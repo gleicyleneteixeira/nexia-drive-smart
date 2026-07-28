@@ -170,6 +170,13 @@ export async function createPixCharge(params: {
 }): Promise<{ txid: string; pixCopiaECola: string; qrcodeBase64: string | null }> {
 
   if (!isEfiConfigured()) {
+    console.error("Configuração EFI inválida. Status das variáveis:", {
+      EFI_CLIENT_ID: !process.env.EFI_CLIENT_ID ? "AUSENTE" : "OK",
+      EFI_CLIENT_SECRET: !process.env.EFI_CLIENT_SECRET ? "AUSENTE" : "OK",
+      EFI_KEY: !process.env.EFI_KEY ? "AUSENTE" : "OK",
+      EFI_CERTIFICATE_CONTENT: !process.env.EFI_CERTIFICATE_CONTENT ? "AUSENTE" : "OK",
+      EFI_CERTIFICATE_PATH: !process.env.EFI_CERTIFICATE_PATH ? "AUSENTE" : "OK",
+    });
     throw new Error("Erro: As credenciais da EFI Pay não estão configuradas.");
   }
 
