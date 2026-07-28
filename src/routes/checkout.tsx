@@ -126,7 +126,55 @@ function CheckoutPage() {
     }, 1000);
     return () => clearInterval(interval);
   }, [isGiftOpened]);
-
+ 
+  const [showRouletteDialog, setShowRouletteDialog] = useState(false);
+  const [hasSpunRoulette, setHasSpunRoulette] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("nexia:roulette_spun") === "true";
+    }
+    return false;
+  });
+  const [rouletteDiscount, setRouletteDiscount] = useState<number | null>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("nexia:roulette_discount");
+      return saved ? Number(saved) : null;
+    }
+    return null;
+  });
+ 
+  const [wheelAngle, setWheelAngle] = useState(0);
+  const [isSpinning, setIsSpinning] = useState(false);
+  const [spinningCompleted, setSpinningCompleted] = useState(false);
+ 
+  useEffect(() => {
+    if (isGiftOpened && discountTimeLeft === 0 && !hasSpunRoulette) {
+      setShowRouletteDialog(true);
+    }
+  }, [isGiftOpened, discountTimeLeft, hasSpunRoulette]);
+ 
+  const spinWheel = () => {
+    if (isSpinning) return;
+    setIsSpinning(true);
+    
+    // Slices: 30%, 20%, 31%, 25%, 33%.
+    // Slice 5 (33%) center is at 324 degrees.
+    const finalAngle = 1800 + 324;
+    setWheelAngle(finalAngle);
+ 
+    setTimeout(() => {
+      setIsSpinning(false);
+      setSpinningCompleted(true);
+      setRouletteDiscount(33);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("nexia:roulette_spun", "true");
+        localStorage.setItem("nexia:roulette_discount", "33");
+      }
+      setHasSpunRoulette(true);
+      playWinChime();
+      startConfetti();
+    }, 4000);
+  };
+ 
   const pollingRef = useRef<NodeJS.Timeout | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -244,9 +292,17 @@ function CheckoutPage() {
       id: "1_month" as const,
       name: "Plano Intensivo (30 Dias)",
       description: "Para quem já está na reta final e quer apenas revisar.",
-      price: isGiftOpened ? 19.90 : 29.90,
+      price: (() => {
+        if (isGiftOpened && discountTimeLeft > 0) return 19.90;
+        if (rouletteDiscount) return 19.90;
+        return 29.90;
+      })(),
       oldPrice: 29.90,
-      discount: "33% OFF",
+      discount: (() => {
+        if (isGiftOpened && discountTimeLeft > 0) return "33% OFF";
+        if (rouletteDiscount) return `${rouletteDiscount}% OFF`;
+        return "";
+      })(),
       badge: "PLANO RÁPIDO",
       bulletPoints: [
         "Acesso completo por 30 dias",
@@ -261,9 +317,19 @@ function CheckoutPage() {
       id: "6_months" as const,
       name: "Combo CNH Aprovada (6 Meses)",
       description: "O guia definitivo para não reprovar no Teórico, Psicotécnico e Prática.",
-      price: isGiftOpened ? 29.90 : 59.90,
+      price: (() => {
+        if (isGiftOpened && discountTimeLeft > 0) return 29.90;
+        if (rouletteDiscount) {
+          return Number((59.90 * (1 - rouletteDiscount / 100)).toFixed(2));
+        }
+        return 59.90;
+      })(),
       oldPrice: 59.90,
-      discount: "50% OFF",
+      discount: (() => {
+        if (isGiftOpened && discountTimeLeft > 0) return "50% OFF";
+        if (rouletteDiscount) return `${rouletteDiscount}% OFF`;
+        return "";
+      })(),
       badge: "MAIS VENDIDO",
       bulletPoints: [
         "Acesso total por 180 dias (sem pressa de vencer)",
@@ -340,8 +406,8 @@ function CheckoutPage() {
         </p>
       </div>
 
-      {/* Gift activation banner — ONLY after reveal */}
-      {isGiftOpened && (
+      {/* Gift activation banner — ONLY after reveal and while timer is active */}
+      {isGiftOpened && discountTimeLeft > 0 && (
         <div className="animate-slide-down max-w-2xl mx-auto p-4 rounded-2xl border border-success/30 bg-success/5 text-center space-y-2">
           <p className="text-sm font-semibold text-success flex items-center justify-center gap-2">
             <Sparkles className="h-4 w-4 text-warning fill-warning" />
@@ -354,6 +420,20 @@ function CheckoutPage() {
           <p className="text-[10px] text-warning font-semibold flex items-center justify-center gap-1.5 animate-pulse">
             <Clock className="h-3.5 w-3.5" />
             Esta oferta especial expira em: <span className="font-mono text-xs bg-warning/20 border border-warning/40 px-2 py-0.5 rounded font-bold">{formatTime(discountTimeLeft)}</span>
+          </p>
+        </div>
+      )}
+ 
+      {/* Roulette activation banner — ONLY after spin */}
+      {isGiftOpened && discountTimeLeft === 0 && rouletteDiscount && (
+        <div className="animate-slide-down max-w-2xl mx-auto p-4 rounded-2xl border border-primary/30 bg-primary/5 text-center space-y-2">
+          <p className="text-sm font-semibold text-primary-glow flex items-center justify-center gap-2">
+            <Sparkles className="h-4 w-4 text-warning fill-warning" />
+            ⚡ Oportunidade Única: Desconto de {rouletteDiscount}% Ativado! ⚡
+            <Sparkles className="h-4 w-4 text-warning fill-warning" />
+          </p>
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            Como seu tempo expirou, garantimos uma última chance com <strong className="text-primary-glow">{rouletteDiscount}% de desconto extra</strong> nos planos! Aproveite agora!
           </p>
         </div>
       )}
@@ -427,6 +507,109 @@ function CheckoutPage() {
             >
               {isOpening ? "Abrindo..." : "Abrir"}
             </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+ 
+      {/* ROULETTE DIALOG — interactive wheel of fortune fallback */}
+      <Dialog open={showRouletteDialog} onOpenChange={(open) => {
+        if (!open && !hasSpunRoulette) return;
+        setShowRouletteDialog(open);
+      }}>
+        <DialogContent
+          hideClose
+          className="sm:max-w-md p-0 border-0 bg-transparent shadow-none"
+        >
+          <div className="glass p-8 md:p-10 rounded-3xl border border-primary/30 max-w-md w-full mx-auto space-y-6 text-center bg-gradient-to-b from-primary/10 to-background/5 shadow-glow">
+            <div className="space-y-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-warning/10 border border-warning/20 text-[10px] font-bold text-warning animate-pulse">
+                <Sparkles className="h-3 w-3" /> ÚLTIMA CHANCE!
+              </span>
+              <h2 className="text-xl font-bold font-display text-primary-glow">O tempo da sua oferta expirou!</h2>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Não queremos que você fique de fora. Gire a roleta abaixo para tentar resgatar uma nova oportunidade de desconto nos planos!
+              </p>
+            </div>
+ 
+            {/* Canvas/SVG Roulette Wheel */}
+            <div className="relative w-60 h-60 mx-auto flex items-center justify-center">
+              {/* Outer light animation frame */}
+              <div className="absolute inset-0 rounded-full border-4 border-primary/40 bg-background/5 shadow-glow pointer-events-none z-10" />
+              
+              {/* Spinning SVG circle */}
+              <svg
+                viewBox="0 0 200 200"
+                className="w-full h-full rounded-full transition-transform duration-[4000ms] ease-out"
+                style={{
+                  transform: `rotate(-${wheelAngle}deg)`,
+                  transitionTimingFunction: "cubic-bezier(0.2, 0.8, 0.2, 1)"
+                }}
+              >
+                {/* Slice 1: 30% */}
+                <g transform="rotate(0 100 100)">
+                  <path d="M100,100 L100,0 A100,100 0 0,1 195.1,69.1 Z" fill="#2563eb" />
+                  <text x="140" y="60" fill="#ffffff" fontWeight="bold" fontSize="11" transform="rotate(36 140 60)">30%</text>
+                </g>
+ 
+                {/* Slice 2: 20% */}
+                <g transform="rotate(72 100 100)">
+                  <path d="M100,100 L100,0 A100,100 0 0,1 195.1,69.1 Z" fill="#1d4ed8" />
+                  <text x="140" y="60" fill="#ffffff" fontWeight="bold" fontSize="11" transform="rotate(36 140 60)">20%</text>
+                </g>
+ 
+                {/* Slice 3: 31% */}
+                <g transform="rotate(144 100 100)">
+                  <path d="M100,100 L100,0 A100,100 0 0,1 195.1,69.1 Z" fill="#3b82f6" />
+                  <text x="140" y="60" fill="#ffffff" fontWeight="bold" fontSize="11" transform="rotate(36 140 60)">31%</text>
+                </g>
+ 
+                {/* Slice 4: 25% */}
+                <g transform="rotate(216 100 100)">
+                  <path d="M100,100 L100,0 A100,100 0 0,1 195.1,69.1 Z" fill="#1e40af" />
+                  <text x="140" y="60" fill="#ffffff" fontWeight="bold" fontSize="11" transform="rotate(36 140 60)">25%</text>
+                </g>
+ 
+                {/* Slice 5: 33% */}
+                <g transform="rotate(288 100 100)">
+                  <path d="M100,100 L100,0 A100,100 0 0,1 195.1,69.1 Z" fill="#eab308" />
+                  <text x="140" y="60" fill="#000000" fontWeight="bold" fontSize="11" transform="rotate(36 140 60)">33%</text>
+                </g>
+ 
+                {/* Center peg */}
+                <circle cx="100" cy="100" r="16" fill="#ffffff" stroke="#2563eb" strokeWidth="3" />
+                <circle cx="100" cy="100" r="7" fill="#2563eb" />
+              </svg>
+ 
+              {/* Indicator pointer pointing downwards at the top center */}
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 z-20">
+                <svg viewBox="0 0 24 24" className="w-full h-full fill-warning drop-shadow-[0_2px_8px_rgba(234,179,8,0.7)]">
+                  <path d="M12 21l-8-14h16z" />
+                </svg>
+              </div>
+            </div>
+ 
+            {spinningCompleted ? (
+              <div className="space-y-4 animate-slide-down">
+                <div className="p-3 rounded-2xl bg-success/15 border border-success/30 text-success text-center">
+                  <p className="text-sm font-bold">🎉 Incrível! Você ganhou 33% de desconto!</p>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">O desconto extra foi aplicado automaticamente nos planos abaixo.</p>
+                </div>
+                <Button
+                  onClick={() => setShowRouletteDialog(false)}
+                  className="w-full h-11 rounded-xl font-bold gradient-primary text-primary-foreground shadow-glow cursor-pointer"
+                >
+                  Ver Planos com Desconto
+                </Button>
+              </div>
+            ) : (
+              <Button
+                onClick={spinWheel}
+                disabled={isSpinning}
+                className="w-full h-11 rounded-xl font-bold gradient-primary text-primary-foreground shadow-glow cursor-pointer"
+              >
+                {isSpinning ? "Girando a roleta..." : "Girar Roleta"}
+              </Button>
+            )}
           </div>
         </DialogContent>
       </Dialog>
