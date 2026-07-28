@@ -80,26 +80,7 @@ export function RatingPrompt() {
     };
   }, [user]);
 
-  // Gatilho por troca de aba do navegador (Page Visibility API)
-  useEffect(() => {
-    if (!user || !existingLoaded) return;
-    function onVisibility() {
-      if (document.visibilityState === "hidden") {
-        wasHidden.current = true;
-        return;
-      }
-      if (document.visibilityState !== "visible" || !wasHidden.current) return;
-      wasHidden.current = false;
-      const start = Number(window.sessionStorage.getItem(SESSION_START_KEY) ?? Date.now());
-      if (Date.now() - start < MIN_SESSION_MS) return;
-      if (!canPromptAuto()) return;
-      setManual(false);
-      setOpen(true);
-      markShownThisSession();
-    }
-    document.addEventListener("visibilitychange", onVisibility);
-    return () => document.removeEventListener("visibilitychange", onVisibility);
-  }, [user, existingLoaded]);
+
 
   // Gatilho por evento custom (fim de simulado, login, manual)
   useEffect(() => {

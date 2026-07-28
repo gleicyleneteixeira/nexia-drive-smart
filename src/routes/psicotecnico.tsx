@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { triggerRatingPrompt } from "@/components/RatingPrompt";
 import { useEffect, useRef, useState, useCallback, useMemo, Fragment } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
@@ -80,6 +81,14 @@ function PsicoPage() {
     speech.stop();
     setStage(next);
   }
+
+  // Dispara pedido de avaliação 2s após terminar a avaliação psicotécnica completa
+  useEffect(() => {
+    if (stage === "result") {
+      const t = setTimeout(() => triggerRatingPrompt("simulado-done"), 2000);
+      return () => clearTimeout(t);
+    }
+  }, [stage]);
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-6 md:py-10">
