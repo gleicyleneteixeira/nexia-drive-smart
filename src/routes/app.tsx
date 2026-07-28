@@ -162,7 +162,7 @@ function ModuleHub({ onSelect }: { onSelect: (mod: "teorico" | "psicotecnico" | 
           className="group text-left glass rounded-3xl p-8 border-border/40 hover:border-primary/50 shadow-card hover:shadow-glow cursor-pointer transition-all hover:scale-[1.02] flex flex-col justify-between"
         >
           <div className="space-y-5">
-            <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/25 flex items-center justify-center text-primary-glow group-hover:scale-110 transition-transform">
+            <div className="w-14 h-14 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center text-pink-400 group-hover:scale-110 transition-transform">
               <Brain className="h-7 w-7" />
             </div>
             <div className="space-y-2">
@@ -193,7 +193,7 @@ function ModuleHub({ onSelect }: { onSelect: (mod: "teorico" | "psicotecnico" | 
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.15 }}
           onClick={() => onSelect("teorico")}
-          className="group text-left glass rounded-3xl p-8 border-border/40 hover:border-red-500/50 shadow-card hover:shadow-red cursor-pointer transition-all hover:scale-[1.02] flex flex-col justify-between"
+          className="group text-left glass rounded-3xl p-8 border-border/40 hover:border-primary/50 shadow-card hover:shadow-glow cursor-pointer transition-all hover:scale-[1.02] flex flex-col justify-between"
         >
           <div className="space-y-5">
             <div className="w-14 h-14 rounded-2xl bg-red-500/10 border border-red-500/25 flex items-center justify-center text-red-500 group-hover:scale-110 transition-transform">
@@ -201,7 +201,7 @@ function ModuleHub({ onSelect }: { onSelect: (mod: "teorico" | "psicotecnico" | 
             </div>
             <div className="space-y-2">
               <h2 className="text-2xl font-bold font-display text-foreground leading-tight">
-                Prepare-se para a <span className="text-red-500">Parte Teórica</span> 📕
+                Prepare-se para a <span className="gradient-text">Parte Teórica</span> 📕
               </h2>
               <p className="text-xs text-muted-foreground leading-relaxed">
                 Estudo focado na prova de legislação do DETRAN. Legislação, Direção Defensiva, Primeiros Socorros, Mecânica Básica e Meio Ambiente.
@@ -214,7 +214,7 @@ function ModuleHub({ onSelect }: { onSelect: (mod: "teorico" | "psicotecnico" | 
             </ul>
           </div>
           <div className="pt-6">
-            <div className="w-full py-3.5 px-5 rounded-xl font-bold bg-red-600 hover:bg-red-700 text-white flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(220,38,38,0.3)] group-hover:gap-3 transition-all pointer-events-none">
+            <div className="w-full py-3.5 px-5 rounded-xl font-bold gradient-primary text-primary-foreground flex items-center justify-center gap-2 shadow-glow group-hover:gap-3 transition-all pointer-events-none">
               Acessar Parte Teórica
               <ChevronRight className="h-4 w-4" />
             </div>
@@ -230,7 +230,7 @@ function ModuleHub({ onSelect }: { onSelect: (mod: "teorico" | "psicotecnico" | 
           className="group text-left glass rounded-3xl p-8 border-border/40 hover:border-primary/50 shadow-card hover:shadow-glow cursor-pointer transition-all hover:scale-[1.02] flex flex-col justify-between"
         >
           <div className="space-y-5">
-            <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/25 flex items-center justify-center text-primary-glow group-hover:scale-110 transition-transform">
+            <div className="w-14 h-14 rounded-2xl bg-warning/10 border border-warning/25 flex items-center justify-center text-warning group-hover:scale-110 transition-transform">
               <TrafficCone className="h-7 w-7" />
             </div>
             <div className="space-y-2">
