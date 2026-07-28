@@ -59,12 +59,12 @@ function httpsRequest(options: RequestOptions): Promise<{ status: number; body: 
 
 // Get certificate content — always returns a Buffer (decoded from base64 or read from file)
 function getCertificate(): Buffer | undefined {
-  const content = process.env.EFI_CERTIFICATE_CONTENT;
+  const content = process.env.EFI_CERT_BASE64 || process.env.EFI_CERTIFICATE_CONTENT;
   if (content) {
     try {
       return Buffer.from(content, "base64");
     } catch (err) {
-      console.error("Erro ao decodificar EFI_CERTIFICATE_CONTENT (base64):", err);
+      console.error("Erro ao decodificar certificado em base64:", err);
       return undefined;
     }
   }
@@ -97,8 +97,8 @@ function isPfxFormat(): boolean {
   const certPath = process.env.EFI_CERTIFICATE_PATH || "";
   if (certPath.endsWith(".p12") || certPath.endsWith(".pfx")) return true;
 
-  // If using EFI_CERTIFICATE_CONTENT without explicit type, assume PFX (most common for Efí)
-  if (process.env.EFI_CERTIFICATE_CONTENT) return true;
+  // If using base64 cert without explicit type, assume PFX (most common for Efí)
+  if (process.env.EFI_CERT_BASE64 || process.env.EFI_CERTIFICATE_CONTENT) return true;
 
   return false;
 }
@@ -109,7 +109,7 @@ export function isEfiConfigured(): boolean {
     process.env.EFI_CLIENT_ID &&
     process.env.EFI_CLIENT_SECRET &&
     process.env.EFI_KEY &&
-    (process.env.EFI_CERTIFICATE_CONTENT || process.env.EFI_CERTIFICATE_PATH)
+    (process.env.EFI_CERT_BASE64 || process.env.EFI_CERTIFICATE_CONTENT || process.env.EFI_CERTIFICATE_PATH)
   );
 }
 
@@ -174,6 +174,7 @@ export async function createPixCharge(params: {
       EFI_CLIENT_ID: !process.env.EFI_CLIENT_ID ? "AUSENTE" : "OK",
       EFI_CLIENT_SECRET: !process.env.EFI_CLIENT_SECRET ? "AUSENTE" : "OK",
       EFI_KEY: !process.env.EFI_KEY ? "AUSENTE" : "OK",
+      EFI_CERT_BASE64: !process.env.EFI_CERT_BASE64 ? "AUSENTE" : "OK",
       EFI_CERTIFICATE_CONTENT: !process.env.EFI_CERTIFICATE_CONTENT ? "AUSENTE" : "OK",
       EFI_CERTIFICATE_PATH: !process.env.EFI_CERTIFICATE_PATH ? "AUSENTE" : "OK",
     });
