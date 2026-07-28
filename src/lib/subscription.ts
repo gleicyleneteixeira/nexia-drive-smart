@@ -1,5 +1,5 @@
 const PLAN_DAYS: Record<string, number> = {
-  "1_month": 60, // Changed from 30 to 60 for the Buy 1 Get 1 Free promotion (60 days)
+  "1_month": 30,
   "3_months": 90,
   "6_months": 180,
 };

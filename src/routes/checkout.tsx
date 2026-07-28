@@ -98,6 +98,34 @@ function CheckoutPage() {
   const [isOpening, setIsOpening] = useState(false);
   const [flashCards, setFlashCards] = useState(false);
   const [showGiftDialog, setShowGiftDialog] = useState(false);
+ 
+  const [discountTimeLeft, setDiscountTimeLeft] = useState<number>(() => {
+    if (typeof window !== "undefined") {
+      const saved = sessionStorage.getItem("nexia:discount_timer");
+      if (saved) {
+        const remaining = Math.max(0, Math.floor((Number(saved) - Date.now()) / 1000));
+        return remaining;
+      }
+      const expiry = Date.now() + 120 * 60 * 1000;
+      sessionStorage.setItem("nexia:discount_timer", String(expiry));
+      return 120 * 60;
+    }
+    return 120 * 60;
+  });
+ 
+  useEffect(() => {
+    if (!isGiftOpened) return;
+    const interval = setInterval(() => {
+      setDiscountTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [isGiftOpened]);
 
   const pollingRef = useRef<NodeJS.Timeout | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -194,7 +222,12 @@ function CheckoutPage() {
   };
 
   const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60); const secs = seconds % 60;
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    if (hrs > 0) {
+      return `${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+    }
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
@@ -208,22 +241,40 @@ function CheckoutPage() {
 
   const plans = [
     {
-      id: "6_months" as const,
-      name: "Plano 6 Meses",
-      description: isGiftOpened ? "Acesso completo com super desconto!" : "Acesso completo por 6 meses",
-      price: isGiftOpened ? 29.90 : 97.00,
-      oldPrice: 97.00,
-      discount: "69% de Desconto",
-      badge: isGiftOpened ? "Super Desconto" : undefined,
+      id: "1_month" as const,
+      name: "Plano Intensivo (30 Dias)",
+      description: "Para quem já está na reta final e quer apenas revisar.",
+      price: isGiftOpened ? 19.90 : 29.90,
+      oldPrice: 29.90,
+      discount: "33% OFF",
+      badge: "PLANO RÁPIDO",
       bulletPoints: [
-        "Acesso completo por 180 dias",
+        "Acesso completo por 30 dias",
         "Simulados inteligentes ilimitados",
-        "Vídeos explicativos do psicotécnico",
-        "Suporte prioritário via WhatsApp",
-        "Material de estudo para download",
-        "Garantia incondicional de aprovação",
+        "Banco de questões atualizado do DETRAN",
+        "Histórico de desempenho e erros",
       ],
-      buttonText: "Liberar Acesso 6 Meses",
+      buttonText: "Liberar Acesso 30 Dias",
+      priceLegend: "Pagamento único no Pix (30 dias de acesso)",
+    },
+    {
+      id: "6_months" as const,
+      name: "Combo CNH Aprovada (6 Meses)",
+      description: "O guia definitivo para não reprovar no Teórico, Psicotécnico e Prática.",
+      price: isGiftOpened ? 29.90 : 59.90,
+      oldPrice: 59.90,
+      discount: "50% OFF",
+      badge: "MAIS VENDIDO",
+      bulletPoints: [
+        "Acesso total por 180 dias (sem pressa de vencer)",
+        "Simulados inteligentes ilimitados",
+        "Módulo Psicotécnico Completo (Atenção, memória e teste dos palitinhos)",
+        "Guia da Prova Prática (Dicas de baliza e erros que reprovam)",
+        "Suporte prioritário via WhatsApp",
+        "Atualizações gratuitas de legislação",
+      ],
+      buttonText: "Liberar Combo Completo",
+      priceLegend: "Pagamento único no Pix (180 dias de acesso)",
     },
   ];
 
@@ -293,15 +344,17 @@ function CheckoutPage() {
       {isGiftOpened && (
         <div className="animate-slide-down max-w-2xl mx-auto p-4 rounded-2xl border border-success/30 bg-success/5 text-center space-y-2">
           <p className="text-sm font-semibold text-success flex items-center justify-center gap-2">
-            <Sparkles className="h-4 w-4" />
-            Ganhe +30 Dias Grátis!
-            <Sparkles className="h-4 w-4" />
+            <Sparkles className="h-4 w-4 text-warning fill-warning" />
+            ⚡ Oferta Relâmpago: Super Desconto Ativado! ⚡
+            <Sparkles className="h-4 w-4 text-warning fill-warning" />
           </p>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            Todos os planos estão com desconto especial de até <strong className="text-success">81% OFF</strong>!
-            O Plano de 1 Mês foi promovido para <strong className="text-foreground">60 Dias (Pague 1, Leve 2)</strong> por apenas <strong className="text-foreground">R$ 14,99</strong>.
+            Seus planos foram promovidos com <strong className="text-success">até 50% de desconto extra</strong>! Aproveite!
           </p>
-          <p className="text-[10px] text-warning font-semibold">⚠️ Esta oferta expira em 24 horas.</p>
+          <p className="text-[10px] text-warning font-semibold flex items-center justify-center gap-1.5 animate-pulse">
+            <Clock className="h-3.5 w-3.5" />
+            Esta oferta especial expira em: <span className="font-mono text-xs bg-warning/20 border border-warning/40 px-2 py-0.5 rounded font-bold">{formatTime(discountTimeLeft)}</span>
+          </p>
         </div>
       )}
 
@@ -363,7 +416,7 @@ function CheckoutPage() {
             </div>
 
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Clique no presente para destravar seu <strong className="text-success">Super Desconto</strong> no plano de 6 meses!
+              Clique no presente para destravar seu <strong className="text-success">Super Desconto</strong> nos planos!
             </p>
             <p className="text-[10px] text-warning font-semibold">⚠️ Oferta especial expira em 24 horas.</p>
  
@@ -378,22 +431,29 @@ function CheckoutPage() {
         </DialogContent>
       </Dialog>
  
-        {/* Centered single premium plan */}
-        <div className="max-w-sm mx-auto">
+        {/* Plans grid */}
+        <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
           {plans.map((plan) => (
             <Card
               key={plan.id}
               className={`glass relative overflow-hidden flex flex-col justify-between transition-all duration-300 ${
                 flashCards ? "flash-card" : ""
-              } border-primary/50 shadow-glow scale-[1.01]`}
+              } ${
+                plan.id === "6_months"
+                  ? "border-primary/50 shadow-glow scale-[1.01]"
+                  : "border-border/40 hover:border-primary/20"
+              }`}
             >
-              {plan.badge && (
-                <div className="absolute top-3 right-3 border text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider bg-success/20 border-success/40 text-success">
-                  {plan.badge}
-                </div>
-              )}
- 
-              <CardHeader className="pb-4">
+              <CardHeader className="pb-4 pt-6">
+                {plan.badge && (
+                  <div className={`self-start inline-block mb-3 border text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider w-max ${
+                    plan.id === "6_months"
+                      ? "bg-warning/20 border-warning/40 text-warning"
+                      : "bg-primary/10 border-primary/20 text-primary-glow"
+                  }`}>
+                    {plan.badge}
+                  </div>
+                )}
                 <CardTitle className="text-xl flex items-center gap-1.5">
                   {plan.name}
                   {isGiftOpened && (
@@ -425,7 +485,7 @@ function CheckoutPage() {
                     </span>
                   )}
                   <span className="text-xs text-muted-foreground block mt-1">
-                    Pagamento único no Pix (Acesso imediato)
+                    {plan.priceLegend}
                   </span>
                 </div>
                 <ul className="text-sm text-muted-foreground space-y-2 pt-2 border-t border-border/10">
@@ -441,7 +501,11 @@ function CheckoutPage() {
               <CardFooter className="pt-4">
                 <Button
                   onClick={() => handleSelectPlan(plan.id, plan.price, plan.name)}
-                  className="w-full h-11 rounded-xl font-bold cursor-pointer gradient-primary text-primary-foreground shadow-glow"
+                  className={`w-full h-11 rounded-xl font-bold cursor-pointer ${
+                    plan.id === "6_months"
+                      ? "gradient-primary text-primary-foreground shadow-glow"
+                      : ""
+                  }`}
                 >
                   {plan.buttonText}
                 </Button>
