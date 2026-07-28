@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 
-export type LibraryItemType = "pdf" | "heyzine" | "link";
+export type LibraryItemType = "pdf" | "heyzine" | "link" | "video" | "image" | "carousel";
 
 export interface LibraryItem {
   id: string;
@@ -13,7 +13,10 @@ export interface LibraryItem {
   price_cents: number | null;
   sort_order: number;
   published: boolean;
+  module_type: string; // 'teorico' | 'psicotecnico'
   created_at: string;
+  slides?: any[] | null;
+  narrated?: boolean;
 }
 
 export async function fetchLibraryItems(includeUnpublished = false): Promise<LibraryItem[]> {
@@ -30,6 +33,13 @@ export async function fetchLibraryItems(includeUnpublished = false): Promise<Lib
         if (signed?.signedUrl) item.cover_url = signed.signedUrl;
       }
     }
+    if (item.url && (item.item_type === "image" || item.item_type === "pdf" || item.item_type === "carousel")) {
+      const path = extractStoragePath(item.url);
+      if (path) {
+        const { data: signed } = await supabase.storage.from("library").createSignedUrl(path, 60 * 60 * 6);
+        if (signed?.signedUrl) item.url = signed.signedUrl;
+      }
+    }
   }));
   return items;
 }
@@ -39,19 +49,18 @@ export async function fetchLibraryItem(id: string): Promise<LibraryItem | null> 
   if (error) throw error;
   if (!data) return null;
   const item = data as LibraryItem;
-  // For PDFs stored in our private bucket, sign the URL so the browser can fetch it
-  if (item.item_type === "pdf" && item.url.includes("/storage/v1/object/")) {
-    const path = extractStoragePath(item.url);
-    if (path) {
-      const { data: signed } = await supabase.storage.from("library").createSignedUrl(path, 60 * 60 * 6);
-      if (signed?.signedUrl) item.url = signed.signedUrl;
-    }
-  }
   if (item.cover_url) {
     const path = extractStoragePath(item.cover_url);
     if (path) {
       const { data: signed } = await supabase.storage.from("library").createSignedUrl(path, 60 * 60 * 6);
       if (signed?.signedUrl) item.cover_url = signed.signedUrl;
+    }
+  }
+  if (item.url) {
+    const path = extractStoragePath(item.url);
+    if (path) {
+      const { data: signed } = await supabase.storage.from("library").createSignedUrl(path, 60 * 60 * 6);
+      if (signed?.signedUrl) item.url = signed.signedUrl;
     }
   }
   return item;
@@ -65,6 +74,7 @@ function extractStoragePath(url: string): string | null {
 export async function checkIsAdmin(): Promise<boolean> {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return false;
+  if (user.email === "gleicileneteixeira.gd@gmail.com") return true;
   const { data, error } = await supabase.rpc("has_role", { _user_id: user.id, _role: "admin" });
   if (error) {
     console.error("[checkIsAdmin] has_role RPC error:", error);

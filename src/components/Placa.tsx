@@ -27,11 +27,25 @@ export function Placa({ id, size = 160, className }: Props) {
   return (
     <div
       className={`inline-flex items-center justify-center bg-white rounded-2xl p-4 shadow-card ${className ?? ""}`}
-      style={{ width: size + 32, height: size + 32 }}
+      style={{
+        width: size + 32,
+        height: size + 32,
+        maxWidth: "100%",
+        aspectRatio: "1 / 1",
+      }}
       aria-label={`Placa ${id}`}
       role="img"
     >
-      <svg viewBox="0 0 200 200" width={size} height={size}>
+      <svg
+        viewBox="0 0 200 200"
+        style={{
+          width: "100%",
+          height: "100%",
+          maxWidth: size,
+          maxHeight: size,
+          objectFit: "contain",
+        }}
+      >
         {renderPlaca(id)}
       </svg>
     </div>
@@ -135,16 +149,19 @@ function renderPlaca(id: PlacaId) {
     case "R-25a": // Vire à esquerda
       return (
         <>
-          <circle cx="100" cy="100" r="90" fill="#0B6BB5" />
-          <path d="M120 60 L70 100 L120 140 L120 115 L150 115 L150 85 L120 85 Z" fill="#fff" />
+          <circle cx="100" cy="100" r="90" fill="#fff" stroke="#D7282F" strokeWidth="14" />
+          <path
+            d="M135 150 V115 Q135 95 115 95 H85 V110 L50 85 L85 60 V75 H115 Q155 75 155 115 V150 Z"
+            fill="#000"
+          />
         </>
       );
 
     case "R-25d": // Siga em frente
       return (
         <>
-          <circle cx="100" cy="100" r="90" fill="#0B6BB5" />
-          <path d="M100 40 L140 100 L115 100 L115 160 L85 160 L85 100 L60 100 Z" fill="#fff" />
+          <circle cx="100" cy="100" r="90" fill="#fff" stroke="#D7282F" strokeWidth="14" />
+          <path d="M100 40 L140 90 L118 90 L118 160 L82 160 L82 90 L60 90 Z" fill="#000" />
         </>
       );
 
@@ -246,8 +263,9 @@ function renderPlaca(id: PlacaId) {
       return (
         <>
           <rect x="10" y="10" width="180" height="180" rx="14" fill="#0B6BB5" />
-          <rect x="80" y="40" width="40" height="120" fill="#fff" />
-          <rect x="40" y="80" width="120" height="40" fill="#fff" />
+          <rect x="35" y="35" width="130" height="130" rx="6" fill="#fff" />
+          <rect x="90" y="50" width="20" height="100" fill="#D7282F" />
+          <rect x="50" y="90" width="100" height="20" fill="#D7282F" />
         </>
       );
 
@@ -255,17 +273,14 @@ function renderPlaca(id: PlacaId) {
       return (
         <>
           <rect x="10" y="10" width="180" height="180" rx="14" fill="#0B6BB5" />
-          <text
-            x="100"
-            y="135"
-            textAnchor="middle"
-            fill="#fff"
-            fontSize="120"
-            fontWeight="900"
-            fontFamily="Arial, sans-serif"
-          >
-            P
-          </text>
+          <rect x="35" y="35" width="130" height="130" rx="6" fill="#fff" />
+          <g transform="translate(10, 5)">
+            <rect x="70" y="70" width="45" height="75" rx="3" fill="#000" />
+            <rect x="78" y="80" width="29" height="18" fill="#fff" />
+            <path d="M115 95 h10 v30 a8 8 0 0 1-8 8" fill="none" stroke="#000" strokeWidth="6" strokeLinecap="round" />
+            <path d="M125 95 v-10 h-5" fill="none" stroke="#000" strokeWidth="5" strokeLinecap="round" />
+            <rect x="62" y="145" width="61" height="8" rx="2" fill="#000" />
+          </g>
         </>
       );
   }

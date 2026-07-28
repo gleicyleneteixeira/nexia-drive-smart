@@ -21,8 +21,6 @@ function ResetPasswordPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Supabase parses the recovery hash automatically on page load and
-    // fires PASSWORD_RECOVERY. We just wait for a session to exist.
     const timer = setTimeout(async () => {
       const { data } = await supabase.auth.getSession();
       if (!data.session) {
@@ -47,9 +45,32 @@ function ResetPasswordPage() {
     try {
       const { error } = await supabase.auth.updateUser({ password });
       if (error) throw error;
-      toast.success("Senha atualizada! Faça login novamente.");
-      await supabase.auth.signOut();
-      navigate({ to: "/auth" });
+
+      toast.success("Senha atualizada com sucesso!");
+
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        // Update needs_new_password to false
+        await supabase
+          .from("profiles")
+          .update({ needs_new_password: false })
+          .eq("id", user.id);
+
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("status, is_migrated")
+          .eq("id", user.id)
+          .maybeSingle();
+
+        const isMigrated = !!profile?.is_migrated;
+        if (isMigrated || profile?.status === "ativo") {
+          navigate({ to: "/app", replace: true });
+        } else {
+          navigate({ to: "/checkout", replace: true });
+        }
+      } else {
+        navigate({ to: "/cadastro", replace: true });
+      }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Erro");
     } finally {
@@ -59,7 +80,7 @@ function ResetPasswordPage() {
 
   return (
     <div className="mx-auto max-w-md px-4 py-12">
-      <Link to="/auth" className="text-xs text-muted-foreground flex items-center gap-1 mb-3 hover:text-foreground">
+      <Link to="/cadastro" className="text-xs text-muted-foreground flex items-center gap-1 mb-3 hover:text-foreground">
         <ArrowLeft className="h-3 w-3" /> Voltar
       </Link>
       <div className="glass rounded-3xl p-8 shadow-card">

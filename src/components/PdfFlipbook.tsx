@@ -38,7 +38,6 @@ export function PdfFlipbook({ url }: Props) {
       if (!containerRef.current) return;
       const cw = containerRef.current.clientWidth;
       const isMobile = cw < 700;
-      // single page on mobile, two pages side-by-side on desktop
       const pageW = isMobile ? Math.min(cw - 16, 480) : Math.min(Math.floor(cw / 2), 500);
       setSize({ w: pageW, h: Math.floor(pageW * 1.4) });
     }

@@ -11,7 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, Search, Download, Users, KeyRound, UserX, Star, Heart } from "lucide-react";
+import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, Search, Download, Users, KeyRound, UserX, Star, Heart, Volume2 } from "lucide-react";
 import * as XLSX from "xlsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { useServerFn } from "@tanstack/react-start";
@@ -468,9 +468,61 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
   const [isPaid, setIsPaid] = useState(false);
   const [priceCents, setPriceCents] = useState("");
   const [published, setPublished] = useState(true);
+  const [moduleType, setModuleType] = useState<"teorico" | "psicotecnico" | "direcao">("teorico");
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
+  const [slides, setSlides] = useState<{ id: string; file: File | null; image_url: string; text: string; audioFile?: File | null; audio_url?: string }[]>([
+    { id: Math.random().toString(), file: null, image_url: "", text: "", audioFile: null, audio_url: "" },
+  ]);
+  const [narrated, setNarrated] = useState(false);
+
+  // Carregar rascunho do localStorage ao montar
+  useEffect(() => {
+    if (!editing && typeof window !== "undefined") {
+      try {
+        const raw = localStorage.getItem("nexia:admin:draft_library_item");
+        if (raw) {
+          const draft = JSON.parse(raw);
+          if (draft.title) setTitle(draft.title);
+          if (draft.description) setDescription(draft.description);
+          if (draft.itemType) setItemType(draft.itemType);
+          if (draft.url) setUrl(draft.url);
+          if (draft.coverUrl) setCoverUrl(draft.coverUrl);
+          if (draft.isPaid !== undefined) setIsPaid(draft.isPaid);
+          if (draft.priceCents) setPriceCents(draft.priceCents);
+          if (draft.published !== undefined) setPublished(draft.published);
+          if (draft.moduleType) setModuleType(draft.moduleType);
+          if (draft.narrated !== undefined) setNarrated(draft.narrated);
+          if (draft.slides) {
+            setSlides(draft.slides.map((s: any) => ({ ...s, id: s.id || Math.random().toString(), file: null, audioFile: null })));
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load draft from localStorage", err);
+      }
+    }
+  }, [editing]);
+
+  // Salvar rascunho no localStorage a cada alteração
+  useEffect(() => {
+    if (!editing && typeof window !== "undefined") {
+      const draft = {
+        title,
+        description,
+        itemType,
+        url,
+        coverUrl,
+        isPaid,
+        priceCents,
+        published,
+        moduleType,
+        narrated,
+        slides: slides.map((s) => ({ id: s.id, image_url: s.image_url, text: s.text, audio_url: s.audio_url })),
+      };
+      localStorage.setItem("nexia:admin:draft_library_item", JSON.stringify(draft));
+    }
+  }, [editing, title, description, itemType, url, coverUrl, isPaid, priceCents, published, moduleType, narrated, slides]);
 
   useEffect(() => {
     if (editing) {
@@ -482,13 +534,34 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
       setIsPaid(editing.is_paid);
       setPriceCents(editing.price_cents ? String(editing.price_cents) : "");
       setPublished(editing.published);
+      setModuleType((editing.module_type as "teorico" | "psicotecnico" | "direcao") || "teorico");
+      setNarrated(editing.narrated ?? false);
+      if (editing.item_type === "carousel" && Array.isArray(editing.slides)) {
+        setSlides(
+          editing.slides.map((s: any) => ({
+            id: Math.random().toString(),
+            file: null,
+            image_url: s.image_url ?? "",
+            text: s.text ?? "",
+            audioFile: null,
+            audio_url: s.audio_url ?? "",
+          }))
+        );
+      } else {
+        setSlides([{ id: Math.random().toString(), file: null, image_url: "", text: "", audioFile: null, audio_url: "" }]);
+      }
     }
   }, [editing]);
 
   function reset() {
     setTitle(""); setDescription(""); setItemType("pdf"); setUrl("");
     setCoverUrl(""); setIsPaid(false); setPriceCents(""); setPublished(true);
-    setPdfFile(null); setCoverFile(null);
+    setPdfFile(null); setCoverFile(null); setModuleType("teorico");
+    setSlides([{ id: Math.random().toString(), file: null, image_url: "", text: "", audioFile: null, audio_url: "" }]);
+    setNarrated(false);
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("nexia:admin:draft_library_item");
+    }
   }
 
   async function uploadToBucket(file: File, folder: string): Promise<string> {
@@ -506,9 +579,37 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
     try {
       let finalUrl = url;
       let finalCover = coverUrl;
+      let finalSlides: any = null;
 
       if (itemType === "pdf" && pdfFile) {
         finalUrl = await uploadToBucket(pdfFile, "pdfs");
+      }
+      if (itemType === "image" && pdfFile) {
+        finalUrl = await uploadToBucket(pdfFile, "images");
+      }
+      if (itemType === "carousel") {
+        const uploadedSlides = [];
+        for (const slide of slides) {
+          let imageUrl = slide.image_url;
+          if (slide.file) {
+            imageUrl = await uploadToBucket(slide.file, "slides");
+          }
+          if (!imageUrl) {
+            throw new Error("Cada slide do carrossel precisa de uma imagem.");
+          }
+
+          let audioUrl = slide.audio_url ?? "";
+          if (slide.audioFile) {
+            audioUrl = await uploadToBucket(slide.audioFile, "slides_audios");
+          }
+
+          uploadedSlides.push({ image_url: imageUrl, text: slide.text, audio_url: audioUrl });
+        }
+        if (uploadedSlides.length === 0) {
+          throw new Error("Adicione pelo menos um slide no carrossel.");
+        }
+        finalSlides = uploadedSlides;
+        finalUrl = uploadedSlides[0].image_url;
       }
       if (coverFile) {
         finalCover = await uploadToBucket(coverFile, "covers");
@@ -525,6 +626,9 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
         is_paid: isPaid,
         price_cents: isPaid && priceCents ? parseInt(priceCents, 10) : null,
         published,
+        module_type: moduleType,
+        slides: finalSlides,
+        narrated,
       };
 
       if (editing) {
@@ -557,7 +661,7 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
         )}
       </div>
 
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-3 gap-4">
         <div>
           <Label>Título *</Label>
           <Input required value={title} onChange={(e) => setTitle(e.target.value)} />
@@ -569,7 +673,21 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
             <SelectContent>
               <SelectItem value="pdf">Livrinho (PDF — vira página)</SelectItem>
               <SelectItem value="heyzine">Embed Heyzine (link de flipbook)</SelectItem>
+              <SelectItem value="video">Vídeo (YouTube/Vimeo)</SelectItem>
+              <SelectItem value="image">Imagem (foto/ilustração)</SelectItem>
               <SelectItem value="link">Link externo (site)</SelectItem>
+              <SelectItem value="carousel">Carrossel de Imagens</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
+          <Label>Categoria *</Label>
+          <Select value={moduleType} onValueChange={(v) => setModuleType(v as "teorico" | "psicotecnico" | "direcao")}>
+            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="teorico">Teórico</SelectItem>
+              <SelectItem value="psicotecnico">Psicotécnico</SelectItem>
+              <SelectItem value="direcao">Direção</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -580,7 +698,7 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
         <Textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} />
       </div>
 
-      {itemType === "pdf" ? (
+      {itemType === "pdf" && (
         <div>
           <Label>Arquivo PDF {editing ? "(opcional — manter atual se vazio)" : "*"}</Label>
           <Input
@@ -590,10 +708,181 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
           />
           {editing && url && <p className="text-xs text-muted-foreground mt-1">Atual: {url.split("/").pop()}</p>}
         </div>
-      ) : (
+      )}
+
+      {(itemType === "heyzine" || itemType === "video" || itemType === "link") && (
         <div>
           <Label>URL {itemType === "heyzine" ? "(ex: https://heyzine.com/flip-book/xxx.html)" : "(site externo)"} *</Label>
           <Input required={!editing} value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://..." />
+        </div>
+      )}
+
+      {itemType === "image" && (
+        <div>
+          <Label>Arquivo de Imagem {editing ? "(opcional — manter atual se vazio)" : "*"}</Label>
+          <Input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setPdfFile(e.target.files?.[0] ?? null)}
+          />
+          {editing && url && <p className="text-xs text-muted-foreground mt-1">Atual: {url}</p>}
+        </div>
+      )}
+
+      {itemType === "carousel" && (
+        <div className="space-y-4 border border-border/20 rounded-2xl p-4 bg-background/20">
+          <div className="flex items-center justify-between">
+            <h3 className="font-semibold text-sm">Slides do Carrossel</h3>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() =>
+                setSlides([
+                  ...slides,
+                  { id: Math.random().toString(), file: null, image_url: "", text: "" },
+                ])
+              }
+            >
+              + Adicionar Slide
+            </Button>
+          </div>
+
+          {slides.map((slide, idx) => (
+            <div key={slide.id} className="p-3 bg-background/40 border border-border/10 rounded-xl space-y-3 relative">
+              <div className="flex items-center justify-between text-xs text-muted-foreground font-semibold">
+                <span>Slide #{idx + 1}</span>
+                <div className="flex items-center gap-1">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 p-0 flex items-center justify-center"
+                    disabled={idx === 0}
+                    onClick={() => {
+                      const copy = [...slides];
+                      const temp = copy[idx];
+                      copy[idx] = copy[idx - 1];
+                      copy[idx - 1] = temp;
+                      setSlides(copy);
+                    }}
+                  >
+                    ↑
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 p-0 flex items-center justify-center"
+                    disabled={idx === slides.length - 1}
+                    onClick={() => {
+                      const copy = [...slides];
+                      const temp = copy[idx];
+                      copy[idx] = copy[idx + 1];
+                      copy[idx + 1] = temp;
+                      setSlides(copy);
+                    }}
+                  >
+                    ↓
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 p-0 flex items-center justify-center text-destructive hover:text-destructive"
+                    disabled={slides.length === 1}
+                    onClick={() => {
+                      setSlides(slides.filter((s) => s.id !== slide.id));
+                    }}
+                  >
+                    X
+                  </Button>
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-3">
+                <div>
+                  <Label className="text-xs">Imagem do Slide {slide.image_url ? "(opcional)" : "*"}</Label>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0] ?? null;
+                      const copy = [...slides];
+                      copy[idx].file = file;
+                      setSlides(copy);
+                    }}
+                  />
+                  {slide.image_url && !slide.file && (
+                    <div className="mt-1 flex items-center gap-2">
+                      <img src={slide.image_url} className="h-10 w-10 object-cover rounded" />
+                      <span className="text-[10px] text-muted-foreground truncate max-w-[200px]">Imagem atual definida</span>
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <Label className="text-xs">Áudio Narração (Opcional)</Label>
+                  <Input
+                    type="file"
+                    accept="audio/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0] ?? null;
+                      const copy = [...slides];
+                      copy[idx].audioFile = file;
+                      setSlides(copy);
+                    }}
+                  />
+                  {slide.audio_url && !slide.audioFile && (
+                    <div className="mt-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const a = new Audio(slide.audio_url);
+                          a.play().catch(() => {});
+                        }}
+                        className="text-[10px] text-primary hover:underline flex items-center gap-1 cursor-pointer"
+                      >
+                        🔊 Ouvir áudio salvo
+                      </button>
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <Label className="text-xs">Texto de Narração / Legenda</Label>
+                    {slide.text && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (typeof window !== "undefined") {
+                            window.speechSynthesis.cancel();
+                            const u = new SpeechSynthesisUtterance(slide.text);
+                            u.lang = "pt-BR";
+                            u.rate = 1.05;
+                            window.speechSynthesis.speak(u);
+                          }
+                        }}
+                        className="text-xs text-primary hover:text-primary-glow flex items-center gap-1 cursor-pointer"
+                        title="Ouvir teste de voz"
+                      >
+                        <Volume2 className="h-3.5 w-3.5" /> Ouvir teste
+                      </button>
+                    )}
+                  </div>
+                  <Textarea
+                    rows={1}
+                    placeholder="Digite o texto que será narrado..."
+                    value={slide.text}
+                    onChange={(e) => {
+                      const copy = [...slides];
+                      copy[idx].text = e.target.value;
+                      setSlides(copy);
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 
@@ -603,7 +892,7 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
         {coverUrl && !coverFile && <p className="text-xs text-muted-foreground mt-1">Capa atual definida.</p>}
       </div>
 
-      <div className="grid md:grid-cols-3 gap-4 items-end">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 items-end">
         <div className="flex items-center gap-2">
           <Switch checked={isPaid} onCheckedChange={setIsPaid} id="paid" />
           <Label htmlFor="paid">Conteúdo pago</Label>
@@ -617,6 +906,10 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
         <div className="flex items-center gap-2">
           <Switch checked={published} onCheckedChange={setPublished} id="pub" />
           <Label htmlFor="pub">Publicado</Label>
+        </div>
+        <div className="flex items-center gap-2">
+          <Switch checked={narrated} onCheckedChange={setNarrated} id="narrated" />
+          <Label htmlFor="narrated">Narrado por voz</Label>
         </div>
       </div>
 

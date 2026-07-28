@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo, Fragment } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
+import { fetchLibraryItems } from "@/lib/library";
 import {
   Brain,
-  PencilLine,
   Eye,
   Timer,
   Shapes,
@@ -15,6 +16,7 @@ import {
   Check,
   X,
   Play,
+  Pause,
 } from "lucide-react";
 import memoriaImg from "@/assets/psico-memoria.png";
 
@@ -32,16 +34,9 @@ export const Route = createFileRoute("/psicotecnico")({
   }),
 });
 
-type Stage = "hub" | "palografico" | "atencao" | "memoria" | "logico" | "result";
+type Stage = "hub" | "atencao" | "memoria" | "logico" | "result";
 
 interface ScoreMap {
-  palografico?: {
-    strokes: number;
-    lines: number;
-    consistency: number;
-    avgWidth: number;
-    avgHeight: number;
-  };
   atencao?: { correct: number; total: number };
   memoria?: { items: number };
   logico?: { correct: number; total: number };
@@ -91,7 +86,7 @@ function PsicoPage() {
       <div className="flex items-start justify-between gap-3 mb-6 flex-wrap">
         <div>
           <p className="text-xs uppercase tracking-widest text-primary-glow font-semibold flex items-center gap-2">
-            <Brain className="h-4 w-4" /> Exame Psicotécnico
+            <Brain className="h-4 w-4" /> Psicotécnico
           </p>
           <h1 className="text-2xl md:text-3xl font-display font-bold mt-1">
             Simulador <span className="gradient-text">Psicotécnico</span> DETRAN
@@ -122,15 +117,7 @@ function PsicoPage() {
           speech={speech}
         />
       )}
-      {stage === "palografico" && (
-        <Palografico
-          speech={speech}
-          onDone={(r) => {
-            setScores((s) => ({ ...s, palografico: r }));
-            go("atencao");
-          }}
-        />
-      )}
+
       {stage === "atencao" && (
         <Atencao
           speech={speech}
@@ -180,13 +167,6 @@ const TESTS: {
   accent: string;
 }[] = [
   {
-    id: "palografico",
-    title: "Teste dos Risquinhos",
-    desc: "Palográfico — ritmo, constância e produtividade.",
-    icon: PencilLine,
-    accent: "from-primary to-primary-glow",
-  },
-  {
     id: "atencao",
     title: "Teste de Atenção",
     desc: "Siga a linha certa e marque a figura igual.",
@@ -219,7 +199,7 @@ function Hub({
 }) {
   useEffect(() => {
     speech.speak(
-      "Bem-vindo ao simulador psicotécnico do DETRAN. Você fará quatro testes: risquinhos, atenção, memória rápida e raciocínio lógico. Toque em começar para iniciar.",
+      "Bem-vindo ao simulador psicotécnico do DETRAN. Você fará três testes: atenção, memória rápida e raciocínio lógico. Toque em começar para iniciar.",
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -228,11 +208,11 @@ function Hub({
     <div className="space-y-4">
       <div className="glass rounded-3xl p-6 shadow-card">
         <p className="text-sm text-muted-foreground">
-          A avaliação completa leva cerca de <strong>8 minutos</strong>. Antes
-          de cada teste, um áudio explica o que fazer. Vamos juntos.
+          A avaliação completa leva cerca de <strong>6 minutos</strong>. Antes de cada teste, um
+          áudio explica o que fazer. Vamos juntos.
         </p>
         <button
-          onClick={() => onPick("palografico")}
+          onClick={() => onPick("atencao")}
           className="mt-4 inline-flex items-center gap-2 px-5 py-3 rounded-xl gradient-primary text-primary-foreground font-semibold shadow-glow"
         >
           <Play className="h-4 w-4" /> Começar do início
@@ -268,399 +248,404 @@ function Hub({
   );
 }
 
-// ===================== Drawing canvas helper =====================
-function useDrawCanvas() {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const drawingRef = useRef(false);
-  const lastRef = useRef<{ x: number; y: number } | null>(null);
-  const strokeCountRef = useRef(0);
-  const strokesRef = useRef<
-    { minX: number; maxX: number; minY: number; maxY: number }[]
-  >([]);
-  const [, force] = useState(0);
+// ===================== TEST 2: ATENÇÃO CONCENTRADA =====================
 
-  const setup = useCallback(() => {
-    const c = canvasRef.current;
-    if (!c) return;
-    const dpr = window.devicePixelRatio || 1;
-    const rect = c.getBoundingClientRect();
-    if (rect.width === 0 || rect.height === 0) return;
-    const targetW = Math.floor(rect.width * dpr);
-    const targetH = Math.floor(rect.height * dpr);
-    // Avoid re-init mid-draw or on noisy resize events (mobile URL bar)
-    if (c.width === targetW && c.height === targetH) return;
-    if (drawingRef.current) return;
-    c.width = targetW;
-    c.height = targetH;
-    const ctx = c.getContext("2d");
-    if (!ctx) return;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-    ctx.lineWidth = 4;
-    ctx.strokeStyle = "#0a0a0a";
-  }, []);
+type SymbolId =
+  | "circle_empty"
+  | "circle_filled"
+  | "star_5"
+  | "star_6"
+  | "square_empty"
+  | "square_dot"
+  | "triangle_up"
+  | "triangle_down"
+  | "diamond_empty"
+  | "diamond_line"
+  | "arrow_right"
+  | "arrow_tilted";
 
-  useEffect(() => {
-    setup();
-    const c = canvasRef.current;
-    if (!c || typeof ResizeObserver === "undefined") return;
-    const ro = new ResizeObserver(() => setup());
-    ro.observe(c);
-    return () => ro.disconnect();
-  }, [setup]);
-
-  function pos(e: PointerEvent | React.PointerEvent) {
-    const c = canvasRef.current!;
-    const r = c.getBoundingClientRect();
-    // Scale CSS-pixel coords by any layout scaling (e.g. transforms)
-    const sx = r.width === 0 ? 1 : c.clientWidth / r.width;
-    const sy = r.height === 0 ? 1 : c.clientHeight / r.height;
-    return {
-      x: (e.clientX - r.left) * sx,
-      y: (e.clientY - r.top) * sy,
-    };
-  }
-
-  const onPointerDown = (e: React.PointerEvent) => {
-    e.preventDefault();
-    (e.target as Element).setPointerCapture?.(e.pointerId);
-    drawingRef.current = true;
-    const p = pos(e);
-    lastRef.current = p;
-    strokeCountRef.current += 1;
-    strokesRef.current.push({ minX: p.x, maxX: p.x, minY: p.y, maxY: p.y });
-    const ctx = canvasRef.current?.getContext("2d");
-    if (ctx) {
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
-      ctx.fillStyle = "#0a0a0a";
-      ctx.fill();
-    }
-    force((n) => n + 1);
-  };
-  const onPointerMove = (e: React.PointerEvent) => {
-    if (!drawingRef.current) return;
-    const ctx = canvasRef.current?.getContext("2d");
-    if (!ctx || !lastRef.current) return;
-    const native = e.nativeEvent as PointerEvent & {
-      getCoalescedEvents?: () => PointerEvent[];
-    };
-    const events =
-      native.getCoalescedEvents && native.getCoalescedEvents().length
-        ? native.getCoalescedEvents()
-        : [native];
-    ctx.beginPath();
-    ctx.moveTo(lastRef.current.x, lastRef.current.y);
-    const stroke = strokesRef.current[strokesRef.current.length - 1];
-    for (const ev of events) {
-      const p = pos(ev);
-      ctx.lineTo(p.x, p.y);
-      lastRef.current = p;
-      if (stroke) {
-        if (p.x < stroke.minX) stroke.minX = p.x;
-        if (p.x > stroke.maxX) stroke.maxX = p.x;
-        if (p.y < stroke.minY) stroke.minY = p.y;
-        if (p.y > stroke.maxY) stroke.maxY = p.y;
-      }
-    }
-    ctx.stroke();
-  };
-  const onPointerUp = () => {
-    drawingRef.current = false;
-    lastRef.current = null;
-  };
-
-  const clear = () => {
-    const c = canvasRef.current;
-    if (!c) return;
-    const ctx = c.getContext("2d");
-    if (!ctx) return;
-    ctx.save();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.clearRect(0, 0, c.width, c.height);
-    ctx.restore();
-    strokeCountRef.current = 0;
-    strokesRef.current = [];
-    force((n) => n + 1);
-  };
-
-  return {
-    canvasRef,
-    onPointerDown,
-    onPointerMove,
-    onPointerUp,
-    clear,
-    strokeCount: strokeCountRef.current,
-    strokesRef,
-  };
+interface GameSymbol {
+  id: SymbolId;
+  pairId: SymbolId;
+  render: (size?: number) => React.ReactNode;
 }
 
-// ===================== TEST 1: PALOGRÁFICO =====================
-function Palografico({
-  speech,
-  onDone,
-}: {
-  speech: ReturnType<typeof useSpeech>;
-  onDone: (r: {
-    strokes: number;
-    lines: number;
-    consistency: number;
-    avgWidth: number;
-    avgHeight: number;
-  }) => void;
-}) {
-  const TOTAL_LINES = 6;
-  const SECS_PER_LINE = 8;
-  const [phase, setPhase] = useState<"intro" | "running" | "done">("intro");
-  const [line, setLine] = useState(0);
-  const [time, setTime] = useState(SECS_PER_LINE);
-  const [perLine, setPerLine] = useState<
-    { count: number; avgW: number; avgH: number }[]
-  >([]);
-  const draw = useDrawCanvas();
-  const lastCountRef = useRef(0);
-  const strokeMarkerRef = useRef(0);
+const SYMBOL_REGISTRY: Record<SymbolId, GameSymbol> = {
+  circle_empty: {
+    id: "circle_empty",
+    pairId: "circle_filled",
+    render: (size = 24) => (
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        className="text-zinc-400 dark:text-zinc-100"
+      >
+        <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" strokeWidth="3" />
+      </svg>
+    ),
+  },
+  circle_filled: {
+    id: "circle_filled",
+    pairId: "circle_empty",
+    render: (size = 24) => (
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        className="text-zinc-400 dark:text-zinc-100"
+      >
+        <circle cx="12" cy="12" r="8" fill="currentColor" />
+      </svg>
+    ),
+  },
+  star_5: {
+    id: "star_5",
+    pairId: "star_6",
+    render: (size = 24) => (
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        className="text-zinc-400 dark:text-zinc-100"
+      >
+        <polygon
+          points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3"
+          strokeLinejoin="round"
+        />
+      </svg>
+    ),
+  },
+  star_6: {
+    id: "star_6",
+    pairId: "star_5",
+    render: (size = 24) => (
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        className="text-zinc-400 dark:text-zinc-100"
+      >
+        <polygon
+          points="12,3 15,9 21,9 18,14 20,20 12,16 4,20 6,14 3,9 9,9"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinejoin="round"
+        />
+        <polygon
+          points="12,21 15,15 21,15 18,10 20,4 12,8 4,4 6,10 3,15 9,15"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinejoin="round"
+          opacity="0.3"
+        />
+      </svg>
+    ),
+  },
+  square_empty: {
+    id: "square_empty",
+    pairId: "square_dot",
+    render: (size = 24) => (
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        className="text-zinc-400 dark:text-zinc-100"
+      >
+        <rect
+          x="4"
+          y="4"
+          width="16"
+          height="16"
+          rx="2"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3"
+        />
+      </svg>
+    ),
+  },
+  square_dot: {
+    id: "square_dot",
+    pairId: "square_empty",
+    render: (size = 24) => (
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        className="text-zinc-400 dark:text-zinc-100"
+      >
+        <rect
+          x="4"
+          y="4"
+          width="16"
+          height="16"
+          rx="2"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3"
+        />
+        <circle cx="12" cy="12" r="2.5" fill="currentColor" />
+      </svg>
+    ),
+  },
+  triangle_up: {
+    id: "triangle_up",
+    pairId: "triangle_down",
+    render: (size = 24) => (
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        className="text-zinc-400 dark:text-zinc-100"
+      >
+        <polygon
+          points="12,4 4,20 20,20"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3"
+          strokeLinejoin="round"
+        />
+      </svg>
+    ),
+  },
+  triangle_down: {
+    id: "triangle_down",
+    pairId: "triangle_up",
+    render: (size = 24) => (
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        className="text-zinc-400 dark:text-zinc-100"
+      >
+        <polygon
+          points="12,20 4,4 20,4"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3"
+          strokeLinejoin="round"
+        />
+      </svg>
+    ),
+  },
+  diamond_empty: {
+    id: "diamond_empty",
+    pairId: "diamond_line",
+    render: (size = 24) => (
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        className="text-zinc-400 dark:text-zinc-100"
+      >
+        <polygon
+          points="12,3 21,12 12,21 3,12"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3"
+          strokeLinejoin="round"
+        />
+      </svg>
+    ),
+  },
+  diamond_line: {
+    id: "diamond_line",
+    pairId: "diamond_empty",
+    render: (size = 24) => (
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        className="text-zinc-400 dark:text-zinc-100"
+      >
+        <polygon
+          points="12,3 21,12 12,21 3,12"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3"
+          strokeLinejoin="round"
+        />
+        <line x1="12" y1="3" x2="12" y2="21" stroke="currentColor" strokeWidth="2.5" />
+      </svg>
+    ),
+  },
+  arrow_right: {
+    id: "arrow_right",
+    pairId: "arrow_tilted",
+    render: (size = 24) => (
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        className="text-zinc-400 dark:text-zinc-100"
+      >
+        <path
+          d="M4 12h16M13 5l7 7-7 7"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    ),
+  },
+  arrow_tilted: {
+    id: "arrow_tilted",
+    pairId: "arrow_right",
+    render: (size = 24) => (
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        className="text-zinc-400 dark:text-zinc-100"
+        style={{ transform: "rotate(-30deg)" }}
+      >
+        <path
+          d="M4 12h16M13 5l7 7-7 7"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    ),
+  },
+};
 
-  useEffect(() => {
-    if (phase !== "intro") return;
-    speech.speak(
-      "Teste dos risquinhos, também chamado palográfico. Você verá três traços de modelo no topo. Repita o padrão livremente na folha em branco abaixo, o mais rápido e constante possível. Gire o celular para a horizontal para ter mais espaço. Toque em iniciar quando estiver pronto.",
-    );
-  }, [phase, speech]);
+// Web Audio API Synthesizer
+class SoundSynth {
+  private ctx: AudioContext | null = null;
 
-  useEffect(() => {
-    if (phase !== "running") return;
-    if (time <= 0) {
-      // próxima linha
-      const count = draw.strokeCount - lastCountRef.current;
-      lastCountRef.current = draw.strokeCount;
-      const all = draw.strokesRef.current;
-      const slice = all.slice(strokeMarkerRef.current);
-      strokeMarkerRef.current = all.length;
-      const widths = slice.map((s) => s.maxX - s.minX);
-      const heights = slice.map((s) => s.maxY - s.minY);
-      const avgW =
-        widths.length > 0
-          ? widths.reduce((a, b) => a + b, 0) / widths.length
-          : 0;
-      const avgH =
-        heights.length > 0
-          ? heights.reduce((a, b) => a + b, 0) / heights.length
-          : 0;
-      setPerLine((p) => [...p, { count, avgW, avgH }]);
-      if (line + 1 >= TOTAL_LINES) {
-        setPhase("done");
-        speech.speak("Tempo encerrado. Vamos para o próximo teste.");
-      } else {
-        speech.speak("Tempo! Próxima rodada.");
-        setLine((l) => l + 1);
-        setTime(SECS_PER_LINE);
-        draw.clear();
-        lastCountRef.current = 0;
-        strokeMarkerRef.current = 0;
-      }
-
-      return;
+  private init() {
+    if (!this.ctx && typeof window !== "undefined") {
+      try {
+        this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      } catch {}
     }
-    const id = setTimeout(() => setTime((t) => t - 1), 1000);
-    return () => clearTimeout(id);
-  }, [phase, time, line, draw.strokeCount, speech]);
-
-  function finish() {
-    const counts = perLine.map((p) => p.count);
-    const total = counts.reduce((a, b) => a + b, 0);
-    const avg = total / Math.max(1, counts.length);
-    const variance =
-      counts.reduce((acc, n) => acc + Math.pow(n - avg, 2), 0) /
-      Math.max(1, counts.length);
-    const consistency = Math.max(0, Math.min(100, 100 - Math.sqrt(variance) * 10));
-    const avgWidth =
-      perLine.length > 0
-        ? perLine.reduce((a, b) => a + b.avgW, 0) / perLine.length
-        : 0;
-    const avgHeight =
-      perLine.length > 0
-        ? perLine.reduce((a, b) => a + b.avgH, 0) / perLine.length
-        : 0;
-    onDone({
-      strokes: total,
-      lines: perLine.length,
-      consistency,
-      avgWidth,
-      avgHeight,
-    });
   }
 
-  return (
-    <div className="glass rounded-3xl p-5 md:p-6 shadow-card">
-      <TestHeader
-        title="1/4 · Teste dos Risquinhos"
-        subtitle="Palográfico — produtividade e constância"
-      />
+  playSuccess() {
+    this.init();
+    if (!this.ctx) return;
+    try {
+      const now = this.ctx.currentTime;
+      this.playTone(523.25, 0.1, 0.04, now);
+      this.playTone(659.25, 0.12, 0.04, now + 0.08);
+    } catch {}
+  }
 
-      {phase === "intro" && (
-        <Intro
-          bullets={[
-            "Repita o padrão dos 3 risquinhos verticais (| | |) com o dedo.",
-            "Sem linhas guia: desenhe livremente na folha em branco.",
-            "Ritmo ideal: cerca de 1 traço por segundo.",
-            "São 6 rodadas; a tela limpa ao trocar de rodada.",
-            "Em celular, gire para a horizontal para ter mais espaço.",
-          ]}
-          onStart={() => {
-            speech.stop();
-            draw.clear();
-            lastCountRef.current = 0;
-            strokeMarkerRef.current = 0;
-            setPerLine([]);
-            setLine(0);
-            setTime(SECS_PER_LINE);
-            setPhase("running");
-          }}
-          speech={speech}
-          replayText="Repita os três risquinhos do modelo com o dedo, na folha em branco. Gire o celular para a horizontal."
-        />
-      )}
+  playFailure() {
+    this.init();
+    if (!this.ctx) return;
+    try {
+      this.playTone(130, 0.25, 0.06, this.ctx.currentTime, "sawtooth");
+    } catch {}
+  }
 
-      {phase === "running" && (
-        <div>
-          <div className="md:hidden mb-2 text-[11px] text-warning bg-warning/10 border border-warning/30 rounded-lg px-3 py-1.5">
-            Dica: gire o celular na horizontal para uma área de desenho maior.
-          </div>
+  playCountdownTick() {
+    this.init();
+    if (!this.ctx) return;
+    try {
+      this.playTone(850, 0.05, 0.02, this.ctx.currentTime);
+    } catch {}
+  }
 
-          <div className="flex items-center justify-between mb-3 text-sm">
-            <span className="font-semibold">
-              Rodada {line + 1}/{TOTAL_LINES}
-            </span>
-            <span
-              className={`font-display text-lg ${
-                time <= 2 ? "text-destructive" : "text-foreground"
-              }`}
-            >
-              {time}s
-            </span>
-          </div>
+  playCountdownStart() {
+    this.init();
+    if (!this.ctx) return;
+    try {
+      this.playTone(1050, 0.3, 0.04, this.ctx.currentTime);
+    } catch {}
+  }
 
-          {/* Modelo: 3 risquinhos iniciais */}
-          <div className="rounded-t-2xl border border-b-0 border-border bg-white px-4 py-3 flex items-center gap-4">
-            <span className="text-[11px] uppercase tracking-widest text-zinc-500 font-semibold">
-              Modelo
-            </span>
-            <div className="flex gap-3 text-zinc-900 font-bold text-2xl leading-none">
-              <span>|</span>
-              <span>|</span>
-              <span>|</span>
-            </div>
-            <span className="ml-auto text-[11px] text-zinc-500">
-              Repita o padrão livremente abaixo
-            </span>
-          </div>
+  playWarningBeep() {
+    this.init();
+    if (!this.ctx) return;
+    try {
+      this.playTone(600, 0.12, 0.03, this.ctx.currentTime);
+    } catch {}
+  }
 
-          <div className="relative rounded-b-2xl overflow-hidden border border-border bg-white">
-            <canvas
-              ref={draw.canvasRef}
-              onPointerDown={draw.onPointerDown}
-              onPointerMove={draw.onPointerMove}
-              onPointerUp={draw.onPointerUp}
-              onPointerCancel={draw.onPointerUp}
-              onPointerLeave={draw.onPointerUp}
-              className="w-full block touch-none select-none"
-              style={{
-                touchAction: "none",
-                aspectRatio: "16 / 9",
-                maxHeight: "70vh",
-              }}
-            />
-          </div>
+  playTargetChange() {
+    this.init();
+    if (!this.ctx) return;
+    try {
+      const now = this.ctx.currentTime;
+      this.playTone(400, 0.12, 0.03, now, "sine");
+      this.playTone(600, 0.12, 0.03, now + 0.08, "sine");
+      this.playTone(800, 0.18, 0.03, now + 0.16, "sine");
+    } catch {}
+  }
 
-          <div className="flex flex-wrap gap-2 mt-3">
-            <button
-              onClick={() => setTime(0)}
-              className="px-4 py-2 rounded-xl gradient-primary text-primary-foreground text-sm font-semibold"
-            >
-              Tempo! (próxima)
-            </button>
-            <button
-              onClick={() => {
-                draw.clear();
-                lastCountRef.current = 0;
-                strokeMarkerRef.current = 0;
-              }}
-              className="px-4 py-2 rounded-xl glass text-sm"
-            >
-              Limpar área
-            </button>
-            <div className="text-xs text-muted-foreground flex-1 self-center text-right">
-              Traços nesta rodada:{" "}
-              <strong>{draw.strokeCount - lastCountRef.current}</strong>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {phase === "done" && (
-        <DoneNext
-          summary={
-            `${perLine.reduce((a, b) => a + b.count, 0)} traços em ${perLine.length} rodadas · ` +
-            `largura média ${Math.round(
-              perLine.reduce((a, b) => a + b.avgW, 0) /
-                Math.max(1, perLine.length),
-            )}px · altura média ${Math.round(
-              perLine.reduce((a, b) => a + b.avgH, 0) /
-                Math.max(1, perLine.length),
-            )}px`
-          }
-          onNext={finish}
-        />
-      )}
-    </div>
-  );
+  private playTone(
+    freq: number,
+    duration: number,
+    volume: number,
+    startTime: number,
+    type: OscillatorType = "sine",
+  ) {
+    if (!this.ctx) return;
+    try {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, startTime);
+      gain.gain.setValueAtTime(volume, startTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(startTime);
+      osc.stop(startTime + duration);
+    } catch {}
+  }
 }
 
-// ===================== TEST 2: ATENÇÃO =====================
-// Linhas embaralhadas: 4 entradas → 4 saídas com figuras. O usuário escolhe
-// qual figura está conectada à entrada destacada.
-type AtItem = { id: number; shape: "circle" | "square" | "triangle" | "diamond" };
-const AT_ITEMS: AtItem[] = [
-  { id: 1, shape: "circle" },
-  { id: 2, shape: "square" },
-  { id: 3, shape: "triangle" },
-  { id: 4, shape: "diamond" },
-];
+const synth = new SoundSynth();
 
-const AT_ROUNDS = [
-  { startIndex: 0, endIndex: 2 }, // 1 → triângulo
-  { startIndex: 1, endIndex: 0 }, // 2 → círculo
-  { startIndex: 2, endIndex: 3 }, // 3 → diamante
-  { startIndex: 3, endIndex: 1 }, // 4 → quadrado
-];
+// Section-based target symbols (~20 rows per section)
+const SECTION_SIZE = 20;
+const SECTION_SYMBOLS: Record<number, SymbolId[][]> = {
+  1: [["star_5"], ["circle_filled"]],
+  2: [
+    ["star_5", "circle_empty"],
+    ["square_dot", "triangle_down"],
+  ],
+  3: [
+    ["star_5", "circle_filled", "square_dot"],
+  ],
+};
 
-function Shape({ shape, size = 28 }: { shape: AtItem["shape"]; size?: number }) {
-  const s = size;
-  if (shape === "circle")
-    return (
-      <svg width={s} height={s} viewBox="0 0 40 40">
-        <circle cx="20" cy="20" r="14" fill="#FFB020" stroke="#222" strokeWidth="2" />
-      </svg>
-    );
-  if (shape === "square")
-    return (
-      <svg width={s} height={s} viewBox="0 0 40 40">
-        <rect x="8" y="8" width="24" height="24" fill="#FFB020" stroke="#222" strokeWidth="2" />
-      </svg>
-    );
-  if (shape === "triangle")
-    return (
-      <svg width={s} height={s} viewBox="0 0 40 40">
-        <polygon points="20,6 34,32 6,32" fill="#FFB020" stroke="#222" strokeWidth="2" />
-      </svg>
-    );
-  return (
-    <svg width={s} height={s} viewBox="0 0 40 40">
-      <polygon points="20,4 36,20 20,36 4,20" fill="#FFB020" stroke="#222" strokeWidth="2" />
-    </svg>
-  );
+interface SymbolCell {
+  id: SymbolId;
+  row: number;
+  col: number;
+  uniqueKey: string;
+  sectionTargets: SymbolId[];
+}
+
+interface ClickResult {
+  correct: boolean;
+  scoreDelta: number;
+  timestamp: number;
+}
+
+interface HistoryItem {
+  date: string;
+  level: number;
+  hits: number;
+  errors: number;
+  missed: number;
+  precision: number;
+  reactionTime: number;
+  score: number;
 }
 
 function Atencao({
@@ -670,186 +655,914 @@ function Atencao({
   speech: ReturnType<typeof useSpeech>;
   onDone: (r: { correct: number; total: number }) => void;
 }) {
-  const [phase, setPhase] = useState<"intro" | "running" | "done">("intro");
-  const [round, setRound] = useState(0);
-  const [picked, setPicked] = useState<number | null>(null);
-  const [correct, setCorrect] = useState(0);
+  const [phase, setPhase] = useState<"mode_select" | "intro" | "get_ready" | "playing" | "result">(
+    "mode_select",
+  );
+  const [level, setLevel] = useState<1 | 2 | 3>(1);
+  const [timeRemaining, setTimeRemaining] = useState(60);
+  const [activeTargets, setActiveTargets] = useState<SymbolId[]>([]);
+  const [symbolsGrid, setSymbolsGrid] = useState<SymbolCell[][]>([]);
+  const [clickedCells, setClickedCells] = useState<Record<string, ClickResult>>({});
+  const [hits, setHits] = useState(0);
+  const [errors, setErrors] = useState(0);
+  const [combo, setCombo] = useState(0);
+  const [maxCombo, setMaxCombo] = useState(0);
+  const [score, setScore] = useState(0);
 
+  // Game loops / timing
+  const [readyCountdown, setReadyCountdown] = useState(3);
+
+  // Reaction times & analytics
+  const [reactionTimes, setReactionTimes] = useState<number[]>([]);
+  const [lastActionTime, setLastActionTime] = useState<number>(0);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [currentSection, setCurrentSection] = useState(0);
+
+  // SVG worm path measurement
+  const gridScrollRef = useRef<HTMLDivElement>(null);
+  const rowElRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+  const [rowPositions, setRowPositions] = useState<Array<{ y: number; h: number }>>([]);
+  const [gridWidth, setGridWidth] = useState(0);
+
+  // Measure row positions after render
   useEffect(() => {
-    if (phase === "intro")
-      speech.speak(
-        "Teste de atenção. Siga a linha que sai da entrada destacada, em azul, até a figura de chegada. Em seguida, marque a figura igual à de chegada. Use o dedo se quiser para seguir a linha.",
-      );
-  }, [phase, speech]);
+    const container = gridScrollRef.current;
+    if (!container || symbolsGrid.length === 0) return;
 
-  const r = AT_ROUNDS[round];
-  const targetShape = AT_ITEMS[r?.endIndex ?? 0].shape;
-  // Embaralha alternativas
-  const alts = useMemo(() => {
-    const ids = AT_ITEMS.map((x) => x.shape);
-    return ids.sort(() => Math.random() - 0.5);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [round]);
+    const positions: Array<{ y: number; h: number }> = [];
+    const containerRect = container.getBoundingClientRect();
 
-  function pick(shape: AtItem["shape"]) {
-    if (picked !== null) return;
-    const isRight = shape === targetShape;
-    setPicked(alts.indexOf(shape));
-    if (isRight) setCorrect((c) => c + 1);
-    setTimeout(() => {
-      if (round + 1 >= AT_ROUNDS.length) {
-        setPhase("done");
-      } else {
-        setRound((x) => x + 1);
-        setPicked(null);
+    for (let i = 0; i < symbolsGrid.length; i++) {
+      const rowEl = rowElRefs.current.get(i);
+      if (rowEl) {
+        const rect = rowEl.getBoundingClientRect();
+        positions.push({
+          y: rect.top - containerRect.top + container.scrollTop,
+          h: rect.height,
+        });
       }
-    }, 900);
-  }
+    }
 
-  // SVG das "minhocas" entre entrada e saída
-  function Worms() {
-    const ys = [40, 110, 180, 250];
-    return (
-      <svg viewBox="0 0 400 290" className="w-full h-[290px]">
-        {AT_ROUNDS.map((rd, i) => {
-          const y1 = ys[rd.startIndex];
-          const y2 = ys[rd.endIndex];
-          const active = i === round;
-          const mid = 200 + (i % 2 === 0 ? -20 : 20);
-          const d = `M 60 ${y1} C ${mid} ${y1}, ${mid} ${y2}, 340 ${y2}`;
-          return (
-            <path
-              key={i}
-              d={d}
-              fill="none"
-              stroke={active ? "#3B82F6" : "#94A3B8"}
-              strokeWidth={active ? 4 : 2}
-              strokeLinecap="round"
-              strokeDasharray={active ? "0" : "6 4"}
-              opacity={active ? 1 : 0.45}
-            />
-          );
-        })}
-        {ys.map((y, i) => (
-          <g key={`L${i}`}>
-            <circle
-              cx={40}
-              cy={y}
-              r={18}
-              fill={i === r.startIndex ? "#3B82F6" : "#E5E7EB"}
-              stroke="#1f2937"
-              strokeWidth="2"
-            />
-            <text
-              x={40}
-              y={y + 5}
-              textAnchor="middle"
-              fontSize="14"
-              fontWeight="700"
-              fill={i === r.startIndex ? "#fff" : "#111"}
-            >
-              {i + 1}
-            </text>
-          </g>
-        ))}
-        {ys.map((y, i) => {
-          const it = AT_ITEMS[i];
-          return (
-            <g key={`R${i}`} transform={`translate(340, ${y - 18})`}>
-              <rect
-                x={-2}
-                y={-2}
-                width={40}
-                height={40}
-                rx={6}
-                fill="#fff"
-                stroke="#1f2937"
-                strokeWidth="2"
-              />
-              <foreignObject x={0} y={0} width={36} height={36}>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    height: "100%",
-                  }}
-                >
-                  <Shape shape={it.shape} size={28} />
-                </div>
-              </foreignObject>
-            </g>
-          );
-        })}
-      </svg>
+    setRowPositions(positions);
+    setGridWidth(container.clientWidth);
+  }, [symbolsGrid, clickedCells, phase]);
+
+  // Load local score history on load
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("nexia:atencao_history");
+        if (stored) {
+          setHistory(JSON.parse(stored));
+        }
+      } catch {}
+    }
+  }, []);
+
+  // Speak initial intro messages
+  useEffect(() => {
+    if (phase === "intro") {
+      speech.speak(
+        `Nível ${level}. Encontre os símbolos solicitados no topo e clique neles na grade contínua. Quando o alvo mudar, um marcador aparecerá dentro da sequência indicando o novo símbolo. Continue de onde parou.`,
+      );
+    }
+  }, [phase, level, speech]);
+
+  // Setup ready countdown
+  useEffect(() => {
+    if (phase !== "get_ready") return;
+    synth.playCountdownTick();
+    const id = setInterval(() => {
+      setReadyCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(id);
+          startGame();
+          return 3;
+        }
+        synth.playCountdownTick();
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(id);
+  }, [phase]);
+
+  // Main playing loops (timer, target switcher, alarm beeps)
+  useEffect(() => {
+    if (phase !== "playing") return;
+
+    const gameTimer = setInterval(() => {
+      setTimeRemaining((prev) => {
+        if (prev <= 1) {
+          clearInterval(gameTimer);
+          endGame();
+          return 0;
+        }
+
+        const nextTime = prev - 1;
+
+        if (nextTime <= 10) {
+          synth.playWarningBeep();
+        }
+
+        return nextTime;
+      });
+    }, 1000);
+
+    return () => clearInterval(gameTimer);
+  }, [phase, level]);
+
+  // Compute current section from last clicked row
+  const lastClickedCell = useMemo(() => {
+    let maxRow = -1;
+    let maxCol = -1;
+    for (const key of Object.keys(clickedCells)) {
+      const [r, c] = key.split("-").map(Number);
+      if (r > maxRow || (r === maxRow && c > maxCol)) {
+        maxRow = r;
+        maxCol = c;
+      }
+    }
+    return { row: maxRow, col: maxCol };
+  }, [clickedCells]);
+
+  const lastClickedRow = lastClickedCell.row;
+
+  const activeSection = useMemo(() => {
+    return Math.min(
+      Math.floor(Math.max(0, lastClickedRow) / SECTION_SIZE),
+      (SECTION_SYMBOLS[level]?.length ?? 1) - 1,
     );
-  }
+  }, [lastClickedRow, level]);
+
+  // Compute SVG snake path from measured row positions
+  const computeSnakePath = useCallback(
+    (positions: Array<{ y: number; h: number }>, width: number) => {
+      if (positions.length === 0 || width === 0) return "";
+      const pad = 14;
+      const left = pad;
+      const right = width - pad;
+      const cx = 12;
+      let d = "";
+
+      positions.forEach((pos, i) => {
+        const cy = pos.y + pos.h / 2;
+        if (i === 0) {
+          d += `M ${left} ${cy}`;
+        }
+        if (i % 2 === 0) {
+          d += ` H ${right}`;
+        } else {
+          d += ` H ${left}`;
+        }
+        if (i < positions.length - 1) {
+          const nextCy = positions[i + 1].y + positions[i + 1].h / 2;
+          if (i % 2 === 0) {
+            d += ` C ${right + cx} ${cy}, ${right + cx} ${nextCy}, ${right} ${nextCy}`;
+          } else {
+            d += ` C ${left - cx} ${cy}, ${left - cx} ${nextCy}, ${left} ${nextCy}`;
+          }
+        }
+      });
+      return d;
+    },
+    [],
+  );
+
+  // Compute partial snake path that stops at a specific row+col
+  const computePartialSnakePath = useCallback(
+    (
+      positions: Array<{ y: number; h: number }>,
+      width: number,
+      stopRow: number,
+      stopCol: number,
+      numCols: number,
+    ) => {
+      if (positions.length === 0 || width === 0 || stopRow < 0) return "";
+      const pad = 14;
+      const left = pad;
+      const right = width - pad;
+      const cx = 12;
+      const usableWidth = right - left;
+
+      let d = "";
+
+      // Draw complete rows before the termination row
+      const fullRows = positions.slice(0, stopRow);
+      fullRows.forEach((pos, i) => {
+        const cy = pos.y + pos.h / 2;
+        if (i === 0) {
+          d += `M ${left} ${cy}`;
+        }
+        if (i % 2 === 0) {
+          d += ` H ${right}`;
+        } else {
+          d += ` H ${left}`;
+        }
+        if (i < fullRows.length - 1) {
+          const nextCy = positions[i + 1].y + positions[i + 1].h / 2;
+          if (i % 2 === 0) {
+            d += ` C ${right + cx} ${cy}, ${right + cx} ${nextCy}, ${right} ${nextCy}`;
+          } else {
+            d += ` C ${left - cx} ${cy}, ${left - cx} ${nextCy}, ${left} ${nextCy}`;
+          }
+        }
+      });
+
+      // Draw partial termination row up to the clicked column
+      const termPos = positions[stopRow];
+      if (!termPos) return d;
+      const cy = termPos.y + termPos.h / 2;
+
+      if (stopRow === 0 && d === "") {
+        d += `M ${left} ${cy}`;
+      } else if (d === "") {
+        d += `M ${left} ${cy}`;
+      } else {
+        // Connect from previous row
+        const prevPos = positions[stopRow - 1];
+        if (prevPos) {
+          const prevCy = prevPos.y + prevPos.h / 2;
+          if ((stopRow - 1) % 2 === 0) {
+            d += ` C ${right + cx} ${prevCy}, ${right + cx} ${cy}, ${right} ${cy}`;
+          } else {
+            d += ` C ${left - cx} ${prevCy}, ${left - cx} ${cy}, ${left} ${cy}`;
+          }
+        }
+      }
+
+      // Calculate X position of the clicked column
+      const colFraction = stopCol / Math.max(numCols - 1, 1);
+      const targetX = stopRow % 2 === 0
+        ? left + colFraction * usableWidth
+        : right - colFraction * usableWidth;
+
+      d += ` H ${targetX}`;
+
+      return d;
+    },
+    [],
+  );
+
+  const snakePathD = useMemo(
+    () => computeSnakePath(rowPositions, gridWidth),
+    [computeSnakePath, rowPositions, gridWidth],
+  );
+
+  // Traveled path stops EXACTLY at the last clicked cell
+  const snakePathTraveled = useMemo(() => {
+    if (lastClickedRow < 0 || rowPositions.length === 0) return "";
+    const cols = level === 1 ? 8 : level === 2 ? 10 : 12;
+    return computePartialSnakePath(
+      rowPositions,
+      gridWidth,
+      lastClickedRow,
+      lastClickedCell.col,
+      cols,
+    );
+  }, [computePartialSnakePath, rowPositions, gridWidth, lastClickedRow, lastClickedCell.col, level]);
+
+  // Initialize and start game session
+  const startGame = () => {
+    synth.playCountdownStart();
+    const duration = level === 1 ? 60 : level === 2 ? 90 : 120;
+    setTimeRemaining(duration);
+
+    const initialTargets = SECTION_SYMBOLS[level][0];
+    setActiveTargets(initialTargets);
+
+    const rows = level === 1 ? 30 : level === 2 ? 50 : 80;
+    const cols = level === 1 ? 8 : level === 2 ? 10 : 12;
+
+    const allSymbolIds = Object.keys(SYMBOL_REGISTRY) as SymbolId[];
+    const newGrid: SymbolCell[][] = [];
+    for (let r = 0; r < rows; r++) {
+      const sectionIdx = Math.floor(r / SECTION_SIZE);
+      const cellSectionTargets = SECTION_SYMBOLS[level]?.[sectionIdx] ?? [];
+      const rowCells: SymbolCell[] = [];
+      for (let c = 0; c < cols; c++) {
+        const randId = allSymbolIds[Math.floor(Math.random() * allSymbolIds.length)];
+        rowCells.push({
+          id: randId,
+          row: r,
+          col: c,
+          uniqueKey: `${r}-${c}`,
+          sectionTargets: cellSectionTargets,
+        });
+      }
+      newGrid.push(rowCells);
+    }
+
+    setSymbolsGrid(newGrid);
+    setClickedCells({});
+    setHits(0);
+    setErrors(0);
+    setCombo(0);
+    setMaxCombo((m) => Math.max(m, 0));
+    setScore(0);
+    setReactionTimes([]);
+    setLastActionTime(Date.now());
+    setCurrentSection(0);
+    setPhase("playing");
+  };
+
+  const endGame = () => {
+    setPhase("result");
+    speech.speak("Treino finalizado. Confira seus resultados.");
+
+    // Save results to history
+    const finalReport = calculateFinalReport();
+    const newRecord: HistoryItem = {
+      date: new Date().toLocaleDateString("pt-BR", {
+        day: "numeric",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      level,
+      hits,
+      errors,
+      missed: finalReport.missed,
+      precision: finalReport.precision,
+      reactionTime: finalReport.avgReactionTime,
+      score,
+    };
+
+    setHistory((prev) => {
+      const updated = [newRecord, ...prev].slice(0, 10);
+      try {
+        localStorage.setItem("nexia:atencao_history", JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+  };
+
+  // Evaluate individual symbol click
+  const handleCellClick = (cell: SymbolCell) => {
+    if (clickedCells[cell.uniqueKey]) return;
+
+    // Validation uses ONLY the cell's own sectionTargets — no global state dependency
+    const isActiveTarget = cell.sectionTargets.includes(cell.id);
+    const now = Date.now();
+    const rt = (now - lastActionTime) / 1000;
+    setLastActionTime(now);
+
+    let pointsEarned = 0;
+    let nextCombo = 0;
+
+    if (isActiveTarget) {
+      synth.playSuccess();
+      setHits((h) => h + 1);
+      nextCombo = combo + 1;
+      setCombo(nextCombo);
+      setMaxCombo((m) => Math.max(m, nextCombo));
+
+      const factor = nextCombo >= 20 ? 5 : nextCombo >= 10 ? 3 : nextCombo >= 5 ? 2 : 1;
+      pointsEarned = 100 * factor;
+      setScore((s) => s + pointsEarned);
+      setReactionTimes((times) => [...times, rt]);
+    } else {
+      synth.playFailure();
+      setErrors((e) => e + 1);
+      setCombo(0);
+      pointsEarned = -50;
+      setScore((s) => Math.max(0, s + pointsEarned));
+    }
+
+    setClickedCells((prev) => ({
+      ...prev,
+      [cell.uniqueKey]: {
+        correct: isActiveTarget,
+        scoreDelta: pointsEarned,
+        timestamp: now,
+      },
+    }));
+
+    // Update active section/targets for header display
+    const cellSection = Math.floor(cell.row / SECTION_SIZE);
+    if (cellSection !== activeSection) {
+      setCurrentSection(cellSection);
+      setActiveTargets(SECTION_SYMBOLS[level][cellSection]);
+    }
+
+    // Auto-scroll: keep clicked row visible
+    const container = gridScrollRef.current;
+    const rowEl = rowElRefs.current.get(cell.row);
+    if (container && rowEl) {
+      const containerRect = container.getBoundingClientRect();
+      const rowRect = rowEl.getBoundingClientRect();
+      const rowRelativeToContainer = rowRect.top - containerRect.top + container.scrollTop;
+      const viewMid = container.clientHeight / 2;
+      container.scrollTo({
+        top: rowRelativeToContainer - viewMid + rowRect.height / 2,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  // Analyze final stats in processed rows
+  const calculateFinalReport = () => {
+    let totalTargetInstances = 0;
+
+    for (let r = 0; r < symbolsGrid.length; r++) {
+      const row = symbolsGrid[r];
+      if (!row) continue;
+      const sectionIdx = Math.floor(r / SECTION_SIZE);
+      const sectionTargets = SECTION_SYMBOLS[level]?.[sectionIdx] ?? [];
+      row.forEach((cell) => {
+        if (sectionTargets.includes(cell.id)) {
+          totalTargetInstances++;
+        }
+      });
+    }
+
+    const totalClicks = hits + errors;
+    const precision = totalClicks > 0 ? Math.round((hits / totalClicks) * 100) : 0;
+    const missed = Math.max(0, totalTargetInstances - hits);
+    const avgReactionTime =
+      reactionTimes.length > 0
+        ? parseFloat((reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length).toFixed(2))
+        : 0;
+
+    let ratingStars = 2;
+    let classification: "aprovado" | "abaixo_da_media" | "reprovado" = "reprovado";
+    if (precision >= 95 && avgReactionTime < 0.9) {
+      ratingStars = 5;
+      classification = "aprovado";
+    } else if (precision >= 85 && avgReactionTime < 1.2) {
+      ratingStars = 4;
+      classification = "aprovado";
+    } else if (precision >= 70) {
+      ratingStars = 3;
+      classification = "abaixo_da_media";
+    }
+
+    return {
+      totalTargetInstances,
+      missed,
+      precision,
+      avgReactionTime,
+      ratingStars,
+      classification,
+    };
+  };
+
+  const report = calculateFinalReport();
 
   return (
-    <div className="glass rounded-3xl p-5 md:p-6 shadow-card">
-      <TestHeader
-        title="2/4 · Teste de Atenção"
-        subtitle="Siga a linha azul e marque a figura igual"
-      />
-      {phase === "intro" && (
-        <Intro
-          bullets={[
-            "Veja a entrada destacada em azul (à esquerda).",
-            "Siga a linha contínua até a figura de chegada.",
-            "Marque, abaixo, a figura igual à de chegada.",
-            "Quanto mais rápido e certo, melhor.",
-          ]}
-          onStart={() => {
-            speech.stop();
-            setRound(0);
-            setCorrect(0);
-            setPicked(null);
-            setPhase("running");
-          }}
-          speech={speech}
-          replayText="Siga a linha azul da entrada até a figura de chegada e marque a figura igual."
-        />
-      )}
-      {phase === "running" && (
-        <div>
-          <div className="text-sm font-semibold mb-2">
-            Rodada {round + 1}/{AT_ROUNDS.length} · Acertos: {correct}
+    <div className="space-y-4">
+      {/* Mode / Level Selection */}
+      {phase === "mode_select" && (
+        <div className="glass rounded-3xl p-6 md:p-8 space-y-6 text-center max-w-xl mx-auto shadow-glow">
+          <div className="w-16 h-16 mx-auto rounded-full bg-success/20 flex items-center justify-center text-3xl">
+            🎯
           </div>
-          <div className="rounded-2xl bg-white border border-border p-2">
-            <Worms />
-          </div>
-          <p className="text-xs text-muted-foreground mt-3 mb-1">
-            Qual figura é igual à de chegada?
+          <h2 className="text-xl md:text-2xl font-display font-bold">
+            Modo Treino de Atenção Concentrada
+          </h2>
+          <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
+            Selecione o nível de dificuldade para iniciar o treinamento de concentração DETRAN. O
+            teste simula o ritmo de uma avaliação psicológica profissional.
           </p>
-          <div className="grid grid-cols-4 gap-2">
-            {alts.map((sh, i) => {
-              const isPicked = picked === i;
-              const isCorrect = sh === targetShape;
-              const reveal = picked !== null;
-              return (
-                <button
-                  key={i}
-                  onClick={() => pick(sh)}
-                  className={`aspect-square rounded-2xl border-2 flex items-center justify-center bg-white transition-all ${
-                    reveal && isCorrect
-                      ? "border-success bg-success/10"
-                      : reveal && isPicked
-                        ? "border-destructive bg-destructive/10"
-                        : "border-border hover:border-primary/50"
-                  }`}
-                >
-                  <Shape shape={sh} size={44} />
-                </button>
-              );
-            })}
+
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+            <button
+              onClick={() => {
+                setLevel(1);
+                setPhase("intro");
+              }}
+              className="glass p-4 rounded-2xl hover:bg-accent/20 hover:scale-[1.02] transition-all text-left flex flex-col justify-between h-36"
+            >
+              <div>
+                <span className="text-xs font-bold text-success uppercase">Nível 1</span>
+                <h3 className="font-bold text-sm mt-1">Um Único Alvo</h3>
+              </div>
+              <p className="text-[10px] text-muted-foreground">
+                Procura 1 figura. Formas maiores, menos distração.
+              </p>
+            </button>
+            <button
+              onClick={() => {
+                setLevel(2);
+                setPhase("intro");
+              }}
+              className="glass p-4 rounded-2xl hover:bg-accent/20 hover:scale-[1.02] transition-all text-left flex flex-col justify-between h-36"
+            >
+              <div>
+                <span className="text-xs font-bold text-warning uppercase">Nível 2</span>
+                <h3 className="font-bold text-sm mt-1">Dois Alvos</h3>
+              </div>
+              <p className="text-[10px] text-muted-foreground">
+                Procura 2 figuras. Dificuldade e símbolos aumentados.
+              </p>
+            </button>
+            <button
+              onClick={() => {
+                setLevel(3);
+                setPhase("intro");
+              }}
+              className="glass p-4 rounded-2xl hover:bg-accent/20 hover:scale-[1.02] transition-all text-left flex flex-col justify-between h-36"
+            >
+              <div>
+                <span className="text-xs font-bold text-destructive uppercase">Nível 3</span>
+                <h3 className="font-bold text-sm mt-1">Três Alvos</h3>
+              </div>
+              <p className="text-[10px] text-muted-foreground">
+                Procura 3 figuras. Espaçamento mínimo e alta densidade.
+              </p>
+            </button>
+          </div>
+
+          <button
+            onClick={() => onDone({ correct: 0, total: 0 })}
+            className="text-xs text-muted-foreground hover:text-foreground mt-4 block mx-auto underline"
+          >
+            Pular Teste de Atenção
+          </button>
+        </div>
+      )}
+
+      {/* Intro Instructions Panel */}
+      {phase === "intro" && (
+        <div className="glass rounded-3xl p-6 md:p-8 space-y-6 max-w-xl mx-auto shadow-glow text-left">
+          <TestHeader
+            title={`Nível ${level} · Treino de Atenção`}
+            subtitle="Instruções do Exercício"
+          />
+          <ul className="space-y-2 mb-4">
+            <li className="text-xs md:text-sm flex items-start gap-2 p-3 rounded-xl bg-secondary/40 border border-border">
+              <span className="text-primary font-bold">•</span>
+              <span>
+                Você terá <strong>{level === 1 ? "60" : level === 2 ? "90" : "120"} segundos</strong>{" "}
+                para completar o teste.
+              </span>
+            </li>
+            <li className="text-xs md:text-sm flex items-start gap-2 p-3 rounded-xl bg-secondary/40 border border-border">
+              <span className="text-primary font-bold">•</span>
+              <span>Encontre e clique apenas nos símbolos solicitados na barra do topo.</span>
+            </li>
+            <li className="text-xs md:text-sm flex items-start gap-2 p-3 rounded-xl bg-secondary/40 border border-border">
+              <span className="text-primary font-bold">•</span>
+              <span>
+                <strong>MUDANÇA DE ALVO:</strong> Quando o alvo mudar, um <strong>marcador</strong>{" "}
+                aparecerá dentro da sequência. Tudo antes dele já foi concluído — continue de onde
+                parou.
+              </span>
+            </li>
+            <li className="text-xs md:text-sm flex items-start gap-2 p-3 rounded-xl bg-secondary/40 border border-border">
+              <span className="text-primary font-bold">•</span>
+              <span>
+                Use combos de acertos seguidos (5x, 10x, 20x) para multiplicar sua pontuação!
+              </span>
+            </li>
+          </ul>
+
+          <div className="flex gap-2 flex-wrap">
+            <button
+              onClick={() => setPhase("get_ready")}
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl gradient-primary text-primary-foreground font-semibold shadow-glow animate-pulse cursor-pointer"
+            >
+              <Play className="h-4 w-4" /> [COMEÇAR]
+            </button>
+            <button
+              onClick={() => setPhase("mode_select")}
+              className="px-4 py-3 rounded-xl glass text-xs font-semibold cursor-pointer"
+            >
+              Voltar ao Níveis
+            </button>
           </div>
         </div>
       )}
-      {phase === "done" && (
-        <DoneNext
-          summary={`${correct}/${AT_ROUNDS.length} acertos de atenção`}
-          onNext={() => onDone({ correct, total: AT_ROUNDS.length })}
-        />
+
+      {/* Countdown Panel */}
+      {phase === "get_ready" && (
+        <div className="glass rounded-3xl p-10 space-y-6 text-center max-w-md mx-auto shadow-glow flex flex-col items-center justify-center min-h-[350px]">
+          <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            Prepare-se...
+          </span>
+
+          <div className="bg-black/20 p-6 rounded-2xl border border-border/20 flex flex-col items-center gap-3">
+            <span className="text-xs font-semibold text-primary-glow">
+              ENCONTRE ESTES SÍMBOLOS:
+            </span>
+            <div className="flex gap-6 items-center">
+              {SECTION_SYMBOLS[level][0].map((tid) => (
+                <div key={tid} className="flex items-center justify-center">
+                  {SYMBOL_REGISTRY[tid]?.render(40)}
+                </div>
+              ))}
+            </div>
+            <span className="text-[9px] text-muted-foreground text-center">
+              A cada ~20 linhas o símbolo muda — observe os marcadores na sequência
+            </span>
+          </div>
+
+          <motion.div
+            key={readyCountdown}
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 300, damping: 15 }}
+            className="text-6xl font-display font-black text-primary"
+          >
+            {readyCountdown}
+          </motion.div>
+        </div>
+      )}
+
+      {/* Active Game Loop Screen */}
+      {phase === "playing" && (
+        <div className="flex flex-col max-w-3xl mx-auto h-full">
+          {/* Compact Stats Bar */}
+          <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-t-2xl border border-border/20 border-b-0 bg-black/30 backdrop-blur-sm flex-wrap shrink-0">
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="text-[10px] font-semibold text-muted-foreground uppercase">
+                Encontre:
+              </span>
+              <div className="flex gap-1.5">
+                {activeTargets.map((tid) => (
+                  <div key={tid} className="animate-pulse">
+                    {SYMBOL_REGISTRY[tid]?.render(20)}
+                  </div>
+                ))}
+              </div>
+              {activeSection < (SECTION_SYMBOLS[level]?.length ?? 1) - 1 && (
+                <span className="text-[8px] text-cyan-300/70 hidden sm:inline">
+                  (seção {activeSection + 1})
+                </span>
+              )}
+            </div>
+
+            <div className="flex items-center gap-3 text-[11px] font-semibold">
+              <span>
+                <span className="text-muted-foreground">⏱</span>{" "}
+                <span className={`font-display font-bold ${timeRemaining <= 10 ? "text-destructive" : "text-foreground"}`}>
+                  {Math.floor(timeRemaining / 60)}:{(timeRemaining % 60).toString().padStart(2, "0")}
+                </span>
+              </span>
+              <span className="text-success-glow">
+                ✓ <span className="font-display font-bold">{hits}</span>
+              </span>
+              <span className="text-destructive-glow">
+                ✗ <span className="font-display font-bold">{errors}</span>
+              </span>
+              <span className="text-primary-glow">
+                ★ <span className="font-display font-bold">{score}</span>
+              </span>
+              {combo >= 5 && (
+                <span className="bg-gradient-to-r from-amber-500 to-orange-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full animate-bounce">
+                  {combo}x🔥
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Grid — fills remaining space */}
+          <div className="flex-1 glass rounded-b-2xl rounded-t-none p-2 md:p-3 shadow-glow bg-background/25 min-h-0">
+            <div ref={gridScrollRef} className="relative flex flex-col gap-2 h-full overflow-y-auto px-2 py-2 border border-border/10 rounded-2xl bg-black/35 select-none scrollbar-thin">
+              {/* SVG worm path overlay */}
+              {snakePathD && (
+                <svg
+                  className="absolute inset-0 w-full pointer-events-none z-0"
+                  style={{ height: gridScrollRef.current?.scrollHeight || "100%" }}
+                >
+                  {/* Future path (cyan) */}
+                  <path
+                    d={snakePathD}
+                    stroke="rgba(34,211,238,0.10)"
+                    strokeWidth="20"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  {/* Traveled path (green) */}
+                  {snakePathTraveled && (
+                    <path
+                      d={snakePathTraveled}
+                      stroke="rgba(52,211,153,0.14)"
+                      strokeWidth="20"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  )}
+                </svg>
+              )}
+              {(() => {
+                let lastSectionIdx = -1;
+                const seenSections = new Set<number>();
+                return symbolsGrid.map((row, rowIndex) => {
+                  const isPastSection = Math.floor(rowIndex / SECTION_SIZE) < activeSection;
+                  const sectionIdx = Math.floor(rowIndex / SECTION_SIZE);
+                  const sectionTargets = SECTION_SYMBOLS[level]?.[sectionIdx] ?? [];
+
+                  const isNewSection = sectionIdx > 0 && sectionIdx !== lastSectionIdx && !seenSections.has(sectionIdx);
+                  if (sectionIdx !== lastSectionIdx) {
+                    lastSectionIdx = sectionIdx;
+                    seenSections.add(sectionIdx);
+                  }
+
+                  return (
+                    <Fragment key={rowIndex}>
+                      <div
+                        ref={(el) => { if (el) rowElRefs.current.set(rowIndex, el); else rowElRefs.current.delete(rowIndex); }}
+                        className={`relative z-10 flex items-center gap-2 py-1 border-b border-border/5 last:border-b-0 transition-opacity duration-300 ${
+                          isPastSection ? "opacity-35" : ""
+                        }`}
+                      >
+                        <span className="text-[9px] text-muted-foreground w-4 text-right shrink-0">
+                          {rowIndex + 1}
+                        </span>
+                        {isNewSection && (
+                          <div className="flex items-center gap-1 bg-cyan-400/10 border border-cyan-400/30 rounded-full px-1.5 py-0.5 shrink-0">
+                            {sectionTargets.map((tid) => {
+                              const pillSymSize = level === 1 ? 26 : level === 2 ? 22 : 18;
+                              return (
+                                <span key={tid}>
+                                  {SYMBOL_REGISTRY[tid]?.render(pillSymSize)}
+                                </span>
+                              );
+                            })}
+                          </div>
+                        )}
+                        <div className="flex gap-1 justify-around w-full">
+                          {row.map((cell) => {
+                            const result = clickedCells[cell.uniqueKey];
+                            const isClicked = !!result;
+                            const isCorrect = result?.correct;
+
+                            const btnSize =
+                              level === 1 ? "w-11 h-11" : level === 2 ? "w-9 h-9" : "w-8 h-8";
+                            const symSize = level === 1 ? 26 : level === 2 ? 22 : 18;
+
+                            return (
+                              <button
+                                key={cell.uniqueKey}
+                                onClick={() => handleCellClick(cell)}
+                                className={`relative rounded-xl border flex items-center justify-center transition-all cursor-pointer ${
+                                  isClicked
+                                    ? isCorrect
+                                      ? "border-success bg-success/20 shadow-success-glow"
+                                      : "border-destructive bg-destructive/20 shadow-destructive-glow animate-shake"
+                                    : "border-border/10 bg-white/5 hover:bg-white/10 hover:border-primary/40 active:scale-90"
+                                } ${btnSize}`}
+                                disabled={isClicked}
+                              >
+                                {SYMBOL_REGISTRY[cell.id]?.render(symSize)}
+
+                              {/* Float indicator badge */}
+                              {isClicked && (
+                                <motion.span
+                                  initial={{ opacity: 1, y: 0, scale: 0.8 }}
+                                  animate={{ opacity: 0, y: -25, scale: 1.1 }}
+                                  transition={{ duration: 0.65, ease: "easeOut" }}
+                                  className={`absolute text-[10px] font-bold pointer-events-none ${
+                                    isCorrect ? "text-success-glow" : "text-destructive-glow"
+                                  }`}
+                                >
+                                  {result.scoreDelta > 0
+                                    ? `+${result.scoreDelta}`
+                                    : result.scoreDelta}
+                                </motion.span>
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      </div>
+                    </Fragment>
+                );
+              });
+              })()}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Game Report/Result Dashboard */}
+      {phase === "result" && (
+        <div className="glass rounded-3xl p-6 md:p-8 max-w-2xl mx-auto shadow-glow space-y-6">
+          <div className="text-center">
+            <div className="w-16 h-16 mx-auto rounded-full bg-primary/20 flex items-center justify-center text-3xl mb-3 shadow-glow">
+              🏆
+            </div>
+            <h2 className="text-2xl font-display font-bold">Treino Finalizado!</h2>
+            <p className="text-muted-foreground text-xs mt-1">
+              {report.classification === "aprovado"
+                ? "Excelente desempenho! Continue assim para atingir o foco perfeito."
+                : report.classification === "abaixo_da_media"
+                  ? "Desempenho regular. Treine mais para melhorar sua precisão e velocidade."
+                  : "Desempenho abaixo do esperado. pratique mais para atingir o nível necessário."}
+            </p>
+          </div>
+
+          {/* Rating stars */}
+          <div className="flex justify-center gap-1.5 text-2xl text-amber-500">
+            {Array.from({ length: 5 }).map((_, idx) => (
+              <span key={idx}>{idx < report.ratingStars ? "⭐" : "☆"}</span>
+            ))}
+          </div>
+
+          {/* Classification badge */}
+          <div className="flex justify-center">
+            <div
+              className={`px-5 py-2 rounded-full font-display font-black text-sm uppercase tracking-wider border-2 ${
+                report.classification === "aprovado"
+                  ? "bg-success/15 border-success text-success-glow shadow-success-glow"
+                  : report.classification === "abaixo_da_media"
+                    ? "bg-amber-500/15 border-amber-500 text-amber-400 shadow-[0_0_12px_rgba(245,158,11,0.3)]"
+                    : "bg-destructive/15 border-destructive text-destructive-glow shadow-destructive-glow"
+              }`}
+            >
+              {report.classification === "aprovado"
+                ? "✓ Aprovado"
+                : report.classification === "abaixo_da_media"
+                  ? "⚠ Abaixo da Média"
+                  : "✗ Reprovado"}
+            </div>
+          </div>
+
+          {/* Score details */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div className="bg-secondary/40 p-4 rounded-2xl border border-border text-center">
+              <span className="text-[10px] uppercase text-muted-foreground tracking-wider font-semibold">
+                Pontuação
+              </span>
+              <p className="text-xl font-display font-black mt-1 text-primary-glow">{score}</p>
+            </div>
+            <div className="bg-secondary/40 p-4 rounded-2xl border border-border text-center">
+              <span className="text-[10px] uppercase text-muted-foreground tracking-wider font-semibold">
+                Acertos / Total alvos
+              </span>
+              <p className="text-xl font-display font-bold mt-1 text-success-glow">
+                {hits}{" "}
+                <span className="text-xs text-muted-foreground">/ {hits + report.missed}</span>
+              </p>
+            </div>
+            <div className="bg-secondary/40 p-4 rounded-2xl border border-border text-center">
+              <span className="text-[10px] uppercase text-muted-foreground tracking-wider font-semibold">
+                Cliques errados
+              </span>
+              <p className="text-xl font-display font-bold mt-1 text-destructive-glow">{errors}</p>
+            </div>
+            <div className="bg-secondary/40 p-4 rounded-2xl border border-border text-center">
+              <span className="text-[10px] uppercase text-muted-foreground tracking-wider font-semibold">
+                Alvos Não Marcados
+              </span>
+              <p className="text-xl font-display font-bold mt-1 text-zinc-400">{report.missed}</p>
+            </div>
+            <div className="bg-secondary/40 p-4 rounded-2xl border border-border text-center">
+              <span className="text-[10px] uppercase text-muted-foreground tracking-wider font-semibold">
+                Precisão
+              </span>
+              <p className="text-xl font-display font-bold mt-1">{report.precision}%</p>
+            </div>
+            <div className="bg-secondary/40 p-4 rounded-2xl border border-border text-center col-span-2 sm:col-span-1">
+              <span className="text-[10px] uppercase text-muted-foreground tracking-wider font-semibold">
+                Reação Média
+              </span>
+              <p className="text-xl font-display font-bold mt-1">{report.avgReactionTime}s</p>
+            </div>
+          </div>
+
+          {/* Historical progression log */}
+          {history.length > 1 && (
+            <div className="bg-black/10 p-4 rounded-2xl border border-border/10 space-y-2">
+              <h4 className="text-xs font-bold text-muted-foreground uppercase flex items-center gap-1.5">
+                📈 Histórico de Evolução
+              </h4>
+              <div className="max-h-36 overflow-y-auto space-y-1.5 scrollbar-thin">
+                {history.map((record, index) => (
+                  <div
+                    key={index}
+                    className="flex justify-between items-center text-xs p-2 rounded bg-black/25"
+                  >
+                    <span className="text-[10px] text-muted-foreground">{record.date}</span>
+                    <span className="font-semibold">Nível {record.level}</span>
+                    <span className="text-success-glow">{record.hits} acertos</span>
+                    <span className="font-bold">{record.score} pts</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="flex gap-2 flex-wrap">
+            <button
+              onClick={() => {
+                onDone({ correct: hits, total: hits + report.missed });
+              }}
+              className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl gradient-primary text-primary-foreground font-semibold shadow-glow animate-pulse cursor-pointer"
+            >
+              Concluir Teste e Avançar <ArrowRight className="h-4 w-4" />
+            </button>
+
+            <button
+              onClick={() => setPhase("mode_select")}
+              className="px-4 py-3 rounded-xl glass text-xs font-semibold cursor-pointer"
+            >
+              Refazer Exercício
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
@@ -857,9 +1570,25 @@ function Atencao({
 
 // ===================== TEST 3: MEMÓRIA RÁPIDA =====================
 const MEM_REFERENCE_OBJECTS = [
-  "casa", "árvore", "sol", "balão", "avião", "carro", "moto", "barco",
-  "bicicleta", "guarda-chuva", "cadeira", "peixe", "ferro", "vela",
-  "ponte", "pessoa", "pipa", "foice", "placa",
+  "casa",
+  "árvore",
+  "sol",
+  "balão",
+  "avião",
+  "carro",
+  "moto",
+  "barco",
+  "bicicleta",
+  "guarda-chuva",
+  "cadeira",
+  "peixe",
+  "ferro",
+  "vela",
+  "ponte",
+  "pessoa",
+  "pipa",
+  "foice",
+  "placa",
 ];
 
 function Memoria({
@@ -871,11 +1600,21 @@ function Memoria({
 }) {
   const MEM_SECS = 30;
   const WRITE_SECS = 60;
-  const [phase, setPhase] = useState<"intro" | "memorize" | "write" | "done">(
-    "intro",
-  );
+  const [phase, setPhase] = useState<"intro" | "memorize" | "write" | "done">("intro");
   const [time, setTime] = useState(MEM_SECS);
   const [text, setText] = useState("");
+
+  const score = useMemo(() => {
+    const items = text
+      .toLowerCase()
+      .split(/[\n,;]+/)
+      .map((x) => x.trim())
+      .filter(Boolean);
+    const matched = items.filter((w) =>
+      MEM_REFERENCE_OBJECTS.some((r) => w.includes(r) || r.includes(w)),
+    );
+    return matched.length;
+  }, [text]);
 
   useEffect(() => {
     if (phase === "intro")
@@ -902,23 +1641,12 @@ function Memoria({
   }, [phase, time, speech]);
 
   function finish() {
-    const items = text
-      .toLowerCase()
-      .split(/[\n,;]+/)
-      .map((x) => x.trim())
-      .filter(Boolean);
-    const matched = items.filter((w) =>
-      MEM_REFERENCE_OBJECTS.some((r) => w.includes(r) || r.includes(w)),
-    );
-    onDone({ items: matched.length });
+    onDone({ items: score });
   }
 
   return (
     <div className="glass rounded-3xl p-5 md:p-6 shadow-card">
-      <TestHeader
-        title="3/4 · Memória Rápida"
-        subtitle="Memorize e liste o máximo de objetos"
-      />
+      <TestHeader title="2/3 · Memória Rápida" subtitle="Memorize e liste o máximo de objetos" />
       {phase === "intro" && (
         <Intro
           bullets={[
@@ -949,18 +1677,14 @@ function Memoria({
               {time}s
             </span>
           </div>
-          <div className="rounded-2xl bg-white border border-border overflow-hidden flex justify-center">
+          <div className="rounded-2xl bg-white border border-border overflow-hidden flex justify-center p-2">
             <img
               src={memoriaImg}
               alt="Cena para memorizar"
-              className="max-h-[70vh] w-auto"
-              style={{ aspectRatio: "9/16", objectFit: "contain" }}
+              className="w-full max-w-4xl max-h-[70vh] object-contain rounded-xl"
             />
           </div>
-          <button
-            onClick={() => setTime(0)}
-            className="mt-3 px-4 py-2 rounded-xl glass text-sm"
-          >
+          <button onClick={() => setTime(0)} className="mt-3 px-4 py-2 rounded-xl glass text-sm">
             Já memorizei →
           </button>
         </div>
@@ -983,15 +1707,18 @@ function Memoria({
             placeholder="ex: casa, árvore, carro, balão..."
             className="w-full h-48 p-4 rounded-2xl bg-background/60 border border-border text-sm leading-relaxed"
           />
-          <button
-            onClick={() => setTime(0)}
-            className="mt-3 px-4 py-2 rounded-xl glass text-sm"
-          >
+          <button onClick={() => setTime(0)} className="mt-3 px-4 py-2 rounded-xl glass text-sm">
             Terminei →
           </button>
         </div>
       )}
-      {phase === "done" && <DoneNext summary="Memória registrada" onNext={finish} />}
+      {phase === "done" && (
+        <DoneNext
+          summary={`Objetos lembrados: ${score} · ${score >= 12 ? "Aprovado" : "Reprovado"} (Mínimo: 12)`}
+          onNext={finish}
+          status={score >= 12 ? "success" : "danger"}
+        />
+      )}
     </div>
   );
 }
@@ -1040,9 +1767,7 @@ function CShape({
             fill={color}
           />
         )}
-        {kind === "pentagon" && (
-          <polygon points="20,4 36,16 30,34 10,34 4,16" fill={color} />
-        )}
+        {kind === "pentagon" && <polygon points="20,4 36,16 30,34 10,34 4,16" fill={color} />}
       </g>
     </svg>
   );
@@ -1060,9 +1785,7 @@ const ci = (key: string, color = NAVY) => (
 const di = (key: string, color = NAVY) => (
   <CShape key={key} kind="diamond" size={64} color={color} />
 );
-const st = (key: string, color = NAVY) => (
-  <CShape key={key} kind="star" size={64} color={color} />
-);
+const st = (key: string, color = NAVY) => <CShape key={key} kind="star" size={64} color={color} />;
 
 function Row({ children }: { children: React.ReactNode }) {
   return <div className="flex gap-1 justify-center items-center flex-wrap">{children}</div>;
@@ -1072,12 +1795,14 @@ function Arrow({
   dir,
   size = 56,
   color = NAVY,
+  rotate,
 }: {
-  dir: "up" | "right" | "down" | "left";
+  dir?: "up" | "right" | "down" | "left";
   size?: number;
   color?: string;
+  rotate?: number;
 }) {
-  const rot = { up: -90, right: 0, down: 90, left: 180 }[dir];
+  const rot = rotate !== undefined ? rotate : { up: -90, right: 0, down: 90, left: 180 }[dir || "right"];
   return (
     <svg width={size} height={size} viewBox="0 0 40 40">
       <g transform={`rotate(${rot} 20 20)`}>
@@ -1092,10 +1817,7 @@ function Dots({ n }: { n: number }) {
   const arr = Array.from({ length: n });
   const cols = Math.min(n, 4);
   return (
-    <div
-      className="grid gap-1"
-      style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
-    >
+    <div className="grid gap-1" style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}>
       {arr.map((_, i) => (
         <span key={i} className="block w-3 h-3 rounded-full" style={{ background: NAVY }} />
       ))}
@@ -1103,13 +1825,7 @@ function Dots({ n }: { n: number }) {
   );
 }
 
-function Grid2x2({
-  fill,
-  color = NAVY,
-}: {
-  fill: Array<0 | 1 | 2 | 3>;
-  color?: string;
-}) {
+function Grid2x2({ fill, color = NAVY }: { fill: Array<0 | 1 | 2 | 3>; color?: string }) {
   const cell = (i: 0 | 1 | 2 | 3) => {
     const x = i % 2 === 0 ? 4 : 33;
     const y = i < 2 ? 4 : 33;
@@ -1130,23 +1846,23 @@ function Grid2x2({
 // Célula da matriz 2x2 estilo psicotécnico
 type MCell =
   | { type: "shape"; kind: ShapeKind; color?: string; rotate?: number }
-  | { type: "arrow"; dir: "up" | "right" | "down" | "left"; color?: string }
+  | { type: "arrow"; dir?: "up" | "right" | "down" | "left"; color?: string }
+  | { type: "custom"; render: () => React.ReactNode }
   | { type: "q" }
   | { type: "empty" };
 
 function MatrixCell({ c }: { c: MCell }) {
   return (
     <div
-      className="aspect-square bg-white flex items-center justify-center"
+      className="aspect-square bg-white flex items-center justify-center p-1 overflow-hidden"
       style={{ border: "1.5px solid #9aa0ad" }}
     >
       {c.type === "shape" && (
         <CShape kind={c.kind} color={c.color ?? NAVY} rotate={c.rotate ?? 0} size={78} />
       )}
       {c.type === "arrow" && <Arrow dir={c.dir} color={c.color ?? NAVY} size={68} />}
-      {c.type === "q" && (
-        <span className="text-5xl font-light text-zinc-400">?</span>
-      )}
+      {c.type === "custom" && c.render()}
+      {c.type === "q" && <span className="text-5xl font-light text-zinc-400">?</span>}
     </div>
   );
 }
@@ -1161,23 +1877,59 @@ function Matrix2x2({ cells }: { cells: [MCell, MCell, MCell, MCell] }) {
   );
 }
 
+function Matrix2x3({ cells }: { cells: MCell[] }) {
+  return (
+    <div className="mx-auto grid grid-cols-3 gap-2 max-w-[400px]">
+      {cells.map((c, i) => (
+        <MatrixCell key={i} c={c} />
+      ))}
+    </div>
+  );
+}
+
+function Matrix3x3({ cells }: { cells: MCell[] }) {
+  return (
+    <div className="mx-auto grid grid-cols-3 gap-2 max-w-[360px]">
+      {cells.map((c, i) => (
+        <MatrixCell key={i} c={c} />
+      ))}
+    </div>
+  );
+}
+
 // Helper: opção como célula única (mesmo estilo)
-const optShape = (kind: ShapeKind, color = NAVY) => () => (
-  <div
-    className="aspect-square w-full flex items-center justify-center bg-white"
-    style={{ border: "1.5px solid #9aa0ad" }}
-  >
-    <CShape kind={kind} color={color} size={68} />
-  </div>
-);
-const optArrow = (dir: "up" | "right" | "down" | "left", color = NAVY) => () => (
-  <div
-    className="aspect-square w-full flex items-center justify-center bg-white"
-    style={{ border: "1.5px solid #9aa0ad" }}
-  >
-    <Arrow dir={dir} color={color} size={60} />
-  </div>
-);
+const optShape =
+  (kind: ShapeKind, color = NAVY) =>
+  () => (
+    <div
+      className="aspect-square w-full flex items-center justify-center bg-white"
+      style={{ border: "1.5px solid #9aa0ad" }}
+    >
+      <CShape kind={kind} color={color} size={68} />
+    </div>
+  );
+
+const optArrow =
+  (dir: "up" | "right" | "down" | "left", color = NAVY) =>
+  () => (
+    <div
+      className="aspect-square w-full flex items-center justify-center bg-white"
+      style={{ border: "1.5px solid #9aa0ad" }}
+    >
+      <Arrow dir={dir} color={color} size={60} />
+    </div>
+  );
+
+const optCustom =
+  (render: () => React.ReactNode) =>
+  () => (
+    <div
+      className="aspect-square w-full flex items-center justify-center bg-white p-1 overflow-hidden"
+      style={{ border: "1.5px solid #9aa0ad" }}
+    >
+      {render()}
+    </div>
+  );
 
 // Helpers para montar células da matriz
 const sC = (kind: ShapeKind, color = NAVY, rotate = 0): MCell => ({
@@ -1186,21 +1938,169 @@ const sC = (kind: ShapeKind, color = NAVY, rotate = 0): MCell => ({
   color,
   rotate,
 });
+
 const aC = (dir: "up" | "right" | "down" | "left", color = NAVY): MCell => ({
   type: "arrow",
   dir,
   color,
 });
+
 const Q: MCell = { type: "q" };
 
-// Cada questão mostra uma matriz 2x2 com 3 figuras + "?" e 4 alternativas A/B/C/D
+// Helpers para rendering complexo na Fase 3 e 4
+const renderShapes = (kind: ShapeKind, color: string, count: number) => () => {
+  const gridCols = count <= 3 ? count : count === 4 ? 2 : 3;
+  return (
+    <div
+      className="grid gap-1 justify-items-center items-center"
+      style={{ gridTemplateColumns: `repeat(${gridCols}, minmax(0, 1fr))` }}
+    >
+      {Array.from({ length: count }).map((_, idx) => (
+        <CShape key={idx} kind={kind} color={color} size={28} />
+      ))}
+    </div>
+  );
+};
+
+const renderSemicircle = (dir: "left" | "right" | "up" | "down", color = NAVY) => () => {
+  let d = "";
+  if (dir === "left") d = "M20,5 A15,15 0 0,0 20,35 Z";
+  if (dir === "right") d = "M20,5 A15,15 0 0,1 20,35 Z";
+  if (dir === "up") d = "M5,20 A15,15 0 0,1 35,20 Z";
+  if (dir === "down") d = "M5,20 A15,15 0 0,0 35,20 Z";
+  return (
+    <svg width="68" height="68" viewBox="0 0 40 40">
+      <path d={d} fill={color} />
+    </svg>
+  );
+};
+
+const renderSquareCorners = (corners: ("TL" | "TR" | "BL" | "BR")[], color = NAVY) => () => {
+  return (
+    <svg width="68" height="68" viewBox="0 0 40 40">
+      {corners.includes("TL") && <rect x="6" y="6" width="14" height="14" fill={color} />}
+      {corners.includes("TR") && <rect x="20" y="6" width="14" height="14" fill={color} />}
+      {corners.includes("BL") && <rect x="6" y="20" width="14" height="14" fill={color} />}
+      {corners.includes("BR") && <rect x="20" y="20" width="14" height="14" fill={color} />}
+    </svg>
+  );
+};
+
+const renderDoubleDots = (pos: "horizontal" | "vertical", color1: string, color2: string) => () => {
+  return (
+    <svg width="68" height="68" viewBox="0 0 40 40">
+      {pos === "horizontal" ? (
+        <>
+          <circle cx="12" cy="20" r="6" fill={color1} />
+          <circle cx="28" cy="20" r="6" fill={color2} />
+        </>
+      ) : (
+        <>
+          <circle cx="20" cy="12" r="6" fill={color1} />
+          <circle cx="20" cy="28" r="6" fill={color2} />
+        </>
+      )}
+    </svg>
+  );
+};
+
+const renderDoubleShapes = (
+  pos: "horizontal" | "vertical",
+  kind1: ShapeKind,
+  color1: string,
+  kind2: ShapeKind,
+  color2: string
+) => () => {
+  return (
+    <div className={`flex gap-2 items-center justify-center ${pos === "vertical" ? "flex-col" : "flex-row"}`}>
+      <CShape kind={kind1} color={color1} size={30} />
+      <CShape kind={kind2} color={color2} size={30} />
+    </div>
+  );
+};
+
+const renderSemicircleArc = (dir: "left" | "right" | "up" | "down", color = NAVY) => () => {
+  let d = "";
+  if (dir === "left") d = "M20,5 A15,15 0 0,0 20,35";
+  if (dir === "right") d = "M20,5 A15,15 0 0,1 20,35";
+  if (dir === "up") d = "M5,20 A15,15 0 0,1 35,20";
+  if (dir === "down") d = "M5,20 A15,15 0 0,0 35,20";
+  return (
+    <svg width="68" height="68" viewBox="0 0 40 40">
+      <path d={d} fill="none" stroke={color} strokeWidth="3" strokeLinecap="round" />
+    </svg>
+  );
+};
+
+const renderOverlay = (parts: ("circle" | "square" | "horiz" | "vert" | "diag")[], color = NAVY) => () => {
+  return (
+    <svg width="68" height="68" viewBox="0 0 40 40">
+      {parts.includes("circle") && <circle cx="20" cy="20" r="14" fill="none" stroke={color} strokeWidth="3" />}
+      {parts.includes("square") && <rect x="6" y="6" width="28" height="28" fill="none" stroke={color} strokeWidth="3" />}
+      {parts.includes("horiz") && <line x1="6" y1="20" x2="34" y2="20" stroke={color} strokeWidth="3" />}
+      {parts.includes("vert") && <line x1="20" y1="6" x2="20" y2="34" stroke={color} strokeWidth="3" />}
+      {parts.includes("diag") && <line x1="6" y1="6" x2="34" y2="34" stroke={color} strokeWidth="3" />}
+    </svg>
+  );
+};
+
+const renderSubtraction = (shape: "circle" | "square" | "triangle" | "none", hasLine: boolean, color = NAVY) => () => {
+  return (
+    <svg width="68" height="68" viewBox="0 0 40 40">
+      {shape === "circle" && <circle cx="20" cy="20" r="14" fill="none" stroke={color} strokeWidth="3" />}
+      {shape === "square" && <rect x="6" y="6" width="28" height="28" fill="none" stroke={color} strokeWidth="3" />}
+      {shape === "triangle" && <polygon points="20,6 34,32 6,32" fill="none" stroke={color} strokeWidth="3" />}
+      {hasLine && <line x1="20" y1="6" x2="20" y2="32" stroke={color} strokeWidth="3" />}
+    </svg>
+  );
+};
+
+const renderCornerDots = (corner: "TL" | "TR" | "BL" | "BR", color1 = NAVY, color2 = RED) => () => {
+  const coords = {
+    TL: [{ cx: 10, cy: 10 }, { cx: 20, cy: 10 }],
+    TR: [{ cx: 30, cy: 10 }, { cx: 20, cy: 10 }],
+    BR: [{ cx: 30, cy: 30 }, { cx: 20, cy: 30 }],
+    BL: [{ cx: 10, cy: 30 }, { cx: 20, cy: 30 }],
+  }[corner];
+  return (
+    <svg width="68" height="68" viewBox="0 0 40 40">
+      <circle cx={coords[0].cx} cy={coords[0].cy} r="4" fill={color1} />
+      <circle cx={coords[1].cx} cy={coords[1].cy} r="4" fill={color2} />
+    </svg>
+  );
+};
+
+const renderThreeDots = (colors: string[]) => () => {
+  return (
+    <svg width="68" height="68" viewBox="0 0 40 40">
+      <circle cx="20" cy="10" r="4" fill={colors[0]} />
+      <circle cx="20" cy="20" r="4" fill={colors[1]} />
+      <circle cx="20" cy="30" r="4" fill={colors[2]} />
+    </svg>
+  );
+};
+
+const renderNestedShapes = (outer: ShapeKind, inner: ShapeKind, color = NAVY) => () => {
+  return (
+    <svg width="68" height="68" viewBox="0 0 40 40">
+      {/* Outer shape (drawn larger and with outline only) */}
+      {outer === "circle" && <circle cx="20" cy="20" r="15" fill="none" stroke={color} strokeWidth="2.5" />}
+      {outer === "square" && <rect x="5" y="5" width="30" height="30" fill="none" stroke={color} strokeWidth="2.5" />}
+      {outer === "triangle" && <polygon points="20,5 35,32 5,32" fill="none" stroke={color} strokeWidth="2.5" />}
+      
+      {/* Inner shape (drawn smaller and filled) */}
+      {inner === "circle" && <circle cx="20" cy="20" r="6" fill={color} />}
+      {inner === "square" && <rect x="14" y="14" width="12" height="12" fill={color} />}
+      {inner === "triangle" && <polygon points="20,13 27,25 13,25" fill={color} />}
+    </svg>
+  );
+};
+
+// FASE 1 (Q1-5): Matrizes 2x2 Simples
 const LOG_QUESTIONS: LogQuestion[] = [
-  // 1 — repetição simples
   {
     question: "Observe a matriz e descubra a figura que completa o conjunto:",
-    prompt: () => (
-      <Matrix2x2 cells={[sC("diamond"), sC("diamond"), sC("diamond"), Q]} />
-    ),
+    prompt: () => <Matrix2x2 cells={[sC("diamond"), sC("diamond"), sC("diamond"), Q]} />,
     options: [
       { key: "A", render: optShape("circle") },
       { key: "B", render: optShape("diamond") },
@@ -1210,60 +2110,10 @@ const LOG_QUESTIONS: LogQuestion[] = [
     correct: "B",
     explain: "Todas as células contêm o mesmo losango azul; a quarta segue o padrão.",
   },
-  // 2 — repetição com cor
   {
     question: "Qual figura completa a matriz?",
     prompt: () => (
-      <Matrix2x2
-        cells={[sC("circle", YLW), sC("circle", YLW), sC("circle", YLW), Q]}
-      />
-    ),
-    options: [
-      { key: "A", render: optShape("circle", YLW) },
-      { key: "B", render: optShape("square", YLW) },
-      { key: "C", render: optShape("triangle", YLW) },
-      { key: "D", render: optShape("circle", NAVY) },
-    ],
-    correct: "A",
-    explain: "As três células mostram o mesmo círculo amarelo; a quarta repete o padrão.",
-  },
-  // 3 — par por linha (cada linha tem losango + círculo)
-  {
-    question: "Qual figura completa a matriz?",
-    prompt: () => (
-      <Matrix2x2 cells={[sC("diamond"), sC("circle"), sC("diamond"), Q]} />
-    ),
-    options: [
-      { key: "A", render: optShape("diamond") },
-      { key: "B", render: optShape("square") },
-      { key: "C", render: optShape("circle") },
-      { key: "D", render: optShape("triangle") },
-    ],
-    correct: "C",
-    explain: "Cada linha contém um losango e um círculo. A linha de baixo precisa do círculo.",
-  },
-  // 4 — coluna constante (quadrado na 2ª coluna)
-  {
-    question: "Qual figura completa a matriz?",
-    prompt: () => (
-      <Matrix2x2 cells={[sC("triangle"), sC("square"), Q, sC("square")]} />
-    ),
-    options: [
-      { key: "A", render: optShape("square") },
-      { key: "B", render: optShape("circle") },
-      { key: "C", render: optShape("triangle") },
-      { key: "D", render: optShape("diamond") },
-    ],
-    correct: "C",
-    explain: "A 2ª coluna tem quadrados e a 1ª tem triângulos. Falta o triângulo embaixo.",
-  },
-  // 5 — alternância de cor por coluna
-  {
-    question: "Qual figura completa a matriz?",
-    prompt: () => (
-      <Matrix2x2
-        cells={[sC("circle", RED), sC("circle", NAVY), sC("circle", RED), Q]}
-      />
+      <Matrix2x2 cells={[sC("circle", RED), sC("circle", NAVY), sC("circle", RED), Q]} />
     ),
     options: [
       { key: "A", render: optShape("circle", RED) },
@@ -1272,28 +2122,77 @@ const LOG_QUESTIONS: LogQuestion[] = [
       { key: "D", render: optShape("circle", YLW) },
     ],
     correct: "B",
-    explain: "1ª coluna sempre vermelha, 2ª coluna sempre azul. Falta o círculo azul.",
+    explain: "1ª coluna = vermelho, 2ª coluna = azul. Falta o círculo azul na segunda coluna.",
   },
-  // 6 — setas todas iguais
   {
-    question: "Qual seta completa a matriz?",
-    prompt: () => (
-      <Matrix2x2 cells={[aC("left"), aC("left"), aC("left"), Q]} />
-    ),
+    question: "Qual figura completa a matriz?",
+    prompt: () => <Matrix2x2 cells={[sC("triangle"), sC("square"), sC("triangle"), Q]} />,
     options: [
-      { key: "A", render: optArrow("right") },
-      { key: "B", render: optArrow("left") },
+      { key: "A", render: optShape("triangle") },
+      { key: "B", render: optShape("circle") },
+      { key: "C", render: optShape("square") },
+      { key: "D", render: optShape("diamond") },
+    ],
+    correct: "C",
+    explain: "Cada linha contém triângulo seguido de quadrado. Falta o quadrado na segunda linha.",
+  },
+  {
+    question: "Qual figura completa a matriz?",
+    prompt: () => <Matrix2x2 cells={[sC("circle"), sC("triangle"), Q, sC("triangle")]} />,
+    options: [
+      { key: "A", render: optShape("square") },
+      { key: "B", render: optShape("circle") },
+      { key: "C", render: optShape("triangle") },
+      { key: "D", render: optShape("diamond") },
+    ],
+    correct: "B",
+    explain: "A 1ª coluna tem círculos, a 2ª tem triângulos. Falta o círculo embaixo.",
+  },
+  {
+    question: "Qual seta completa a matriz de inversão?",
+    prompt: () => <Matrix2x2 cells={[aC("left"), aC("right"), aC("left"), Q]} />,
+    options: [
+      { key: "A", render: optArrow("left") },
+      { key: "B", render: optArrow("right") },
       { key: "C", render: optArrow("up") },
       { key: "D", render: optArrow("down") },
     ],
     correct: "B",
-    explain: "Todas as setas apontam para a esquerda; a quarta segue o padrão.",
+    explain: "A seta inverte a direção horizontalmente na linha (esquerda para direita). Falta a seta para a direita.",
   },
-  // 7 — rotação 90° horário (cima → direita → baixo → esquerda)
+  // FASE 2 (Q6-10): Matrizes 2x3 — Permutação de 3 atributos
   {
-    question: "As setas giram 90° no sentido horário. Qual completa?",
+    question: "Na linha 2, qual cor completa a sequência? (Cada cor aparece uma vez por linha)",
     prompt: () => (
-      <Matrix2x2 cells={[aC("up"), aC("right"), aC("down"), Q]} />
+      <Matrix2x3 cells={[sC("circle", NAVY), sC("circle", GRN), sC("circle", YLW), sC("circle", GRN), sC("circle", YLW), Q]} />
+    ),
+    options: [
+      { key: "A", render: optShape("circle", NAVY) },
+      { key: "B", render: optShape("circle", GRN) },
+      { key: "C", render: optShape("circle", YLW) },
+      { key: "D", render: optShape("circle", RED) },
+    ],
+    correct: "A",
+    explain: "Cada linha contém azul, verde e amarelo em permutação. Na linha 2 falta azul.",
+  },
+  {
+    question: "Qual forma completa a sequência na linha 2? (Cada forma aparece uma vez por linha)",
+    prompt: () => (
+      <Matrix2x3 cells={[sC("triangle"), sC("square"), sC("circle"), sC("circle"), sC("triangle"), Q]} />
+    ),
+    options: [
+      { key: "A", render: optShape("circle") },
+      { key: "B", render: optShape("triangle") },
+      { key: "C", render: optShape("square") },
+      { key: "D", render: optShape("diamond") },
+    ],
+    correct: "C",
+    explain: "Cada linha tem triângulo, quadrado e círculo. Na linha 2 falta o quadrado.",
+  },
+  {
+    question: "Qual seta completa a sequência na linha 2?",
+    prompt: () => (
+      <Matrix2x3 cells={[aC("up"), aC("right"), aC("down"), aC("down"), aC("up"), Q]} />
     ),
     options: [
       { key: "A", render: optArrow("up") },
@@ -1301,245 +2200,433 @@ const LOG_QUESTIONS: LogQuestion[] = [
       { key: "C", render: optArrow("down") },
       { key: "D", render: optArrow("left") },
     ],
-    correct: "D",
-    explain: "Cima → direita → baixo → esquerda (giro de 90° horário).",
-  },
-  // 8 — par triângulo+losango por linha
-  {
-    question: "Qual figura completa a matriz?",
-    prompt: () => (
-      <Matrix2x2 cells={[sC("triangle"), sC("diamond"), sC("triangle"), Q]} />
-    ),
-    options: [
-      { key: "A", render: optShape("triangle") },
-      { key: "B", render: optShape("circle") },
-      { key: "C", render: optShape("diamond") },
-      { key: "D", render: optShape("square") },
-    ],
-    correct: "C",
-    explain: "Cada linha tem triângulo seguido de losango. Falta o losango.",
-  },
-  // 9 — coluna esquerda = círculo
-  {
-    question: "Qual figura completa a matriz?",
-    prompt: () => (
-      <Matrix2x2 cells={[sC("circle"), sC("square"), Q, sC("square")]} />
-    ),
-    options: [
-      { key: "A", render: optShape("circle") },
-      { key: "B", render: optShape("square") },
-      { key: "C", render: optShape("diamond") },
-      { key: "D", render: optShape("triangle") },
-    ],
-    correct: "A",
-    explain: "A 1ª coluna tem círculos; a 2ª tem quadrados. Falta o círculo embaixo.",
-  },
-  // 10 — par de cores por linha
-  {
-    question: "Qual figura completa a matriz?",
-    prompt: () => (
-      <Matrix2x2
-        cells={[
-          sC("diamond", GRN),
-          sC("diamond", NAVY),
-          sC("diamond", GRN),
-          Q,
-        ]}
-      />
-    ),
-    options: [
-      { key: "A", render: optShape("diamond", GRN) },
-      { key: "B", render: optShape("diamond", NAVY) },
-      { key: "C", render: optShape("circle", NAVY) },
-      { key: "D", render: optShape("square", NAVY) },
-    ],
     correct: "B",
-    explain: "Em cada linha: losango verde + losango azul. Falta o losango azul.",
+    explain: "Cada linha tem cima, direita e baixo. Na linha 2 falta a direita.",
   },
-  // 11 — diagonal igual
   {
-    question: "Qual figura completa a matriz?",
+    question: "Qual combinação de cor e forma completa a matriz?",
     prompt: () => (
-      <Matrix2x2 cells={[sC("square"), sC("circle"), sC("circle"), Q]} />
-    ),
-    options: [
-      { key: "A", render: optShape("circle") },
-      { key: "B", render: optShape("square") },
-      { key: "C", render: optShape("triangle") },
-      { key: "D", render: optShape("diamond") },
-    ],
-    correct: "B",
-    explain: "A diagonal principal (canto sup. esq. e inf. dir.) tem quadrados.",
-  },
-  // 12 — cor varia por linha, forma por coluna
-  {
-    question: "Qual figura completa a matriz?",
-    prompt: () => (
-      <Matrix2x2
-        cells={[
-          sC("circle", NAVY),
-          sC("diamond", NAVY),
-          sC("circle", RED),
-          Q,
-        ]}
-      />
-    ),
-    options: [
-      { key: "A", render: optShape("circle", RED) },
-      { key: "B", render: optShape("diamond", NAVY) },
-      { key: "C", render: optShape("diamond", RED) },
-      { key: "D", render: optShape("square", RED) },
-    ],
-    correct: "C",
-    explain: "A linha de baixo é toda vermelha; a 2ª coluna são losangos. Logo: losango vermelho.",
-  },
-  // 13 — par cima/baixo
-  {
-    question: "Qual seta completa a matriz?",
-    prompt: () => (
-      <Matrix2x2 cells={[aC("up"), aC("down"), aC("up"), Q]} />
-    ),
-    options: [
-      { key: "A", render: optArrow("up") },
-      { key: "B", render: optArrow("left") },
-      { key: "C", render: optArrow("down") },
-      { key: "D", render: optArrow("right") },
-    ],
-    correct: "C",
-    explain: "Cada linha alterna seta para cima e seta para baixo.",
-  },
-  // 14 — quadrado + triângulo por linha
-  {
-    question: "Qual figura completa a matriz?",
-    prompt: () => (
-      <Matrix2x2 cells={[sC("square"), sC("triangle"), sC("square"), Q]} />
-    ),
-    options: [
-      { key: "A", render: optShape("square") },
-      { key: "B", render: optShape("circle") },
-      { key: "C", render: optShape("triangle") },
-      { key: "D", render: optShape("diamond") },
-    ],
-    correct: "C",
-    explain: "Cada linha: quadrado seguido de triângulo.",
-  },
-  // 15 — mesma forma, cores alternam por coluna
-  {
-    question: "Qual figura completa a matriz?",
-    prompt: () => (
-      <Matrix2x2
-        cells={[
-          sC("triangle", NAVY),
-          sC("triangle", GRN),
-          sC("triangle", NAVY),
-          Q,
-        ]}
-      />
+      <Matrix2x3 cells={[
+        sC("triangle", NAVY), sC("square", GRN), sC("circle", YLW),
+        sC("square", YLW), sC("circle", NAVY), Q
+      ]} />
     ),
     options: [
       { key: "A", render: optShape("triangle", NAVY) },
       { key: "B", render: optShape("triangle", GRN) },
-      { key: "C", render: optShape("circle", GRN) },
-      { key: "D", render: optShape("square", GRN) },
+      { key: "C", render: optShape("square", NAVY) },
+      { key: "D", render: optShape("circle", GRN) },
     ],
     correct: "B",
-    explain: "A 1ª coluna é azul e a 2ª é verde; todas são triângulos.",
+    explain: "Cada linha contém triângulo, quadrado e círculo associados a azul, verde e amarelo de forma permutada. Falta o triângulo verde.",
   },
-  // 16 — três iguais + ?
   {
-    question: "Qual figura completa a matriz?",
+    question: "A linha 2 é o espelho da linha 1. Qual figura completa a sequência?",
     prompt: () => (
-      <Matrix2x2
-        cells={[
-          sC("square", RED),
-          sC("square", RED),
-          sC("square", RED),
-          Q,
-        ]}
-      />
+      <Matrix2x3 cells={[sC("diamond", RED), sC("diamond", NAVY), sC("diamond", GRN), sC("diamond", GRN), sC("diamond", NAVY), Q]} />
     ),
     options: [
-      { key: "A", render: optShape("circle", RED) },
-      { key: "B", render: optShape("square", NAVY) },
-      { key: "C", render: optShape("square", RED) },
-      { key: "D", render: optShape("triangle", RED) },
+      { key: "A", render: optShape("diamond", RED) },
+      { key: "B", render: optShape("diamond", NAVY) },
+      { key: "C", render: optShape("diamond", GRN) },
+      { key: "D", render: optShape("diamond", YLW) },
     ],
-    correct: "C",
-    explain: "As três células mostram o quadrado vermelho; a quarta repete o padrão.",
+    correct: "A",
+    explain: "A linha 2 espelha a linha 1: verde, azul, vermelho. Falta o diamante vermelho.",
   },
-  // 17 — combinação cor+direção
+  // FASE 3 (Q11-20): Proporção, Contagem e Rotação Angular
   {
-    question: "Qual seta completa a matriz?",
-    prompt: () => (
-      <Matrix2x2
-        cells={[
-          aC("left", RED),
-          aC("right", NAVY),
-          aC("left", RED),
-          Q,
-        ]}
-      />
-    ),
+    question: "As setas giram 90 graus no sentido horário. Qual completa?",
+    prompt: () => <Matrix2x2 cells={[aC("up"), aC("right"), aC("down"), Q]} />,
     options: [
-      { key: "A", render: optArrow("left", NAVY) },
-      { key: "B", render: optArrow("right", NAVY) },
-      { key: "C", render: optArrow("right", RED) },
-      { key: "D", render: optArrow("left", RED) },
-    ],
-    correct: "B",
-    explain: "Cada linha: seta vermelha à esquerda + seta azul à direita.",
-  },
-  // 18 — cor muda por linha
-  {
-    question: "Qual figura completa a matriz?",
-    prompt: () => (
-      <Matrix2x2
-        cells={[
-          sC("diamond", NAVY),
-          sC("diamond", NAVY),
-          sC("diamond", GRN),
-          Q,
-        ]}
-      />
-    ),
-    options: [
-      { key: "A", render: optShape("diamond", NAVY) },
-      { key: "B", render: optShape("diamond", GRN) },
-      { key: "C", render: optShape("circle", GRN) },
-      { key: "D", render: optShape("square", GRN) },
-    ],
-    correct: "B",
-    explain: "A linha de cima é azul, a de baixo é verde; todos são losangos.",
-  },
-  // 19 — círculo + triângulo
-  {
-    question: "Qual figura completa a matriz?",
-    prompt: () => (
-      <Matrix2x2 cells={[sC("circle"), sC("triangle"), sC("circle"), Q]} />
-    ),
-    options: [
-      { key: "A", render: optShape("square") },
-      { key: "B", render: optShape("circle") },
-      { key: "C", render: optShape("diamond") },
-      { key: "D", render: optShape("triangle") },
+      { key: "A", render: optArrow("up") },
+      { key: "B", render: optArrow("right") },
+      { key: "C", render: optArrow("down") },
+      { key: "D", render: optArrow("left") },
     ],
     correct: "D",
-    explain: "Cada linha: círculo seguido de triângulo.",
+    explain: "Cima -> direita -> baixo -> esquerda (giro de 90 graus no sentido horário).",
   },
-  // 20 — todas iguais (setas para a direita)
   {
-    question: "Qual seta completa a matriz?",
+    question: "Analise a proporção numérica de objetos. Qual grupo completa?",
     prompt: () => (
-      <Matrix2x2 cells={[aC("right"), aC("right"), aC("right"), Q]} />
+      <Matrix2x2 cells={[
+        { type: "custom", render: renderShapes("triangle", NAVY, 3) },
+        { type: "custom", render: renderShapes("square", GRN, 6) },
+        { type: "custom", render: renderShapes("triangle", NAVY, 2) },
+        Q
+      ]} />
     ),
     options: [
-      { key: "A", render: optArrow("left") },
-      { key: "B", render: optArrow("down") },
-      { key: "C", render: optArrow("right") },
-      { key: "D", render: optArrow("up") },
+      { key: "A", render: optCustom(renderShapes("square", GRN, 4)) },
+      { key: "B", render: optCustom(renderShapes("square", GRN, 3)) },
+      { key: "C", render: optCustom(renderShapes("triangle", GRN, 4)) },
+      { key: "D", render: optCustom(renderShapes("square", GRN, 2)) },
     ],
-    correct: "C",
-    explain: "Todas as setas apontam para a direita.",
+    correct: "A",
+    explain: "A proporção é de 1 triângulo para 2 quadrados. Como temos 2 triângulos embaixo, precisamos de 4 quadrados verdes.",
+  },
+  {
+    question: "A figura gira 45 graus a cada passo. Qual completa?",
+    prompt: () => (
+      <Matrix2x2 cells={[sC("diamond", NAVY, 0), sC("diamond", NAVY, 45), sC("diamond", NAVY, 90), Q]} />
+    ),
+    options: [
+      { key: "A", render: () => <div className="aspect-square w-full flex items-center justify-center bg-white" style={{ border: "1.5px solid #9aa0ad" }}><CShape kind="diamond" color={NAVY} size={68} rotate={135} /></div> },
+      { key: "B", render: () => <div className="aspect-square w-full flex items-center justify-center bg-white" style={{ border: "1.5px solid #9aa0ad" }}><CShape kind="diamond" color={NAVY} size={68} rotate={180} /></div> },
+      { key: "C", render: () => <div className="aspect-square w-full flex items-center justify-center bg-white" style={{ border: "1.5px solid #9aa0ad" }}><CShape kind="diamond" color={NAVY} size={68} rotate={225} /></div> },
+      { key: "D", render: () => <div className="aspect-square w-full flex items-center justify-center bg-white" style={{ border: "1.5px solid #9aa0ad" }}><CShape kind="diamond" color={NAVY} size={68} rotate={270} /></div> },
+    ],
+    correct: "A",
+    explain: "0° -> 45° -> 90° -> 135°. Cada etapa gira 45 graus no sentido horário.",
+  },
+  {
+    question: "Analise a proporção de multiplicação de objetos. Qual grupo completa?",
+    prompt: () => (
+      <Matrix2x2 cells={[
+        { type: "custom", render: renderShapes("star", YLW, 1) },
+        { type: "custom", render: renderShapes("star", YLW, 3) },
+        { type: "custom", render: renderShapes("circle", RED, 2) },
+        Q
+      ]} />
+    ),
+    options: [
+      { key: "A", render: optCustom(renderShapes("circle", RED, 6)) },
+      { key: "B", render: optCustom(renderShapes("circle", RED, 4)) },
+      { key: "C", render: optCustom(renderShapes("star", YLW, 6)) },
+      { key: "D", render: optCustom(renderShapes("circle", RED, 8)) },
+    ],
+    correct: "A",
+    explain: "A segunda célula tem o triplo de objetos da primeira. A quarta deve ter o triplo da terceira (2 círculos * 3 = 6 círculos vermelhos).",
+  },
+  {
+    question: "A seta rotaciona em eixos de 90 graus. Qual completa?",
+    prompt: () => (
+      <Matrix2x2 cells={[
+        { type: "custom", render: () => <Arrow rotate={45} color={NAVY} size={68} /> },
+        { type: "custom", render: () => <Arrow rotate={135} color={NAVY} size={68} /> },
+        { type: "custom", render: () => <Arrow rotate={225} color={NAVY} size={68} /> },
+        Q
+      ]} />
+    ),
+    options: [
+      { key: "A", render: () => <div className="aspect-square w-full flex items-center justify-center bg-white" style={{ border: "1.5px solid #9aa0ad" }}><Arrow rotate={315} color={NAVY} size={60} /></div> },
+      { key: "B", render: () => <div className="aspect-square w-full flex items-center justify-center bg-white" style={{ border: "1.5px solid #9aa0ad" }}><Arrow rotate={45} color={NAVY} size={60} /></div> },
+      { key: "C", render: () => <div className="aspect-square w-full flex items-center justify-center bg-white" style={{ border: "1.5px solid #9aa0ad" }}><Arrow rotate={270} color={NAVY} size={60} /></div> },
+      { key: "D", render: () => <div className="aspect-square w-full flex items-center justify-center bg-white" style={{ border: "1.5px solid #9aa0ad" }}><Arrow rotate={180} color={NAVY} size={60} /></div> },
+    ],
+    correct: "A",
+    explain: "As setas estão girando 90 graus no sentido horário: 45° -> 135° -> 225° -> 315°.",
+  },
+  {
+    question: "Observe a contagem de elementos por linha. Qual completa?",
+    prompt: () => (
+      <Matrix2x3 cells={[
+        { type: "custom", render: renderShapes("circle", NAVY, 1) },
+        { type: "custom", render: renderShapes("circle", NAVY, 2) },
+        { type: "custom", render: renderShapes("circle", NAVY, 3) },
+        { type: "custom", render: renderShapes("triangle", NAVY, 2) },
+        { type: "custom", render: renderShapes("triangle", NAVY, 3) },
+        Q
+      ]} />
+    ),
+    options: [
+      { key: "A", render: optCustom(renderShapes("triangle", NAVY, 4)) },
+      { key: "B", render: optCustom(renderShapes("triangle", NAVY, 3)) },
+      { key: "C", render: optCustom(renderShapes("triangle", NAVY, 5)) },
+      { key: "D", render: optCustom(renderShapes("circle", NAVY, 4)) },
+    ],
+    correct: "A",
+    explain: "A quantidade de elementos aumenta em 1 a cada coluna. A linha 2 começa com 2 triângulos, passa para 3 e deve terminar com 4.",
+  },
+  {
+    question: "A forma gira e muda de cor de acordo com o ângulo. Qual completa?",
+    prompt: () => (
+      <Matrix2x2 cells={[sC("triangle", NAVY, 0), sC("triangle", GRN, 90), sC("triangle", YLW, 180), Q]} />
+    ),
+    options: [
+      { key: "A", render: () => <div className="aspect-square w-full flex items-center justify-center bg-white" style={{ border: "1.5px solid #9aa0ad" }}><CShape kind="triangle" color={RED} size={68} rotate={270} /></div> },
+      { key: "B", render: () => <div className="aspect-square w-full flex items-center justify-center bg-white" style={{ border: "1.5px solid #9aa0ad" }}><CShape kind="triangle" color={NAVY} size={68} rotate={270} /></div> },
+      { key: "C", render: () => <div className="aspect-square w-full flex items-center justify-center bg-white" style={{ border: "1.5px solid #9aa0ad" }}><CShape kind="triangle" color={GRN} size={68} rotate={270} /></div> },
+      { key: "D", render: () => <div className="aspect-square w-full flex items-center justify-center bg-white" style={{ border: "1.5px solid #9aa0ad" }}><CShape kind="triangle" color={YLW} size={68} rotate={270} /></div> },
+    ],
+    correct: "A",
+    explain: "A cor muda (azul -> verde -> amarelo -> vermelho) à medida que o triângulo gira 90 graus no sentido horário. Falta o triângulo vermelho rotacionado em 270°.",
+  },
+  {
+    question: "A quantidade de objetos é reduzida de forma proporcional. Qual completa?",
+    prompt: () => (
+      <Matrix2x2 cells={[
+        { type: "custom", render: renderShapes("square", NAVY, 4) },
+        { type: "custom", render: renderShapes("square", NAVY, 2) },
+        { type: "custom", render: renderShapes("circle", RED, 8) },
+        Q
+      ]} />
+    ),
+    options: [
+      { key: "A", render: optCustom(renderShapes("circle", RED, 4)) },
+      { key: "B", render: optCustom(renderShapes("circle", RED, 2)) },
+      { key: "C", render: optCustom(renderShapes("circle", RED, 6)) },
+      { key: "D", render: optCustom(renderShapes("square", NAVY, 4)) },
+    ],
+    correct: "A",
+    explain: "A quantidade de elementos cai pela metade na segunda coluna. 8 círculos vermelhos divididos por 2 resulta em 4 círculos vermelhos.",
+  },
+  {
+    question: "As setas realizam uma inversão no eixo diagonal (180 graus). Qual completa?",
+    prompt: () => (
+      <Matrix2x2 cells={[
+        { type: "custom", render: () => <Arrow rotate={45} color={NAVY} size={68} /> },
+        { type: "custom", render: () => <Arrow rotate={225} color={NAVY} size={68} /> },
+        { type: "custom", render: () => <Arrow rotate={315} color={NAVY} size={68} /> },
+        Q
+      ]} />
+    ),
+    options: [
+      { key: "A", render: () => <div className="aspect-square w-full flex items-center justify-center bg-white" style={{ border: "1.5px solid #9aa0ad" }}><Arrow rotate={135} color={NAVY} size={60} /></div> },
+      { key: "B", render: () => <div className="aspect-square w-full flex items-center justify-center bg-white" style={{ border: "1.5px solid #9aa0ad" }}><Arrow rotate={315} color={NAVY} size={60} /></div> },
+      { key: "C", render: () => <div className="aspect-square w-full flex items-center justify-center bg-white" style={{ border: "1.5px solid #9aa0ad" }}><Arrow rotate={45} color={NAVY} size={60} /></div> },
+      { key: "D", render: () => <div className="aspect-square w-full flex items-center justify-center bg-white" style={{ border: "1.5px solid #9aa0ad" }}><Arrow rotate={225} color={NAVY} size={60} /></div> },
+    ],
+    correct: "A",
+    explain: "A diagonal superior-direita (45°) inverte para a inferior-esquerda (225°). A diagonal superior-esquerda (315°) deve inverter para a inferior-direita (135°).",
+  },
+  {
+    question: "Observe o aumento de itens por coluna e a troca de forma. Qual completa?",
+    prompt: () => (
+      <Matrix2x3 cells={[
+        { type: "custom", render: renderShapes("square", NAVY, 1) },
+        { type: "custom", render: renderShapes("circle", NAVY, 2) },
+        { type: "custom", render: renderShapes("triangle", NAVY, 3) },
+        { type: "custom", render: renderShapes("square", NAVY, 2) },
+        { type: "custom", render: renderShapes("circle", NAVY, 3) },
+        Q
+      ]} />
+    ),
+    options: [
+      { key: "A", render: optCustom(renderShapes("triangle", NAVY, 4)) },
+      { key: "B", render: optCustom(renderShapes("triangle", NAVY, 3)) },
+      { key: "C", render: optCustom(renderShapes("circle", NAVY, 4)) },
+      { key: "D", render: optCustom(renderShapes("square", NAVY, 3)) },
+    ],
+    correct: "A",
+    explain: "A segunda linha tem N+1 elementos correspondentes da primeira. A última coluna tem triângulos, portanto precisamos de 4 triângulos (3 + 1).",
+  },
+  // FASE 4 (Q21-30): Geometria Complementar e Pares
+  {
+    question: "Duas formas se unem para formar um círculo completo. Qual completa o par?",
+    prompt: () => (
+      <Matrix2x2 cells={[
+        { type: "custom", render: renderSemicircle("left", NAVY) },
+        { type: "custom", render: renderSemicircle("right", NAVY) },
+        { type: "custom", render: renderSemicircle("up", NAVY) },
+        Q
+      ]} />
+    ),
+    options: [
+      { key: "A", render: optCustom(renderSemicircle("down", NAVY)) },
+      { key: "B", render: optCustom(renderSemicircle("up", NAVY)) },
+      { key: "C", render: optCustom(renderSemicircle("left", NAVY)) },
+      { key: "D", render: optCustom(() => <CShape kind="circle" color={NAVY} size={50} />) },
+    ],
+    correct: "A",
+    explain: "As metades esquerda e direita formam o círculo na primeira linha. Embaixo, a metade superior se completa com a metade inferior.",
+  },
+  {
+    question: "As peças se encaixam para formar um quadrado completo. Qual completa o par?",
+    prompt: () => (
+      <Matrix2x2 cells={[
+        { type: "custom", render: renderSquareCorners(["TL", "BR"], NAVY) },
+        { type: "custom", render: renderSquareCorners(["TR", "BL"], NAVY) },
+        { type: "custom", render: renderSquareCorners(["TL", "TR"], NAVY) },
+        Q
+      ]} />
+    ),
+    options: [
+      { key: "A", render: optCustom(renderSquareCorners(["BL", "BR"], NAVY)) },
+      { key: "B", render: optCustom(renderSquareCorners(["TL", "TR"], NAVY)) },
+      { key: "C", render: optCustom(renderSquareCorners(["TL", "BR"], NAVY)) },
+      { key: "D", render: optCustom(() => <CShape kind="square" color={NAVY} size={50} />) },
+    ],
+    correct: "A",
+    explain: "As diagonais opostas formam o quadrado em cima. Embaixo, a metade superior precisa da metade inferior (cantos inferior-esquerdo e inferior-direito) para completar o quadrado.",
+  },
+  {
+    question: "Dois elementos trocam de posição e cor no espaço. Qual completa o par?",
+    prompt: () => (
+      <Matrix2x2 cells={[
+        { type: "custom", render: renderDoubleDots("horizontal", NAVY, RED) },
+        { type: "custom", render: renderDoubleDots("horizontal", RED, NAVY) },
+        { type: "custom", render: renderDoubleDots("vertical", GRN, YLW) },
+        Q
+      ]} />
+    ),
+    options: [
+      { key: "A", render: optCustom(renderDoubleDots("vertical", YLW, GRN)) },
+      { key: "B", render: optCustom(renderDoubleDots("vertical", GRN, YLW)) },
+      { key: "C", render: optCustom(renderDoubleDots("horizontal", YLW, GRN)) },
+      { key: "D", render: optCustom(renderDoubleDots("horizontal", NAVY, RED)) },
+    ],
+    correct: "A",
+    explain: "O par inverte a posição e as cores na segunda célula. Verde em cima / amarelo embaixo torna-se amarelo em cima / verde embaixo.",
+  },
+  {
+    question: "As formas duplas rotacionam no sentido anti-horário. Qual completa?",
+    prompt: () => (
+      <Matrix2x2 cells={[
+        { type: "custom", render: renderDoubleShapes("horizontal", "triangle", NAVY, "circle", GRN) },
+        { type: "custom", render: renderDoubleShapes("vertical", "triangle", NAVY, "circle", GRN) },
+        { type: "custom", render: renderDoubleShapes("horizontal", "star", YLW, "diamond", RED) },
+        Q
+      ]} />
+    ),
+    options: [
+      { key: "A", render: optCustom(renderDoubleShapes("vertical", "star", YLW, "diamond", RED)) },
+      { key: "B", render: optCustom(renderDoubleShapes("vertical", "diamond", RED, "star", YLW)) },
+      { key: "C", render: optCustom(renderDoubleShapes("horizontal", "star", YLW, "diamond", RED)) },
+      { key: "D", render: optCustom(renderDoubleShapes("horizontal", "diamond", RED, "star", YLW)) },
+    ],
+    correct: "A",
+    explain: "A orientação muda de horizontal para vertical mantendo a ordem relativa de rotação anti-horária de 90° (elemento da esquerda vai para cima).",
+  },
+  {
+    question: "Os arcos circulares são complementares. Qual completa o semicírculo?",
+    prompt: () => (
+      <Matrix2x2 cells={[
+        { type: "custom", render: renderSemicircleArc("up", NAVY) },
+        { type: "custom", render: renderSemicircleArc("down", NAVY) },
+        { type: "custom", render: renderSemicircleArc("left", NAVY) },
+        Q
+      ]} />
+    ),
+    options: [
+      { key: "A", render: optCustom(renderSemicircleArc("right", NAVY)) },
+      { key: "B", render: optCustom(renderSemicircleArc("left", NAVY)) },
+      { key: "C", render: optCustom(renderSemicircleArc("up", NAVY)) },
+      { key: "D", render: optCustom(renderSemicircleArc("down", NAVY)) },
+    ],
+    correct: "A",
+    explain: "O arco superior é complementado pelo arco inferior na primeira linha. Embaixo, o arco esquerdo se complementa com o direito.",
+  },
+  {
+    question: "Observe a sobreposição lógica de linhas (Célula 3 = Célula 1 + Célula 2). Qual completa?",
+    prompt: () => (
+      <Matrix3x3 cells={[
+        { type: "custom", render: renderOverlay(["horiz"]) },
+        { type: "custom", render: renderOverlay(["vert"]) },
+        { type: "custom", render: renderOverlay(["horiz", "vert"]) },
+        { type: "custom", render: renderOverlay(["circle"]) },
+        { type: "custom", render: renderOverlay(["horiz", "vert"]) },
+        { type: "custom", render: renderOverlay(["circle", "horiz", "vert"]) },
+        { type: "custom", render: renderOverlay(["square"]) },
+        { type: "custom", render: renderOverlay(["diag"]) },
+        Q
+      ]} />
+    ),
+    options: [
+      { key: "A", render: optCustom(renderOverlay(["square", "diag"])) },
+      { key: "B", render: optCustom(renderOverlay(["square", "horiz", "vert"])) },
+      { key: "C", render: optCustom(renderOverlay(["diag"])) },
+      { key: "D", render: optCustom(renderOverlay(["square"])) },
+    ],
+    correct: "A",
+    explain: "A terceira célula de cada linha é a soma/sobreposição das duas primeiras. A última célula deve ser o quadrado com a linha diagonal dentro.",
+  },
+  {
+    question: "Observe a subtração lógica de formas (Célula 3 = Célula 1 - Célula 2). Qual completa?",
+    prompt: () => (
+      <Matrix3x3 cells={[
+        { type: "custom", render: renderSubtraction("circle", true) },
+        { type: "custom", render: renderSubtraction("circle", false) },
+        { type: "custom", render: renderSubtraction("none", true) },
+        { type: "custom", render: renderSubtraction("square", true) },
+        { type: "custom", render: renderSubtraction("none", true) },
+        { type: "custom", render: renderSubtraction("square", false) },
+        { type: "custom", render: renderSubtraction("triangle", true) },
+        { type: "custom", render: renderSubtraction("none", true) },
+        Q
+      ]} />
+    ),
+    options: [
+      { key: "A", render: optCustom(renderSubtraction("triangle", false)) },
+      { key: "B", render: optCustom(renderSubtraction("triangle", true)) },
+      { key: "C", render: optCustom(renderSubtraction("none", true)) },
+      { key: "D", render: optCustom(renderSubtraction("square", false)) },
+    ],
+    correct: "A",
+    explain: "A terceira célula subtrai os traços comuns ou específicos da segunda célula em relação à primeira. Triângulo com linha menos linha resulta no triângulo vazio.",
+  },
+  {
+    question: "Dois elementos se movem no sentido horário pelas pontas do grid. Qual completa?",
+    prompt: () => (
+      <Matrix3x3 cells={[
+        { type: "custom", render: renderCornerDots("TL") },
+        { type: "custom", render: renderCornerDots("TR") },
+        { type: "custom", render: renderCornerDots("BR") },
+        { type: "custom", render: renderCornerDots("TR") },
+        { type: "custom", render: renderCornerDots("BR") },
+        { type: "custom", render: renderCornerDots("BL") },
+        { type: "custom", render: renderCornerDots("BR") },
+        { type: "custom", render: renderCornerDots("BL") },
+        Q
+      ]} />
+    ),
+    options: [
+      { key: "A", render: optCustom(renderCornerDots("TL")) },
+      { key: "B", render: optCustom(renderCornerDots("TR")) },
+      { key: "C", render: optCustom(renderCornerDots("BR")) },
+      { key: "D", render: optCustom(renderCornerDots("BL")) },
+    ],
+    correct: "A",
+    explain: "As bolinhas movem-se um canto por vez no sentido horário (TL -> TR -> BR). Na última linha, BR -> BL -> TL (superior esquerdo).",
+  },
+  {
+    question: "Três elementos realizam uma permutação circular vertical. Qual completa?",
+    prompt: () => (
+      <Matrix3x3 cells={[
+        { type: "custom", render: renderThreeDots([NAVY, GRN, RED]) },
+        { type: "custom", render: renderThreeDots([GRN, RED, NAVY]) },
+        { type: "custom", render: renderThreeDots([RED, NAVY, GRN]) },
+        { type: "custom", render: renderThreeDots([GRN, RED, NAVY]) },
+        { type: "custom", render: renderThreeDots([RED, NAVY, GRN]) },
+        { type: "custom", render: renderThreeDots([NAVY, GRN, RED]) },
+        { type: "custom", render: renderThreeDots([RED, NAVY, GRN]) },
+        { type: "custom", render: renderThreeDots([NAVY, GRN, RED]) },
+        Q
+      ]} />
+    ),
+    options: [
+      { key: "A", render: optCustom(renderThreeDots([GRN, RED, NAVY])) },
+      { key: "B", render: optCustom(renderThreeDots([RED, NAVY, GRN])) },
+      { key: "C", render: optCustom(renderThreeDots([NAVY, GRN, RED])) },
+      { key: "D", render: optCustom(renderThreeDots([NAVY, RED, GRN])) },
+    ],
+    correct: "A",
+    explain: "Em cada linha, as bolinhas sobem uma posição ciclicamente. Na última linha: vermelho-azul-verde torna-se azul-verde-vermelho e depois verde-vermelho-azul.",
+  },
+  {
+    question: "Analise a matriz de pares e formas internas complementares. Qual completa?",
+    prompt: () => (
+      <Matrix3x3 cells={[
+        { type: "custom", render: renderNestedShapes("triangle", "circle") },
+        { type: "custom", render: renderNestedShapes("triangle", "square") },
+        { type: "custom", render: renderNestedShapes("triangle", "triangle") },
+        { type: "custom", render: renderNestedShapes("circle", "square") },
+        { type: "custom", render: renderNestedShapes("circle", "triangle") },
+        { type: "custom", render: renderNestedShapes("circle", "circle") },
+        { type: "custom", render: renderNestedShapes("square", "triangle") },
+        { type: "custom", render: renderNestedShapes("square", "circle") },
+        Q
+      ]} />
+    ),
+    options: [
+      { key: "A", render: optCustom(renderNestedShapes("square", "square")) },
+      { key: "B", render: optCustom(renderNestedShapes("square", "circle")) },
+      { key: "C", render: optCustom(renderNestedShapes("square", "triangle")) },
+      { key: "D", render: optCustom(renderNestedShapes("circle", "square")) },
+    ],
+    correct: "A",
+    explain: "A forma externa é constante por linha (triângulos, círculos, quadrados). A forma interna segue a permutação (círculo, quadrado, triângulo). Falta o quadrado com quadrado interno.",
   },
 ];
 
@@ -1554,13 +2641,25 @@ function Logico({
   const [i, setI] = useState(0);
   const [picked, setPicked] = useState<string | null>(null);
   const [correct, setCorrect] = useState(0);
+  const [time, setTime] = useState(60);
 
   useEffect(() => {
     if (phase === "intro")
       speech.speak(
-        "Teste de raciocínio lógico. Olhe as figuras geométricas e escolha a alternativa que responde à pergunta. Pense com calma antes de marcar.",
+        "Teste de raciocínio lógico. Você tem 1 minuto. Olhe as figuras geométricas e escolha a alternativa correta o mais rápido que puder.",
       );
   }, [phase, speech]);
+
+  useEffect(() => {
+    if (phase !== "running") return;
+    if (time <= 0) {
+      setPhase("done");
+      speech.speak("Tempo encerrado.");
+      return;
+    }
+    const id = setTimeout(() => setTime((t) => t - 1), 1000);
+    return () => clearTimeout(id);
+  }, [phase, time, speech]);
 
   const q = LOG_QUESTIONS[i];
 
@@ -1576,7 +2675,7 @@ function Logico({
   return (
     <div className="glass rounded-3xl p-5 md:p-6 shadow-card">
       <TestHeader
-        title="4/4 · Raciocínio Lógico"
+        title="3/3 · Raciocínio Lógico"
         subtitle="Figuras geométricas — encontre o padrão"
       />
       {phase === "intro" && (
@@ -1592,6 +2691,7 @@ function Logico({
             setI(0);
             setCorrect(0);
             setPicked(null);
+            setTime(60);
             setPhase("running");
           }}
           speech={speech}
@@ -1600,8 +2700,21 @@ function Logico({
       )}
       {phase === "running" && (
         <div>
-          <div className="text-sm font-semibold mb-2">
-            Questão {i + 1}/{LOG_QUESTIONS.length} · Acertos: {correct}
+          <div className="flex justify-between items-center text-sm font-semibold mb-3 bg-secondary/30 border border-border/20 px-4 py-2.5 rounded-2xl flex-wrap gap-2">
+            <div>
+              Questão <span className="text-primary-glow font-bold">{i + 1}</span>/{LOG_QUESTIONS.length}
+            </div>
+            <div className="flex items-center gap-4 text-xs">
+              <span className="text-success-glow">
+                Acertos: <span className="font-bold">{correct}</span>
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Timer className={`h-4 w-4 ${time <= 10 ? "text-destructive animate-pulse" : "text-primary"}`} />
+                <span className={`font-display font-bold ${time <= 10 ? "text-destructive" : "text-foreground"}`}>
+                  {time}s
+                </span>
+              </span>
+            </div>
           </div>
           <p className="text-base md:text-lg font-medium mb-4">{q.question}</p>
           {q.prompt && <div className="mb-5">{q.prompt()}</div>}
@@ -1626,9 +2739,7 @@ function Logico({
                         : "border-border hover:border-primary/50"
                   }`}
                 >
-                  <span className="self-start text-xs font-bold text-zinc-700">
-                    {opt.key}
-                  </span>
+                  <span className="self-start text-xs font-bold text-zinc-700">{opt.key}</span>
                   {opt.render()}
                 </button>
               );
@@ -1668,8 +2779,9 @@ function Logico({
       )}
       {phase === "done" && (
         <DoneNext
-          summary={`${correct}/${LOG_QUESTIONS.length} acertos lógicos`}
+          summary={`${correct}/${LOG_QUESTIONS.length} acertos lógicos · ${correct >= 21 ? "Aprovado" : "Reprovado"} (Mínimo: 21)`}
           onNext={() => onDone({ correct, total: LOG_QUESTIONS.length })}
+          status={correct >= 21 ? "success" : "danger"}
         />
       )}
     </div>
@@ -1680,9 +2792,7 @@ function Logico({
 function TestHeader({ title, subtitle }: { title: string; subtitle: string }) {
   return (
     <div className="mb-4">
-      <p className="text-xs uppercase tracking-widest text-primary-glow font-semibold">
-        {title}
-      </p>
+      <p className="text-xs uppercase tracking-widest text-primary-glow font-semibold">{title}</p>
       <h2 className="text-xl font-display font-bold">{subtitle}</h2>
     </div>
   );
@@ -1733,17 +2843,24 @@ function Intro({
 function DoneNext({
   summary,
   onNext,
+  status,
 }: {
   summary: string;
   onNext: () => void;
+  status?: "success" | "danger";
 }) {
+  const isDanger = status === "danger";
   return (
     <div className="text-center py-6">
-      <Check className="h-10 w-10 text-success mx-auto" />
+      {isDanger ? (
+        <X className="h-10 w-10 text-destructive mx-auto" />
+      ) : (
+        <Check className="h-10 w-10 text-success mx-auto" />
+      )}
       <p className="mt-2 font-semibold">{summary}</p>
       <button
         onClick={onNext}
-        className="mt-4 inline-flex items-center gap-2 px-5 py-3 rounded-xl gradient-primary text-primary-foreground font-semibold shadow-glow"
+        className="mt-4 inline-flex items-center gap-2 px-5 py-3 rounded-xl gradient-primary text-primary-foreground font-semibold shadow-glow cursor-pointer"
       >
         Continuar <ArrowRight className="h-4 w-4" />
       </button>
@@ -1751,53 +2868,33 @@ function DoneNext({
   );
 }
 
-function Result({
-  scores,
-  onRestart,
-}: {
-  scores: ScoreMap;
-  onRestart: () => void;
-}) {
+function Result({ scores, onRestart }: { scores: ScoreMap; onRestart: () => void }) {
   return (
     <div className="glass rounded-3xl p-6 md:p-8 shadow-glow">
       <div className="text-center">
         <div className="w-20 h-20 mx-auto rounded-full gradient-primary flex items-center justify-center mb-4 shadow-glow">
           <Trophy className="h-10 w-10 text-primary-foreground" />
         </div>
-        <h2 className="text-2xl font-display font-bold">
-          Avaliação Psicotécnica Concluída
-        </h2>
-        <p className="text-muted-foreground mt-1">
-          Veja seu desempenho em cada teste.
-        </p>
+        <h2 className="text-2xl font-display font-bold">Avaliação Psicotécnica Concluída</h2>
+        <p className="text-muted-foreground mt-1">Veja seu desempenho em cada teste.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-6">
         <ResultCard
-          title="Risquinhos (palográfico)"
-          lines={[
-            `Traços totais: ${scores.palografico?.strokes ?? 0}`,
-            `Rodadas concluídas: ${scores.palografico?.lines ?? 0}`,
-            `Largura média: ${Math.round(scores.palografico?.avgWidth ?? 0)} px`,
-            `Altura média: ${Math.round(scores.palografico?.avgHeight ?? 0)} px`,
-            `Constância: ${Math.round(scores.palografico?.consistency ?? 0)}%`,
-          ]}
-        />
-        <ResultCard
           title="Atenção"
-          lines={[
-            `Acertos: ${scores.atencao?.correct ?? 0}/${scores.atencao?.total ?? 0}`,
-          ]}
+          lines={[`Acertos: ${scores.atencao?.correct ?? 0}/${scores.atencao?.total ?? 0}`]}
         />
         <ResultCard
           title="Memória rápida"
           lines={[`Objetos lembrados: ${scores.memoria?.items ?? 0}`]}
+          status={(scores.memoria?.items ?? 0) >= 12 ? "success" : "danger"}
+          requiredText="Mínimo exigido: 12 objetos"
         />
         <ResultCard
           title="Raciocínio lógico"
-          lines={[
-            `Acertos: ${scores.logico?.correct ?? 0}/${scores.logico?.total ?? 0}`,
-          ]}
+          lines={[`Acertos: ${scores.logico?.correct ?? 0}/${scores.logico?.total ?? 0}`]}
+          status={scores.logico ? ((scores.logico.correct ?? 0) >= 21 ? "success" : "danger") : undefined}
+          requiredText="Mínimo exigido: 21 acertos (70%)"
         />
       </div>
 
@@ -1819,19 +2916,51 @@ function Result({
   );
 }
 
-function ResultCard({ title, lines }: { title: string; lines: string[] }) {
+function ResultCard({
+  title,
+  lines,
+  status,
+  requiredText,
+}: {
+  title: string;
+  lines: string[];
+  status?: "success" | "danger";
+  requiredText?: string;
+}) {
   return (
-    <div className="rounded-2xl border border-border bg-secondary/30 p-4">
-      <p className="text-xs uppercase tracking-wider text-muted-foreground">
-        {title}
-      </p>
-      <div className="mt-1 space-y-0.5">
-        {lines.map((l, i) => (
-          <p key={i} className="text-sm font-semibold">
-            {l}
-          </p>
-        ))}
+    <div className="rounded-2xl border border-border bg-secondary/30 p-5 flex items-center justify-between gap-4">
+      <div className="space-y-1">
+        <p className="text-xs uppercase tracking-wider text-muted-foreground">{title}</p>
+        <div className="space-y-0.5">
+          {lines.map((l, i) => (
+            <p key={i} className="text-sm font-semibold">
+              {l}
+            </p>
+          ))}
+        </div>
+        {requiredText && (
+          <p className="text-xs text-muted-foreground mt-1">{requiredText}</p>
+        )}
       </div>
+      {status && (
+        <span
+          className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold ${
+            status === "success"
+              ? "bg-success/20 border border-success/40 text-success"
+              : "bg-destructive/20 border border-destructive/40 text-destructive"
+          }`}
+        >
+          {status === "success" ? (
+            <>
+              <Check className="h-3 w-3" /> Aprovado
+            </>
+          ) : (
+            <>
+              <X className="h-3.5 w-3.5" /> Reprovado
+            </>
+          )}
+        </span>
+      )}
     </div>
   );
 }

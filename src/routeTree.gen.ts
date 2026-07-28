@@ -9,62 +9,28 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TurboRouteImport } from './routes/turbo'
-import { Route as SimuladoRouteImport } from './routes/simulado'
-import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as PsicotecnicoRouteImport } from './routes/psicotecnico'
-import { Route as PlacasRouteImport } from './routes/placas'
-import { Route as MaisCaemRouteImport } from './routes/mais-caem'
-import { Route as ConquistasRouteImport } from './routes/conquistas'
-import { Route as BibliotecaRouteImport } from './routes/biblioteca'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AppRouteImport } from './routes/app'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BibliotecaRouteImport } from './routes/biblioteca'
+import { Route as CadastroRouteImport } from './routes/cadastro'
+import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as ConquistasRouteImport } from './routes/conquistas'
+import { Route as MaisCaemRouteImport } from './routes/mais-caem'
+import { Route as PlacasRouteImport } from './routes/placas'
+import { Route as PsicotecnicoRouteImport } from './routes/psicotecnico'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as SimuladoRouteImport } from './routes/simulado'
+import { Route as TurboRouteImport } from './routes/turbo'
 import { Route as BibliotecaIdRouteImport } from './routes/biblioteca.$id'
+import { Route as ApiPixCreateRouteImport } from './routes/api/pix/create'
+import { Route as ApiPixStatusRouteImport } from './routes/api/pix/status'
+import { Route as ApiPixWebhookRouteImport } from './routes/api/pix/webhook'
 
-const TurboRoute = TurboRouteImport.update({
-  id: '/turbo',
-  path: '/turbo',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SimuladoRoute = SimuladoRouteImport.update({
-  id: '/simulado',
-  path: '/simulado',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResetPasswordRoute = ResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PsicotecnicoRoute = PsicotecnicoRouteImport.update({
-  id: '/psicotecnico',
-  path: '/psicotecnico',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PlacasRoute = PlacasRouteImport.update({
-  id: '/placas',
-  path: '/placas',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MaisCaemRoute = MaisCaemRouteImport.update({
-  id: '/mais-caem',
-  path: '/mais-caem',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ConquistasRoute = ConquistasRouteImport.update({
-  id: '/conquistas',
-  path: '/conquistas',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BibliotecaRoute = BibliotecaRouteImport.update({
-  id: '/biblioteca',
-  path: '/biblioteca',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -72,9 +38,64 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BibliotecaRoute = BibliotecaRouteImport.update({
+  id: '/biblioteca',
+  path: '/biblioteca',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CadastroRoute = CadastroRouteImport.update({
+  id: '/cadastro',
+  path: '/cadastro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConquistasRoute = ConquistasRouteImport.update({
+  id: '/conquistas',
+  path: '/conquistas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MaisCaemRoute = MaisCaemRouteImport.update({
+  id: '/mais-caem',
+  path: '/mais-caem',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlacasRoute = PlacasRouteImport.update({
+  id: '/placas',
+  path: '/placas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PsicotecnicoRoute = PsicotecnicoRouteImport.update({
+  id: '/psicotecnico',
+  path: '/psicotecnico',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SimuladoRoute = SimuladoRouteImport.update({
+  id: '/simulado',
+  path: '/simulado',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TurboRoute = TurboRouteImport.update({
+  id: '/turbo',
+  path: '/turbo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BibliotecaIdRoute = BibliotecaIdRouteImport.update({
@@ -82,12 +103,30 @@ const BibliotecaIdRoute = BibliotecaIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => BibliotecaRoute,
 } as any)
+const ApiPixCreateRoute = ApiPixCreateRouteImport.update({
+  id: '/api/pix/create',
+  path: '/api/pix/create',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPixStatusRoute = ApiPixStatusRouteImport.update({
+  id: '/api/pix/status',
+  path: '/api/pix/status',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPixWebhookRoute = ApiPixWebhookRouteImport.update({
+  id: '/api/pix/webhook',
+  path: '/api/pix/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/app': typeof AppRoute
   '/auth': typeof AuthRoute
   '/biblioteca': typeof BibliotecaRouteWithChildren
+  '/cadastro': typeof CadastroRoute
+  '/checkout': typeof CheckoutRoute
   '/conquistas': typeof ConquistasRoute
   '/mais-caem': typeof MaisCaemRoute
   '/placas': typeof PlacasRoute
@@ -96,12 +135,18 @@ export interface FileRoutesByFullPath {
   '/simulado': typeof SimuladoRoute
   '/turbo': typeof TurboRoute
   '/biblioteca/$id': typeof BibliotecaIdRoute
+  '/api/pix/create': typeof ApiPixCreateRoute
+  '/api/pix/status': typeof ApiPixStatusRoute
+  '/api/pix/webhook': typeof ApiPixWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/app': typeof AppRoute
   '/auth': typeof AuthRoute
   '/biblioteca': typeof BibliotecaRouteWithChildren
+  '/cadastro': typeof CadastroRoute
+  '/checkout': typeof CheckoutRoute
   '/conquistas': typeof ConquistasRoute
   '/mais-caem': typeof MaisCaemRoute
   '/placas': typeof PlacasRoute
@@ -110,13 +155,19 @@ export interface FileRoutesByTo {
   '/simulado': typeof SimuladoRoute
   '/turbo': typeof TurboRoute
   '/biblioteca/$id': typeof BibliotecaIdRoute
+  '/api/pix/create': typeof ApiPixCreateRoute
+  '/api/pix/status': typeof ApiPixStatusRoute
+  '/api/pix/webhook': typeof ApiPixWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/app': typeof AppRoute
   '/auth': typeof AuthRoute
   '/biblioteca': typeof BibliotecaRouteWithChildren
+  '/cadastro': typeof CadastroRoute
+  '/checkout': typeof CheckoutRoute
   '/conquistas': typeof ConquistasRoute
   '/mais-caem': typeof MaisCaemRoute
   '/placas': typeof PlacasRoute
@@ -125,14 +176,20 @@ export interface FileRoutesById {
   '/simulado': typeof SimuladoRoute
   '/turbo': typeof TurboRoute
   '/biblioteca/$id': typeof BibliotecaIdRoute
+  '/api/pix/create': typeof ApiPixCreateRoute
+  '/api/pix/status': typeof ApiPixStatusRoute
+  '/api/pix/webhook': typeof ApiPixWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/admin'
+    | '/app'
     | '/auth'
     | '/biblioteca'
+    | '/cadastro'
+    | '/checkout'
     | '/conquistas'
     | '/mais-caem'
     | '/placas'
@@ -141,12 +198,18 @@ export interface FileRouteTypes {
     | '/simulado'
     | '/turbo'
     | '/biblioteca/$id'
+    | '/api/pix/create'
+    | '/api/pix/status'
+    | '/api/pix/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
+    | '/app'
     | '/auth'
     | '/biblioteca'
+    | '/cadastro'
+    | '/checkout'
     | '/conquistas'
     | '/mais-caem'
     | '/placas'
@@ -155,12 +218,18 @@ export interface FileRouteTypes {
     | '/simulado'
     | '/turbo'
     | '/biblioteca/$id'
+    | '/api/pix/create'
+    | '/api/pix/status'
+    | '/api/pix/webhook'
   id:
     | '__root__'
     | '/'
     | '/admin'
+    | '/app'
     | '/auth'
     | '/biblioteca'
+    | '/cadastro'
+    | '/checkout'
     | '/conquistas'
     | '/mais-caem'
     | '/placas'
@@ -169,13 +238,19 @@ export interface FileRouteTypes {
     | '/simulado'
     | '/turbo'
     | '/biblioteca/$id'
+    | '/api/pix/create'
+    | '/api/pix/status'
+    | '/api/pix/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
+  AppRoute: typeof AppRoute
   AuthRoute: typeof AuthRoute
   BibliotecaRoute: typeof BibliotecaRouteWithChildren
+  CadastroRoute: typeof CadastroRoute
+  CheckoutRoute: typeof CheckoutRoute
   ConquistasRoute: typeof ConquistasRoute
   MaisCaemRoute: typeof MaisCaemRoute
   PlacasRoute: typeof PlacasRoute
@@ -183,71 +258,18 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   SimuladoRoute: typeof SimuladoRoute
   TurboRoute: typeof TurboRoute
+  ApiPixCreateRoute: typeof ApiPixCreateRoute
+  ApiPixStatusRoute: typeof ApiPixStatusRoute
+  ApiPixWebhookRoute: typeof ApiPixWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/turbo': {
-      id: '/turbo'
-      path: '/turbo'
-      fullPath: '/turbo'
-      preLoaderRoute: typeof TurboRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/simulado': {
-      id: '/simulado'
-      path: '/simulado'
-      fullPath: '/simulado'
-      preLoaderRoute: typeof SimuladoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/psicotecnico': {
-      id: '/psicotecnico'
-      path: '/psicotecnico'
-      fullPath: '/psicotecnico'
-      preLoaderRoute: typeof PsicotecnicoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/placas': {
-      id: '/placas'
-      path: '/placas'
-      fullPath: '/placas'
-      preLoaderRoute: typeof PlacasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mais-caem': {
-      id: '/mais-caem'
-      path: '/mais-caem'
-      fullPath: '/mais-caem'
-      preLoaderRoute: typeof MaisCaemRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/conquistas': {
-      id: '/conquistas'
-      path: '/conquistas'
-      fullPath: '/conquistas'
-      preLoaderRoute: typeof ConquistasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/biblioteca': {
-      id: '/biblioteca'
-      path: '/biblioteca'
-      fullPath: '/biblioteca'
-      preLoaderRoute: typeof BibliotecaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -257,11 +279,88 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/biblioteca': {
+      id: '/biblioteca'
+      path: '/biblioteca'
+      fullPath: '/biblioteca'
+      preLoaderRoute: typeof BibliotecaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cadastro': {
+      id: '/cadastro'
+      path: '/cadastro'
+      fullPath: '/cadastro'
+      preLoaderRoute: typeof CadastroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/conquistas': {
+      id: '/conquistas'
+      path: '/conquistas'
+      fullPath: '/conquistas'
+      preLoaderRoute: typeof ConquistasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mais-caem': {
+      id: '/mais-caem'
+      path: '/mais-caem'
+      fullPath: '/mais-caem'
+      preLoaderRoute: typeof MaisCaemRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/placas': {
+      id: '/placas'
+      path: '/placas'
+      fullPath: '/placas'
+      preLoaderRoute: typeof PlacasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/psicotecnico': {
+      id: '/psicotecnico'
+      path: '/psicotecnico'
+      fullPath: '/psicotecnico'
+      preLoaderRoute: typeof PsicotecnicoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/simulado': {
+      id: '/simulado'
+      path: '/simulado'
+      fullPath: '/simulado'
+      preLoaderRoute: typeof SimuladoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/turbo': {
+      id: '/turbo'
+      path: '/turbo'
+      fullPath: '/turbo'
+      preLoaderRoute: typeof TurboRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/biblioteca/$id': {
@@ -270,6 +369,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/biblioteca/$id'
       preLoaderRoute: typeof BibliotecaIdRouteImport
       parentRoute: typeof BibliotecaRoute
+    }
+    '/api/pix/create': {
+      id: '/api/pix/create'
+      path: '/api/pix/create'
+      fullPath: '/api/pix/create'
+      preLoaderRoute: typeof ApiPixCreateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/pix/status': {
+      id: '/api/pix/status'
+      path: '/api/pix/status'
+      fullPath: '/api/pix/status'
+      preLoaderRoute: typeof ApiPixStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/pix/webhook': {
+      id: '/api/pix/webhook'
+      path: '/api/pix/webhook'
+      fullPath: '/api/pix/webhook'
+      preLoaderRoute: typeof ApiPixWebhookRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -289,8 +409,11 @@ const BibliotecaRouteWithChildren = BibliotecaRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
+  AppRoute: AppRoute,
   AuthRoute: AuthRoute,
   BibliotecaRoute: BibliotecaRouteWithChildren,
+  CadastroRoute: CadastroRoute,
+  CheckoutRoute: CheckoutRoute,
   ConquistasRoute: ConquistasRoute,
   MaisCaemRoute: MaisCaemRoute,
   PlacasRoute: PlacasRoute,
@@ -298,7 +421,20 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   SimuladoRoute: SimuladoRoute,
   TurboRoute: TurboRoute,
+  ApiPixCreateRoute: ApiPixCreateRoute,
+  ApiPixStatusRoute: ApiPixStatusRoute,
+  ApiPixWebhookRoute: ApiPixWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

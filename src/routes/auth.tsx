@@ -44,6 +44,13 @@ function AuthPage() {
   const [forgotOpen, setForgotOpen] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
   const [forgotLoading, setForgotLoading] = useState(false);
+  const [legacyUserModal, setLegacyUserModal] = useState(false);
+  const [legacyEmail, setLegacyEmail] = useState("");
+  const [legacyPassword, setLegacyPassword] = useState("");
+  const [legacyConfirmPassword, setLegacyConfirmPassword] = useState("");
+  const [legacyLoading, setLegacyLoading] = useState(false);
+  const [showLegacyPw, setShowLegacyPw] = useState(false);
+  const [showLegacyConfirmPw, setShowLegacyConfirmPw] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -66,6 +73,29 @@ function AuthPage() {
         if (employment === "outro" && !employmentOther.trim()) {
           throw new Error("Descreva sua situação profissional.");
         }
+
+        let isLegacyEmail = false;
+        let legacyUserEmail = email;
+        try {
+          const { checkLegacyAccessSecure } = await import("@/lib/admin-operations.server");
+          const status = await checkLegacyAccessSecure({ data: { input: email } });
+          if (status.found && status.isMigratedUser && status.needsFirstAccess) {
+            isLegacyEmail = true;
+            legacyUserEmail = status.userEmail || email;
+          }
+        } catch (checkErr) {
+          console.error("Erro ao verificar email:", checkErr);
+        }
+
+        if (isLegacyEmail) {
+          setLegacyEmail(legacyUserEmail);
+          setLegacyPassword("");
+          setLegacyConfirmPassword("");
+          setLegacyUserModal(true);
+          setLoading(false);
+          return;
+        }
+
         const { data: signUpData, error } = await supabase.auth.signUp({
           email,
           password,
@@ -114,7 +144,33 @@ function AuthPage() {
         navigate({ to: "/" });
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+        if (error) {
+          const isInvalidCredentials =
+            error.status === 400 ||
+            error.message?.toLowerCase().includes("credentials") ||
+            error.message?.toLowerCase().includes("grant") ||
+            error.code === "invalid_credentials" ||
+            error.code === "invalid_grant";
+
+          if (isInvalidCredentials) {
+            setLoading(false);
+            try {
+              const { checkLegacyAccessSecure } = await import("@/lib/admin-operations.server");
+              const status = await checkLegacyAccessSecure({ data: { input: email } });
+
+              if (status.found && status.isMigratedUser && status.needsFirstAccess) {
+                setLegacyEmail(status.userEmail);
+                setLegacyPassword("");
+                setLegacyConfirmPassword("");
+                setLegacyUserModal(true);
+                return;
+              }
+            } catch (checkErr) {
+              console.error("Erro ao verificar status de migração:", checkErr);
+            }
+          }
+          throw error;
+        }
         toast.success("Bem-vinda(o) de volta!");
         navigate({ to: portal === "admin" ? "/admin" : "/" });
       }
@@ -124,6 +180,47 @@ function AuthPage() {
       toast.error(msg);
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleLegacyDefinePassword(e: React.FormEvent) {
+    e.preventDefault();
+    if (!legacyPassword || !legacyConfirmPassword) {
+      toast.error("Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
+    if (legacyPassword !== legacyConfirmPassword) {
+      toast.error("As senhas não coincidem.");
+      return;
+    }
+    if (legacyPassword.length < 6) {
+      toast.error("A senha deve ter pelo menos 6 caracteres.");
+      return;
+    }
+
+    setLegacyLoading(true);
+    try {
+      const { registerLegacyUser } = await import("@/lib/admin-operations.server");
+      const res = await registerLegacyUser({ data: { email: legacyEmail, password: legacyPassword } });
+
+      if (!res.success) {
+        throw new Error(res.error || "Erro ao definir senha.");
+      }
+
+      const { error: signInErr } = await supabase.auth.signInWithPassword({
+        email: legacyEmail,
+        password: legacyPassword,
+      });
+
+      if (signInErr) throw signInErr;
+
+      toast.success("Senha cadastrada com sucesso! Bem-vindo(a)!");
+      setLegacyUserModal(false);
+      navigate({ to: portal === "admin" ? "/admin" : "/" });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erro ao atualizar senha.");
+    } finally {
+      setLegacyLoading(false);
     }
   }
 
@@ -284,6 +381,80 @@ function AuthPage() {
               </Button>
             </DialogFooter>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={legacyUserModal} onOpenChange={setLegacyUserModal}>
+        <DialogContent className="max-w-md rounded-3xl p-6 bg-[#0E111E] border border-zinc-800 text-center space-y-4">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold font-display flex items-center justify-center gap-2">
+              Atualização de Sistema ⚡
+            </DialogTitle>
+            <DialogDescription className="text-xs text-muted-foreground pt-1 leading-relaxed">
+              Olá! Identificamos que você é nosso aluno. O sistema passou por uma atualização. Por favor, crie uma senha de acesso para esta nova versão da plataforma.
+            </DialogDescription>
+          </DialogHeader>
+
+          <form onSubmit={handleLegacyDefinePassword} className="space-y-4 text-left">
+            <div>
+              <Label htmlFor="legacyPassword">Nova Senha *</Label>
+              <div className="relative mt-1">
+                <Input
+                  id="legacyPassword"
+                  type={showLegacyPw ? "text" : "password"}
+                  required
+                  placeholder="Mínimo 6 caracteres"
+                  value={legacyPassword}
+                  onChange={(e) => setLegacyPassword(e.target.value)}
+                  className="bg-background/40 border-border/30 pr-10"
+                />
+                <button
+                  type="button"
+                  tabIndex={-1}
+                  onClick={() => setShowLegacyPw(!showLegacyPw)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
+                >
+                  {showLegacyPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="legacyConfirmPassword">Confirme a Nova Senha *</Label>
+              <div className="relative mt-1">
+                <Input
+                  id="legacyConfirmPassword"
+                  type={showLegacyConfirmPw ? "text" : "password"}
+                  required
+                  placeholder="Repita a nova senha"
+                  value={legacyConfirmPassword}
+                  onChange={(e) => setLegacyConfirmPassword(e.target.value)}
+                  className="bg-background/40 border-border/30 pr-10"
+                />
+                <button
+                  type="button"
+                  tabIndex={-1}
+                  onClick={() => setShowLegacyConfirmPw(!showLegacyConfirmPw)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
+                >
+                  {showLegacyConfirmPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+            </div>
+
+            <Button type="submit" disabled={legacyLoading} className="w-full h-11 rounded-xl font-bold cursor-pointer mt-4">
+              {legacyLoading ? (
+                <Loader2 className="h-5 w-5 animate-spin mx-auto" />
+              ) : (
+                "Salvar e Acessar Plataforma"
+              )}
+            </Button>
+          </form>
+
+          <DialogFooter className="sm:justify-center">
+            <Button variant="ghost" onClick={() => setLegacyUserModal(false)} className="text-xs cursor-pointer">
+              Cancelar e voltar
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

@@ -287,14 +287,14 @@ function SimuladoPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 md:py-10">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4 gap-3">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors shrink-0"
+        <div className="flex items-center justify-between mb-4 gap-3">
+        <button
+          onClick={restart}
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors shrink-0 cursor-pointer"
         >
           <ArrowLeft className="h-4 w-4" />
           <span className="hidden sm:inline">Voltar</span>
-        </Link>
+        </button>
         <div className="text-right">
           <p className="text-xs uppercase tracking-widest text-primary-glow font-semibold">
             Simulado Inteligente
@@ -586,9 +586,6 @@ function ModePicker({ onPick }: { onPick: (m: "completo" | Category) => void }) 
               Recomendado
             </p>
             <p className="font-display font-bold text-lg">Simulado completo</p>
-            <p className="text-sm text-muted-foreground">
-              30 questões no formato DETRAN: 3 placas + 27 das demais matérias, pesos reais de incidência.
-            </p>
           </div>
           <ArrowRight className="h-5 w-5 text-primary-glow mt-2 shrink-0" />
         </div>
@@ -607,7 +604,6 @@ function ModePicker({ onPick }: { onPick: (m: "completo" | Category) => void }) 
             >
               <div className="text-2xl mb-1">{c.icon}</div>
               <p className="text-sm font-semibold leading-tight">{CATEGORY_LABELS[c.id]}</p>
-              <p className="text-[11px] text-muted-foreground mt-1">30 questões</p>
             </button>
           ))}
         </div>

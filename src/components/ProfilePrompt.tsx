@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Loader2, Lock } from "lucide-react";
+import { Loader2, Lock, LogOut } from "lucide-react";
 import { formatCpf, isValidCpf } from "@/lib/cpf";
 
 type Employment =
@@ -53,30 +53,66 @@ export function ProfilePrompt() {
       setLoading(false);
       return;
     }
-    (async () => {
-      const { data } = await supabase
-        .from("profiles")
-        .select("display_name, email, cpf, phone, employment_status, employment_other")
-        .eq("id", user.id)
-        .maybeSingle();
+    
+    // Check if we are in Mock Mode
+    if (typeof window !== "undefined" && localStorage.getItem("nexia:use_mock_mode") === "true") {
+      const mockProfileStr = localStorage.getItem("nexia:mock_profile");
+      if (mockProfileStr) {
+        const mockProfile = JSON.parse(mockProfileStr);
+        const name = mockProfile.display_name ?? "";
+        const mail = mockProfile.email ?? "";
+        const profileCpf = mockProfile.cpf ?? "";
+        const profilePhone = mockProfile.phone ?? "";
+        const status = normalizeStatus(mockProfile.employment_status ?? "");
 
-      const name = data?.display_name ?? user.user_metadata?.display_name ?? "";
-      const mail = data?.email ?? user.email ?? "";
-      const profileCpf = data?.cpf ?? "";
-      const profilePhone = data?.phone ?? "";
-      const status = normalizeStatus(data?.employment_status ?? user.user_metadata?.employment_status ?? "");
+        setDisplayName(name);
+        setEmail(mail);
+        setCpf(profileCpf);
+        setPhone(profilePhone);
+        setEmployment(status as Employment | "");
+        setEmploymentOther(mockProfile.employment_other ?? "");
 
-      setDisplayName(name);
-      setEmail(mail);
-      setCpf(profileCpf);
-      setPhone(profilePhone);
-      setEmployment(status as Employment | "");
-      setEmploymentOther(data?.employment_other ?? "");
-
-      if (!name.trim() || !profileCpf.trim() || !profilePhone.trim() || !status) {
+        if (!name.trim() || !profileCpf.trim() || !profilePhone.trim()) {
+          setOpen(true);
+        }
+      } else {
         setOpen(true);
       }
       setLoading(false);
+      return;
+    }
+
+    (async () => {
+      try {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("display_name, email, cpf, phone, employment_status, employment_other")
+          .eq("id", user.id)
+          .maybeSingle();
+
+        if (error) throw error;
+
+        const name = data?.display_name ?? user.user_metadata?.display_name ?? "";
+        const mail = data?.email ?? user.email ?? "";
+        const profileCpf = data?.cpf ?? "";
+        const profilePhone = data?.phone ?? "";
+        const status = normalizeStatus(data?.employment_status ?? user.user_metadata?.employment_status ?? "");
+
+        setDisplayName(name);
+        setEmail(mail);
+        setCpf(profileCpf);
+        setPhone(profilePhone);
+        setEmployment(status as Employment | "");
+        setEmploymentOther(data?.employment_other ?? "");
+
+        if (!name.trim() || !profileCpf.trim() || !profilePhone.trim()) {
+          setOpen(true);
+        }
+      } catch (err) {
+        console.warn("Error fetching profiles, falling back to mock UI checks:", err);
+      } finally {
+        setLoading(false);
+      }
     })();
   }, [user]);
 
@@ -125,6 +161,26 @@ export function ProfilePrompt() {
 
     setSaving(true);
     try {
+      // Mock mode save fallback
+      if (typeof window !== "undefined" && localStorage.getItem("nexia:use_mock_mode") === "true") {
+        const mockProfile = {
+          id: user.id,
+          display_name: displayName.trim(),
+          email,
+          cpf,
+          phone: phone.trim() || null,
+          employment_status: employmentToDb[employment as Employment] ?? employment,
+          employment_other: employment === "outro" ? employmentOther.trim() : null,
+          status: "ativo" // keep active when offline profile is filled
+        };
+        localStorage.setItem("nexia:mock_profile", JSON.stringify(mockProfile));
+        toast.success("Cadastro salvo offline!");
+        setOpen(false);
+        // Dispatch event to sync page views
+        window.dispatchEvent(new Event("nexia:active_module:change"));
+        return;
+      }
+
       const { error } = await supabase.from("profiles").upsert({
         id: user.id,
         display_name: displayName.trim(),
@@ -255,6 +311,13 @@ export function ProfilePrompt() {
           <Button className="w-full mt-2" onClick={handleSave} disabled={saving}>
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Salvar e continuar"}
           </Button>
+          <button
+            type="button"
+            onClick={async () => { await supabase.auth.signOut(); window.location.href = "/cadastro"; }}
+            className="w-full mt-2 text-sm text-muted-foreground hover:text-foreground flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <LogOut className="h-4 w-4" /> Sair e voltar ao cadastro
+          </button>
         </div>
       </div>
     </div>
