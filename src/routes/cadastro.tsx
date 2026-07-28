@@ -642,7 +642,7 @@ function CadastroPage() {
                 id="password" 
                 type={showPw ? "text" : "password"} 
                 required 
-                placeholder="••••••••"
+                placeholder={mode === "signup" ? "Crie uma senha" : "Digite sua senha"}
                 value={password} 
                 onChange={(e) => setPassword(e.target.value)} 
                 className="bg-background/40 border-border/30"
