@@ -208,54 +208,19 @@ function CheckoutPage() {
 
   const plans = [
     {
-      id: "1_month" as const,
-      name: isGiftOpened ? "Plano 60 Dias (Leve 2 Pague 1)" : "Plano 1 Mês",
-      description: isGiftOpened ? "Ganha +30 dias grátis de acesso!" : "Acesso completo por 30 dias",
-      price: isGiftOpened ? 14.99 : 79.90,
-      oldPrice: 79.90,
-      discount: "81% de Desconto",
-      badge: isGiftOpened ? "Pague 1, Leve 2" : undefined,
-      bulletPoints: isGiftOpened ? [
-        "Acesso completo por 60 dias",
-        "Ganha +1 Mês de Bônus Grátis",
-        "Simulados inteligentes ilimitados",
-        "Vídeos explicativos do psicotécnico",
-      ] : [
-        "Acesso completo por 30 dias",
-        "Simulados inteligentes ilimitados",
-        "Vídeos explicativos do psicotécnico",
-        "Suporte padrão via chat",
-      ],
-      buttonText: isGiftOpened ? "Liberar Acesso 60 Dias" : "Liberar Acesso 1 Mês",
-    },
-    {
-      id: "3_months" as const,
-      name: "Plano 3 Meses",
-      description: "Tempo ideal para passar sem pressa",
-      price: isGiftOpened ? 19.90 : 99.90,
-      oldPrice: 99.90,
-      discount: "80% de Desconto",
-      badge: isGiftOpened ? "Mais Vendido" : undefined,
-      bulletPoints: [
-        "Acesso completo por 90 dias",
-        "Tudo do plano de 1 Mês",
-        "Suporte prioritário via WhatsApp",
-        "Atualizações de questões gratuitas",
-      ],
-      buttonText: "Liberar Acesso 3 Meses",
-    },
-    {
       id: "6_months" as const,
       name: "Plano 6 Meses",
-      description: "Tempo completo até sua aprovação",
-      price: isGiftOpened ? 49.90 : 249.90,
-      oldPrice: 249.90,
-      discount: "80% de Desconto",
-      badge: isGiftOpened ? "Melhor Valor" : undefined,
+      description: isGiftOpened ? "Acesso completo com super desconto!" : "Acesso completo por 6 meses",
+      price: isGiftOpened ? 29.90 : 97.00,
+      oldPrice: 97.00,
+      discount: "69% de Desconto",
+      badge: isGiftOpened ? "Super Desconto" : undefined,
       bulletPoints: [
         "Acesso completo por 180 dias",
-        "Tudo do plano de 3 Meses",
-        "Material complementar para download",
+        "Simulados inteligentes ilimitados",
+        "Vídeos explicativos do psicotécnico",
+        "Suporte prioritário via WhatsApp",
+        "Material de estudo para download",
         "Garantia incondicional de aprovação",
       ],
       buttonText: "Liberar Acesso 6 Meses",
@@ -398,10 +363,10 @@ function CheckoutPage() {
             </div>
 
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Clique no presente para destravar <strong className="text-success">até 81% de desconto</strong> em todos os planos!
+              Clique no presente para destravar seu <strong className="text-success">Super Desconto</strong> no plano de 6 meses!
             </p>
             <p className="text-[10px] text-warning font-semibold">⚠️ Oferta especial expira em 24 horas.</p>
-
+ 
             <Button
               onClick={handleOpenGift}
               disabled={isOpening}
@@ -412,45 +377,37 @@ function CheckoutPage() {
           </div>
         </DialogContent>
       </Dialog>
-
-        {/* Plans grid */}
-        <div className="grid md:grid-cols-3 gap-6">
+ 
+        {/* Centered single premium plan */}
+        <div className="max-w-sm mx-auto">
           {plans.map((plan) => (
             <Card
               key={plan.id}
               className={`glass relative overflow-hidden flex flex-col justify-between transition-all duration-300 ${
                 flashCards ? "flash-card" : ""
-              } ${
-                plan.badge === "Pague 1, Leve 2" || plan.badge === "Mais Vendido"
-                  ? "border-primary/50 shadow-glow scale-[1.01]"
-                  : "border-border/40 hover:border-primary/20"
-              }`}
+              } border-primary/50 shadow-glow scale-[1.01]`}
             >
               {plan.badge && (
-                <div className={`absolute top-3 right-3 border text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
-                  plan.badge.includes("Leve 2")
-                    ? "bg-success/20 border-success/40 text-success"
-                    : "bg-primary/20 border-primary/40 text-primary-glow"
-                }`}>
+                <div className="absolute top-3 right-3 border text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider bg-success/20 border-success/40 text-success">
                   {plan.badge}
                 </div>
               )}
-
+ 
               <CardHeader className="pb-4">
                 <CardTitle className="text-xl flex items-center gap-1.5">
                   {plan.name}
-                  {plan.id === "1_month" && isGiftOpened && (
+                  {isGiftOpened && (
                     <Sparkles className="h-4 w-4 text-warning fill-warning" />
                   )}
                 </CardTitle>
                 <CardDescription>{plan.description}</CardDescription>
               </CardHeader>
-
+ 
               <CardContent className="space-y-4">
                 <div className="space-y-1">
                   {isGiftOpened ? (
                     <div className="flex flex-col">
-                      <span className="text-[11px] text-muted-foreground line-through">
+                       <span className="text-[11px] text-muted-foreground line-through">
                         De R$ {plan.oldPrice.toFixed(2).replace(".", ",")}
                       </span>
                       <div className="flex items-baseline gap-2">
@@ -468,9 +425,7 @@ function CheckoutPage() {
                     </span>
                   )}
                   <span className="text-xs text-muted-foreground block mt-1">
-                    {plan.id === "1_month" && isGiftOpened
-                      ? "Pagamento único (60 dias de acesso!)"
-                      : "Pagamento único no Pix"}
+                    Pagamento único no Pix (Acesso imediato)
                   </span>
                 </div>
                 <ul className="text-sm text-muted-foreground space-y-2 pt-2 border-t border-border/10">
@@ -482,15 +437,11 @@ function CheckoutPage() {
                   ))}
                 </ul>
               </CardContent>
-
+ 
               <CardFooter className="pt-4">
                 <Button
                   onClick={() => handleSelectPlan(plan.id, plan.price, plan.name)}
-                  className={`w-full h-11 rounded-xl font-bold cursor-pointer ${
-                    plan.badge === "Pague 1, Leve 2" || plan.badge === "Mais Vendido"
-                      ? "gradient-primary text-primary-foreground shadow-glow"
-                      : ""
-                  }`}
+                  className="w-full h-11 rounded-xl font-bold cursor-pointer gradient-primary text-primary-foreground shadow-glow"
                 >
                   {plan.buttonText}
                 </Button>
