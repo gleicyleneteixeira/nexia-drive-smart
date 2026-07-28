@@ -23,7 +23,7 @@ export const Route = createFileRoute("/")({
   component: LandingPage,
   head: () => ({
     meta: [
-      { title: "Nexia DETRAN — Passe de Primeira na Prova Teórica e Psicotécnico" },
+      { title: "NEXIA DRIVE Simulado — Passe de Primeira na Prova Teórica e Psicotécnico" },
       {
         name: "description",
         content: "Simulador inteligente da prova teórica e psicotécnico do DETRAN. Macetes exclusivos, simulados dinâmicos e aprovação garantida.",

@@ -18,7 +18,7 @@ export function Logo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
       </motion.div>
       <div className="hidden sm:flex flex-col leading-tight">
         <span className={`font-display font-bold whitespace-nowrap ${text}`}>
-          Nexia<span className="gradient-text"> Simulado</span>
+          NEXIA DRIVE<span className="gradient-text"> Simulado</span>
         </span>
         <span className="hidden xl:block text-[10px] uppercase tracking-widest text-muted-foreground whitespace-nowrap">
           DETRAN · As que realmente caem

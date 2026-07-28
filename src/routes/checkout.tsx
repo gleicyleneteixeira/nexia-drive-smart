@@ -11,7 +11,7 @@ import { getExpiryDate, isProfileExpired } from "@/lib/subscription";
 
 export const Route = createFileRoute("/checkout")({
   component: CheckoutPage,
-  head: () => ({ meta: [{ title: "Checkout Pix — Nexia DETRAN" }] }),
+  head: () => ({ meta: [{ title: "Checkout Pix — NEXIA DRIVE Simulado" }] }),
 });
 
 function playWinChime() {

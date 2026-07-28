@@ -37,7 +37,7 @@ export const Route = createFileRoute("/app")({
   component: DashboardGate,
   head: () => ({
     meta: [
-      { title: "Área do Aluno — Nexia DETRAN" },
+      { title: "Área do Aluno — NEXIA DRIVE Simulado" },
       {
         name: "description",
         content: "Prepare-se para a Prova Teórica e o Psicotécnico para passar de primeira.",
