@@ -68,7 +68,16 @@ export function AppShell() {
     <div className="min-h-screen flex flex-col">
       <header className="sticky top-0 z-40 glass border-b border-border/40">
         <div className="mx-auto max-w-6xl px-4 h-16 flex items-center justify-between gap-3">
-          <Link to={isActive ? "/app" : "/"} className="shrink-0 flex items-center gap-2">
+          <Link
+            to={isActive ? "/app" : "/"}
+            onClick={() => {
+              if (isActive) {
+                localStorage.removeItem("nexia:active_module");
+                window.dispatchEvent(new Event("nexia:active_module:change"));
+              }
+            }}
+            className="shrink-0 flex items-center gap-2"
+          >
             <Logo />
           </Link>
 

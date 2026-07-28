@@ -98,9 +98,11 @@ function DashboardController() {
 
   useEffect(() => {
     const handler = () => {
-      const stored = localStorage.getItem("nexia:active_module") as "teorico" | "psicotecnico" | "direcao";
+      const stored = localStorage.getItem("nexia:active_module") as "teorico" | "psicotecnico" | "direcao" | null;
       if (stored && stored !== activeModule) {
         setActiveModule(stored);
+      } else if (!stored && activeModule !== "hub") {
+        setActiveModule("hub");
       }
     };
     window.addEventListener("nexia:active_module:change", handler);
@@ -151,45 +153,11 @@ function ModuleHub({ onSelect }: { onSelect: (mod: "teorico" | "psicotecnico" | 
       </motion.div>
 
       <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto pt-6">
-        {/* Module 1: Teorico */}
+        {/* Module 1: Psicotecnico */}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          onClick={() => onSelect("teorico")}
-          className="group text-left glass rounded-3xl p-8 border-border/40 hover:border-primary/50 shadow-card hover:shadow-glow cursor-pointer transition-all hover:scale-[1.02] flex flex-col justify-between"
-        >
-          <div className="space-y-5">
-            <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/25 flex items-center justify-center text-primary-glow group-hover:scale-110 transition-transform">
-              <BookOpen className="h-7 w-7" />
-            </div>
-            <div className="space-y-2">
-              <h2 className="text-2xl font-bold font-display text-foreground leading-tight">
-                Prepare-se para a <span className="gradient-text">Parte Teórica</span> 📘
-              </h2>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Estudo focado na prova de legislação do DETRAN. Legislação, Direção Defensiva, Primeiros Socorros, Mecânica Básica e Meio Ambiente.
-              </p>
-            </div>
-            <ul className="space-y-2 text-xs text-muted-foreground pt-2">
-              <li className="flex items-center gap-2">✓ Simulados inteligentes com cronômetro</li>
-              <li className="flex items-center gap-2">✓ Game interativo para memorizar Placas</li>
-              <li className="flex items-center gap-2">✓ Resumos e livrinhos virtuais em PDF</li>
-            </ul>
-          </div>
-          <div className="pt-6">
-            <div className="w-full py-3.5 px-5 rounded-xl font-bold gradient-primary text-primary-foreground flex items-center justify-center gap-2 shadow-glow group-hover:gap-3 transition-all pointer-events-none">
-              Acessar Parte Teórica
-              <ChevronRight className="h-4 w-4" />
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Module 2: Psicotecnico */}
-        <motion.div
-          initial={{ opacity: 0, x: 30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.15 }}
           onClick={() => onSelect("psicotecnico")}
           className="group text-left glass rounded-3xl p-8 border-border/40 hover:border-primary/50 shadow-card hover:shadow-glow cursor-pointer transition-all hover:scale-[1.02] flex flex-col justify-between"
         >
@@ -219,9 +187,43 @@ function ModuleHub({ onSelect }: { onSelect: (mod: "teorico" | "psicotecnico" | 
           </div>
         </motion.div>
 
+        {/* Module 2: Teorico */}
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          onClick={() => onSelect("teorico")}
+          className="group text-left glass rounded-3xl p-8 border-border/40 hover:border-red-500/50 shadow-card hover:shadow-red cursor-pointer transition-all hover:scale-[1.02] flex flex-col justify-between"
+        >
+          <div className="space-y-5">
+            <div className="w-14 h-14 rounded-2xl bg-red-500/10 border border-red-500/25 flex items-center justify-center text-red-500 group-hover:scale-110 transition-transform">
+              <BookOpen className="h-7 w-7" />
+            </div>
+            <div className="space-y-2">
+              <h2 className="text-2xl font-bold font-display text-foreground leading-tight">
+                Prepare-se para a <span className="text-red-500">Parte Teórica</span> 📕
+              </h2>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Estudo focado na prova de legislação do DETRAN. Legislação, Direção Defensiva, Primeiros Socorros, Mecânica Básica e Meio Ambiente.
+              </p>
+            </div>
+            <ul className="space-y-2 text-xs text-muted-foreground pt-2">
+              <li className="flex items-center gap-2">✓ Simulados inteligentes com cronômetro</li>
+              <li className="flex items-center gap-2">✓ Game interativo para memorizar Placas</li>
+              <li className="flex items-center gap-2">✓ Resumos e livrinhos virtuais em PDF</li>
+            </ul>
+          </div>
+          <div className="pt-6">
+            <div className="w-full py-3.5 px-5 rounded-xl font-bold bg-red-600 hover:bg-red-700 text-white flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(220,38,38,0.3)] group-hover:gap-3 transition-all pointer-events-none">
+              Acessar Parte Teórica
+              <ChevronRight className="h-4 w-4" />
+            </div>
+          </div>
+        </motion.div>
+
         {/* Module 3: Direcao */}
         <motion.div
-          initial={{ opacity: 0, x: -30 }}
+          initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
           onClick={() => onSelect("direcao")}
