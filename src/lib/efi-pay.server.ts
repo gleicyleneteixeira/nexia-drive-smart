@@ -177,6 +177,9 @@ export async function createPixCharge(params: {
 }): Promise<{ txid: string; pixCopiaECola: string; qrcodeBase64: string | null }> {
 
   if (!isEfiConfigured()) {
+    if (!isSandbox()) {
+      throw new Error("Erro: As credenciais da EFI Pay não estão configuradas no ambiente de produção.");
+    }
     console.warn("EFI Pay não configurado. Gerando dados de simulação.");
     return generateMockPix(params.amount);
   }
@@ -252,6 +255,10 @@ export async function createPixCharge(params: {
       qrcodeBase64,
     };
   } catch (err) {
+    if (!isSandbox()) {
+      console.error("Falha ao conectar com EFI Pay em produção:", err);
+      throw new Error("Erro ao conectar com a EFI Pay: " + (err instanceof Error ? err.message : String(err)));
+    }
     console.error("Falha ao conectar com EFI Pay. Gerando simulação:", (err as Error).message);
     return generateMockPix(params.amount);
   }
