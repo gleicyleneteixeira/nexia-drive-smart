@@ -79,13 +79,6 @@ function CheckoutPage() {
   const navigate = useNavigate();
   const { user, profile, loading: authLoading, refreshProfile } = useAuth();
 
-  const isLocalEnv = typeof window !== "undefined" && (
-    window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1" ||
-    window.location.hostname.startsWith("192.168.") ||
-    window.location.hostname.endsWith(".local")
-  );
-
   const [selectedPlan, setSelectedPlan] = useState<{ id: "1_month" | "3_months" | "6_months"; price: number; name: string } | null>(null);
   const [pixLoading, setPixLoading] = useState(false);
   const [pixData, setPixData] = useState<{
@@ -188,14 +181,8 @@ function CheckoutPage() {
       startTimer(); startPolling(data.txid);
     } catch (err) {
       console.error(err);
-      toast.error(err instanceof Error ? err.message : "Erro ao gerar o Pix. Usando simulação.");
-      const mockTxid = "mock_" + Math.random().toString(36).substring(2, 15);
-      setPixData({
-        txid: mockTxid,
-        pixCopiaECola: "00020101021226990014BR.GOV.BCB.PIX2577mockpixcopiaecola" + mockTxid + "5204000053039865405" + price.toFixed(2) + "5802BR5913NexiaDetran6009SAOPAULO62070503***6304",
-        qrcodeBase64: null,
-      });
-      startTimer(); startPolling(mockTxid);
+      toast.error(err instanceof Error ? err.message : "Erro ao gerar o Pix.");
+      setModalOpen(false);
     } finally { setPixLoading(false); }
   };
 
@@ -204,45 +191,6 @@ function CheckoutPage() {
     navigator.clipboard.writeText(pixData.pixCopiaECola);
     setCopied(true); toast.success("Código Pix copiado!");
     setTimeout(() => setCopied(false), 2000);
-  };
-
-  const handleSimulateSuccess = async () => {
-    if (!isLocalEnv) {
-      toast.error("Simulação não permitida em ambiente de produção.");
-      return;
-    }
-    setPixLoading(true);
-    try {
-      if (typeof window !== "undefined" && localStorage.getItem("nexia:use_mock_mode") === "true") {
-        const mockProfileStr = localStorage.getItem("nexia:mock_profile");
-        if (mockProfileStr) {
-          const profileObj = JSON.parse(mockProfileStr);
-          profileObj.status = "ativo";
-          profileObj.expires_at = getExpiryDate("1_month").toISOString();
-          localStorage.setItem("nexia:mock_profile", JSON.stringify(profileObj));
-        }
-        await refreshProfile();
-        stopPolling(); stopTimer(); setPaymentConfirmed(true);
-        toast.success("Simulação de pagamento ativa!");
-        setTimeout(() => { navigate({ to: "/app", replace: true }); }, 1500);
-        return;
-      }
-      if (!user?.id) throw new Error("Usuário não autenticado");
-      const { error } = await supabase
-        .from("profiles").upsert({
-          id: user.id,
-          email: user.email,
-          status: "ativo",
-          expires_at: getExpiryDate("1_month").toISOString(),
-        }, { onConflict: "id" });
-      if (error) throw error;
-      await refreshProfile();
-      stopPolling(); stopTimer(); setPaymentConfirmed(true);
-      toast.success("Simulação de pagamento ativa!");
-      setTimeout(() => { navigate({ to: "/app", replace: true }); }, 1500);
-    } catch (err) {
-      toast.error("Erro ao simular pagamento: " + (err instanceof Error ? err.message : ""));
-    } finally { setPixLoading(false); }
   };
 
   const formatTime = (seconds: number) => {
@@ -552,25 +500,7 @@ function CheckoutPage() {
         </div>
       </div>
 
-      {/* Developer Mode Bypass */}
-      {isLocalEnv && (
-        <div className="max-w-2xl mx-auto p-4 rounded-xl border border-warning/20 bg-warning/5 text-center space-y-3">
-          <p className="text-xs text-warning flex items-center justify-center gap-1.5">
-            <Terminal className="h-4 w-4" />
-            Ambiente de Desenvolvimento
-          </p>
-          <p className="text-xs text-muted-foreground">
-            Você pode simular um pagamento Pix de sucesso imediatamente para ver o simulador funcionando.
-          </p>
-          <Button
-            onClick={handleSimulateSuccess}
-            variant="outline"
-            className="h-9 px-4 text-xs font-semibold text-warning hover:bg-warning/10 cursor-pointer"
-          >
-            Simular Sucesso do Pagamento (Liberar Acesso)
-          </Button>
-        </div>
-      )}
+
 
       {/* Payment Modal */}
       <Dialog open={modalOpen} onOpenChange={(open) => {
@@ -607,10 +537,10 @@ function CheckoutPage() {
                   {pixData.qrcodeBase64 ? (
                     <img src={pixData.qrcodeBase64} alt="QR Code Pix" className="w-full h-full" />
                   ) : (
-                    <div className="w-full h-full bg-slate-100 flex flex-col items-center justify-center text-[10px] text-muted-foreground font-mono text-center px-2">
-                      <CreditCard className="h-8 w-8 text-primary mb-1" />
-                      <span>Simulador Pix Ativo</span>
-                      <span className="text-[8px] mt-1 text-slate-400">Escaneie pelo Copia e Cola</span>
+                    <div className="w-full h-full bg-slate-100 flex flex-col items-center justify-center text-[10px] text-destructive font-mono text-center px-2">
+                      <CreditCard className="h-8 w-8 text-destructive mb-1" />
+                      <span className="font-bold">QR Code não disponível</span>
+                      <span className="text-[8px] mt-1 text-slate-500">Utilize a chave Copia e Cola abaixo para pagar.</span>
                     </div>
                   )}
                 </div>
@@ -634,12 +564,7 @@ function CheckoutPage() {
               </div>
               <div className="p-3 rounded-xl bg-primary/5 border border-primary/10 flex items-center gap-3">
                 <Loader2 className="h-4 w-4 animate-spin text-primary shrink-0" />
-                <span className="text-xs text-muted-foreground">Aguardando pagamento... O simulador será liberado na hora.</span>
-              </div>
-              <div className="pt-2 border-t border-border/10 text-center">
-                <button onClick={handleSimulateSuccess} className="text-xs text-warning hover:underline font-semibold cursor-pointer">
-                  [ Testar ] Simular Confirmação Pix
-                </button>
+                <span className="text-xs text-muted-foreground">Aguardando confirmação de pagamento do Pix...</span>
               </div>
             </div>
           ) : null}

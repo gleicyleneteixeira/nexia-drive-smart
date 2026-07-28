@@ -21,20 +21,7 @@ export const Route = createFileRoute("/api/pix/status")({
             });
           }
 
-          // For mock/simulated transactions, return paid immediately (only in sandbox)
-          if (txid.startsWith("mock_") || txid.startsWith("sim_")) {
-            const { isSandbox } = await import("@/lib/efi-pay.server");
-            if (!isSandbox()) {
-              return new Response(JSON.stringify({ status: "ATIVA", error: "Simulação não permitida em produção." }), {
-                status: 400,
-                headers: { "Content-Type": "application/json" },
-              });
-            }
-            return new Response(JSON.stringify({ status: "CONCLUIDA" }), {
-              status: 200,
-              headers: { "Content-Type": "application/json" },
-            });
-          }
+
 
           let currentStatus = "ATIVA";
 

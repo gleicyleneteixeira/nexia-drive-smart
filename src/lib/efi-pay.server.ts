@@ -129,14 +129,7 @@ function getEfiConfig() {
   };
 }
 
-function generateMockPix(amount: number): { txid: string; pixCopiaECola: string; qrcodeBase64: string | null } {
-  const txid = "sim_" + Math.random().toString(36).substring(2, 15);
-  return {
-    txid,
-    pixCopiaECola: `00020101021226990014BR.GOV.BCB.PIX2577mockpixcopiaecola${txid}5204000053039865405${amount.toFixed(2)}5802BR5913NexiaDetran6009SAOPAULO62070503***6304`,
-    qrcodeBase64: null,
-  };
-}
+
 
 // 1. Get OAuth Access Token
 async function getAccessToken(): Promise<string> {
@@ -177,11 +170,7 @@ export async function createPixCharge(params: {
 }): Promise<{ txid: string; pixCopiaECola: string; qrcodeBase64: string | null }> {
 
   if (!isEfiConfigured()) {
-    if (!isSandbox()) {
-      throw new Error("Erro: As credenciais da EFI Pay não estão configuradas no ambiente de produção.");
-    }
-    console.warn("EFI Pay não configurado. Gerando dados de simulação.");
-    return generateMockPix(params.amount);
+    throw new Error("Erro: As credenciais da EFI Pay não estão configuradas.");
   }
 
   try {
@@ -255,12 +244,8 @@ export async function createPixCharge(params: {
       qrcodeBase64,
     };
   } catch (err) {
-    if (!isSandbox()) {
-      console.error("Falha ao conectar com EFI Pay em produção:", err);
-      throw new Error("Erro ao conectar com a EFI Pay: " + (err instanceof Error ? err.message : String(err)));
-    }
-    console.error("Falha ao conectar com EFI Pay. Gerando simulação:", (err as Error).message);
-    return generateMockPix(params.amount);
+    console.error("Falha ao conectar com EFI Pay:", err);
+    throw new Error("Erro ao conectar com a EFI Pay: " + (err instanceof Error ? err.message : String(err)));
   }
 }
 
