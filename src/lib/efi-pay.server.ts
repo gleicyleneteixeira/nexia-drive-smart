@@ -57,10 +57,17 @@ function httpsRequest(options: RequestOptions): Promise<{ status: number; body: 
   });
 }
 
-// Get certificate content
-function getCertificate(): string | Buffer | undefined {
+// Get certificate content — always returns a Buffer (decoded from base64 or read from file)
+function getCertificate(): Buffer | undefined {
   const content = process.env.EFI_CERTIFICATE_CONTENT;
-  if (content) return content;
+  if (content) {
+    try {
+      return Buffer.from(content, "base64");
+    } catch (err) {
+      console.error("Erro ao decodificar EFI_CERTIFICATE_CONTENT (base64):", err);
+      return undefined;
+    }
+  }
 
   const certPath = process.env.EFI_CERTIFICATE_PATH;
   if (certPath) {
@@ -80,9 +87,20 @@ function getCertificate(): string | Buffer | undefined {
   return undefined;
 }
 
+// Detect PFX/P12 format from env var or file extension
 function isPfxFormat(): boolean {
+  const certType = process.env.EFI_CERTIFICATE_TYPE?.toLowerCase();
+  if (certType === "p12" || certType === "pfx") return true;
+  if (certType === "pem") return false;
+
+  // Fallback: check file extension
   const certPath = process.env.EFI_CERTIFICATE_PATH || "";
-  return certPath.endsWith(".p12") || certPath.endsWith(".pfx");
+  if (certPath.endsWith(".p12") || certPath.endsWith(".pfx")) return true;
+
+  // If using EFI_CERTIFICATE_CONTENT without explicit type, assume PFX (most common for Efí)
+  if (process.env.EFI_CERTIFICATE_CONTENT) return true;
+
+  return false;
 }
 
 // Check if credentials are set
