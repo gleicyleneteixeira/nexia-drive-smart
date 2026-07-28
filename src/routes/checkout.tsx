@@ -79,6 +79,13 @@ function CheckoutPage() {
   const navigate = useNavigate();
   const { user, profile, loading: authLoading, refreshProfile } = useAuth();
 
+  const isLocalEnv = typeof window !== "undefined" && (
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1" ||
+    window.location.hostname.startsWith("192.168.") ||
+    window.location.hostname.endsWith(".local")
+  );
+
   const [selectedPlan, setSelectedPlan] = useState<{ id: "1_month" | "3_months" | "6_months"; price: number; name: string } | null>(null);
   const [pixLoading, setPixLoading] = useState(false);
   const [pixData, setPixData] = useState<{
@@ -200,6 +207,10 @@ function CheckoutPage() {
   };
 
   const handleSimulateSuccess = async () => {
+    if (!isLocalEnv) {
+      toast.error("Simulação não permitida em ambiente de produção.");
+      return;
+    }
     setPixLoading(true);
     try {
       if (typeof window !== "undefined" && localStorage.getItem("nexia:use_mock_mode") === "true") {
@@ -542,22 +553,24 @@ function CheckoutPage() {
       </div>
 
       {/* Developer Mode Bypass */}
-      <div className="max-w-2xl mx-auto p-4 rounded-xl border border-warning/20 bg-warning/5 text-center space-y-3">
-        <p className="text-xs text-warning flex items-center justify-center gap-1.5">
-          <Terminal className="h-4 w-4" />
-          Ambiente de Desenvolvimento
-        </p>
-        <p className="text-xs text-muted-foreground">
-          Você pode simular um pagamento Pix de sucesso imediatamente para ver o simulador funcionando.
-        </p>
-        <Button
-          onClick={handleSimulateSuccess}
-          variant="outline"
-          className="h-9 px-4 text-xs font-semibold text-warning hover:bg-warning/10 cursor-pointer"
-        >
-          Simular Sucesso do Pagamento (Liberar Acesso)
-        </Button>
-      </div>
+      {isLocalEnv && (
+        <div className="max-w-2xl mx-auto p-4 rounded-xl border border-warning/20 bg-warning/5 text-center space-y-3">
+          <p className="text-xs text-warning flex items-center justify-center gap-1.5">
+            <Terminal className="h-4 w-4" />
+            Ambiente de Desenvolvimento
+          </p>
+          <p className="text-xs text-muted-foreground">
+            Você pode simular um pagamento Pix de sucesso imediatamente para ver o simulador funcionando.
+          </p>
+          <Button
+            onClick={handleSimulateSuccess}
+            variant="outline"
+            className="h-9 px-4 text-xs font-semibold text-warning hover:bg-warning/10 cursor-pointer"
+          >
+            Simular Sucesso do Pagamento (Liberar Acesso)
+          </Button>
+        </div>
+      )}
 
       {/* Payment Modal */}
       <Dialog open={modalOpen} onOpenChange={(open) => {
