@@ -11,12 +11,12 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, Search, Download, Users, KeyRound, UserX, Star, Heart, Volume2 } from "lucide-react";
+import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, Search, Download, Users, KeyRound, UserX, XCircle, Star, Heart, Volume2 } from "lucide-react";
 import * as XLSX from "xlsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { useServerFn } from "@tanstack/react-start";
 import { adminResetUserPassword } from "@/lib/admin-users.functions";
-import { sendPasswordReset, deleteUser } from "@/lib/admin-operations.server";
+import { sendPasswordReset, deleteUser, activateUser, deactivateUser } from "@/lib/admin-operations.server";
 
 export const Route = createFileRoute("/admin")({
   component: AdminPage,
@@ -158,6 +158,8 @@ type ProfileRow = {
   phone: string | null;
   employment_status: string | null;
   employment_other: string | null;
+  status: string | null;
+  expires_at: string | null;
   created_at: string;
 };
 
@@ -178,6 +180,7 @@ function UsersPanel() {
   const qc = useQueryClient();
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<string>("all");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [resetUser, setResetUser] = useState<ProfileRow | null>(null);
@@ -209,7 +212,7 @@ function UsersPanel() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profiles")
-        .select("id, display_name, email, cpf, phone, employment_status, employment_other, created_at")
+        .select("id, display_name, email, cpf, phone, employment_status, employment_other, status, expires_at, created_at")
         .order("created_at", { ascending: false });
       if (error) throw error;
       return (data ?? []) as ProfileRow[];
@@ -218,6 +221,7 @@ function UsersPanel() {
 
   const filtered = users.filter((u) => {
     if (filter !== "all" && u.employment_status !== filter) return false;
+    if (statusFilter !== "all" && u.status !== statusFilter) return false;
     if (!search.trim()) return true;
     const q = search.toLowerCase();
     return (
@@ -238,6 +242,7 @@ function UsersPanel() {
       "E-mail": u.email ?? "",
       CPF: u.cpf ?? "",
       Telefone: u.phone ?? "",
+      Pagamento: u.status === "ativo" ? "Pago" : u.status === "pendente_pagamento" ? "Pendente" : (u.status ?? ""),
       "Situação profissional":
         u.employment_status === "outro"
           ? `Outros: ${u.employment_other ?? ""}`
@@ -284,7 +289,7 @@ function UsersPanel() {
               placeholder="Nome, e-mail, CPF ou telefone" className="pl-8" />
           </div>
         </div>
-        <div className="min-w-[200px]">
+        <div className="min-w-[160px]">
           <Label className="text-xs">Situação</Label>
           <select value={filter} onChange={(e) => { setFilter(e.target.value); setPage(1); }}
             className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm">
@@ -295,6 +300,15 @@ function UsersPanel() {
             <option value="trabalha_estuda">Trabalha e Estuda</option>
             <option value="desempregado">Desempregado(a)</option>
             <option value="outro">Outros</option>
+          </select>
+        </div>
+        <div className="min-w-[140px]">
+          <Label className="text-xs">Pagamento</Label>
+          <select value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
+            className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm">
+            <option value="all">Todos</option>
+            <option value="ativo">Pago (Ativo)</option>
+            <option value="pendente_pagamento">Pendente</option>
           </select>
         </div>
         <div className="min-w-[90px]">
@@ -317,7 +331,14 @@ function UsersPanel() {
       </div>
 
       <div className="text-xs text-muted-foreground">
-        {isLoading ? "Carregando…" : `${filtered.length} de ${users.length} usuários`}
+        {isLoading ? "Carregando…" : (
+          <span>
+            {filtered.length} de {users.length} usuários &middot;
+            <span className="text-success"> {users.filter(u => u.status === "ativo").length} pago</span>
+            &middot;
+            <span className="text-warning"> {users.filter(u => u.status === "pendente_pagamento").length} pendente</span>
+          </span>
+        )}
       </div>
 
       {deleteTarget && (
@@ -362,6 +383,7 @@ function UsersPanel() {
               <th className="text-left px-3 py-2">E-mail</th>
               <th className="text-left px-3 py-2">CPF</th>
               <th className="text-left px-3 py-2">Telefone</th>
+              <th className="text-left px-3 py-2">Pagamento</th>
               <th className="text-left px-3 py-2">Situação</th>
               <th className="text-left px-3 py-2">Cadastro</th>
               <th className="text-right px-3 py-2">Ações</th>
@@ -374,6 +396,26 @@ function UsersPanel() {
                 <td className="px-3 py-2">{u.email ?? "—"}</td>
                 <td className="px-3 py-2 whitespace-nowrap">{u.cpf ?? "—"}</td>
                 <td className="px-3 py-2">{u.phone ?? "—"}</td>
+                <td className="px-3 py-2 whitespace-nowrap">
+                  {u.status === "ativo" ? (
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-success bg-success/10 border border-success/30 px-2 py-0.5 rounded-full">
+                      <span className="w-1.5 h-1.5 rounded-full bg-success" />
+                      Ativo
+                    </span>
+                  ) : u.status === "pendente_pagamento" ? (
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-warning bg-warning/10 border border-warning/30 px-2 py-0.5 rounded-full">
+                      <span className="w-1.5 h-1.5 rounded-full bg-warning" />
+                      Pendente
+                    </span>
+                  ) : (
+                    <span className="text-[11px] text-muted-foreground">{u.status ?? "—"}</span>
+                  )}
+                  {u.status === "ativo" && u.expires_at && (
+                    <span className="block text-[10px] text-muted-foreground mt-0.5">
+                      Expira: {new Date(u.expires_at).toLocaleDateString("pt-BR")}
+                    </span>
+                  )}
+                </td>
                 <td className="px-3 py-2">
                   {u.employment_status === "outro"
                     ? `Outro: ${u.employment_other ?? ""}`
@@ -381,6 +423,39 @@ function UsersPanel() {
                 </td>
                 <td className="px-3 py-2 whitespace-nowrap">{new Date(u.created_at).toLocaleDateString("pt-BR")}</td>
                 <td className="px-3 py-2 text-right whitespace-nowrap">
+                  {u.status !== "ativo" ? (
+                    <button
+                      title="Ativar usuário"
+                      onClick={async () => {
+                        try {
+                          const result = await activateUser({ data: { userId: u.id } });
+                          toast.success(`Usuário ativado (plano: ${result.planType})`);
+                          qc.invalidateQueries({ queryKey: ["admin", "profiles"] });
+                        } catch (err) {
+                          toast.error(err instanceof Error ? err.message : "Erro ao ativar");
+                        }
+                      }}
+                      className="inline-flex items-center justify-center h-8 w-8 rounded-md text-success hover:text-success/80 hover:bg-success/10"
+                    >
+                      <CheckCircle2 className="h-4 w-4" />
+                    </button>
+                  ) : (
+                    <button
+                      title="Desativar usuário"
+                      onClick={async () => {
+                        try {
+                          await deactivateUser({ data: { userId: u.id } });
+                          toast.success("Usuário desativado");
+                          qc.invalidateQueries({ queryKey: ["admin", "profiles"] });
+                        } catch (err) {
+                          toast.error(err instanceof Error ? err.message : "Erro ao desativar");
+                        }
+                      }}
+                      className="inline-flex items-center justify-center h-8 w-8 rounded-md text-destructive hover:text-destructive/80 hover:bg-destructive/10"
+                    >
+                      <XCircle className="h-4 w-4" />
+                    </button>
+                  )}
                   <button
                     title="Redefinir senha"
                     onClick={() => { setResetUser(u); setNewPassword(""); }}
@@ -399,7 +474,7 @@ function UsersPanel() {
               </tr>
             ))}
             {!isLoading && filtered.length === 0 && (
-              <tr><td colSpan={7} className="text-center text-muted-foreground py-6">Nenhum usuário encontrado.</td></tr>
+              <tr><td colSpan={8} className="text-center text-muted-foreground py-6">Nenhum usuário encontrado.</td></tr>
             )}
           </tbody>
         </table>

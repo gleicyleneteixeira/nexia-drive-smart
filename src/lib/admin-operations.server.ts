@@ -347,3 +347,55 @@ export const sendMigrationResetEmail = createServerFn({ method: "POST" })
     return { success: true };
   });
 
+export const deactivateUser = createServerFn({ method: "POST" })
+  .inputValidator((d: { userId: string }) => d)
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { error } = await supabaseAdmin
+      .from("profiles")
+      .update({
+        status: "pendente_pagamento",
+        expires_at: null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", data.userId);
+
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const activateUser = createServerFn({ method: "POST" })
+  .inputValidator((d: { userId: string }) => d)
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { getExpiryDate } = await import("@/lib/subscription");
+
+    let planType = "6_months";
+
+    const { data: tx } = await supabaseAdmin
+      .from("pix_transactions")
+      .select("plan_type")
+      .eq("user_id", data.userId)
+      .eq("status", "CONCLUIDA")
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .single();
+
+    if (tx?.plan_type) {
+      planType = tx.plan_type;
+    }
+
+    const { error } = await supabaseAdmin
+      .from("profiles")
+      .update({
+        status: "ativo",
+        expires_at: getExpiryDate(planType).toISOString(),
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", data.userId);
+
+    if (error) throw new Error(error.message);
+    return { ok: true, planType };
+  });
+
