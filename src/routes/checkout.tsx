@@ -672,7 +672,7 @@ function CheckoutPage() {
                         </span>
                       </div>
                       <span className="text-xs text-muted-foreground mt-1 block">
-                        Pagamento único no Pix &bull; Sai por apenas R$ 9,95/mês
+                        Pagamento único no Pix &bull; Sai por apenas <strong className="font-bold text-emerald-400">R$ 9,95/mês</strong>
                       </span>
                       <span className="text-xs text-muted-foreground block">
                         (Acesso garantido por 60 dias)
@@ -691,11 +691,13 @@ function CheckoutPage() {
                           {plan.discount}
                         </span>
                       </div>
-                      <span className="text-xs text-muted-foreground mt-1 block">
-                        Pagamento único no Pix &bull; Sai por apenas R$ 4,98/mês
-                      </span>
+                      <div className="mt-1.5 mb-1">
+                        <span className="inline-block bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full font-bold text-sm">
+                          🔥 Menos de R$ 4,98 por mês
+                        </span>
+                      </div>
                       <span className="text-xs text-muted-foreground block">
-                        (Acesso garantido por 6 meses)
+                        Pagamento único no Pix (Acesso garantido por 6 meses)
                       </span>
                     </div>
                   ) : isGiftOpened ? (
