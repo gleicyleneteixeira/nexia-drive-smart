@@ -23,6 +23,8 @@ ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS group_status TEXT;
 INSERT INTO public.app_settings (key, value) VALUES
   ('whatsapp_group_link', 'https://chat.whatsapp.com/DPvDUOukxO4KkR42t41RAp?s=cl&p=i&mlu=4'),
   ('whatsapp_support_link', 'https://wa.link/6sc2qc'),
+  ('tiktok_group_link', 'https://tiktok.me/group/ZSCDyFLa7/'),
   ('show_group_popup', 'true'),
+  ('show_tiktok_popup', 'true'),
   ('show_whatsapp_button', 'true')
 ON CONFLICT (key) DO NOTHING;

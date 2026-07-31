@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";
 import { isProfileExpired } from "@/lib/subscription";
 import { fetchLibraryItems } from "@/lib/library";
-import { WhatsAppGroupPopup } from "@/components/WhatsAppGroupPopup";
+import { GroupPopups } from "@/components/WhatsAppGroupPopup";
 import { Loader2 } from "lucide-react";
 import {
   Sparkles,
@@ -90,7 +90,7 @@ function DashboardGate() {
       <DashboardController />
       {user && profile && profile.status === "ativo" && (
         <>
-          <WhatsAppGroupPopup userId={user.id} groupStatus={profile.group_status} />
+          <GroupPopups userId={user.id} groupStatus={profile.group_status} />
         </>
       )}
     </>

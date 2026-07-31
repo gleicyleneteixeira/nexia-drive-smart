@@ -1406,7 +1406,9 @@ function SettingsPanel() {
   const [saving, setSaving] = useState(false);
   const [groupLink, setGroupLink] = useState("");
   const [supportLink, setSupportLink] = useState("");
+  const [tiktokLink, setTiktokLink] = useState("");
   const [showPopup, setShowPopup] = useState(true);
+  const [showTiktokPopup, setShowTiktokPopup] = useState(true);
   const [showButton, setShowButton] = useState(true);
   const [loaded, setLoaded] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -1422,7 +1424,9 @@ function SettingsPanel() {
       const map = Object.fromEntries((data ?? []).map((r) => [r.key, r.value]));
       setGroupLink(map.whatsapp_group_link ?? "");
       setSupportLink(map.whatsapp_support_link ?? "https://wa.link/6sc2qc");
+      setTiktokLink(map.tiktok_group_link ?? "");
       setShowPopup(map.show_group_popup !== "false");
+      setShowTiktokPopup(map.show_tiktok_popup !== "false");
       setShowButton(map.show_whatsapp_button !== "false");
       setLoaded(true);
       return map;
@@ -1437,6 +1441,8 @@ function SettingsPanel() {
         { key: "show_whatsapp_button", value: showButton ? "true" : "false" },
         { key: "whatsapp_group_link", value: groupLink },
         { key: "show_group_popup", value: showPopup ? "true" : "false" },
+        { key: "tiktok_group_link", value: tiktokLink },
+        { key: "show_tiktok_popup", value: showTiktokPopup ? "true" : "false" },
       ];
       for (const s of settings) {
         const { error } = await supabase.from("app_settings").upsert(s, { onConflict: "key" });
@@ -1469,7 +1475,7 @@ function SettingsPanel() {
     <div className="glass rounded-2xl p-6 max-w-2xl space-y-8">
       <div>
         <h2 className="font-display font-bold text-lg">Configurações do WhatsApp</h2>
-        <p className="text-sm text-muted-foreground">Links e exibição dos canais de WhatsApp do app.</p>
+        <p className="text-sm text-muted-foreground">Links e exibição dos canais de comunicação do app.</p>
       </div>
 
       <div className="space-y-4">
@@ -1509,6 +1515,26 @@ function SettingsPanel() {
             <p className="text-xs text-muted-foreground">Mostrar modal de convite do WhatsApp para alunos ativos.</p>
           </div>
           <Switch checked={showPopup} onCheckedChange={setShowPopup} />
+        </div>
+      </div>
+
+      <div className="space-y-4 border-t border-border/40 pt-6">
+        <h3 className="font-display font-bold text-sm">Grupo de Conversa (TikTok)</h3>
+        <div className="space-y-2">
+          <Label className="text-xs font-semibold">Link do Grupo</Label>
+          <div className="flex gap-2">
+            <Input value={tiktokLink} onChange={(e) => setTiktokLink(e.target.value)} placeholder="https://tiktok.me/group/…" className="flex-1" />
+            <Button variant="outline" size="icon" onClick={() => window.open(tiktokLink, "_blank")} title="Abrir link">
+              <ExternalLink className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+        <div className="flex items-center justify-between">
+          <div>
+            <Label className="text-xs font-semibold">Exibir Pop-up do Grupo</Label>
+            <p className="text-xs text-muted-foreground">Mostrar modal de convite do grupo de conversa para alunos ativos.</p>
+          </div>
+          <Switch checked={showTiktokPopup} onCheckedChange={setShowTiktokPopup} />
         </div>
       </div>
 
