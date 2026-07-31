@@ -93,12 +93,10 @@ function CadastroPage() {
   // Redirect if user is already logged in
   useEffect(() => {
     if (!authLoading && user && profile) {
-      const isMigrated = !!(profile as any).is_migrated;
-      const hasActiveAccess = isMigrated || (profile as any).access_status === "active";
-      if (hasActiveAccess || (profile.status === "ativo" && !isProfileExpired(profile))) {
-        navigate({ to: "/app", replace: true });
-      } else if (profile.status === "pendente_pagamento" || isProfileExpired(profile)) {
+      if (isProfileExpired(profile)) {
         navigate({ to: "/checkout", replace: true });
+      } else {
+        navigate({ to: "/app", replace: true });
       }
     }
   }, [user, profile, authLoading, navigate]);
