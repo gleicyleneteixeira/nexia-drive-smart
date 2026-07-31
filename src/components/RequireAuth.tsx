@@ -18,7 +18,7 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
       } else {
         // Se for admin, ignora a cobrança e vai direto pro app
         if (isAdmin) {
-          if (pathname === "/checkout") {
+          if (pathname.startsWith("/checkout")) {
             navigate({ to: "/app", replace: true });
           }
           return;
@@ -27,12 +27,12 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
         if (profile) {
           if (isProfileExpired(profile)) {
             // Se logado pendente de pagamento (ou expirado), força ir para o checkout
-            if (pathname !== "/checkout") {
+            if (!pathname.startsWith("/checkout")) {
               navigate({ to: "/checkout", replace: true });
             }
           } else {
             // Se ativo e tentar acessar checkout, vai direto pro app
-            if (pathname === "/checkout") {
+            if (pathname.startsWith("/checkout")) {
               navigate({ to: "/app", replace: true });
             }
           }
@@ -60,7 +60,7 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
   }
 
   // Bloqueia renderização das rotas se estiver no status pendente ou expirado tentando acessar o app
-  if (profile && isProfileExpired(profile) && pathname !== "/checkout") {
+  if (profile && isProfileExpired(profile) && !pathname.startsWith("/checkout")) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
         <div className="text-center space-y-4">
