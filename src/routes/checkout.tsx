@@ -631,15 +631,15 @@ function CheckoutPage() {
             >
               <CardHeader className="pb-4 pt-6">
                 {giftOfferActive && plan.id === "1_month" ? (
-                  <div className="self-start inline-block mb-3 border text-[10px] font-bold px-2.5 py-0.5 rounded-full tracking-wider w-max bg-success/20 border-success/40 text-success">
+                  <div className="self-start inline-block mb-3 border text-[10px] font-bold px-2.5 py-0.5 rounded-full tracking-wider max-w-full truncate bg-success/20 border-success/40 text-success">
                     🎁 BÔNUS: +30 DIAS GRÁTIS
                   </div>
                 ) : giftOfferActive && plan.id === "6_months" ? (
-                  <div className="self-start inline-block mb-3 border text-[10px] font-bold px-2.5 py-0.5 rounded-full tracking-wider w-max bg-warning/20 border-warning/40 text-warning">
+                  <div className="self-start inline-block mb-3 border text-[10px] font-bold px-2.5 py-0.5 rounded-full tracking-wider max-w-full truncate bg-warning/20 border-warning/40 text-warning">
                     🏆 BÔNUS: +3 MESES GRÁTIS
                   </div>
                 ) : plan.badge && (
-                  <div className={`self-start inline-block mb-3 border text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider w-max ${
+                  <div className={`self-start inline-block mb-3 border text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider max-w-full truncate ${
                     plan.id === "6_months"
                       ? "bg-warning/20 border-warning/40 text-warning"
                       : "bg-primary/10 border-primary/20 text-primary-glow"
