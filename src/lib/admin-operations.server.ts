@@ -51,7 +51,13 @@ export const checkIfEmailExists = createServerFn({ method: "POST" })
 
 export const checkLegacyAccessSecure = createServerFn({ method: "POST" })
   .inputValidator((d: { input: string }) => d)
-  .handler(async ({ data }) => {
+  .handler(async ({ data }): Promise<{
+    found: boolean;
+    isMigratedUser: boolean;
+    needsFirstAccess: boolean;
+    needsNewPassword: boolean;
+    userEmail: string;
+  }> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const inputClean = data.input.trim().toLowerCase();
     const cpfDigits = inputClean.replace(/\D/g, "");
@@ -67,16 +73,24 @@ export const checkLegacyAccessSecure = createServerFn({ method: "POST" })
     const { data: profile, error } = await query.maybeSingle();
 
     if (error || !profile) {
-      return { found: false, isMigratedUser: false, needsFirstAccess: false, userEmail: "" };
+      return { found: false, isMigratedUser: false, needsFirstAccess: false, needsNewPassword: false, userEmail: "" };
     }
 
     const isMigratedUser = "is_migrated" in profile ? !!(profile as any).is_migrated : true;
-    const needsFirstAccess = "is_first_access" in profile ? !!(profile as any).is_first_access : true;
+
+    const needsFirstAccess = "is_first_access" in profile
+      ? !!(profile as any).is_first_access
+      : true;
+
+    const needsNewPassword = "needs_new_password" in profile
+      ? !!(profile as any).needs_new_password
+      : true;
 
     return {
       found: true,
       isMigratedUser,
       needsFirstAccess,
+      needsNewPassword,
       userEmail: profile.email || "",
     };
   });
@@ -144,6 +158,7 @@ export const registerLegacyUser = createServerFn({ method: "POST" })
 
     if (updateProfileErr) {
       console.error("Error updating profile status:", updateProfileErr);
+      return { success: false, error: "Erro ao atualizar perfil do usuário." };
     }
 
     return { success: true };
@@ -373,9 +388,11 @@ export const activateUser = createServerFn({ method: "POST" })
 
     let planType = "6_months";
 
+    let amount = 0;
+
     const { data: tx } = await supabaseAdmin
       .from("pix_transactions")
-      .select("plan_type")
+      .select("plan_type, amount")
       .eq("user_id", data.userId)
       .eq("status", "CONCLUIDA")
       .order("created_at", { ascending: false })
@@ -384,13 +401,14 @@ export const activateUser = createServerFn({ method: "POST" })
 
     if (tx?.plan_type) {
       planType = tx.plan_type;
+      amount = tx.amount;
     }
 
     const { error } = await supabaseAdmin
       .from("profiles")
       .update({
         status: "ativo",
-        expires_at: getExpiryDate(planType).toISOString(),
+        expires_at: getExpiryDate(planType, amount).toISOString(),
         updated_at: new Date().toISOString(),
       })
       .eq("id", data.userId);

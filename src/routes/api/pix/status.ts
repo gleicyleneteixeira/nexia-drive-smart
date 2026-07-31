@@ -32,7 +32,7 @@ export const Route = createFileRoute("/api/pix/status")({
 
               const { data: tx, error: txErr } = await supabaseAdmin
                 .from("pix_transactions")
-                .select("status, user_id, plan_type")
+                .select("status, user_id, plan_type, amount")
                 .eq("txid", txid)
                 .single();
 
@@ -52,7 +52,7 @@ export const Route = createFileRoute("/api/pix/status")({
                         .from("profiles")
                         .update({
                           status: "ativo",
-                          expires_at: getExpiryDate(tx.plan_type).toISOString(),
+                          expires_at: getExpiryDate(tx.plan_type, tx.amount).toISOString(),
                           updated_at: new Date().toISOString(),
                         })
                         .eq("id", tx.user_id);

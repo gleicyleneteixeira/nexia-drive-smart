@@ -14,6 +14,7 @@ export interface Profile {
   is_first_access: boolean | null;
   needs_new_password: boolean | null;
   access_status: string | null;
+  group_status: string | null;
 }
 
 interface AuthContextType {

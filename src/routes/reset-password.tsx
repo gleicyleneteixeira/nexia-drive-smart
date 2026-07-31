@@ -43,36 +43,38 @@ function ResetPasswordPage() {
     }
     setLoading(true);
     try {
+      const { data: { user }, error: userErr } = await supabase.auth.getUser();
+      if (userErr || !user) throw new Error("Sessão inválida. Solicite um novo link.");
+
       const { error } = await supabase.auth.updateUser({ password });
       if (error) throw error;
 
+      const { error: profileErr } = await supabase
+        .from("profiles")
+        .update({ needs_new_password: false, is_first_access: false })
+        .eq("id", user.id);
+
+      if (profileErr) {
+        console.error("Erro ao atualizar perfil:", profileErr);
+        throw new Error("Senha salva, mas erro ao atualizar perfil. Tente novamente.");
+      }
+
       toast.success("Senha atualizada com sucesso!");
 
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        // Update needs_new_password to false
-        await supabase
-          .from("profiles")
-          .update({ needs_new_password: false })
-          .eq("id", user.id);
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("status, is_migrated")
+        .eq("id", user.id)
+        .maybeSingle();
 
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("status, is_migrated")
-          .eq("id", user.id)
-          .maybeSingle();
-
-        const isMigrated = !!profile?.is_migrated;
-        if (isMigrated || profile?.status === "ativo") {
-          navigate({ to: "/app", replace: true });
-        } else {
-          navigate({ to: "/checkout", replace: true });
-        }
+      const isMigrated = !!profile?.is_migrated;
+      if (isMigrated || profile?.status === "ativo") {
+        navigate({ to: "/app", replace: true });
       } else {
-        navigate({ to: "/cadastro", replace: true });
+        navigate({ to: "/checkout", replace: true });
       }
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Erro");
+      toast.error(err instanceof Error ? err.message : "Erro ao redefinir senha.");
     } finally {
       setLoading(false);
     }

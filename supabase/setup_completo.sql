@@ -119,7 +119,7 @@ BEGIN
   INSERT INTO public.profiles (id, display_name, email, phone, cpf, employment_status, employment_other, status)
   VALUES (
     NEW.id,
-    COALESCE(NEW.raw_user_meta_data->>'display_name', NEW.email),
+    UPPER(COALESCE(NEW.raw_user_meta_data->>'display_name', NEW.email)),
     NEW.email,
     NEW.raw_user_meta_data->>'phone',
     NEW.raw_user_meta_data->>'cpf',

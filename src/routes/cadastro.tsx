@@ -170,7 +170,7 @@ function CadastroPage() {
             options: {
               emailRedirectTo: window.location.origin,
               data: {
-                display_name: name,
+                display_name: name.trim().toUpperCase(),
                 cpf,
                 phone,
                 employment_status: employmentToDb[employment as Employment] ?? employment,
@@ -228,6 +228,10 @@ function CadastroPage() {
             setLoading(false);
             return;
           }
+          await supabase
+            .from("profiles")
+            .update({ needs_new_password: false, is_first_access: false })
+            .eq("id", signUpData.user.id);
           toast.success("Cadastro realizado com sucesso!");
           navigate({ to: "/checkout" });
           setLoading(false);
@@ -266,6 +270,10 @@ function CadastroPage() {
             return;
           }
 
+          await supabase
+            .from("profiles")
+            .update({ needs_new_password: false, is_first_access: false })
+            .eq("id", signUpData.user.id);
           toast.success("Cadastro realizado com sucesso!");
           navigate({ to: "/checkout" });
           setLoading(false);
@@ -284,7 +292,7 @@ function CadastroPage() {
         try {
           const { checkLegacyAccessSecure } = await import("@/lib/admin-operations.server");
           const status = await checkLegacyAccessSecure({ data: { input: email } });
-          if (status.found && status.isMigratedUser && status.needsFirstAccess) {
+              if (status.found && status.isMigratedUser && (status.needsNewPassword ?? status.needsFirstAccess)) {
             isLegacyNeedsPassword = true;
             legacyUserEmail = status.userEmail || email;
           }
@@ -335,7 +343,7 @@ function CadastroPage() {
               const { checkLegacyAccessSecure } = await import("@/lib/admin-operations.server");
               const status = await checkLegacyAccessSecure({ data: { input: email } });
 
-              if (status.found && status.isMigratedUser && status.needsFirstAccess) {
+          if (status.found && status.isMigratedUser && (status.needsNewPassword ?? status.needsFirstAccess)) {
                 setLegacyEmail(status.userEmail);
                 setLegacyPassword("");
                 setLegacyConfirmPassword("");
@@ -504,6 +512,12 @@ function CadastroPage() {
       });
 
       if (signInErr) throw signInErr;
+
+      // Fallback: ensure profile flags are cleared client-side
+      await supabase
+        .from("profiles")
+        .update({ needs_new_password: false, is_first_access: false })
+        .eq("id", (await supabase.auth.getUser()).data.user?.id ?? "");
 
       toast.success("Senha cadastrada com sucesso! Bem-vindo(a)!");
       setLegacyUserModal(false);

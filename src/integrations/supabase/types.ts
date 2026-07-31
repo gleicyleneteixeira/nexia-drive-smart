@@ -130,46 +130,67 @@ export type Database = {
            studies: boolean | null
            status: string
            updated_at: string
-           access_status: string | null
-         }
-         Insert: {
-           cpf?: string | null
-           created_at?: string
-           display_name?: string | null
-           email?: string | null
-           employment_other?: string | null
-           employment_status?: string | null
-           expires_at?: string | null
-           id: string
-           is_first_access?: boolean | null
-           is_migrated?: boolean | null
-           needs_new_password?: boolean | null
-           phone?: string | null
-           studies?: boolean | null
-           status?: string
-           updated_at?: string
-           access_status?: string | null
-         }
-         Update: {
-           cpf?: string | null
-           created_at?: string
-           display_name?: string | null
-           email?: string | null
-           employment_other?: string | null
-           employment_status?: string | null
-           expires_at?: string | null
-           id?: string
-           is_first_access?: boolean | null
-           is_migrated?: boolean | null
-           needs_new_password?: boolean | null
-           phone?: string | null
-           studies?: boolean | null
-           status?: string
-           updated_at?: string
-           access_status?: string | null
-         }
-         Relationships: []
-       }
+            access_status: string | null
+            group_status: string | null
+          }
+          Insert: {
+            cpf?: string | null
+            created_at?: string
+            display_name?: string | null
+            email?: string | null
+            employment_other?: string | null
+            employment_status?: string | null
+            expires_at?: string | null
+            id: string
+            is_first_access?: boolean | null
+            is_migrated?: boolean | null
+            needs_new_password?: boolean | null
+            phone?: string | null
+            studies?: boolean | null
+            status?: string
+            updated_at?: string
+            access_status?: string | null
+            group_status?: string | null
+          }
+          Update: {
+            cpf?: string | null
+            created_at?: string
+            display_name?: string | null
+            email?: string | null
+            employment_other?: string | null
+            employment_status?: string | null
+            expires_at?: string | null
+            id?: string
+            is_first_access?: boolean | null
+            is_migrated?: boolean | null
+            needs_new_password?: boolean | null
+            phone?: string | null
+            studies?: boolean | null
+            status?: string
+            updated_at?: string
+            access_status?: string | null
+            group_status?: string | null
+          }
+          Relationships: []
+        }
+        app_settings: {
+          Row: {
+            key: string
+            value: string
+            updated_at: string
+          }
+          Insert: {
+            key: string
+            value: string
+            updated_at?: string
+          }
+          Update: {
+            key?: string
+            value?: string
+            updated_at?: string
+          }
+          Relationships: []
+        }
       pix_transactions: {
         Row: {
           id: string

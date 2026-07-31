@@ -165,7 +165,7 @@ export function ProfilePrompt() {
       if (typeof window !== "undefined" && localStorage.getItem("nexia:use_mock_mode") === "true") {
         const mockProfile = {
           id: user.id,
-          display_name: displayName.trim(),
+          display_name: displayName.trim().toUpperCase(),
           email,
           cpf,
           phone: phone.trim() || null,

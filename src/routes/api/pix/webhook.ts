@@ -32,7 +32,7 @@ export const Route = createFileRoute("/api/pix/webhook")({
               // 1. Find user_id from txid
               const { data: tx, error: txErr } = await supabaseAdmin
                 .from("pix_transactions")
-                .select("user_id, status, plan_type")
+                .select("user_id, status, plan_type, amount")
                 .eq("txid", txid)
                 .single();
 
@@ -48,7 +48,7 @@ export const Route = createFileRoute("/api/pix/webhook")({
                   .from("profiles")
                   .update({
                     status: "ativo",
-                    expires_at: getExpiryDate(tx.plan_type).toISOString(),
+                    expires_at: getExpiryDate(tx.plan_type, tx.amount).toISOString(),
                     updated_at: new Date().toISOString(),
                   })
                   .eq("id", tx.user_id);

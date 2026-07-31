@@ -11,7 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, Search, Download, Users, KeyRound, UserX, XCircle, Star, Heart, Volume2 } from "lucide-react";
+import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink } from "lucide-react";
 import * as XLSX from "xlsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { useServerFn } from "@tanstack/react-start";
@@ -90,7 +90,7 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 space-y-6">
+    <div className="mx-auto max-w-full px-4 lg:px-8 py-8 space-y-6">
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div>
           <Link to="/" className="text-xs text-muted-foreground flex items-center gap-1 hover:text-foreground">
@@ -105,16 +105,20 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
       </div>
 
       <Tabs defaultValue="users">
-        <TabsList className="grid grid-cols-3 w-full max-w-lg">
+        <TabsList className="grid grid-cols-4 w-full max-w-xl">
           <TabsTrigger value="users" className="gap-2"><Users className="h-4 w-4" /> Usuários</TabsTrigger>
           <TabsTrigger value="library" className="gap-2"><Upload className="h-4 w-4" /> Biblioteca</TabsTrigger>
           <TabsTrigger value="ratings" className="gap-2"><Star className="h-4 w-4" /> Avaliações</TabsTrigger>
+          <TabsTrigger value="settings" className="gap-2"><Settings className="h-4 w-4" /> Configurações</TabsTrigger>
         </TabsList>
         <TabsContent value="users" className="mt-4">
           <UsersPanel />
         </TabsContent>
         <TabsContent value="ratings" className="mt-4">
           <RatingsPanel />
+        </TabsContent>
+        <TabsContent value="settings" className="mt-4">
+          <SettingsPanel />
         </TabsContent>
         <TabsContent value="library" className="mt-4 space-y-6">
           <ItemForm
@@ -161,6 +165,7 @@ type ProfileRow = {
   status: string | null;
   expires_at: string | null;
   created_at: string;
+  needs_new_password: boolean | null;
 };
 
 const EMPLOYMENT_LABELS: Record<string, string> = {
@@ -174,15 +179,18 @@ const EMPLOYMENT_LABELS: Record<string, string> = {
   outro: "Outros",
 };
 
-const PAGE_SIZES = [10, 20, 50, 100] as const;
+const PAGE_SIZES = [10, 20, 50, 100, 500, 1000, 99999] as const;
 
 function UsersPanel() {
   const qc = useQueryClient();
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [passwordFilter, setPasswordFilter] = useState<string>("all");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState<number>(10);
+  const [sortField, setSortField] = useState<"name" | "email">("name");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const [resetUser, setResetUser] = useState<ProfileRow | null>(null);
   const [newPassword, setNewPassword] = useState("");
   const [resetLoading, setResetLoading] = useState(false);
@@ -212,7 +220,7 @@ function UsersPanel() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profiles")
-        .select("id, display_name, email, cpf, phone, employment_status, employment_other, status, expires_at, created_at")
+        .select("id, display_name, email, cpf, phone, employment_status, employment_other, status, expires_at, created_at, needs_new_password")
         .order("created_at", { ascending: false });
       if (error) throw error;
       return (data ?? []) as ProfileRow[];
@@ -222,6 +230,8 @@ function UsersPanel() {
   const filtered = users.filter((u) => {
     if (filter !== "all" && u.employment_status !== filter) return false;
     if (statusFilter !== "all" && u.status !== statusFilter) return false;
+    if (passwordFilter === "sem_senha" && (u.needs_new_password !== true)) return false;
+    if (passwordFilter === "com_senha" && u.needs_new_password === true) return false;
     if (!search.trim()) return true;
     const q = search.toLowerCase();
     return (
@@ -230,6 +240,12 @@ function UsersPanel() {
       (u.cpf ?? "").toLowerCase().includes(q) ||
       (u.phone ?? "").toLowerCase().includes(q)
     );
+  }).sort((a, b) => {
+    const aVal = (sortField === "name" ? a.display_name ?? "" : a.email ?? "").toLowerCase();
+    const bVal = (sortField === "name" ? b.display_name ?? "" : b.email ?? "").toLowerCase();
+    if (aVal < bVal) return sortDir === "asc" ? -1 : 1;
+    if (aVal > bVal) return sortDir === "asc" ? 1 : -1;
+    return 0;
   });
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
@@ -292,31 +308,40 @@ function UsersPanel() {
         <div className="min-w-[160px]">
           <Label className="text-xs">Situação</Label>
           <select value={filter} onChange={(e) => { setFilter(e.target.value); setPage(1); }}
-            className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm">
-            <option value="all">Todas</option>
-            <option value="clt">CLT</option>
-            <option value="autonomo">Autônomo(a)</option>
-            <option value="estudante">Estudante</option>
-            <option value="trabalha_estuda">Trabalha e Estuda</option>
-            <option value="desempregado">Desempregado(a)</option>
-            <option value="outro">Outros</option>
+            className="flex h-9 w-full rounded-md border border-border/20 bg-card/60 backdrop-blur-md px-3 py-1 text-sm text-foreground shadow-sm">
+            <option className="bg-card text-foreground" value="all">Todas</option>
+            <option className="bg-card text-foreground" value="clt">CLT</option>
+            <option className="bg-card text-foreground" value="autonomo">Autônomo(a)</option>
+            <option className="bg-card text-foreground" value="estudante">Estudante</option>
+            <option className="bg-card text-foreground" value="trabalha_estuda">Trabalha e Estuda</option>
+            <option className="bg-card text-foreground" value="desempregado">Desempregado(a)</option>
+            <option className="bg-card text-foreground" value="outro">Outros</option>
           </select>
         </div>
         <div className="min-w-[140px]">
           <Label className="text-xs">Pagamento</Label>
           <select value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
-            className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm">
-            <option value="all">Todos</option>
-            <option value="ativo">Pago (Ativo)</option>
-            <option value="pendente_pagamento">Pendente</option>
+            className="flex h-9 w-full rounded-md border border-border/20 bg-card/60 backdrop-blur-md px-3 py-1 text-sm text-foreground shadow-sm">
+            <option className="bg-card text-foreground" value="all">Todos</option>
+            <option className="bg-card text-foreground" value="ativo">Pago (Ativo)</option>
+            <option className="bg-card text-foreground" value="pendente_pagamento">Pendente</option>
+          </select>
+        </div>
+        <div className="min-w-[140px]">
+          <Label className="text-xs">Senha</Label>
+          <select value={passwordFilter} onChange={(e) => { setPasswordFilter(e.target.value); setPage(1); }}
+            className="flex h-9 w-full rounded-md border border-border/20 bg-card/60 backdrop-blur-md px-3 py-1 text-sm text-foreground shadow-sm">
+            <option className="bg-card text-foreground" value="all">Todos</option>
+            <option className="bg-card text-foreground" value="sem_senha">Sem senha</option>
+            <option className="bg-card text-foreground" value="com_senha">Com senha</option>
           </select>
         </div>
         <div className="min-w-[90px]">
           <Label className="text-xs">Por página</Label>
           <select value={pageSize} onChange={(e) => { setPageSize(Number(e.target.value)); setPage(1); }}
-            className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm">
+            className="flex h-9 w-full rounded-md border border-border/20 bg-card/60 backdrop-blur-md px-3 py-1 text-sm text-foreground shadow-sm">
             {PAGE_SIZES.map((size) => (
-              <option key={size} value={size}>{size}</option>
+              <option className="bg-card text-foreground" key={size} value={size}>{size === 99999 ? "Todos" : size}</option>
             ))}
           </select>
         </div>
@@ -337,6 +362,8 @@ function UsersPanel() {
             <span className="text-success"> {users.filter(u => u.status === "ativo").length} pago</span>
             &middot;
             <span className="text-warning"> {users.filter(u => u.status === "pendente_pagamento").length} pendente</span>
+            &middot;
+            <span className="text-destructive"> {users.filter(u => u.needs_new_password === true).length} sem senha</span>
           </span>
         )}
       </div>
@@ -379,11 +406,32 @@ function UsersPanel() {
         <table className="w-full text-sm">
           <thead className="bg-background/50 text-xs uppercase text-muted-foreground">
             <tr>
-              <th className="text-left px-3 py-2">Nome</th>
-              <th className="text-left px-3 py-2">E-mail</th>
+              <th className="text-left px-3 py-2">
+                <button onClick={() => {
+                  if (sortField === "name") setSortDir((d) => d === "asc" ? "desc" : "asc");
+                  else { setSortField("name"); setSortDir("asc"); }
+                }} className="inline-flex items-center gap-1 hover:text-foreground transition-colors">
+                  Nome
+                  {sortField === "name" ? (
+                    sortDir === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />
+                  ) : <ArrowUpDown className="h-3 w-3 opacity-40" />}
+                </button>
+              </th>
+              <th className="text-left px-3 py-2">
+                <button onClick={() => {
+                  if (sortField === "email") setSortDir((d) => d === "asc" ? "desc" : "asc");
+                  else { setSortField("email"); setSortDir("asc"); }
+                }} className="inline-flex items-center gap-1 hover:text-foreground transition-colors">
+                  E-mail
+                  {sortField === "email" ? (
+                    sortDir === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />
+                  ) : <ArrowUpDown className="h-3 w-3 opacity-40" />}
+                </button>
+              </th>
               <th className="text-left px-3 py-2">CPF</th>
               <th className="text-left px-3 py-2">Telefone</th>
               <th className="text-left px-3 py-2">Pagamento</th>
+              <th className="text-left px-3 py-2">Senha</th>
               <th className="text-left px-3 py-2">Situação</th>
               <th className="text-left px-3 py-2">Cadastro</th>
               <th className="text-right px-3 py-2">Ações</th>
@@ -416,6 +464,19 @@ function UsersPanel() {
                     </span>
                   )}
                 </td>
+                <td className="px-3 py-2 whitespace-nowrap">
+                  {u.needs_new_password === true ? (
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-destructive bg-destructive/10 border border-destructive/30 px-2 py-0.5 rounded-full">
+                      <span className="w-1.5 h-1.5 rounded-full bg-destructive" />
+                      Sem senha
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-success bg-success/10 border border-success/30 px-2 py-0.5 rounded-full">
+                      <span className="w-1.5 h-1.5 rounded-full bg-success" />
+                      OK
+                    </span>
+                  )}
+                </td>
                 <td className="px-3 py-2">
                   {u.employment_status === "outro"
                     ? `Outro: ${u.employment_other ?? ""}`
@@ -423,16 +484,17 @@ function UsersPanel() {
                 </td>
                 <td className="px-3 py-2 whitespace-nowrap">{new Date(u.created_at).toLocaleDateString("pt-BR")}</td>
                 <td className="px-3 py-2 text-right whitespace-nowrap">
-                  {u.status !== "ativo" ? (
+                  {u.status === "ativo" ? (
                     <button
-                      title="Ativar usuário"
+                      title="Usuário ativo — clique para desativar"
                       onClick={async () => {
+                        if (!window.confirm(`Tem certeza que deseja DESATIVAR "${u.display_name ?? u.email}"?`)) return;
                         try {
-                          const result = await activateUser({ data: { userId: u.id } });
-                          toast.success(`Usuário ativado (plano: ${result.planType})`);
+                          await deactivateUser({ data: { userId: u.id } });
+                          toast.success("Usuário desativado");
                           qc.invalidateQueries({ queryKey: ["admin", "profiles"] });
                         } catch (err) {
-                          toast.error(err instanceof Error ? err.message : "Erro ao ativar");
+                          toast.error(err instanceof Error ? err.message : "Erro ao desativar");
                         }
                       }}
                       className="inline-flex items-center justify-center h-8 w-8 rounded-md text-success hover:text-success/80 hover:bg-success/10"
@@ -441,14 +503,15 @@ function UsersPanel() {
                     </button>
                   ) : (
                     <button
-                      title="Desativar usuário"
+                      title="Usuário inativo — clique para ativar"
                       onClick={async () => {
+                        if (!window.confirm(`Tem certeza que deseja ATIVAR "${u.display_name ?? u.email}"?`)) return;
                         try {
-                          await deactivateUser({ data: { userId: u.id } });
-                          toast.success("Usuário desativado");
+                          const result = await activateUser({ data: { userId: u.id } });
+                          toast.success(`Usuário ativado (plano: ${result.planType})`);
                           qc.invalidateQueries({ queryKey: ["admin", "profiles"] });
                         } catch (err) {
-                          toast.error(err instanceof Error ? err.message : "Erro ao desativar");
+                          toast.error(err instanceof Error ? err.message : "Erro ao ativar");
                         }
                       }}
                       className="inline-flex items-center justify-center h-8 w-8 rounded-md text-destructive hover:text-destructive/80 hover:bg-destructive/10"
@@ -1334,6 +1397,127 @@ function ContributionsPanel({ dateFrom, dateTo }: { dateFrom: string; dateTo: st
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function SettingsPanel() {
+  const qc = useQueryClient();
+  const [saving, setSaving] = useState(false);
+  const [groupLink, setGroupLink] = useState("");
+  const [supportLink, setSupportLink] = useState("");
+  const [showPopup, setShowPopup] = useState(true);
+  const [showButton, setShowButton] = useState(true);
+  const [loaded, setLoaded] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  useQuery({
+    queryKey: ["admin", "settings"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("app_settings").select("key, value");
+      if (error) {
+        setLoadError(error.message);
+        throw error;
+      }
+      const map = Object.fromEntries((data ?? []).map((r) => [r.key, r.value]));
+      setGroupLink(map.whatsapp_group_link ?? "");
+      setSupportLink(map.whatsapp_support_link ?? "https://wa.link/6sc2qc");
+      setShowPopup(map.show_group_popup !== "false");
+      setShowButton(map.show_whatsapp_button !== "false");
+      setLoaded(true);
+      return map;
+    },
+  });
+
+  async function handleSave() {
+    setSaving(true);
+    try {
+      const settings = [
+        { key: "whatsapp_support_link", value: supportLink },
+        { key: "show_whatsapp_button", value: showButton ? "true" : "false" },
+        { key: "whatsapp_group_link", value: groupLink },
+        { key: "show_group_popup", value: showPopup ? "true" : "false" },
+      ];
+      for (const s of settings) {
+        const { error } = await supabase.from("app_settings").upsert(s, { onConflict: "key" });
+        if (error) throw error;
+      }
+      qc.invalidateQueries({ queryKey: ["admin", "settings"] });
+      toast.success("Configurações salvas!");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erro ao salvar");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (loadError) {
+    return (
+      <div className="glass rounded-2xl p-6 max-w-2xl">
+        <p className="text-sm text-destructive mb-2">Erro ao carregar configurações.</p>
+        <p className="text-xs text-muted-foreground mb-4">{loadError}</p>
+        <p className="text-xs text-muted-foreground">
+          Verifique se a migration <code className="text-primary">20260731000001_add_app_settings.sql</code> foi executada no SQL Editor do Supabase.
+        </p>
+      </div>
+    );
+  }
+
+  if (!loaded) return <div className="text-sm text-muted-foreground py-8 text-center">Carregando configurações…</div>;
+
+  return (
+    <div className="glass rounded-2xl p-6 max-w-2xl space-y-8">
+      <div>
+        <h2 className="font-display font-bold text-lg">Configurações do WhatsApp</h2>
+        <p className="text-sm text-muted-foreground">Links e exibição dos canais de WhatsApp do app.</p>
+      </div>
+
+      <div className="space-y-4">
+        <h3 className="font-display font-bold text-sm">Botão de Suporte (todas as telas)</h3>
+        <div className="space-y-2">
+          <Label className="text-xs font-semibold">Link de Suporte</Label>
+          <div className="flex gap-2">
+            <Input value={supportLink} onChange={(e) => setSupportLink(e.target.value)} placeholder="https://wa.me/55…" className="flex-1" />
+            <Button variant="outline" size="icon" onClick={() => window.open(supportLink, "_blank")} title="Abrir link">
+              <ExternalLink className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+        <div className="flex items-center justify-between">
+          <div>
+            <Label className="text-xs font-semibold">Exibir Botão Flutuante do WhatsApp</Label>
+            <p className="text-xs text-muted-foreground">Mostrar botão de suporte do WhatsApp no canto da tela.</p>
+          </div>
+          <Switch checked={showButton} onCheckedChange={setShowButton} />
+        </div>
+      </div>
+
+      <div className="space-y-4 border-t border-border/40 pt-6">
+        <h3 className="font-display font-bold text-sm">Grupo de Alunos</h3>
+        <div className="space-y-2">
+          <Label className="text-xs font-semibold">Link do Grupo</Label>
+          <div className="flex gap-2">
+            <Input value={groupLink} onChange={(e) => setGroupLink(e.target.value)} placeholder="https://chat.whatsapp.com/…" className="flex-1" />
+            <Button variant="outline" size="icon" onClick={() => window.open(groupLink, "_blank")} title="Abrir link">
+              <ExternalLink className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+        <div className="flex items-center justify-between">
+          <div>
+            <Label className="text-xs font-semibold">Exibir Pop-up do Grupo</Label>
+            <p className="text-xs text-muted-foreground">Mostrar modal de convite do WhatsApp para alunos ativos.</p>
+          </div>
+          <Switch checked={showPopup} onCheckedChange={setShowPopup} />
+        </div>
+      </div>
+
+      <div className="pt-2">
+        <Button onClick={handleSave} disabled={saving}>
+          {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+          Salvar Configurações
+        </Button>
+      </div>
     </div>
   );
 }

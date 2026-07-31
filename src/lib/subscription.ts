@@ -4,8 +4,11 @@ const PLAN_DAYS: Record<string, number> = {
   "6_months": 180,
 };
 
-export function getExpiryDate(planType: string): Date {
-  const days = PLAN_DAYS[planType] ?? 30;
+export function getExpiryDate(planType: string, amount?: number): Date {
+  let days = PLAN_DAYS[planType] ?? 30;
+  if (planType === "1_month" && amount === 19.90) {
+    days = 60;
+  }
   const expires = new Date();
   expires.setDate(expires.getDate() + days);
   return expires;

@@ -1,4 +1,10 @@
--- Fix handle_new_user: fail with clear message on duplicate CPF
+-- Normalizar display_name para maiúsculo (dados existentes)
+UPDATE public.profiles
+SET display_name = UPPER(TRIM(display_name))
+WHERE display_name IS NOT NULL
+  AND display_name != UPPER(TRIM(display_name));
+
+-- Re-cria trigger handle_new_user com UPPER
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS trigger
 LANGUAGE plpgsql
@@ -18,7 +24,7 @@ BEGIN
     COALESCE(NEW.raw_user_meta_data->>'status', 'pendente_pagamento')
   )
   ON CONFLICT (id) DO UPDATE SET
-    display_name = COALESCE(EXCLUDED.display_name, public.profiles.display_name),
+    display_name = COALESCE(UPPER(EXCLUDED.display_name), public.profiles.display_name),
     email = COALESCE(EXCLUDED.email, public.profiles.email),
     phone = COALESCE(EXCLUDED.phone, public.profiles.phone),
     cpf = COALESCE(EXCLUDED.cpf, public.profiles.cpf),
@@ -34,3 +40,14 @@ EXCEPTION WHEN unique_violation THEN
   END IF;
 END;
 $$;
+
+-- Atualiza também auth.users raw_user_meta_data para manter consistência
+UPDATE auth.users
+SET raw_user_meta_data = 
+  jsonb_set(
+    raw_user_meta_data,
+    '{display_name}',
+    to_jsonb(UPPER(TRIM(raw_user_meta_data->>'display_name')))
+  )
+WHERE raw_user_meta_data->>'display_name' IS NOT NULL
+  AND raw_user_meta_data->>'display_name' != UPPER(TRIM(raw_user_meta_data->>'display_name'));

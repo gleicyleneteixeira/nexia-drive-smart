@@ -287,6 +287,8 @@ function CheckoutPage() {
     );
   }
 
+  const giftOfferActive = isGiftOpened && discountTimeLeft > 0;
+
   const plans = [
     {
       id: "1_month" as const,
@@ -294,13 +296,13 @@ function CheckoutPage() {
       description: "Para quem já está na reta final e quer apenas revisar.",
       price: (() => {
         if (isGiftOpened && discountTimeLeft > 0) return 19.90;
-        if (rouletteDiscount) return 19.90;
+        if (isGiftOpened && rouletteDiscount) return 19.90;
         return 29.90;
       })(),
       oldPrice: 29.90,
       discount: (() => {
         if (isGiftOpened && discountTimeLeft > 0) return "33% OFF";
-        if (rouletteDiscount) return `${rouletteDiscount}% OFF`;
+        if (isGiftOpened && rouletteDiscount) return `${rouletteDiscount}% OFF`;
         return "";
       })(),
       badge: "PLANO RÁPIDO",
@@ -319,7 +321,7 @@ function CheckoutPage() {
       description: "O guia definitivo para não reprovar no Teórico, Psicotécnico e Prática.",
       price: (() => {
         if (isGiftOpened && discountTimeLeft > 0) return 29.90;
-        if (rouletteDiscount) {
+        if (isGiftOpened && rouletteDiscount) {
           return Number((59.90 * (1 - rouletteDiscount / 100)).toFixed(2));
         }
         return 59.90;
@@ -327,7 +329,7 @@ function CheckoutPage() {
       oldPrice: 59.90,
       discount: (() => {
         if (isGiftOpened && discountTimeLeft > 0) return "50% OFF";
-        if (rouletteDiscount) return `${rouletteDiscount}% OFF`;
+        if (isGiftOpened && rouletteDiscount) return `${rouletteDiscount}% OFF`;
         return "";
       })(),
       badge: "MAIS VENDIDO",
@@ -628,7 +630,15 @@ function CheckoutPage() {
               }`}
             >
               <CardHeader className="pb-4 pt-6">
-                {plan.badge && (
+                {giftOfferActive && plan.id === "1_month" ? (
+                  <div className="self-start inline-block mb-3 border text-[10px] font-bold px-2.5 py-0.5 rounded-full tracking-wider w-max bg-success/20 border-success/40 text-success">
+                    🎁 GANHOU +30 DIAS BÔNUS (LEVE 2 MESES PELO PREÇO DE 1)
+                  </div>
+                ) : giftOfferActive && plan.id === "6_months" ? (
+                  <div className="self-start inline-block mb-3 border text-[10px] font-bold px-2.5 py-0.5 rounded-full tracking-wider w-max bg-warning/20 border-warning/40 text-warning">
+                    🏆 MAIOR ECONOMIA
+                  </div>
+                ) : plan.badge && (
                   <div className={`self-start inline-block mb-3 border text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider w-max ${
                     plan.id === "6_months"
                       ? "bg-warning/20 border-warning/40 text-warning"
@@ -648,7 +658,43 @@ function CheckoutPage() {
  
               <CardContent className="space-y-4">
                 <div className="space-y-1">
-                  {isGiftOpened ? (
+                  {giftOfferActive && plan.id === "1_month" ? (
+                    <div className="flex flex-col">
+                      <span className="text-[11px] text-muted-foreground line-through">
+                        De R$ {plan.oldPrice.toFixed(2).replace(".", ",")}
+                      </span>
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-4xl font-bold font-display text-primary-glow">
+                          R$ 9,95
+                        </span>
+                        <span className="text-sm font-medium text-muted-foreground">/mês</span>
+                        <span className="inline-block text-[10px] font-bold text-success bg-success/15 border border-success/30 px-1.5 py-0.5 rounded">
+                          {plan.discount}
+                        </span>
+                      </div>
+                      <span className="text-xs text-muted-foreground mt-1">
+                        Total a pagar: R$ 19,90 (Cobrança única de 2 meses de acesso)
+                      </span>
+                    </div>
+                  ) : giftOfferActive && plan.id === "6_months" ? (
+                    <div className="flex flex-col">
+                      <span className="text-[11px] text-muted-foreground line-through">
+                        De R$ {plan.oldPrice.toFixed(2).replace(".", ",")}
+                      </span>
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-4xl font-bold font-display text-primary-glow">
+                          R$ 4,98
+                        </span>
+                        <span className="text-sm font-medium text-muted-foreground">/mês</span>
+                        <span className="inline-block text-[10px] font-bold text-success bg-success/15 border border-success/30 px-1.5 py-0.5 rounded">
+                          {plan.discount}
+                        </span>
+                      </div>
+                      <span className="text-xs text-muted-foreground mt-1">
+                        Total a pagar: R$ 29,90 (Cobrança única de 6 meses de acesso)
+                      </span>
+                    </div>
+                  ) : isGiftOpened ? (
                     <div className="flex flex-col">
                        <span className="text-[11px] text-muted-foreground line-through">
                         De R$ {plan.oldPrice.toFixed(2).replace(".", ",")}
@@ -667,30 +713,34 @@ function CheckoutPage() {
                       R$ {plan.price.toFixed(2).replace(".", ",")}
                     </span>
                   )}
-                  <span className="text-xs text-muted-foreground block mt-1">
-                    {plan.priceLegend}
-                  </span>
+                  {!giftOfferActive && (
+                    <span className="text-xs text-muted-foreground block mt-1">
+                      {plan.priceLegend}
+                    </span>
+                  )}
                 </div>
                 <ul className="text-sm text-muted-foreground space-y-2 pt-2 border-t border-border/10">
-                  {plan.bulletPoints.map((bp, index) => (
-                    <li key={index} className="flex items-center gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-success shrink-0" />
-                      {bp}
-                    </li>
-                  ))}
+                  {plan.bulletPoints.map((bp, index) => {
+                    let text = bp;
+                    if (giftOfferActive && plan.id === "1_month" && index === 0) {
+                      text = "Acesso completo por 60 dias";
+                    }
+                    return (
+                      <li key={index} className="flex items-center gap-2">
+                        <CheckCircle2 className="h-4 w-4 text-success shrink-0" />
+                        {text}
+                      </li>
+                    );
+                  })}
                 </ul>
               </CardContent>
  
               <CardFooter className="pt-4">
                 <Button
                   onClick={() => handleSelectPlan(plan.id, plan.price, plan.name)}
-                  className={`w-full h-11 rounded-xl font-bold cursor-pointer ${
-                    plan.id === "6_months"
-                      ? "gradient-primary text-primary-foreground shadow-glow"
-                      : ""
-                  }`}
+                  className="w-full h-11 rounded-xl font-bold cursor-pointer gradient-primary text-primary-foreground shadow-glow"
                 >
-                  {plan.buttonText}
+                  {giftOfferActive && plan.id === "1_month" ? "Liberar Acesso 60 Dias" : plan.buttonText}
                 </Button>
               </CardFooter>
             </Card>

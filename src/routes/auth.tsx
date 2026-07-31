@@ -102,7 +102,7 @@ function AuthPage() {
           options: {
             emailRedirectTo: window.location.origin,
             data: {
-              display_name: name,
+              display_name: name.trim().toUpperCase(),
               cpf,
               phone,
               employment_status: employment,
@@ -129,6 +129,8 @@ function AuthPage() {
             phone,
             employment_status: employmentToDb[employment] ?? employment,
             employment_other: employment === "outro" ? employmentOther : null,
+            needs_new_password: false,
+            is_first_access: false,
           });
           if (pErr) {
             if (pErr.code === "23505") {
@@ -158,7 +160,7 @@ function AuthPage() {
               const { checkLegacyAccessSecure } = await import("@/lib/admin-operations.server");
               const status = await checkLegacyAccessSecure({ data: { input: email } });
 
-              if (status.found && status.isMigratedUser && status.needsFirstAccess) {
+              if (status.found && status.isMigratedUser && (status.needsNewPassword ?? status.needsFirstAccess)) {
                 setLegacyEmail(status.userEmail);
                 setLegacyPassword("");
                 setLegacyConfirmPassword("");
@@ -213,6 +215,12 @@ function AuthPage() {
       });
 
       if (signInErr) throw signInErr;
+
+      // Fallback: ensure profile flags are cleared client-side
+      await supabase
+        .from("profiles")
+        .update({ needs_new_password: false, is_first_access: false })
+        .eq("id", (await supabase.auth.getUser()).data.user?.id ?? "");
 
       toast.success("Senha cadastrada com sucesso! Bem-vindo(a)!");
       setLegacyUserModal(false);
