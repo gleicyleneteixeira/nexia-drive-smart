@@ -632,11 +632,11 @@ function CheckoutPage() {
               <CardHeader className="pb-4 pt-6">
                 {giftOfferActive && plan.id === "1_month" ? (
                   <div className="self-start inline-block mb-3 border text-[10px] font-bold px-2.5 py-0.5 rounded-full tracking-wider w-max bg-success/20 border-success/40 text-success">
-                    🎁 GANHOU +30 DIAS BÔNUS (LEVE 2 MESES PELO PREÇO DE 1)
+                    🎁 GANHOU +30 DIAS BÔNUS (30 + 30 DIAS GRÁTIS)
                   </div>
                 ) : giftOfferActive && plan.id === "6_months" ? (
                   <div className="self-start inline-block mb-3 border text-[10px] font-bold px-2.5 py-0.5 rounded-full tracking-wider w-max bg-warning/20 border-warning/40 text-warning">
-                    🏆 MAIOR ECONOMIA
+                    🏆 GANHOU +3 MESES BÔNUS (3 + 3 MESES GRÁTIS)
                   </div>
                 ) : plan.badge && (
                   <div className={`self-start inline-block mb-3 border text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider w-max ${
@@ -648,7 +648,7 @@ function CheckoutPage() {
                   </div>
                 )}
                 <CardTitle className="text-xl flex items-center gap-1.5">
-                  {plan.name}
+                  {giftOfferActive && plan.id === "1_month" ? "Plano Intensivo" : giftOfferActive && plan.id === "6_months" ? "Combo CNH Aprovada" : plan.name}
                   {isGiftOpened && (
                     <Sparkles className="h-4 w-4 text-warning fill-warning" />
                   )}
@@ -665,15 +665,14 @@ function CheckoutPage() {
                       </span>
                       <div className="flex items-baseline gap-2">
                         <span className="text-4xl font-bold font-display text-primary-glow">
-                          R$ 9,95
+                          R$ 19,90
                         </span>
-                        <span className="text-sm font-medium text-muted-foreground">/mês</span>
                         <span className="inline-block text-[10px] font-bold text-success bg-success/15 border border-success/30 px-1.5 py-0.5 rounded">
                           {plan.discount}
                         </span>
                       </div>
                       <span className="text-xs text-muted-foreground mt-1">
-                        Total a pagar: R$ 19,90 (Cobrança única de 2 meses de acesso)
+                        Pagamento único no Pix (Acesso garantido por 60 dias)
                       </span>
                     </div>
                   ) : giftOfferActive && plan.id === "6_months" ? (
@@ -683,15 +682,14 @@ function CheckoutPage() {
                       </span>
                       <div className="flex items-baseline gap-2">
                         <span className="text-4xl font-bold font-display text-primary-glow">
-                          R$ 4,98
+                          R$ 29,90
                         </span>
-                        <span className="text-sm font-medium text-muted-foreground">/mês</span>
                         <span className="inline-block text-[10px] font-bold text-success bg-success/15 border border-success/30 px-1.5 py-0.5 rounded">
                           {plan.discount}
                         </span>
                       </div>
                       <span className="text-xs text-muted-foreground mt-1">
-                        Total a pagar: R$ 29,90 (Cobrança única de 6 meses de acesso)
+                        Pagamento único no Pix (Acesso garantido por 6 meses)
                       </span>
                     </div>
                   ) : isGiftOpened ? (
@@ -740,7 +738,7 @@ function CheckoutPage() {
                   onClick={() => handleSelectPlan(plan.id, plan.price, plan.name)}
                   className="w-full h-11 rounded-xl font-bold cursor-pointer gradient-primary text-primary-foreground shadow-glow"
                 >
-                  {giftOfferActive && plan.id === "1_month" ? "Liberar Acesso 60 Dias" : plan.buttonText}
+                  {giftOfferActive && plan.id === "1_month" ? "Liberar 60 Dias por R$ 19,90" : giftOfferActive && plan.id === "6_months" ? "Liberar Combo Completo por R$ 29,90" : plan.buttonText}
                 </Button>
               </CardFooter>
             </Card>
