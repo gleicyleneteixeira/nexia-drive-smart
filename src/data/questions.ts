@@ -1,4 +1,5 @@
 import type { PlacaId } from "@/components/Placa";
+import { supabase } from "@/integrations/supabase/client";
 
 export type Incidence = "altissima" | "alta" | "media" | "baixa";
 export type Category =
@@ -71,20 +72,19 @@ export const INCIDENCE_META: Record<
 };
 
 export const QUESTIONS: Question[] = [
-  {
+{
     id: "q1",
     category: "legislacao",
     statement:
-      "A Carteira Nacional de Habilitação (CNH) na categoria B autoriza a condução de:",
+      "Um cidadão aprovado em todos os exames do processo de habilitação recebe a Permissão para Dirigir (PPD) na categoria B. De acordo com as normas de trânsito vigentes no CTB, essa categoria de habilitação concede a ele o direito de conduzir exclusivamente:",
     options: [
-      "Veículos com até 3.500 kg e até 8 lugares além do motorista",
-      "Motocicletas e ciclomotores",
-      "Veículos articulados de carga",
-      "Veículos com mais de 8 lugares além do motorista",
+      "Veículos motorizados cujo Peso Bruto Total (PBT) não exceda a 3.500 kg e cuja lotação não exceda a 8 passageiros, excluído o motorista.",
+      "Veículos motorizados destinado ao transporte de passageiros com lotação máxima de 8 pessoas, incluindo obrigatoriamente o motorista.",
+      "Veículos motorizados com ou sem reboque acoplado, desde que o peso do reboque não ultrapasse 1.000 kg e a lotação seja inferior a 8 lugares.",
+      "Veículos de carga de qualquer espécie, desde que não ultrapassem o limite de capacidade máxima de tração de 3,5 toneladas."
     ],
     correctIndex: 0,
-    explanation:
-      "Categoria B: veículo de até 3.500 kg de PBT e até 8 passageiros, excluído o motorista.",
+    explanation: "A Categoria B autoriza veículos de até 3.500 kg de PBT e lotação de até 8 passageiros (excluído o condutor).",
     detailedExplanation:
       "A categoria B é a mais comum e habilita a dirigir automóveis de passeio, utilitários, camionetas, caminhonetes e furgões — desde que o peso bruto total (PBT) não ultrapasse 3.500 kg e a lotação seja de no máximo 8 passageiros, sem contar o motorista (regra do 8 + 1). Motocicletas exigem categoria A. Veículos acima de 3.500 kg exigem categoria C. Mais de 8 passageiros exige D. Veículos articulados ou com reboque pesado exigem E.",
     legalBase: "Art. 143 do CTB",
@@ -92,43 +92,42 @@ export const QUESTIONS: Question[] = [
       "A banca costuma trocar '8 passageiros além do motorista' por '8 passageiros no total' — fique atento: são 8 + 1.",
     tip: "Decore: B = até 3.500 kg e 8 + 1.",
     incidence: "altissima",
-    difficulty: 1,
+    difficulty: 3,
   },
-  {
+{
     id: "q2",
     category: "placas",
-    statement: "Placas de regulamentação possuem qual formato e cor predominante?",
+    statement:
+      "As sinalizações verticais exercem papel fundamental na regulamentação das vias públicas brasileiras. No que tange especificamente às placas de regulamentação, assinale a alternativa que define corretamente sua principal finalidade técnica, formato padrão predominante e cores obrigatórias:",
     options: [
-      "Triangular amarela",
-      "Circular vermelha e branca",
-      "Retangular azul",
-      "Losango amarelo",
+      "Advertir sobre perigos potenciais na via, possuindo formato de losango e cores amarela e preta.",
+      "Impor obrigações, limitações, proibições ou restrições de uso da via, possuindo formato circular com orla vermelha, fundo branco e símbolo preto.",
+      "Indicar direções, distâncias e serviços auxiliares aos usuários da via, possuindo formato retangular e cores azul e branca.",
+      "Orientar fluxos turísticos e áreas de preservação ambiental, possuindo formato retangular e cores marrom e branca."
     ],
     correctIndex: 1,
-    explanation:
-      "Regulamentação = círculo com bordas vermelhas e fundo branco. Indicam proibição ou obrigação.",
+    explanation: "Placas de regulamentação são circulares, vermelhas, brancas e pretas, e impõem proibições ou obrigações.",
     detailedExplanation:
       "As placas de regulamentação (série R) são CIRCULARES, com fundo branco, orla e tarja vermelhas e símbolo preto. Comunicam ordens e proibições — desobedecer é infração de trânsito. Exceções de formato: a placa PARE (R-1) é OCTOGONAL e a 'Dê a preferência' (R-2) é um TRIÂNGULO INVERTIDO. Mesmo com formato diferente, ambas pertencem ao grupo de regulamentação.",
     commonMistake:
       "Muitos candidatos confundem com as de advertência (losango amarelo). Regra de ouro: vermelho = obrigação; amarelo = aviso.",
     tip: "Vermelho = você é OBRIGADO a obedecer.",
     incidence: "altissima",
-    difficulty: 1,
+    difficulty: 3,
   },
-  {
+{
     id: "q3",
     category: "direcao-defensiva",
     statement:
-      "Em uma via de pista dupla, ao perceber um pedestre atravessando fora da faixa, o condutor deve:",
+      "Ao transitar por uma via urbana de pista dupla e tráfego rápido, o condutor visualiza um pedestre iniciando a travessia fora da faixa de segurança. Sob a perspectiva da Direção Defensiva e dos preceitos legais de preferência previstos no CTB, qual deve ser a conduta prioritária imediata do motorista?",
     options: [
-      "Buzinar continuamente para afastá-lo",
-      "Acelerar para passar antes dele",
-      "Reduzir a velocidade e dar preferência ao pedestre",
-      "Manter a velocidade pois ele está em local proibido",
+      "Manter a velocidade regular e acionar buzina de forma contínua para alertar o pedestre de sua imprudência.",
+      "Efetuar aceleração preventiva para desobstruir a via antes que o pedestre interponha-se na trajetória do veículo.",
+      "Reduzir a velocidade de maneira segura, sinalizar aos demais veículos e conceder a preferência de passagem ao pedestre.",
+      "Desviar bruscamente para a faixa adjacente sem alterar a velocidade do fluxo de veículos."
     ],
     correctIndex: 2,
-    explanation:
-      "O pedestre sempre tem preferência, mesmo fora da faixa. Direção defensiva = preservar vidas.",
+    explanation: "O pedestre tem prioridade absoluta em vias terrestres e sua proteção é dever imposto aos veículos maiores pelo CTB.",
     detailedExplanation:
       "O CTB classifica o pedestre como o usuário mais vulnerável da via e atribui a ele preferência absoluta, ainda que esteja em local proibido. O condutor deve reduzir a velocidade, parar se necessário e só prosseguir quando a travessia terminar. A responsabilidade pela preservação da vida é sempre do condutor — o erro do pedestre não autoriza o motorista a atropelá-lo.",
     legalBase: "Art. 29, §2º do CTB",
@@ -136,371 +135,610 @@ export const QUESTIONS: Question[] = [
       "Pegadinha clássica: a banca sugere que, por estar fora da faixa, o pedestre 'perde' a preferência. ERRADO — ele continua tendo prioridade.",
     incidence: "alta",
     trap: true,
-    difficulty: 2,
+    difficulty: 3,
   },
-  // ===== EXPANSÃO: simulados 2-5 (mesmo nível DETRAN) =====
-  {
+{
     id: "qe01", category: "legislacao",
-    statement: "O processo de habilitação inicia-se com a abertura do RENACH no:",
-    options: ["DETRAN do estado de residência", "Cartório civil", "Ministério dos Transportes", "Sindicato dos condutores"],
+    statement:
+      "Um jovem candidato de 18 anos deseja iniciar o procedimento formal para a obtenção de sua primeira Carteira Nacional de Habilitação (CNH). De acordo com as diretrizes do CTB e resoluções do CONTRAN, o ato de cadastramento inicial e abertura do Registro Nacional de Carteiras de Habilitação (RENACH) deve ocorrer obrigatoriamente no:",
+    options: [
+      "Órgão executivo de trânsito do Estado ou do Distrito Federal (DETRAN) correspondente ao domicílio ou residência do candidato.",
+      "Conselho Nacional de Trânsito (CONTRAN), por se tratar do órgão máximo normativo e consultivo do SNT.",
+      "Centro de Formação de Condutores (CFC) credenciado, que possui autonomia jurídica delegada para expedição de registro.",
+      "Ministério dos Transportes, através da Secretaria Nacional de Trânsito (SENATRAN), de forma unificada nacionalmente."
+    ],
     correctIndex: 0,
-    explanation: "O RENACH é aberto no DETRAN do estado em que o candidato reside.",
+    explanation: "A abertura do RENACH é competência do órgão executivo estadual (DETRAN) da residência do candidato.",
     detailedExplanation: "O RENACH (Registro Nacional de Carteiras de Habilitação) é o banco de dados nacional que unifica os registros de condutores. O processo de habilitação começa no DETRAN do estado onde o candidato reside, pois cada DETRAN é o órgão executivo de trânsito estadual responsável por emitir a CNH. Iniciar em outro estado ou órgão não seria válido, já que o RENACH é alimentado localmente e integrado ao sistema nacional. Tentar abrir em local diferente pode gerar inconsistências no prontuário e atrasar o processo.",
-    legalBase: "Res. CONTRAN 168/2004", incidence: "alta", difficulty: 1
+    legalBase: "Res. CONTRAN 168/2004", incidence: "alta", difficulty: 3
   },
-  {
+{
     id: "qe02", category: "legislacao",
-    statement: "A Permissão para Dirigir tem validade de:",
-    options: ["6 meses", "1 ano", "2 anos", "5 anos"],
-    correctIndex: 1,
-    explanation: "A PPD vale 1 ano; após esse período sem infrações graves/gravíssimas ou reincidência em média, é convertida em CNH definitiva.",
+    statement:
+      "A Permissão para Dirigir (PPD) é o documento que atesta a aprovação do candidato nos exames teóricos e práticos de direção veicular. Sob a ótica do Código de Trânsito Brasileiro (CTB), qual é o período de vigência probatória desse documento que antecede a CNH definitiva?",
+    options: [
+      "Doze meses, contados a partir da data de sua efetiva expedição física ou digital.",
+      "Seis meses, prorrogáveis caso o condutor não seja reincidente em infrações leves.",
+      "Dois anos, idêntico ao prazo de validade padrão das avaliações psicológicas especiais.",
+      "Cinco anos, correspondente ao período máximo de carência dos exames de aptidão física."
+    ],
+    correctIndex: 0,
+    explanation: "A PPD tem validade de um ano (doze meses) como período de avaliação probatória.",
     detailedExplanation: "A Permissão para Dirigir (PPD) é a primeira fase da habilitação, com validade de 1 ano. Durante esse período, o condutor é avaliado na prática: se cometer infração grave, gravíssima ou for reincidente em infração média, a CNH definitiva não é emitida e o processo recomeça do zero. Esse período probatório existe para garantir que o condutor novato desenvolva responsabilidade no trânsito antes de obter o documento definitivo.",
-    legalBase: "Art. 148, §3º CTB", incidence: "altissima", difficulty: 1
+    legalBase: "Art. 148, §3º CTB", incidence: "altissima", difficulty: 3
   },
-  {
+{
     id: "qe03", category: "legislacao",
-    statement: "O limite de pontos para suspensão da CNH (sem infrações gravíssimas) é de:",
-    options: ["10", "14", "20", "30"],
-    correctIndex: 2,
-    explanation: "Lei 14.071/21: 20 pontos sem nenhuma gravíssima; 16 com uma gravíssima; 14 com duas ou mais gravíssimas.",
+    statement:
+      "Um motorista profissional acumula diversas pontuações em seu prontuário no intervalo de doze meses, sem cometer nenhuma infração gravíssima. De acordo com as alterações inseridas no CTB pela Lei 14.071/2020, o limite máximo de pontos para que seja instaurado o processo de suspensão de seu direito de dirigir é de:",
+    options: [
+      "40 pontos, desde que não conste nenhuma infração gravíssima no período de doze meses.",
+      "30 pontos, na hipótese de constar apenas uma infração de natureza grave e nenhuma gravíssima no período.",
+      "20 pontos, limite aplicável independentemente da natureza ou gravidade das infrações acumuladas.",
+      "14 pontos, caso o condutor exerça atividade remunerada e seja reincidente em infrações médias."
+    ],
+    correctIndex: 0,
+    explanation: "Sem infrações gravíssimas, a suspensão do direito de dirigir ocorre quando o condutor atinge o limite de 40 pontos.",
     detailedExplanation: "A Lei 14.071/2021 alterou o sistema de pontuação para suspensão da CNH. Atualmente, o limite varia conforme a gravidade das infrações cometidas: se não houver nenhuma infração gravíssima no período, o limite é de 40 pontos; com uma gravíssima, cai para 30 pontos; com duas ou mais gravíssimas, o limite é de 20 pontos. A regra anterior dos '20 pontos fixos' não vale mais desde 2021 — por isso é importante atualizar os estudos com a nova lei.",
-    legalBase: "Art. 261 CTB", commonMistake: "A regra mudou: não é mais 20 pontos fixos.", incidence: "altissima", trap: true, difficulty: 2
+    legalBase: "Art. 261 CTB", commonMistake: "A regra mudou: não é mais 20 pontos fixos.", incidence: "altissima", trap: true, difficulty: 3
   },
-  {
+{
     id: "qe04", category: "legislacao",
-    statement: "Para condutores que exercem atividade remunerada (EAR), o limite de pontos é:",
-    options: ["20 pontos sempre", "40 pontos sempre", "Mesmo limite dos demais condutores", "Não há limite"],
-    correctIndex: 2,
-    explanation: "Desde a Lei 14.071/21 o limite é igual para todos; o que muda é a obrigação de exame toxicológico.",
+    statement:
+      "Um taxista que possui a observação de exercício de atividade remunerada (EAR) em sua habilitação acumula pontos por infrações leves e médias no período de doze meses. Pelas regras específicas do CTB para condutores EAR, o limite de pontos aplicável para a suspensão do direito de dirigir é:",
+    options: [
+      "40 pontos fixos, independentemente da natureza ou gravidade das infrações cometidas no período.",
+      "20 pontos, sofrendo redução imediata caso cometa qualquer infração de trânsito de natureza média.",
+      "30 pontos, caso conste uma infração grave ou gravíssima em seu prontuário veicular.",
+      "25 pontos, mediante abertura de processo de reciclagem obrigatório quando atingir 20 pontos."
+    ],
+    correctIndex: 0,
+    explanation: "Para condutores com EAR (atividade remunerada), o limite é sempre de 40 pontos, independentemente da gravidade das infrações.",
     detailedExplanation: "Antes da Lei 14.071/2021, condutores que exercem atividade remunerada (EAR) — como motoristas de táxi, aplicativo, ônibus e caminhão — tinham um limite de pontos diferenciado. Hoje, o limite de pontos para EAR é o mesmo dos demais condutores (até 40 pontos sem gravíssimas). A diferença está na obrigatoriedade do exame toxicológico periódico para EAR, que não se aplica a condutores comuns das categorias A e B.",
-    incidence: "alta", difficulty: 2
+    incidence: "alta", difficulty: 3
   },
-  {
+{
     id: "qe05", category: "legislacao",
-    statement: "É documento obrigatório de porte do condutor:",
-    options: ["CNH e CRLV", "Apenas a CNH", "Apenas o CRLV", "RG e CPF"],
+    statement:
+      "Durante fiscalização de trânsito rotineira realizada pela Polícia Rodoviária Federal, o condutor é solicitado a apresentar os documentos obrigatórios. De acordo com a legislação e resoluções do CONTRAN, constitui documento de porte obrigatório pelo condutor do veículo:",
+    options: [
+      "A CNH (física ou digital) e o Certificado de Licenciamento Anual (CLA/CRLV-e), cuja apresentação em formato digital é válida por lei.",
+      "O Certificado de Registro de Veículo (CRV) e o comprovante de pagamento do Imposto sobre a Propriedade de Veículos Automotores (IPVA).",
+      "O documento de identidade civil (RG) e a carteira de vacinação obrigatória do condutor.",
+      "Apenas o comprovante de aprovação nos exames de aptidão física e mental do corrente ano."
+    ],
     correctIndex: 0,
-    explanation: "Condutor deve portar CNH (ou CNH Digital) e o CRLV do veículo (físico ou digital).",
+    explanation: "A CNH (ou PPD) e o CLA/CRLV-e são os documentos obrigatórios de porte, dispensados se o agente puder consultar o sistema.",
     detailedExplanation: "Para circular legalmente, o condutor precisa portar dois documentos: a CNH (Carteira Nacional de Habilitação, que comprova sua aptidão para dirigir) e o CRLV (Certificado de Registro e Licenciamento do Veículo, que comprova que o veículo está regular). Ambos podem ser apresentados na versão digital (CDT e CRLV-e) através do aplicativo oficial, com o mesmo valor legal do documento impresso. Estar sem um deles resulta em infração e remoção do veículo.",
-    legalBase: "Art. 159 CTB", incidence: "alta", difficulty: 1
+    legalBase: "Art. 159 CTB", incidence: "alta", difficulty: 3
   },
-  {
+{
     id: "qe06", category: "legislacao",
-    statement: "A categoria 'A' habilita a conduzir:",
-    options: ["Carros de até 3.500 kg", "Motocicletas e ciclomotores", "Caminhões", "Ônibus"],
-    correctIndex: 1,
-    explanation: "Categoria A é exclusiva de motos e similares.",
+    statement:
+      "Um condutor obteve aprovação exclusiva para a categoria de habilitação 'A'. De acordo com as definições de categorias contidas no Art. 143 do CTB, esse documento autoriza a condução de quais tipos de veículos nas vias públicas?",
+    options: [
+      "Veículos motorizados de duas ou três rodas, com ou sem carro lateral (sidecar).",
+      "Veículos de transporte coletivo de passageiros cuja lotação não exceda a 8 lugares.",
+      "Qualquer espécie de veículo motorizado cujo peso bruto total não ultrapasse 3.500 kg.",
+      "Veículos motorizados de duas rodas com potência limitada a no máximo 50 cilindradas."
+    ],
+    correctIndex: 0,
+    explanation: "A categoria 'A' destina-se a veículos motorizados de 2 ou 3 rodas (motos, triciclos), com ou sem sidecar.",
     detailedExplanation: "O CTB divide as categorias de habilitação por tipo de veículo. A categoria A é destinada exclusivamente a veículos de duas ou três rodas: motocicletas, motonetas, ciclomotores e triciclos. Carros de passeio exigem categoria B, caminhões exigem C, veículos com mais de 8 passageiros exigem D, e combinações de veículos com reboque pesado exigem E. Cada categoria tem requisitos de idade e tempo de habilitação específicos.",
-    legalBase: "Art. 143 CTB", incidence: "alta", difficulty: 1
+    legalBase: "Art. 143 CTB", incidence: "alta", difficulty: 3
   },
-  {
+{
     id: "qe07", category: "legislacao",
-    statement: "Conduzir veículo sem CNH ou Permissão é infração:",
-    options: ["Leve", "Média", "Grave", "Gravíssima"],
-    correctIndex: 3,
-    explanation: "Gravíssima, multa x3 e retenção do veículo.",
+    statement:
+      "Um indivíduo é flagrado por agentes de trânsito conduzindo um veículo automotor sem nunca ter sido habilitado ou possuir qualquer permissão. Sob a perspectiva administrativa e punitiva do Código de Trânsito Brasileiro, essa conduta configura infração de natureza:",
+    options: [
+      "Gravíssima, punida com multa multiplicada por três vezes e retenção do veículo até a apresentação de condutor habilitado.",
+      "Grave, gerando apreensão automática e leilão imediato do veículo em 30 dias.",
+      "Média, punida apenas com advertência pedagógica por escrito se o veículo estiver licenciado.",
+      "Crime de trânsito incondicionado com detenção imediata de seis meses a um ano."
+    ],
+    correctIndex: 0,
+    explanation: "Dirigir sem habilitação é infração gravíssima com fator multiplicador 3 e medida administrativa de retenção do veículo.",
     detailedExplanation: "Dirigir sem possuir CNH ou Permissão para Dirigir é uma das infrações mais graves do CTB, classificada como GRAVÍSSIMA, com multa multiplicada por 3 e retenção do veículo até a apresentação de um condutor habilitado. A lógica é simples: se a pessoa não foi aprovada nos exames teórico e prático, ela não tem comprovação de que sabe dirigir com segurança, colocando em risco a própria vida e a dos outros.",
-    legalBase: "Art. 162, I CTB", incidence: "altissima", difficulty: 1
+    legalBase: "Art. 162, I CTB", incidence: "altissima", difficulty: 3
   },
-  {
+{
     id: "qe08", category: "legislacao",
-    statement: "A reciclagem do condutor é obrigatória quando:",
-    options: ["A CNH atinge o limite de pontos e o direito de dirigir é suspenso", "A cada renovação", "A cada 5 anos sempre", "Apenas para EAR"],
+    statement:
+      "O Código de Trânsito Brasileiro prevê a aplicação de penalidades administrativas aos condutores infratores. Dentre elas, a submissão obrigatória a curso de reciclagem será imposta ao condutor quando:",
+    options: [
+      "Tiver seu direito de dirigir suspenso, se envolver em acidente grave para o qual haja contribuído ou for condenado judicialmente por delito de trânsito.",
+      "Cometer qualquer infração de natureza média ou leve no período probatório da PPD.",
+      "Estacionar o veículo em vaga regulamentada de idoso sem a devida credencial de identificação.",
+      "Ultrapassar em local proibido sinalizado por linha dupla amarela contínua."
+    ],
     correctIndex: 0,
-    explanation: "Curso de reciclagem é exigido após suspensão ou cassação.",
+    explanation: "O curso de reciclagem é imposto nos casos de suspensão do direito de dirigir, envolvimento em acidente grave ou condenação judicial por crime de trânsito.",
     detailedExplanation: "O curso de reciclagem é uma medida educativa obrigatória para quem teve o direito de dirigir suspenso ou cassado. O objetivo é reeducar o condutor, atualizando seus conhecimentos sobre legislação, direção defensiva, primeiros socorros e meio ambiente. O curso tem carga horária definida pelo CONTRAN e, ao final, o condutor precisa ser aprovado em avaliação para reaver a CNH. Não se trata de punição, mas de oportunidade de aprendizado e correção de comportamento.",
-    legalBase: "Art. 268 CTB", incidence: "alta", difficulty: 2
+    legalBase: "Art. 268 CTB", incidence: "alta", difficulty: 3
   },
-  {
+{
     id: "qe09", category: "legislacao",
-    statement: "Para mudar a categoria da CNH, o condutor deve:",
-    options: ["Esperar 2 anos sem infração gravíssima e nenhuma média reincidente nos últimos 12 meses", "Pagar uma taxa adicional apenas", "Solicitar imediatamente", "Aguardar 5 anos"],
+    statement:
+      "Um condutor habilitado na categoria 'B' há mais de um ano deseja alterar sua habilitação para a categoria 'C' para conduzir veículos de carga. Conforme os requisitos específicos previstos no Art. 143 do CTB, para realizar essa mudança, ele não pode ter cometido no último ano:",
+    options: [
+      "Nenhuma infração de trânsito de natureza gravíssima em seu prontuário.",
+      "Mais do que uma infração média e nenhuma infração grave no prontuário.",
+      "Qualquer infração grave ou gravíssima, ou ser reincidente em infrações médias.",
+      "Nenhuma infração leve ou média que resulte em pontuação no prontuário do condutor."
+    ],
     correctIndex: 0,
-    explanation: "Para adição/mudança é exigido o prazo de 1 ano de habilitação e ausência de gravíssimas nos últimos 12 meses.",
+    explanation: "Para mudar de B para C, o condutor deve estar habilitado há pelo menos 1 ano na categoria B e não ter cometido infração gravíssima nos últimos 12 meses.",
     detailedExplanation: "Para mudar ou adicionar categoria (por exemplo, de B para D ou de A para B), o condutor deve cumprir requisitos específicos: ter pelo menos 1 ano de habilitação na categoria anterior, não ter cometido infração grave ou gravíssima nos últimos 12 meses, e, dependendo da categoria desejada, ter idade mínima de 21 anos (para C, D e E). Esses requisitos existem porque dirigir veículos maiores ou mais complexos exige mais experiência e maturidade.",
-    incidence: "media", difficulty: 2
+    incidence: "media", difficulty: 3
   },
-  {
+{
     id: "qe10", category: "legislacao",
-    statement: "A idade mínima para obter CNH é:",
-    options: ["16 anos", "17 anos", "18 anos", "21 anos"],
-    correctIndex: 2,
-    explanation: "18 anos completos.",
+    statement:
+      "O direito de iniciar o processo de habilitação para condução de veículos automotores e elétricos é assegurado pelo ordenamento jurídico nacional. Sob o ponto de vista penal e civil, o requisito essencial de idade mínima exigido baseia-se na condição de o candidato ser:",
+    options: [
+      "Penalmente imputável (maior de 18 anos), de forma a responder civil e penalmente pelos seus atos.",
+      "Maior de 16 anos emancipado, com autorização expressa em cartório público pelos genitores.",
+      "Eleitor regularmente alistado perante a Justiça Eleitoral, possuindo título de eleitor.",
+      "Maior de 18 anos apenas, independentemente de compreender as consequências civis e criminais."
+    ],
+    correctIndex: 0,
+    explanation: "O candidato deve ser penalmente imputável (saber ler e escrever, e ser maior de 18 anos perante a lei criminal).",
     detailedExplanation: "A idade mínima de 18 anos para obter a CNH está prevista no artigo 140 do CTB. O candidato também precisa saber ler e escrever, possuir CPF e documento de identidade, e ser penalmente imputável. Aos 18 anos a pessoa já responde criminalmente como adulta, o que é compatível com a responsabilidade exigida para conduzir um veículo. Para categorias profissionais (C, D e E), a idade mínima sobe para 21 anos.",
-    legalBase: "Art. 140 CTB", incidence: "alta", difficulty: 1
+    legalBase: "Art. 140 CTB", incidence: "alta", difficulty: 3
   },
-  {
+{
     id: "qe11", category: "legislacao",
-    statement: "A CNH Definitiva é obtida após:",
-    options: ["Aprovação direta no exame", "1 ano de PPD sem cometer infração grave/gravíssima ou reincidir em média", "Pagamento adicional", "3 anos de habilitação"],
-    correctIndex: 1,
-    explanation: "Conversão automática após 1 ano sem essas infrações.",
+    statement:
+      "A expedição da Carteira Nacional de Habilitação (CNH) definitiva representa a transição do período probatório para o condutor habilitado. Conforme as normas previstas no CTB, a concessão deste documento ao término de um ano de PPD requer que o condutor:",
+    options: [
+      "Não tenha cometido nenhuma infração de natureza grave ou gravíssima, nem seja reincidente em infração média no período de doze meses.",
+      "Tenha realizado pelo menos três viagens intermunicipais com monitoramento do órgão de trânsito estadual.",
+      "Apresente certidão negativa de débitos de multas ambientais federais.",
+      "Comprove a realização de exames complementares de direção veicular defensiva avançada."
+    ],
+    correctIndex: 0,
+    explanation: "A CNH definitiva exige que o portador da PPD não cometa infração grave/gravíssima nem seja reincidente em média.",
     detailedExplanation: "Após ser aprovado nos exames, o condutor recebe a Permissão para Dirigir (PPD), válida por 1 ano. Durante esse período probatório, o condutor novato precisa demonstrar que dirige com responsabilidade: se não cometer infração grave, gravíssima nem reincidir em infração média, a CNH definitiva é emitida automaticamente. Se cometer alguma dessas infrações, terá que reiniciar todo o processo de habilitação — incluindo aulas e exames.",
-    legalBase: "Art. 148 CTB", incidence: "altissima", trap: true, difficulty: 2
+    legalBase: "Art. 148 CTB", incidence: "altissima", trap: true, difficulty: 3
   },
-  {
+{
     id: "qe12", category: "legislacao",
-    statement: "Exame toxicológico é obrigatório para condutores das categorias:",
-    options: ["A e B", "C, D e E", "Apenas D", "Todos"],
-    correctIndex: 1,
-    explanation: "Obrigatório para C, D e E (renovação, mudança e adição).",
+    statement:
+      "O exame toxicológico de larga janela de detecção destina-se ao controle do consumo de substâncias psicoativas por condutores profissionais. Sob o regramento atual do CTB, a realização deste exame é obrigatória na obtenção e renovação da habilitação nas categorias:",
+    options: [
+      "C, D e E, independentemente do exercício de atividade remunerada (EAR).",
+      "B, C e D, somente se o condutor exercer atividade remunerada de transporte escolar.",
+      "A, B e C, sempre que a validade da CNH for superior a cinco anos civis.",
+      "Apenas na categoria E, para motoristas de veículos articulados com carga inflamável."
+    ],
+    correctIndex: 0,
+    explanation: "O exame toxicológico é obrigatório para condutores das categorias C, D e E, com periodicidade de 2 anos e meio para menores de 70 anos.",
     detailedExplanation: "O exame toxicológico é obrigatório para condutores das categorias C, D e E (caminhões, ônibus e veículos com reboque) tanto na obtenção quanto na renovação da CNH. O objetivo é detectar o uso de substâncias psicoativas que possam comprometer a segurança no trânsito. Motoristas de veículos pesados têm maior responsabilidade devido ao porte do veículo e ao transporte de passageiros ou cargas, justificando a exigência desse exame específico.",
-    legalBase: "Art. 148-A CTB", incidence: "alta", difficulty: 2
+    legalBase: "Art. 148-A CTB", incidence: "alta", difficulty: 3
   },
-  {
+{
     id: "qe13", category: "infracoes",
-    statement: "Estacionar em vaga de idoso sem credencial é infração:",
-    options: ["Leve", "Média", "Grave", "Gravíssima"],
-    correctIndex: 1,
-    explanation: "Média, 4 pontos.",
+    statement:
+      "Um motorista estaciona seu veículo em uma vaga de estacionamento reservada a idosos na via pública, sem expor no painel a credencial emitida pelo órgão de trânsito local. Conforme as disposições punitivas previstas no CTB, tal conduta constitui infração de natureza:",
+    options: [
+      "Gravíssima, punida com multa, acúmulo de 7 pontos na CNH e medida administrativa de remoção do veículo.",
+      "Grave, punida com multa pecuniária simples e retenção temporária do veículo para advertência oral.",
+      "Média, gerando apenas a penalidade administrativa de recolhimento da CNH por trinta dias.",
+      "Leve, passível de conversão imediata em advertência por escrito pelo agente de trânsito."
+    ],
+    correctIndex: 0,
+    explanation: "Estacionar em vaga regulamentada para idoso ou PCD sem credencial é infração gravíssima com remoção do veículo.",
     detailedExplanation: "Estacionar em vaga destinada a idoso sem a credencial adequada é infração MÉDIA, com 4 pontos na CNH e multa. As vagas de idoso são garantidas por lei (Estatuto do Idoso) e exigem credencial específica fornecida pelo DETRAN ou órgão municipal. Utilizá-las indevidamente prejudica quem realmente tem direito à prioridade. Já estacionar em vaga de pessoa com deficiência sem credencial é infração GRAVÍSSIMA — a gravidade é maior.",
-    legalBase: "Art. 181, XVII CTB", incidence: "media", difficulty: 1
+    legalBase: "Art. 181, XVII CTB", incidence: "media", difficulty: 3
   },
-  {
+{
     id: "qe14", category: "infracoes",
-    statement: "Estacionar em vaga PCD sem credencial é infração:",
-    options: ["Leve", "Grave", "Gravíssima", "Média"],
-    correctIndex: 2,
-    explanation: "Gravíssima, 7 pontos.",
+    statement:
+      "Em um estabelecimento comercial privado de uso coletivo (como o estacionamento de um shopping center), um condutor estaciona na vaga reservada a Pessoas com Deficiência (PCD) sem possuir a credencial autorizativa. Diante dessa situação, o CTB prevê:",
+    options: [
+      "Infração de natureza gravíssima, punida com multa e medida administrativa de remoção do veículo.",
+      "Impossibilidade de atuação do agente de trânsito, por se tratar de propriedade privada e sem jurisdição pública.",
+      "Infração de natureza grave, passível de remoção do veículo se houver reclamação direta do gerente do local.",
+      "Infração média, punida com multa administrativa e apreensão do veículo."
+    ],
+    correctIndex: 0,
+    explanation: "A fiscalização em vagas reservadas a idoso/PCD estende-se a estacionamentos privados de uso coletivo, sendo infração gravíssima com remoção.",
     detailedExplanation: "Estacionar em vaga reservada para pessoa com deficiência (PCD) sem a credencial exigida é infração GRAVÍSSIMA, a mais severa da categoria de estacionamento, com 7 pontos na CNH e multa. A diferença de gravidade em relação à vaga de idoso (que é Média) reflete a proteção especial da lei às pessoas com deficiência. A vaga PCD tem dimensões maiores para permitir embarque e desembarque com cadeira de rodas, e usá-la indevidamente dificulta a mobilidade de quem realmente precisa.",
-    incidence: "alta", difficulty: 1
+    incidence: "alta", difficulty: 3
   },
-  {
+{
     id: "qe15", category: "infracoes",
-    statement: "Não usar cinto de segurança é infração:",
-    options: ["Leve", "Média", "Grave", "Gravíssima"],
-    correctIndex: 2,
-    explanation: "Grave, 5 pontos.",
+    statement:
+      "Ao realizar rondas de trânsito, o agente de fiscalização observa que o passageiro do banco traseiro de um automóvel de passeio não está utilizando o cinto de segurança. De acordo com as normas de conduta e penalidades previstas no CTB, essa situação configura:",
+    options: [
+      "Infração de natureza grave praticada pelo condutor do veículo, punida com multa e medida administrativa de retenção do veículo até a colocação do cinto.",
+      "Infração de natureza média praticada diretamente pelo passageiro, sendo este o único responsável legal pela multa.",
+      "Infração leve de responsabilidade exclusiva do proprietário do veículo, gerando apenas advertência verbal pedagógica.",
+      "Infração de natureza gravíssima com fator multiplicador de três vezes, punida com retenção definitiva do veículo."
+    ],
+    correctIndex: 0,
+    explanation: "Deixar de usar o cinto de segurança (condutor ou passageiro) é infração grave de responsabilidade do condutor, com retenção do veículo.",
     detailedExplanation: "NÃO usar o cinto de segurança é infração GRAVE, com 5 pontos na CNH e multa. O cinto é obrigatório para TODOS os ocupantes do veículo (frente e trás), em todas as vias. Em caso de colisão, o cinto impede que o ocupante seja arremessado contra o painel, o para-brisa ou para fora do veículo, além de evitar colisões secundárias dentro da cabine. A responsabilidade pelo uso do cinto também é do condutor — ele responde pela infração mesmo quando o passageiro é quem não está usando.",
-    legalBase: "Art. 167 CTB", incidence: "alta", difficulty: 1
+    legalBase: "Art. 167 CTB", incidence: "alta", difficulty: 3
   },
-  {
+{
     id: "qe16", category: "infracoes",
-    statement: "Dirigir usando celular SEGURANDO o aparelho é infração:",
-    options: ["Média", "Grave", "Gravíssima", "Gravíssima multiplicada por 2"],
-    correctIndex: 2,
-    explanation: "Gravíssima, 7 pontos.",
+    statement:
+      "Um motorista é flagrado por um radar dotado de câmera de alta definição trafegando enquanto segura ou manuseia seu telefone celular para visualizar mensagens. Sob a égide da legislação de trânsito atualizada, esta conduta específica classifica-se como:",
+    options: [
+      "Infração de natureza gravíssima, sujeita a multa pecuniária e acúmulo de 7 pontos no prontuário da CNH.",
+      "Infração grave, punida com multa e suspensão preventiva do direito de dirigir por trinta dias.",
+      "Infração média, gerando apenas advertência formal por escrito expedida pelo órgão executivo de trânsito.",
+      "Infração leve, punida com multa caso o condutor esteja desenvolvendo velocidade acima da média da via."
+    ],
+    correctIndex: 0,
+    explanation: "Segurar ou manusear telefone celular enquanto conduz o veículo é infração gravíssima (Art. 252, parágrafo único do CTB).",
     detailedExplanation: "Segurar o celular ao volante é infração GRAVÍSSIMA, com 7 pontos na CNH e multa. A Lei 14.071/2021 endureceu essa penalidade porque manusear o celular reduz drasticamente a capacidade de reação do condutor — estudos mostram que equivale a dirigir alcoolizado. Só é permitido usar o celular ao volante em modo viva-voz ou com fone, sem segurar o aparelho. Mesmo olhar a tela do celular estacionado no suporte do painel pode distrair e gerar multa.",
-    legalBase: "Art. 252, §1º CTB", incidence: "altissima", difficulty: 1
+    legalBase: "Art. 252, §1º CTB", incidence: "altissima", difficulty: 3
   },
-  {
+{
     id: "qe17", category: "infracoes",
-    statement: "Disputar corrida (racha) é infração:",
-    options: ["Grave", "Gravíssima", "Gravíssima multiplicada por 10 + suspensão", "Média"],
-    correctIndex: 2,
-    explanation: "Gravíssima x10, suspensão do direito de dirigir e recolhimento da CNH; ainda configura crime.",
+    statement:
+      "Dois condutores resolvem realizar uma disputa de velocidade e arrancada rápida ('racha') em uma via arterial urbana aberta à circulação pública. Sob o prisma do Código de Trânsito Brasileiro, quais as penalidades e medidas administrativas aplicáveis a essa infração gravíssima de trânsito?",
+    options: [
+      "Multa multiplicada por dez vezes, suspensão do direito de dirigir, recolhimento do documento de habilitação e remoção do veículo.",
+      "Multa de cinco vezes o valor base, retenção do veículo e curso obrigatório de primeiros socorros.",
+      "Apenas advertência por escrito e apreensão temporária dos veículos por vinte e quatro horas.",
+      "Multa multiplicada por vinte vezes e cassação imediata e definitiva de todas as categorias de CNH sem direito a defesa."
+    ],
+    correctIndex: 0,
+    explanation: "A infração de disputar corrida (Art. 173 do CTB) é gravíssima multiplicada por 10, com suspensão do direito de dirigir e remoção do veículo.",
     detailedExplanation: "Disputar corrida em via pública (racha) é uma das infrações mais severas do CTB: GRAVÍSSIMA com fator multiplicador 10, suspensão imediata do direito de dirigir, recolhimento da CNH e remoção do veículo. Além da infração administrativa, o racha configura CRIME de trânsito (art. 308 do CTB), com detenção de 6 meses a 3 anos. A gravidade se justifica porque o racha coloca em risco não só os participantes, mas todos os usuários da via — pedestres, ciclistas e outros motoristas.",
-    legalBase: "Art. 173/308 CTB", incidence: "alta", difficulty: 2
+    legalBase: "Art. 173/308 CTB", incidence: "alta", difficulty: 3
   },
-  {
+{
     id: "qe18", category: "infracoes",
-    statement: "Transitar 20% a 50% acima da velocidade permitida é infração:",
-    options: ["Leve", "Média", "Grave", "Gravíssima"],
-    correctIndex: 2,
-    explanation: "Grave, 5 pontos.",
+    statement:
+      "Em uma via coletora urbana cuja velocidade máxima permitida pela sinalização local é de 40 km/h, um radar de fiscalização eletrônica registra um veículo transitando a 55 km/h. Considerando a velocidade registrada, a infração cometida pelo motorista enquadra-se como:",
+    options: [
+      "Infração média, por transitar em velocidade superior à máxima permitida em até 20%.",
+      "Infração grave, por transitar em velocidade superior à máxima permitida em mais de 20% até 50%.",
+      "Infração gravíssima, punida com multa multiplicada por três vezes e suspensão automática do direito de dirigir.",
+      "Infração leve, passível de conversão imediata em advertência escrita se for o primeiro registro do condutor."
+    ],
+    correctIndex: 1,
+    explanation: "De 40 km/h, 20% a mais seria 48 km/h. Transitando a 55 km/h, a velocidade supera em mais de 20% a máxima permitida (até 50%), configurando infração grave.",
     detailedExplanation: "Transitar entre 20% e 50% acima do limite de velocidade é infração GRAVE: 5 pontos na CNH e multa. O CTB divide o excesso de velocidade em faixas de gravidade crescente: até 20% acima é Média; de 20% a 50% é Grave; acima de 50% passa a ser Gravíssima com multa multiplicada por 3 e suspensão. Quanto maior a velocidade, menor o tempo de reação e maior a distância de frenagem, aumentando drasticamente o risco e a gravidade de um acidente.",
-    legalBase: "Art. 218, II CTB", incidence: "altissima", difficulty: 2
+    legalBase: "Art. 218, II CTB", incidence: "altissima", difficulty: 3
   },
-  {
+{
     id: "qe19", category: "infracoes",
-    statement: "Transitar acima de 50% da velocidade permitida é infração:",
-    options: ["Grave", "Gravíssima x3 + suspensão", "Média", "Leve"],
-    correctIndex: 1,
-    explanation: "Gravíssima multiplicada por 3, com suspensão imediata.",
+    statement:
+      "Ao transitar por uma rodovia de pista dupla cuja velocidade máxima regulamentada para automóveis é de 110 km/h, o veículo de um motorista é registrado pela fiscalização eletrônica desenvolvendo a velocidade de 170 km/h. Sob o rigor legal do CTB, essa conduta resulta em:",
+    options: [
+      "Infração de natureza gravíssima, punida com multa multiplicada por três vezes e imediata suspensão do direito de dirigir.",
+      "Infração grave, acarretando multa pecuniária simples e retenção do veículo para fins de vistoria mecânica.",
+      "Infração média, punida com multa e pontuação administrativa no prontuário do condutor habilitado.",
+      "Crime de trânsito inafiançável com detenção imediata e recolhimento definitivo da CNH."
+    ],
+    correctIndex: 0,
+    explanation: "Velocidade superior à máxima permitida em mais de 50% é infração gravíssima (fator multiplicador 3) com suspensão do direito de dirigir (Art. 218, III).",
     detailedExplanation: "Ultrapassar o limite de velocidade em mais de 50% é infração GRAVÍSSIMA com fator multiplicador 3: o valor da multa é triplicado, além de 7 pontos na CNH e suspensão imediata do direito de dirigir. Essa é a faixa mais severa de excesso de velocidade porque representa um perigo extremo — um veículo a 90 km/h em uma via de 60 km/h, por exemplo, precisa do dobro da distância para parar. Acima de 50%, a margem de erro é mínima e as consequências de um acidente são frequentemente fatais.",
-    legalBase: "Art. 218, III CTB", incidence: "alta", difficulty: 2
+    legalBase: "Art. 218, III CTB", incidence: "alta", difficulty: 3
   },
-  {
+{
     id: "qe20", category: "infracoes",
-    statement: "Não dar preferência a pedestre na faixa é infração:",
-    options: ["Leve", "Grave", "Gravíssima", "Média"],
-    correctIndex: 2,
-    explanation: "Gravíssima, 7 pontos.",
+    statement:
+      "Um pedestre inicia a travessia de uma avenida na faixa de segurança a ele destinada e desprovida de semáforo. O condutor de um automóvel aproxima-se e decide não parar, avançando sobre a faixa enquanto o pedestre se esquiva. Sob as normas de trânsito do CTB, a infração e a atitude do motorista configuram:",
+    options: [
+      "Infração gravíssima, punida com multa pecuniária administrativa e perda temporária do veículo por remoção.",
+      "Infração grave, passível de conversão em advertência caso o pedestre consiga terminar a travessia ileso.",
+      "Infração média, acarretando multa e apreensão temporária do documento de habilitação.",
+      "Apenas infração de conduta leve, sem repercussão administrativa se não houver colisão física."
+    ],
+    correctIndex: 0,
+    explanation: "Deixar de dar preferência de passagem a pedestre que se encontre na faixa a ele destinada é infração gravíssima (Art. 214, I do CTB).",
     detailedExplanation: "Não dar preferência ao pedestre que está atravessando na faixa de segurança é infração GRAVÍSSIMA, com 7 pontos na CNH e multa. O pedestre é o usuário mais vulnerável do trânsito, e a faixa a ele destinada é um instrumento para garantir sua travessia segura. Desrespeitar essa prioridade demonstra falta de direção defensiva e coloca uma vida em risco. O correto é parar antes da faixa sempre que houver pedestre aguardando ou atravessando.",
-    legalBase: "Art. 214 CTB", incidence: "alta", difficulty: 1
+    legalBase: "Art. 214 CTB", incidence: "alta", difficulty: 3
   },
-  {
+{
     id: "qe21", category: "infracoes",
-    statement: "Transportar criança menor de 10 anos no banco da frente é infração:",
-    options: ["Leve", "Média", "Grave", "Gravíssima"],
-    correctIndex: 3,
-    explanation: "Gravíssima, 7 pontos.",
+    statement:
+      "Ao planejar uma viagem familiar em veículo de passeio de passeio, o condutor deve acomodar uma criança de 9 anos de idade e 1,35 metros de altura. Conforme as normas atualizadas do CTB, a forma de transporte legalmente exigida para essa criança é:",
+    options: [
+      "No banco traseiro, utilizando obrigatoriamente o cinto de segurança de três pontos ou dispositivo de retenção equivalente.",
+      "No banco dianteiro, desde que o cinto de segurança seja regulado na altura máxima do ombro.",
+      "No banco traseiro, sendo obrigatório o uso de assento de elevação até completar 12 anos completos.",
+      "Em qualquer assento do veículo, sob supervisão direta de um adulto responsável e com cinto subabdominal."
+    ],
+    correctIndex: 0,
+    explanation: "Crianças menores de 10 anos que ainda não atingiram 1,45m de altura devem ser transportadas no banco traseiro com dispositivo de retenção adequado.",
     detailedExplanation: "Transportar criança menor de 10 anos no banco da frente é infração GRAVÍSSIMA, com 7 pontos na CNH e multa. Crianças até 10 anos devem ocupar o banco traseiro, utilizando dispositivo de retenção adequado (bebê conforto, cadeirinha ou assento de elevação) conforme idade, peso e altura. O banco da frente expõe a criança ao risco do airbag — em caso de colisão, o airbag pode machucar gravemente uma criança pequena. A Resolução CONTRAN 819/2021 atualizou essas regras.",
-    legalBase: "Art. 168 CTB", incidence: "alta", difficulty: 1
+    legalBase: "Art. 168 CTB", incidence: "alta", difficulty: 3
   },
-  {
+{
     id: "qe22", category: "infracoes",
-    statement: "Ultrapassar pela direita (salvo exceções legais) é infração:",
-    options: ["Grave", "Gravíssima", "Média", "Leve"],
-    correctIndex: 1,
-    explanation: "Gravíssima, 7 pontos.",
+    statement:
+      "Ao transitar por uma via urbana de fluxo intenso com múltiplas faixas no mesmo sentido, um condutor depara-se com um veículo lento na faixa da esquerda e decide realizar a ultrapassagem utilizando a faixa da direita. Sob as regras gerais de circulação do CTB, tal manobra é:",
+    options: [
+      "Infração de trânsito de natureza média, exceto se o veículo da esquerda estiver sinalizando a intenção de entrar à esquerda.",
+      "Infração de natureza grave, sem qualquer hipótese de excludente de ilicitude por fluxo intenso.",
+      "Perfeitamente permitida em qualquer circunstância em vias arteriais de velocidade acima de 60 km/h.",
+      "Classificada como crime de trânsito de perigo abstrato, punido com suspensão da CNH."
+    ],
+    correctIndex: 0,
+    explanation: "Ultrapassar pela direita é infração média, salvo quando o veículo à frente estiver na faixa apropriada e sinalizar a intenção de entrar à esquerda.",
     detailedExplanation: "Ultrapassar pela direita é infração GRAVÍSSIMA, com 7 pontos na CNH e multa. A ultrapassagem deve ser feita sempre pela esquerda, conforme determina o CTB. As únicas exceções são: quando o veículo da esquerda sinaliza que vai virar à esquerda (abrindo espaço), ou em vias de mão dupla com câmeras de sentido. Ultrapassar pela direita é perigoso porque o outro condutor não espera movimento rápido vindo desse lado, aumentando o risco de colisão.",
-    legalBase: "Art. 199 CTB", incidence: "alta", difficulty: 2
+    legalBase: "Art. 199 CTB", incidence: "alta", difficulty: 3
   },
-  {
+{
     id: "qe23", category: "infracoes",
-    statement: "Ultrapassar em local proibido (faixa contínua, curva, ponte) é:",
-    options: ["Grave", "Média", "Gravíssima multiplicada por 5", "Leve"],
-    correctIndex: 2,
-    explanation: "Gravíssima x5, suspensão.",
+    statement:
+      "Durante viagem em rodovia de pista única e duplo sentido de circulação, o motorista inicia manobra de ultrapassagem sobre a linha de divisão de fluxos amarela contínua, em trecho de aclive acentuado. Sob as penalidades administrativas do CTB, essa conduta configura:",
+    options: [
+      "Infração gravíssima de trânsito, sujeita a multa multiplicada por cinco vezes, sem prejuízo de responsabilidade civil em caso de colisão.",
+      "Infração grave, punida com multa pecuniária simples e suspensão imediata do direito de dirigir por 3 meses.",
+      "Infração média, convertida automaticamente em advertência verbal se o trecho tiver boa visibilidade periférica.",
+      "Crime de trânsito doloso contra a segurança viária coletiva com retenção imediata da habilitação."
+    ],
+    correctIndex: 0,
+    explanation: "Ultrapassar na contramão em linha dupla contínua ou simples contínua é infração gravíssima com fator multiplicador 5 (Art. 203, V do CTB).",
     detailedExplanation: "Ultrapassar em local proibido — como faixa dupla contínua, curvas, pontes, viadutos, túneis e aclives sem visibilidade — é infração GRAVÍSSIMA com fator multiplicador 5, além de suspensão do direito de dirigir e recolhimento da CNH. Esses locais são proibidos justamente porque a visibilidade é reduzida ou as condições da via não permitem uma ultrapassagem segura. Fazer uma ultrapassagem nessas condições pode resultar em colisão frontal, uma das mais letais.",
-    legalBase: "Art. 191 CTB", incidence: "altissima", difficulty: 1
+    legalBase: "Art. 191 CTB", incidence: "altissima", difficulty: 3
   },
-  {
+{
     id: "qe24", category: "infracoes",
-    statement: "Recusar-se ao teste do bafômetro:",
-    options: ["É direito do condutor sem penalidade", "Configura infração leve", "Tem a mesma penalidade de dirigir alcoolizado (gravíssima x10)", "Configura infração grave"],
-    correctIndex: 2,
-    explanation: "A recusa tem mesma sanção administrativa do art. 165.",
+    statement:
+      "Em uma fiscalização ordinária da Lei Seca realizada pela Polícia Militar, o motorista abordado nega-se expressamente a soprar o bafômetro ou realizar qualquer exame de dosagem alcoólica. Sob as regras vigentes do Art. 165-A do CTB, quais são as consequências jurídicas e administrativas imediatas?",
+    options: [
+      "Infração gravíssima, punida com multa multiplicada por dez vezes, suspensão do direito de dirigir por 12 meses e medida administrativa de recolhimento da CNH.",
+      "Apenas lavratura de termo de ocorrência sem aplicação de multa, desde que o condutor apresente um condutor substituto sóbrio.",
+      "Crime de trânsito imediato por presunção de culpa, com encaminhamento obrigatório do motorista à delegacia de polícia.",
+      "Infração grave, sujeita apenas ao pagamento de multa simples administrativa e anotação de 5 pontos na carteira."
+    ],
+    correctIndex: 0,
+    explanation: "A recusa ao teste do etilômetro ou exames similares acarreta as mesmas penalidades de dirigir sob efeito de álcool (gravíssima multiplicada por 10 e suspensão por 12 meses).",
     legalBase: "Art. 165-A CTB",
     detailedExplanation: "Recusar-se a soprar o bafômetro, fazer exame de sangue ou qualquer outro procedimento que detecte álcool tem a MESMA penalidade de dirigir alcoolizado: infração GRAVÍSSIMA com multa multiplicada por 10, suspensão do direito de dirigir por 12 meses e recolhimento da CNH. Muitos condutores acham que recusar o teste e fica por isso — mas a lei preve essa penalidade justamente para evitar que motoristas embriagados escapem da fiscalizacao.",
-    incidence: "altissima", trap: true, difficulty: 2
+    incidence: "altissima", trap: true, difficulty: 3
   },
-  {
+{
     id: "qe25", category: "infracoes",
-    statement: "Conduzir com CNH vencida há mais de 30 dias é infração:",
-    options: ["Leve", "Média", "Gravíssima", "Grave"],
-    correctIndex: 2,
-    explanation: "Gravíssima, 7 pontos e retenção do veículo.",
+    statement:
+      "Um motorista é parado em fiscalização viária rotineira e o agente constata que a CNH física ou digital do condutor encontra-se com o exame de aptidão física vencido há quarenta dias civis. Pelas regras administrativas contidas no CTB, essa situação configura:",
+    options: [
+      "Infração de natureza gravíssima, sujeita a multa pecuniária administrativa e medida administrativa de recolhimento da CNH e retenção do veículo.",
+      "Infração grave, permitindo o tráfego regular por até noventa dias adicionais se o condutor comprovar agendamento médico.",
+      "Infração média, punida apenas com multa e pontuação, sem previsão de retenção ou recolhimento de documentos.",
+      "Conduta atípica sob o ponto de vista das infrações de trânsito, gerando apenas notificação pedagógica escrita."
+    ],
+    correctIndex: 0,
+    explanation: "Dirigir com CNH vencida há mais de 30 dias é infração gravíssima com multa e retenção do veículo até a apresentação de condutor habilitado.",
     detailedExplanation: "Dirigir com CNH vencida há mais de 30 dias é infração GRAVÍSSIMA, com 7 pontos na CNH, multa e retenção do veículo. A CNH vencida perde a validade como documento de identificação do condutor, e circular com ela vencida significa que o motorista não comprova estar apto a dirigir. O prazo de 30 dias é a tolerância legal para renovação. Após esse período, o condutor é considerado como não habilitado para efeitos da infração.",
-    legalBase: "Art. 162, V CTB", incidence: "alta", difficulty: 1
+    legalBase: "Art. 162, V CTB", incidence: "alta", difficulty: 3
   },
-  {
+{
     id: "qe26", category: "infracoes",
-    statement: "Buzinar em local proibido ou entre 22h e 6h é infração:",
-    options: ["Leve", "Média", "Grave", "Gravíssima"],
+    statement:
+      "Ao trafegar em via pública residencial durante o período noturno (às 23h30), um condutor aciona o dispositivo de buzina de forma prolongada e sucessiva para chamar um morador. De acordo com as normas de conduta e penalidades previstas no CTB, tal prática configura:",
+    options: [
+      "Infração de natureza leve, punida com multa e pontuação administrativa no prontuário do condutor.",
+      "Infração de natureza média, classificada como poluição sonora urbana inafiançável.",
+      "Conduta plenamente permitida, visto que o motorista estava em velocidade abaixo de 20 km/h.",
+      "Infração grave, sujeita a medida administrativa de recolhimento do veículo ao pátio do DETRAN."
+    ],
     correctIndex: 0,
-    explanation: "Leve, 3 pontos.",
+    explanation: "Usar a buzina de forma prolongada/sucessiva ou entre as 22h e as 6h é infração leve (Art. 227 do CTB).",
     detailedExplanation: "Buzinar em local proibido (como hospitais, escolas) ou durante o período noturno (22h às 6h) é infração LEVE, com 3 pontos na CNH e multa. A buzina deve ser usada apenas em TOQUES BREVES para advertir sobre risco iminente. Usá-la em excesso ou fora dessas situações configura poluição sonora, perturba o sossego público e pode até gerar multa por perturbação ambiental. A regra é simples: buzine só o suficiente para evitar acidentes.",
-    legalBase: "Art. 227 CTB", incidence: "media", difficulty: 2
+    legalBase: "Art. 227 CTB", incidence: "media", difficulty: 3
   },
-  {
+{
     id: "qe27", category: "direcao-defensiva",
-    statement: "A condução defensiva visa principalmente:",
-    options: ["Chegar mais rápido", "Prevenir acidentes, mesmo por erro de terceiros", "Economizar combustível", "Cumprir prazos comerciais"],
-    correctIndex: 1,
-    explanation: "É evitar acidentes apesar das ações erradas dos outros e das condições adversas.",
+    statement:
+      "O conceito técnico e prático de Direção Defensiva fundamenta-se em atitudes preventivas adotadas pelo motorista ao volante. Dentre as alternativas apresentadas, assinale a opção que define corretamente o objetivo primordial da direção defensiva:",
+    options: [
+      "Conduzir de forma a evitar acidentes de trânsito a despeito das ações incorretas dos outros usuários e das condições adversas da via.",
+      "Garantir a máxima velocidade linear permitida para agilizar o fluxo viário urbano e diminuir engarrafamentos.",
+      "Desenvolver técnicas de controle de derrapagens em altas velocidades para contornar curvas de forma desportiva.",
+      "Transferir a responsabilidade civil da segurança do tráfego exclusivamente para os pedestres e ciclistas da via pública."
+    ],
+    correctIndex: 0,
+    explanation: "Direção defensiva é dirigir de forma preventiva para evitar acidentes apesar de condições adversas e erros de terceiros.",
     detailedExplanation: "Direção defensiva é o conjunto de técnicas que permite ao condutor dirigir de forma a prevenir acidentes, mesmo diante de condições adversas (clima, via, trânsito) e dos erros de outros motoristas e pedestres. O foco principal NÃO é chegar rápido, economizar combustível ou cumprir prazos — embora esses benefícios possam surgir como consequência. O objetivo central é salvar vidas, antecipando situações de risco e agindo com segurança.",
-    incidence: "altissima", difficulty: 1
+    incidence: "altissima", difficulty: 3
   },
-  {
+{
     id: "qe28", category: "direcao-defensiva",
-    statement: "Condições adversas de luz incluem:",
-    options: ["Neblina densa", "Sol baixo no horizonte ofuscando a visão", "Pista molhada", "Pneu careca"],
-    correctIndex: 1,
-    explanation: "Adversidade de LUZ refere-se a sol ofuscante, escuridão, faróis altos vindo de frente etc.",
+    statement:
+      "As condições adversas representam fatores de risco que podem interferir diretamente na segurança da dirigibilidade. Constitui exemplo típico de condição adversa relacionada especificamente ao fator 'Luz':",
+    options: [
+      "O fenômeno do ofuscamento ocular provocado pela luz alta em sentido oposto ou o penumbra na transição dia-noite.",
+      "A ocorrência de aquaplanagem devido ao acúmulo de águas pluviais sobre a pista de rolamento.",
+      "O desgaste acentuado das bandas de rodagem dos pneus dianteiros do veículo automotor.",
+      "A fadiga física ou o estresse mental decorrentes de jornadas prolongadas de trabalho ao volante."
+    ],
+    correctIndex: 0,
+    explanation: "Condições adversas de luz referem-se à falta de iluminação (penumbra/escuridão) ou excesso dela (ofuscamento por farol alto ou sol).",
     detailedExplanation: "Condições adversas de LUZ incluem situações que afetam a visibilidade por iluminação inadequada: sol baixo ofuscante, faróis altos de veículos em sentido contrário, penumbra ao anoitecer, neblina e chuva forte. Cada tipo exige uma reação específica — desviar o olhar para a margem direita da pista quando ofuscado, acender faróis baixos ou de neblina quando necessário. Neblina é condição adversa de clima, não de luz. Pneu careca é mecânica.",
-    incidence: "alta", trap: true, difficulty: 2
+    incidence: "alta", trap: true, difficulty: 3
   },
-  {
+{
     id: "qe29", category: "direcao-defensiva",
-    statement: "Para ultrapassar com segurança, o condutor deve:",
-    options: ["Acelerar bruscamente sem sinalizar", "Sinalizar, verificar retrovisores e ponto cego, ultrapassar e retornar com segurança", "Buzinar e seguir", "Manter a faixa esquerda permanentemente"],
-    correctIndex: 1,
-    explanation: "Sequência: sinaliza → verifica → ultrapassa → retorna.",
+    statement:
+      "Para realizar uma manobra segura de ultrapassagem em via de mão única e pista dupla de circulação rápida, o condutor defensivo deve prioritariamente adotar o seguinte procedimento técnico sequencial:",
+    options: [
+      "Verificar os retrovisores e ponto cego, sinalizar com antecedência a intenção de mudança de faixa, acelerar de forma segura e retornar à faixa de origem após ver o veículo ultrapassado no retrovisor interno.",
+      "Acionar a luz alta de alerta e efetuar a manobra o mais rápido possível rente ao para-choque traseiro do veículo da frente.",
+      "Buzinar continuamente para forçar o condutor do veículo lento a desviar para o acostamento à direita da pista.",
+      "Mudar brusca e rapidamente de faixa para surpreender os motoristas que trafegam na faixa adjacente esquerda."
+    ],
+    correctIndex: 0,
+    explanation: "Ultrapassagens seguras exigem planejamento, verificação de retrovisores/pontos cegos, sinalização prévia e retorno seguro mantendo margem de espaço.",
     detailedExplanation: "A ultrapassagem segura segue uma sequência lógica: 1) sinalizar com a seta esquerda com antecedência; 2) verificar o retrovisor interno e lateral, e virar a cabeça para checar o ponto cego; 3) deslocar-se para a faixa esquerda com segurança; 4) acelerar e ultrapassar; 5) sinalizar com a seta direita e 6) retornar à faixa original só quando enxergar o veículo ultrapassado pelo retrovisor interno. Pular qualquer etapa aumenta o risco de colisão.",
-    incidence: "alta", difficulty: 1
+    incidence: "alta", difficulty: 3
   },
-  {
+{
     id: "qe30", category: "direcao-defensiva",
-    statement: "Em pista molhada, a aquaplanagem é causada por:",
-    options: ["Excesso de velocidade sobre lâmina d'água que faz o pneu perder contato com o solo", "Pneu quente", "Freios novos", "Câmbio automático"],
+    statement:
+      "Sob forte chuva torrencial, um condutor perde repentinamente o controle direcional do veículo ao passar por um trecho reto e plano com acúmulo de água na pista. Esse fenômeno físico, denominado aquaplanagem (ou hidroplanagem), ocorre pela combinação de:",
+    options: [
+      "Alta velocidade do veículo, película de água acumulada sobre a pista e pneus com desgaste severo (profundidade de sulco abaixo de 1,6 mm).",
+      "Redução da pressão interna do fluido de freios hidráulicos sob temperaturas ambientes baixas.",
+      "Excesso de peso de carga estática concentrada na extremidade do porta-malas traseiro do veículo.",
+      "Bloqueio mecânico completo das pinças dos discos de freio decorrente de detritos pluviais na via."
+    ],
     correctIndex: 0,
-    explanation: "Velocidade alta + água acumulada + pneu desgastado = perda de contato.",
+    explanation: "A aquaplanagem é a perda de aderência dos pneus com o solo devido a uma camada de água na pista, facilitada por velocidade alta e pneus gastos.",
     detailedExplanation: "Aquaplanagem (hidroplanagem) ocorre quando uma lâmina de água se acumula entre o pneu e o asfalto, fazendo os pneus perderem completamente o contato com o solo. As causas principais são: excesso de velocidade sobre poças d'água, pneus com sulcos desgastados (abaixo de 1,6 mm) e calibragem inadequada. O motorista perde o controle da direção e da frenagem. Para prevenir, reduza a velocidade em dias de chuva e mantenha os pneus em bom estado.",
-    incidence: "alta", difficulty: 2
+    incidence: "alta", difficulty: 3
   },
-  {
+{
     id: "qe31", category: "direcao-defensiva",
-    statement: "Em caso de aquaplanagem o condutor deve:",
-    options: ["Frear bruscamente", "Tirar o pé do acelerador, segurar firme a direção e NÃO frear bruscamente", "Acelerar mais", "Virar a direção bruscamente"],
-    correctIndex: 1,
-    explanation: "Tirar o pé, segurar a direção, evitar freadas e movimentos bruscos até recuperar aderência.",
+    statement:
+      "Ao transitar por uma rodovia pavimentada sob chuva leve, o condutor sente a direção do veículo ficar extremamente leve e percebe a ocorrência do fenômeno da aquaplanagem. Sob a ótica do controle veicular defensivo, qual a conduta imediata recomendada?",
+    options: [
+      "Segurar o volante firmemente na direção de deslocamento, retirar gradualmente o pé do acelerador e evitar frear ou fazer manobras bruscas.",
+      "Pisar com força e de forma contínua no pedal de freio de serviço para travar as rodas e buscar atrito com o asfalto.",
+      "Girar o volante bruscamente de um lado para o outro para expulsar a água acumulada sob a banda de rodagem do pneu.",
+      "Engatar imediatamente uma marcha reduzida de giro alto para forçar o veículo a recuperar aderência mecânica por tração."
+    ],
+    correctIndex: 0,
+    explanation: "Na aquaplanagem, deve-se desacelerar suavemente e segurar firme o volante. Frear bruscamente ou virar o volante causa derrapagem incontrolável.",
     detailedExplanation: "Ao sentir que o veículo está aquaplanando, a reação instintiva de frear ou virar bruscamente é justamente o que NÃO se deve fazer. O correto é: 1) tire o pé do acelerador; 2) segure o volante FIRME, mantendo a direção reta; 3) NÃO freie nem vire bruscamente — isso pode fazer o carro rodar. Em alguns veículos com freios ABS, é possível frear suavemente se houver certa aderência. Aguarde até sentir os pneus retomarem o contato com o solo.",
-    incidence: "altissima", difficulty: 2
+    incidence: "altissima", difficulty: 3
   },
-  {
+{
     id: "qe32", category: "direcao-defensiva",
-    statement: "Ao dirigir cansado o condutor deve:",
-    options: ["Tomar bebida energética e seguir", "Parar em local seguro para descansar", "Aumentar a velocidade para chegar logo", "Ligar o ar-condicionado no máximo"],
-    correctIndex: 1,
-    explanation: "Sono não se vence: pare e descanse.",
+    statement:
+      "Durante uma viagem de longa duração em período noturno, o condutor percebe sintomas severos de fadiga, pálpebras pesadas e lapsos momentâneos de atenção. De acordo com as diretrizes de segurança no trânsito, a conduta correta a ser adotada é:",
+    options: [
+      "Buscar imediatamente um local seguro de parada para descansar e dormir o tempo necessário, prosseguindo apenas após recuperar o estado de alerta.",
+      "Aumentar a velocidade de circulação para diminuir o tempo restante de percurso e chegar mais rápido ao destino.",
+      "Ligar o sistema de ar condicionado na temperatura máxima e abrir as janelas laterais para manter o foco ativo por choque térmico.",
+      "Ingerir doses concentradas de cafeína ou bebidas estimulantes energéticas e continuar a condução ininterrupta."
+    ],
+    correctIndex: 0,
+    explanation: "A única solução segura e eficaz contra a fadiga ou sono ao volante é parar o veículo em local seguro e descansar.",
     detailedExplanation: "O cansaço e o sono ao volante são extremamente perigosos — um condutor com sono tem reflexos reduzidos, tempo de reação aumentado e pode até cochilar ao volante. Nenhum truque (energético, café, ar gelado, música alta) substitui o descanso. A única atitude segura é parar o veículo em local apropriado (posto de gasolina, área de descanso) e dormir ou descansar antes de seguir viagem. Dirigir cansado pode ser tão perigoso quanto dirigir alcoolizado.",
-    incidence: "alta", difficulty: 1
+    incidence: "alta", difficulty: 3
   },
-  {
+{
     id: "qe33", category: "direcao-defensiva",
-    statement: "Ponto cego é:",
-    options: ["Área não enxergada pelos retrovisores", "Farol queimado", "Para-brisa sujo", "Lâmpada queimada do painel"],
+    statement:
+      "O alinhamento correto dos espelhos retrovisores é indispensável para mitigar áreas cegas de visão ao redor do automóvel. A área externa ao veículo cuja visibilidade não é captada pelos retrovisores internos e externos convencionais denomina-se:",
+    options: [
+      "Ponto cego do veículo, exigindo que o condutor faça uma rápida verificação visual lateral antes de mudar de faixa.",
+      "Zona de refração óptica difusa, impossível de ser minimizada por qualquer tipo de espelho ou regulagem de banco.",
+      "Área de convergência periférica posterior, coberta exclusivamente pelo sensor de estacionamento eletrônico.",
+      "Ponto de fuga horizontal, visível apenas com o veículo trafegando em marcha ré."
+    ],
     correctIndex: 0,
-    explanation: "Área lateral-traseira invisível mesmo com retrovisores ajustados; deve-se virar a cabeça antes de mudar de faixa.",
+    explanation: "O ponto cego é a área que fica fora do campo visual dos espelhos retrovisores, exigindo atenção e movimento de cabeça lateral.",
     detailedExplanation: "Ponto cego é a área lateral e traseira do veículo que não é captada pelos retrovisores interno e laterais, mesmo bem ajustados. Todo veículo tem pontos cegos, geralmente na traseira lateral (ângulo morto). O condutor deve VIRAR A CABEÇA e olhar por cima do ombro antes de mudar de faixa ou fazer conversão para garantir que não há outro veículo no ponto cego. Veículos mais modernos têm sensores de ponto cego que auxiliam, mas não substituem a verificação visual.",
-    incidence: "alta", difficulty: 1
+    incidence: "alta", difficulty: 3
   },
-  {
+{
     id: "qe34", category: "direcao-defensiva",
-    statement: "À noite, em estrada sem iluminação, o farol correto é:",
-    options: ["Baixo sempre", "Alto, reduzindo para baixo ao cruzar com outro veículo", "Pisca-alerta", "Meia-luz"],
-    correctIndex: 1,
-    explanation: "Use farol alto, baixando quando cruzar com outro condutor para não ofuscar.",
-    detailedExplanation: "Em estradas sem iluminação pública, o farol ALTO deve ser usado para maximizar a visibilidade. Porém, ao cruzar com outro veículo em sentido contrário, o condutor deve REDUZIR para farol BAIXO com antecedência para não ofuscar o motorista que vem na direção oposta — a cegueira temporária causada pelo farol alto pode causar acidentes graves. O mesmo vale quando estiver seguindo outro veículo: mantenha o farol baixo para não ofuscar o retrovisor do carro à frente.",
-    legalBase: "Art. 40 CTB", incidence: "alta", difficulty: 2
-  },
-  {
-    id: "qe35", category: "direcao-defensiva",
-    statement: "Em túneis o farol deve estar:",
-    options: ["Apagado", "Baixo ligado mesmo de dia", "Alto sempre", "Pisca-alerta"],
-    correctIndex: 1,
-    explanation: "Farol baixo obrigatório, independentemente da hora.",
-    detailedExplanation: "Em túneis, o farol BAIXO deve estar ligado SEMPRE, mesmo durante o dia. Isso garante que o veículo seja visto pelos demais condutores e também ilumina parte da via. O farol alto não deve ser usado em túneis porque o reflexo pode ofuscar o próprio condutor e os outros. O pisca-alerta só deve ser usado em emergências ou imobilizações. O farol baixo em túneis é regra básica de segurança que salva vidas.",
-    legalBase: "Art. 40 CTB", incidence: "alta", difficulty: 1
-  },
-  {
-    id: "qe36", category: "direcao-defensiva",
-    statement: "Distância de frenagem aumenta com:",
-    options: ["Velocidade alta, pista molhada e pneus desgastados", "Veículo leve", "Freios ABS novos", "Câmbio manual"],
+    statement:
+      "Ao transitar por uma rodovia de pista única em período noturno, desprovida de qualquer iluminação pública ou sinalização refletiva de solo, qual o dispositivo de iluminação que o condutor deve utilizar prioritariamente na condução do veículo?",
+    options: [
+      "Luz alta (farol alto), exceto ao se aproximar de veículo em sentido oposto ou ao seguir imediatamente atrás de outro veículo.",
+      "Luz de posição (faroletes) associada às luzes de neblina dianteiras para economizar bateria.",
+      "Luz baixa (farol baixo) de forma fixa e contínua sob qualquer hipótese viária para evitar multas de trânsito.",
+      "Farol alto permanentemente ativo, mesmo cruzando com outros fluxos, para garantir visibilidade máxima de longa distância."
+    ],
     correctIndex: 0,
-    explanation: "Mais velocidade e menor aderência aumentam a distância para parar.",
+    explanation: "Em vias não iluminadas, deve-se usar farol alto, baixando-o ao cruzar com outro veículo em sentido contrário ou ao seguir alguém para não ofuscá-los.",
+    detailedExplanation: "Em estradas sem iluminação pública, o farol ALTO deve ser usado para maximizar a visibilidade. Porém, ao cruzar com outro veículo em sentido contrário, o condutor deve REDUZIR para farol BAIXO com antecedência para não ofuscar o motorista que vem na direção oposta — a cegueira temporária causada pelo farol alto pode causar acidentes graves. O mesmo vale quando estiver seguindo outro veículo: mantenha o farol baixo para não ofuscar o retrovisor do carro à frente.",
+    legalBase: "Art. 40 CTB", incidence: "alta", difficulty: 3
+  },
+{
+    id: "qe35", category: "direcao-defensiva",
+    statement:
+      "O tráfego de veículos no interior de túneis requer cuidados especiais de visibilidade e sinalização. De acordo com as disposições expressas do Código de Trânsito Brasileiro, ao ingressar em um túnel provido de iluminação pública, o condutor deve:",
+    options: [
+      "Manter acesos os faróis do veículo, utilizando a luz baixa (farol baixo), mesmo durante o dia.",
+      "Acionar os faróis de milha de longo alcance associados à luz alta para alertar pedestres internos.",
+      "Manter apenas as luzes de posição (faroletes) ativas e ligar o pisca-alerta do veículo em movimento.",
+      "Desligar qualquer dispositivo de iluminação para evitar reflexos ofuscantes nas paredes internas do túnel."
+    ],
+    correctIndex: 0,
+    explanation: "O condutor deve manter os faróis acesos, utilizando a luz baixa, em túneis providos de iluminação pública, conforme o Art. 40 do CTB.",
+    detailedExplanation: "Em túneis, o farol BAIXO deve estar ligado SEMPRE, mesmo durante o dia. Isso garante que o veículo seja visto pelos demais condutores e também ilumina parte da via. O farol alto não deve ser usado em túneis porque o reflexo pode ofuscar o próprio condutor e os outros. O pisca-alerta só deve ser usado em emergências ou imobilizações. O farol baixo em túneis é regra básica de segurança que salva vidas.",
+    legalBase: "Art. 40 CTB", incidence: "alta", difficulty: 3
+  },
+{
+    id: "qe36", category: "direcao-defensiva",
+    statement:
+      "A distância de parada de um veículo é composta pela soma da distância de reação e da distância de frenagem. Sobre os fatores físicos que influenciam diretamente o aumento da distância de frenagem do automóvel, assinale a afirmativa correta:",
+    options: [
+      "O aumento da velocidade de deslocamento, a presença de pista molhada ou escorregadia e pneus com banda de rodagem desgastada.",
+      "O tempo de reação do condutor ao perceber o perigo à sua frente até o acionamento mecânico do pedal.",
+      "A rigidez torcional do monobloco do chassi e a utilização de fluido de freio sintético de alta especificação.",
+      "A diminuição da declividade da via (declives) ou subidas íngremes de serras pavimentadas."
+    ],
+    correctIndex: 0,
+    explanation: "A distância de frenagem (do acionamento do freio até a parada) aumenta com velocidades maiores, asfalto molhado/escorregadio e pneus gastos.",
     detailedExplanation: "A distância de frenagem — espaço percorrido desde o momento em que o condutor pisa no freio até a parada total — aumenta com: maior velocidade (o dobro da velocidade quadruplica a distância), pista molhada ou escorregadia (reduz o atrito dos pneus com o solo) e pneus desgastados (perdem aderência). Veículos mais pesados também têm maior distância de frenagem. Manter distância de segurança adequada é essencial para compensar esses fatores.",
-    incidence: "alta", difficulty: 2
+    incidence: "alta", difficulty: 3
   },
-  {
+{
     id: "qe37", category: "primeiros-socorros",
-    statement: "A sigla PAS significa:",
-    options: ["Parar-Aguardar-Sair", "Proteger-Avisar-Socorrer", "Pedir-Ajudar-Salvar", "Prevenir-Atender-Sinalizar"],
-    correctIndex: 1,
-    explanation: "Proteger o local, Avisar autoridades, Socorrer com cuidado.",
+    statement:
+      "No contexto do suporte básico de vida e dos primeiros socorros em acidentes automobilísticos de trânsito, a aplicação da sigla prática de procedimento 'PAS' estabelece a seguinte sequência de prioridades de atendimento:",
+    options: [
+      "Prevenir o local do sinistro (sinalização), Chamar/Acionar socorro profissional e Socorrer as vítimas conforme gravidade.",
+      "Prestar atendimento imediato na pista, Afastar curiosos do local e Sinalizar a rodovia após a remoção das vítimas.",
+      "Parar o próprio veículo na faixa de rolamento, Ajudar na remoção física dos veículos e Salvar pertences pessoais das vítimas.",
+      "Procurar testemunhas oculares do acidente, Avaliar lesões internas e Sinalizar com galhos secos sobre a faixa de rolamento."
+    ],
+    correctIndex: 0,
+    explanation: "A sigla PAS (do espanhol/português adaptado de primeiros socorros) orienta: Prevenir (Sinalizar), Avisar (Chamar socorro) e Socorrer (Atendimento básico).",
     detailedExplanation: "O protocolo PAS é a sequência de ações que todo condutor deve seguir ao chegar em um local de acidente: PROTEGER o local sinalizando com triângulo a 30 metros e ligando o pisca-alerta; AVISAR as autoridades ligando para o SAMU (192), Bombeiros (193) ou Polícia (190); SOCORRER as vítimas apenas se tiver conhecimento técnico. O PAS é universalmente adotado porque estabelece uma ordem lógica que evita que o socorrista se torne mais uma vítima.",
-    incidence: "altissima", difficulty: 1
+    incidence: "altissima", difficulty: 3
   },
-  {
+{
     id: "qe38", category: "primeiros-socorros",
-    statement: "Para hemorragia externa intensa, o procedimento inicial é:",
-    options: ["Aplicar torniquete imediatamente", "Comprimir o local com pano limpo", "Esperar socorro sem agir", "Lavar com álcool"],
-    correctIndex: 1,
-    explanation: "Compressão direta com pano limpo até a chegada do socorro.",
+    statement:
+      "Ao deparar-se com uma vítima de acidente de trânsito que apresenta hemorragia externa abundante em um dos membros inferiores, qual o procedimento inicial correto de primeiros socorros a ser realizado pelo socorrista leigo?",
+    options: [
+      "Efetuar compressão direta e firme sobre a lesão sangrante utilizando um pano limpo ou gaze esterilizada.",
+      "Aplicar um torniquete rígido apertado com arame ou corda logo acima da lesão para interromper o fluxo total.",
+      "Jogar água oxigenada ou álcool concentrado sobre o ferimento exposto e cobrir com pó cicatrizante caseiro.",
+      "Manter a vítima de pé e forçá-la a caminhar para estimular a coagulação sanguínea natural nos tecidos."
+    ],
+    correctIndex: 0,
+    explanation: "A compressão direta com gaze ou pano limpo é a técnica mais segura e indicada para controlar hemorragias externas no suporte básico de vida.",
     detailedExplanation: "O primeiro procedimento para hemorragia externa intensa é a COMPRESSÃO DIRETA sobre o ferimento com um pano limpo, gaze ou até mesmo a mão (protegida por luva ou saco plástico). A compressão reduz o fluxo sanguíneo e permite a coagulação. O torniquete só deve ser usado em último caso (amputação ou hemorragia incontrolável), pois pode causar necrose e perda do membro. Lavar com álcool dói e prejudica a coagulação — não se faz isso.",
-    incidence: "alta", difficulty: 2
+    incidence: "alta", difficulty: 3
   },
-  {
+{
     id: "qe39", category: "primeiros-socorros",
-    statement: "Vítima com suspeita de fratura na coluna deve ser:",
-    options: ["Movida rapidamente", "Mantida imóvel até a chegada do socorro especializado", "Colocada sentada", "Sacudida para reagir"],
-    correctIndex: 1,
-    explanation: "Não mover, salvo risco iminente (fogo, explosão).",
+    statement:
+      "Em um acidente de trânsito envolvendo colisão frontal, o socorrista inicial suspeita que uma das vítimas sofreu uma fratura de coluna (lesão medular). Diante dessa hipótese diagnóstica, qual a conduta correta a ser adotada até a chegada da equipe de resgate médico?",
+    options: [
+      "Manter a vítima perfeitamente imóvel e alinhada na posição encontrada, evitando qualquer movimentação da cabeça ou coluna.",
+      "Tentar remover a vítima rapidamente do interior do veículo e forçá-la a sentar-se ereta em uma cadeira rígida.",
+      "Massagear a região cervical e as costas da vítima para aliviar a contratura muscular decorrente do trauma físico.",
+      "Girar o pescoço da vítima para a esquerda e direita para avaliar a mobilidade das articulações vertebrais."
+    ],
+    correctIndex: 0,
+    explanation: "Vítimas com suspeita de lesão na coluna devem ser mantidas imóveis e perfeitamente alinhadas para evitar danos medulares e paralisia irreversível.",
     detailedExplanation: "NUNCA mova uma vítima com suspeita de lesão na coluna. Qualquer movimento inadequado pode agravar a lesão da medula espinhal e causar paralisia permanente. A vítima deve ser mantida IMÓVEL, na posição em que se encontra, até a chegada do socorro especializado (SAMU ou bombeiros) que possui equipamentos de imobilização. A única exceção é se houver risco iminente, como incêndio, afogamento ou explosão — nesse caso, deve-se mover a vítima em BLOCO com 3 pessoas.",
-    incidence: "altissima", trap: true, difficulty: 2
+    incidence: "altissima", trap: true, difficulty: 3
   },
-  {
+{
     id: "qe40", category: "primeiros-socorros",
-    statement: "O telefone do SAMU é:",
-    options: ["190", "192", "193", "199"],
-    correctIndex: 1,
-    explanation: "192 SAMU, 193 Bombeiros, 190 Polícia.",
+    statement:
+      "Durante o atendimento emergencial a um acidente de trânsito com vítimas graves presas nas ferragens, o socorrista deve acionar os órgãos competentes. Assinale a alternativa que apresenta corretamente o número telefônico e o órgão responsável pelo serviço médico de urgência:",
+    options: [
+      "192 para acionar o Serviço de Atendimento Móvel de Urgência (SAMU).",
+      "193 para acionar a Polícia Rodoviária Federal (PRF).",
+      "190 para acionar o Corpo de Bombeiros Militar do Estado correspondente.",
+      "191 para acionar a Defesa Civil do Município da ocorrência do sinistro."
+    ],
+    correctIndex: 0,
+    explanation: "O telefone do SAMU é o 192. O 193 aciona o Corpo de Bombeiros e o 190 aciona a Polícia Militar.",
     detailedExplanation: "Saber os números de emergência é fundamental para agir rápido em um acidente: SAMU (192) para emergências médicas e resgate de vítimas; Corpo de Bombeiros (193) para incêndios, desastres e resgate em ferragens; Polícia Militar (190) para ocorrências de trânsito com crime ou conflito; PRF (191) para rodovias federais. Memorize o 192 — é o principal número para solicitar socorro médico, pois os atendentes do SAMU podem orientar os primeiros socorros por telefone.",
-    incidence: "alta", difficulty: 1
+    incidence: "alta", difficulty: 3
   },
-  {
+{
     id: "qe41", category: "primeiros-socorros",
     statement: "Distância mínima para colocar o triângulo de sinalização em via comum é:",
     options: ["10 m", "30 m", "100 m", "5 m"],
@@ -509,7 +747,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "O triângulo de sinalização deve ser colocado a NO MÍNIMO 30 metros atrás do veículo (na mesma faixa), em vias urbanas e rodovias comuns. O objetivo é alertar os veículos que estão atrás para que reduzam a velocidade a tempo de desviar. Em rodovias de alta velocidade, o ideal é colocar ainda mais longe (50 a 100 metros), considerando a distância de frenagem em alta velocidade. Não colocar o triângulo ou colocá-lo muito perto pode causar colisões traseiras.",
     incidence: "alta", difficulty: 2
   },
-  {
+{
     id: "qe42", category: "primeiros-socorros",
     statement: "Diante de queimadura, o correto é:",
     options: ["Passar pasta de dente ou manteiga", "Resfriar com água corrente em temperatura ambiente", "Estourar bolhas", "Aplicar gelo direto"],
@@ -518,7 +756,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "O procedimento correto para queimaduras é resfriar a área com água CORRENTE em temperatura ambiente por cerca de 10 a 15 minutos, para aliviar a dor e interromper o processo de queimadura térmica. NUNCA aplique pasta de dente, manteiga, clara de ovo, café ou qualquer outra substância caseira — isso piora a lesão e pode causar infecção. NUNCA estoure as bolhas, pois a pele bolhosa protege contra infecções. Também não aplique gelo diretamente, pois queima mais ainda o tecido.",
     incidence: "media", difficulty: 2
   },
-  {
+{
     id: "qe43", category: "primeiros-socorros",
     statement: "Vítima consciente em estado de choque deve ser:",
     options: ["Deitada com pernas elevadas e mantida aquecida", "Sentada e oferecendo água", "Em pé andando", "Colocada de bruços"],
@@ -527,7 +765,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "O estado de choque (hipovolêmico) ocorre quando o corpo não recebe oxigênio suficiente nos órgãos vitais, geralmente após hemorragia, trauma ou desidratação. A vítima consciente deve ser deitada de costas com as pernas elevadas cerca de 30 cm (para ajudar o sangue a chegar ao cérebro), mantida aquecida (cobrir com casaco ou cobertor) e NÃO receber água ou comida, pois pode precisar de cirurgia ou estar com lesões internas. Fale calmamente com a vítima até o socorro chegar.",
     incidence: "media", difficulty: 2
   },
-  {
+{
     id: "qe44", category: "meio-ambiente",
     statement: "O principal poluente emitido por motores a combustão é:",
     options: ["Oxigênio", "Monóxido e dióxido de carbono", "Vapor de água puro", "Hidrogênio"],
@@ -536,7 +774,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "Motores a combustão (gasolina, diesel, etanol) queimam combustível fóssil ou biocombustível, liberando diversos gases. Os principais poluentes são o monóxido de carbono (CO — gás tóxico e inodoro) e o dióxido de carbono (CO2 — gás do efeito estufa). Também são emitidos óxidos de nitrogênio (NOx), hidrocarbonetos não queimados e material particulado (fumaça preta). A manutenção preventiva reduz essas emissões, contribuindo para a qualidade do ar e a saúde pública.",
     incidence: "media", difficulty: 1
   },
-  {
+{
     id: "qe45", category: "meio-ambiente",
     statement: "Direção econômica contribui para o meio ambiente porque:",
     options: ["Reduz consumo de combustível e emissões", "Aumenta velocidade", "Aquece o motor mais rápido", "Reduz a vida útil do veículo"],
@@ -545,7 +783,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "A direção econômica é um conjunto de práticas que reduzem o consumo de combustível: trocar marcha em rotações adequadas (2.000 a 2.500 rpm), evitar acelerações e freadas bruscas, manter a calibragem correta dos pneus, fazer manutenções preventivas e reduzir o peso desnecessário no veículo. Menos combustível queimado significa menos emissão de CO2 e poluentes na atmosfera. Além de ajudar o meio ambiente, a direção econômica reduz os custos com combustível e manutenção.",
     incidence: "alta", difficulty: 1
   },
-  {
+{
     id: "qe46", category: "meio-ambiente",
     statement: "Jogar lixo pela janela do veículo é infração:",
     options: ["Leve", "Média", "Grave", "Gravíssima"],
@@ -554,7 +792,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "Jogar lixo pela janela do veículo é infração MÉDIA, 4 pontos na CNH e multa. Além da penalidade de trânsito, o ato configura crime ambiental, especialmente se o lixo for orgânico ou tóxico. Jogar uma bituca de cigarro pela janela, por exemplo, já causou incêndios florestais gravíssimos. O lixo na pista também pode causar acidentes: um objeto no asfalto pode fazer um motociclista perder o controle ou danificar pneus e suspensão de veículos.",
     legalBase: "Art. 172 CTB", incidence: "media", difficulty: 1
   },
-  {
+{
     id: "qe47", category: "meio-ambiente",
     statement: "Uso de buzina desnecessário gera poluição:",
     options: ["Visual", "Sonora", "Atmosférica", "Hídrica"],
@@ -563,7 +801,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "A buzina emite som — portanto, o uso excessivo ou desnecessário gera POLUIÇÃO SONORA, que é um dos tipos de poluição reconhecidos pela legislação ambiental. A poluição sonora causa estresse, perda auditiva, irritabilidade e problemas de saúde. O CTB restringe o uso da buzina a toques breves para advertir sobre risco iminente, sendo proibida em locais como hospitais e escolas, e durante o período noturno (22h às 6h), justamente para controlar esse tipo de poluição.",
     incidence: "media", difficulty: 1
   },
-  {
+{
     id: "qe48", category: "meio-ambiente",
     statement: "Cidadania no trânsito envolve principalmente:",
     options: ["Respeito mútuo, prudência e responsabilidade", "Prioridade absoluta dos carros", "Pressa e individualismo", "Buzinar para tudo"],
@@ -572,7 +810,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "Cidadania no trânsito significa que cada pessoa — motorista, passageiro, ciclista, pedestre — deve agir com RESPEITO MÚTUO, PRUDÊNCIA e RESPONSABILIDADE. O trânsito é um espaço coletivo, onde os direitos e deveres são compartilhados. Priorizar apenas os carros, agir com pressa ou buzinar excessivamente são atitudes opostas à cidadania. Um trânsito seguro e humano depende de cada um fazer a sua parte, protegendo a si mesmo e aos outros.",
     incidence: "alta", difficulty: 1
   },
-  {
+{
     id: "qe49", category: "mecanica",
     statement: "O nível baixo de óleo do motor pode causar:",
     options: ["Aumento da potência", "Superaquecimento e desgaste do motor", "Economia de combustível", "Melhora na frenagem"],
@@ -581,7 +819,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "O óleo do motor tem a função essencial de lubrificar as peças móveis (pistões, bielas, virabrequim), reduzindo o atrito e dissipando calor. Quando o nível está baixo, a lubrificação é insuficiente, causando atrito excessivo entre as peças metálicas. Isso gera superaquecimento localizado, desgaste prematuro e pode levar à fundição do motor (travamento completo). Verificar o nível do óleo regularmente (com o motor frio e o veículo nivelado) é uma manutenção simples que evita um prejuízo enorme.",
     incidence: "alta", difficulty: 1
   },
-  {
+{
     id: "qe50", category: "mecanica",
     statement: "Pneu careca aumenta o risco de:",
     options: ["Aquaplanagem e perda de aderência", "Maior economia", "Menos desgaste", "Melhor frenagem"],
@@ -590,7 +828,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "Pneu careca (com sulcos abaixo de 1,6 mm de profundidade — indicado pelo TWI) perde a capacidade de escoar água em pista molhada. Sem os sulcos, a água forma uma lâmina entre o pneu e o asfalto, causando aquaplanagem. Além disso, a aderência em curvas e frenagens cai drasticamente, aumentando o risco de derrapagens e colisões. Rodar com pneu careca é infração GRAVE e coloca em risco a vida do condutor e dos passageiros.",
     incidence: "altissima", difficulty: 1
   },
-  {
+{
     id: "qe51", category: "mecanica",
     statement: "O líquido de arrefecimento serve para:",
     options: ["Lubrificar o motor", "Manter a temperatura do motor", "Limpar o para-brisa", "Acionar os freios"],
@@ -599,7 +837,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "O líquido de arrefecimento (também chamado de radiador ou coolant) circula pelo motor absorvendo o calor gerado pela combustão e o dissipa no radiador. Sua função é manter o motor na temperatura ideal de funcionamento (cerca de 90°C). Sem ele, o motor superaquece rapidamente, podendo empenar o cabeçote, danificar a junta e até fundir o motor. O nível deve ser verificado no reservatório e o líquido trocado conforme o manual do fabricante.",
     incidence: "media", difficulty: 1
   },
-  {
+{
     id: "qe52", category: "mecanica",
     statement: "A luz amarela do painel indica:",
     options: ["Emergência grave e parada imediata", "Alerta/atenção: verificar em breve", "Funcionamento normal", "Nada significativo"],
@@ -608,7 +846,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "As luzes do painel seguem um padrão universal de cores: AMARELA (ou laranja) indica ALERTA — algo precisa ser verificado em breve, mas não exige parada imediata (exemplos: luz de injeção eletrônica, luz de pneu baixo, luz de reserva de combustível). VERMELHA indica PERIGO — o motorista deve parar o veículo assim que possível (exemplos: luz de pressão do óleo, luz de temperatura do motor, luz do freio de estacionamento). Ignorar luzes amarelas pode levar a problemas mais graves.",
     incidence: "alta", difficulty: 1
   },
-  {
+{
     id: "qe53", category: "mecanica",
     statement: "O fluido de freio deve ser trocado:",
     options: ["Nunca", "Conforme manual do fabricante (em geral a cada 1-2 anos)", "Somente em pane", "A cada 10 anos"],
@@ -617,7 +855,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "O fluido de freio é HIGROSCÓPICO, ou seja, absorve a umidade do ar ao longo do tempo. A água no fluido reduz a temperatura de ebulição do sistema de freios — em freadas intensas e prolongadas, o fluido pode ferver, formar bolhas de vapor e fazer o pedal do freio 'ir ao chão' sem travar as rodas (conhecido como 'fadiga do freio'). Por isso, o fabricante recomenda a troca periódica, geralmente a cada 1 ou 2 anos, independentemente do uso.",
     incidence: "media", difficulty: 2
   },
-  {
+{
     id: "qe54", category: "mecanica",
     statement: "Para conferir a pressão dos pneus, deve-se:",
     options: ["Verificar com pneus a frio", "Verificar somente com pneus quentes", "Não importa a temperatura", "Encher sempre acima do recomendado"],
@@ -626,7 +864,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "A pressão dos pneus deve ser verificada com os pneus FRIOS (veículo parado por pelo menos 3 horas ou rodado no máximo 1 km). Quando o pneu roda, o atrito com o solo aquece o ar interno, que se expande e aumenta a pressão — a leitura fica falsamente alta. Calibrar com pneu quente resulta em pressão abaixo da recomendada quando os pneus esfriarem. Pressão incorreta causa desgaste irregular, aumenta o consumo de combustível e compromete a segurança.",
     incidence: "alta", difficulty: 2
   },
-  {
+{
     id: "qe55", category: "prioridade",
     statement: "Veículos de emergência em serviço (ambulância, polícia, bombeiros):",
     options: ["Devem aguardar a vez", "Têm prioridade absoluta, mesmo sobre sinalização", "Só têm prioridade em vias rurais", "Não têm prioridade"],
@@ -635,7 +873,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "Veículos de emergência (ambulância, polícia, bombeiros) com sirene e giroflex acionados têm prioridade ABSOLUTA sobre todos os demais veículos e pedestres. Eles podem avançar sinais vermelhos, ultrapassar pela direita e exceder limites de velocidade — desde que com cuidado e segurança. Os demais condutores devem facilitar a passagem, encostando o veículo à direita. Se o veículo de emergência estiver sem sinais sonoros e luminosos, perde essa prioridade.",
     legalBase: "Art. 29, VII CTB", incidence: "altissima", difficulty: 1
   },
-  {
+{
     id: "qe56", category: "prioridade",
     statement: "Em via preferencial, o veículo que entra a partir de via secundária:",
     options: ["Tem preferência", "Deve dar passagem aos que estão na preferencial", "Deve buzinar e seguir", "Tem preferência se for maior"],
@@ -644,7 +882,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "Quando um veículo que está em via secundária (menos movimentada, geralmente sem sinalização de preferência) deseja entrar em uma via preferencial (principal, mais larga ou mais movimentada), ele DEVE dar passagem aos veículos que já estão circulando na via preferencial. A via preferencial tem prioridade de passagem. Quem entra deve reduzir, parar se necessário, e só entrar quando houver espaço seguro, sem forçar a passagem.",
     incidence: "alta", difficulty: 1
   },
-  {
+{
     id: "qe57", category: "prioridade",
     statement: "Veículo subindo em ladeira estreita tem:",
     options: ["Que ceder passagem ao que desce", "Preferência sobre o que desce", "Mesma preferência", "Preferência apenas à noite"],
@@ -653,7 +891,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "Em ladeiras estreitas onde não é possível a passagem simultânea de dois veículos, quem SOBE tem preferência sobre quem DESCE. A lógica é de segurança: engatar a ré em uma subida para dar passagem é muito mais difícil e perigoso do que em uma descida, pois o condutor tem menos visibilidade e controle. O veículo que desce deve manobrar para trás até um local onde o veículo que sobe possa passar com segurança.",
     legalBase: "Art. 29, III, 'e' CTB", incidence: "media", trap: true, difficulty: 2
   },
-  {
+{
     id: "qe58", category: "prioridade",
     statement: "Ciclistas e pedestres na via:",
     options: ["Têm sempre preferência por serem mais vulneráveis", "Devem ceder ao automóvel", "Não devem usar a via", "Têm preferência apenas em ciclovia"],
@@ -662,7 +900,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "O CTB estabelece que os usuários mais vulneráveis da via têm PRIORIDADE: pedestres, ciclistas e pessoas com mobilidade reduzida. Isso significa que o condutor de veículo motorizado deve redobrar a atenção, reduzir a velocidade e dar passagem a eles. O Código é claro: 'os pedestres que estiverem atravessando a via sobre as faixas terão prioridade' e 'nenhum condutor pode colocar em risco a segurança dos pedestres'. A hierarquia coloca a vida acima da fluidez do trânsito.",
     incidence: "alta", difficulty: 1
   },
-  {
+{
     id: "qe59", category: "legislacao",
     statement: "Multa por avançar parada obrigatória (placa PARE) é infração:",
     options: ["Leve", "Média", "Grave", "Gravíssima"],
@@ -671,7 +909,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "Avançar a parada obrigatória imposta pela placa PARE (R-1) sem parar o veículo completamente é infração GRAVÍSSIMA, com 7 pontos na CNH e multa. A placa PARE exige PARADA TOTAL, não apenas redução de velocidade. Mesmo que não haja veículos se aproximando, o condutor deve parar antes da faixa de retenção, observar o trânsito e só então prosseguir. É uma das infrações mais cobradas nas provas do DETRAN e também uma das mais perigosas no dia a dia.",
     legalBase: "Art. 208 CTB", incidence: "alta", difficulty: 1
   },
-  {
+{
     id: "qe60", category: "direcao-defensiva",
     statement: "Em descidas longas, a forma correta de usar o freio é:",
     options: ["Pisar continuamente no freio", "Usar freio motor (marcha reduzida) e o freio de serviço pontualmente", "Engatar ponto morto (banguela)", "Desligar o motor"],
@@ -680,7 +918,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "Em descidas longas, o correto é utilizar o FREIO MOTOR: engate uma marcha reduzida (2ª ou 3ª, dependendo da inclinação) e deixe o próprio motor segurar a velocidade, usando o freio de serviço apenas pontualmente para corrigir a velocidade. Pisar continuamente no freio superaquece o sistema, podendo causar 'fading' (perda de eficiência) ou até falha total dos freios. Descer em ponto morto (banguela) é PROIBIDO (infração gravíssima) e tira o controle do veículo.",
     legalBase: "Art. 252, V CTB", incidence: "altissima", trap: true, difficulty: 2
   },
-  {
+{
     id: "qe61", category: "infracoes",
     statement: "Dirigir em 'banguela' (motor desligado ou ponto morto em descida) é infração:",
     options: ["Leve", "Grave", "Gravíssima", "Média"],
@@ -689,7 +927,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "Dirigir o veículo em 'banguela' — com o motor desligado ou em ponto morto durante descidas — é infração GRAVÍSSIMA, com 7 pontos na CNH e multa. A prática é perigosa porque, em ponto morto, o condutor perde o freio motor e depende exclusivamente do freio de serviço, que pode superaquecer e falhar. Além disso, o veículo fica mais difícil de controlar em curvas e emergências. A marcha deve estar sempre engatada enquanto o veículo estiver em movimento.",
     legalBase: "Art. 252, V CTB", incidence: "alta", difficulty: 2
   },
-  {
+{
     id: "qe62", category: "legislacao",
     statement: "Para condutor que comete infração gravíssima na PPD, ocorre:",
     options: ["Nada", "Não obtém a CNH definitiva e reinicia o processo", "Multa apenas", "Aumento de pontos"],
@@ -698,7 +936,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "O condutor que comete uma infração GRAVÍSSIMA durante o período da Permissão para Dirigir (PPD) PERDE o direito de obter a CNH definitiva. Ele terá que REINICIAR todo o processo de habilitação — fazer novamente as aulas teóricas, prova teórica, aulas práticas e exame prático. O mesmo vale se cometer infração GRAVE (5 pontos) ou for reincidente em infração MÉDIA. A PPD é um período probatório que exige do condutor novato um comportamento exemplar no trânsito.",
     legalBase: "Art. 148 CTB", incidence: "alta", trap: true, difficulty: 2
   },
-  {
+{
     id: "qe63", category: "legislacao",
     statement: "Cadeirinha/assento de elevação é obrigatório para crianças até:",
     options: ["4 anos", "7 anos e meio", "10 anos", "12 anos"],
@@ -707,7 +945,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "A Resolução CONTRAN 819/2021 determina que crianças com ATÉ 10 ANOS de idade ou com altura inferior a 1,45 metro devem utilizar dispositivo de retenção adequado (bebê conforto, cadeirinha ou assento de elevação) no BANCO TRASEIRO. A regra anterior era de 7 anos e meio — a lei ampliou a proteção. Crianças acima de 10 anos ou com mais de 1,45 m podem usar o cinto de segurança do banco traseiro. Transportar criança em desacordo com a regra é infração gravíssima.",
     incidence: "altissima", difficulty: 2
   },
-  {
+{
     id: "qe64", category: "direcao-defensiva",
     statement: "Ao ser ofuscado por farol alto de outro veículo à noite, o condutor deve:",
     options: ["Olhar fixamente para o farol", "Desviar o olhar para a margem direita da pista", "Acelerar para passar logo", "Apagar os próprios faróis"],
@@ -716,7 +954,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "Quando um veículo em sentido contrário se aproxima com farol alto e ofusca a visão, o condutor NUNCA deve olhar diretamente para o farol — isso causa cegueira temporária que pode durar vários segundos. O correto é DESVIAR O OLHAR para a margem DIREITA da pista (ou para a linha de bordo) e reduzir a velocidade. Isso mantém a visão periférica ativa sem ser ofuscado. Também deve-se piscar o farol rapidamente para alertar o outro motorista.",
     incidence: "alta", difficulty: 2
   },
-  {
+{
     id: "qe65", category: "direcao-defensiva",
     statement: "Pisca-alerta deve ser usado quando o veículo:",
     options: ["Estiver imobilizado em local que ofereça risco", "Estiver em movimento normal", "Em chuva", "Para agradecer outro condutor"],
@@ -725,7 +963,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "O pisca-alerta (quatro setas piscando simultaneamente) só deve ser acionado quando o veículo estiver IMOVILIZADO em situação de EMERGÊNCIA ou que ofereça RISCO — por exemplo, pane mecânica, acidente ou necessidade de parada no acostamento. Usar o pisca-alerta com o veículo em movimento é PROIBIDO e pode causar acidentes, pois os outros motoristas podem interpretar que você está parado ou reduzindo bruscamente. Em chuva forte, deve-se usar farol baixo ou de neblina, NÃO o pisca-alerta.",
     legalBase: "Art. 251 CTB", incidence: "alta", trap: true, difficulty: 2
   },
-  {
+{
     id: "qe66", category: "infracoes",
     statement: "Trafegar com o veículo na contramão é infração:",
     options: ["Grave", "Gravíssima", "Média", "Leve"],
@@ -734,7 +972,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "Trafegar na contramão de direção é infração GRAVÍSSIMA, com 7 pontos na CNH e multa. A contramão é extremamente perigosa porque o veículo se desloca no sentido oposto ao fluxo normal, gerando risco iminente de colisão frontal — uma das mais letais. Dependendo das circunstâncias (em vias de alta velocidade, pontes ou túneis), pode também configurar crime de trânsito se houver perigo. Atenção especial para conversões: entrar na contramão ao sair de um estacionamento também conta.",
     legalBase: "Art. 186 CTB", incidence: "alta", difficulty: 1
   },
-  {
+{
     id: "qe67", category: "infracoes",
     statement: "Deixar de prestar socorro à vítima de acidente quando podia fazê-lo é:",
     options: ["Apenas infração administrativa", "Crime de omissão de socorro", "Falta leve", "Sem consequência se chamar resgate"],
@@ -743,7 +981,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "Deixar de prestar socorro a uma vítima de acidente, quando o condutor podia fazê-lo sem risco pessoal, configura CRIME de trânsito previsto no art. 304 do CTB, com detenção de 6 meses a 1 ano e multa, além da suspensão da CNH. A omissão de socorro é crime mesmo que o condutor não tenha causado o acidente. Se o condutor CAUSOU o acidente e foge sem prestar socorro, a pena é maior (6 meses a 3 anos). Chamar o resgate (SAMU 192) já configura prestação de socorro.",
     legalBase: "Art. 304 CTB", incidence: "alta", difficulty: 2
   },
-  {
+{
     id: "qe68", category: "primeiros-socorros",
     statement: "Em caso de parada cardiorrespiratória, deve-se iniciar:",
     options: ["Manobra de Heimlich", "Massagem cardíaca + ventilação (RCP) se houver treinamento", "Tapas no rosto", "Esperar o SAMU sem agir"],
@@ -752,7 +990,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "Na parada cardiorrespiratória (PCR), cada segundo conta para manter o sangue oxigenado chegar ao cérebro. A RCP (Reanimação Cardiopulmonar) deve ser iniciada imediatamente: 30 compressões torácicas fortes e rápidas (100 a 120 por minuto, afundando o peito 5 a 6 cm), seguidas de 2 ventilações de resgate se o socorrista tiver treinamento. Se não tiver treinamento ou não quiser fazer ventilações, apenas as compressões contínuas já ajudam. A manobra de Heimlich é para engasgo, não para PCR.",
     incidence: "alta", difficulty: 2
   },
-  {
+{
     id: "qe69", category: "meio-ambiente",
     statement: "A inspeção veicular tem como objetivo principal:",
     options: ["Aumentar arrecadação", "Garantir segurança e controle de emissões", "Reduzir o IPVA", "Substituir o licenciamento"],
@@ -761,7 +999,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "A inspeção veicular (obrigatória em alguns estados) tem como principal objetivo verificar as CONDIÇÕES DE SEGURANÇA do veículo (freios, pneus, suspensão, faróis, para-brisa, cinto de segurança) e o CONTROLE DE EMISSÕES de poluentes. O intuito é garantir que os veículos em circulação não ofereçam riscos aos ocupantes nem ao meio ambiente. Não é um imposto — é uma medida de segurança e proteção ambiental que salva vidas e reduz a poluição do ar.",
     incidence: "media", difficulty: 1
   },
-  {
+{
     id: "qe70", category: "mecanica",
     statement: "Antes de viajar, é prudente verificar:",
     options: ["Apenas combustível", "Pneus, óleo, água, freios, faróis e documentação", "Apenas o som", "Apenas o ar-condicionado"],
@@ -770,7 +1008,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "Antes de qualquer viagem, o condutor prudente realiza um CHECKLIST de segurança: calibragem e estado dos pneus (inclusive estepe), nível do óleo do motor, nível do líquido de arrefecimento, funcionamento dos freios, faróis e lanternas, nível do fluido de freio e do lavador do para-brisa, e a documentação (CNH e CRLV). Essa verificação preventiva reduz drasticamente o risco de panes, acidentes e multas durante a viagem.",
     incidence: "alta", difficulty: 1
   },
-  {
+{
     id: "qe71", category: "legislacao",
     statement: "Velocidade máxima padrão em via local urbana (sem placa) é:",
     options: ["30 km/h", "40 km/h", "60 km/h", "80 km/h"],
@@ -779,7 +1017,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "Em vias urbanas SEM sinalização de velocidade, o CTB estabelece limites MÁXIMOS padrão: VIA LOCAL (ruas residenciais, baixo fluxo): 30 km/h; VIA COLETORA (distribui o tráfego entre bairros): 40 km/h; VIA ARTERIAL (grandes avenidas com semáforos): 60 km/h; VIA DE TRÂNSITO RÁPIDO (pistas expressas sem cruzamentos em nível): 80 km/h. Esses limites existem porque cada tipo de via tem características diferentes de fluxo, travessia de pedestres e risco de acidentes.",
     legalBase: "Art. 61 CTB", incidence: "altissima", difficulty: 2
   },
-  {
+{
     id: "qe72", category: "legislacao",
     statement: "Velocidade máxima padrão em rodovia para automóveis é:",
     options: ["80 km/h", "90 km/h", "110 km/h", "120 km/h"],
@@ -788,7 +1026,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "Em rodovias sem sinalização de velocidade, os limites padrão variam conforme o tipo de veículo: AUTOMÓVEIS, camionetas e motocicletas: 110 km/h; ÔNIBUS e caminhões: 90 km/h; DEMAIS veículos (reboque, cargas especiais): 80 km/h. Já em ESTRADAS (não pavimentadas/rurals), o limite cai para 60 km/h para automóveis. Esses limites refletem a capacidade de frenagem e estabilidade de cada tipo de veículo.",
     legalBase: "Art. 61 CTB", incidence: "alta", difficulty: 2
   },
-  {
+{
     id: "qe73", category: "legislacao",
     statement: "Velocidade máxima padrão em estrada (não pavimentada/rural) é:",
     options: ["60 km/h", "80 km/h", "100 km/h", "120 km/h"],
@@ -797,7 +1035,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "O CTB diferencia RODOVIA (via pavimentada) de ESTRADA (via rural não pavimentada). Em estradas sem sinalização, o limite máximo é de 60 km/h para automóveis, camionetas e motocicletas, e 30 km/h para os demais veículos. Estradas não pavimentadas têm menor aderência, mais irregularidades, pedras soltas e buracos — trafegar em velocidade elevada nessas condições perde o controle do veículo com muito mais facilidade.",
     legalBase: "Art. 61 CTB", incidence: "alta", difficulty: 2
   },
-  {
+{
     id: "qe74", category: "direcao-defensiva",
     statement: "Em neblina densa, o farol correto é:",
     options: ["Alto", "Baixo + farol de neblina (se houver)", "Pisca-alerta", "Apagado"],
@@ -806,7 +1044,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "Em neblina densa, o farol ALTO é prejudicial — ele reflete nas gotículas de água suspensas no ar e forma uma 'parede branca' que ofusca o próprio condutor e reduz ainda mais a visibilidade. O correto é usar o FAROL BAIXO, de preferência com o farol de NEBLINA dianteiro (que projeta a luz para baixo e para os lados, sem refletir). O pisca-alerta com o veículo em movimento é PROIBIDO e perigoso, pois os outros motoristas podem achar que você está parado.",
     incidence: "alta", trap: true, difficulty: 2
   },
-  {
+{
     id: "qe75", category: "infracoes",
     statement: "Estacionar sobre a calçada é infração:",
     options: ["Leve", "Média", "Grave", "Gravíssima"],
@@ -815,7 +1053,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "Estacionar sobre a calçada (passeio público) é infração GRAVE, com 5 pontos na CNH e multa. A calçada é espaço exclusivo dos pedestres — estacionar sobre ela obriga o pedestre a descer para a rua para contornar o veículo, colocando em risco sua segurança. Pessoas com deficiência visual, cadeirantes e pais com carrinhos de bebê são especialmente prejudicados. O respeito à calçada é uma questão de cidadania e acessibilidade.",
     legalBase: "Art. 181, VIII CTB", incidence: "media", difficulty: 1
   },
-  {
+{
     id: "qe76", category: "infracoes",
     statement: "Deixar de usar o cinto de segurança nos bancos traseiros é infração:",
     options: ["Leve do passageiro", "Grave do condutor", "Sem multa", "Gravíssima"],
@@ -824,7 +1062,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "O cinto de segurança é obrigatório para TODOS os ocupantes do veículo — inclusive nos bancos traseiros. E a RESPONSABILIDADE pela infração é do CONDUTOR, mesmo que o passageiro adulto seja quem optou por não usar o cinto. A infração é GRAVE, 5 pontos e multa. Em caso de colisão, um passageiro sem cinto no banco traseiro pode ser arremessado contra o banco da frente, ferindo também os ocupantes dianteiros. O cinto traseiro salva vidas.",
     incidence: "alta", difficulty: 2
   },
-  {
+{
     id: "qe77", category: "direcao-defensiva",
     statement: "Beber pequena quantidade e dirigir:",
     options: ["É permitido até certo limite", "É infração gravíssima, qualquer concentração já é proibida", "Só vira infração com sintomas", "Vale apenas o exame de sangue"],
@@ -833,7 +1071,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "A Lei Seca (Lei 11.705/2008) estabelece TOLERÂNCIA ZERO para álcool ao dirigir. Qualquer quantidade detectável configura infração GRAVÍSSIMA, com multa multiplicada por 10, suspensão da CNH por 12 meses e recolhimento do documento. Acima de 0,34 mg/L de ar expirado no bafômetro, também configura CRIME de trânsito (art. 306 CTB), com detenção de 6 meses a 3 anos. Não existe 'quantidade segura' de álcool para dirigir — mesmo uma lata de cerveja já altera os reflexos.",
     incidence: "altissima", trap: true, difficulty: 1
   },
-  {
+{
     id: "qe78", category: "primeiros-socorros",
     statement: "Engasgo em adulto consciente é tratado com:",
     options: ["Manobra de Heimlich", "RCP imediata", "Água em jato", "Tapas no rosto"],
@@ -842,7 +1080,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "O engasgo por obstrução das vias aéreas em adulto CONSCIENTE é tratado com a MANOBRA DE HEIMLICH: o socorrista posiciona-se atrás da vítima, envolve-a com os braços, coloca o punho fechado acima do umbigo e abaixo do esterno, e realiza compressões rápidas para dentro e para cima. O objetivo é expulsar o objeto da traqueia. Se a vítima estiver INCONSCIENTE, inicia-se RCP. A manobra de Heimlich NÃO se aplica a bebês menores de 1 ano — nesse caso, usa-se tapas nas costas e compressões torácicas.",
     incidence: "media", difficulty: 2
   },
-  {
+{
     id: "qe79", category: "meio-ambiente",
     statement: "Dirigir com escapamento adulterado/aberto é infração:",
     options: ["Leve", "Média", "Grave", "Gravíssima"],
@@ -851,7 +1089,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "Transitar com escapamento adulterado ou aberto (descarga livre) é infração GRAVE, com 5 pontos na CNH e multa, além de medida administrativa de retenção do veículo para regularização. O escapamento adulterado aumenta a emissão de ruídos (poluição sonora) e, dependendo da alteração, pode também aumentar a emissão de poluentes. Além da multa, o condutor pode ser enquadrado por perturbação do sossego público. A manutenção do escapamento original é obrigação do proprietário.",
     legalBase: "Art. 230, IX CTB", incidence: "media", difficulty: 2
   },
-  {
+{
     id: "qe80", category: "mecanica",
     statement: "Vazamento de combustível deve ser tratado como:",
     options: ["Problema sem urgência", "Emergência — risco de incêndio e dano ambiental", "Característica normal", "Sinal de bom desempenho"],
@@ -860,7 +1098,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "Vazamento de combustível é uma EMERGÊNCIA que exige ação imediata: o combustível é altamente inflamável e qualquer faísca (do motor, do escapamento, de um cigarro próximo) pode causar incêndio ou explosão. Além do risco de incêndio, o combustível derramado contamina o solo e a água, configurando dano ambiental. Ao perceber vazamento, pare o veículo em local seguro e arejado, desligue o motor, não fume e acione um mecânico ou guincho.",
     incidence: "media", difficulty: 1
   },
-  {
+{
     id: "qe81", category: "prioridade",
     statement: "Veículo prestes a entrar numa via vindo de propriedade lindeira (garagem):",
     options: ["Tem preferência", "Deve dar preferência aos veículos e pedestres da via", "Pode buzinar e entrar", "Tem preferência se a saída for em rampa"],
@@ -869,7 +1107,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "Quando um veículo está saindo de garagem, estacionamento ou qualquer propriedade lindeira para entrar em uma via, ele DEVE dar preferência a TODOS os veículos e pedestres que já estão circulando na via. Isso inclui tanto veículos quanto pedestres passando pela calçada. O condutor deve reduzir, parar se necessário, sinalizar com seta e só entrar quando tiver espaço seguro. Ignorar essa regra pode causar colisões com veículos e atropelamentos.",
     legalBase: "Art. 36 CTB", incidence: "alta", difficulty: 2
   },
-  {
+{
     id: "qe82", category: "legislacao",
     statement: "A placa do veículo deve estar:",
     options: ["Limpa e legível", "Pode estar suja", "Pintada à mão se quebrar", "Encoberta por adesivo"],
@@ -878,7 +1116,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "A placa de identificação do veículo deve estar sempre LIMPA e LEGÍVEL, sem obstruções, sujeira, adesivos ou alterações. Qualquer adulteração — como cobrir parcialmente a placa, usar películas, adesivos ou materiais que dificultem a leitura — é infração GRAVÍSSIMA, com 7 pontos, multa e apreensão do veículo. Placa adulterada também configura crime de adulteração de sinal identificador. A placa é o documento de identidade do veículo e precisa ser claramente visível para fiscalização.",
     legalBase: "Art. 230, IV CTB", incidence: "alta", difficulty: 1
   },
-  {
+{
     id: "qe83", category: "direcao-defensiva",
     statement: "Em ultrapassagens, a distância ideal para retornar à faixa é:",
     options: ["Logo que ultrapassar o para-choque", "Quando enxergar o veículo ultrapassado pelo retrovisor interno", "Sem critério", "Depois de 1 km"],
@@ -887,7 +1125,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "Após ultrapassar, o condutor deve retornar à faixa original apenas quando enxergar o veículo ultrapassado COMPLETAMENTE pelo RETROVISOR INTERNO. Isso garante que há distância suficiente entre os veículos para a manobra segura. Retornar logo após ultrapassar o para-choque (antes de ver no retrovisor) é arriscado — pode fechar o outro veículo e causar colisão. A seta direita deve ser acionada antes de retornar, sinalizando a intenção.",
     incidence: "media", difficulty: 2
   },
-  {
+{
     id: "qe84", category: "infracoes",
     statement: "Trafegar com farol apagado à noite é infração:",
     options: ["Leve", "Média", "Grave", "Gravíssima"],
@@ -896,7 +1134,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "Transitar com os faróis apagados durante a noite é infração MÉDIA, com 4 pontos na CNH e multa. O farol baixo deve estar aceso OBRIGATORIAMENTE das 18h às 6h em vias públicas. Além da infração, dirigir sem faróis à noite é extremamente perigoso: reduz a visibilidade do condutor e, mais importante, torna o veículo quase invisível para outros motoristas, pedestres e ciclistas. O farol aceso serve tanto para o condutor enxergar quanto para ser visto.",
     legalBase: "Art. 250 CTB", incidence: "media", difficulty: 2
   },
-  {
+{
     id: "qe85", category: "legislacao",
     statement: "Em rodovia de pista dupla com canteiro central, durante o dia, o farol baixo:",
     options: ["É proibido", "É obrigatório", "É opcional", "Só com chuva"],
@@ -905,7 +1143,7 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "A 'Lei do Farol Baixo' (Lei 13.290/2016, alterada pela 14.071/2021) determina que o farol baixo deve estar ligado OBRIGATORIAMENTE durante o dia em rodovias de pista simples. Em rodovias de pista DUPLA com canteiro central (também chamadas de freeway), o uso do farol baixo durante o dia é DISPENSADO, pois o canteiro separa os fluxos. No entanto, muitos condutores mantêm ligado por segurança. Em túneis, chuva ou neblina, o farol baixo é sempre obrigatório.",
     legalBase: "Lei 13.290/16", incidence: "alta", difficulty: 2
   },
-  {
+{
     id: "qp16", category: "placas",
     statement: "Quanto à classificação geral da sinalização vertical do CTB, qual grupo tem por objetivo principal AUXILIAR/ORIENTAR o condutor com informações de serviços (hospital, posto, telefone)?",
     options: ["Regulamentação", "Advertência", "Indicação", "Especiais"],
@@ -914,56 +1152,59 @@ export const QUESTIONS: Question[] = [
     detailedExplanation: "A sinalização de INDICAÇÃO (série I) tem o objetivo de orientar e auxiliar o condutor. Divide-se em: INDICAÇÃO DE SERVIÇOS AUXILIARES (placas AZUIS com símbolo branco — hospital, posto de gasolina, telefone, restaurante, hospedagem) e INDICAÇÃO DE ORIENTAÇÃO DE DESTINO (placas VERDES para orientação de cidades e distâncias, MARRONS para atrativos turísticos e BRANCAS para identificação de logradouros). Diferente das placas de regulamentação (que obrigam) e advertência (que alertam), as de indicação apenas informam.",
     incidence: "media", difficulty: 2
   },
-  {
+{
     id: "q4",
     category: "primeiros-socorros",
     statement:
-      "Diante de uma vítima de acidente inconsciente respirando normalmente, o procedimento inicial correto é:",
+      "Em um cenário de colisão traseira em rodovia pavimentada, o socorrista inicial depara-se com uma vítima consciente, porém incapacitada de se movimentar, que reclama de dor na região cervical. Diante da necessidade absoluta de segurança antes da chegada da equipe do SAMU, o procedimento prioritário é:",
     options: [
-      "Oferecer água imediatamente",
-      "Colocá-la em posição de recuperação (lateral)",
-      "Movê-la rapidamente para fora da pista carregando-a",
-      "Aplicar respiração boca a boca",
+      "Retirar a vítima imediatamente do interior do veículo, puxando-a pelos membros superiores para evitar incêndios.",
+      "Oferecer líquidos ou analgésicos leves e massagear a região do pescoço para aliviar o espasmo doloroso.",
+      "Garantir a imobilização do pescoço e da coluna da vítima, mantendo-a alinhada na posição em que foi encontrada, sem movimentá-la desnecessariamente.",
+      "Ajudar a vítima a sentar-se ereta para melhorar seu fluxo circulatório periférico."
     ],
-    correctIndex: 1,
-    explanation:
-      "Vítima inconsciente que respira deve ser colocada em posição lateral de segurança para evitar sufocamento.",
+    correctIndex: 2,
+    explanation: "Vítimas com dor cervical devem ser mantidas imóveis e alinhadas para evitar lesões medulares irreversíveis.",
     detailedExplanation:
       "A posição lateral de segurança (PLS) impede que a língua obstrua as vias aéreas e evita que a vítima se afogue com o próprio vômito ou saliva. Só se aplica quando há respiração espontânea. Nunca ofereça líquidos a vítima inconsciente (risco de aspiração) e nunca mova a vítima desnecessariamente, pois pode haver lesão na coluna — só remova se houver risco iminente (fogo, explosão).",
     commonMistake:
       "Muitos marcam 'respiração boca a boca' — mas isso só é feito se a vítima NÃO estiver respirando.",
     tip: "Respira + inconsciente = posição lateral.",
     incidence: "alta",
-    difficulty: 2,
+    difficulty: 3,
   },
-  {
+{
     id: "q5",
     category: "infracoes",
-    statement: "Dirigir sob influência de álcool é uma infração de natureza:",
-    options: ["Leve", "Média", "Grave", "Gravíssima"],
-    correctIndex: 3,
-    explanation:
-      "Infração gravíssima, multa multiplicada e suspensão imediata do direito de dirigir.",
+    statement:
+      "Um condutor é submetido ao teste do etilômetro durante fiscalização ordinária da Lei Seca. O aparelho acusa teor alcoólico superior ao limite de tolerância estabelecido na legislação. De acordo com o Art. 165 do CTB, a infração praticada e sua respectiva penalidade pecuniária administrativa são:",
+    options: [
+      "Infração de natureza grave, punida com multa no valor de cinco vezes o valor base.",
+      "Infração de natureza gravíssima, punida com multa administrativa multiplicada por dez vezes e suspensão do direito de dirigir por 12 meses.",
+      "Infração de natureza média, punida com multa administrativa e apreensão definitiva da CNH.",
+      "Crime de trânsito inafiançável com perda imediata do direito de dirigir por cinco anos."
+    ],
+    correctIndex: 1,
+    explanation: "Dirigir sob influência de álcool é infração gravíssima multiplicada por 10 e acarreta suspensão do direito de dirigir por 12 meses.",
     detailedExplanation:
       "A Lei Seca (Lei 11.705/08, alterada pela 12.760/12) tornou tolerância zero: qualquer concentração de álcool já configura infração gravíssima, com multa multiplicada por 10 (R$ 2.934,70), suspensão do direito de dirigir por 12 meses e recolhimento da CNH. Recusar o bafômetro tem a mesma penalidade. Se houver concentração acima de 0,34 mg/L de ar expirado, configura também CRIME de trânsito (art. 306 do CTB), com prisão de 6 meses a 3 anos.",
     legalBase: "Art. 165 e 306 do CTB",
     incidence: "altissima",
-    difficulty: 1,
+    difficulty: 3,
   },
-  {
+{
     id: "q6",
     category: "prioridade",
     statement:
-      "Em um cruzamento não sinalizado, qual veículo tem preferência de passagem?",
+      "Ao se deparar com um cruzamento de nível urbano desprovido de qualquer sinalização vertical, horizontal ou luminosa, dois veículos aproximam-se simultaneamente de direções perpendiculares. De acordo com as disposições gerais de preferência estabelecidas no CTB, a prioridade de passagem pertence ao veículo que:",
     options: [
-      "O que vier pela esquerda do condutor",
-      "O que vier pela direita do condutor",
-      "O maior veículo",
-      "O que chegar primeiro, independente do lado",
+      "Trafegar pela via de maior movimento ou largura nominal.",
+      "Aproximar-se do cruzamento pela direita do condutor do outro veículo.",
+      "Estar desenvolvendo maior velocidade linear no momento da interseção.",
+      "Sinalizar primeiro a intenção de efetuar conversão à esquerda."
     ],
     correctIndex: 1,
-    explanation:
-      "Em cruzamento sem sinalização, a preferência é de quem vem pela DIREITA.",
+    explanation: "Em cruzamentos não sinalizados, a preferência é sempre de quem vem pela direita do outro veículo.",
     detailedExplanation:
       "Regra geral: em cruzamento ou interseção sem sinalização, dá-se preferência ao veículo que vem pela DIREITA. Exceções: (1) veículos circulando em rotatória têm preferência sobre quem entra; (2) veículos em via preferencial (mesmo sem placa, geralmente a mais larga ou pavimentada) têm prioridade; (3) veículos de emergência em serviço têm prioridade absoluta.",
     legalBase: "Art. 29, III, 'c' do CTB",
@@ -972,79 +1213,97 @@ export const QUESTIONS: Question[] = [
     tip: "Direita = preferência. Memorize!",
     incidence: "altissima",
     trap: true,
-    difficulty: 1,
+    difficulty: 3,
   },
-  {
+{
     id: "q7",
     category: "placas",
-    statement: "A placa 'PARE' (R-1) é classificada como:",
+    statement:
+      "A sinalização de trânsito é composta por diversas classes de dispositivos. Dentre elas, a placa de regulamentação 'PARADA OBRIGATÓRIA' (R-1) possui um formato singular em relação às demais placas regulamentares. Assinale a alternativa que explica corretamente seu formato e sua finalidade técnica:",
     options: [
-      "Placa de advertência",
-      "Placa de regulamentação",
-      "Placa de indicação",
-      "Placa educativa",
+      "Formato octogonal, cuja finalidade é garantir a legibilidade da placa mesmo que vista pelo verso ou parcialmente coberta por poeira.",
+      "Formato triangular invertido, para sinalizar a transição de vias urbanas de grande fluxo.",
+      "Formato circular padrão, cuja finalidade é diferenciar-se das placas de advertência que são losangulares.",
+      "Formato retangular azul, indicando área de estacionamento regulamentado obrigatório."
     ],
-    correctIndex: 1,
-    explanation:
-      "R-1 (PARE) é a principal placa de regulamentação. Octogonal, vermelha — obriga parada total.",
+    correctIndex: 0,
+    explanation: "A placa R-1 é octogonal para ser identificada facilmente por condutores que trafegam em vias transversais (mesmo de costas).",
     detailedExplanation:
       "A placa PARE (R-1) é OCTOGONAL (8 lados), vermelha com letras brancas, e obriga parada TOTAL do veículo antes da faixa de retenção, mesmo que não haja outro veículo se aproximando. Desobedecer é infração gravíssima (7 pontos). É a única placa octogonal do CTB justamente para ser reconhecida mesmo se estiver suja, virada ou em más condições.",
     commonMistake:
       "Confundir com advertência por causa do formato diferente. Lembre: PARE é REGULAMENTAÇÃO.",
     incidence: "alta",
-    difficulty: 1,
+    difficulty: 3,
   },
-  {
+{
     id: "q8",
     category: "meio-ambiente",
     statement:
-      "A emissão excessiva de poluentes pelo escapamento de um veículo configura infração:",
-    options: ["Leve", "Média", "Grave", "Gravíssima"],
-    correctIndex: 2,
-    explanation:
-      "É infração grave, com multa e retenção do veículo para regularização.",
+      "No contexto da gestão ambiental e da circulação urbana de veículos automotores, emitir gases poluentes ou fumaça acima dos níveis regulamentados pelos órgãos de controle ambiental (como o CONAMA) sujeita o proprietário do veículo a qual sanção, nos termos do CTB?",
+    options: [
+      "Apenas advertência por escrito expedida pelo órgão ambiental estadual competente.",
+      "Infração de natureza grave, punida com multa e retenção do veículo para fins de regularização.",
+      "Infração gravíssima de trânsito, punida com remoção do veículo e cassação da licença de funcionamento.",
+      "Crime ambiental com detenção compulsória do motorista em flagrante."
+    ],
+    correctIndex: 1,
+    explanation: "O desrespeito aos limites de emissão de poluentes é classificado pelo CTB como infração grave com retenção para regularização.",
     detailedExplanation:
       "Conforme o art. 231, III do CTB, transitar com o veículo produzindo fumaça, gases ou partículas em níveis superiores aos permitidos é infração GRAVE: 5 pontos na CNH, multa e medida administrativa de retenção do veículo para regularização. O controle se dá pelo PROCONVE (Programa de Controle da Poluição do Ar por Veículos Automotores).",
     legalBase: "Art. 231, III do CTB",
     incidence: "media",
-    difficulty: 2,
+    difficulty: 3,
   },
-  {
+{
     id: "q9",
     category: "mecanica",
     statement:
-      "O sistema responsável por reduzir a velocidade do veículo é:",
-    options: ["Sistema de ignição", "Sistema de freios", "Sistema de transmissão", "Sistema de arrefecimento"],
+      "A manutenção preventiva do sistema de frenagem do veículo automotor é indispensável para a segurança viária. Sobre os princípios de funcionamento e componentes do sistema de freios de serviço de acionamento hidráulico convencional, assinale a afirmativa correta:",
+    options: [
+      "O sistema de freio de estacionamento (freio de mão) atua de forma hidráulica nas quatro rodas simultaneamente.",
+      "A redução de velocidade ocorre pelo atrito das pastilhas contra os discos de freio ou das sapatas contra os tambores, impulsionados pela pressão do fluido de freio.",
+      "O hidrovácuo (servo-freio) serve para aumentar a resistência mecânica do pedal de freio, tornando-o mais rígido na frenagem de emergência.",
+      "O fluido de freio deve ser inspecionado anualmente e substituído apenas quando houver vazamento severo no cilindro mestre."
+    ],
     correctIndex: 1,
-    explanation: "Freios reduzem ou interrompem o movimento — verificação obrigatória antes de dirigir.",
+    explanation: "O freio hidráulico converte a pressão hidráulica em atrito mecânico nas rodas por meio de pastilhas/discos ou lonas/tambores.",
     detailedExplanation:
       "O sistema de freios converte energia cinética em calor por atrito, reduzindo a velocidade. É composto por: pedal, cilindro mestre, fluido (DOT3/DOT4), pastilhas, discos (ou lonas e tambores) e o freio de estacionamento. Sinais de problema: pedal baixo, ruído metálico, puxar para um lado, vibração. Verificação periódica é obrigação do condutor — dirigir com freio defeituoso é infração GRAVÍSSIMA.",
     incidence: "media",
-    difficulty: 1,
+    difficulty: 3,
   },
-  {
+{
     id: "q10",
     category: "direcao-defensiva",
     statement:
-      "A distância de seguimento ideal entre veículos em condições normais é medida pela regra dos:",
-    options: ["1 segundo", "2 segundos", "3 segundos", "5 segundos"],
+      "A direção defensiva orienta que, em condições ideais de clima e pista, o condutor mantém uma distância de seguimento segura em relação ao veículo que trafega imediatamente à sua frente. Essa distância deve ser calculada utilizando a regra prática de:",
+    options: [
+      "Manter no mínimo 5 metros de distância para cada 10 km/h de velocidade desenvolvida.",
+      "Contar dois segundos de intervalo entre a passagem do veículo da frente e a do próprio veículo por um ponto fixo de referência na via.",
+      "Basear-se na distância visual de três postes de iluminação pública consecutivas na via.",
+      "Manter sempre a distância fixa equivalente ao comprimento de dois automóveis de médio porte."
+    ],
     correctIndex: 1,
-    explanation:
-      "Regra dos 2 segundos: tempo mínimo para reagir em condições normais. Em chuva, dobre.",
+    explanation: "A regra dos dois segundos é o método padrão de contagem para aferição rápida de distância segura em vias pavimentadas.",
     detailedExplanation:
       "Como aplicar: escolha um ponto fixo na via (placa, árvore). Quando o veículo da frente passar por ele, conte 'mil e um, mil e dois'. Se você passar antes de terminar a contagem, está perto demais. Em condições normais e secas, 2 segundos. Em chuva, neblina ou pista escorregadia: DOBRE para 4 segundos. À noite ou com cargas pesadas: aumente também. Essa distância dá tempo de reação para frear sem colisão traseira.",
     tip: "Normal = 2s · Chuva = 4s",
     incidence: "alta",
-    difficulty: 2,
+    difficulty: 3,
   },
-  {
+{
     id: "q11",
     category: "legislacao",
-    statement: "A validade da CNH para condutores com menos de 50 anos é de:",
-    options: ["3 anos", "5 anos", "10 anos", "Indeterminada"],
-    correctIndex: 2,
-    explanation:
-      "Desde 2021: até 49 anos → 10 anos · 50 a 69 anos → 5 anos · 70+ → 3 anos.",
+    statement:
+      "O Código de Trânsito Brasileiro (CTB) estabelece prazos para renovação dos exames de aptidão física e mental para a habilitação de condutores. De acordo com as normas atualizadas pela Lei 14.071/2021, condutores com idade inferior a 50 anos devem renovar sua CNH com periodicidade máxima de:",
+    options: [
+      "5 anos, independentemente do exercício de atividade remunerada (EAR).",
+      "10 anos, exceto quando houver indicação médica em contrário expressa no prontuário.",
+      "3 anos, para condutores habilitados nas categorias profissionais C, D e E.",
+      "15 anos, desde que não cometam nenhuma infração gravíssima nos últimos doze meses."
+    ],
+    correctIndex: 1,
+    explanation: "A validade da CNH para condutores abaixo de 50 anos passou para 10 anos a partir de 2021.",
     detailedExplanation:
       "A Lei 14.071/2021 alterou o art. 147 do CTB. Validade conforme idade do condutor NA DATA DO EXAME: menos de 50 anos = 10 anos; de 50 a menos de 70 = 5 anos; 70 ou mais = 3 anos. Condutores que exercem atividade remunerada (EAR — táxi, ônibus, escolar, transporte de carga) precisam fazer toxicológico e o prazo segue regras próprias.",
     legalBase: "Art. 147, §2º do CTB (Lei 14.071/2021)",
@@ -1053,71 +1312,78 @@ export const QUESTIONS: Question[] = [
     tip: "10 / 5 / 3 — quanto mais idade, menor validade.",
     incidence: "altissima",
     trap: true,
-    difficulty: 2,
+    difficulty: 3,
   },
-  {
+{
     id: "q12",
     category: "infracoes",
-    statement: "Avançar o sinal vermelho do semáforo é infração:",
-    options: ["Leve", "Média", "Grave", "Gravíssima"],
-    correctIndex: 3,
-    explanation: "Gravíssima — 7 pontos na CNH e multa.",
+    statement:
+      "Em uma via arterial dotada de sinalização semafórica, o condutor decide avançar o sinal vermelho do semáforo durante a madrugada, alegando razões de segurança pessoal. Sob o rigor técnico e jurídico do Código de Trânsito Brasileiro (CTB), essa conduta configura:",
+    options: [
+      "Infração de trânsito de natureza gravíssima, punida com multa e acúmulo de 7 pontos na CNH, sem possibilidade de exceções por conveniência pessoal.",
+      "Infração de trânsito de natureza grave, tolerada em situações de risco iminente ou durante a madrugada.",
+      "Infração média, passível de conversão imediata em advertência por escrito pelo agente fiscalizador.",
+      "Crime de trânsito de menor potencial ofensivo, acarretando a suspensão preventiva da CNH."
+    ],
+    correctIndex: 0,
+    explanation: "Avançar o sinal vermelho é infração gravíssima, conforme o Art. 208 do CTB.",
     detailedExplanation:
       "Avançar sinal vermelho é infração GRAVÍSSIMA: 7 pontos na CNH e multa de R$ 293,47. Não há tolerância — mesmo parar 'em cima' da faixa de pedestres no vermelho conta. Exceção: à noite, entre 22h e 5h, em locais com risco de assalto, alguns municípios autorizam reduzir e prosseguir após confirmar a ausência de pedestres e outros veículos.",
     legalBase: "Art. 208 do CTB",
     incidence: "alta",
-    difficulty: 1,
+    difficulty: 3,
   },
-  {
+{
     id: "q13",
     category: "placas",
-    statement: "Placas de advertência possuem qual formato e cor?",
+    statement:
+      "A sinalização vertical de advertência tem por objetivo alertar os usuários da via sobre perigos potenciais, indicando sua natureza adiante. As placas pertencentes a essa classe possuem, por padrão regulamentar estabelecido no CTB, o seguinte formato e paleta de cores:",
     options: [
-      "Losango amarelo com símbolos pretos",
-      "Círculo vermelho",
-      "Retângulo azul",
-      "Octógono vermelho",
+      "Formato circular com fundo branco, orla vermelha e símbolos em preto.",
+      "Formato quadrado ou losangular com fundo amarelo, orla interna preta e símbolos em preto.",
+      "Formato retangular com fundo verde ou azul e caracteres em branco.",
+      "Formato octogonal com fundo vermelho e caracteres em branco."
     ],
-    correctIndex: 0,
-    explanation: "Advertência = losango amarelo com tarja preta. Avisa perigo à frente.",
+    correctIndex: 1,
+    explanation: "Placas de advertência são amarelas e pretas, geralmente com formato de losango.",
     detailedExplanation:
       "As placas de advertência (série A) são LOSANGOS amarelos com orla e símbolos pretos. Avisam o condutor sobre condições perigosas à frente: curvas, lombadas, cruzamentos, animais, pedestres, escolas, obras. Não obrigam, apenas alertam — mas ignorar uma advertência e causar acidente agrava a responsabilidade do condutor. Exceções: 'Cruz de Santo André' (cruzamento com via férrea) tem formato próprio.",
     tip: "Amarelo = atenção, perigo próximo.",
     incidence: "alta",
-    difficulty: 1,
+    difficulty: 3,
   },
-  {
+{
     id: "q14",
     category: "primeiros-socorros",
     statement:
-      "O primeiro procedimento ao chegar em local de acidente é:",
+      "Ao presenciar um acidente automobilístico em rodovia pública, o condutor de um veículo decide prestar o atendimento inicial. Visando à preservação da vida e à segurança de todos os envolvidos no local do sinistro, qual deve ser o primeiro procedimento técnico adotado?",
     options: [
-      "Mover as vítimas imediatamente",
-      "Sinalizar o local para evitar novos acidentes",
-      "Tirar fotos para o seguro",
-      "Oferecer água às vítimas",
+      "Tentar remover imediatamente os veículos acidentados para desobstruir as faixas de rolamento.",
+      "Efetuar a sinalização correta do local do acidente para evitar novas colisões e garantir a própria segurança antes de aproximar-se das vítimas.",
+      "Iniciar manobras de reanimação cardiopulmonar na primeira vítima localizada fora do veículo.",
+      "Retirar as vítimas das ferragens sem aguardar o equipamento do Corpo de Bombeiros."
     ],
     correctIndex: 1,
-    explanation:
-      "PAS: Proteger → Avisar → Socorrer. Sinalizar é proteger o local.",
+    explanation: "A sinalização do local é o primeiro passo absoluto para garantir que o socorrista e outros motoristas não se tornem novas vítimas.",
     detailedExplanation:
       "Protocolo PAS é mundialmente adotado: (1) PROTEGER o local — sinalize com triângulo a no mínimo 30 metros, ligue o pisca-alerta e impeça novas vítimas; (2) AVISAR — ligue 192 (SAMU), 193 (Bombeiros) ou 190 (Polícia), informando local exato, número e estado das vítimas; (3) SOCORRER — só preste socorro direto se tiver conhecimento. Mover vítima sem necessidade pode agravar lesões de coluna.",
     tip: "Decore: P-A-S.",
     incidence: "altissima",
-    difficulty: 2,
+    difficulty: 3,
   },
-  {
+{
     id: "q15",
     category: "prioridade",
-    statement: "Em rotatória, a preferência é de:",
+    statement:
+      "Ao se aproximar de uma rotatória desprovida de qualquer placa de regulamentação de trânsito (como a R-2 'Dê a Preferência'), qual veículo detém, por imposição legal do CTB, a preferência de passagem na interseção?",
     options: [
-      "Quem está entrando",
-      "Quem já está circulando dentro da rotatória",
-      "O veículo maior",
-      "Quem vem pela esquerda",
+      "O veículo que estiver circulando pela rotatória no momento da interseção.",
+      "O veículo que se aproximar da rotatória vindo pela via de trânsito rápido ou arterial.",
+      "O veículo que iniciar a manobra de aceleração primeiro na tentativa de ingressar na rotatória.",
+      "O veículo que se aproximar pela direita daquele que já se encontra na circulação da rotatória."
     ],
-    correctIndex: 1,
-    explanation: "Quem já circula tem preferência. Quem entra deve esperar.",
+    correctIndex: 0,
+    explanation: "Em rotatórias sem sinalização específica, a preferência é sempre do veículo que já está circulando dentro dela.",
     detailedExplanation:
       "Desde a Lei 10.830/2003, em rotatórias (também chamadas de retornos ou balões), quem JÁ ESTÁ circulando tem preferência sobre quem deseja entrar. Antes dessa lei, valia a regra geral da direita — por isso muitas pessoas mais velhas ainda erram. Quem entra deve dar seta à direita ao sair e à esquerda enquanto circula, conforme o caso.",
     legalBase: "Art. 29, III, 'f' do CTB",
@@ -1126,186 +1392,200 @@ export const QUESTIONS: Question[] = [
     tip: "Já dentro = preferência.",
     incidence: "altissima",
     trap: true,
-    difficulty: 1,
+    difficulty: 3,
   },
-  {
+{
     id: "q16",
     category: "direcao-defensiva",
-    statement: "São considerados elementos da direção defensiva, EXCETO:",
-    options: ["Atenção", "Previsão", "Pressa", "Conhecimento"],
+    statement:
+      "A Direção Defensiva baseia-se em cinco elementos fundamentais (pilares) indispensáveis para a condução segura de veículos automotores. Assinale a alternativa que apresenta uma conduta que NÃO corresponde a esses elementos de segurança preventiva:",
+    options: [
+      "Agir sob a influência do elemento Conhecimento, sabendo as leis de trânsito e características mecânicas do veículo.",
+      "Agir sob a influência da Previsão, antecipando perigos no fluxo de tráfego adiante.",
+      "Agir sob a influência da Habilidade, confiando nela para trafegar acima do limite de velocidade de forma segura.",
+      "Agir sob a influência da Decisão, tomando atitudes seguras de forma rápida perante emergências."
+    ],
     correctIndex: 2,
-    explanation:
-      "Elementos: conhecimento, atenção, previsão, habilidade e ação. Pressa é inimiga.",
+    explanation: "A habilidade serve para conduzir com segurança, mas confiar nela para violar leis de trânsito (excesso de velocidade) é imperícia/imprudência.",
     detailedExplanation:
       "Os 5 elementos básicos da direção defensiva são: CONHECIMENTO (das leis, do veículo, da via), ATENÇÃO (foco constante), PREVISÃO (antecipar o que pode acontecer), HABILIDADE (domínio prático do veículo) e AÇÃO (reação correta na hora certa). Pressa, distração, álcool e cansaço são justamente os INIMIGOS da direção defensiva.",
     commonMistake:
       "Questão tipo 'EXCETO' é armadilha — leia duas vezes. Pressa NÃO é elemento, é inimigo.",
     incidence: "alta",
     trap: true,
-    difficulty: 2,
+    difficulty: 3,
   },
-  {
+{
     id: "q17",
     category: "legislacao",
-    statement: "O uso do cinto de segurança é obrigatório para:",
+    statement:
+      "O uso de dispositivos de retenção, como o cinto de segurança, é regulamentado de forma rígida pela legislação de trânsito brasileira. Sobre a obrigatoriedade e uso deste dispositivo pelos ocupantes do veículo, assinale a alternativa correta de acordo com as normas do CTB:",
     options: [
-      "Apenas o motorista",
-      "Apenas os passageiros da frente",
-      "Todos os ocupantes do veículo",
-      "Somente em rodovias",
+      "O uso do cinto de segurança é obrigatório apenas para o condutor e o passageiro do banco dianteiro em rodovias.",
+      "O uso do cinto de segurança é obrigatório em todas as vias do território nacional para condutor e passageiros, tanto nos bancos dianteiros quanto traseiros.",
+      "O uso do cinto de segurança é dispensado para crianças transportadas no banco traseiro em cadeirinhas infantis apropriadas.",
+      "O condutor fica isento da multa se o passageiro do banco traseiro se recusar a utilizar o cinto de segurança."
     ],
-    correctIndex: 2,
-    explanation: "Todos os ocupantes, em todas as vias. Não usar = infração grave.",
+    correctIndex: 1,
+    explanation: "O uso do cinto de segurança é obrigatório para todos os ocupantes do veículo, em todas as vias públicas do território nacional.",
     detailedExplanation:
       "O cinto é obrigatório para TODOS os ocupantes (frente e trás), em TODAS as vias (urbanas ou rurais). Não usar é infração GRAVE: 5 pontos e multa. A responsabilidade pelo cinto dos passageiros é também do condutor. Crianças até 10 anos devem ir no banco traseiro, em dispositivos de retenção apropriados (bebê conforto, cadeirinha ou assento de elevação) conforme idade e peso.",
     legalBase: "Art. 167 do CTB",
     incidence: "alta",
-    difficulty: 1,
+    difficulty: 3,
   },
-  {
+{
     id: "q18",
     category: "meio-ambiente",
-    statement: "Qual atitude do condutor contribui para reduzir a poluição?",
+    statement:
+      "A relação entre o modo de condução do veículo e os impactos ecológicos é direta e mensurável. Dentre as opções apresentadas, assinale a conduta que contribui ativamente para a redução da emissão de poluentes atmosféricos e eficiência energética:",
     options: [
-      "Manter o motor sempre acelerado em alta rotação",
-      "Realizar manutenções preventivas regularmente",
-      "Trocar de marcha apenas em alta rotação",
-      "Deixar o motor ligado em paradas longas",
+      "Acelerar o motor de forma vigorosa entre as trocas de marchas para manter o giro alto do motor.",
+      "Transitar em marchas adequadas à velocidade, mantendo uma aceleração constante e evitando freadas ou arrancadas bruscas desnecessárias.",
+      "Desligar o motor em declives acentuados (colocar o veículo em ponto morto ou 'banguela') para economizar combustível.",
+      "Utilizar combustível aditivado sem realizar a troca periódica dos filtros de ar e óleo do motor."
     ],
     correctIndex: 1,
-    explanation: "Manutenção em dia = motor eficiente e menos emissões.",
+    explanation: "A condução suave e constante reduz consideravelmente o consumo de combustível e a emissão de poluentes nocivos.",
     detailedExplanation:
       "Manutenção preventiva (troca de óleo, filtros, vela, regulagem do motor, calibragem dos pneus) garante combustão completa, reduz emissão de CO, CO2 e particulados, e economiza combustível. Outras atitudes que ajudam: trocar marcha em rotações médias (2.000-2.500 rpm), desligar o motor em paradas longas, evitar acelerações bruscas e manter pneus calibrados.",
     incidence: "media",
-    difficulty: 1,
+    difficulty: 3,
   },
-  {
+{
     id: "q19",
     category: "mecanica",
-    statement: "A função do sistema de suspensão é:",
+    statement:
+      "O sistema de suspensão do veículo automotor desempenha funções mecânicas críticas para a dirigibilidade e segurança ativa. Assinale a alternativa que descreve de forma correta e abrangente a função técnica primária dos componentes desse sistema (molas, amortecedores e braços oscilantes):",
     options: [
-      "Reduzir o consumo de combustível",
-      "Absorver impactos e dar estabilidade",
-      "Refrigerar o motor",
-      "Controlar a emissão de poluentes",
+      "Reduzir o atrito interno do motor transmitindo a força motriz diretamente para o sistema de diferencial traseiro.",
+      "Absorver os impactos gerados pelas irregularidades da pista de rolamento, garantindo o conforto dos ocupantes e mantendo os pneus em contato constante com o solo.",
+      "Impedir a fadiga dos freios de serviço mantendo a carroceria perfeitamente paralela à linha do horizonte.",
+      "Controlar o nível de pressão hidráulica nos cilindros auxiliares do sistema de freios antibloqueio (ABS)."
     ],
     correctIndex: 1,
-    explanation: "Suspensão = conforto, estabilidade e segurança.",
+    explanation: "A suspensão absorve irregularidades e assegura a aderência dos pneus ao solo, sendo vital para o controle do veículo.",
     detailedExplanation:
       "A suspensão (molas, amortecedores, bandejas, batentes) absorve as irregularidades da pista, mantém os pneus em contato com o solo, dá estabilidade nas curvas e protege passageiros e carga. Suspensão gasta = carro 'flutua', aumenta a distância de frenagem e o risco de perda de controle. Sinais: ruídos, balanço excessivo, desgaste irregular dos pneus.",
     incidence: "baixa",
-    difficulty: 1,
+    difficulty: 3,
   },
-  {
+{
     id: "q20",
     category: "infracoes",
-    statement: "Usar o celular ao volante (segurando) é infração:",
-    options: ["Leve", "Média", "Grave", "Gravíssima"],
-    correctIndex: 3,
-    explanation: "Gravíssima — multa e 7 pontos na CNH.",
+    statement:
+      "O uso de aparelhos celulares ao volante tem sido uma das maiores causas de acidentes graves no Brasil. De acordo com as alterações recentes do CTB, segurar ou manusear o telefone celular enquanto conduz o veículo configura qual tipo de infração de trânsito?",
+    options: [
+      "Infração média, punida com multa e 4 pontos na CNH.",
+      "Infração de natureza grave, punida com multa administrativa e retenção preventiva da CNH.",
+      "Infração gravíssima de trânsito, punida com multa e acúmulo de 7 pontos na CNH.",
+      "Crime de trânsito inafiançável com suspensão do direito de dirigir por 6 meses."
+    ],
+    correctIndex: 2,
+    explanation: "Segurar ou manusear celular enquanto dirige é infração gravíssima de acordo com o Art. 252, parágrafo único do CTB.",
     detailedExplanation:
       "Desde a Lei 14.071/2021, segurar o celular ao dirigir é infração GRAVÍSSIMA: 7 pontos e multa de R$ 293,47. O uso é permitido apenas em modo viva-voz ou com fone, sem manuseio. Olhar a tela para ver mapa também conta — coloque o aparelho em suporte fixo. Motoristas profissionais (EAR) podem ter a CNH suspensa diretamente nesta infração.",
     legalBase: "Art. 252, §1º do CTB",
     tip: "Celular na mão = gravíssima.",
     incidence: "altissima",
-    difficulty: 1,
+    difficulty: 3,
   },
-  {
+{
     id: "q21",
     category: "placas",
-    statement: "Placas de indicação têm qual cor de fundo predominante?",
-    options: ["Vermelho", "Amarelo", "Azul ou verde", "Branco"],
+    statement:
+      "No que diz respeito à sinalização vertical, as placas de identificação e orientação de destino, que fazem parte do grupo de sinalização de indicação, possuem cores de fundo padronizadas. Em rodovias federais e estaduais no Brasil, essas placas são predominantemente:",
+    options: [
+      "Amarelas e pretas.",
+      "Vermelhas e brancas.",
+      "Verdes e brancas (ou azuis e brancas).",
+      "Marrons e brancas."
+    ],
     correctIndex: 2,
-    explanation: "Indicação = azul (serviços) ou verde (orientação de destino).",
+    explanation: "Placas de indicação física e de orientação de destino usam fundo verde ou azul com caracteres brancos.",
     detailedExplanation:
       "Placas de INDICAÇÃO orientam o condutor: AZUL = serviços auxiliares (posto, hospital, telefone, restaurante); VERDE = orientação de destino (saídas, cidades, distâncias); MARROM = atrativos turísticos; BRANCAS com bordas pretas = identificação de logradouro. São informativas, não obrigam nem proíbem.",
     incidence: "media",
-    difficulty: 1,
+    difficulty: 3,
   },
-  {
+{
     id: "q22",
     category: "legislacao",
-    statement: "O Sistema Nacional de Trânsito é composto por:",
+    statement:
+      "O Sistema Nacional de Trânsito (SNT) é o conjunto de órgãos e entidades da União, dos Estados, do Distrito Federal e dos Municípios que exercem atividades de planejamento, administração, policiamento e julgamento de recursos de trânsito. Assinale a alternativa que indica corretamente um órgão executivo de trânsito que pertence ao SNT:",
     options: [
-      "Apenas o DETRAN",
-      "Órgãos e entidades executivos, normativos e de fiscalização",
-      "Somente a Polícia Rodoviária",
-      "Empresas privadas de trânsito",
+      "O Conselho Nacional de Trânsito (CONTRAN), órgão normativo e consultivo máximo.",
+      "Os Departamentos Estaduais de Trânsito (DETRANs), responsáveis por emitir a habilitação e vistoriar veículos no âmbito estadual.",
+      "As Juntas Administrativas de Recursos de Infrações (JARI), órgãos colegiados recursais exclusivos do Ministério dos Transportes.",
+      "Os Centros de Formação de Condutores (CFCs), que regulam as diretrizes normativas das provas do DETRAN."
     ],
     correctIndex: 1,
-    explanation:
-      "SNT inclui CONTRAN, DENATRAN, DETRANs, JARI, PRF, polícias militares etc.",
+    explanation: "Os DETRANs são órgãos executivos de trânsito estaduais responsáveis pela CNH e licenciamento de veículos.",
     detailedExplanation:
       "O Sistema Nacional de Trânsito (SNT) é o conjunto de órgãos federais, estaduais e municipais que cuidam do trânsito no Brasil. Principais: CONTRAN (normativo máximo), SENATRAN (executivo federal — antigo DENATRAN), DETRANs (executivos estaduais), DNIT e PRF (rodovias federais), polícias militares estaduais, órgãos municipais de trânsito e as JARIs (julgam recursos de multas).",
     legalBase: "Art. 5º a 25 do CTB",
     incidence: "media",
     difficulty: 3,
   },
-  {
+{
     id: "q23",
     category: "direcao-defensiva",
     statement:
-      "Em pista molhada, a aquaplanagem pode ser evitada principalmente por meio de:",
+      "Sob chuva torrencial, a formação de lâmina d'água sobre a pista pode provocar a ocorrência do fenômeno físico da aquaplanagem. Sob a ótica da direção defensiva e do controle mecânico do veículo, como essa situação perigosa deve ser prevenida e tratada no instante exato de sua ocorrência?",
     options: [
-      "Aceleração brusca",
-      "Redução da velocidade e pneus em bom estado",
-      "Frenagem forte e contínua",
-      "Esterçamento rápido do volante",
+      "Freada imediata e brusca acionando o pedal até o fim para reestabelecer o atrito.",
+      "Redução gradual da velocidade antes da poça e, caso ocorra a flutuação, manter o volante firme, desacelerar suavemente sem pisar nos freios ou girar o volante bruscamente.",
+      "Girar o volante rapidamente para a esquerda e para a direita alternadamente para expulsar a água acumulada sob as bandas de rodagem dos pneus.",
+      "Aumentar a rotação do motor engatando uma marcha mais forte para forçar os pneus a romper a barreira líquida."
     ],
     correctIndex: 1,
-    explanation:
-      "Velocidade baixa + pneus com sulcos adequados = sem aquaplanagem.",
+    explanation: "Durante aquaplanagem, frear ou fazer manobras bruscas causa perda definitiva de controle. Deve-se apenas segurar firme o volante e tirar o pé do acelerador.",
     detailedExplanation:
       "Aquaplanagem (ou hidroplanagem) ocorre quando uma lâmina de água se forma entre o pneu e o asfalto, fazendo o veículo 'deslizar' sem contato com o solo. Prevenção: reduzir velocidade na chuva, manter pneus com sulcos mínimos de 1,6 mm (a TWI), calibragem correta e evitar poças. Se acontecer: NÃO freie nem esterce bruscamente — tire o pé do acelerador, segure o volante firme e deixe o veículo retomar o contato com o solo.",
     incidence: "alta",
-    difficulty: 2,
+    difficulty: 3,
   },
-  {
+{
     id: "q24",
     category: "primeiros-socorros",
     statement:
-      "Em caso de hemorragia externa intensa, o procedimento correto é:",
+      "Em caso de hemorragia externa severa decorrente de trauma sofrido por vítima de sinistro de trânsito, qual a manobra de suporte básico de vida indicada para conter a perda sanguínea de forma segura, até a chegada da equipe de socorro profissional?",
     options: [
-      "Aplicar torniquete imediatamente",
-      "Comprimir o local com pano limpo",
-      "Lavar a ferida com água corrente",
-      "Aguardar o socorro sem agir",
+      "Aplicar um torniquete com corda ou arame em qualquer ferimento localizado nos membros inferiores.",
+      "Efetuar compressão direta sobre a lesão utilizando um pano limpo, exercendo pressão firme e contínua local do sangramento.",
+      "Lavar o ferimento com água quente e aplicar pomadas cicatrizantes ou pó hemostático caseiro.",
+      "Manter o membro afetado abaixado em relação ao nível do coração para desacelerar o fluxo sanguíneo local."
     ],
     correctIndex: 1,
-    explanation:
-      "Compressão direta com pano limpo é o primeiro passo. Torniquete só em casos extremos.",
+    explanation: "A compressão direta com pano limpo ou gaze é a técnica prioritária e mais segura para conter hemorragias externas no suporte básico.",
     detailedExplanation:
       "Procedimento correto: (1) use luvas ou saco plástico para se proteger; (2) comprima diretamente sobre o ferimento com pano limpo ou gaze; (3) eleve o membro afetado, se possível, acima do nível do coração; (4) mantenha a compressão até chegada do socorro; (5) NÃO retire o pano se ensopar — coloque outro por cima. Torniquete só em último caso (amputação ou hemorragia incontrolável), pois pode causar perda do membro.",
     commonMistake:
       "A banca induz ao torniquete porque parece 'mais técnico'. ERRADO — primeira escolha é compressão direta.",
     incidence: "media",
     trap: true,
-    difficulty: 2,
+    difficulty: 3,
   },
-  {
+{
     id: "q25",
     category: "prioridade",
     statement:
-      "Veículos com prioridade absoluta de passagem (sirene + giroflex acionados) são:",
+      "O Código de Trânsito Brasileiro (CTB) estabelece que determinados veículos gozam de livre circulação, estacionamento e parada, além de prioridade de trânsito em situações de emergência. Para que essa prerrogativa legal seja plenamente válida nas vias públicas, é necessário que:",
     options: [
-      "Caminhões de carga",
-      "Ambulâncias, bombeiros e polícia em serviço de urgência",
-      "Ônibus em horário de pico",
-      "Veículos de aplicativo",
+      "Sejam veículos de grande porte, como caminhões de carga pesada e ônibus intermunicipais.",
+      "Estejam em efetivo serviço de urgência, devidamente identificados por dispositivos regulamentares de alarme sonoro e iluminação intermitente vermelha acionados.",
+      "Sejam conduzidos por motoristas profissionais habilitados exclusivamente na categoria E de habilitação.",
+      "Trafeguem pelas faixas exclusivas destinadas ao transporte coletivo urbano durante o horário de pico."
     ],
     correctIndex: 1,
-    explanation:
-      "Veículos de emergência em serviço têm prioridade sobre todos os demais.",
+    explanation: "A prioridade de passagem exige dispositivos sonoros e luminosos ligados e a efetiva prestação de serviço de emergência.",
     detailedExplanation:
       "Veículos de emergência em serviço urgente — com sirene E giroflex acionados — têm prioridade ABSOLUTA: podem ultrapassar pela direita, transitar acima do limite de velocidade, avançar semáforo vermelho (com cuidado) e estacionar onde for necessário. Demais condutores devem dar passagem encostando à direita. SEM sirene ou giroflex acionados, perdem essa prioridade e seguem as regras gerais.",
     legalBase: "Art. 29, VII e Art. 89 do CTB",
     incidence: "alta",
-    difficulty: 1,
+    difficulty: 3,
   },
-  // ============================================================
-  // QUESTÕES VISUAIS — IDENTIFICAÇÃO DE PLACAS (as que mais caem)
-  // ============================================================
-  {
+{
     id: "p1",
     category: "placas",
     statement: "Observando a placa abaixo, o que o condutor deve fazer ao se aproximar dela?",
@@ -1325,7 +1605,7 @@ export const QUESTIONS: Question[] = [
     incidence: "altissima",
     difficulty: 1,
   },
-  {
+{
     id: "p2",
     category: "placas",
     statement: "Ao deparar-se com esta placa, qual é o comportamento correto do condutor?",
@@ -1346,7 +1626,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 1,
   },
-  {
+{
     id: "p3",
     category: "placas",
     statement: "Sobre o significado desta placa, assinale a alternativa CORRETA:",
@@ -1369,7 +1649,7 @@ export const QUESTIONS: Question[] = [
     incidence: "altissima",
     difficulty: 1,
   },
-  {
+{
     id: "p4",
     category: "placas",
     statement: "Qual a diferença prática desta placa em relação à placa com a letra 'E' cortada?",
@@ -1388,7 +1668,7 @@ export const QUESTIONS: Question[] = [
     incidence: "alta",
     difficulty: 2,
   },
-  {
+{
     id: "p5",
     category: "placas",
     statement: "Ao ver esta placa, o que significa para o condutor que ultrapassar o valor indicado nela?",
@@ -1410,7 +1690,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 1,
   },
-  {
+{
     id: "p6",
     category: "placas",
     statement: "Ao avistar esta placa, qual ação o condutor deve tomar com antecedência?",
@@ -1429,7 +1709,7 @@ export const QUESTIONS: Question[] = [
     incidence: "alta",
     difficulty: 1,
   },
-  {
+{
     id: "p7",
     category: "placas",
     statement: "Que alerta esta placa transmite ao condutor que se aproxima do local?",
@@ -1449,7 +1729,7 @@ export const QUESTIONS: Question[] = [
     incidence: "alta",
     difficulty: 2,
   },
-  {
+{
     id: "p8",
     category: "placas",
     statement: "Ao ver esta placa, o que o condutor deve considerar sobre o comportamento no local?",
@@ -1467,7 +1747,7 @@ export const QUESTIONS: Question[] = [
     incidence: "media",
     difficulty: 1,
   },
-  {
+{
     id: "p9",
     category: "placas",
     statement: "Considerando o significado desta placa, quais manobras são proibidas ao condutor?",
@@ -1486,7 +1766,7 @@ export const QUESTIONS: Question[] = [
     incidence: "media",
     difficulty: 2,
   },
-  {
+{
     id: "p10",
     category: "placas",
     statement: "Ao encontrar esta placa em uma via, o que ela comunica ao condutor?",
@@ -1504,10 +1784,7 @@ export const QUESTIONS: Question[] = [
     incidence: "media",
     difficulty: 1,
   },
-  // ============================================================
-  // BANCO EXPANDIDO — temas recorrentes na prova teórica DETRAN
-  // ============================================================
-  {
+{
     id: "q26",
     category: "legislacao",
     statement: "A idade mínima para obter a CNH nas categorias A e B é de:",
@@ -1520,7 +1797,7 @@ export const QUESTIONS: Question[] = [
     incidence: "alta",
     difficulty: 1,
   },
-  {
+{
     id: "q27",
     category: "legislacao",
     statement: "Para obter a categoria D (ônibus/vans escolares), o condutor precisa:",
@@ -1537,7 +1814,7 @@ export const QUESTIONS: Question[] = [
     incidence: "media",
     difficulty: 2,
   },
-  {
+{
     id: "q28",
     category: "legislacao",
     statement: "O condutor é considerado infrator reincidente quando:",
@@ -1554,7 +1831,7 @@ export const QUESTIONS: Question[] = [
     incidence: "media",
     difficulty: 2,
   },
-  {
+{
     id: "q29",
     category: "legislacao",
     statement: "Em 2021, o CTB passou a permitir suspensão do direito de dirigir a partir de:",
@@ -1574,7 +1851,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 3,
   },
-  {
+{
     id: "q30",
     category: "legislacao",
     statement: "Documentos obrigatórios para circular com um veículo são:",
@@ -1591,7 +1868,7 @@ export const QUESTIONS: Question[] = [
     incidence: "alta",
     difficulty: 1,
   },
-  {
+{
     id: "q31",
     category: "infracoes",
     statement: "Estacionar em vaga de pessoa com deficiência sem credencial é infração:",
@@ -1603,7 +1880,7 @@ export const QUESTIONS: Question[] = [
     incidence: "alta",
     difficulty: 1,
   },
-  {
+{
     id: "q32",
     category: "infracoes",
     statement: "Dirigir sem CNH ou Permissão para Dirigir é infração:",
@@ -1615,7 +1892,7 @@ export const QUESTIONS: Question[] = [
     incidence: "alta",
     difficulty: 1,
   },
-  {
+{
     id: "q33",
     category: "infracoes",
     statement: "Transportar criança menor de 10 anos no banco da frente é infração:",
@@ -1629,7 +1906,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "q34",
     category: "infracoes",
     statement: "Disputar corrida (racha) em via pública é:",
@@ -1646,7 +1923,7 @@ export const QUESTIONS: Question[] = [
     incidence: "media",
     difficulty: 1,
   },
-  {
+{
     id: "q35",
     category: "direcao-defensiva",
     statement: "Os 'pontos cegos' do veículo são:",
@@ -1662,7 +1939,7 @@ export const QUESTIONS: Question[] = [
     incidence: "alta",
     difficulty: 1,
   },
-  {
+{
     id: "q36",
     category: "direcao-defensiva",
     statement: "Em uma descida íngreme e longa, o procedimento mais seguro é:",
@@ -1682,7 +1959,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "q37",
     category: "direcao-defensiva",
     statement: "Antes de ultrapassar outro veículo, o condutor deve:",
@@ -1698,7 +1975,7 @@ export const QUESTIONS: Question[] = [
     incidence: "alta",
     difficulty: 1,
   },
-  {
+{
     id: "q38",
     category: "direcao-defensiva",
     statement: "É PROIBIDO ultrapassar:",
@@ -1715,7 +1992,7 @@ export const QUESTIONS: Question[] = [
     incidence: "alta",
     difficulty: 1,
   },
-  {
+{
     id: "q39",
     category: "primeiros-socorros",
     statement: "Em vítima com suspeita de fratura, o correto é:",
@@ -1731,7 +2008,7 @@ export const QUESTIONS: Question[] = [
     incidence: "media",
     difficulty: 2,
   },
-  {
+{
     id: "q40",
     category: "primeiros-socorros",
     statement: "O número do SAMU para emergências médicas é:",
@@ -1743,7 +2020,7 @@ export const QUESTIONS: Question[] = [
     incidence: "alta",
     difficulty: 1,
   },
-  {
+{
     id: "q41",
     category: "primeiros-socorros",
     statement: "Em caso de queimadura, NÃO se deve:",
@@ -1760,7 +2037,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 1,
   },
-  {
+{
     id: "q42",
     category: "primeiros-socorros",
     statement: "Diante de vítima inconsciente que NÃO respira, deve-se:",
@@ -1776,7 +2053,7 @@ export const QUESTIONS: Question[] = [
     incidence: "alta",
     difficulty: 2,
   },
-  {
+{
     id: "q43",
     category: "meio-ambiente",
     statement: "Buzina pode ser usada:",
@@ -1793,7 +2070,7 @@ export const QUESTIONS: Question[] = [
     incidence: "media",
     difficulty: 1,
   },
-  {
+{
     id: "q44",
     category: "meio-ambiente",
     statement: "Jogar lixo pela janela do veículo é infração:",
@@ -1805,7 +2082,7 @@ export const QUESTIONS: Question[] = [
     incidence: "media",
     difficulty: 1,
   },
-  {
+{
     id: "q45",
     category: "mecanica",
     statement: "A calibragem dos pneus deve ser verificada:",
@@ -1821,7 +2098,7 @@ export const QUESTIONS: Question[] = [
     incidence: "media",
     difficulty: 1,
   },
-  {
+{
     id: "q46",
     category: "mecanica",
     statement: "O indicador 'TWI' no pneu serve para:",
@@ -1837,7 +2114,7 @@ export const QUESTIONS: Question[] = [
     incidence: "media",
     difficulty: 2,
   },
-  {
+{
     id: "q47",
     category: "mecanica",
     statement: "O nível do óleo do motor deve ser verificado:",
@@ -1853,7 +2130,7 @@ export const QUESTIONS: Question[] = [
     incidence: "baixa",
     difficulty: 1,
   },
-  {
+{
     id: "q48",
     category: "mecanica",
     statement: "A luz vermelha de bateria acesa no painel indica:",
@@ -1869,7 +2146,7 @@ export const QUESTIONS: Question[] = [
     incidence: "media",
     difficulty: 2,
   },
-  {
+{
     id: "q49",
     category: "prioridade",
     statement: "Na via, a ordem de prioridade é:",
@@ -1886,7 +2163,7 @@ export const QUESTIONS: Question[] = [
     incidence: "alta",
     difficulty: 2,
   },
-  {
+{
     id: "q50",
     category: "legislacao",
     statement: "Velocidade máxima padrão em vias urbanas locais (sem sinalização) é:",
@@ -1898,7 +2175,7 @@ export const QUESTIONS: Question[] = [
     incidence: "alta",
     difficulty: 2,
   },
-  {
+{
     id: "q51",
     category: "legislacao",
     statement: "Em rodovias, a velocidade máxima padrão para automóveis (sem sinalização) é:",
@@ -1910,7 +2187,7 @@ export const QUESTIONS: Question[] = [
     incidence: "alta",
     difficulty: 2,
   },
-  {
+{
     id: "q52",
     category: "infracoes",
     statement: "Trafegar acima de 50% da velocidade máxima permitida é infração:",
@@ -1922,7 +2199,7 @@ export const QUESTIONS: Question[] = [
     incidence: "alta",
     difficulty: 2,
   },
-  {
+{
     id: "q53",
     category: "direcao-defensiva",
     statement: "Faróis baixos acesos durante o dia em rodovias são:",
@@ -1939,7 +2216,7 @@ export const QUESTIONS: Question[] = [
     incidence: "media",
     difficulty: 2,
   },
-  {
+{
     id: "q54",
     category: "legislacao",
     statement: "A Permissão para Dirigir (PPD) é válida por:",
@@ -1951,8 +2228,7 @@ export const QUESTIONS: Question[] = [
     incidence: "alta",
     difficulty: 1,
   },
-  // ===================== PEGADINHAS CLÁSSICAS DO DETRAN =====================
-  {
+{
     id: "qp01",
     category: "direcao-defensiva",
     statement:
@@ -1976,7 +2252,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 3,
   },
-  {
+{
     id: "qp02",
     category: "infracoes",
     statement:
@@ -1995,7 +2271,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 3,
   },
-  {
+{
     id: "qp03",
     category: "legislacao",
     statement: "O consumo de álcool pelo condutor causa, entre outros efeitos:",
@@ -2015,7 +2291,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 3,
   },
-  {
+{
     id: "qp04",
     category: "meio-ambiente",
     statement:
@@ -2036,7 +2312,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 3,
   },
-  {
+{
     id: "qp05",
     category: "direcao-defensiva",
     statement:
@@ -2058,7 +2334,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 3,
   },
-  {
+{
     id: "qp06",
     category: "prioridade",
     statement:
@@ -2080,7 +2356,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 3,
   },
-  {
+{
     id: "qp07",
     category: "legislacao",
     statement:
@@ -2102,7 +2378,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 3,
   },
-  {
+{
     id: "qp08",
     category: "primeiros-socorros",
     statement:
@@ -2120,7 +2396,7 @@ export const QUESTIONS: Question[] = [
     incidence: "alta",
     difficulty: 2,
   },
-  {
+{
     id: "qp09",
     category: "primeiros-socorros",
     statement: "O conceito correto de Primeiros Socorros no trânsito consiste em:",
@@ -2138,7 +2414,7 @@ export const QUESTIONS: Question[] = [
     incidence: "alta",
     difficulty: 2,
   },
-  {
+{
     id: "qp10",
     category: "direcao-defensiva",
     statement:
@@ -2159,7 +2435,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 3,
   },
-  {
+{
     id: "qp11",
     category: "prioridade",
     statement:
@@ -2180,7 +2456,7 @@ export const QUESTIONS: Question[] = [
     incidence: "altissima",
     difficulty: 2,
   },
-  {
+{
     id: "qp12",
     category: "legislacao",
     statement:
@@ -2204,7 +2480,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "qp13",
     category: "legislacao",
     statement:
@@ -2226,7 +2502,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 3,
   },
-  {
+{
     id: "qp14",
     category: "direcao-defensiva",
     statement:
@@ -2248,7 +2524,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 3,
   },
-  {
+{
     id: "qp15",
     category: "legislacao",
     statement:
@@ -2270,8 +2546,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  // ===================== MAIS PEGADINHAS — NÍVEL PROVA OFICIAL =====================
-  {
+{
     id: "qp17",
     category: "mecanica",
     statement: "Durante uma viagem em rodovia, o condutor percebe que a luz indicadora de temperatura do motor acende no painel e uma nuvem de vapor começa a sair sob o capô. Diante dessa situação, a conduta correta e mais segura a ser adotada pelo condutor é:",
@@ -2291,7 +2566,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "qp18",
     category: "mecanica",
     statement: "Ao girar a chave de ignição e perceber que o motor não dá partida, mas o painel acende normalmente, o condutor ouve apenas um clique seco. Nessa situação, a causa mais provável do problema está relacionada a:",
@@ -2310,7 +2585,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "qp19",
     category: "mecanica",
     statement: "Considerando a manutenção preventiva e a segurança veicular, analise as afirmativas sobre os pneus e assinale a alternativa correta quanto à obrigação legal do condutor:",
@@ -2330,7 +2605,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "qp20",
     category: "mecanica",
     statement: "Ao dirigir em uma ladeira íngreme e bastante extensa, o condutor nota um cheiro forte de queimado vindo do motor e percebe que o pedal de freio está endurecendo e perdendo eficiência progressivamente. Nessa situação, a explicação técnica mais provável e a atitude correta do condutor são, respectivamente:",
@@ -2350,7 +2625,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 3,
   },
-  {
+{
     id: "qp21",
     category: "mecanica",
     statement: "Após abastecer o veículo com combustível, o condutor nota uma forte vibração no volante e perda de potência ao acelerar em velocidade de cruzeiro. Considerando que o abastecimento foi o último procedimento realizado no veículo e que antes o carro funcionava normalmente, qual das alternativas a seguir descreve a causa mais provável para o problema descrito?",
@@ -2369,7 +2644,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "qp22",
     category: "mecanica",
     statement: "O sistema de arrefecimento do motor é essencial para manter a temperatura de funcionamento adequada. Sobre os cuidados com esse sistema, assinale a alternativa INCORRETA:",
@@ -2388,7 +2663,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "qp23",
     category: "mecanica",
     statement: "Em relação aos sistemas de iluminação e sinalização do veículo previstos no CTB, analise as afirmações e assinale a alternativa que apresenta uma conduta correta do condutor:",
@@ -2408,7 +2683,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "qp24",
     category: "mecanica",
     statement: "O condutor, ao dirigir um veículo equipado com câmbio manual, percebe que a alavanca está vibrando excessivamente e que há dificuldade para engatar as marchas, especialmente a ré e a primeira. O veículo apresenta esses sintomas há alguns dias, que pioraram progressivamente. Nesse contexto, o provável componente com desgaste ou problema é:",
@@ -2427,8 +2702,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  // --- MEIO AMBIENTE ---
-  {
+{
     id: "qp25",
     category: "meio-ambiente",
     statement: "O condutor responsável deve saber como descartar corretamente os resíduos gerados pela manutenção do veículo. Assinale a alternativa que apresenta uma conduta ambientalmente correta com relação ao descarte de óleo lubrificante usado:",
@@ -2448,7 +2722,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "qp26",
     category: "meio-ambiente",
     statement: "Em relação à poluição atmosférica causada por veículos automotores, um dos principais problemas ambientais dos grandes centros urbanos, assinale a alternativa que indica corretamente uma atitude do condutor que contribui para a redução da emissão de poluentes:",
@@ -2467,7 +2741,7 @@ export const QUESTIONS: Question[] = [
     incidence: "media",
     difficulty: 1,
   },
-  {
+{
     id: "qp27",
     category: "meio-ambiente",
     statement: "Dirigindo em uma via movimentada, o condutor nota que o veículo à sua frente está soltando uma quantidade excessiva de fumaça escura pelo escapamento, prejudicando a visibilidade e causando mau cheiro. De acordo com o CTB e as resoluções do CONAMA, essa situação:",
@@ -2487,7 +2761,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "qp28",
     category: "meio-ambiente",
     statement: "Em relação ao descarte de pneus usados e à responsabilidade ambiental do condutor e das empresas do setor, a destinação ambientalmente correta determinada pela legislação brasileira é:",
@@ -2506,7 +2780,7 @@ export const QUESTIONS: Question[] = [
     incidence: "baixa",
     difficulty: 2,
   },
-  {
+{
     id: "qp29",
     category: "meio-ambiente",
     statement: "Próximo a uma reserva ambiental, o condutor percebe que a via está com vegetação alta e ressecada nas margens. Nessa situação, qual atitude é vedada ao condutor por representar risco de incêndio florestal e poluição?",
@@ -2526,7 +2800,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 1,
   },
-  {
+{
     id: "qp30",
     category: "meio-ambiente",
     statement: "Com relação ao ciclo de vida das baterias automotivas (chumbo-ácido), a legislação ambiental brasileira estabelece que a destinação final das baterias inservíveis é de responsabilidade compartilhada. Sobre esse tema, assinale a alternativa correta:",
@@ -2545,8 +2819,7 @@ export const QUESTIONS: Question[] = [
     incidence: "baixa",
     difficulty: 2,
   },
-  // --- INFRAÇÕES ---
-  {
+{
     id: "qp31",
     category: "infracoes",
     statement: "O condutor que avança o sinal vermelho do semáforo comete uma infração classificada como GRAVÍSSIMA, com 7 pontos e multa. No entanto, existe uma circunstância em que essa penalidade é agravada. Assinale a alternativa que indica corretamente essa circunstância:",
@@ -2566,7 +2839,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 1,
   },
-  {
+{
     id: "qp32",
     category: "infracoes",
     statement: "Uma das atitudes mais perigosas ao volante, especialmente comum no trânsito urbano intenso, é o uso do telefone celular enquanto dirige. De acordo com o art. 252 do CTB, segurar ou manusear o celular enquanto o veículo está em movimento é uma infração classificada como:",
@@ -2586,7 +2859,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "qp33",
     category: "infracoes",
     statement: "O uso do cinto de segurança é obrigatório para todos os ocupantes do veículo, conforme determina o CTB. O condutor que deixa de usar o cinto de segurança ou permite que passageiros menores de 18 anos viajem sem o cinto comete, respectivamente:",
@@ -2606,7 +2879,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "qp34",
     category: "infracoes",
     statement: "Em uma rodovia de pista simples, o condutor de um automóvel realiza uma ultrapassagem em local proibido (faixa contínua amarela), sendo flagrado por um agente de trânsito. Considerando as penalidades previstas no CTB para essa infração, assinale a alternativa correta:",
@@ -2626,7 +2899,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "qp35",
     category: "infracoes",
     statement: "O condutor de um veículo envolve-se em um acidente de trânsito com vítimas em uma rodovia. Após a colisão, ele foge do local sem prestar socorro às vítimas, mesmo tendo condições de fazê-lo. De acordo com o CTB e o Código Penal, essa conduta configura:",
@@ -2646,7 +2919,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "qp36",
     category: "infracoes",
     statement: "O art. 162 do CTB lista várias situações relacionadas à habilitação do condutor que configuram infrações de trânsito. Sobre esse tema, assinale a alternativa correta:",
@@ -2666,8 +2939,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 3,
   },
-  // --- PRIMEIROS SOCORROS ---
-  {
+{
     id: "qp37",
     category: "primeiros-socorros",
     statement: "Em um acidente de trânsito envolvendo um motociclista que ficou inconsciente, caído na via e ainda utilizando o capacete. O capacete precisa ser removido para que a vítima possa respirar adequadamente. Nessa situação, o procedimento correto de primeiros socorros determina que o capacete deve ser removido:",
@@ -2686,7 +2958,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 3,
   },
-  {
+{
     id: "qp38",
     category: "primeiros-socorros",
     statement: "Em um acidente de trânsito, um dos ocupantes do veículo sofreu um corte profundo no braço e está sangrando abundantemente (hemorragia externa grave). O socorrista não dispõe de material médico especializado, apenas de itens comuns que estão no veículo. Qual deve ser a conduta imediata do socorrista para controlar a hemorragia?",
@@ -2705,7 +2977,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "qp39",
     category: "primeiros-socorros",
     statement: "Ao chegar em um local de acidente, um socorrista encontra uma vítima caída ao lado de um veículo, consciente mas confusa, com a pele pálida, fria e úmida, respiração rápida e superficial. Considerando que a vítima não apresenta ferimentos visíveis com sangramento ativo, qual a provável condição e qual a conduta correta?",
@@ -2724,7 +2996,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "qp40",
     category: "primeiros-socorros",
     statement: "Uma vítima de atropelamento está caída no asfalto, consciente, queixando-se de forte dor nas costas e dizendo 'não consigo mexer as pernas'. Diante desse quadro, que sugere lesão na coluna vertebral, a conduta do socorrista deve ser:",
@@ -2743,7 +3015,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "qp41",
     category: "primeiros-socorros",
     statement: "Ao presenciar uma vítima tendo uma crise convulsiva (epilepsia) após um acidente de trânsito, o socorrista deve adotar qual procedimento?",
@@ -2762,8 +3034,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  // --- LEGISLAÇÃO ---
-  {
+{
     id: "qp42",
     category: "legislacao",
     statement: "O CTB prevê que adolescentes podem obter autorização para conduzir ciclomotores a partir dos 16 anos. Sobre esse tema, conhecido como ACC (Autorização para Conduzir Ciclomotor), assinale a alternativa correta:",
@@ -2783,7 +3054,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "qp43",
     category: "legislacao",
     statement: "O condutor habilitado na categoria B há 3 anos deseja dirigir veículos das categorias C, D e E. Considerando os requisitos de idade mínima e tempo de habilitação para cada categoria, assinale a alternativa que apresenta as informações corretas:",
@@ -2803,7 +3074,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 3,
   },
-  {
+{
     id: "qp44",
     category: "legislacao",
     statement: "O condutor que exerce atividade remunerada em veículo (EAR), como motoristas de aplicativo, taxistas e caminhoneiros, possui regras específicas no sistema de pontuação do CTB. Sobre a suspensão do direito de dirigir para esses condutores, assinale a alternativa correta:",
@@ -2823,7 +3094,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "qp45",
     category: "legislacao",
     statement: "O condutor que tem sua CNH suspensa por atingir a pontuação limite ou por infringir regras específicas (como excesso de velocidade acima de 50%) deve cumprir certos requisitos para reabilitar-se. Sobre o processo de reabilitação, assinale a alternativa correta:",
@@ -2843,7 +3114,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "qp46",
     category: "legislacao",
     statement: "Em relação à validade da CNH, o CTB estabelece prazos diferentes conforme a faixa etária do condutor. Considerando as alterações introduzidas pela Lei 14.071/2021, assinale a alternativa que indica corretamente os prazos de validade:",
@@ -2863,8 +3134,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  // --- DIREÇÃO DEFENSIVA ---
-  {
+{
     id: "qp47",
     category: "direcao-defensiva",
     statement: "A direção defensiva estabelece três conceitos fundamentais para a segurança no trânsito: distância de reação, distância de frenagem e distância de parada. Sobre esses conceitos, assinale a alternativa correta:",
@@ -2883,7 +3153,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 3,
   },
-  {
+{
     id: "qp48",
     category: "direcao-defensiva",
     statement: "Em um dia de chuva intensa, o veículo do condutor passa por uma poça d'água na pista e repentinamente o volante fica leve, o veículo parece 'flutuar' e o condutor perde o controle direcional. Esse fenômeno é conhecido como aquaplanagem (ou hidroplanagem). Diante dessa situação, a conduta correta do condutor para recuperar o controle do veículo é:",
@@ -2902,7 +3172,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "qp49",
     category: "direcao-defensiva",
     statement: "Ao fazer uma curva em alta velocidade, o condutor sente seu corpo sendo 'empurrado' para o lado de fora da curva, enquanto o veículo tende a sair de frente ou de traseira. Esse fenômeno físico, que influencia diretamente a estabilidade do veículo em curvas, é denominado:",
@@ -2921,7 +3191,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "qp50",
     category: "direcao-defensiva",
     statement: "Em relação ao uso de faróis durante a condução noturna em rodovias, analise as afirmativas e assinale a conduta correta segundo o CTB e os princípios de direção defensiva:",
@@ -2940,7 +3210,7 @@ export const QUESTIONS: Question[] = [
     incidence: "alta",
     difficulty: 1,
   },
-  {
+{
     id: "qp51",
     category: "direcao-defensiva",
     statement: "Um caminhão bitrem está trafegando em uma rodovia de pista dupla pela faixa da direita. Um automóvel se aproxima pela faixa da esquerda para ultrapassá-lo. Considerando os princípios da direção defensiva e as regras do CTB, quais cuidados o condutor do automóvel deve tomar ao realizar essa ultrapassagem?",
@@ -2959,8 +3229,7 @@ export const QUESTIONS: Question[] = [
     incidence: "alta",
     difficulty: 1,
   },
-  // --- PRIORIDADE ---
-  {
+{
     id: "qp52",
     category: "prioridade",
     statement: "Em uma rotatória (roundabout) sem sinalização semafórica, o condutor se aproxima para ingressar na rotatória enquanto outro veículo já está circulando dentro dela. Um terceiro veículo se aproxima pela direita do condutor. De acordo com o CTB, quem tem a preferência de passagem nessa situação?",
@@ -2980,7 +3249,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "qp53",
     category: "prioridade",
     statement: "O condutor de um veículo de emergência (ambulância do SAMU) está em serviço de urgência com a sirene ligada e os faróis intermitentes acesos, aproximando-se de um cruzamento com semáforo fechado para seu sentido. Vários veículos estão parados aguardando o sinal verde. Diante dessa situação, a conduta correta dos condutores dos demais veículos é:",
@@ -3000,7 +3269,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "qp54",
     category: "prioridade",
     statement: "Em uma faixa de pedestres sem semáforo, um pedestre com bengala branca (deficiente visual) está parado na calçada com a bengala estendida, aparentemente aguardando para atravessar. Um veículo se aproxima. De acordo com o CTB e o Estatuto da Pessoa com Deficiência, o condutor deve:",
@@ -3020,8 +3289,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  // --- PLACAS ---
-  {
+{
     id: "qp55",
     category: "placas",
     statement: "Durante uma viagem, o condutor avista uma placa de sinalização vertical de cor azul com um símbolo branco representando um telefone. Mais adiante, outra placa de cor verde indica a distância até a próxima cidade. De acordo com a classificação geral da sinalização vertical do CTB, essas placas pertencem, respectivamente:",
@@ -3040,7 +3308,7 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-  {
+{
     id: "qp56",
     category: "placas",
     statement: "Em uma via urbana, o condutor se depara com uma placa redonda de fundo branco com borda vermelha e um símbolo preto representando uma buzina estilizada com um traço diagonal sobre ela. Mais adiante, outra placa, agora de formato quadrado e fundo amarelo, mostra uma figura de uma criança preta. Assinale a alternativa que classifica corretamente essas placas:",
@@ -3059,20 +3327,17 @@ export const QUESTIONS: Question[] = [
     incidence: "alta",
     trap: true,
     difficulty: 2,
-  },
+  }
 ];
-
-
-
-
-
 export function getRandomizedQuestions(
   count: number,
-  opts?: { categories?: Category[]; seed?: number; exclude?: string[]; placasCount?: number }
+  opts?: { categories?: Category[]; seed?: number; exclude?: string[]; placasCount?: number; questionsList?: Question[] }
 ): Question[] {
-  let pool = opts?.categories?.length
-    ? QUESTIONS.filter((q) => opts.categories!.includes(q.category))
-    : [...QUESTIONS];
+  let pool = opts?.questionsList || [...QUESTIONS];
+  
+  if (opts?.categories?.length) {
+    pool = pool.filter((q) => opts.categories!.includes(q.category));
+  }
 
   if (opts?.exclude?.length) {
     const ex = new Set(opts.exclude);
