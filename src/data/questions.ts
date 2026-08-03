@@ -1026,14 +1026,14 @@ export const QUESTIONS: Question[] = [
 {
     id: "qe60", category: "direcao-defensiva",
     statement:
-      "Ao transitar por uma descida de serra íngreme e de longa extensão com veículo automotor de passeio, qual o procedimento mecânico e de direção defensiva recomendado para o controle seguro da velocidade sem superaquecer o sistema de freios?",
+      "Ao conduzir um veículo automotor em um declive acentuado e de longa extensão em uma rodovia, o condutor constata a necessidade de controlar a velocidade para evitar o superaquecimento do sistema de freios por atrito. Considerando as técnicas de Direção Defensiva e as normas do Código de Trânsito Brasileiro, assinale a conduta CORRETA a ser adotada:",
     options: [
-      "Manter o veículo engrenado em marcha compatível com a velocidade de descida, utilizando a força de retenção dinâmica do motor ('freio motor').",
-      "Desligar a ignição do motor e descer em ponto morto (banguela) para refrigerar as pastilhas de freio por fluxo de ar passivo.",
-      "Utilizar freadas curtas e violentas no pedal de forma contínua acionando as pinças hidráulicas ao extremo.",
-      "Manter o pedal de embreagem pressionado até o fim controlando a velocidade exclusivamente pelo freio de estacionamento."
+      "Engrenar a marcha neutra (ponto morto) para permitir que a força da gravidade atue livremente, acionando o freio de serviço intermitentemente para poupar o sistema hidráulico.",
+      "Transitar com o veículo desengrenado em declive, visando a economia de combustível, efetuando frenagens bruscas apenas quando a velocidade ultrapassar o limite da via.",
+      "Manter o veículo engrenado em marcha reduzida, utilizando a compressão do motor como freio-motor para auxiliar na retenção da velocidade de forma segura.",
+      "Manter o pedal do freio continuamente pressionado ao longo de toda a descida, mantendo uma marcha alta engatada para evitar que o motor atinja rotações elevadas."
     ],
-    correctIndex: 0,
+    correctIndex: 2,
     explanation: "Em descidas longas, deve-se usar o freio motor (veículo engrenado). Descer em ponto morto ou usar apenas o freio de serviço aquece demais as pastilhas/discos, podendo causar perda de frenagem por 'fading'.",
     detailedExplanation: "Em descidas longas, o correto é utilizar o FREIO MOTOR: engate uma marcha reduzida (2ª ou 3ª, dependendo da inclinação) e deixe o próprio motor segurar a velocidade, usando o freio de serviço apenas pontualmente para corrigir a velocidade. Pisar continuamente no freio superaquece o sistema, podendo causar 'fading' (perda de eficiência) ou até falha total dos freios. Descer em ponto morto (banguela) é PROIBIDO (infração gravíssima) e tira o controle do veículo.",
     legalBase: "Art. 252, V CTB", incidence: "altissima", trap: true, difficulty: 3
