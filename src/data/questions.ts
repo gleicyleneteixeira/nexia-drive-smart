@@ -788,10 +788,10 @@ export const QUESTIONS: Question[] = [
     statement:
       "Os motores a combustão interna dos veículos automotores emitem gases nocivos pela queima de derivados de petróleo. Dentre as substâncias listadas, assinale o gás altamente tóxico, sem cheiro e incolor que interfere na oxigenação do sangue humano:",
     options: [
-      "Monóxido de Carbono (CO).",
-      "Dióxido de Carbono (CO2).",
-      "Dióxido de Enxofre (SO2).",
-      "Clorofluorcarboneto (CFC)."
+      "O Monóxido de Carbono (CO), gás liberado pela combustão incompleta que se liga à hemoglobina do sangue e impede a oxigenação adequada do corpo humano.",
+      "O Dióxido de Carbono (CO2), gás naturalmente presente na atmosfera e principal responsável pela intensificação do efeito estufa global.",
+      "O Dióxido de Enxofre (SO2), gás de odor forte e irritante que contribui para a formação da chuva ácida em regiões industrializadas.",
+      "O Clorofluorcarboneto (CFC), composto químico utilizado em sistemas de refrigeração que contribui para a destruição da camada de ozônio."
     ],
     correctIndex: 0,
     explanation: "O Monóxido de Carbono (CO) liga-se de forma estável à hemoglobina do sangue, reduzindo a oxigenação corporal e podendo provocar asfixia e morte.",
@@ -1416,7 +1416,12 @@ export const QUESTIONS: Question[] = [
 {
     id: "qp16", category: "placas",
     statement: "Quanto à classificação geral da sinalização vertical do CTB, qual grupo tem por objetivo principal AUXILIAR/ORIENTAR o condutor com informações de serviços (hospital, posto, telefone)?",
-    options: ["Regulamentação", "Advertência", "Indicação", "Especiais"],
+    options: [
+      "Sinalização de Regulamentação, que tem por finalidade informar aos usuários as condições, proibições, obrigações ou restrições no uso das vias.",
+      "Sinalização de Advertência, que tem por finalidade alertar os usuários das condições potencialmente perigosas ou obstáculos existentes na via.",
+      "Sinalização de Indicação, que tem por finalidade identificar as vias e os locais de interesse, bem como orientar os condutores sobre os destinos e os serviços auxiliares disponíveis.",
+      "Sinalização de Obras e Especiais, que tem por finalidade informar sobre os trabalhos executados na pista e demais eventos temporários."
+    ],
     correctIndex: 2,
     explanation: "Sinalização de Indicação informa serviços auxiliares e atrativos turísticos (placas azuis).",
     detailedExplanation: "A sinalização de INDICAÇÃO (série I) tem o objetivo de orientar e auxiliar o condutor. Divide-se em: INDICAÇÃO DE SERVIÇOS AUXILIARES (placas AZUIS com símbolo branco — hospital, posto de gasolina, telefone, restaurante, hospedagem) e INDICAÇÃO DE ORIENTAÇÃO DE DESTINO (placas VERDES para orientação de cidades e distâncias, MARRONS para atrativos turísticos e BRANCAS para identificação de logradouros). Diferente das placas de regulamentação (que obrigam) e advertência (que alertam), as de indicação apenas informam.",
@@ -1766,10 +1771,10 @@ export const QUESTIONS: Question[] = [
     statement:
       "No que diz respeito à sinalização vertical, as placas de identificação e orientação de destino, que fazem parte do grupo de sinalização de indicação, possuem cores de fundo padronizadas. Em rodovias federais e estaduais no Brasil, essas placas são predominantemente:",
     options: [
-      "Amarelas e pretas.",
-      "Vermelhas e brancas.",
-      "Verdes e brancas (ou azuis e brancas).",
-      "Marrons e brancas."
+      "Fundo amarelo com caracteres pretos, destacando o nome das cidades próximas da rodovia.",
+      "Fundo vermelho com caracteres brancos, indicando a proibição de prosseguimento na via.",
+      "Fundo verde com caracteres brancos, podendo também ser azuis com caracteres brancos quando se destinam à orientação de destino.",
+      "Fundo marrom com caracteres brancos, reservadas exclusivamente às orientações de caráter turístico."
     ],
     correctIndex: 2,
     explanation: "Placas de indicação física e de orientação de destino usam fundo verde ou azul com caracteres brancos.",
@@ -1858,13 +1863,14 @@ export const QUESTIONS: Question[] = [
 {
     id: "p1",
     category: "placas",
-    statement: "Observando a placa abaixo, o que o condutor deve fazer ao se aproximar dela?",
+    statement:
+      "Ao trafegar por uma via urbana desconhecida, o condutor se aproxima de uma interseção e avista a placa de sinalização representada abaixo, posicionada junto à faixa de retenção pintada no pavimento. Considerando a classificação e o significado das placas de regulamentação do Código de Trânsito Brasileiro (CTB), assinale a conduta que o condutor deve adotar ao se deparar com essa placa:",
     placa: "R-1",
     options: [
-      "Reduzir a velocidade e ceder passagem aos veículos da via preferencial",
-      "Parar o veículo completamente antes da faixa de retenção, mesmo que não haja ninguém",
-      "Reduzir a velocidade e estar pronto para parar se necessário",
-      "Acelerar para ultrapassar antes que outro veículo chegue",
+      "Reduzir a velocidade e ceder a preferência de passagem aos veículos que circulam pela via transversal, sem necessidade de parada total.",
+      "Parar o veículo completamente antes da faixa de retenção, mesmo que não haja nenhum veículo ou pedestre se aproximando, observando o trânsito antes de prosseguir.",
+      "Reduzir a velocidade e manter-se pronto para parar apenas se houver veículos se aproximando pelo cruzamento à frente.",
+      "Acelerar o veículo para cruzar a interseção antes que qualquer outro veículo alcance o cruzamento, priorizando a fluidez do tráfego."
     ],
     correctIndex: 1,
     explanation: "R-1 PARE — octogonal, vermelha. Obriga parada total do veículo.",
@@ -1878,13 +1884,14 @@ export const QUESTIONS: Question[] = [
 {
     id: "p2",
     category: "placas",
-    statement: "Ao deparar-se com esta placa, qual é o comportamento correto do condutor?",
+    statement:
+      "Um condutor aproxima-se de uma via transversal com a intenção de nela ingressar e avista, junto à interseção, a placa de regulamentação representada abaixo. Considerando a diferença entre os sinais de regulamentação do Código de Trânsito Brasileiro (CTB), assinale o comportamento CORRETO a ser adotado pelo condutor ao se deparar com essa placa:",
     placa: "R-2",
     options: [
-      "Parar totalmente antes de entrar na via, como se fosse um PARE",
-      "Reduzir a velocidade e ceder passagem aos veículos que trafegam na via preferencial",
-      "Manter a velocidade, pois a placa indica apenas atenção",
-      "Acelerar para ingressar na via antes de outros veículos",
+      "Parar totalmente o veículo antes de ingressar na via, exatamente como ocorre na placa de parada obrigatória PARE.",
+      "Reduzir a velocidade de forma segura e ceder a preferência de passagem aos veículos que já trafegam pela via preferencial, prosseguindo quando houver espaço seguro.",
+      "Manter a velocidade constante, pois a placa possui apenas caráter informativo sobre as condições da via à frente.",
+      "Acelerar o veículo para ingressar na via antes dos demais veículos, aproveitando qualquer abertura momentânea no fluxo."
     ],
     correctIndex: 1,
     explanation: "R-2 Dê a Preferência — triângulo invertido, branca com borda vermelha.",
@@ -1899,13 +1906,14 @@ export const QUESTIONS: Question[] = [
 {
     id: "p3",
     category: "placas",
-    statement: "Sobre o significado desta placa, assinale a alternativa CORRETA:",
+    statement:
+      "Ao procurar uma vaga para estacionar em uma rua central de movimento intenso, um condutor avista, afixada em um poste, a placa de regulamentação representada abaixo. Considerando o significado das placas de restrição de estacionamento do Código de Trânsito Brasileiro (CTB), assinale a alternativa que descreve CORRETAMENTE o que essa placa determina:",
     placa: "R-6a",
     options: [
-      "É proibido qualquer tipo de parada, inclusive para embarque e desembarque",
-      "É proibido deixar o veículo estacionado, mas a parada rápida para embarque/desembarque é permitida",
-      "É permitido estacionar apenas nos horários indicados abaixo da placa",
-      "É obrigatório estacionar apenas do lado direito da via",
+      "É proibida qualquer tipo de parada no trecho, inclusive a parada rápida para embarque ou desembarque de passageiros.",
+      "É proibido estacionar o veículo no trecho sinalizado, porém a parada rápida para embarque ou desembarque de passageiros permanece permitida.",
+      "É permitido estacionar no trecho apenas nos horários indicados em placa complementar fixada abaixo do sinal.",
+      "É obrigatório estacionar o veículo somente no lado direito da via, mantendo a mão de direção preferencial."
     ],
     correctIndex: 1,
     explanation:
@@ -1922,13 +1930,14 @@ export const QUESTIONS: Question[] = [
 {
     id: "p4",
     category: "placas",
-    statement: "Qual a diferença prática desta placa em relação à placa com a letra 'E' cortada?",
+    statement:
+      "Durante o trajeto pelo centro da cidade, um condutor observa duas placas de regulamentação diferentes afixadas em trechos distintos da via: uma com a letra 'E' cortada por um traço diagonal e outra com um 'X' vermelho, representada abaixo. Considerando a diferença prática entre essas sinalizações, assinale a alternativa que explica corretamente o significado da placa apresentada:",
     placa: "R-6b",
     options: [
-      "Não há diferença — ambas proíbem apenas estacionar",
-      "Esta placa proíbe qualquer parada, seja para estacionar, embarcar ou desembarcar passageiros",
-      "Esta placa proíbe apenas a parada de veículos grandes",
-      "Esta placa indica que o estacionamento é permitido apenas à noite",
+      "A placa tem o mesmo significado da placa com a letra 'E' cortada, proibindo apenas o estacionamento prolongado no trecho.",
+      "A placa é mais restritiva e proíbe qualquer tipo de parada no trecho, inclusive a parada rápida para embarque, desembarque ou carga e descarga.",
+      "A placa proíbe apenas a parada de veículos pesados e de grande porte, liberando a parada de veículos de passeio.",
+      "A placa indica que o estacionamento é permitido apenas no período noturno, entre 22h e 6h, nos trechos por ela sinalizados."
     ],
     correctIndex: 1,
     explanation: "R-6b Proibido Parar e Estacionar — X vermelho em círculo branco.",
@@ -1941,13 +1950,14 @@ export const QUESTIONS: Question[] = [
 {
     id: "p5",
     category: "placas",
-    statement: "Ao ver esta placa, o que significa para o condutor que ultrapassar o valor indicado nela?",
+    statement:
+      "Ao trafegar por uma avenida arterial, o condutor avista sobre a pista a placa de regulamentação representada abaixo, que estabelece o valor numérico máximo permitido para a via. Considerando as consequências legais do descumprimento das placas de regulamentação de velocidade, assinale a alternativa que indica corretamente o que ocorre com o condutor que ultrapassa o valor indicado na placa:",
     placa: "R-19",
     options: [
-      "Receberá apenas uma advertência verbal da autoridade de trânsito",
-      "Cometerá infração que varia de média a gravíssima conforme o grau de excesso de velocidade",
-      "Receberá multa fixa independente do quanto excedeu o limite",
-      "Terá o veículo apreendido imediatamente",
+      "O condutor receberá apenas uma advertência verbal da autoridade de trânsito, sem qualquer penalidade pecuniária na primeira ocorrência.",
+      "O condutor cometerá infração de trânsito cuja gravidade varia conforme o excesso: média até 20%, grave de 20% a 50% e gravíssima acima de 50% do limite.",
+      "O condutor receberá uma multa de valor fixo e único, independentemente de quanto excedeu o limite máximo regulamentado da via.",
+      "O condutor terá seu veículo apreendido imediatamente no ato da fiscalização, sem possibilidade de regularização posterior."
     ],
     correctIndex: 1,
     explanation: "R-19 Velocidade Máxima Permitida — limite que NÃO pode ser ultrapassado.",
@@ -1963,13 +1973,14 @@ export const QUESTIONS: Question[] = [
 {
     id: "p6",
     category: "placas",
-    statement: "Ao avistar esta placa, qual ação o condutor deve tomar com antecedência?",
+    statement:
+      "Ao dirigir por uma estrada serrana de pista estreita, o condutor avista a placa de advertência representada abaixo, posicionada alguns metros antes de um trecho sinuoso. Considerando o significado das placas de advertência do Código de Trânsito Brasileiro (CTB), assinale a ação que o condutor deve adotar com a devida antecedência ao se deparar com essa sinalização:",
     placa: "A-1a",
     options: [
-      "Aumentar a velocidade para atravessar a curva rapidamente",
-      "Manter a velocidade constante, pois a placa é apenas informativa",
-      "Reduzir a velocidade antes de entrar na curva acentuada à esquerda",
-      "Acender as setas e mudar de faixa imediatamente",
+      "Aumentar a velocidade para atravessar o trecho sinuoso rapidamente, reduzindo o tempo de exposição ao risco.",
+      "Manter a velocidade constante, pois a placa possui apenas caráter informativo sobre a geometria da via à frente.",
+      "Reduzir a velocidade de forma gradual e segura antes de entrar na curva acentuada à esquerda, evitando o uso do freio no interior da curva.",
+      "Acender a seta e mudar de faixa imediatamente para se posicionar na pista contrária, garantindo um melhor raio de curva."
     ],
     correctIndex: 2,
     explanation: "A-1a Curva Acentuada à Esquerda — advertência (losango amarelo).",
@@ -1982,13 +1993,14 @@ export const QUESTIONS: Question[] = [
 {
     id: "p7",
     category: "placas",
-    statement: "Que alerta esta placa transmite ao condutor que se aproxima do local?",
+    statement:
+      "Ao se aproximar de um trecho urbano de grande circulação de pessoas, o condutor avista no canteiro central a placa de advertência representada abaixo, sinalizando uma situação adiante na via. Considerando o significado das placas de advertência do Código de Trânsito Brasileiro (CTB) e a necessidade de proteção aos usuários mais vulneráveis da via, assinale a alternativa que indica o alerta transmitido por essa placa:",
     placa: "A-32b",
     options: [
-      "Que há uma escola próxima e a velocidade deve ser reduzida drasticamente",
-      "Que há uma faixa de travessia de pedestres à frente e ele deve estar pronto para parar e dar preferência",
-      "Que é proibido o trânsito de pedestres naquele trecho",
-      "Que há uma passagem de animais silvestres na via",
+      "Que há uma instituição de ensino nas proximidades e que a velocidade deve ser drasticamente reduzida nos horários de entrada e saída de alunos.",
+      "Que há uma faixa de travessia de pedestres à frente e que o condutor deve estar pronto para parar e conceder a preferência de passagem aos pedestres.",
+      "Que é proibido o trânsito de pedestres naquele trecho da via, devendo o condutor manter a velocidade de cruzeiro.",
+      "Que há uma passagem de animais silvestres na pista, exigindo atenção redobrada em períodos de baixa visibilidade."
     ],
     correctIndex: 1,
     explanation:
@@ -2002,13 +2014,14 @@ export const QUESTIONS: Question[] = [
 {
     id: "p8",
     category: "placas",
-    statement: "Ao ver esta placa, o que o condutor deve considerar sobre o comportamento no local?",
+    statement:
+      "Ao trafegar por uma via que margeia uma instituição de ensino em horário de entrada dos alunos, o condutor avista a placa de advertência representada abaixo. Considerando o significado dessa sinalização e as práticas de direção defensiva, assinale a alternativa que indica o comportamento que o condutor deve adotar nesse local:",
     placa: "A-33a",
     options: [
-      "Que pode manter a velocidade, pois é apenas uma indicação de local educacional",
-      "Que deve reduzir a velocidade e estar atento à entrada e saída de crianças, comum em horários de aula",
-      "Que é proibido o trânsito de veículos motorizados naquele trecho",
-      "Que deve parar obrigatoriamente em qualquer condição",
+      "Manter a velocidade habitual, pois a placa possui apenas caráter informativo sobre a existência de um estabelecimento educacional na região.",
+      "Reduzir a velocidade, redobrar a atenção e estar preparado para parar diante da entrada e saída de crianças, especialmente nos horários de início e término das aulas.",
+      "Considerar o trecho como totalmente interditado ao trânsito de veículos motorizados em qualquer horário do dia.",
+      "Parar obrigatoriamente o veículo em qualquer condição, ainda que não haja crianças ou pedestres atravessando a via."
     ],
     correctIndex: 1,
     explanation: "A-33a Área Escolar — duas crianças, advertência.",
@@ -2020,13 +2033,14 @@ export const QUESTIONS: Question[] = [
 {
     id: "p9",
     category: "placas",
-    statement: "Considerando o significado desta placa, quais manobras são proibidas ao condutor?",
+    statement:
+      "Em uma interseção urbana, o condutor avista afixada a placa de regulamentação representada abaixo, que impõe uma obrigação de trajetória aos veículos. Considerando a classificação das placas de regulamentação do Código de Trânsito Brasileiro (CTB) e o significado específico dessa sinalização, assinale a alternativa que indica corretamente quais manobras são permitidas ou proibidas ao condutor:",
     placa: "R-25d",
     options: [
-      "Não pode parar, mas pode virar à direita ou à esquerda",
-      "Não pode virar à direita nem à esquerda — só pode seguir em frente",
-      "Não pode ultrapassar outros veículos, mas pode mudar de faixa",
-      "Não pode estacionar, mas pode fazer qualquer manobra",
+      "O condutor não pode parar o veículo no trecho, porém pode realizar conversão tanto à direita quanto à esquerda no cruzamento.",
+      "O condutor não pode virar à direita nem à esquerda, sendo obrigado a prosseguir em frente seguindo a trajetória imposta pela placa.",
+      "O condutor não pode ultrapassar outros veículos no trecho, mas permanece livre para realizar mudanças de faixa conforme a necessidade.",
+      "O condutor não pode estacionar o veículo, permanecendo autorizado a realizar qualquer manobra de conversão no cruzamento."
     ],
     correctIndex: 1,
     explanation: "R-25d Siga em Frente Obrigatório — regulamentação azul circular.",
@@ -2039,13 +2053,14 @@ export const QUESTIONS: Question[] = [
 {
     id: "p10",
     category: "placas",
-    statement: "Ao encontrar esta placa em uma via, o que ela comunica ao condutor?",
+    statement:
+      "Ao circular por uma via urbana em um bairro comercial, o condutor avista a placa de sinalização representada abaixo, afixada em um ponto de orientação do trajeto. Considerando a classificação da sinalização vertical do Código de Trânsito Brasileiro (CTB), assinale a alternativa que indica corretamente o que essa placa comunica ao condutor:",
     placa: "I-Hospital",
     options: [
-      "Que existe um posto de abastecimento à frente",
-      "Que há um hospital nas proximidades — local informativo, sem obrigação de ação",
-      "Que o trânsito está interditado por razões hospitalares",
-      "Que o condutor deve estacionar e aguardar liberação do hospital",
+      "Que existe um posto de abastecimento de combustível à frente, indicando a localização de um serviço auxiliar da via.",
+      "Que há um hospital nas proximidades, tratando-se de uma placa de indicação de serviço auxiliar de caráter meramente informativo, sem impor qualquer obrigação ao condutor.",
+      "Que o trânsito está interditado naquele trecho por razões de emergência hospitalar, sendo obrigatório desviar do local.",
+      "Que o condutor deve estacionar o veículo e aguardar a liberação do tráfego pelos funcionários do hospital."
     ],
     correctIndex: 1,
     explanation: "Placa de Indicação de Serviço Auxiliar — Hospital.",
@@ -2057,8 +2072,14 @@ export const QUESTIONS: Question[] = [
 {
     id: "q26",
     category: "legislacao",
-    statement: "A idade mínima para obter a CNH nas categorias A e B é de:",
-    options: ["16 anos", "17 anos", "18 anos", "21 anos"],
+    statement:
+      "Um jovem candidato, recém-completando a maioridade civil e penal, decide iniciar o processo de habilitação para conduzir veículos das categorias A e B. Ao dar entrada no processo junto a um Centro de Formação de Condutores (CFC), ele questiona o instrutor sobre o requisito de idade mínima imposto pelo Código de Trânsito Brasileiro (CTB) para pleitear essas categorias. Assinale a alternativa que apresenta corretamente esse requisito legal:",
+    options: [
+      "Completar 16 anos de idade, desde que o candidato seja emancipado por sentença judicial e apresente autorização expressa dos responsáveis legais perante o cartório.",
+      "Completar 17 anos de idade, condicionado à aprovação prévia em avaliação psicológica de maturidade emocional realizada pelo órgão executivo de trânsito.",
+      "Completar 18 anos de idade, ser penalmente imputável, saber ler e escrever, possuir documento de identidade e CPF e ser aprovado nos exames de aptidão física e mental e nas avaliações teórica e prática.",
+      "Completar 21 anos de idade, exigência que se aplica de forma idêntica a todas as categorias de habilitação, inclusive para automóveis de passeio e motocicletas."
+    ],
     correctIndex: 2,
     explanation: "18 anos completos, saber ler e escrever, e possuir CPF.",
     detailedExplanation:
@@ -2070,12 +2091,13 @@ export const QUESTIONS: Question[] = [
 {
     id: "q27",
     category: "legislacao",
-    statement: "Para obter a categoria D (ônibus/vans escolares), o condutor precisa:",
+    statement:
+      "Um condutor habilitado na categoria B pretende ampliar sua habilitação para a categoria D, com o objetivo de conduzir veículos de transporte coletivo de passageiros, como ônibus e vans de transporte escolar. Considerando os requisitos de idade, tempo de habilitação e conduta previstos no Código de Trânsito Brasileiro (CTB) e na Resolução CONTRAN aplicável, assinale a alternativa que apresenta corretamente as condições exigidas para a obtenção da categoria D:",
     options: [
-      "Ter 18 anos e CNH B há 1 ano",
-      "Ter no mínimo 21 anos, CNH C/B por 2 anos e não ter cometido infração grave nos últimos 12 meses",
-      "Apenas pagar a taxa do DETRAN",
-      "Ter 25 anos e curso superior",
+      "Ter completado 18 anos e estar habilitado na categoria B há pelo menos 1 ano, independentemente de ter cometido infrações de trânsito nesse período.",
+      "Ter no mínimo 21 anos, estar habilitado há pelo menos 2 anos na categoria B (ou 1 ano na categoria C) e não ter cometido infração grave ou gravíssima nos últimos 12 meses.",
+      "Apenas efetuar o pagamento das taxas do órgão executivo de trânsito e apresentar comprovante de residência, dispensando novos exames por já possuir habilitação anterior.",
+      "Ter completado 25 anos e possuir curso superior em qualquer área do conhecimento, requisito obrigatório para todos os condutores de veículos de transporte coletivo."
     ],
     correctIndex: 1,
     explanation: "D = 21 anos + habilitado há pelo menos 2 anos na B (ou 1 ano na C) + ficha limpa.",
@@ -2087,12 +2109,13 @@ export const QUESTIONS: Question[] = [
 {
     id: "q28",
     category: "legislacao",
-    statement: "O condutor é considerado infrator reincidente quando:",
+    statement:
+      "Durante a análise do prontuário de um condutor, o órgão executivo de trânsito identifica a ocorrência de autuações repetidas e precisa aplicar corretamente a regra da reincidência prevista no Código de Trânsito Brasileiro (CTB), que agrava a penalidade com a cobrança de multa em dobro. Considerando o conceito legal de reincidência estabelecido pelo CTB, assinale a alternativa que define corretamente quando o condutor é considerado reincidente:",
     options: [
-      "Comete duas infrações em datas distintas",
-      "Comete a mesma infração no período de 12 meses",
-      "Acumula 20 pontos no prontuário",
-      "É autuado em outro estado",
+      "Quando comete duas ou mais infrações de naturezas distintas em datas diferentes, independentemente de se tratar do mesmo tipo de infração.",
+      "Quando comete a mesma infração de trânsito por mais de uma vez no período de 12 meses, aplicando-se a multa em dobro na nova autuação.",
+      "Quando acumula determinada pontuação em seu prontuário, bastando atingir o limite de pontos previsto em lei para ser considerado reincidente.",
+      "Quando é autuado pela primeira vez em uma unidade federativa diferente daquela em que obteve sua habilitação, ainda que seja a primeira infração."
     ],
     correctIndex: 1,
     explanation: "Reincidência = mesma infração dentro de 12 meses, com multa em dobro.",
@@ -2104,12 +2127,13 @@ export const QUESTIONS: Question[] = [
 {
     id: "q29",
     category: "legislacao",
-    statement: "Em 2021, o CTB passou a permitir suspensão do direito de dirigir a partir de:",
+    statement:
+      "Um condutor comum deseja saber a partir de qual limite de pontuação no período de doze meses seu direito de dirigir pode ser suspenso, considerando as alterações introduzidas no Código de Trânsito Brasileiro (CTB) pela Lei 14.071/2021. Assinale a alternativa que apresenta corretamente o atual sistema de limites de pontos para a instauração do processo de suspensão do direito de dirigir:",
     options: [
-      "20 pontos em 12 meses",
-      "Pontuação variável: 20, 30 ou 40 conforme natureza das infrações",
-      "Sempre 14 pontos",
-      "Apenas após cometer uma gravíssima",
+      "O limite é fixo em 20 pontos no período de doze meses, independentemente da natureza ou da gravidade das infrações cometidas pelo condutor.",
+      "O limite varia conforme as infrações cometidas: 40 pontos quando não houver nenhuma infração gravíssima, 30 pontos com uma gravíssima e 20 pontos com duas ou mais gravíssimas no período.",
+      "O limite é sempre de 14 pontos para qualquer condutor, independentemente da categoria de habilitação ou da natureza das infrações acumuladas.",
+      "A suspensão por pontuação somente ocorre após o condutor cometer ao menos uma infração de natureza gravíssima, não havendo limite de pontos nos demais casos."
     ],
     correctIndex: 1,
     explanation:
@@ -2124,12 +2148,13 @@ export const QUESTIONS: Question[] = [
 {
     id: "q30",
     category: "legislacao",
-    statement: "Documentos obrigatórios para circular com um veículo são:",
+    statement:
+      "Durante uma fiscalização de rotina em rodovia federal, um condutor é abordado por agentes que solicitam a apresentação dos documentos de porte obrigatório relativos a ele próprio e ao veículo. Considerando as disposições do Código de Trânsito Brasileiro (CTB) e das resoluções do CONTRAN sobre documentação, assinale a alternativa que indica corretamente quais documentos o condutor deve apresentar para circular legalmente:",
     options: [
-      "CNH e CRLV (físicos ou digitais)",
-      "Somente o CRLV",
-      "Apenas a CNH",
-      "CRLV e comprovante de IPVA pago em papel",
+      "A Carteira Nacional de Habilitação (CNH) ou a Permissão para Dirigir (PPD) e o Certificado de Registro e Licenciamento do Veículo (CRLV), sendo igualmente válidas as versões física e digital (CDT e CRLV-e).",
+      "Apenas o Certificado de Registro e Licenciamento do Veículo (CRLV), pois a habilitação do condutor é verificada exclusivamente pelo sistema informatizado do agente.",
+      "Somente a Carteira Nacional de Habilitação (CNH), uma vez que o licenciamento do veículo é consultado em tempo real sem necessidade de apresentação documental.",
+      "O CRLV acompanhado do comprovante impresso de pagamento do IPVA, sendo dispensada a apresentação da CNH durante a fiscalização."
     ],
     correctIndex: 0,
     explanation: "CNH + CRLV em dia. Versões digitais (CDT/CRLV-e) têm o mesmo valor legal.",
@@ -2141,8 +2166,14 @@ export const QUESTIONS: Question[] = [
 {
     id: "q31",
     category: "infracoes",
-    statement: "Estacionar em vaga de pessoa com deficiência sem credencial é infração:",
-    options: ["Leve", "Média", "Grave", "Gravíssima"],
+    statement:
+      "Em um estacionamento de shopping center aberto ao público, um condutor deixa seu veículo em uma vaga sinalizada para Pessoas com Deficiência (PCD), sem exibir sobre o painel a credencial de estacionamento emitida pelo órgão de trânsito competente. Considerando a classificação das infrações prevista no Código de Trânsito Brasileiro (CTB), assinale a alternativa que indica corretamente a natureza dessa infração e suas consequências:",
+    options: [
+      "Infração leve, punida apenas com advertência verbal ou por escrito, sem acúmulo de pontos na CNH e sem qualquer medida administrativa sobre o veículo.",
+      "Infração média, punida com multa e acúmulo de 4 pontos na CNH, sem previsão de remoção do veículo do local de estacionamento.",
+      "Infração grave, punida com multa e acúmulo de 5 pontos, podendo ser convertida em advertência caso a vaga estivesse desocupada por longo período.",
+      "Infração gravíssima, punida com multa e acúmulo de 7 pontos na CNH, além da medida administrativa de remoção do veículo."
+    ],
     correctIndex: 3,
     explanation: "Gravíssima — 7 pontos e multa. Mesmo vale para vaga de idoso (grave).",
     detailedExplanation: "Estacionar em vaga reservada a pessoa com deficiência sem a credencial de estacionamento (que deve estar visível sobre o painel) é infração GRAVÍSSIMA: 7 pontos na CNH e multa. Já estacionar em vaga de idoso (pessoas com 60+) é infração GRAVE (5 pontos). A diferença de gravidade existe porque as vagas para PCD têm proteção legal mais rigorosa. A credencial é emitida pelo órgão de trânsito municipal e deve estar sempre visível. Atenção: mesmo que a vaga esteja vazia, não é permitido usar sem a credencial.",
@@ -2153,8 +2184,14 @@ export const QUESTIONS: Question[] = [
 {
     id: "q32",
     category: "infracoes",
-    statement: "Dirigir sem CNH ou Permissão para Dirigir é infração:",
-    options: ["Leve", "Média", "Grave", "Gravíssima"],
+    statement:
+      "Durante uma operação de fiscalização em via urbana, um condutor é abordado e, ao solicitar seus documentos, os agentes constatam que ele nunca obteve Carteira Nacional de Habilitação (CNH) nem Permissão para Dirigir (PPD), conduzindo o veículo sem qualquer habilitação. Considerando a classificação punitiva do Código de Trânsito Brasileiro (CTB), assinale a alternativa que indica corretamente a natureza dessa infração e as medidas administrativas aplicáveis:",
+    options: [
+      "Infração leve, punida com advertência por escrito na primeira autuação, sem multa e sem retenção do veículo.",
+      "Infração média, punida com multa e acúmulo de 4 pontos, permitindo que o condutor prossiga mediante assinatura de termo de compromisso.",
+      "Infração grave, punida com multa e acúmulo de 5 pontos, sem previsão de retenção do veículo por se tratar de conduta meramente documental.",
+      "Infração gravíssima, punida com multa multiplicada por três vezes e retenção do veículo até a apresentação de condutor habilitado, podendo ainda configurar crime de trânsito."
+    ],
     correctIndex: 3,
     explanation: "Gravíssima — multa x3, e pode configurar crime se gerar perigo.",
     detailedExplanation: "Dirigir sem ser habilitado (sem CNH ou PPD) é infração GRAVÍSSIMA com multa multiplicada por 3 (fator 3). Além disso, se o ato de dirigir sem habilitação gerar perigo de dano a alguém, pode configurar o crime previsto no art. 309 do CTB, com detenção de 6 meses a 1 ano. Se o condutor tem CNH, mas não a porta no momento da abordagem, é infração LEVE (art. 232). A prova costuma cobrar essa diferença: dirigir SEM CNH é gravíssima, mas dirigir SEM PORTAR a CNH é leve. Fique atento!",
@@ -2165,8 +2202,14 @@ export const QUESTIONS: Question[] = [
 {
     id: "q33",
     category: "infracoes",
-    statement: "Transportar criança menor de 10 anos no banco da frente é infração:",
-    options: ["Leve", "Média", "Grave", "Gravíssima"],
+    statement:
+      "Ao planejar um passeio em família com seu automóvel, o condutor pretende acomodar sua filha de 6 anos no banco dianteiro do passageiro, sob a alegação de que ela se sente mais confortável e tem visão privilegiada da viagem. Considerando as normas de segurança para o transporte de crianças previstas no Código de Trânsito Brasileiro (CTB) e na Resolução CONTRAN aplicável, assinale a alternativa que indica corretamente a classificação da infração cometida nessa situação:",
+    options: [
+      "Infração leve, punida com multa e acúmulo de 3 pontos, sem qualquer medida administrativa sobre o veículo.",
+      "Infração média, punida com multa e acúmulo de 4 pontos, sendo permitido prosseguir com a criança acomodada no banco dianteiro.",
+      "Infração grave, punida com multa e acúmulo de 5 pontos, sem necessidade de retenção ou remoção do veículo.",
+      "Infração gravíssima, punida com multa e acúmulo de 7 pontos na CNH, pois crianças menores de 10 anos devem ser transportadas no banco traseiro em dispositivo de retenção adequado."
+    ],
     correctIndex: 3,
     explanation: "Gravíssima — crianças até 10 anos vão atrás, em dispositivo adequado à idade.",
     detailedExplanation: "Crianças com até 10 anos de idade (ou que ainda não tenham atingido 1,45 m de altura) DEVEM ser transportadas no banco traseiro, em dispositivo de retenção adequado conforme a faixa etária: bebê conforto (até 1 ano), cadeirinha (1 a 4 anos), assento de elevação (4 a 7,5 anos) e cinto de segurança (após). A infração por descumprir essa regra é GRAVÍSSIMA: 7 pontos na CNH e multa. Muitos alunos erram achando que é 'grave', mas a banca classifica como gravíssima justamente pela gravidade do risco à vida da criança.",
@@ -2179,12 +2222,13 @@ export const QUESTIONS: Question[] = [
 {
     id: "q34",
     category: "infracoes",
-    statement: "Disputar corrida (racha) em via pública é:",
+    statement:
+      "Dois condutores são flagrados pela Polícia Rodoviária realizando uma disputa de velocidade e arrancadas rápidas em via pública aberta à circulação, colocando em risco a segurança dos demais usuários da via. Considerando a gravidade dessa conduta e as penalidades previstas no Código de Trânsito Brasileiro (CTB), assinale a alternativa que classifica corretamente a infração cometida e suas consequências legais:",
     options: [
-      "Infração média",
-      "Infração grave",
-      "Infração gravíssima e crime de trânsito",
-      "Apenas advertência verbal",
+      "Infração média, punida com multa e acúmulo de 4 pontos na CNH, sem previsão de recolhimento de documentos ou remoção do veículo.",
+      "Infração grave, punida com multa e acúmulo de 5 pontos, com possibilidade de conversão em advertência caso não haja danos materiais.",
+      "Infração gravíssima com multa multiplicada por dez vezes, suspensão do direito de dirigir, recolhimento da CNH e remoção do veículo, além de configurar crime de trânsito.",
+      "Apenas uma advertência verbal do agente de trânsito, desde que a disputa seja encerrada imediatamente e sem vítimas."
     ],
     correctIndex: 2,
     explanation: "Gravíssima x10 + suspensão da CNH + crime (art. 308 do CTB, detenção 6 meses a 3 anos).",
@@ -2196,12 +2240,13 @@ export const QUESTIONS: Question[] = [
 {
     id: "q35",
     category: "direcao-defensiva",
-    statement: "Os 'pontos cegos' do veículo são:",
+    statement:
+      "Durante uma aula prática de direção defensiva, o instrutor orienta o aluno habilitando sobre a importância de realizar a verificação visual lateral, por cima do ombro, antes de qualquer mudança de faixa, mesmo com os retrovisores corretamente ajustados. O instrutor explica que existe uma região ao redor do veículo que não é captada pelos espelhos convencionais. Assinale a alternativa que define corretamente o que são os denominados 'pontos cegos' do veículo:",
     options: [
-      "Locais onde a visão é totalmente obstruída pelas colunas e fora do alcance dos retrovisores",
-      "Áreas escuras dentro do carro à noite",
-      "Pontos de desgaste do pneu",
-      "Manchas do para-brisa",
+      "Regiões laterais e traseiras ao redor do veículo que não são visíveis pelos retrovisores interno e externos, em geral obstruídas pelas colunas da carroceria, exigindo verificação visual lateral direta antes de manobrar.",
+      "Áreas internas do habitáculo que permanecem na penumbra durante o período noturno, dificultando a visualização dos passageiros pelo condutor.",
+      "Pontos específicos da banda de rodagem dos pneus onde o desgaste ocorre de forma acelerada, indicando a necessidade de balanceamento e rodízio.",
+      "Manchas ou opacidades no para-brisa que prejudicam a visibilidade frontal quando o veículo é exposto à incidência direta dos raios solares."
     ],
     correctIndex: 0,
     explanation: "São áreas não visíveis pelos espelhos — sempre olhe por cima do ombro antes de mudar de faixa.",
@@ -2212,12 +2257,13 @@ export const QUESTIONS: Question[] = [
 {
     id: "q36",
     category: "direcao-defensiva",
-    statement: "Em uma descida íngreme e longa, o procedimento mais seguro é:",
+    statement:
+      "Ao conduzir um veículo automotor por uma serra com declive acentuado e de longa extensão, o condutor percebe a necessidade de controlar a velocidade do veículo de forma contínua, preocupando-se com o risco de superaquecimento do sistema de freios por atrito. Considerando as técnicas de Direção Defensiva e as normas do Código de Trânsito Brasileiro (CTB), assinale a conduta CORRETA a ser adotada nessa situação:",
     options: [
-      "Manter o ponto morto para economizar combustível",
-      "Usar marcha reduzida, aproveitando o freio motor",
-      "Manter os freios pressionados continuamente",
-      "Desligar o motor",
+      "Engrenar a marcha neutra (ponto morto) para permitir que a força da gravidade atue livremente, acionando o freio de serviço intermitentemente para poupar o sistema hidráulico.",
+      "Transitar com o veículo desengrenado em declive, visando à economia de combustível, efetuando frenagens bruscas apenas quando a velocidade ultrapassar o limite da via.",
+      "Manter o veículo engrenado em marcha reduzida, utilizando a compressão do motor como freio-motor para auxiliar na retenção da velocidade de forma segura, acionando o freio apenas pontualmente.",
+      "Manter o pedal do freio continuamente pressionado ao longo de toda a descida, mantendo uma marcha alta engatada para evitar que o motor atinja rotações elevadas."
     ],
     correctIndex: 1,
     explanation: "Marcha reduzida + freio motor evita superaquecimento dos freios.",
@@ -2232,12 +2278,13 @@ export const QUESTIONS: Question[] = [
 {
     id: "q37",
     category: "direcao-defensiva",
-    statement: "Antes de ultrapassar outro veículo, o condutor deve:",
+    statement:
+      "Em uma rodovia de pista dupla com fluxo intenso, o condutor de um automóvel de passeio identifica que o veículo à sua frente está trafegando em velocidade reduzida e decide realizar uma manobra de ultrapassagem de forma segura. Considerando as técnicas de Direção Defensiva e as regras de circulação do Código de Trânsito Brasileiro (CTB), assinale a alternativa que apresenta o procedimento correto a ser adotado antes e durante a ultrapassagem:",
     options: [
-      "Acelerar imediatamente sem sinalizar",
-      "Verificar a visibilidade, sinalizar com seta e checar retrovisores e ponto cego",
-      "Buzinar continuamente",
-      "Acender o pisca-alerta",
+      "Acelerar imediatamente e deslocar-se para a faixa da esquerda sem qualquer sinalização, confiando na rapidez da manobra para evitar colisões.",
+      "Verificar a visibilidade e a sinalização do trecho, sinalizar a intenção com a seta para a esquerda, checar retrovisores e ponto cego e acelerar com segurança para concluir a manobra.",
+      "Buzinar continuamente contra o veículo da frente para obrigá-lo a acelerar ou desviar para o acostamento e liberar a faixa.",
+      "Acender o pisca-alerta e manter a distância, pois a ultrapassagem só pode ser realizada após o veículo da frente parar voluntariamente no acostamento."
     ],
     correctIndex: 1,
     explanation: "Ultrapassagem segura = visibilidade + seta + espelhos + ponto cego.",
@@ -2248,12 +2295,13 @@ export const QUESTIONS: Question[] = [
 {
     id: "q38",
     category: "direcao-defensiva",
-    statement: "É PROIBIDO ultrapassar:",
+    statement:
+      "Um condutor realiza viagem frequente por uma rodovia de pista simples e, em determinado trecho, precisa ultrapassar um veículo de carga que segue em baixa velocidade. Antes de iniciar a manobra, ele avalia as condições do trecho para verificar se a ultrapassagem é legalmente permitida. Considerando as regras de circulação e sinalização do Código de Trânsito Brasileiro (CTB), assinale a alternativa que indica em qual situação a ultrapassagem é PROIBIDA:",
     options: [
-      "Em retas com boa visibilidade",
-      "Em pontes, viadutos, túneis, curvas e faixa contínua",
-      "Em qualquer rodovia federal",
-      "Durante o dia",
+      "Em trechos de reta com boa visibilidade e sinalização de faixa tracejada, que permitem a manobra com segurança.",
+      "Em pontes, viadutos, túneis, curvas, aclives sem visibilidade e sobre faixa contínua, que sinalizam a proibição de ultrapassagem.",
+      "Em qualquer rodovia federal, independentemente da sinalização horizontal do trecho percorrido.",
+      "Durante o período diurno, quando o fluxo de veículos em sentido contrário dificulta a avaliação da distância de segurança."
     ],
     correctIndex: 1,
     explanation: "Ultrapassagem proibida em pontes, viadutos, túneis, curvas, aclives sem visibilidade e faixa contínua.",
@@ -2265,12 +2313,13 @@ export const QUESTIONS: Question[] = [
 {
     id: "q39",
     category: "primeiros-socorros",
-    statement: "Em vítima com suspeita de fratura, o correto é:",
+    statement:
+      "Após uma colisão em via urbana, um socorrista leigo encontra uma vítima caída ao lado do veículo queixando-se de forte dor no braço, com deformidade visível no antebraço, indicando provável fratura. Até a chegada da equipe do SAMU, o socorrista precisa decidir como proceder para evitar o agravamento da lesão. Assinale a alternativa que apresenta a conduta CORRETA de primeiros socorros nessa situação:",
     options: [
-      "Tentar colocar o osso no lugar",
-      "Imobilizar o membro na posição encontrada e aguardar socorro",
-      "Movimentar a vítima para verificar a extensão da lesão",
-      "Massagear o local da dor",
+      "Tentar recolocar o osso fraturado em sua posição anatômica, realizando tração manual no membro para aliviar a dor da vítima.",
+      "Imobilizar o membro na posição em que se encontra, utilizando talas improvisadas e ataduras sem apertar demais, aguardando a chegada do socorro especializado.",
+      "Movimentar a vítima ativamente e testar os movimentos do membro lesionado para avaliar a extensão da fratura.",
+      "Massagear vigorosamente a região ao redor da dor para estimular a circulação sanguínea e reduzir o inchaço local."
     ],
     correctIndex: 1,
     explanation: "NUNCA recoloque osso. Imobilize como está e chame o SAMU.",
@@ -2281,8 +2330,14 @@ export const QUESTIONS: Question[] = [
 {
     id: "q40",
     category: "primeiros-socorros",
-    statement: "O número do SAMU para emergências médicas é:",
-    options: ["190", "192", "193", "199"],
+    statement:
+      "Ao presenciar um grave acidente de trânsito em via urbana, com vítimas feridas necessitando de atendimento médico de urgência, um condutor que parou para auxiliar precisa acionar rapidamente o serviço adequado pelo telefone. Considerando os números de emergência utilizados no Brasil, assinale a alternativa que indica corretamente o número e o serviço que devem ser acionados nessa situação:",
+    options: [
+      "Ligar para o número 190, que aciona a Polícia Militar, responsável pelo transporte hospitalar imediato das vítimas.",
+      "Ligar para o número 192, que aciona o Serviço de Atendimento Móvel de Urgência (SAMU), responsável pelo socorro médico de urgência.",
+      "Ligar para o número 193, que aciona a Polícia Rodoviária Federal, responsável pelo atendimento em vias urbanas.",
+      "Ligar para o número 199, que aciona a Defesa Civil, responsável pela remoção de veículos acidentados das vias."
+    ],
     correctIndex: 1,
     explanation: "192 SAMU · 193 Bombeiros · 190 Polícia Militar · 191 PRF.",
     detailedExplanation: "Em emergências de trânsito, é essencial saber os números de telefone corretos: SAMU (Serviço de Atendimento Móvel de Urgência) disca 192 — emergências médicas, como acidentes com feridos; Corpo de Bombeiros disca 193 — resgate veicular, incêndios e desencarceramento; Polícia Militar disca 190 — ocorrências de trânsito sem vítimas; PRF (Polícia Rodoviária Federal) disca 191 — ocorrências em rodovias federais. Confundir esses números pode atrasar o atendimento e custar vidas. Uma dica: SAMU (192) é serviço médico, enquanto Bombeiros (193) fazem o resgate técnico.",
@@ -2293,12 +2348,13 @@ export const QUESTIONS: Question[] = [
 {
     id: "q41",
     category: "primeiros-socorros",
-    statement: "Em caso de queimadura, NÃO se deve:",
+    statement:
+      "Um mecânico sofre uma queimadura de segundo grau no antebraço ao entrar em contato acidental com a mangueira superaquecida do radiador durante um reparo. O colega de trabalho, que presencia o ocorrido, pretende prestar os primeiros socorros. Considerando os procedimentos corretos para o atendimento de queimaduras, assinale a alternativa que apresenta uma conduta que NÃO deve ser adotada:",
     options: [
-      "Resfriar com água corrente em temperatura ambiente",
-      "Cobrir com pano limpo",
-      "Aplicar pasta de dente, manteiga ou pomadas caseiras",
-      "Procurar atendimento médico",
+      "Resfriar o local afetado com água corrente limpa em temperatura ambiente por alguns minutos, aliviando a dor e interrompendo a queimadura térmica.",
+      "Cobrir a lesão com um pano limpo ou gaze umedecida, protegendo a região antes de encaminhar a vítima ao atendimento médico.",
+      "Aplicar pasta de dente, manteiga ou pomadas caseiras sobre o ferimento, acreditando que aliviam a ardência e aceleram a cicatrização.",
+      "Procurar atendimento médico especializado o mais rápido possível para avaliação e tratamento adequado da lesão."
     ],
     correctIndex: 2,
     explanation: "Pasta de dente/manteiga pioram a lesão e podem causar infecção.",
@@ -2310,12 +2366,13 @@ export const QUESTIONS: Question[] = [
 {
     id: "q42",
     category: "primeiros-socorros",
-    statement: "Diante de vítima inconsciente que NÃO respira, deve-se:",
+    statement:
+      "Após uma colisão frontal entre dois automóveis, um motorista que parou para ajudar verifica que o condutor de um dos veículos está inconsciente, não apresenta movimentos torácicos e não demonstra sinais de respiração espontânea. Considerando o suporte básico de vida e os protocolos de primeiros socorros, assinale a alternativa que apresenta a conduta imediata CORRETA a ser adotada pelo socorrista:",
     options: [
-      "Esperar o socorro chegar",
-      "Iniciar compressões torácicas (RCP) imediatamente",
-      "Dar água",
-      "Sacudir a vítima",
+      "Aguardar passivamente a chegada da equipe de resgate, mantendo a vítima na mesma posição sem qualquer intervenção.",
+      "Iniciar imediatamente as compressões torácicas da Reanimação Cardiopulmonar (RCP), em ritmo de 100 a 120 compressões por minuto, até a chegada do socorro.",
+      "Oferecer pequenos goles de água à vítima para verificar se a deglutição está preservada e estimular a respiração.",
+      "Sacudir vigorosamente a vítima pelos ombros e bater em seu rosto para tentar reverter o estado de inconsciência."
     ],
     correctIndex: 1,
     explanation: "Parada respiratória = iniciar RCP (100 a 120 compressões/min no centro do peito).",
@@ -2326,12 +2383,13 @@ export const QUESTIONS: Question[] = [
 {
     id: "q43",
     category: "meio-ambiente",
-    statement: "Buzina pode ser usada:",
+    statement:
+      "Ao trafegar por uma via residencial no período noturno, um condutor observa outro motorista acionando a buzina de forma prolongada e sucessiva para chamar um morador de um prédio. Considerando as regras de conduta e os preceitos de cidadania e poluição sonora previstos no Código de Trânsito Brasileiro (CTB), assinale a alternativa que indica a utilização CORRETA do dispositivo sonoro:",
     options: [
-      "Em qualquer situação, livremente",
-      "Apenas em toques breves e para advertir sobre risco iminente",
-      "Para cumprimentar amigos",
-      "Em frente a hospitais e escolas",
+      "A buzina pode ser utilizada livremente em qualquer situação, pois é um direito do condutor alertar os demais usuários da via.",
+      "A buzina deve ser utilizada apenas em toques breves, para advertir sobre risco iminente à segurança, sendo proibido seu uso prolongado ou em locais como hospitais e escolas.",
+      "A buzina pode ser usada para cumprimentar amigos e conhecidos que estejam na calçada, pois se trata de uma prática social comum.",
+      "A buzina é permitida em frente a hospitais e escolas, desde que o condutor esteja trafegando em baixa velocidade."
     ],
     correctIndex: 1,
     explanation: "Uso indevido de buzina = poluição sonora = infração leve.",
@@ -2343,8 +2401,14 @@ export const QUESTIONS: Question[] = [
 {
     id: "q44",
     category: "meio-ambiente",
-    statement: "Jogar lixo pela janela do veículo é infração:",
-    options: ["Leve", "Média", "Grave", "Gravíssima"],
+    statement:
+      "Durante uma viagem em rodovia estadual, um passageiro arremessa pela janela do veículo uma embalagem vazia de lanche, que vai parar na pista de rolamento. Considerando as posturas ambientais e as penalidades previstas no Código de Trânsito Brasileiro (CTB), assinale a alternativa que indica corretamente a classificação dessa infração e suas consequências:",
+    options: [
+      "Infração leve, punida apenas com advertência por escrito, sem acúmulo de pontos na CNH e sem multa pecuniária.",
+      "Infração média, punida com multa e acúmulo de 4 pontos na CNH, cabendo ao condutor do veículo a responsabilidade pelo ato do passageiro.",
+      "Infração grave, punida com multa e acúmulo de 5 pontos, além da suspensão imediata do licenciamento anual do veículo.",
+      "Infração gravíssima, punida com multa multiplicada por três vezes e apreensão do veículo até o recolhimento dos resíduos arremessados."
+    ],
     correctIndex: 1,
     explanation: "Média — 4 pontos. Também pode causar incêndios e acidentes.",
     detailedExplanation: "Atirar do veículo ou abandonar objetos ou substâncias na via é infração MÉDIA (4 pontos na CNH e multa). Pode parecer uma infração leve, mas as consequências são sérias: uma bituca de cigarro pode causar incêndio em vegetação às margens da rodovia; uma garrafa ou lata pode provocar acidentes com motociclistas ou danificar outros veículos. Além da multa de trânsito, o ato de jogar lixo em via pública também pode ser enquadrado como crime ambiental (Lei 9.605/98). O condutor responsável mantém o lixo dentro do veículo e descarta em local adequado.",
@@ -2355,12 +2419,13 @@ export const QUESTIONS: Question[] = [
 {
     id: "q45",
     category: "mecanica",
-    statement: "A calibragem dos pneus deve ser verificada:",
+    statement:
+      "Um condutor que utiliza diariamente seu automóvel para ir ao trabalho deseja manter a segurança e a eficiência do veículo, adotando uma rotina adequada de manutenção preventiva. Considerando os cuidados recomendados com o sistema de pneus e a influência da calibragem na dirigibilidade e no consumo de combustível, assinale a alternativa que indica corretamente como e com que frequência a calibragem deve ser verificada:",
     options: [
-      "Uma vez por ano",
-      "Pelo menos a cada 15 dias, com pneus frios",
-      "Somente quando o carro 'puxa' para um lado",
-      "Apenas em viagens longas",
+      "Uma vez por ano, juntamente com a troca do óleo do motor, pois a pressão dos pneus permanece estável por longos períodos.",
+      "Pelo menos a cada 15 dias e antes de viagens longas, com os pneus frios (veículo parado há pelo menos 2 horas ou rodado poucos quilômetros).",
+      "Somente quando o veículo apresenta puxamento lateral da direção, sinal de que a pressão está consideravelmente baixa.",
+      "Apenas antes de viagens longas em rodovias, dispensando verificações periódicas no uso urbano diário."
     ],
     correctIndex: 1,
     explanation: "A cada 15 dias e antes de viagens. Pneu frio = leitura correta.",
@@ -2371,12 +2436,13 @@ export const QUESTIONS: Question[] = [
 {
     id: "q46",
     category: "mecanica",
-    statement: "O indicador 'TWI' no pneu serve para:",
+    statement:
+      "Durante uma revisão preventiva em uma oficina mecânica, o técnico aponta para o fundo dos sulcos do pneu e explica ao proprietário do veículo a função dos pequenos ressaltos de borracha existentes na banda de rodagem. Considerando a segurança veicular e os limites legais de desgaste dos pneus, assinale a alternativa que descreve corretamente a finalidade do indicador denominado TWI:",
     options: [
-      "Mostrar a marca do pneu",
-      "Indicar o limite mínimo legal de profundidade dos sulcos (1,6 mm)",
-      "Medir a pressão",
-      "Indicar a data de fabricação",
+      "Indicar o nome comercial e o modelo do pneu, permitindo a identificação correta do produto na compra de um exemplar idêntico.",
+      "Indicar o limite mínimo legal de profundidade dos sulcos da banda de rodagem (1,6 mm), sinalizando que o pneu deve ser substituído quando os sulcos alcançam esse nível.",
+      "Medir a pressão interna do pneu em tempo real, dispensando o uso do calibrador e do manômetro convencional.",
+      "Indicar a data de fabricação do pneu, determinando o prazo de validade máximo de utilização independentemente do desgaste da borracha."
     ],
     correctIndex: 1,
     explanation: "TWI (Tread Wear Indicator) = quando o sulco chega ao indicador, troque o pneu.",
@@ -2387,12 +2453,13 @@ export const QUESTIONS: Question[] = [
 {
     id: "q47",
     category: "mecanica",
-    statement: "O nível do óleo do motor deve ser verificado:",
+    statement:
+      "Um condutor deseja realizar a verificação preventiva do nível de óleo do motor de seu veículo, utilizando a vareta medidora localizada sob o capô. Para obter uma leitura precisa e evitar danos por falta de lubrificação, ele precisa adotar o procedimento correto. Assinale a alternativa que indica corretamente como e quando o nível de óleo do motor deve ser verificado:",
     options: [
-      "Com o motor quente e funcionando",
-      "Com o veículo em plano nivelado e o motor frio (ou desligado há alguns minutos)",
-      "Somente em oficinas",
-      "Uma vez por ano",
+      "Com o motor quente e em funcionamento, no momento em que o óleo está circulando por todo o sistema de lubrificação.",
+      "Com o veículo estacionado em terreno plano e o motor frio ou desligado há alguns minutos, para que o óleo retorne ao cárter e a vareta indique o nível real.",
+      "Somente em oficinas especializadas durante a troca periódica, pois o condutor não possui acesso seguro à vareta medidora.",
+      "Uma vez por ano, juntamente com a revisão preventiva geral do veículo, independentemente da quilometragem percorrida."
     ],
     correctIndex: 1,
     explanation: "Plano + motor frio = leitura precisa da vareta.",
@@ -2403,12 +2470,13 @@ export const QUESTIONS: Question[] = [
 {
     id: "q48",
     category: "mecanica",
-    statement: "A luz vermelha de bateria acesa no painel indica:",
+    statement:
+      "Durante o trajeto em uma rodovia, o condutor observa que a luz indicadora de cor vermelha, simbolizada por uma bateria, acende-se de forma contínua no painel de instrumentos do veículo. Considerando o significado das luzes de advertência do painel e os procedimentos de segurança, assinale a alternativa que indica corretamente o problema sinalizado por essa luz e a atitude adequada:",
     options: [
-      "Problema no sistema de carga (alternador, correia ou bateria)",
-      "Falta de combustível",
-      "Problema nos freios",
-      "Pneu furado",
+      "Falha no sistema de carga do veículo, envolvendo o alternador, a correia ou a bateria, exigindo que o condutor pare em local seguro assim que possível para verificar e solicitar assistência.",
+      "Indicação de que o nível de combustível está no limite da reserva, exigindo que o condutor procure o posto de abastecimento mais próximo.",
+      "Falha no sistema de freios, indicando que as pastilhas estão gastas e que o veículo deve ser levado imediatamente a uma oficina mecânica.",
+      "Indicação de pressão incorreta dos pneus, exigindo a verificação imediata da calibragem de todos os pneus do veículo."
     ],
     correctIndex: 0,
     explanation: "Vermelho = pare assim que possível. Continuar pode deixar o carro sem energia.",
@@ -2419,12 +2487,13 @@ export const QUESTIONS: Question[] = [
 {
     id: "q49",
     category: "prioridade",
-    statement: "Na via, a ordem de prioridade é:",
+    statement:
+      "Em uma via urbana de fluxo misto, circulam simultaneamente um automóvel, um ciclista, um pedestre atravessando na faixa e, ao fundo, aproxima-se uma ambulância do SAMU com sirene e luzes intermitentes acionadas em serviço de urgência. Considerando a hierarquia de prioridade entre os usuários da via estabelecida pelo Código de Trânsito Brasileiro (CTB), assinale a alternativa que apresenta a ordem CORRETA de prioridade:",
     options: [
-      "Veículos pesados → automóveis → pedestres",
-      "Veículos de emergência → pedestres → veículos não motorizados → motorizados",
-      "Sempre quem chegou primeiro",
-      "Motos → carros → ônibus",
+      "Primeiro os veículos pesados, depois os automóveis e, por último, os pedestres, pois o porte do veículo determina a preferência.",
+      "Primeiro os veículos de emergência em serviço, depois os pedestres, seguidos dos veículos não motorizados e, por fim, os veículos motorizados.",
+      "A prioridade é sempre de quem chegou primeiro ao local, independentemente do tipo de veículo ou da condição de vulnerabilidade do usuário.",
+      "Primeiro as motocicletas, depois os automóveis e, por último, os ônibus, conforme a agilidade de manobra de cada veículo."
     ],
     correctIndex: 1,
     explanation: "Hierarquia: emergência > pedestre > não motorizado > motorizado.",
@@ -2436,8 +2505,14 @@ export const QUESTIONS: Question[] = [
 {
     id: "q50",
     category: "legislacao",
-    statement: "Velocidade máxima padrão em vias urbanas locais (sem sinalização) é:",
-    options: ["20 km/h", "30 km/h", "40 km/h", "60 km/h"],
+    statement:
+      "Um condutor que se mudou recentemente para um novo bairro trafega por uma rua residencial sem qualquer placa de regulamentação de velocidade, onde há intenso trânsito de pedestres e crianças brincando próximo às calçadas. Considerando os limites máximos de velocidade previstos no Código de Trânsito Brasileiro (CTB) para vias urbanas não sinalizadas, assinale a alternativa que indica a velocidade máxima permitida nessa via local:",
+    options: [
+      "20 km/h, limite aplicável exclusivamente às vias de trânsito rápido urbanas com pistas múltiplas.",
+      "30 km/h, limite máximo estabelecido pelo CTB para as vias locais, caracterizadas por fluxos residenciais de curta distância.",
+      "40 km/h, limite padrão destinado às vias coletoras que distribuem o tráfego entre os bairros da cidade.",
+      "60 km/h, limite típico das vias arteriais, que concentram o maior fluxo de veículos e possuem semáforos."
+    ],
     correctIndex: 1,
     explanation: "Local 30 · Coletora 40 · Arterial 60 · Trânsito rápido 80 (urbanas, sem sinalização).",
     detailedExplanation: "Na ausência de sinalização regulamentadora de velocidade, o CTB estabelece os limites máximos para vias urbanas: VIA LOCAL (residencial, baixo fluxo): 30 km/h; VIA COLETORA (distribui o tráfego entre bairros): 40 km/h; VIA ARTERIAL (grande fluxo, semaforizada): 60 km/h; VIA DE TRÂNSITO RÁPIDO (pistas múltiplas, sem cruzamentos): 80 km/h. Esses limites são frequentemente cobrados na prova. Dica: a sequência é progressiva: 30, 40, 60, 80 — quanto maior a capacidade da via, maior o limite.",
@@ -2448,8 +2523,14 @@ export const QUESTIONS: Question[] = [
 {
     id: "q51",
     category: "legislacao",
-    statement: "Em rodovias, a velocidade máxima padrão para automóveis (sem sinalização) é:",
-    options: ["80 km/h", "100 km/h", "110 km/h", "120 km/h"],
+    statement:
+      "Um condutor dirige seu automóvel de passeio por uma rodovia de pista dupla em trecho rural, que não apresenta nenhuma placa de regulamentação de velocidade ao longo do percurso. Considerando os limites padrão de velocidade para rodovias estabelecidos pelo Código de Trânsito Brasileiro (CTB) na ausência de sinalização, assinale a alternativa que indica a velocidade máxima permitida para esse veículo:",
+    options: [
+      "80 km/h, limite padrão aplicável aos demais veículos em rodovias de pista dupla, como caminhões e reboques.",
+      "100 km/h, velocidade máxima destinada às estradas não pavimentadas em condições ideais de conservação.",
+      "110 km/h, limite padrão estabelecido pelo CTB para automóveis, camionetas e motocicletas em rodovias de pista dupla.",
+      "120 km/h, velocidade permitida em todas as rodovias federais concedidas à iniciativa privada, independentemente de sinalização."
+    ],
     correctIndex: 2,
     explanation: "Rodovia: automóvel 110 · ônibus 90 · demais 80. Estrada (não pavimentada): 60.",
     detailedExplanation: "Em rodovias (vias pavimentadas, rurais) sem sinalização específica, os limites padrão são: automóveis, camionetas e motocicletas: 110 km/h; ônibus e micro-ônibus: 90 km/h; demais veículos (caminhões, reboques): 80 km/h. Já em estradas NÃO pavimentadas, o limite é 60 km/h para todos. Esses valores são para vias de pista dupla (com separador). Se a rodovia for de pista simples (sem canteiro central), os limites são reduzidos em 10 km/h para cada categoria. É comum a banca trocar os valores para derrubar o candidato.",
@@ -2460,8 +2541,14 @@ export const QUESTIONS: Question[] = [
 {
     id: "q52",
     category: "infracoes",
-    statement: "Trafegar acima de 50% da velocidade máxima permitida é infração:",
-    options: ["Média", "Grave", "Gravíssima com fator multiplicador 3", "Apenas advertência"],
+    statement:
+      "Em uma via arterial urbana com velocidade máxima regulamentada de 60 km/h, a fiscalização eletrônica registra um automóvel transitando a 95 km/h. Considerando a classificação das infrações por excesso de velocidade prevista no Código de Trânsito Brasileiro (CTB), assinale a alternativa que indica corretamente a natureza da infração cometida e suas consequências:",
+    options: [
+      "Infração média, punida com multa e acúmulo de 4 pontos na CNH, sem qualquer medida administrativa adicional.",
+      "Infração grave, punida com multa e acúmulo de 5 pontos, com possibilidade de conversão em advertência na primeira ocorrência.",
+      "Infração gravíssima, punida com multa multiplicada por três vezes, acúmulo de 7 pontos e suspensão imediata do direito de dirigir.",
+      "Mera irregularidade administrativa passível apenas de advertência verbal, desde que não haja colisão ou dano material."
+    ],
     correctIndex: 2,
     explanation: "Gravíssima x3 (7 pts + multa x3) + suspensão imediata da CNH.",
     detailedExplanation: "As infrações por excesso de velocidade são graduadas: até 20% acima do limite = infração MÉDIA; de 20% a 50% = infração GRAVE; ACIMA DE 50% = infração GRAVÍSSIMA com fator multiplicador 3 (multa x3), 7 pontos na CNH e suspensão imediata do direito de dirigir. Esta última é uma das poucas infrações que geram suspensão automática (sem necessidade de processo administrativo). Além da multa salgada, o condutor tem a CNH recolhida e precisa passar pelo curso de reciclagem. É uma das pegadinhas favoritas da banca.",
@@ -2472,12 +2559,13 @@ export const QUESTIONS: Question[] = [
 {
     id: "q53",
     category: "direcao-defensiva",
-    statement: "Faróis baixos acesos durante o dia em rodovias são:",
+    statement:
+      "Ao iniciar uma viagem de carro por uma rodovia de pista simples em um dia de céu claro e boa visibilidade, um condutor questiona se precisa manter os faróis acesos durante o dia, considerando as recentes alterações na legislação de trânsito. Considerando as normas do Código de Trânsito Brasileiro (CTB) e a Lei do Farol Baixo, assinale a alternativa que indica corretamente a obrigatoriedade do uso do farol baixo durante o dia em rodovias:",
     options: [
-      "Proibidos",
-      "Obrigatórios em rodovias sem iluminação artificial (ou usar DRL)",
-      "Opcionais",
-      "Apenas em túneis",
+      "O uso do farol baixo durante o dia em rodovias é proibido, pois desperdiça energia e pode confundir os demais condutores.",
+      "O uso do farol baixo é obrigatório durante o dia em rodovias de pista simples fora do perímetro urbano, podendo ser substituído pela luz de condução diurna (DRL) quando o veículo a possuir.",
+      "O uso do farol baixo durante o dia é opcional, cabendo ao condutor decidir conforme sua preferência pessoal de visibilidade.",
+      "O farol baixo durante o dia é exigido apenas no interior de túneis iluminados ou em situações de chuva e neblina intensas."
     ],
     correctIndex: 1,
     explanation: "Lei 13.290/2016 / 14.071/2021: obrigatório em rodovias; DRL substitui.",
@@ -2489,8 +2577,14 @@ export const QUESTIONS: Question[] = [
 {
     id: "q54",
     category: "legislacao",
-    statement: "A Permissão para Dirigir (PPD) é válida por:",
-    options: ["3 meses", "6 meses", "1 ano", "2 anos"],
+    statement:
+      "Um candidato foi aprovado em todos os exames teóricos e práticos do processo de habilitação e recebeu, do órgão executivo de trânsito, a Permissão para Dirigir (PPD), que antecede a emissão da Carteira Nacional de Habilitação (CNH) definitiva. Considerando as disposições do Código de Trânsito Brasileiro (CTB) sobre o período probatório, assinale a alternativa que indica corretamente a validade da PPD:",
+    options: [
+      "3 meses, prazo destinado exclusivamente à realização do exame prático de direção veicular.",
+      "6 meses, período máximo para que o candidato conclua as etapas iniciais do processo de habilitação.",
+      "1 ano, período de validade da Permissão para Dirigir durante o qual o condutor passa pelo estágio probatório antes da CNH definitiva.",
+      "2 anos, prazo idêntico ao de validade das avaliações psicológicas exigidas no processo de habilitação."
+    ],
     correctIndex: 2,
     explanation: "PPD vale por 1 ano. Sem cometer infração grave/gravíssima nem reincidir em média, vira CNH definitiva.",
     detailedExplanation: "A PPD (Permissão para Dirigir) é o documento provisório emitido ao candidato aprovado nos exames teórico e prático. Tem validade de 1 ano (não confunda com os 6 meses de prazo para concluir o processo inicial). Durante esse período, o condutor deve cumprir um estágio probatório: se não cometer nenhuma infração grave ou gravíssima, e não for reincidente em infração média, a PPD é convertida automaticamente em CNH definitiva. Se cometer infração grave/gravíssima OU reincidir em média, a PPD é cassada e o condutor perde o direito de dirigir, tendo que reiniciar todo o processo.",
@@ -2526,8 +2620,13 @@ export const QUESTIONS: Question[] = [
     id: "qp02",
     category: "infracoes",
     statement:
-      "O condutor que deixa de guardar distância de segurança lateral e frontal entre o seu veículo e os demais, bem como em relação ao bordo da pista, considerando-se, no momento, a velocidade, as condições climáticas e do local, comete uma infração de natureza:",
-    options: ["Média", "Grave", "Gravíssima", "Leve"],
+      "Durante a fiscalização em uma rodovia, um agente verifica que um condutor mantém uma distância frontal insuficiente em relação ao veículo que segue à sua frente, colando-se a ele mesmo em alta velocidade, além de não guardar distância lateral adequada do bordo da pista. Considerando as condições de velocidade e clima do momento, a conduta descrita constitui uma infração de natureza:",
+    options: [
+      "Média, sujeita a multa e ao acréscimo de 4 pontos na Carteira Nacional de Habilitação do condutor.",
+      "Grave, sujeita a multa e ao acréscimo de 5 pontos na Carteira Nacional de Habilitação do condutor.",
+      "Gravíssima, sujeita a multa e ao acréscimo de 7 pontos na Carteira Nacional de Habilitação do condutor.",
+      "Leve, sujeita a multa de valor reduzido e ao acréscimo de 3 pontos na Carteira Nacional de Habilitação do condutor."
+    ],
     correctIndex: 1,
     explanation:
       "Art. 192 do CTB: infração GRAVE — 5 pontos na CNH e multa.",
@@ -2544,12 +2643,13 @@ export const QUESTIONS: Question[] = [
 {
     id: "qp03",
     category: "legislacao",
-    statement: "O consumo de álcool pelo condutor causa, entre outros efeitos:",
+    statement:
+      "Durante a Operação Lei Seca, um condutor abordado apresenta fala arrastada, olhos avermelhados e reações lentas, sendo então submetido ao teste do etilômetro. Considerando os efeitos fisiológicos do consumo de álcool no organismo humano e sua influência na capacidade de dirigir, assinale a alternativa que indica CORRETAMENTE esses efeitos:",
     options: [
-      "Perda total da visão",
-      "Visão turva e agilidade",
-      "Falta de atenção e sono",
-      "Aumento dos reflexos e melhor coordenação motora",
+      "Perda total e permanente da visão do condutor, que fica definitivamente impedido de conduzir qualquer tipo de veículo.",
+      "Visão turva e aumento de agilidade, melhorando a capacidade do condutor de reagir aos imprevistos do trânsito.",
+      "Falta de atenção, sonolência, diminuição dos reflexos e da coordenação motora, elevando o risco de envolvimento em acidentes.",
+      "Aumento dos reflexos e melhor coordenação motora, tornando o condutor mais seguro mesmo sob efeito da substância.",
     ],
     correctIndex: 2,
     explanation:
@@ -2610,10 +2710,10 @@ export const QUESTIONS: Question[] = [
     statement:
       "Em um cruzamento não sinalizado, a preferência de passagem do veículo que se desloca sobre trilhos em relação aos demais veículos é:",
     options: [
-      "Apenas se o outro veículo for de menor porte",
-      "Condicionada à sinalização semafórica local",
-      "Absoluta, devendo os demais condutores aguardar a passagem dele",
-      "Compartilhada, aplicando-se a regra da direita",
+      "A preferência é relativa, aplicando-se apenas quando o veículo sobre trilhos for de porte maior que o veículo concorrente.",
+      "A preferência é condicionada à existência de sinalização semafórica no cruzamento, prevalecendo a regra da direita na sua ausência.",
+      "A preferência é absoluta, devendo os demais condutores aguardar a passagem do veículo sobre trilhos em qualquer situação.",
+      "A preferência é compartilhada entre os condutores, aplicando-se a regra geral de quem vem pela direita no cruzamento."
     ],
     correctIndex: 2,
     explanation:
@@ -2669,7 +2769,8 @@ export const QUESTIONS: Question[] = [
 {
     id: "qp09",
     category: "primeiros-socorros",
-    statement: "O conceito correto de Primeiros Socorros no trânsito consiste em:",
+    statement:
+      "Durante um passeio em uma rodovia, um motorista se depara com uma colisão entre dois veículos e percebe que uma das vítimas está consciente, com escoriações leves, porém nenhuma equipe de socorro profissional ainda chegou ao local. Considerando o conceito e a finalidade dos primeiros socorros no trânsito, assinale a alternativa que define corretamente em que consiste essa prática:",
     options: [
       "Aplicar técnicas médicas avançadas e medicar a vítima imediatamente no local do acidente",
       "Prestar o atendimento inicial e temporário à vítima, garantindo o suporte básico até a chegada do socorro profissional especializado",
@@ -2688,7 +2789,7 @@ export const QUESTIONS: Question[] = [
     id: "qp10",
     category: "direcao-defensiva",
     statement:
-      "O verdadeiro conceito de Direção Defensiva pode ser definido como:",
+      "Durante uma aula teórica de direção defensiva, um instrutor questiona os condutores habilitados sobre o que define, de fato, essa técnica de condução. Considerando os conceitos de segurança no trânsito do Código de Trânsito Brasileiro (CTB), assinale a alternativa que apresenta CORRETAMENTE o verdadeiro conceito de direção defensiva:",
     options: [
       "O ato de evitar acidentes, mortes e prejuízos a qualquer custo, independentemente das condições de manutenção do carro ou do clima",
       "Um tipo de acidente misterioso onde o condutor não consegue realizar nenhuma manobra para evitar a colisão",
@@ -2711,10 +2812,10 @@ export const QUESTIONS: Question[] = [
     statement:
       "Em um cruzamento sem sinalização (sem placas e sem semáforo), entre dois veículos que se aproximam ao mesmo tempo, a preferência de passagem é:",
     options: [
-      "Do veículo que trafega pela via mais larga ou movimentada",
-      "Do veículo que estiver em maior velocidade",
-      "Do veículo que vier pela direita do outro",
-      "De qualquer um dos dois, desde que pisque o farol para pedir passagem",
+      "Do veículo que trafega pela via mais larga ou mais movimentada, prevalecendo a hierarquia viária sobre as demais regras.",
+      "Do veículo que estiver desenvolvendo maior velocidade, pois demonstra maior pressa e fluidez no tráfego.",
+      "Do veículo que vier pela direita do outro, conforme a regra geral de preferência em interseções sem sinalização.",
+      "De qualquer um dos dois, desde que pisque o farol para solicitar passagem e aguarde a concordância do outro condutor."
     ],
     correctIndex: 2,
     explanation:
@@ -2732,10 +2833,10 @@ export const QUESTIONS: Question[] = [
     statement:
       "O condutor, com o braço esquerdo na posição HORIZONTAL para fora do veículo (estendido para o lado), está sinalizando que vai:",
     options: [
-      "Diminuir a marcha do veículo",
-      "Parar o veículo imediatamente",
-      "Virar à esquerda",
-      "Permitir a ultrapassagem pela esquerda",
+      "Diminuir a marcha do veículo, avisando aos condutores que vêm atrás a intenção de reduzir a velocidade.",
+      "Parar o veículo imediatamente, indicando parada total no leito da via aos demais condutores.",
+      "Virar à esquerda, comunicando aos condutores que vêm atrás a intenção de realizar a conversão.",
+      "Permitir a ultrapassagem pela esquerda, autorizando o veículo de trás a se deslocar pelo lado esquerdo."
     ],
     correctIndex: 2,
     explanation:
@@ -2756,10 +2857,10 @@ export const QUESTIONS: Question[] = [
     statement:
       "O condutor com o braço esquerdo para fora do veículo, dobrado no cotovelo com a mão apontando para CIMA, está sinalizando que vai:",
     options: [
-      "Virar à esquerda",
-      "Virar à direita",
-      "Dar passagem ao veículo de trás",
-      "Reduzir a velocidade",
+      "Virar à esquerda, indicando a intenção de realizar a conversão para o lado esquerdo da via.",
+      "Virar à direita, comunicando aos condutores de trás a intenção de realizar a conversão para o lado direito da via.",
+      "Dar passagem ao veículo de trás, autorizando a ultrapassagem pela faixa adjacente da via.",
+      "Reduzir a velocidade ou parar o veículo, sinalizando aos demais a intenção de diminuir a marcha."
     ],
     correctIndex: 1,
     explanation:
@@ -2800,10 +2901,10 @@ export const QUESTIONS: Question[] = [
     statement:
       "Antes de efetuar qualquer manobra que implique deslocamento lateral (mudança de faixa, conversão, ultrapassagem), o condutor é OBRIGADO a:",
     options: [
-      "Apenas olhar pelo retrovisor interno e iniciar a manobra.",
-      "Buzinar três vezes e seguir em frente.",
+      "Apenas observar o trânsito pelo retrovisor interno e iniciar a manobra imediatamente, sem qualquer sinalização prévia.",
+      "Buzinar três vezes consecutivas para alertar os demais condutores e seguir em frente realizando a manobra normalmente.",
       "Certificar-se de que pode executá-la sem perigo para os demais e indicar com antecedência a sua intenção, por meio de luz indicadora ou gesto convencional de braço.",
-      "Acelerar bruscamente para abrir espaço entre os veículos.",
+      "Acelerar bruscamente para abrir espaço entre os veículos e completar a manobra antes que o trânsito de trás se aproxime.",
     ],
     correctIndex: 2,
     explanation:
