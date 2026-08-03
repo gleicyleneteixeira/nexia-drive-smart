@@ -11,12 +11,14 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink } from "lucide-react";
+import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink, ShoppingBag, MessageCircle } from "lucide-react";
 import * as XLSX from "xlsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { useServerFn } from "@tanstack/react-start";
-import { adminResetUserPassword } from "@/lib/admin-users.functions";
+import { adminResetUserPassword, getSalesReport, type SalesReportProfile } from "@/lib/admin-users.functions";
 import { sendPasswordReset, deleteUser, activateUser, deactivateUser } from "@/lib/admin-operations.server";
+import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
+import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
 
 export const Route = createFileRoute("/admin")({
   component: AdminPage,
@@ -104,13 +106,17 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
         </Button>
       </div>
 
-      <Tabs defaultValue="users">
-        <TabsList className="grid grid-cols-4 w-full max-w-xl">
+      <Tabs defaultValue="sales">
+        <TabsList className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 w-full max-w-2xl">
+          <TabsTrigger value="sales" className="gap-2"><ShoppingBag className="h-4 w-4" /> Vendas</TabsTrigger>
           <TabsTrigger value="users" className="gap-2"><Users className="h-4 w-4" /> Usuários</TabsTrigger>
           <TabsTrigger value="library" className="gap-2"><Upload className="h-4 w-4" /> Biblioteca</TabsTrigger>
           <TabsTrigger value="ratings" className="gap-2"><Star className="h-4 w-4" /> Avaliações</TabsTrigger>
           <TabsTrigger value="settings" className="gap-2"><Settings className="h-4 w-4" /> Configurações</TabsTrigger>
         </TabsList>
+        <TabsContent value="sales" className="mt-4">
+          <SalesPanel />
+        </TabsContent>
         <TabsContent value="users" className="mt-4">
           <UsersPanel />
         </TabsContent>
@@ -154,6 +160,250 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
   );
 }
 
+const salesChartConfig = {
+  vendas: { label: "Vendas", color: "var(--chart-1)" },
+  vendasHoje: { label: "Vendas hoje", color: "var(--chart-2)" },
+} satisfies ChartConfig;
+
+type SaleRow = {
+  id: string;
+  user_id: string;
+  amount: number | null;
+  plan_type: string | null;
+  status: string;
+  created_at: string;
+};
+
+const PLAN_SALES_LABELS: Record<string, string> = {
+  "1_month": "Plano Intensivo (30 dias)",
+  "3_months": "Plano Trimestral (90 dias)",
+  "6_months": "Combo CNH Aprovada (6 meses)",
+};
+
+function salesPlanLabel(plan: string | null): string {
+  return plan ? PLAN_SALES_LABELS[plan] ?? plan : "—";
+}
+
+function phoneForWhatsApp(phone: string | null): string {
+  if (!phone) return "";
+  const digits = phone.replace(/\D/g, "");
+  if (!digits) return "";
+  return digits.startsWith("55") ? digits : "55" + digits;
+}
+
+function dayKey(iso: string): string {
+  const d = new Date(iso);
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${d.getFullYear()}-${m}-${day}`;
+}
+
+function SalesPanel() {
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
+  const salesFn = useServerFn(getSalesReport);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["admin", "sales"],
+    queryFn: async () => {
+      const result = await salesFn({ data: undefined });
+      const buyers = new Map<string, SalesReportProfile>(
+        (result.profiles ?? []).map((p) => [p.id, p]),
+      );
+      return { sales: result.sales ?? [], buyers };
+    },
+  });
+
+  function withinRange(iso: string): boolean {
+    if (!dateFrom && !dateTo) return true;
+    const t = new Date(iso).getTime();
+    if (dateFrom && t < new Date(dateFrom + "T00:00:00").getTime()) return false;
+    if (dateTo && t > new Date(dateTo + "T23:59:59").getTime()) return false;
+    return true;
+  }
+
+  const filtered = (data?.sales ?? []).filter((s) => withinRange(s.created_at));
+  const totalSales = filtered.length;
+  const revenue = filtered.reduce((acc, s) => acc + (s.amount ?? 0), 0);
+  const uniqueBuyers = new Set(filtered.map((s) => s.user_id)).size;
+
+  const byDay = new Map<string, number>();
+  for (const s of filtered) {
+    const k = dayKey(s.created_at);
+    byDay.set(k, (byDay.get(k) ?? 0) + 1);
+  }
+  const todayKey = dayKey(new Date().toISOString());
+  const chartData = Array.from(byDay.entries())
+    .sort((a, b) => a[0].localeCompare(b[0]))
+    .map(([k, count]) => {
+      const [, m, d] = k.split("-").map(Number);
+      return {
+        label: `${String(d).padStart(2, "0")}/${String(m).padStart(2, "0")}`,
+        vendas: count,
+        isHoje: k === todayKey,
+      };
+    });
+
+  function applyPreset(preset: "hoje" | "7" | "30" | "tudo") {
+    if (preset === "tudo") {
+      setDateFrom("");
+      setDateTo("");
+      return;
+    }
+    const today = new Date();
+    const from = new Date(today);
+    if (preset === "7") from.setDate(today.getDate() - 6);
+    else if (preset === "30") from.setDate(today.getDate() - 29);
+    const fmt = (dt: Date) =>
+      `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, "0")}-${String(dt.getDate()).padStart(2, "0")}`;
+    setDateFrom(fmt(from));
+    setDateTo(fmt(today));
+  }
+
+  const currency = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+
+  if (isLoading) {
+    return <div className="flex justify-center py-10"><Loader2 className="h-6 w-6 animate-spin" /></div>;
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="glass rounded-2xl p-4 flex flex-wrap items-end gap-3">
+        <div>
+          <Label className="text-xs">De</Label>
+          <Input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className="w-40" />
+        </div>
+        <div>
+          <Label className="text-xs">Até</Label>
+          <Input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className="w-40" />
+        </div>
+        <div className="flex gap-1.5 flex-wrap">
+          {(["hoje", "7", "30", "tudo"] as const).map((p) => {
+            const label = p === "hoje" ? "Hoje" : p === "7" ? "Últimos 7 dias" : p === "30" ? "Últimos 30 dias" : "Tudo";
+            return (
+              <Button key={p} size="sm" variant="outline" onClick={() => applyPreset(p)}>
+                {label}
+              </Button>
+            );
+          })}
+        </div>
+        <p className="text-xs text-muted-foreground ml-auto">
+          Compradores com Pix confirmado (status CONCLUÍDA).
+        </p>
+      </div>
+
+      <div className="grid gap-3 md:grid-cols-4">
+        <div className="glass rounded-2xl p-4">
+          <p className="text-xs text-muted-foreground uppercase tracking-wider">Vendas</p>
+          <p className="text-3xl font-display font-bold mt-1 text-primary">{totalSales}</p>
+        </div>
+        <div className="glass rounded-2xl p-4">
+          <p className="text-xs text-muted-foreground uppercase tracking-wider">Receita</p>
+          <p className="text-3xl font-display font-bold mt-1 text-success">{currency.format(revenue)}</p>
+        </div>
+        <div className="glass rounded-2xl p-4">
+          <p className="text-xs text-muted-foreground uppercase tracking-wider">Compradores únicos</p>
+          <p className="text-3xl font-display font-bold mt-1 text-warning">{uniqueBuyers}</p>
+        </div>
+        <div className="glass rounded-2xl p-4">
+          <p className="text-xs text-muted-foreground uppercase tracking-wider">Dias com venda</p>
+          <p className="text-3xl font-display font-bold mt-1 text-primary-glow">{chartData.filter((c) => c.vendas > 0).length}</p>
+        </div>
+      </div>
+
+      <div className="glass rounded-2xl p-4">
+        <div className="flex items-center justify-between gap-2 mb-3 flex-wrap">
+          <h2 className="font-display font-bold">Vendas por dia</h2>
+          <span className="text-xs text-muted-foreground">Passe o mouse nas barras para detalhes.</span>
+        </div>
+        {chartData.length === 0 ? (
+          <p className="text-sm text-muted-foreground text-center py-10">Nenhuma venda no período selecionado.</p>
+        ) : (
+          <ChartContainer config={salesChartConfig} className="aspect-auto h-[260px] w-full">
+            <BarChart data={chartData}>
+              <defs>
+                <linearGradient id="fillVendas" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="var(--color-vendas)" />
+                  <stop offset="100%" stopColor="var(--color-vendas)" stopOpacity={0.35} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid vertical={false} stroke="var(--border)" />
+              <XAxis dataKey="label" tickLine={false} axisLine={false} tickMargin={8} />
+              <YAxis allowDecimals={false} tickLine={false} axisLine={false} width={30} />
+              <ChartTooltip cursor={false} content={<ChartTooltipContent nameKey="vendas" />} />
+              <Bar dataKey="vendas" radius={[6, 6, 2, 2]}>
+                {chartData.map((entry) => (
+                  <Cell key={entry.label} fill={entry.isHoje ? "var(--color-vendasHoje)" : "url(#fillVendas)"} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ChartContainer>
+        )}
+      </div>
+
+      <div className="glass rounded-2xl p-4">
+        <h2 className="font-display font-bold mb-3">Compradores ({filtered.length})</h2>
+        <div className="overflow-x-auto rounded-lg border border-border/40">
+          <table className="w-full text-sm">
+            <thead className="bg-background/50 text-xs uppercase text-muted-foreground">
+              <tr>
+                <th className="text-left px-3 py-2">Nome</th>
+                <th className="text-left px-3 py-2">E-mail</th>
+                <th className="text-left px-3 py-2">Telefone</th>
+                <th className="text-left px-3 py-2">Plano</th>
+                <th className="text-left px-3 py-2">Valor</th>
+                <th className="text-left px-3 py-2">Data</th>
+                <th className="text-right px-3 py-2">WhatsApp</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((sale) => {
+                const buyer = data?.buyers.get(sale.user_id);
+                const wa = phoneForWhatsApp(buyer?.phone ?? null);
+                return (
+                  <tr key={sale.id} className="border-t border-border/30">
+                    <td className="px-3 py-2">{buyer?.display_name ?? "—"}</td>
+                    <td className="px-3 py-2">{buyer?.email ?? "—"}</td>
+                    <td className="px-3 py-2 whitespace-nowrap">{buyer?.phone ?? "—"}</td>
+                    <td className="px-3 py-2">{salesPlanLabel(sale.plan_type)}</td>
+                    <td className="px-3 py-2 whitespace-nowrap">{currency.format(sale.amount ?? 0)}</td>
+                    <td className="px-3 py-2 whitespace-nowrap">
+                      {new Date(sale.created_at).toLocaleDateString("pt-BR")}{" "}
+                      <span className="text-muted-foreground">
+                        {new Date(sale.created_at).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
+                      </span>
+                    </td>
+                    <td className="px-3 py-2 text-right whitespace-nowrap">
+                      {wa ? (
+                        <a
+                          href={`https://wa.me/${wa}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-success bg-success/10 border border-success/30 px-2.5 py-1 rounded-full hover:bg-success/20 transition-colors"
+                          title={`Chamar ${buyer?.display_name ?? "cliente"} no WhatsApp`}
+                        >
+                          <MessageCircle className="h-3.5 w-3.5" /> Chamar
+                        </a>
+                      ) : (
+                        <span className="text-[11px] text-muted-foreground">Sem telefone</span>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+              {filtered.length === 0 && (
+                <tr>
+                  <td colSpan={7} className="text-center text-muted-foreground py-6">Nenhuma venda encontrada.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 type ProfileRow = {
   id: string;
   display_name: string | null;
@@ -167,7 +417,6 @@ type ProfileRow = {
   created_at: string;
   needs_new_password: boolean | null;
 };
-
 const EMPLOYMENT_LABELS: Record<string, string> = {
   clt: "CLT",
   carteira_assinada: "CLT",
@@ -187,6 +436,10 @@ function UsersPanel() {
   const [filter, setFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [passwordFilter, setPasswordFilter] = useState<string>("all");
+  const [createdFrom, setCreatedFrom] = useState("");
+  const [createdTo, setCreatedTo] = useState("");
+  const [expiresFrom, setExpiresFrom] = useState("");
+  const [expiresTo, setExpiresTo] = useState("");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [sortField, setSortField] = useState<"name" | "email">("name");
@@ -232,6 +485,17 @@ function UsersPanel() {
     if (statusFilter !== "all" && u.status !== statusFilter) return false;
     if (passwordFilter === "sem_senha" && (u.needs_new_password !== true)) return false;
     if (passwordFilter === "com_senha" && u.needs_new_password === true) return false;
+    if (createdFrom || createdTo) {
+      const t = new Date(u.created_at).getTime();
+      if (createdFrom && t < new Date(createdFrom + "T00:00:00").getTime()) return false;
+      if (createdTo && t > new Date(createdTo + "T23:59:59").getTime()) return false;
+    }
+    if (expiresFrom || expiresTo) {
+      if (!u.expires_at) return false;
+      const t = new Date(u.expires_at).getTime();
+      if (expiresFrom && t < new Date(expiresFrom + "T00:00:00").getTime()) return false;
+      if (expiresTo && t > new Date(expiresTo + "T23:59:59").getTime()) return false;
+    }
     if (!search.trim()) return true;
     const q = search.toLowerCase();
     return (
@@ -264,6 +528,7 @@ function UsersPanel() {
           ? `Outros: ${u.employment_other ?? ""}`
           : EMPLOYMENT_LABELS[u.employment_status ?? ""] ?? (u.employment_status ?? ""),
       "Data de cadastro": new Date(u.created_at).toLocaleString("pt-BR"),
+      "Data de expiração": u.expires_at ? new Date(u.expires_at).toLocaleString("pt-BR") : "",
     }));
   }
 
@@ -355,6 +620,31 @@ function UsersPanel() {
         </div>
       </div>
 
+      <div className="flex flex-wrap items-end gap-3 border-t border-border/20 pt-3">
+        <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold self-center">Filtro por data</p>
+        <div>
+          <Label className="text-xs">Cadastro de</Label>
+          <Input type="date" value={createdFrom} onChange={(e) => { setCreatedFrom(e.target.value); setPage(1); }} className="w-40" />
+        </div>
+        <div>
+          <Label className="text-xs">Cadastro até</Label>
+          <Input type="date" value={createdTo} onChange={(e) => { setCreatedTo(e.target.value); setPage(1); }} className="w-40" />
+        </div>
+        <div>
+          <Label className="text-xs">Expiração de</Label>
+          <Input type="date" value={expiresFrom} onChange={(e) => { setExpiresFrom(e.target.value); setPage(1); }} className="w-40" />
+        </div>
+        <div>
+          <Label className="text-xs">Expiração até</Label>
+          <Input type="date" value={expiresTo} onChange={(e) => { setExpiresTo(e.target.value); setPage(1); }} className="w-40" />
+        </div>
+        {(createdFrom || createdTo || expiresFrom || expiresTo) && (
+          <Button variant="ghost" size="sm" onClick={() => { setCreatedFrom(""); setCreatedTo(""); setExpiresFrom(""); setExpiresTo(""); setPage(1); }}>
+            Limpar datas
+          </Button>
+        )}
+      </div>
+
       <div className="text-xs text-muted-foreground">
         {isLoading ? "Carregando…" : (
           <span>
@@ -434,6 +724,7 @@ function UsersPanel() {
               <th className="text-left px-3 py-2">Senha</th>
               <th className="text-left px-3 py-2">Situação</th>
               <th className="text-left px-3 py-2">Cadastro</th>
+              <th className="text-left px-3 py-2">Expiração</th>
               <th className="text-right px-3 py-2">Ações</th>
             </tr>
           </thead>
@@ -458,11 +749,6 @@ function UsersPanel() {
                   ) : (
                     <span className="text-[11px] text-muted-foreground">{u.status ?? "—"}</span>
                   )}
-                  {u.status === "ativo" && u.expires_at && (
-                    <span className="block text-[10px] text-muted-foreground mt-0.5">
-                      Expira: {new Date(u.expires_at).toLocaleDateString("pt-BR")}
-                    </span>
-                  )}
                 </td>
                 <td className="px-3 py-2 whitespace-nowrap">
                   {u.needs_new_password === true ? (
@@ -483,6 +769,7 @@ function UsersPanel() {
                     : EMPLOYMENT_LABELS[u.employment_status ?? ""] ?? (u.employment_status ?? "—")}
                 </td>
                 <td className="px-3 py-2 whitespace-nowrap">{new Date(u.created_at).toLocaleDateString("pt-BR")}</td>
+                <td className="px-3 py-2 whitespace-nowrap">{u.expires_at ? new Date(u.expires_at).toLocaleDateString("pt-BR") : "—"}</td>
                 <td className="px-3 py-2 text-right whitespace-nowrap">
                   {u.status === "ativo" ? (
                     <button
