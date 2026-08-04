@@ -1,6 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
+import { isProfileExpired } from "@/lib/subscription";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   getRandomizedQuestions,
@@ -25,12 +26,13 @@ import {
   Brain,
   Sparkles,
   ListChecks,
+  Loader2,
 } from "lucide-react";
 import { Placa } from "@/components/Placa";
 import { triggerRatingPrompt } from "@/components/RatingPrompt";
 
-export const Route = createFileRoute("/simulado")({
-  component: SimuladoPage,
+export const Route = createFileRoute("/simulado-demo")({
+  component: SimuladoDemoPage,
   head: () => ({
     meta: [
       { title: "Simulado Inteligente — Nexia DETRAN" },
@@ -62,35 +64,11 @@ function saveSeen(ids: string[]) {
     window.localStorage.setItem(SEEN_KEY, JSON.stringify(ids));
   } catch {}
 }
-function buildFresh(category?: Category): Question[] {
+function buildFresh(questionsList: Question[], category?: Category, count: number = TOTAL): Question[] {
   const seen = loadSeen();
-  const REAL_EXAM_IDS = ["qp01", "qp07", "qp06", "q29", "qp02", "qp03", "qp04"];
-  
-  let fresh: Question[];
-  if (!category) {
-    // Para simulados completos, garante a inclusão das 7 perguntas reais da prova
-    const fixedQuestions = QUESTIONS.filter((q) => REAL_EXAM_IDS.includes(q.id));
-    const fixedIds = fixedQuestions.map((q) => q.id);
-    
-    // Pega as outras 23 questões randomizadas (excluindo as 7 fixas para não duplicar)
-    const otherQuestions = getRandomizedQuestions(23, { 
-      exclude: [...seen, ...fixedIds], 
-      placasCount: 3 
-    });
-    
-    // Une as 7 fixas com as 23 randomizadas
-    const merged = [...fixedQuestions, ...otherQuestions];
-    
-    // Embaralha todas juntas para que fiquem misturadas de forma randômica
-    for (let i = merged.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [merged[i], merged[j]] = [merged[j], merged[i]];
-    }
-    fresh = merged;
-  } else {
-    fresh = getRandomizedQuestions(TOTAL, { exclude: seen, categories: [category] });
-  }
-  
+  const fresh = category
+    ? getRandomizedQuestions(count, { exclude: seen, categories: [category], questionsList })
+    : getRandomizedQuestions(count, { exclude: seen, placasCount: 3, questionsList });
   const newSeen = Array.from(new Set([...seen, ...fresh.map((q) => q.id)]));
   saveSeen(newSeen);
   return fresh;
@@ -150,9 +128,13 @@ function getMemoryHook(q: Question): string {
   return CATEGORY_HOOKS[q.category];
 }
 
-function SimuladoPage() {
-  const { user, loading: authLoading } = useAuth();
+function SimuladoDemoPage() {
+  const { user, profile, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
   const [hydrated, setHydrated] = useState(false);
+
+  const isTrial = true;
+
   const [questions, setQuestions] = useState<Question[]>([]);
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
@@ -160,18 +142,37 @@ function SimuladoPage() {
   const [showResult, setShowResult] = useState(false);
   const [resumed, setResumed] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
+  const dbQuestions = QUESTIONS;
 
   // Dispara pedido de avaliação 2s após terminar o simulado
   useEffect(() => {
-    if (!showResult) return;
+    if (!showResult || isTrial) return;
     const t = setTimeout(() => triggerRatingPrompt("simulado-done"), 2000);
     return () => clearTimeout(t);
-  }, [showResult]);
+  }, [showResult, isTrial]);
 
   // Hidrata estado a partir do localStorage
   useEffect(() => {
     const persisted = loadPersisted();
-    if (persisted && persisted.questions?.length) {
+    if (isTrial) {
+      clearPersisted();
+      const trialIds = ["qe60", "qe04", "qe39", "qe11", "qe74", "qe75", "q6"];
+      const fresh = trialIds.map(id => QUESTIONS.find(q => q.id === id)).filter(Boolean) as Question[];
+      setQuestions(fresh);
+      setIndex(0);
+      setSelected(null);
+      setAnswers([]);
+      setShowResult(false);
+      setResumed(false);
+      setShowPicker(false);
+      savePersisted({
+        questions: fresh,
+        index: 0,
+        selected: null,
+        answers: [],
+        startedAt: Date.now(),
+      });
+    } else if (persisted && persisted.questions?.length) {
       setQuestions(persisted.questions);
       setIndex(persisted.index);
       setSelected(persisted.selected);
@@ -184,7 +185,7 @@ function SimuladoPage() {
       setShowPicker(true);
     }
     setHydrated(true);
-  }, []);
+  }, [isTrial]);
 
   // Persiste a cada mudança relevante
   useEffect(() => {
@@ -200,7 +201,26 @@ function SimuladoPage() {
 
   function startWithMode(mode: "completo" | Category) {
     clearPersisted();
-    const fresh = buildFresh(mode === "completo" ? undefined : mode);
+    const count = isTrial ? 7 : TOTAL;
+    let fresh: Question[];
+    if (isTrial) {
+      if (mode === "completo") {
+        const trialIds = ["qe60", "qe04", "qe39", "qe11", "qe74", "qe75", "q6"];
+        fresh = trialIds.map(id => dbQuestions.find(q => q.id === id)).filter(Boolean) as Question[];
+        if (fresh.length < 7) {
+          fresh = buildFresh(dbQuestions, undefined, 7);
+        }
+      } else {
+        const categoryQuestions = dbQuestions.filter(q => q.category === mode);
+        const trialIds = ["qe60", "qe04", "qe39", "qe11", "qe74", "qe75", "q6"];
+        const specTrialQs = categoryQuestions.filter(q => trialIds.includes(q.id));
+        const exclude = specTrialQs.map(q => q.id);
+        const others = getRandomizedQuestions(Math.max(0, 7 - specTrialQs.length), { exclude, categories: [mode], questionsList: dbQuestions });
+        fresh = [...specTrialQs, ...others].slice(0, 7);
+      }
+    } else {
+      fresh = buildFresh(dbQuestions, mode === "completo" ? undefined : mode, count);
+    }
     setQuestions(fresh);
     setIndex(0);
     setSelected(null);
@@ -268,8 +288,28 @@ function SimuladoPage() {
       </div>
     );
   }
-  if (showPicker || !questions.length) {
-    return <ModePicker onPick={startWithMode} />;
+  if (!questions.length) {
+    if (isTrial) {
+      return (
+        <div className="flex items-center justify-center min-h-[50vh]">
+          <div className="text-center space-y-4">
+            <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
+            <p className="text-sm text-muted-foreground font-semibold text-primary-glow animate-pulse">Preparando seu teste grátis...</p>
+          </div>
+        </div>
+      );
+    }
+    if (showPicker) {
+      return <ModePicker onPick={startWithMode} />;
+    }
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <div className="text-center space-y-4">
+          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
+          <p className="text-sm text-muted-foreground">Carregando simulado...</p>
+        </div>
+      </div>
+    );
   }
 
   const q = questions[Math.min(index, questions.length - 1)];
@@ -279,6 +319,14 @@ function SimuladoPage() {
     setSelected(i);
   }
 
+  const handleCompleteTrial = () => {
+    if (user) {
+      localStorage.setItem(`nexia:trial_completed:${user.id}`, "true");
+    }
+    clearPersisted();
+    navigate({ to: "/checkout", replace: true });
+  };
+
   function next() {
     const newAnswers = [...answers];
     newAnswers[index] = selected;
@@ -287,6 +335,9 @@ function SimuladoPage() {
     if (index + 1 >= questions.length) {
       setIndex(questions.length); // marca como finalizado
       setShowResult(true);
+      if (user) {
+        localStorage.setItem(`nexia:trial_completed:${user.id}`, "true");
+      }
     } else {
       setIndex(index + 1);
     }
@@ -312,24 +363,28 @@ function SimuladoPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 md:py-10">
       {/* Header */}
-        <div className="flex items-center justify-between mb-4 gap-3">
-        <button
-          onClick={restart}
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors shrink-0 cursor-pointer"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          <span className="hidden sm:inline">Voltar</span>
-        </button>
+      <div className="flex items-center justify-between mb-4 gap-3">
+        {!isTrial && (
+          <button
+            onClick={restart}
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors shrink-0 cursor-pointer"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            <span className="hidden sm:inline">Voltar</span>
+          </button>
+        )}
         <div className="text-right">
           <p className="text-xs uppercase tracking-widest text-primary-glow font-semibold">
-            Simulado Inteligente
+            {isTrial ? "Teste Grátis (7 Questões) 🚀" : "Simulado Inteligente"}
           </p>
-          <h1 className="text-xl md:text-2xl font-display font-bold">
-            Questão {Math.min(index + 1, questions.length)}{" "}
-            <span className="text-muted-foreground text-base font-normal">
-              / {questions.length}
-            </span>
-          </h1>
+          {!showResult && (
+            <h1 className="text-xl md:text-2xl font-display font-bold">
+              Questão {Math.min(index + 1, questions.length)}{" "}
+              <span className="text-muted-foreground text-base font-normal">
+                / {questions.length}
+              </span>
+            </h1>
+          )}
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <div className="px-3 py-1.5 rounded-xl border border-success/30 bg-success/10 text-center min-w-[78px]">
@@ -494,6 +549,8 @@ function SimuladoPage() {
             answers={answers}
             score={score}
             onRestart={restart}
+            isTrial={isTrial}
+            onCompleteTrial={handleCompleteTrial}
           />
         )}
       </AnimatePresence>
@@ -642,11 +699,15 @@ function ResultScreen({
   answers,
   score,
   onRestart,
+  isTrial,
+  onCompleteTrial,
 }: {
   questions: Question[];
   answers: (number | null)[];
   score: number;
   onRestart: () => void;
+  isTrial: boolean;
+  onCompleteTrial: () => void;
 }) {
   const [tab, setTab] = useState<"resumo" | "erradas" | "todas">("resumo");
   const total = questions.length;
@@ -857,19 +918,30 @@ function ResultScreen({
       </div>
 
       <div className="mt-6 grid gap-2">
-        <button
-          onClick={onRestart}
-          className="w-full px-5 py-3 rounded-xl gradient-primary text-primary-foreground font-semibold shadow-glow"
-        >
-          Treinar mais um simulado
-        </button>
-        <Link
-          to="/"
-          className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl border border-border bg-secondary/50 text-foreground font-semibold hover:bg-accent/30 transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Voltar para o início
-        </Link>
+        {isTrial ? (
+          <button
+            onClick={onCompleteTrial}
+            className="w-full px-5 py-4 rounded-xl gradient-primary text-primary-foreground font-bold shadow-glow text-lg animate-pulse"
+          >
+            Adquirir o Simulado Completo 🚀
+          </button>
+        ) : (
+          <button
+            onClick={onRestart}
+            className="w-full px-5 py-3 rounded-xl gradient-primary text-primary-foreground font-semibold shadow-glow"
+          >
+            Treinar mais um simulado
+          </button>
+        )}
+        {!isTrial && (
+          <Link
+            to="/"
+            className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl border border-border bg-secondary/50 text-foreground font-semibold hover:bg-accent/30 transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Voltar para o início
+          </Link>
+        )}
       </div>
     </motion.div>
   );

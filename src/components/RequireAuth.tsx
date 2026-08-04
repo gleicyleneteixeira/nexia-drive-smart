@@ -10,6 +10,9 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const pathname = location.pathname;
 
+  const trialCompleted = typeof window !== "undefined" && user ? localStorage.getItem(`nexia:trial_completed:${user.id}`) === "true" : false;
+  const isTrialSimulado = pathname === "/simulado-demo" && !trialCompleted;
+
   useEffect(() => {
     if (!loading) {
       if (!user) {
@@ -28,7 +31,11 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
           if (isProfileExpired(profile)) {
             // Se logado pendente de pagamento (ou expirado), força ir para o checkout
             if (!pathname.startsWith("/checkout")) {
-              navigate({ to: "/checkout", replace: true });
+              if (isTrialSimulado) {
+                // Permitir acesso ao simulado para fazer o teste grátis
+              } else {
+                navigate({ to: "/checkout", replace: true });
+              }
             }
           } else {
             // Se ativo e tentar acessar checkout, vai direto pro app
@@ -39,7 +46,7 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
         }
       }
     }
-  }, [user, profile, isAdmin, loading, pathname, navigate]);
+  }, [user, profile, isAdmin, loading, pathname, navigate, isTrialSimulado]);
 
   if (loading) {
     return (
@@ -60,7 +67,7 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
   }
 
   // Bloqueia renderização das rotas se estiver no status pendente ou expirado tentando acessar o app
-  if (profile && isProfileExpired(profile) && !pathname.startsWith("/checkout")) {
+  if (profile && isProfileExpired(profile) && !pathname.startsWith("/checkout") && !isTrialSimulado) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
         <div className="text-center space-y-4">

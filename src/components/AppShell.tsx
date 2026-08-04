@@ -28,7 +28,7 @@ export function AppShell() {
   const { pathname } = useLocation();
   const { user, profile, isAdmin, signOut } = useAuth();
 
-  const isPublicPage = pathname === "/" || pathname === "/cadastro" || pathname === "/auth" || pathname === "/reset-password";
+  const isPublicPage = pathname === "/" || pathname === "/cadastro" || pathname === "/auth" || pathname === "/reset-password" || pathname === "/simulado-demo";
   const isActive = (profile?.status === "ativo" && !isProfileExpired(profile)) || isAdmin;
   const isPending = (profile?.status === "pendente_pagamento" || isProfileExpired(profile)) && !isAdmin;
   const activeAuth = pathname === "/cadastro" || pathname === "/auth" || pathname === "/admin";

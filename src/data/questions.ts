@@ -3698,6 +3698,78 @@ export const QUESTIONS: Question[] = [
     incidence: "alta",
     trap: true,
     difficulty: 2,
+  },
+{
+    id: "qd01",
+    category: "placas",
+    statement:
+      "Em uma rodovia, o condutor se aproxima de um trecho de obras onde a pista passa por um estreitamento (afunilamento), com a sinalização de advertência A-10 (Estreitamento de pista) indicando a redução das faixas de rolamento adiante. De acordo com o CTB e os preceitos da direção defensiva, a conduta CORRETA do condutor ao se aproximar desse trecho é:",
+    options: [
+      "Acelerar para passar antes do estreitamento, garantindo a prioridade pela maior velocidade.",
+      "Reduzir a velocidade, observar a sinalização e cooperar com a alternância de passagem, cedendo a vez ao veículo que já se encontra posicionado no trecho estreito.",
+      "Parar o veículo imediatamente no meio da pista e acionar o pisca-alerta até o tráfego escoar.",
+      "Manter a velocidade constante e acionar a buzina de forma contínua para alertar os demais condutores sobre o estreitamento.",
+    ],
+    correctIndex: 1,
+    explanation:
+      "A placa A-10 (Estreitamento de pista) é placa de ADVERTÊNCIA: avisa que a pista se estreita adiante. O correto é reduzir a velocidade e cooperar na alternância (zíper), cedendo a vez a quem já está no trecho estreito.",
+    detailedExplanation:
+      "O afunilamento (estreitamento) de pista é sinalizado pela placa A-10 e indica que as faixas de rolamento diminuem adiante. Nessas situações, o CTB e a direção defensiva determinam: REDUZIR a velocidade, redobrar a atenção e cooperar com a alternância de passagem — os veículos entram no trecho estreito de forma intercalada ('efeito zíper'), e o condutor cede a vez ao veículo que já se encontra posicionado no trecho. Acelerar para 'furar' a fila, parar no meio da pista ou buzinar de forma contínua são condutas perigosas que geram congestionamentos e colisões.",
+    legalBase: "Manual Brasileiro de Sinalização de Trânsito — Volume I (placa A-10) e princípios da direção defensiva",
+    commonMistake:
+      "A banca testa a leitura da sinalização: afunilamento NÃO é 'pare' nem 'preferência' — é ADVERTÊNCIA de redução de pista. Não confunda a placa A-10 com a placa PARE (R-1).",
+    tip: "A-10 = Estreitamento de pista = aviso. Reduza e coopere no zíper.",
+    incidence: "alta",
+    trap: true,
+    difficulty: 2,
+  },
+{
+    id: "qd02",
+    category: "legislacao",
+    statement:
+      "De acordo com o art. 90 do CTB, a sinalização de trânsito também é realizada por sinais sonoros (silvos de apito) e gestos do agente de trânsito. Sobre os silvos de apito emitidos pelo agente, é correto afirmar que:",
+    options: [
+      "Um silvo longo significa 'sigam' (liberar a passagem) e dois silvos breves significam 'diminuam a marcha'.",
+      "Um silvo breve significa 'sigam'; dois silvos breves significam 'parem'; um silvo longo significa 'diminuam a marcha'.",
+      "Os silvos não possuem significado oficial, servindo apenas para chamar a atenção dos condutores.",
+      "Os silvos de apito só têm validade se acompanhados de gestos; isoladamente não orientam o trânsito.",
+    ],
+    correctIndex: 1,
+    explanation:
+      "Art. 90 do CTB: um silvo breve = siga; dois silvos breves = pare; um silvo longo = diminua a marcha.",
+    detailedExplanation:
+      "O apito do agente é forma oficial de sinalização prevista no art. 90 do CTB, que define: um silvo BREVE — 'siga'; dois silvos BREVES — 'parem'; um silvo LONGO — 'diminuam a marcha'. Esses sinais sonoros normalmente acompanham os gestos do agente, mas têm significado próprio e devem ser obedecidos por todos os condutores. Decorar esses três comandos garante ponto na prova.",
+    legalBase: "Art. 90 do CTB",
+    commonMistake:
+      "A pegadinha clássica inverte os significados: trocar 'dois breves = pare' por 'siga', ou afirmar que o silvo longo significa parar. Lembre: 1 breve = siga; 2 breves = pare; 1 longo = devagar.",
+    tip: "Decore: 1 pio = vai; 2 pios = para; 1 pio longo = devagar.",
+    incidence: "altissima",
+    trap: true,
+    difficulty: 2,
+  },
+{
+    id: "qd03",
+    category: "legislacao",
+    statement:
+      "Em um cruzamento com semáforo funcionando normalmente, um agente de trânsito postado no centro orienta, por gestos convencionais de braço, a parada dos veículos de uma via e a passagem dos veículos da via transversal. Considerando a hierarquia das sinalizações prevista no CTB, assinale a alternativa correta:",
+    options: [
+      "Os gestos do agente prevalecem sobre as demais sinalizações, devendo os condutores obedecer às suas ordens mesmo que contrariem o semáforo.",
+      "O semáforo prevalece sobre os gestos do agente, pois a sinalização semafórica tem prioridade máxima.",
+      "As placas de regulamentação prevalecem sobre os gestos do agente, por serem sinalização fixa e permanente.",
+      "O agente pode orientar, mas o condutor deve seguir o semáforo, pois desobedecê-lo sempre configura infração.",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Hierarquia das sinalizações (art. 89 do CTB): os gestos do agente prevalecem sobre as demais sinalizações, incluindo o semáforo.",
+    detailedExplanation:
+      "O art. 89 do CTB estabelece a hierarquia das sinalizações: 1º) as ordens do AGENTE DE TRÂNSITO (gestos e apito); 2º) a sinalização SEMAFÓRICA; 3º) a sinalização VERTICAL (placas); 4º) a sinalização HORIZONTAL (marcas no pavimento). Por isso, quando um agente orienta o trânsito em um cruzamento, seus gestos prevalecem sobre o semáforo e as placas — o condutor deve obedecer ao agente, mesmo que isso contrarie o sinal luminoso. Desobedecer às ordens do agente configura infração (art. 195 do CTB).",
+    legalBase: "Arts. 89 e 195 do CTB",
+    commonMistake:
+      "A banca troca a ordem da hierarquia (colocando o semáforo acima do agente) ou confunde 'gestos do agente' com 'sinalização vertical'. Hierarquia: AGENTE > SEMÁFORO > PLACA > SINALIZAÇÃO HORIZONTAL.",
+    tip: "Hierarquia: o agente manda mais que o semáforo — a 'mão do agente' prevalece sobre o vermelho.",
+    incidence: "altissima",
+    trap: true,
+    difficulty: 2,
   }
 ];
 export function getRandomizedQuestions(

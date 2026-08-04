@@ -6,12 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Loader2, CheckCircle2, Copy, Clock, CreditCard, Sparkles, Terminal } from "lucide-react";
+import { Loader2, CheckCircle2, Copy, Clock, CreditCard, Sparkles, Terminal, BookOpen } from "lucide-react";
 import { getExpiryDate, isProfileExpired } from "@/lib/subscription";
 
 export const Route = createFileRoute("/checkout")({
   component: CheckoutPage,
-  head: () => ({ meta: [{ title: "Checkout Pix — NEXIA DRIVE Simulado" }] }),
+  head: () => ({ meta: [{ title: "Checkout Pix — NEXIA DRIVE Simulado Detran" }] }),
 });
 
 function playWinChime() {
@@ -128,6 +128,16 @@ function CheckoutPage() {
   }, [isGiftOpened]);
  
   const [showRouletteDialog, setShowRouletteDialog] = useState(false);
+  const [showTrialDialog, setShowTrialDialog] = useState(false);
+
+  useEffect(() => {
+    if (!authLoading && user && profile && isProfileExpired(profile)) {
+      const trialCompleted = localStorage.getItem(`nexia:trial_completed:${user.id}`) === "true";
+      if (!trialCompleted) {
+        setShowTrialDialog(true);
+      }
+    }
+  }, [user, profile, authLoading]);
   const [hasSpunRoulette, setHasSpunRoulette] = useState(() => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("nexia:roulette_spun") === "true";
@@ -179,11 +189,14 @@ function CheckoutPage() {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    if (!isGiftOpened) {
-      const timer = setTimeout(() => setShowGiftDialog(true), 1500);
-      return () => clearTimeout(timer);
+    if (!isGiftOpened && user) {
+      const trialCompleted = localStorage.getItem(`nexia:trial_completed:${user.id}`) === "true";
+      if (trialCompleted) {
+        const timer = setTimeout(() => setShowGiftDialog(true), 1500);
+        return () => clearTimeout(timer);
+      }
     }
-  }, []);
+  }, [isGiftOpened, user]);
 
   const handleOpenGift = () => {
     if (isGiftOpened || isOpening) return;
@@ -612,6 +625,52 @@ function CheckoutPage() {
                 {isSpinning ? "Girando a roleta..." : "Girar Roleta"}
               </Button>
             )}
+          </div>
+        </DialogContent>
+      </Dialog>
+ 
+      {/* TRIAL ONBOARDING DIALOG */}
+      <Dialog open={showTrialDialog} onOpenChange={(open) => {
+        setShowTrialDialog(open);
+      }}>
+        <DialogContent className="sm:max-w-md glass border-border/40">
+          <DialogHeader className="space-y-3 text-center">
+            <div className="mx-auto w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary-glow animate-bounce mt-2">
+              <BookOpen className="h-6 w-6" />
+            </div>
+            <DialogTitle className="font-display text-xl text-primary-glow font-bold text-center">
+              Teste Grátis Liberado! 🚦
+            </DialogTitle>
+            <DialogDescription className="text-sm text-muted-foreground leading-relaxed text-center">
+              Adoramos ter você aqui! Liberamos um **mini-simulado gratuito com 7 questões** para você testar seus conhecimentos e experimentar a nossa plataforma agora mesmo.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-3 pt-4">
+            <Button
+              onClick={() => {
+                setShowTrialDialog(false);
+                navigate({ to: "/simulado-demo" });
+              }}
+              className="w-full h-11 rounded-xl font-bold gradient-primary text-primary-foreground shadow-glow cursor-pointer flex items-center justify-center gap-2"
+            >
+              <Sparkles className="h-4 w-4" />
+              Fazer Teste Grátis
+            </Button>
+            
+            <Button
+              variant="ghost"
+              onClick={() => {
+                if (user) {
+                  localStorage.setItem(`nexia:trial_completed:${user.id}`, "true");
+                }
+                setShowTrialDialog(false);
+                setTimeout(() => setShowGiftDialog(true), 1000);
+              }}
+              className="w-full h-11 rounded-xl font-medium text-xs text-muted-foreground hover:text-foreground cursor-pointer hover:bg-secondary/40"
+            >
+              Pular e Ver Planos
+            </Button>
           </div>
         </DialogContent>
       </Dialog>

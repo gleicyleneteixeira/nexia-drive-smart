@@ -22,6 +22,7 @@ import { Route as PlacasRouteImport } from './routes/placas'
 import { Route as PsicotecnicoRouteImport } from './routes/psicotecnico'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SimuladoRouteImport } from './routes/simulado'
+import { Route as SimuladoDemoRouteImport } from './routes/simulado-demo'
 import { Route as TurboRouteImport } from './routes/turbo'
 import { Route as BibliotecaIdRouteImport } from './routes/biblioteca.$id'
 import { Route as ApiPixCreateRouteImport } from './routes/api/pix/create'
@@ -93,6 +94,11 @@ const SimuladoRoute = SimuladoRouteImport.update({
   path: '/simulado',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SimuladoDemoRoute = SimuladoDemoRouteImport.update({
+  id: '/simulado-demo',
+  path: '/simulado-demo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TurboRoute = TurboRouteImport.update({
   id: '/turbo',
   path: '/turbo',
@@ -133,6 +139,7 @@ export interface FileRoutesByFullPath {
   '/psicotecnico': typeof PsicotecnicoRoute
   '/reset-password': typeof ResetPasswordRoute
   '/simulado': typeof SimuladoRoute
+  '/simulado-demo': typeof SimuladoDemoRoute
   '/turbo': typeof TurboRoute
   '/biblioteca/$id': typeof BibliotecaIdRoute
   '/api/pix/create': typeof ApiPixCreateRoute
@@ -153,6 +160,7 @@ export interface FileRoutesByTo {
   '/psicotecnico': typeof PsicotecnicoRoute
   '/reset-password': typeof ResetPasswordRoute
   '/simulado': typeof SimuladoRoute
+  '/simulado-demo': typeof SimuladoDemoRoute
   '/turbo': typeof TurboRoute
   '/biblioteca/$id': typeof BibliotecaIdRoute
   '/api/pix/create': typeof ApiPixCreateRoute
@@ -174,6 +182,7 @@ export interface FileRoutesById {
   '/psicotecnico': typeof PsicotecnicoRoute
   '/reset-password': typeof ResetPasswordRoute
   '/simulado': typeof SimuladoRoute
+  '/simulado-demo': typeof SimuladoDemoRoute
   '/turbo': typeof TurboRoute
   '/biblioteca/$id': typeof BibliotecaIdRoute
   '/api/pix/create': typeof ApiPixCreateRoute
@@ -196,6 +205,7 @@ export interface FileRouteTypes {
     | '/psicotecnico'
     | '/reset-password'
     | '/simulado'
+    | '/simulado-demo'
     | '/turbo'
     | '/biblioteca/$id'
     | '/api/pix/create'
@@ -216,6 +226,7 @@ export interface FileRouteTypes {
     | '/psicotecnico'
     | '/reset-password'
     | '/simulado'
+    | '/simulado-demo'
     | '/turbo'
     | '/biblioteca/$id'
     | '/api/pix/create'
@@ -236,6 +247,7 @@ export interface FileRouteTypes {
     | '/psicotecnico'
     | '/reset-password'
     | '/simulado'
+    | '/simulado-demo'
     | '/turbo'
     | '/biblioteca/$id'
     | '/api/pix/create'
@@ -257,6 +269,7 @@ export interface RootRouteChildren {
   PsicotecnicoRoute: typeof PsicotecnicoRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SimuladoRoute: typeof SimuladoRoute
+  SimuladoDemoRoute: typeof SimuladoDemoRoute
   TurboRoute: typeof TurboRoute
   ApiPixCreateRoute: typeof ApiPixCreateRoute
   ApiPixStatusRoute: typeof ApiPixStatusRoute
@@ -356,6 +369,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SimuladoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/simulado-demo': {
+      id: '/simulado-demo'
+      path: '/simulado-demo'
+      fullPath: '/simulado-demo'
+      preLoaderRoute: typeof SimuladoDemoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/turbo': {
       id: '/turbo'
       path: '/turbo'
@@ -420,6 +440,7 @@ const rootRouteChildren: RootRouteChildren = {
   PsicotecnicoRoute: PsicotecnicoRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SimuladoRoute: SimuladoRoute,
+  SimuladoDemoRoute: SimuladoDemoRoute,
   TurboRoute: TurboRoute,
   ApiPixCreateRoute: ApiPixCreateRoute,
   ApiPixStatusRoute: ApiPixStatusRoute,
