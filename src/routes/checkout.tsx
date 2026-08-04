@@ -88,33 +88,39 @@ function CheckoutPage() {
   const [copied, setCopied] = useState(false);
   const [timeLeft, setTimeLeft] = useState(3600);
   const [paymentConfirmed, setPaymentConfirmed] = useState(false);
-
-  const [isGiftOpened, setIsGiftOpened] = useState(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("nexia:gift_opened") === "true";
-    }
-    return false;
-  });
+  const [isGiftOpened, setIsGiftOpened] = useState(false);
   const [isOpening, setIsOpening] = useState(false);
   const [flashCards, setFlashCards] = useState(false);
   const [showGiftDialog, setShowGiftDialog] = useState(false);
- 
-  const [discountTimeLeft, setDiscountTimeLeft] = useState<number>(() => {
-    if (typeof window !== "undefined") {
-      const saved = sessionStorage.getItem("nexia:discount_timer");
-      if (saved) {
-        const remaining = Math.max(0, Math.floor((Number(saved) - Date.now()) / 1000));
-        return remaining;
-      }
-      const expiry = Date.now() + 120 * 60 * 1000;
-      sessionStorage.setItem("nexia:discount_timer", String(expiry));
-      return 120 * 60;
-    }
-    return 120 * 60;
-  });
- 
+  const [discountTimeLeft, setDiscountTimeLeft] = useState(120 * 60);
+
+  const [hasSpunRoulette, setHasSpunRoulette] = useState(false);
+  const [rouletteDiscount, setRouletteDiscount] = useState<number | null>(null);
+
+  // Initialize and load user-specific states
   useEffect(() => {
-    if (!isGiftOpened) return;
+    if (!user) return;
+    
+    if (typeof window !== "undefined") {
+      setIsGiftOpened(localStorage.getItem(`nexia:gift_opened:${user.id}`) === "true");
+      setHasSpunRoulette(localStorage.getItem(`nexia:roulette_spun:${user.id}`) === "true");
+      const savedDiscount = localStorage.getItem(`nexia:roulette_discount:${user.id}`);
+      setRouletteDiscount(savedDiscount ? Number(savedDiscount) : null);
+
+      const savedTimer = sessionStorage.getItem(`nexia:discount_timer:${user.id}`);
+      if (savedTimer) {
+        const remaining = Math.max(0, Math.floor((Number(savedTimer) - Date.now()) / 1000));
+        setDiscountTimeLeft(remaining);
+      } else {
+        const expiry = Date.now() + 120 * 60 * 1000;
+        sessionStorage.setItem(`nexia:discount_timer:${user.id}`, String(expiry));
+        setDiscountTimeLeft(120 * 60);
+      }
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (!isGiftOpened || !user) return;
     const interval = setInterval(() => {
       setDiscountTimeLeft((prev) => {
         if (prev <= 1) {
@@ -125,7 +131,7 @@ function CheckoutPage() {
       });
     }, 1000);
     return () => clearInterval(interval);
-  }, [isGiftOpened]);
+  }, [isGiftOpened, user]);
  
   const [showRouletteDialog, setShowRouletteDialog] = useState(false);
   const [showTrialDialog, setShowTrialDialog] = useState(false);
@@ -138,32 +144,19 @@ function CheckoutPage() {
       }
     }
   }, [user, profile, authLoading]);
-  const [hasSpunRoulette, setHasSpunRoulette] = useState(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("nexia:roulette_spun") === "true";
-    }
-    return false;
-  });
-  const [rouletteDiscount, setRouletteDiscount] = useState<number | null>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("nexia:roulette_discount");
-      return saved ? Number(saved) : null;
-    }
-    return null;
-  });
- 
+
   const [wheelAngle, setWheelAngle] = useState(0);
   const [isSpinning, setIsSpinning] = useState(false);
   const [spinningCompleted, setSpinningCompleted] = useState(false);
  
   useEffect(() => {
-    if (isGiftOpened && discountTimeLeft === 0 && !hasSpunRoulette) {
+    if (isGiftOpened && discountTimeLeft === 0 && !hasSpunRoulette && user) {
       setShowRouletteDialog(true);
     }
-  }, [isGiftOpened, discountTimeLeft, hasSpunRoulette]);
+  }, [isGiftOpened, discountTimeLeft, hasSpunRoulette, user]);
  
   const spinWheel = () => {
-    if (isSpinning) return;
+    if (isSpinning || !user) return;
     setIsSpinning(true);
     
     // Slices: 30%, 20%, 31%, 25%, 33%.
@@ -176,8 +169,8 @@ function CheckoutPage() {
       setSpinningCompleted(true);
       setRouletteDiscount(33);
       if (typeof window !== "undefined") {
-        localStorage.setItem("nexia:roulette_spun", "true");
-        localStorage.setItem("nexia:roulette_discount", "33");
+        localStorage.setItem(`nexia:roulette_spun:${user.id}`, "true");
+        localStorage.setItem(`nexia:roulette_discount:${user.id}`, "33");
       }
       setHasSpunRoulette(true);
       playWinChime();
@@ -199,7 +192,7 @@ function CheckoutPage() {
   }, [isGiftOpened, user]);
 
   const handleOpenGift = () => {
-    if (isGiftOpened || isOpening) return;
+    if (isGiftOpened || isOpening || !user) return;
     setIsOpening(true);
     playWinChime();
     startConfetti();
@@ -207,7 +200,7 @@ function CheckoutPage() {
       setIsGiftOpened(true);
       setFlashCards(true);
       if (typeof window !== "undefined") {
-        localStorage.setItem("nexia:gift_opened", "true");
+        localStorage.setItem(`nexia:gift_opened:${user.id}`, "true");
       }
       setTimeout(() => setFlashCards(false), 800);
     }, 600);
