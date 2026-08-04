@@ -308,14 +308,12 @@ function CheckoutPage() {
       name: "Plano Intensivo (30 Dias)",
       description: "Para quem já está na reta final e quer apenas revisar.",
       price: (() => {
-        if (isGiftOpened && discountTimeLeft > 0) return 19.90;
-        if (isGiftOpened && rouletteDiscount) return 19.90;
+        if (isGiftOpened && (discountTimeLeft > 0 || rouletteDiscount)) return 19.90;
         return 29.90;
       })(),
       oldPrice: 29.90,
       discount: (() => {
-        if (isGiftOpened && discountTimeLeft > 0) return "33% OFF";
-        if (isGiftOpened && rouletteDiscount) return `${rouletteDiscount}% OFF`;
+        if (isGiftOpened && (discountTimeLeft > 0 || rouletteDiscount)) return "33% OFF";
         return "";
       })(),
       badge: "PLANO RÁPIDO",
@@ -333,16 +331,12 @@ function CheckoutPage() {
       name: "Combo CNH Aprovada (6 Meses)",
       description: "O guia definitivo para não reprovar no Teórico, Psicotécnico e Prática.",
       price: (() => {
-        if (isGiftOpened && discountTimeLeft > 0) return 29.90;
-        if (isGiftOpened && rouletteDiscount) {
-          return Number((59.90 * (1 - rouletteDiscount / 100)).toFixed(2));
-        }
+        if (isGiftOpened && (discountTimeLeft > 0 || rouletteDiscount)) return 29.90;
         return 59.90;
       })(),
       oldPrice: 59.90,
       discount: (() => {
-        if (isGiftOpened && discountTimeLeft > 0) return "50% OFF";
-        if (isGiftOpened && rouletteDiscount) return `${rouletteDiscount}% OFF`;
+        if (isGiftOpened && (discountTimeLeft > 0 || rouletteDiscount)) return "50% OFF";
         return "";
       })(),
       badge: "MAIS VENDIDO",
