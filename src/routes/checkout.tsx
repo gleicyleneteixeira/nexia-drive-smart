@@ -94,30 +94,21 @@ function CheckoutPage() {
   const [showGiftDialog, setShowGiftDialog] = useState(false);
   const [discountTimeLeft, setDiscountTimeLeft] = useState(120 * 60);
 
-  const [hasSpunRoulette, setHasSpunRoulette] = useState(false);
-  const [rouletteDiscount, setRouletteDiscount] = useState<number | null>(null);
-
-  // Initialize and load user-specific states
+  // Cada vez que o usuário sem plano ativo entrar, reinicia o presente e o cronômetro
   useEffect(() => {
-    if (!user) return;
+    if (!user || !profile) return;
     
-    if (typeof window !== "undefined") {
-      setIsGiftOpened(localStorage.getItem(`nexia:gift_opened:${user.id}`) === "true");
-      setHasSpunRoulette(localStorage.getItem(`nexia:roulette_spun:${user.id}`) === "true");
-      const savedDiscount = localStorage.getItem(`nexia:roulette_discount:${user.id}`);
-      setRouletteDiscount(savedDiscount ? Number(savedDiscount) : null);
-
-      const savedTimer = sessionStorage.getItem(`nexia:discount_timer:${user.id}`);
-      if (savedTimer) {
-        const remaining = Math.max(0, Math.floor((Number(savedTimer) - Date.now()) / 1000));
-        setDiscountTimeLeft(remaining);
-      } else {
-        const expiry = Date.now() + 120 * 60 * 1000;
-        sessionStorage.setItem(`nexia:discount_timer:${user.id}`, String(expiry));
-        setDiscountTimeLeft(120 * 60);
+    if (isProfileExpired(profile)) {
+      setIsGiftOpened(false);
+      setDiscountTimeLeft(120 * 60);
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem(`nexia:discount_timer:${user.id}`, String(Date.now() + 120 * 60 * 1000));
+        localStorage.removeItem(`nexia:gift_opened:${user.id}`);
       }
+    } else {
+      setIsGiftOpened(true);
     }
-  }, [user]);
+  }, [user, profile]);
 
   useEffect(() => {
     if (!isGiftOpened || !user) return;
@@ -132,8 +123,7 @@ function CheckoutPage() {
     }, 1000);
     return () => clearInterval(interval);
   }, [isGiftOpened, user]);
- 
-  const [showRouletteDialog, setShowRouletteDialog] = useState(false);
+  
   const [showTrialDialog, setShowTrialDialog] = useState(false);
 
   useEffect(() => {
@@ -145,39 +135,6 @@ function CheckoutPage() {
     }
   }, [user, profile, authLoading]);
 
-  const [wheelAngle, setWheelAngle] = useState(0);
-  const [isSpinning, setIsSpinning] = useState(false);
-  const [spinningCompleted, setSpinningCompleted] = useState(false);
- 
-  useEffect(() => {
-    if (isGiftOpened && discountTimeLeft === 0 && !hasSpunRoulette && user) {
-      setShowRouletteDialog(true);
-    }
-  }, [isGiftOpened, discountTimeLeft, hasSpunRoulette, user]);
- 
-  const spinWheel = () => {
-    if (isSpinning || !user) return;
-    setIsSpinning(true);
-    
-    // Slices: 30%, 20%, 31%, 25%, 33%.
-    // Slice 5 (33%) center is at 324 degrees.
-    const finalAngle = 1800 + 324;
-    setWheelAngle(finalAngle);
- 
-    setTimeout(() => {
-      setIsSpinning(false);
-      setSpinningCompleted(true);
-      setRouletteDiscount(33);
-      if (typeof window !== "undefined") {
-        localStorage.setItem(`nexia:roulette_spun:${user.id}`, "true");
-        localStorage.setItem(`nexia:roulette_discount:${user.id}`, "33");
-      }
-      setHasSpunRoulette(true);
-      playWinChime();
-      startConfetti();
-    }, 4000);
-  };
- 
   const pollingRef = useRef<NodeJS.Timeout | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -301,12 +258,12 @@ function CheckoutPage() {
       name: "Plano Intensivo (30 Dias)",
       description: "Para quem já está na reta final e quer apenas revisar.",
       price: (() => {
-        if (isGiftOpened && (discountTimeLeft > 0 || rouletteDiscount)) return 19.90;
+        if (isGiftOpened && discountTimeLeft > 0) return 19.90;
         return 29.90;
       })(),
       oldPrice: 29.90,
       discount: (() => {
-        if (isGiftOpened && (discountTimeLeft > 0 || rouletteDiscount)) return "33% OFF";
+        if (isGiftOpened && discountTimeLeft > 0) return "33% OFF";
         return "";
       })(),
       badge: "PLANO RÁPIDO",
@@ -324,12 +281,12 @@ function CheckoutPage() {
       name: "Combo CNH Aprovada (6 Meses)",
       description: "O guia definitivo para não reprovar no Teórico, Psicotécnico e Prática.",
       price: (() => {
-        if (isGiftOpened && (discountTimeLeft > 0 || rouletteDiscount)) return 29.90;
+        if (isGiftOpened && discountTimeLeft > 0) return 29.90;
         return 59.90;
       })(),
       oldPrice: 59.90,
       discount: (() => {
-        if (isGiftOpened && (discountTimeLeft > 0 || rouletteDiscount)) return "50% OFF";
+        if (isGiftOpened && discountTimeLeft > 0) return "50% OFF";
         return "";
       })(),
       badge: "MAIS VENDIDO",
