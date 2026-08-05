@@ -487,3 +487,78 @@ export const resetFailedLoginAttempts = createServerFn({ method: "POST" })
     return { success: true };
   });
 
+export const requestPasswordResetSecure = createServerFn({ method: "POST" })
+  .inputValidator((d: { input: string }) => d)
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { sendEmail } = await import("@/lib/mail.server");
+
+    const inputClean = data.input.trim().toLowerCase();
+    const cpfDigits = inputClean.replace(/\D/g, "");
+
+    let query = supabaseAdmin.from("profiles").select("id, email, display_name");
+
+    if (cpfDigits && cpfDigits.length >= 11) {
+      query = query.or(`email.eq.${inputClean},cpf.eq.${cpfDigits}`);
+    } else {
+      query = query.eq("email", inputClean);
+    }
+
+    const { data: profile, error } = await query.maybeSingle();
+    if (error || !profile) {
+      throw new Error("Não encontramos nenhuma conta com o e-mail ou CPF informado.");
+    }
+
+    const email = profile.email;
+    if (!email) {
+      throw new Error("Esta conta não possui um e-mail cadastrado. Entre em contato com o suporte.");
+    }
+
+    // Generate random temporary password
+    const chars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789";
+    let tempPassword = "nexia-";
+    for (let i = 0; i < 6; i++) {
+      tempPassword += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+
+    // Update Auth password
+    const { error: authErr } = await supabaseAdmin.auth.admin.updateUserById(profile.id, {
+      password: tempPassword,
+    });
+    if (authErr) throw new Error("Erro ao atualizar credenciais: " + authErr.message);
+
+    // Update profile: set needs_new_password: true, reset failed attempts
+    await supabaseAdmin
+      .from("profiles")
+      .update({
+        failed_attempts: 0,
+        access_status: "active",
+        needs_new_password: true,
+      })
+      .eq("id", profile.id);
+
+    // Send email with nodemailer
+    const htmlContent = `
+      <div style="font-family: sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px; background: #ffffff;">
+        <h2 style="color: #2563eb; margin-top: 0;">Recuperação de Senha — Nexia Drive</h2>
+        <p>Olá, <strong>${profile.display_name || "Estudante"}</strong>!</p>
+        <p>Recebemos uma solicitação de redefinição de senha para sua conta.</p>
+        <p>Geramos uma senha temporária segura para você acessar a plataforma:</p>
+        <div style="background: #f1f5f9; padding: 12px; font-size: 18px; font-family: monospace; font-weight: bold; letter-spacing: 1px; text-align: center; border-radius: 6px; margin: 18px 0; border: 1px dashed #cbd5e1; color: #0f172a;">
+          ${tempPassword}
+        </div>
+        <p style="color: #64748b; font-size: 12px;">💡 Por segurança, você deverá cadastrar uma nova senha de sua escolha assim que fizer login.</p>
+        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
+        <p style="font-size: 11px; color: #94a3b8; margin-bottom: 0;">Se você não solicitou essa alteração, altere sua senha imediatamente.</p>
+      </div>
+    `;
+
+    await sendEmail({
+      to: email,
+      subject: "Sua senha temporária — Nexia Drive",
+      html: htmlContent,
+    });
+
+    return { success: true };
+  });
+

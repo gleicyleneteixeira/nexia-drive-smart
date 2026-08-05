@@ -28,6 +28,11 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
         }
 
         if (profile) {
+          if (profile.needs_new_password) {
+            navigate({ to: "/reset-password", replace: true });
+            return;
+          }
+
           if (isProfileExpired(profile)) {
             // Se logado pendente de pagamento (ou expirado), força ir para o checkout
             if (!pathname.startsWith("/checkout")) {

@@ -323,7 +323,7 @@ function CadastroPage() {
         const { checkLoginBlockSecure } = await import("@/lib/admin-operations.server");
         const blockCheck = await checkLoginBlockSecure({ data: { input: loginEmail } });
         if (blockCheck.blocked) {
-          const msg = "Sua conta foi bloqueada por excesso de tentativas de login incorretas. Entre em contato com o suporte para desbloquear.";
+          const msg = "Usuário bloqueado por excesso de tentativas de login incorretas. Redefina sua senha ou entre em contato com o suporte.";
           setErrorMsg(msg);
           toast.error(msg);
           setLoading(false);
@@ -351,7 +351,14 @@ function CadastroPage() {
               const { recordFailedLoginAttempt } = await import("@/lib/admin-operations.server");
               const res = await recordFailedLoginAttempt({ data: { input: loginEmail } });
               if (res.blocked) {
-                const msg = "Sua conta foi bloqueada por excesso de tentativas de login incorretas. Entre em contato com o suporte para desbloquear.";
+                const msg = "Usuário bloqueado por excesso de tentativas de login incorretas. Redefina sua senha ou entre em contato com o suporte.";
+                setErrorMsg(msg);
+                toast.error(msg);
+                setLoading(false);
+                return;
+              } else {
+                const remaining = 3 - res.attempts;
+                const msg = `E-mail/CPF ou senha incorretos. Você tem mais ${remaining} tentativa${remaining > 1 ? "s" : ""}.`;
                 setErrorMsg(msg);
                 toast.error(msg);
                 setLoading(false);
@@ -428,13 +435,13 @@ function CadastroPage() {
     e.preventDefault();
     setForgotLoading(true);
     try {
-      const { sendMigrationResetEmail } = await import("@/lib/admin-operations.server");
-      await sendMigrationResetEmail({ data: { email: forgotEmail, origin: window.location.origin } });
-      toast.success("Enviamos um link de redefinição para seu e-mail.");
+      const { requestPasswordResetSecure } = await import("@/lib/admin-operations.server");
+      await requestPasswordResetSecure({ data: { input: forgotEmail } });
+      toast.success("Senha temporária gerada e enviada para o seu e-mail!");
       setForgotOpen(false);
       resetForgotState();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Erro");
+      toast.error(err instanceof Error ? err.message : "Erro ao redefinir senha.");
     } finally {
       setForgotLoading(false);
     }
@@ -465,9 +472,9 @@ function CadastroPage() {
     if (!forgotPhoneResult) return;
     setForgotLoading(true);
     try {
-      const { sendMigrationResetEmail } = await import("@/lib/admin-operations.server");
-      await sendMigrationResetEmail({ data: { email: forgotPhoneResult.email, origin: window.location.origin } });
-      toast.success("Link de redefinição enviado com sucesso para o e-mail cadastrado!");
+      const { requestPasswordResetSecure } = await import("@/lib/admin-operations.server");
+      await requestPasswordResetSecure({ data: { input: forgotPhoneResult.email } });
+      toast.success("Senha temporária gerada e enviada para o e-mail cadastrado!");
       setForgotOpen(false);
       resetForgotState();
     } catch (err) {
@@ -502,9 +509,9 @@ function CadastroPage() {
     if (!forgotCpfResult) return;
     setForgotLoading(true);
     try {
-      const { sendMigrationResetEmail } = await import("@/lib/admin-operations.server");
-      await sendMigrationResetEmail({ data: { email: forgotCpfResult.email, origin: window.location.origin } });
-      toast.success("Link de redefinição enviado com sucesso para o e-mail cadastrado!");
+      const { requestPasswordResetSecure } = await import("@/lib/admin-operations.server");
+      await requestPasswordResetSecure({ data: { input: forgotCpfResult.email } });
+      toast.success("Senha temporária gerada e enviada para o e-mail cadastrado!");
       setForgotOpen(false);
       resetForgotState();
     } catch (err) {

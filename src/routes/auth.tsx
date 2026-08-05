@@ -148,7 +148,7 @@ function AuthPage() {
         const { checkLoginBlockSecure } = await import("@/lib/admin-operations.server");
         const blockCheck = await checkLoginBlockSecure({ data: { input: email } });
         if (blockCheck.blocked) {
-          throw new Error("Sua conta foi bloqueada por excesso de tentativas de login incorretas. Entre em contato com o suporte para desbloquear.");
+          throw new Error("Usuário bloqueado por excesso de tentativas de login incorretas. Redefina sua senha ou entre em contato com o suporte.");
         }
 
         const { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -165,11 +165,14 @@ function AuthPage() {
               const { recordFailedLoginAttempt } = await import("@/lib/admin-operations.server");
               const res = await recordFailedLoginAttempt({ data: { input: email } });
               if (res.blocked) {
-                throw new Error("Sua conta foi bloqueada por excesso de tentativas de login incorretas. Entre em contato com o suporte para desbloquear.");
+                throw new Error("Usuário bloqueado por excesso de tentativas de login incorretas. Redefina sua senha ou entre em contato com o suporte.");
+              } else {
+                const remaining = 3 - res.attempts;
+                throw new Error(`E-mail/CPF ou senha incorretos. Você tem mais ${remaining} tentativa${remaining > 1 ? "s" : ""}.`);
               }
             } catch (blockErr) {
               console.error("Erro ao gravar tentativa de login:", blockErr);
-              if (blockErr instanceof Error && blockErr.message.includes("bloqueada")) {
+              if (blockErr instanceof Error) {
                 throw blockErr;
               }
             }
@@ -267,15 +270,13 @@ function AuthPage() {
     e.preventDefault();
     setForgotLoading(true);
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(forgotEmail, {
-        redirectTo: `${window.location.origin}/reset-password`,
-      });
-      if (error) throw error;
-      toast.success("Enviamos um link de redefinição para seu e-mail.");
+      const { requestPasswordResetSecure } = await import("@/lib/admin-operations.server");
+      await requestPasswordResetSecure({ data: { input: forgotEmail } });
+      toast.success("Senha temporária gerada e enviada para o seu e-mail!");
       setForgotOpen(false);
       setForgotEmail("");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Erro");
+      toast.error(err instanceof Error ? err.message : "Erro ao redefinir senha.");
     } finally {
       setForgotLoading(false);
     }
