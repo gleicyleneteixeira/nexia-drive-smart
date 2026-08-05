@@ -11,7 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink, ShoppingBag, MessageCircle } from "lucide-react";
+import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen } from "lucide-react";
 import * as XLSX from "xlsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { useServerFn } from "@tanstack/react-start";
@@ -416,6 +416,8 @@ type ProfileRow = {
   expires_at: string | null;
   created_at: string;
   needs_new_password: boolean | null;
+  access_status?: string | null;
+  failed_attempts?: number | null;
 };
 const EMPLOYMENT_LABELS: Record<string, string> = {
   clt: "CLT",
@@ -436,6 +438,7 @@ function UsersPanel() {
   const [filter, setFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [passwordFilter, setPasswordFilter] = useState<string>("all");
+  const [blockFilter, setBlockFilter] = useState<string>("all");
   const [createdFrom, setCreatedFrom] = useState("");
   const [createdTo, setCreatedTo] = useState("");
   const [expiresFrom, setExpiresFrom] = useState("");
@@ -473,7 +476,7 @@ function UsersPanel() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profiles")
-        .select("id, display_name, email, cpf, phone, employment_status, employment_other, status, expires_at, created_at, needs_new_password")
+        .select("id, display_name, email, cpf, phone, employment_status, employment_other, status, expires_at, created_at, needs_new_password, access_status, failed_attempts")
         .order("created_at", { ascending: false });
       if (error) throw error;
       return (data ?? []) as ProfileRow[];
@@ -485,6 +488,8 @@ function UsersPanel() {
     if (statusFilter !== "all" && u.status !== statusFilter) return false;
     if (passwordFilter === "sem_senha" && (u.needs_new_password !== true)) return false;
     if (passwordFilter === "com_senha" && u.needs_new_password === true) return false;
+    if (blockFilter === "bloqueados" && u.access_status !== "blocked" && (u.failed_attempts ?? 0) < 3) return false;
+    if (blockFilter === "ativos" && (u.access_status === "blocked" || (u.failed_attempts ?? 0) >= 3)) return false;
     if (createdFrom || createdTo) {
       const t = new Date(u.created_at).getTime();
       if (createdFrom && t < new Date(createdFrom + "T00:00:00").getTime()) return false;
@@ -601,6 +606,15 @@ function UsersPanel() {
             <option className="bg-card text-foreground" value="com_senha">Com senha</option>
           </select>
         </div>
+        <div className="min-w-[140px]">
+          <Label className="text-xs">Bloqueio</Label>
+          <select value={blockFilter} onChange={(e) => { setBlockFilter(e.target.value); setPage(1); }}
+            className="flex h-9 w-full rounded-md border border-border/20 bg-card/60 backdrop-blur-md px-3 py-1 text-sm text-foreground shadow-sm">
+            <option className="bg-card text-foreground" value="all">Todos</option>
+            <option className="bg-card text-foreground" value="bloqueados">Bloqueados</option>
+            <option className="bg-card text-foreground" value="ativos">Desbloqueados</option>
+          </select>
+        </div>
         <div className="min-w-[90px]">
           <Label className="text-xs">Por página</Label>
           <select value={pageSize} onChange={(e) => { setPageSize(Number(e.target.value)); setPage(1); }}
@@ -654,6 +668,8 @@ function UsersPanel() {
             <span className="text-warning"> {users.filter(u => u.status === "pendente_pagamento").length} pendente</span>
             &middot;
             <span className="text-destructive"> {users.filter(u => u.needs_new_password === true).length} sem senha</span>
+            &middot;
+            <span className="text-destructive font-semibold"> {users.filter(u => u.access_status === "blocked" || (u.failed_attempts ?? 0) >= 3).length} bloqueados</span>
           </span>
         )}
       </div>
@@ -722,6 +738,7 @@ function UsersPanel() {
               <th className="text-left px-3 py-2">Telefone</th>
               <th className="text-left px-3 py-2">Pagamento</th>
               <th className="text-left px-3 py-2">Senha</th>
+              <th className="text-left px-3 py-2">Bloqueio</th>
               <th className="text-left px-3 py-2">Situação</th>
               <th className="text-left px-3 py-2">Cadastro</th>
               <th className="text-left px-3 py-2">Expiração</th>
@@ -760,6 +777,19 @@ function UsersPanel() {
                     <span className="inline-flex items-center gap-1 text-[11px] font-bold text-success bg-success/10 border border-success/30 px-2 py-0.5 rounded-full">
                       <span className="w-1.5 h-1.5 rounded-full bg-success" />
                       OK
+                    </span>
+                  )}
+                </td>
+                <td className="px-3 py-2 whitespace-nowrap">
+                  {u.access_status === "blocked" || (u.failed_attempts ?? 0) >= 3 ? (
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-destructive bg-destructive/10 border border-destructive/30 px-2 py-0.5 rounded-full">
+                      <span className="w-1.5 h-1.5 rounded-full bg-destructive animate-pulse" />
+                      Bloqueado
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-success bg-success/10 border border-success/30 px-2 py-0.5 rounded-full">
+                      <span className="w-1.5 h-1.5 rounded-full bg-success" />
+                      Ativo
                     </span>
                   )}
                 </td>
@@ -806,6 +836,25 @@ function UsersPanel() {
                       <XCircle className="h-4 w-4" />
                     </button>
                   )}
+                  {u.access_status === "blocked" || (u.failed_attempts ?? 0) >= 3 ? (
+                    <button
+                      title="Desbloquear conta"
+                      onClick={async () => {
+                        if (!window.confirm(`Deseja desbloquear a conta de "${u.display_name ?? u.email}"?`)) return;
+                        try {
+                          const { resetFailedLoginAttempts } = await import("@/lib/admin-operations.server");
+                          await resetFailedLoginAttempts({ data: { userId: u.id } });
+                          toast.success("Usuário desbloqueado com sucesso!");
+                          qc.invalidateQueries({ queryKey: ["admin", "profiles"] });
+                        } catch (err) {
+                          toast.error(err instanceof Error ? err.message : "Erro ao desbloquear");
+                        }
+                      }}
+                      className="inline-flex items-center justify-center h-8 w-8 rounded-md text-warning hover:text-warning/80 hover:bg-warning/10"
+                    >
+                      <LockOpen className="h-4 w-4" />
+                    </button>
+                  ) : null}
                   <button
                     title="Redefinir senha"
                     onClick={() => { setResetUser(u); setNewPassword(""); }}
@@ -824,7 +873,7 @@ function UsersPanel() {
               </tr>
             ))}
             {!isLoading && filtered.length === 0 && (
-              <tr><td colSpan={8} className="text-center text-muted-foreground py-6">Nenhum usuário encontrado.</td></tr>
+              <tr><td colSpan={11} className="text-center text-muted-foreground py-6">Nenhum usuário encontrado.</td></tr>
             )}
           </tbody>
         </table>

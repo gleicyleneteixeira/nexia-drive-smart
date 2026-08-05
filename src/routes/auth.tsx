@@ -145,6 +145,12 @@ function AuthPage() {
         toast.success("Conta criada! Bem-vinda(o).");
         navigate({ to: "/" });
       } else {
+        const { checkLoginBlockSecure } = await import("@/lib/admin-operations.server");
+        const blockCheck = await checkLoginBlockSecure({ data: { input: email } });
+        if (blockCheck.blocked) {
+          throw new Error("Sua conta foi bloqueada por excesso de tentativas de login incorretas. Entre em contato com o suporte para desbloquear.");
+        }
+
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) {
           const isInvalidCredentials =
@@ -155,6 +161,19 @@ function AuthPage() {
             error.code === "invalid_grant";
 
           if (isInvalidCredentials) {
+            try {
+              const { recordFailedLoginAttempt } = await import("@/lib/admin-operations.server");
+              const res = await recordFailedLoginAttempt({ data: { input: email } });
+              if (res.blocked) {
+                throw new Error("Sua conta foi bloqueada por excesso de tentativas de login incorretas. Entre em contato com o suporte para desbloquear.");
+              }
+            } catch (blockErr) {
+              console.error("Erro ao gravar tentativa de login:", blockErr);
+              if (blockErr instanceof Error && blockErr.message.includes("bloqueada")) {
+                throw blockErr;
+              }
+            }
+
             setLoading(false);
             try {
               const { checkLegacyAccessSecure } = await import("@/lib/admin-operations.server");
@@ -173,6 +192,18 @@ function AuthPage() {
           }
           throw error;
         }
+
+        // Reset attempts on successful login
+        try {
+          const { data: userData } = await supabase.auth.getUser();
+          if (userData?.user?.id) {
+            const { resetFailedLoginAttempts } = await import("@/lib/admin-operations.server");
+            await resetFailedLoginAttempts({ data: { userId: userData.user.id } });
+          }
+        } catch (resetErr) {
+          console.error("Erro ao resetar tentativas de login:", resetErr);
+        }
+
         toast.success("Bem-vinda(o) de volta!");
         navigate({ to: portal === "admin" ? "/admin" : "/" });
       }

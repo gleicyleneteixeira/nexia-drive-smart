@@ -320,6 +320,16 @@ function CadastroPage() {
         }
 
         // Sign in with resolved e-mail
+        const { checkLoginBlockSecure } = await import("@/lib/admin-operations.server");
+        const blockCheck = await checkLoginBlockSecure({ data: { input: loginEmail } });
+        if (blockCheck.blocked) {
+          const msg = "Sua conta foi bloqueada por excesso de tentativas de login incorretas. Entre em contato com o suporte para desbloquear.";
+          setErrorMsg(msg);
+          toast.error(msg);
+          setLoading(false);
+          return;
+        }
+
         let signInError: any = null;
         try {
           const { error } = await supabase.auth.signInWithPassword({ email: loginEmail, password });
@@ -338,10 +348,24 @@ function CadastroPage() {
 
           if (isInvalidCredentials) {
             try {
+              const { recordFailedLoginAttempt } = await import("@/lib/admin-operations.server");
+              const res = await recordFailedLoginAttempt({ data: { input: loginEmail } });
+              if (res.blocked) {
+                const msg = "Sua conta foi bloqueada por excesso de tentativas de login incorretas. Entre em contato com o suporte para desbloquear.";
+                setErrorMsg(msg);
+                toast.error(msg);
+                setLoading(false);
+                return;
+              }
+            } catch (blockErr) {
+              console.error("Erro ao gravar tentativa de login:", blockErr);
+            }
+
+            try {
               const { checkLegacyAccessSecure } = await import("@/lib/admin-operations.server");
               const status = await checkLegacyAccessSecure({ data: { input: email } });
 
-          if (status.found && status.isMigratedUser && (status.needsNewPassword ?? status.needsFirstAccess)) {
+              if (status.found && status.isMigratedUser && (status.needsNewPassword ?? status.needsFirstAccess)) {
                 setLegacyEmail(status.userEmail);
                 setLegacyPassword("");
                 setLegacyConfirmPassword("");
@@ -377,6 +401,17 @@ function CadastroPage() {
           return;
         }
         
+        // Reset attempts on successful login
+        try {
+          const { data: userData } = await supabase.auth.getUser();
+          if (userData?.user?.id) {
+            const { resetFailedLoginAttempts } = await import("@/lib/admin-operations.server");
+            await resetFailedLoginAttempts({ data: { userId: userData.user.id } });
+          }
+        } catch (resetErr) {
+          console.error("Erro ao resetar tentativas de login:", resetErr);
+        }
+
         toast.success("Bem-vinda(o) de volta!");
         // Navigation will be handled by useEffect above
       }

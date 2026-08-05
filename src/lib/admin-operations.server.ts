@@ -417,3 +417,73 @@ export const activateUser = createServerFn({ method: "POST" })
     return { ok: true, planType };
   });
 
+export const checkLoginBlockSecure = createServerFn({ method: "POST" })
+  .inputValidator((d: { input: string }) => d)
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const inputClean = data.input.trim().toLowerCase();
+    const cpfDigits = inputClean.replace(/\D/g, "");
+
+    let query = supabaseAdmin.from("profiles").select("id, access_status, failed_attempts");
+
+    if (cpfDigits && cpfDigits.length >= 11) {
+      query = query.or(`email.eq.${inputClean},cpf.eq.${cpfDigits}`);
+    } else {
+      query = query.eq("email", inputClean);
+    }
+
+    const { data: profile } = await query.maybeSingle();
+    if (!profile) return { blocked: false };
+
+    const isBlocked = profile.access_status === "blocked" || (profile.failed_attempts ?? 0) >= 3;
+    return { blocked: isBlocked };
+  });
+
+export const recordFailedLoginAttempt = createServerFn({ method: "POST" })
+  .inputValidator((d: { input: string }) => d)
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const inputClean = data.input.trim().toLowerCase();
+    const cpfDigits = inputClean.replace(/\D/g, "");
+
+    let query = supabaseAdmin.from("profiles").select("id, failed_attempts");
+
+    if (cpfDigits && cpfDigits.length >= 11) {
+      query = query.or(`email.eq.${inputClean},cpf.eq.${cpfDigits}`);
+    } else {
+      query = query.eq("email", inputClean);
+    }
+
+    const { data: profile } = await query.maybeSingle();
+    if (!profile) return { success: false };
+
+    const currentAttempts = profile.failed_attempts ?? 0;
+    const newAttempts = currentAttempts + 1;
+    const isBlockedNow = newAttempts >= 3;
+
+    await supabaseAdmin
+      .from("profiles")
+      .update({
+        failed_attempts: newAttempts,
+        access_status: isBlockedNow ? "blocked" : "active"
+      })
+      .eq("id", profile.id);
+
+    return { success: true, attempts: newAttempts, blocked: isBlockedNow };
+  });
+
+export const resetFailedLoginAttempts = createServerFn({ method: "POST" })
+  .inputValidator((d: { userId: string }) => d)
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    await supabaseAdmin
+      .from("profiles")
+      .update({
+        failed_attempts: 0,
+        access_status: "active"
+      })
+      .eq("id", data.userId);
+
+    return { success: true };
+  });
+
