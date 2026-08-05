@@ -338,13 +338,7 @@ function TeoricoDashboard() {
               <Sparkles className="h-4 w-4" />
               Iniciar Primeiro Simulado
             </Link>
-            <Link
-              to="/simulado-demo"
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-success/40 bg-success/10 text-success text-xs font-bold hover:bg-success/15 transition-colors"
-            >
-              <Sparkles className="h-4 w-4" />
-              Teste Grátis (7 questões)
-            </Link>
+
             <Link
               to="/turbo"
               className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl glass text-xs font-semibold hover:bg-accent/30 transition-colors"
