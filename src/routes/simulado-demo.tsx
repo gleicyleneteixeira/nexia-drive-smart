@@ -46,7 +46,7 @@ export const Route = createFileRoute("/simulado-demo")({
 });
 
 const TOTAL = 30;
-const STORAGE_KEY = "nexia:simulado:v3";
+const STORAGE_KEY = "nexia:simulado_demo:v3";
 const SEEN_KEY = "nexia:simulado:seen:v1";
 
 function loadSeen(): string[] {
