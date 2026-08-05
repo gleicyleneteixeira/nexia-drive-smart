@@ -3770,6 +3770,30 @@ export const QUESTIONS: Question[] = [
     incidence: "altissima",
     trap: true,
     difficulty: 2,
+  },
+{
+    id: "qp57",
+    category: "legislacao",
+    statement:
+      "Um condutor transita com seu veículo automotor por uma via urbana de pista simples e duplo sentido de circulação. Ao aproximar-se de um cruzamento, ele sinaliza a intenção de convergir à esquerda. Considerando as normas gerais de circulação e conduta do Código de Trânsito Brasileiro (CTB), bem como o correto posicionamento do veículo antes e durante a manobra, como o condutor deve proceder para convergir de forma legal e segura?",
+    options: [
+      "Para convergir, o condutor deve deslocar o veículo com a devida antecedência para a posição mais próxima possível do bordo esquerdo da pista de rolamento, imobilizar o veículo e aguardar o fluxo em sentido contrário antes de cruzar a via.",
+      "Para convergir, o condutor deve deslocar o veículo com a devida antecedência para a posição mais próxima possível da linha divisória central da pista, sem invadir a faixa do sentido oposto, e efetuar a conversão com segurança após ceder a preferência aos veículos que transitam no sentido contrário.",
+      "Para convergir, o condutor deve obrigatoriamente deslocar o veículo para o bordo direito da pista de rolamento, parar no acostamento ou bordo lateral e aguardar o momento oportuno de tráfego livre em ambos os sentidos para efetuar a manobra.",
+      "Para convergir, o condutor deve manter o veículo centralizado na sua faixa, acionar o pisca-alerta (luzes de advertência) e realizar a conversão rapidamente, tendo em vista que a sinalização de intenção lhe garante a preferência sobre os veículos do fluxo oposto.",
+    ],
+    correctIndex: 1,
+    explanation:
+      "Art. 38 do CTB: ao convergir à esquerda em via de duplo sentido, o condutor deve posicionar o veículo o mais próximo possível da linha divisória central da pista (sem invadir a faixa do sentido oposto) e ceder a preferência aos veículos que vêm em sentido contrário.",
+    detailedExplanation:
+      "O art. 38, inciso II do CTB disciplina a conversão à esquerda em via de pista simples e duplo sentido de circulação: o condutor deve deslocar o veículo, com a devida antecedência, para a posição mais próxima possível da linha divisória central da pista (sem cruzá-la nem invadir a faixa do sentido oposto) e efetuar a conversão após ceder a preferência aos veículos que transitam em sentido contrário. A alternativa A erra ao citar o 'bordo esquerdo' — posicionamento que vale apenas para vias de sentido único de circulação; fazer isso em via de duplo sentido coloca o veículo na contramão. A alternativa C induz ao erro de aplicar a regra de rodovia (deslocar-se para o bordo direito/acostamento), que não se aplica à conversão em via urbana. A alternativa D traz o mito clássico de que 'dar a seta garante preferência' e ainda sugere o uso indevido do pisca-alerta com o veículo em movimento, vedado pelo art. 40 do CTB.",
+    legalBase: "Arts. 38, II e 40 do CTB",
+    commonMistake:
+      "Três pegadinhas: (A) 'bordo esquerdo' só vale em via de sentido único — em duplo sentido isso é contramão; (C) regra de rodovia (bordo direito/acostamento) aplicada a via urbana; (D) mito de que a seta garante preferência + pisca-alerta com o veículo em movimento (proibido pelo art. 40 do CTB).",
+    tip: "Esquerda em mão dupla = perto da LINHA CENTRAL (sem invadir) + ceder passagem a quem vem de frente. 'Bordo esquerdo' é só em via de sentido único.",
+    incidence: "altissima",
+    trap: true,
+    difficulty: 3,
   }
 ];
 export function getRandomizedQuestions(

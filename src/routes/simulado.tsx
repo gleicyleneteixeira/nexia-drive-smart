@@ -64,21 +64,21 @@ function saveSeen(ids: string[]) {
 }
 function buildFresh(category?: Category): Question[] {
   const seen = loadSeen();
-  const REAL_EXAM_IDS = ["qp01", "qp07", "qp06", "q29", "qp02", "qp03", "qp04"];
+  const REAL_EXAM_IDS = ["qp01", "qp07", "qp06", "q29", "qp02", "qp03", "qp04", "qp57"];
   
   let fresh: Question[];
   if (!category) {
-    // Para simulados completos, garante a inclusão das 7 perguntas reais da prova
+    // Para simulados completos, garante a inclusão das 8 perguntas reais da prova
     const fixedQuestions = QUESTIONS.filter((q) => REAL_EXAM_IDS.includes(q.id));
     const fixedIds = fixedQuestions.map((q) => q.id);
     
-    // Pega as outras 23 questões randomizadas (excluindo as 7 fixas para não duplicar)
-    const otherQuestions = getRandomizedQuestions(23, { 
+    // Pega as outras 22 questões randomizadas (excluindo as 8 fixas para não duplicar)
+    const otherQuestions = getRandomizedQuestions(22, { 
       exclude: [...seen, ...fixedIds], 
       placasCount: 3 
     });
     
-    // Une as 7 fixas com as 23 randomizadas
+    // Une as 8 fixas com as 22 randomizadas
     const merged = [...fixedQuestions, ...otherQuestions];
     
     // Embaralha todas juntas para que fiquem misturadas de forma randômica
@@ -112,6 +112,11 @@ function loadPersisted(): PersistedState | null {
     if (!raw) return null;
     const parsed = JSON.parse(raw) as PersistedState;
     if (!parsed?.questions?.length) return null;
+    // Se o simulado salvo tiver 7 questões (resquício do teste grátis antigo), limpa e inicia novo de 30
+    if (parsed.questions.length === 7) {
+      window.localStorage.removeItem(STORAGE_KEY);
+      return null;
+    }
     return parsed;
   } catch {
     return null;
