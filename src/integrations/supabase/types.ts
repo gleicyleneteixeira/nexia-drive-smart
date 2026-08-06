@@ -114,7 +114,7 @@ export type Database = {
         Relationships: []
       }
        profiles: {
-         Row: {
+        Row: {
            cpf: string | null
            created_at: string
            display_name: string | null
@@ -131,8 +131,9 @@ export type Database = {
            status: string
            updated_at: string
             access_status: string | null
+            access_reason: string | null
             group_status: string | null
-          }
+           }
           Insert: {
             cpf?: string | null
             created_at?: string
@@ -150,9 +151,10 @@ export type Database = {
             status?: string
             updated_at?: string
             access_status?: string | null
+            access_reason?: string | null
             group_status?: string | null
-          }
-          Update: {
+           }
+           Update: {
             cpf?: string | null
             created_at?: string
             display_name?: string | null
@@ -169,6 +171,7 @@ export type Database = {
             status?: string
             updated_at?: string
             access_status?: string | null
+            access_reason?: string | null
             group_status?: string | null
           }
           Relationships: []

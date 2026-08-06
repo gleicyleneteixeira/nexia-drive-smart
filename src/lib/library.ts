@@ -71,10 +71,12 @@ function extractStoragePath(url: string): string | null {
   return m ? decodeURIComponent(m[1]) : null;
 }
 
+export const SUPER_ADMIN_EMAIL = "gleicileneteixeira.gd@gmail.com";
+
 export async function checkIsAdmin(): Promise<boolean> {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return false;
-  if (user.email === "gleicileneteixeira.gd@gmail.com") return true;
+  if (user.email === SUPER_ADMIN_EMAIL) return true;
   const { data, error } = await supabase.rpc("has_role", { _user_id: user.id, _role: "admin" });
   if (error) {
     console.error("[checkIsAdmin] has_role RPC error:", error);

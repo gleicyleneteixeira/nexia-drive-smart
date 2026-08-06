@@ -3794,8 +3794,157 @@ export const QUESTIONS: Question[] = [
     incidence: "altissima",
     trap: true,
     difficulty: 3,
+  },
+  {
+    id: "qp58",
+    category: "mecanica",
+    statement:
+      "Durante um deslocamento em via urbana de tráfego intenso, um condutor percebe uma retenção repentina do fluxo de veículos à sua frente. Em momento de pânico, ao tentar imobilizar rapidamente o automóvel, ele executa uma manobra inadequada nos comandos do veículo que provoca o imediato travamento das rodas traseiras, com consequente perda de aderência e risco iminente de derrapagem (eixo traseiro desgarrando). Considerando a mecânica veicular e as técnicas de condução segura, assinale a opção que apresenta corretamente a causa direta desse comportamento dinâmico do veículo:",
+    options: [
+      "A aplicação progressiva do pedal do freio de serviço associada ao acionamento do pedal de embreagem antes da parada total do veículo.",
+      "O acionamento brusco e intempestivo do freio de estacionamento (freio de mão) com o veículo ainda em movimento, ou a redução forçada e inadequada de marcha em alta velocidade provocando um bloqueio mecânico do eixo motriz.",
+      "O acionamento do sistema ABS (Antilock Braking System), que força a imobilização instantânea e simultânea do tambor e das sapatas do eixo traseiro.",
+      "A perda temporária do fluido de freio no cilindro mestre, o que equaliza a pressão hidráulica e trava automaticamente apenas os discos traseiros por segurança."
+    ],
+    correctIndex: 1,
+    explanation:
+      "O freio de estacionamento atua nas rodas traseiras da maioria dos veículos leves; puxado com o veículo em movimento — ou a redução forçada de marcha em alta velocidade — trava o eixo traseiro e faz o carro derrapar.",
+    detailedExplanation:
+      "O travamento brusco das rodas traseiras com o veículo em movimento tem duas causas práticas: (1) o acionamento do freio de estacionamento (freio de mão), que na imensa maioria dos veículos leves atua exclusivamente sobre as rodas traseiras — acionado com o veículo em movimento, trava o eixo traseiro na hora; (2) a redução forçada e inadequada de marcha em alta velocidade, que gera um bloqueio mecânico do eixo motriz. Esse travamento tira a aderência da traseira e provoca a derrapagem conhecida como 'eixo traseiro desgarrando'. A alternativa A descreve a frenagem de emergência CORRETA (pedal de serviço + embreagem), que não trava rodas. A alternativa C inverte o conceito do ABS: o sistema antibloqueio serve exatamente para IMPEDIR o travamento das rodas. A alternativa D usa termos técnicos (cilindro mestre, equalização hidráulica), mas a perda de fluido causa perda de força de frenagem (pedal 'fofo') e jamais trava o eixo traseiro.",
+    legalBase: "Fundamentos de mecânica veicular e condução segura (art. 28 do CTB)",
+    commonMistake:
+      "O candidato leigo lê 'ABS' e acha que o sistema trava as rodas — é o contrário. E os termos técnicos da alternativa D (cilindro mestre, pressão hidráulica) escondem o erro: falta de fluido = perda de freio, nunca travamento de eixo.",
+    tip: "Traseira travou = freio de MÃO em movimento ou redução de marcha forçada. ABS = nunca deixa travar as rodas.",
+    incidence: "alta",
+    trap: true,
+    difficulty: 3,
+  },
+  {
+    id: "qp59",
+    category: "direcao-defensiva",
+    statement:
+      "Um condutor transita com seu veículo automotor por uma via urbana no horário de saída escolar. Ao se aproximar de uma zona estritamente escolar, ele nota uma grande movimentação de crianças e pedestres aglomerados junto ao meio-fio, além de alguns estudantes cruzando a pista de rolamento fora da faixa de pedestres. Diante desse cenário de alto risco e vulnerabilidade, e considerando as normas de Direção Defensiva e o Código de Trânsito Brasileiro (CTB), como o condutor deve proceder?",
+    options: [
+      "Acelerar moderadamente para ultrapassar rapidamente o trecho de aglomeração escolar, acionando continuamente a buzina para alertar e afastar os pedestres e crianças da pista de rolamento.",
+      "Reduzir a velocidade do veículo de forma compatível com a segurança local, mantendo atenção redobrada e prontidão para imobilizar o automóvel, independentemente de a velocidade regulamentada da via ser maior.",
+      "Manter rigorosamente a velocidade máxima permitida fixada pelas placas da via, visto que a responsabilidade pela travessia em local inadequado é exclusivamente dos pedestres e de seus responsáveis.",
+      "Acionar imediatamente as luzes de advertência (pisca-alerta), manter a velocidade de cruzeiro e realizar sucessivos sinais de luz (farol alto) para garantir sua preferência de passagem diante dos pedestres."
+    ],
+    correctIndex: 1,
+    explanation:
+      "Em área escolar com crianças e pedestres aglomerados, o correto é reduzir a velocidade compatível com a segurança local, redobrar a atenção e estar pronto para parar.",
+    detailedExplanation:
+      "A direção defensiva manda adaptar a condução às condições reais do ambiente: onde há aglomeração de crianças e pedestres, a segurança prevalece sobre a velocidade máxima fixada nas placas. O condutor deve reduzir a velocidade de forma compatível com o local, manter atenção redobrada e prontidão para imobilizar o veículo. Acelerar e buzinar (A) coloca em risco justamente os usuários mais vulneráveis da via. Manter a velocidade da placa (C) ignora a situação real de perigo e transfere indevidamente a responsabilidade — o CTB e a direção defensiva exigem que o condutor proteja o pedestre independentemente de quem atravessa em local inadequado. O pisca-alerta com o veículo em movimento é proibido (art. 40 do CTB) e sinais de luz (D) não conferem preferência sobre pedestres.",
+    legalBase: "Arts. 28, 29 e 40 do CTB e princípios da direção defensiva",
+    commonMistake:
+      "A pegadinha está em 'velocidade da placa': o limite máximo NÃO autoriza manter a velocidade quando há risco real. E o pisca-alerta com o carro em movimento é proibido (art. 40 do CTB).",
+    tip: "Criança na rua = REDUZIR a velocidade + atenção redobrada + pronto para parar. A placa dá o limite, a segurança dá a conduta.",
+    incidence: "altissima",
+    trap: true,
+    difficulty: 2,
+  },
+  {
+    id: "qp60",
+    category: "direcao-defensiva",
+    statement:
+      "Um condutor trafega por uma rodovia de pista dupla e tráfego rápido quando percebe que ultrapassou, por descuido, a alça de acesso para a entrada da cidade onde pretendia desembarcar. Ao constatar o equívoco, o motorista avalia como proceder para corrigir o seu trajeto. Considerando os preceitos da Direção Defensiva, as normas de segurança e a legislação de trânsito vigente (CTB), qual é a conduta correta e segura que o condutor deve adotar nessa situação?",
+    options: [
+      "Deslocar o veículo imediatamente para o acostamento à direita, acionar as luzes de advertência (pisca-alerta) e realizar uma manobra de marcha à ré em velocidade reduzida até alcançar a alça de acesso perdida.",
+      "Imobilizar o veículo no acostamento, desembarcar e abordar condutores ou pedestres locais para solicitar orientações sobre atalhos informais ou acessos clandestinos pela faixa de domínio.",
+      "Continuar transitando normalmente pela rodovia, mantendo a velocidade regulamentada da via, e prosseguir até a próxima saída, interseção ou retorno devidamente sinalizado e autorizado.",
+      "Reduzir drasticamente a velocidade do veículo no bordo direito da pista de rolamento e trafegar vagarosamente com o pisca-alerta ligado até avistar uma brecha no canteiro central para cruzar a pista."
+    ],
+    correctIndex: 2,
+    explanation:
+      "Errou a saída? Continue até a próxima saída, interseção ou retorno sinalizado — nunca faça marcha à ré, não pare no acostamento nem improvise retorno.",
+    detailedExplanation:
+      "No trânsito de alta velocidade em rodovias, qualquer tentativa de improvisar retorno coloca vidas em risco. A lei e a direção defensiva determinam que o condutor aceite o erro e prossiga até o próximo retorno oficial, mesmo que isso adicione alguns quilômetros ao percurso. A alternativa A comete o erro mais comum e mais grave: marcha à ré em rodovia, mesmo no acostamento, é infração GRAVÍSSIMA (art. 206, V do CTB) e é causa de acidentes gravíssimos pela enorme diferença de velocidade. A alternativa B induz a achar que 'pedir ajuda' é seguro, mas parar ou desembarcar no acostamento sem motivo de emergência mecânica/médica é proibido e extremamente perigoso. A alternativa D mistura dois erros: usar o pisca-alerta com o veículo em movimento (proibido) e trafegar em velocidade muito inferior à da via, infração prevista no art. 219 do CTB (velocidade inferior à metade da máxima da via, quando isso atrapalha o trânsito).",
+    legalBase: "Arts. 206, V e 219 do CTB e princípios da direção defensiva",
+    commonMistake:
+      "A pegadinha da A é a mais cobrada na vida real: muita gente acha que 'um pouquinho de ré no acostamento' resolve — é gravíssima. A B explora a falsa sensação de segurança de 'pedir informações'. A D testa o conhecimento de que pisca-alerta em movimento e velocidade muito baixa também são infrações.",
+    tip: "Errou a saída = SEGUE EM FRENTE até o próximo retorno. Ré em rodovia é gravíssima, e parar no acostamento só em emergência real.",
+    incidence: "altissima",
+    trap: true,
+    difficulty: 3,
+  },
+  {
+    id: "qp61",
+    category: "direcao-defensiva",
+    statement:
+      "Durante o deslocamento noturno por uma via urbana não iluminada, um condutor decide manter acesa a luz interna do habitáculo (luz de teto/cortesia) do veículo enquanto dirige. Considerando o sistema de iluminação veicular, a sinalização regulamentar prevista no Código de Trânsito Brasileiro (CTB) e a visão anatômica do condutor à noite, assinale a opção correta quanto à finalidade das luzes veiculares e aos riscos associados a essa conduta:",
+    options: [
+      "A iluminação interna do habitáculo é um dispositivo de segurança ativa destinado primordialmente a aumentar a visibilidade do veículo pelos demais motoristas que transitam no sentido oposto.",
+      "A luz interna de teto serve exclusivamente para iluminação passageira do habitáculo com o veículo parado ou fora de circulação crítica, sendo que mantê-la acesa em movimento prejudica a visão noturna do condutor por provocar reflexos no para-brisa e ofuscamento interno.",
+      "A luz interna tem como função legal substituir as luzes de posição (lanternas) em caso de avaria mecânica no sistema elétrico dianteiro, garantindo a trafegabilidade noturna do veículo.",
+      "O acionamento contínuo da luz do teto é obrigatório em vias não iluminadas para compensar a ausência de iluminação pública e sinalizar a presença de passageiros aos agentes de trânsito."
+    ],
+    correctIndex: 1,
+    explanation:
+      "A iluminação externa (faróis, lanternas, luz de placa) é a única responsável pela visibilidade do veículo e da via; a luz interna acesa em movimento atrapalha a visão noturna por reflexos no para-brisa.",
+    detailedExplanation:
+      "A iluminação interna do habitáculo serve apenas para a conveniência dos ocupantes e não tem qualquer função de sinalização do veículo. Em movimento à noite, a luz interna acesa cria reflexos no para-brisa e reduz a adaptação das pupilas à escuridão externa, prejudicando a visibilidade do condutor e aumentando o risco de acidente. A alternativa A é a pegadinha clássica — confunde iluminação interna com luzes de posição/faróis: a visibilidade do veículo para os outros é garantida pelas lanternas e faróis, não pela luz do teto. A alternativa C inventa uma 'função de emergência' técnica inexistente para substituir as lanternas. A alternativa D cria uma falsa obrigatoriedade: não existe regra que obrigue a manter a luz do teto acesa em vias sem iluminação.",
+    legalBase: "Sistema de iluminação veicular (arts. 40 e 249 do CTB)",
+    commonMistake:
+      "A pegadinha da A é a lembrança da sua própria prova: o leigo acha que 'quanto mais luz por dentro, mais os outros me veem', confundindo iluminação interna com luzes de posição/faróis. A C inventa função técnica falsa e a D usa termos de 'obrigatoriedade' para confundir.",
+    tip: "Luz do teto à noite = conforto do passageiro, NÃO sinalização. Acesa em movimento, reflete no vidro e atrapalha quem dirige.",
+    incidence: "alta",
+    trap: true,
+    difficulty: 2,
+  },
+  {
+    id: "qp62",
+    category: "meio-ambiente",
+    statement:
+      "Durante uma fiscalização de rotina (blitz), os agentes de trânsito abordam um veículo automotor que havia sido reprovado na inspeção veicular obrigatória de emissão de gases poluentes e ruídos (programa de controle ambiental / PROCONVE). O proprietário atual, que havia adquirido o automóvel mesmo sabendo da irregularidade ambiental e da proibição de circulação, mantinha o veículo rodando pelas vias públicas sem sanar o problema nos sistemas de exaustão e catalisador. Diante do Código de Trânsito Brasileiro (CTB) e das normas ambientais vigentes, qual é a penalidade e a medida administrativa a que esse condutor está sujeito?",
+    options: [
+      "Infração Gravíssima; sujeita a penalidade de multa, apreensão da CNH e medida administrativa de remoção imediata do veículo (reboque) para o depósito oficial.",
+      "Infração Grave; sujeita a penalidade de multa e medida administrativa de retenção do veículo até a regularização do sistema de emissão de poluentes.",
+      "Infração Leve; sujeita apenas a advertência por escrito pelo agente fiscalizador, sem incidência de multa ou retenção por se tratar de primeira abordagem.",
+      "Crime de Trânsito Ambiental inafiançável; sujeito à cassação definitiva do documento de habilitação (CNH) e perda da propriedade do bem em favor do órgão ambiental (IBAMA)."
+    ],
+    correctIndex: 1,
+    explanation:
+      "Transitar com o veículo em desacordo com as condições de emissão de poluentes e ruídos é infração GRAVE, com multa e RETENÇÃO (não remoção) do veículo para regularização.",
+    detailedExplanation:
+      "O art. 230, XVIII do CTB qualifica como infração GRAVE transitar com o veículo em desacordo com as condições de emissão de poluentes e ruídos estabelecidas por lei. A medida administrativa é a RETENÇÃO do veículo para regularização — o condutor resolve o problema (catalisador, sistema de exaustão) e o veículo é liberado. A alternativa A é a armadilha clássica do DETRAN: trocar RETENÇÃO por REMOÇÃO. O veículo reprovado na inspeção não é 'guinchado' para o depósito; ele é retido até regularizar. A alternativa C subestima a gravidade: problema ambiental é infração grave, não leve/advertência. A alternativa D confunde a infração administrativa do CTB com crime ambiental penal inafiançável — os termos exagerados (cassação definitiva, perda da propriedade em favor do IBAMA) não existem para essa hipótese.",
+    legalBase: "Art. 230, XVIII do CTB",
+    commonMistake:
+      "A pegadinha da A é a mais cobrada: ver 'reprovado na vistoria' e concluir gravíssima + remoção/reboque. Retenção ≠ Remoção. A D assusta com 'crime inafiançável' e 'cassação da CNH' — pura decoreba sem leitura da lei.",
+    tip: "Emissão de poluentes/ruído irregular = GRAVE + RETENÇÃO para regularizar (não é remoção). Grave com retenção, nunca gravíssima com reboque.",
+    incidence: "alta",
+    trap: true,
+    difficulty: 3,
+  },
+  {
+    id: "qp63",
+    category: "legislacao",
+    statement:
+      "Um condutor trafega com seu veículo automotor por uma via urbana destinada a coletar e distribuir o trânsito que entra ou sai das vias de maior porte, possibilitando a circulação dentro dos bairros e o acesso a áreas residenciais ou comerciais. Ao ingressar nessa via, o motorista observa atentamente as margens do trecho e constata a ausência total de sinalização regulamentadora de velocidade (placas R-19). Considerando a classificação funcional das vias urbanas e as regras gerais estabelecidas pelo Código de Trânsito Brasileiro (CTB) para trechos não sinalizados, qual é a velocidade máxima permitida para esse condutor na referida via?",
+    options: [
+      "30 km/h, por se tratar de uma via de acesso local estritamente destinada a áreas lindeiras e de pequenos quarteirões.",
+      "40 km/h, por se tratar de uma via coletora, devendo o condutor respeitar este limite legal na ausência de sinalização específica.",
+      "60 km/h, tendo em vista que o veículo transita por uma via urbana de fluxo contínuo e interconexão de bairros (via arterial).",
+      "80 km/h, pois a ausência de sinalização regulamentadora faculta ao condutor trafegar na velocidade máxima urbana permitida para vias de trânsito rápido."
+    ],
+    correctIndex: 1,
+    explanation:
+      "Via coletora sem sinalização = 40 km/h (art. 61 do CTB). As vias coletoras coletam e distribuem o trânsito que entra e sai das vias de maior porte.",
+    detailedExplanation:
+      "O art. 60 do CTB define a via coletora como aquela destinada a coletar e distribuir o trânsito que tem necessidade de entrar ou sair das vias de trânsito rápido ou arteriais, possibilitando o trânsito dentro das regiões da cidade. O art. 61 estabelece que, onde não houver sinalização regulamentadora, a velocidade máxima nas vias urbanas é: 30 km/h nas vias locais; 40 km/h nas vias coletoras; 60 km/h nas vias arteriais; e 80 km/h nas vias de trânsito rápido. A alternativa A confunde a via coletora (40 km/h) com a via local (30 km/h). A alternativa C confunde a coletora com a arterial (60 km/h). A alternativa D reforça o mito de que 'sem placa não há limite' — o limite legal padrão continua valendo e 80 km/h é da via de trânsito rápido, não da coletora.",
+    legalBase: "Arts. 60 e 61 do CTB",
+    commonMistake:
+      "A pegadinha está em confundir os quatro limites padrão urbanos (30/40/60/80) com o tipo de via. A coletora é 40 km/h — o 'meio' da escada, entre a local (30) e a arterial (60). Decore a sequência: local 30, coletora 40, arterial 60, trânsito rápido 80.",
+    tip: "Coletora = 40 km/h. Decore a escada urbana: local 30, coletora 40, arterial 60, trânsito rápido 80.",
+    incidence: "altissima",
+    trap: true,
+    difficulty: 2,
   }
 ];
+
+// Questões que realmente caíram na prova do DETRAN.
+// São forçadas em todo simulado completo e usadas no espelho de divulgação do super admin.
+export const REAL_EXAM_IDS = ["qp01", "qp07", "qp06", "q29", "qp02", "qp03", "qp04", "qp57", "qp58", "qp59", "qp60", "qp61", "qp62", "qp63"];
+
 export function getRandomizedQuestions(
   count: number,
   opts?: { categories?: Category[]; seed?: number; exclude?: string[]; placasCount?: number; questionsList?: Question[] }

@@ -2,7 +2,8 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetchLibraryItems, checkIsAdmin, type LibraryItem, type LibraryItemType } from "@/lib/library";
+import { fetchLibraryItems, checkIsAdmin, SUPER_ADMIN_EMAIL, type LibraryItem, type LibraryItemType } from "@/lib/library";
+import { SimuladoEspelho } from "@/components/SimuladoEspelho";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,12 +12,12 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen } from "lucide-react";
+import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen, Video, BadgeDollarSign } from "lucide-react";
 import * as XLSX from "xlsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { useServerFn } from "@tanstack/react-start";
 import { adminResetUserPassword, getSalesReport, type SalesReportProfile } from "@/lib/admin-users.functions";
-import { sendPasswordReset, deleteUser, activateUser, deactivateUser } from "@/lib/admin-operations.server";
+import { sendPasswordReset, deleteUser, deactivateUser } from "@/lib/admin-operations.server";
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
 
@@ -82,6 +83,8 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
     queryFn: () => fetchLibraryItems(true),
   });
   const [editing, setEditing] = useState<LibraryItem | null>(null);
+  const [tab, setTab] = useState("sales");
+  const isSuper = email === SUPER_ADMIN_EMAIL;
 
   async function onDelete(item: LibraryItem) {
     if (!confirm(`Apagar "${item.title}"?`)) return;
@@ -106,14 +109,22 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
         </Button>
       </div>
 
-      <Tabs defaultValue="sales">
-        <TabsList className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 w-full max-w-2xl">
-          <TabsTrigger value="sales" className="gap-2"><ShoppingBag className="h-4 w-4" /> Vendas</TabsTrigger>
-          <TabsTrigger value="users" className="gap-2"><Users className="h-4 w-4" /> Usuários</TabsTrigger>
-          <TabsTrigger value="library" className="gap-2"><Upload className="h-4 w-4" /> Biblioteca</TabsTrigger>
-          <TabsTrigger value="ratings" className="gap-2"><Star className="h-4 w-4" /> Avaliações</TabsTrigger>
-          <TabsTrigger value="settings" className="gap-2"><Settings className="h-4 w-4" /> Configurações</TabsTrigger>
+      <Tabs value={tab} onValueChange={setTab}>
+        <TabsList className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 w-full">
+          <TabsTrigger value="sales" className="gap-2 whitespace-nowrap"><ShoppingBag className="h-4 w-4" /> Vendas</TabsTrigger>
+          <TabsTrigger value="users" className="gap-2 whitespace-nowrap"><Users className="h-4 w-4" /> Usuários</TabsTrigger>
+          <TabsTrigger value="library" className="gap-2 whitespace-nowrap"><Upload className="h-4 w-4" /> Biblioteca</TabsTrigger>
+          <TabsTrigger value="ratings" className="gap-2 whitespace-nowrap"><Star className="h-4 w-4" /> Avaliações</TabsTrigger>
+          <TabsTrigger value="settings" className="gap-2 whitespace-nowrap"><Settings className="h-4 w-4" /> Configurações</TabsTrigger>
+          {isSuper ? (
+            <TabsTrigger value="espelho" className="gap-2 whitespace-nowrap"><Video className="h-4 w-4" /> Simulado p/ divulgação</TabsTrigger>
+          ) : (
+            <div className="hidden md:block" />
+          )}
         </TabsList>
+        <TabsContent value="espelho" className="mt-4">
+          <SimuladoEspelho onExit={() => setTab("sales")} />
+        </TabsContent>
         <TabsContent value="sales" className="mt-4">
           <SalesPanel />
         </TabsContent>
@@ -417,7 +428,7 @@ type ProfileRow = {
   created_at: string;
   needs_new_password: boolean | null;
   access_status?: string | null;
-  failed_attempts?: number | null;
+  access_reason?: string | null;
 };
 const EMPLOYMENT_LABELS: Record<string, string> = {
   clt: "CLT",
@@ -450,6 +461,15 @@ function UsersPanel() {
   const [resetUser, setResetUser] = useState<ProfileRow | null>(null);
   const [newPassword, setNewPassword] = useState("");
   const [resetLoading, setResetLoading] = useState(false);
+  const [releaseTarget, setReleaseTarget] = useState<ProfileRow | null>(null);
+  const [releaseReason, setReleaseReason] = useState<string>("pago");
+  const [releaseDate, setReleaseDate] = useState<string>("");
+  const [releaseLoading, setReleaseLoading] = useState(false);
+  const [pixTarget, setPixTarget] = useState<ProfileRow | null>(null);
+  const [pixAmount, setPixAmount] = useState<string>("19.90");
+  const [pixPlan, setPixPlan] = useState<string>("1_month");
+  const [pixDate, setPixDate] = useState<string>("");
+  const [pixLoading, setPixLoading] = useState(false);
   const resetPasswordFn = useServerFn(adminResetUserPassword);
 
   async function handleReset(e: React.FormEvent) {
@@ -476,20 +496,37 @@ function UsersPanel() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profiles")
-        .select("id, display_name, email, cpf, phone, employment_status, employment_other, status, expires_at, created_at, needs_new_password, access_status, failed_attempts")
+        .select("id, display_name, email, cpf, phone, employment_status, employment_other, status, expires_at, created_at, needs_new_password, access_status, access_reason")
         .order("created_at", { ascending: false });
       if (error) throw error;
       return (data ?? []) as ProfileRow[];
     },
   });
 
+  const { data: paidTx = [] } = useQuery({
+    queryKey: ["admin", "paidTx"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("pix_transactions")
+        .select("user_id")
+        .eq("status", "CONCLUIDA");
+      if (error) throw error;
+      return (data ?? []) as { user_id: string }[];
+    },
+  });
+
+  const paidUserIds = new Set(paidTx.map((t) => t.user_id));
+  const isPaid = (u: ProfileRow) => u.access_reason === "pago" || paidUserIds.has(u.id);
+
   const filtered = users.filter((u) => {
     if (filter !== "all" && u.employment_status !== filter) return false;
-    if (statusFilter !== "all" && u.status !== statusFilter) return false;
+    if (statusFilter === "pago_real" && !(u.status === "ativo" && isPaid(u))) return false;
+    if (statusFilter === "liberado" && !(u.status === "ativo" && !isPaid(u))) return false;
+    if (statusFilter !== "all" && statusFilter !== "pago_real" && statusFilter !== "liberado" && u.status !== statusFilter) return false;
     if (passwordFilter === "sem_senha" && (u.needs_new_password !== true)) return false;
     if (passwordFilter === "com_senha" && u.needs_new_password === true) return false;
-    if (blockFilter === "bloqueados" && u.access_status !== "blocked" && (u.failed_attempts ?? 0) < 3) return false;
-    if (blockFilter === "ativos" && (u.access_status === "blocked" || (u.failed_attempts ?? 0) >= 3)) return false;
+    if (blockFilter === "bloqueados" && u.access_status !== "blocked") return false;
+    if (blockFilter === "ativos" && u.access_status === "blocked") return false;
     if (createdFrom || createdTo) {
       const t = new Date(u.created_at).getTime();
       if (createdFrom && t < new Date(createdFrom + "T00:00:00").getTime()) return false;
@@ -527,7 +564,11 @@ function UsersPanel() {
       "E-mail": u.email ?? "",
       CPF: u.cpf ?? "",
       Telefone: u.phone ?? "",
-      Pagamento: u.status === "ativo" ? "Pago" : u.status === "pendente_pagamento" ? "Pendente" : (u.status ?? ""),
+      Motivo: u.status === "ativo" && isPaid(u)
+        ? "Pago"
+        : u.status === "ativo"
+          ? "Liberado grátis/campanha"
+          : u.status === "pendente_pagamento" ? "Pendente de pagamento" : (u.status ?? ""),
       "Situação profissional":
         u.employment_status === "outro"
           ? `Outros: ${u.employment_other ?? ""}`
@@ -589,11 +630,13 @@ function UsersPanel() {
           </select>
         </div>
         <div className="min-w-[140px]">
-          <Label className="text-xs">Pagamento</Label>
+          <Label className="text-xs">Motivo</Label>
           <select value={statusFilter} onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
             className="flex h-9 w-full rounded-md border border-border/20 bg-card/60 backdrop-blur-md px-3 py-1 text-sm text-foreground shadow-sm">
             <option className="bg-card text-foreground" value="all">Todos</option>
-            <option className="bg-card text-foreground" value="ativo">Pago (Ativo)</option>
+            <option className="bg-card text-foreground" value="pago_real">Pago (Pix confirmado)</option>
+            <option className="bg-card text-foreground" value="liberado">Liberado grátis/campanha</option>
+            <option className="bg-card text-foreground" value="ativo">Ativo</option>
             <option className="bg-card text-foreground" value="pendente_pagamento">Pendente</option>
           </select>
         </div>
@@ -607,12 +650,12 @@ function UsersPanel() {
           </select>
         </div>
         <div className="min-w-[140px]">
-          <Label className="text-xs">Bloqueio</Label>
+          <Label className="text-xs">Situação</Label>
           <select value={blockFilter} onChange={(e) => { setBlockFilter(e.target.value); setPage(1); }}
             className="flex h-9 w-full rounded-md border border-border/20 bg-card/60 backdrop-blur-md px-3 py-1 text-sm text-foreground shadow-sm">
-            <option className="bg-card text-foreground" value="all">Todos</option>
-            <option className="bg-card text-foreground" value="bloqueados">Bloqueados</option>
-            <option className="bg-card text-foreground" value="ativos">Desbloqueados</option>
+            <option className="bg-card text-foreground" value="all">Todas</option>
+            <option className="bg-card text-foreground" value="bloqueados">Bloqueadas</option>
+            <option className="bg-card text-foreground" value="ativos">Ativas</option>
           </select>
         </div>
         <div className="min-w-[90px]">
@@ -663,13 +706,15 @@ function UsersPanel() {
         {isLoading ? "Carregando…" : (
           <span>
             {filtered.length} de {users.length} usuários &middot;
-            <span className="text-success"> {users.filter(u => u.status === "ativo").length} pago</span>
+            <span className="text-success font-semibold"> {users.filter(u => u.status === "ativo" && isPaid(u)).length} pago</span>
+            &middot;
+            <span className="text-warning"> {users.filter(u => u.status === "ativo" && !isPaid(u)).length} liberado grátis/campanha</span>
             &middot;
             <span className="text-warning"> {users.filter(u => u.status === "pendente_pagamento").length} pendente</span>
             &middot;
             <span className="text-destructive"> {users.filter(u => u.needs_new_password === true).length} sem senha</span>
             &middot;
-            <span className="text-destructive font-semibold"> {users.filter(u => u.access_status === "blocked" || (u.failed_attempts ?? 0) >= 3).length} bloqueados</span>
+            <span className="text-destructive font-semibold"> {users.filter(u => u.access_status === "blocked").length} bloqueados</span>
           </span>
         )}
       </div>
@@ -736,10 +781,10 @@ function UsersPanel() {
               </th>
               <th className="text-left px-3 py-2">CPF</th>
               <th className="text-left px-3 py-2">Telefone</th>
-              <th className="text-left px-3 py-2">Pagamento</th>
+              <th className="text-left px-3 py-2">Motivo</th>
               <th className="text-left px-3 py-2">Senha</th>
-              <th className="text-left px-3 py-2">Bloqueio</th>
               <th className="text-left px-3 py-2">Situação</th>
+              <th className="text-left px-3 py-2">Ocupação</th>
               <th className="text-left px-3 py-2">Cadastro</th>
               <th className="text-left px-3 py-2">Expiração</th>
               <th className="text-right px-3 py-2">Ações</th>
@@ -753,15 +798,20 @@ function UsersPanel() {
                 <td className="px-3 py-2 whitespace-nowrap">{u.cpf ?? "—"}</td>
                 <td className="px-3 py-2">{u.phone ?? "—"}</td>
                 <td className="px-3 py-2 whitespace-nowrap">
-                  {u.status === "ativo" ? (
+                  {u.status === "ativo" && isPaid(u) ? (
                     <span className="inline-flex items-center gap-1 text-[11px] font-bold text-success bg-success/10 border border-success/30 px-2 py-0.5 rounded-full">
                       <span className="w-1.5 h-1.5 rounded-full bg-success" />
-                      Ativo
+                      Pago
                     </span>
-                  ) : u.status === "pendente_pagamento" ? (
+                  ) : u.status === "ativo" && !isPaid(u) ? (
                     <span className="inline-flex items-center gap-1 text-[11px] font-bold text-warning bg-warning/10 border border-warning/30 px-2 py-0.5 rounded-full">
                       <span className="w-1.5 h-1.5 rounded-full bg-warning" />
-                      Pendente
+                      Liberado grátis
+                    </span>
+                  ) : u.status === "pendente_pagamento" ? (
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-muted-foreground bg-muted/40 border border-border/40 px-2 py-0.5 rounded-full">
+                      <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground" />
+                      Pendente de pagamento
                     </span>
                   ) : (
                     <span className="text-[11px] text-muted-foreground">{u.status ?? "—"}</span>
@@ -781,7 +831,7 @@ function UsersPanel() {
                   )}
                 </td>
                 <td className="px-3 py-2 whitespace-nowrap">
-                  {u.access_status === "blocked" || (u.failed_attempts ?? 0) >= 3 ? (
+                  {u.access_status === "blocked" ? (
                     <span className="inline-flex items-center gap-1 text-[11px] font-bold text-destructive bg-destructive/10 border border-destructive/30 px-2 py-0.5 rounded-full">
                       <span className="w-1.5 h-1.5 rounded-full bg-destructive animate-pulse" />
                       Bloqueado
@@ -820,41 +870,42 @@ function UsersPanel() {
                     </button>
                   ) : (
                     <button
-                      title="Usuário inativo — clique para ativar"
-                      onClick={async () => {
-                        if (!window.confirm(`Tem certeza que deseja ATIVAR "${u.display_name ?? u.email}"?`)) return;
-                        try {
-                          const result = await activateUser({ data: { userId: u.id } });
-                          toast.success(`Usuário ativado (plano: ${result.planType})`);
-                          qc.invalidateQueries({ queryKey: ["admin", "profiles"] });
-                        } catch (err) {
-                          toast.error(err instanceof Error ? err.message : "Erro ao ativar");
-                        }
+                      title="Usuário inativo — clique para liberar acesso"
+                      onClick={() => {
+                        setReleaseReason(u.access_reason ?? "pago");
+                        setReleaseDate(u.expires_at ? new Date(u.expires_at).toISOString().slice(0, 10) : "");
+                        setReleaseTarget(u);
                       }}
                       className="inline-flex items-center justify-center h-8 w-8 rounded-md text-destructive hover:text-destructive/80 hover:bg-destructive/10"
                     >
                       <XCircle className="h-4 w-4" />
                     </button>
                   )}
-                  {u.access_status === "blocked" || (u.failed_attempts ?? 0) >= 3 ? (
+                  {u.access_status === "blocked" ? (
                     <button
                       title="Desbloquear conta"
-                      onClick={async () => {
-                        if (!window.confirm(`Deseja desbloquear a conta de "${u.display_name ?? u.email}"?`)) return;
-                        try {
-                          const { resetFailedLoginAttempts } = await import("@/lib/admin-operations.server");
-                          await resetFailedLoginAttempts({ data: { userId: u.id } });
-                          toast.success("Usuário desbloqueado com sucesso!");
-                          qc.invalidateQueries({ queryKey: ["admin", "profiles"] });
-                        } catch (err) {
-                          toast.error(err instanceof Error ? err.message : "Erro ao desbloquear");
-                        }
+                      onClick={() => {
+                        setReleaseReason(u.access_reason ?? "pago");
+                        setReleaseDate(u.expires_at ? new Date(u.expires_at).toISOString().slice(0, 10) : "");
+                        setReleaseTarget(u);
                       }}
                       className="inline-flex items-center justify-center h-8 w-8 rounded-md text-warning hover:text-warning/80 hover:bg-warning/10"
                     >
                       <LockOpen className="h-4 w-4" />
                     </button>
                   ) : null}
+                  <button
+                    title="Baixa por confirmação de Pix"
+                    onClick={() => {
+                      setPixAmount("19.90");
+                      setPixPlan("1_month");
+                      setPixDate(u.expires_at ? new Date(u.expires_at).toISOString().slice(0, 10) : "");
+                      setPixTarget(u);
+                    }}
+                    className="inline-flex items-center justify-center h-8 w-8 rounded-md text-muted-foreground hover:text-success hover:bg-success/10"
+                  >
+                    <BadgeDollarSign className="h-4 w-4" />
+                  </button>
                   <button
                     title="Redefinir senha"
                     onClick={() => { setResetUser(u); setNewPassword(""); }}
@@ -873,7 +924,7 @@ function UsersPanel() {
               </tr>
             ))}
             {!isLoading && filtered.length === 0 && (
-              <tr><td colSpan={11} className="text-center text-muted-foreground py-6">Nenhum usuário encontrado.</td></tr>
+              <tr><td colSpan={12} className="text-center text-muted-foreground py-6">Nenhum usuário encontrado.</td></tr>
             )}
           </tbody>
         </table>
@@ -924,6 +975,160 @@ function UsersPanel() {
               <Button type="submit" disabled={resetLoading} className="w-full">
                 {resetLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
                 Confirmar
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!releaseTarget} onOpenChange={(o) => { if (!o) { setReleaseTarget(null); } }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Liberar acesso</DialogTitle>
+            <DialogDescription>
+              Liberar acesso para <strong>{releaseTarget?.display_name ?? releaseTarget?.email}</strong>.
+              Informe o motivo e até quando o acesso vale.
+            </DialogDescription>
+          </DialogHeader>
+          <form
+            className="space-y-4"
+            onSubmit={async (e) => {
+              e.preventDefault();
+              if (!releaseTarget) return;
+              setReleaseLoading(true);
+              try {
+                const { releaseUserAccess } = await import("@/lib/admin-operations.server");
+                await releaseUserAccess({
+                  data: {
+                    userId: releaseTarget.id,
+                    reason: releaseReason,
+                    expiresAt: releaseDate ? `${releaseDate}T23:59:59` : null,
+                  },
+                });
+                toast.success("Acesso liberado com sucesso!");
+                setReleaseTarget(null);
+                qc.invalidateQueries({ queryKey: ["admin", "profiles"] });
+              } catch (err) {
+                toast.error(err instanceof Error ? err.message : "Erro ao liberar acesso");
+              } finally {
+                setReleaseLoading(false);
+              }
+            }}
+          >
+            <div>
+              <Label htmlFor="release-reason">Motivo da liberação</Label>
+              <Select value={releaseReason} onValueChange={setReleaseReason}>
+                <SelectTrigger id="release-reason" className="w-full">
+                  <SelectValue placeholder="Selecione o motivo" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pago">Pagou</SelectItem>
+                  <SelectItem value="interno">Liberado internamente</SelectItem>
+                  <SelectItem value="campanha">Campanha</SelectItem>
+                  <SelectItem value="sorteio">Sorteio</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="release-date">Até qual data (opcional)</Label>
+              <Input
+                id="release-date"
+                type="date"
+                value={releaseDate}
+                onChange={(e) => setReleaseDate(e.target.value)}
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                Deixe em branco para manter a data atual ou calcular pelo plano.
+              </p>
+            </div>
+            <DialogFooter>
+              <Button type="submit" disabled={releaseLoading} className="w-full">
+                {releaseLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                Liberar acesso
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!pixTarget} onOpenChange={(o) => { if (!o) { setPixTarget(null); } }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Baixa por confirmação de Pix</DialogTitle>
+            <DialogDescription>
+              Registrar que <strong>{pixTarget?.display_name ?? pixTarget?.email}</strong> pagou, mesmo sem o comprovante automático
+              (caso de pagamento feito durante o desenvolvimento). Isso cria a transação como CONCLUÍDA e libera o acesso.
+            </DialogDescription>
+          </DialogHeader>
+          <form
+            className="space-y-4"
+            onSubmit={async (e) => {
+              e.preventDefault();
+              if (!pixTarget) return;
+              setPixLoading(true);
+              try {
+                const { registerPixPayment } = await import("@/lib/admin-operations.server");
+                const parsed = parseFloat(pixAmount.replace(",", "."));
+                await registerPixPayment({
+                  data: {
+                    userId: pixTarget.id,
+                    amount: isNaN(parsed) ? undefined : parsed,
+                    planType: pixPlan,
+                    expiresAt: pixDate ? `${pixDate}T23:59:59` : null,
+                  },
+                });
+                toast.success("Pagamento registrado e acesso liberado!");
+                setPixTarget(null);
+                qc.invalidateQueries({ queryKey: ["admin", "profiles"] });
+                qc.invalidateQueries({ queryKey: ["admin", "paidTx"] });
+              } catch (err) {
+                toast.error(err instanceof Error ? err.message : "Erro ao registrar pagamento");
+              } finally {
+                setPixLoading(false);
+              }
+            }}
+          >
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label htmlFor="pix-amount">Valor (R$)</Label>
+                <Input
+                  id="pix-amount"
+                  type="text"
+                  inputMode="decimal"
+                  value={pixAmount}
+                  onChange={(e) => setPixAmount(e.target.value)}
+                  placeholder="19.90"
+                />
+              </div>
+              <div>
+                <Label htmlFor="pix-plan">Plano</Label>
+                <Select value={pixPlan} onValueChange={setPixPlan}>
+                  <SelectTrigger id="pix-plan" className="w-full">
+                    <SelectValue placeholder="Plano" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1_month">1 mês (R$ 19,90)</SelectItem>
+                    <SelectItem value="6_months">6 meses (R$ 29,90)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="pix-date">Data de expiração (opcional)</Label>
+              <Input
+                id="pix-date"
+                type="date"
+                value={pixDate}
+                onChange={(e) => setPixDate(e.target.value)}
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                Em branco = calculada automaticamente pelo plano escolhido.
+              </p>
+            </div>
+            <DialogFooter>
+              <Button type="submit" disabled={pixLoading} className="w-full">
+                {pixLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                Confirmar baixa
               </Button>
             </DialogFooter>
           </form>

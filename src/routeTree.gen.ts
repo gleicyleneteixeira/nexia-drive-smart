@@ -28,6 +28,7 @@ import { Route as BibliotecaIdRouteImport } from './routes/biblioteca.$id'
 import { Route as ApiPixCreateRouteImport } from './routes/api/pix/create'
 import { Route as ApiPixStatusRouteImport } from './routes/api/pix/status'
 import { Route as ApiPixWebhookRouteImport } from './routes/api/pix/webhook'
+import { Route as ApiPixWebhookPixRouteImport } from './routes/api/pix/webhook/pix'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -124,6 +125,11 @@ const ApiPixWebhookRoute = ApiPixWebhookRouteImport.update({
   path: '/api/pix/webhook',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPixWebhookPixRoute = ApiPixWebhookPixRouteImport.update({
+  id: '/pix',
+  path: '/pix',
+  getParentRoute: () => ApiPixWebhookRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -144,7 +150,8 @@ export interface FileRoutesByFullPath {
   '/biblioteca/$id': typeof BibliotecaIdRoute
   '/api/pix/create': typeof ApiPixCreateRoute
   '/api/pix/status': typeof ApiPixStatusRoute
-  '/api/pix/webhook': typeof ApiPixWebhookRoute
+  '/api/pix/webhook': typeof ApiPixWebhookRouteWithChildren
+  '/api/pix/webhook/pix': typeof ApiPixWebhookPixRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -165,7 +172,8 @@ export interface FileRoutesByTo {
   '/biblioteca/$id': typeof BibliotecaIdRoute
   '/api/pix/create': typeof ApiPixCreateRoute
   '/api/pix/status': typeof ApiPixStatusRoute
-  '/api/pix/webhook': typeof ApiPixWebhookRoute
+  '/api/pix/webhook': typeof ApiPixWebhookRouteWithChildren
+  '/api/pix/webhook/pix': typeof ApiPixWebhookPixRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -187,7 +195,8 @@ export interface FileRoutesById {
   '/biblioteca/$id': typeof BibliotecaIdRoute
   '/api/pix/create': typeof ApiPixCreateRoute
   '/api/pix/status': typeof ApiPixStatusRoute
-  '/api/pix/webhook': typeof ApiPixWebhookRoute
+  '/api/pix/webhook': typeof ApiPixWebhookRouteWithChildren
+  '/api/pix/webhook/pix': typeof ApiPixWebhookPixRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -211,6 +220,7 @@ export interface FileRouteTypes {
     | '/api/pix/create'
     | '/api/pix/status'
     | '/api/pix/webhook'
+    | '/api/pix/webhook/pix'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -232,6 +242,7 @@ export interface FileRouteTypes {
     | '/api/pix/create'
     | '/api/pix/status'
     | '/api/pix/webhook'
+    | '/api/pix/webhook/pix'
   id:
     | '__root__'
     | '/'
@@ -253,6 +264,7 @@ export interface FileRouteTypes {
     | '/api/pix/create'
     | '/api/pix/status'
     | '/api/pix/webhook'
+    | '/api/pix/webhook/pix'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -273,7 +285,7 @@ export interface RootRouteChildren {
   TurboRoute: typeof TurboRoute
   ApiPixCreateRoute: typeof ApiPixCreateRoute
   ApiPixStatusRoute: typeof ApiPixStatusRoute
-  ApiPixWebhookRoute: typeof ApiPixWebhookRoute
+  ApiPixWebhookRoute: typeof ApiPixWebhookRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -411,6 +423,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPixWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/pix/webhook/pix': {
+      id: '/api/pix/webhook/pix'
+      path: '/pix'
+      fullPath: '/api/pix/webhook/pix'
+      preLoaderRoute: typeof ApiPixWebhookPixRouteImport
+      parentRoute: typeof ApiPixWebhookRoute
+    }
   }
 }
 
@@ -424,6 +443,18 @@ const BibliotecaRouteChildren: BibliotecaRouteChildren = {
 
 const BibliotecaRouteWithChildren = BibliotecaRoute._addFileChildren(
   BibliotecaRouteChildren,
+)
+
+interface ApiPixWebhookRouteChildren {
+  ApiPixWebhookPixRoute: typeof ApiPixWebhookPixRoute
+}
+
+const ApiPixWebhookRouteChildren: ApiPixWebhookRouteChildren = {
+  ApiPixWebhookPixRoute: ApiPixWebhookPixRoute,
+}
+
+const ApiPixWebhookRouteWithChildren = ApiPixWebhookRoute._addFileChildren(
+  ApiPixWebhookRouteChildren,
 )
 
 const rootRouteChildren: RootRouteChildren = {
@@ -444,7 +475,7 @@ const rootRouteChildren: RootRouteChildren = {
   TurboRoute: TurboRoute,
   ApiPixCreateRoute: ApiPixCreateRoute,
   ApiPixStatusRoute: ApiPixStatusRoute,
-  ApiPixWebhookRoute: ApiPixWebhookRoute,
+  ApiPixWebhookRoute: ApiPixWebhookRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

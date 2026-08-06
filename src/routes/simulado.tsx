@@ -6,6 +6,7 @@ import {
   getRandomizedQuestions,
   INCIDENCE_META,
   CATEGORY_LABELS,
+  REAL_EXAM_IDS,
   type Question,
   type Category,
   QUESTIONS,
@@ -64,21 +65,20 @@ function saveSeen(ids: string[]) {
 }
 function buildFresh(category?: Category): Question[] {
   const seen = loadSeen();
-  const REAL_EXAM_IDS = ["qp01", "qp07", "qp06", "q29", "qp02", "qp03", "qp04", "qp57"];
   
   let fresh: Question[];
   if (!category) {
-    // Para simulados completos, garante a inclusão das 8 perguntas reais da prova
+    // Para simulados completos, garante a inclusão das 14 perguntas reais da prova
     const fixedQuestions = QUESTIONS.filter((q) => REAL_EXAM_IDS.includes(q.id));
     const fixedIds = fixedQuestions.map((q) => q.id);
     
-    // Pega as outras 22 questões randomizadas (excluindo as 8 fixas para não duplicar)
-    const otherQuestions = getRandomizedQuestions(22, { 
+    // Pega as outras 16 questões randomizadas (excluindo as 14 fixas para não duplicar)
+    const otherQuestions = getRandomizedQuestions(16, { 
       exclude: [...seen, ...fixedIds], 
       placasCount: 3 
     });
     
-    // Une as 8 fixas com as 22 randomizadas
+    // Une as 14 fixas com as 16 randomizadas
     const merged = [...fixedQuestions, ...otherQuestions];
     
     // Embaralha todas juntas para que fiquem misturadas de forma randômica

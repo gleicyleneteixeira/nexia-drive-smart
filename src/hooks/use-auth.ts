@@ -15,7 +15,6 @@ export interface Profile {
   needs_new_password: boolean | null;
   access_status: string | null;
   group_status: string | null;
-  failed_attempts: number | null;
 }
 
 interface AuthContextType {

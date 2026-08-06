@@ -29,7 +29,6 @@ export const adminResetUserPassword = createServerFn({ method: "POST" })
     await supabaseAdmin
       .from("profiles")
       .update({
-        failed_attempts: 0,
         access_status: "active",
         needs_new_password: true,
       })

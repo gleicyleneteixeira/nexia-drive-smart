@@ -372,6 +372,7 @@ export const deactivateUser = createServerFn({ method: "POST" })
       .update({
         status: "pendente_pagamento",
         expires_at: null,
+        access_reason: null,
         updated_at: new Date().toISOString(),
       })
       .eq("id", data.userId);
@@ -381,7 +382,7 @@ export const deactivateUser = createServerFn({ method: "POST" })
   });
 
 export const activateUser = createServerFn({ method: "POST" })
-  .inputValidator((d: { userId: string }) => d)
+  .inputValidator((d: { userId: string; reason?: string; expiresAt?: string | null }) => d)
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { getExpiryDate } = await import("@/lib/subscription");
@@ -404,17 +405,66 @@ export const activateUser = createServerFn({ method: "POST" })
       amount = tx.amount;
     }
 
+    const expiresAt = data.expiresAt
+      ? new Date(data.expiresAt).toISOString()
+      : getExpiryDate(planType, amount).toISOString();
+
     const { error } = await supabaseAdmin
       .from("profiles")
       .update({
         status: "ativo",
-        expires_at: getExpiryDate(planType, amount).toISOString(),
+        expires_at: expiresAt,
+        access_reason: data.reason ?? null,
         updated_at: new Date().toISOString(),
       })
       .eq("id", data.userId);
 
     if (error) throw new Error(error.message);
-    return { ok: true, planType };
+    return { ok: true, planType, expiresAt };
+  });
+
+export const registerPixPayment = createServerFn({ method: "POST" })
+  .inputValidator((d: { userId: string; amount?: number; planType?: string; expiresAt?: string | null }) => d)
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { getExpiryDate } = await import("@/lib/subscription");
+
+    const planType = data.planType && ["1_month", "3_months", "6_months"].includes(data.planType) ? data.planType : "1_month";
+    const amount = typeof data.amount === "number" && data.amount > 0 ? data.amount : 19.9;
+
+    const expiresAt = data.expiresAt
+      ? new Date(data.expiresAt).toISOString()
+      : getExpiryDate(planType, amount).toISOString();
+
+    const txid = `manual-${crypto.randomUUID()}`;
+
+    const { error: txErr } = await supabaseAdmin
+      .from("pix_transactions")
+      .insert({
+        user_id: data.userId,
+        txid,
+        amount,
+        plan_type: planType,
+        status: "CONCLUIDA",
+        pix_copia_e_cola: "baixa-manual",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      });
+    if (txErr) throw new Error("Erro ao registrar pagamento: " + txErr.message);
+
+    const { error: profErr } = await supabaseAdmin
+      .from("profiles")
+      .update({
+        status: "ativo",
+        expires_at: expiresAt,
+        access_reason: "pago",
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", data.userId);
+
+    if (profErr) throw new Error("Erro ao ativar usuário: " + profErr.message);
+
+    return { ok: true, txid, expiresAt };
   });
 
 export const checkLoginBlockSecure = createServerFn({ method: "POST" })
@@ -424,7 +474,7 @@ export const checkLoginBlockSecure = createServerFn({ method: "POST" })
     const inputClean = data.input.trim().toLowerCase();
     const cpfDigits = inputClean.replace(/\D/g, "");
 
-    let query = supabaseAdmin.from("profiles").select("id, access_status, failed_attempts");
+    let query = supabaseAdmin.from("profiles").select("id, access_status");
 
     if (cpfDigits && cpfDigits.length >= 11) {
       query = query.or(`email.eq.${inputClean},cpf.eq.${cpfDigits}`);
@@ -435,7 +485,7 @@ export const checkLoginBlockSecure = createServerFn({ method: "POST" })
     const { data: profile } = await query.maybeSingle();
     if (!profile) return { blocked: false };
 
-    const isBlocked = profile.access_status === "blocked" || (profile.failed_attempts ?? 0) >= 3;
+    const isBlocked = profile.access_status === "blocked";
     return { blocked: isBlocked };
   });
 
@@ -446,7 +496,7 @@ export const recordFailedLoginAttempt = createServerFn({ method: "POST" })
     const inputClean = data.input.trim().toLowerCase();
     const cpfDigits = inputClean.replace(/\D/g, "");
 
-    let query = supabaseAdmin.from("profiles").select("id, failed_attempts");
+    let query = supabaseAdmin.from("profiles").select("id");
 
     if (cpfDigits && cpfDigits.length >= 11) {
       query = query.or(`email.eq.${inputClean},cpf.eq.${cpfDigits}`);
@@ -455,21 +505,59 @@ export const recordFailedLoginAttempt = createServerFn({ method: "POST" })
     }
 
     const { data: profile } = await query.maybeSingle();
-    if (!profile) return { success: false };
+    if (!profile) return { success: false, attempts: 0, blocked: false };
 
-    const currentAttempts = profile.failed_attempts ?? 0;
-    const newAttempts = currentAttempts + 1;
-    const isBlockedNow = newAttempts >= 3;
+    const newAttempts = 1;
+    const isBlockedNow = false;
 
     await supabaseAdmin
       .from("profiles")
       .update({
-        failed_attempts: newAttempts,
-        access_status: isBlockedNow ? "blocked" : "active"
+        access_status: "active"
       })
       .eq("id", profile.id);
 
     return { success: true, attempts: newAttempts, blocked: isBlockedNow };
+  });
+
+export const releaseUserAccess = createServerFn({ method: "POST" })
+  .inputValidator((d: { userId: string; reason?: string; expiresAt?: string | null }) => d)
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { getExpiryDate } = await import("@/lib/subscription");
+
+    let expiresAt: string | null = null;
+
+    if (data.expiresAt) {
+      expiresAt = new Date(data.expiresAt).toISOString();
+    } else {
+      const { data: profile } = await supabaseAdmin
+        .from("profiles")
+        .select("status, expires_at")
+        .eq("id", data.userId)
+        .maybeSingle();
+
+      if (profile?.status !== "ativo") {
+        expiresAt = getExpiryDate("6_months").toISOString();
+      } else if (profile.expires_at) {
+        expiresAt = profile.expires_at;
+      }
+    }
+
+    const { error } = await supabaseAdmin
+      .from("profiles")
+      .update({
+        access_status: "active",
+        status: "ativo",
+        expires_at: expiresAt,
+        access_reason: data.reason ?? null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", data.userId);
+
+    if (error) throw new Error(error.message);
+
+    return { success: true };
   });
 
 export const resetFailedLoginAttempts = createServerFn({ method: "POST" })
@@ -479,7 +567,6 @@ export const resetFailedLoginAttempts = createServerFn({ method: "POST" })
     await supabaseAdmin
       .from("profiles")
       .update({
-        failed_attempts: 0,
         access_status: "active"
       })
       .eq("id", data.userId);
@@ -527,11 +614,10 @@ export const requestPasswordResetSecure = createServerFn({ method: "POST" })
     });
     if (authErr) throw new Error("Erro ao atualizar credenciais: " + authErr.message);
 
-    // Update profile: set needs_new_password: true, reset failed attempts
+    // Update profile: set needs_new_password: true
     await supabaseAdmin
       .from("profiles")
       .update({
-        failed_attempts: 0,
         access_status: "active",
         needs_new_password: true,
       })
