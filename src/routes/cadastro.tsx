@@ -184,34 +184,120 @@ function CadastroPage() {
         }
         
         if (authError) {
-          const rawMsg = authError?.message || authError?.error_description || "";
-          let msg: string;
-          let isLegacyUser = false;
-          if (rawMsg.includes("CPF") || rawMsg.includes("profiles_cpf_unique")) {
-            msg = "Este CPF já está cadastrado. Utilize outro CPF ou faça login com a conta existente.";
-          } else if (rawMsg.includes("already registered") || rawMsg.includes("already been registered")) {
-            isLegacyUser = true;
+          let rawMsg = authError?.message || authError?.error_description || "";
+
+          // Erro de rede ("Failed to fetch"): a requisição pode ter chegado e a conta
+          // pode ter sido criada mesmo sem a resposta voltar. Tenta fazer login para
+          // verificar — se funcionar, o cadastro foi concluído e seguimos normalmente.
+          const isNetworkError =
+            authError?.status == null &&
+            (/failed to fetch/i.test(rawMsg) ||
+              /network error/i.test(rawMsg) ||
+              /networkerror/i.test(rawMsg) ||
+              /fetch failed/i.test(rawMsg) ||
+              authError?.name === "TypeError");
+
+          if (isNetworkError) {
             try {
-              await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: `${window.location.origin}/reset-password`
-              });
-            } catch (resetErr) {
-              console.error("Erro ao enviar reset de senha:", resetErr);
+              const recovery = await supabase.auth.signInWithPassword({ email, password });
+              if (!recovery.error && recovery.data?.user) {
+                await supabase
+                  .from("profiles")
+                  .update({ needs_new_password: false, is_first_access: false })
+                  .eq("id", recovery.data.user.id);
+                toast.success("Cadastro realizado com sucesso!");
+                navigate({ to: "/checkout" });
+                setLoading(false);
+                return;
+              }
+            } catch (recoverErr) {
+              console.error("Erro ao confirmar cadastro após falha de rede:", recoverErr);
             }
-            msg = "Seu e-mail já possui cadastro em nosso sistema de alunos! Enviamos uma notificação para o seu e-mail com instruções para você criar/redefinir sua nova senha. Verifique sua caixa de entrada e de spam.";
-          } else if (rawMsg.includes("Database error") || rawMsg.includes("500")) {
-            msg = "Erro ao criar conta. Verifique se seus dados não estão duplicados ou tente novamente.";
+            // Não conseguiu confirmar: tenta de novo o cadastro uma vez
+            try {
+              const retry = await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                  emailRedirectTo: window.location.origin,
+                  data: {
+                    display_name: name.trim().toUpperCase(),
+                    cpf,
+                    phone,
+                    employment_status: employmentToDb[employment as Employment] ?? employment,
+                    employment_other: employment === "outro" ? employmentOther.trim() : null,
+                    status: "pendente_pagamento"
+                  },
+                },
+              });
+              if (!retry.error) {
+                signUpData = retry.data;
+                authError = null;
+              } else {
+                authError = retry.error;
+                rawMsg = authError?.message || "";
+                // Se o retry diz que o e-mail já está cadastrado, a conta foi criada no
+                // primeiro envio — tenta o login uma última vez para confirmar.
+                if (/already registered|already been registered/i.test(rawMsg)) {
+                  try {
+                    const finalRecovery = await supabase.auth.signInWithPassword({ email, password });
+                    if (!finalRecovery.error && finalRecovery.data?.user) {
+                      await supabase
+                        .from("profiles")
+                        .update({ needs_new_password: false, is_first_access: false })
+                        .eq("id", finalRecovery.data.user.id);
+                      toast.success("Cadastro realizado com sucesso!");
+                      navigate({ to: "/checkout" });
+                      setLoading(false);
+                      return;
+                    }
+                  } catch (finalErr) {
+                    console.error("Erro no login final após retry:", finalErr);
+                  }
+                }
+              }
+            } catch (retryErr) {
+              console.error("Retry de cadastro falhou:", retryErr);
+            }
+
+            if (!authError) {
+              // cai no fluxo normal de sucesso abaixo
+            } else {
+              const netMsg = "Não foi possível confirmar seu cadastro por falha de conexão. Sua conta pode já ter sido criada — tente fazer login ou recarregue a página e tente novamente.";
+              setErrorMsg(netMsg);
+              toast.error(netMsg);
+              setLoading(false);
+              return;
+            }
           } else {
-            msg = rawMsg || "Erro ao criar conta. Tente novamente.";
+            let msg: string;
+            let isLegacyUser = false;
+            if (rawMsg.includes("CPF") || rawMsg.includes("profiles_cpf_unique")) {
+              msg = "Este CPF já está cadastrado. Utilize outro CPF ou faça login com a conta existente.";
+            } else if (rawMsg.includes("already registered") || rawMsg.includes("already been registered")) {
+              isLegacyUser = true;
+              try {
+                await supabase.auth.resetPasswordForEmail(email, {
+                  redirectTo: `${window.location.origin}/reset-password`
+                });
+              } catch (resetErr) {
+                console.error("Erro ao enviar reset de senha:", resetErr);
+              }
+              msg = "Seu e-mail já possui cadastro em nosso sistema de alunos! Enviamos uma notificação para o seu e-mail com instruções para você criar/redefinir sua nova senha. Verifique sua caixa de entrada e de spam.";
+            } else if (rawMsg.includes("Database error") || rawMsg.includes("500")) {
+              msg = "Erro ao criar conta. Verifique se seus dados não estão duplicados ou tente novamente.";
+            } else {
+              msg = rawMsg || "Erro ao criar conta. Tente novamente.";
+            }
+            setErrorMsg(msg);
+            if (isLegacyUser) {
+              toast.info(msg, { duration: 8000 });
+            } else {
+              toast.error(msg);
+            }
+            setLoading(false);
+            return;
           }
-          setErrorMsg(msg);
-          if (isLegacyUser) {
-            toast.info(msg, { duration: 8000 });
-          } else {
-            toast.error(msg);
-          }
-          setLoading(false);
-          return;
         }
 
         if (signUpData?.user && signUpData?.session) {
