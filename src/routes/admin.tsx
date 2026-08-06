@@ -12,7 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen, Video, BadgeDollarSign } from "lucide-react";
+import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen, Video, BadgeDollarSign, Gift } from "lucide-react";
 import * as XLSX from "xlsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { useServerFn } from "@tanstack/react-start";
@@ -429,6 +429,7 @@ type ProfileRow = {
   needs_new_password: boolean | null;
   access_status?: string | null;
   access_reason?: string | null;
+  free_trial_enabled?: boolean | null;
 };
 const EMPLOYMENT_LABELS: Record<string, string> = {
   clt: "CLT",
@@ -496,7 +497,7 @@ function UsersPanel() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profiles")
-        .select("id, display_name, email, cpf, phone, employment_status, employment_other, status, expires_at, created_at, needs_new_password, access_status, access_reason")
+        .select("id, display_name, email, cpf, phone, employment_status, employment_other, status, expires_at, created_at, needs_new_password, access_status, access_reason, free_trial_enabled")
         .order("created_at", { ascending: false });
       if (error) throw error;
       return (data ?? []) as ProfileRow[];
@@ -921,6 +922,26 @@ function UsersPanel() {
                     className="inline-flex items-center justify-center h-8 w-8 rounded-md text-muted-foreground hover:text-success hover:bg-success/10"
                   >
                     <BadgeDollarSign className="h-4 w-4" />
+                  </button>
+                  <button
+                    title={u.free_trial_enabled === true ? "Teste grátis liberado — clique para remover" : u.free_trial_enabled === false ? "Teste grátis negado — clique para seguir config global" : "Liberar teste grátis para este usuário"}
+                    onClick={async () => {
+                      try {
+                        const next = u.free_trial_enabled === true ? null : true;
+                        await supabase.from("profiles").update({ free_trial_enabled: next }).eq("id", u.id);
+                        toast.success(next === true ? "Teste grátis liberado para este usuário" : "Teste grátis removido do usuário");
+                        qc.invalidateQueries({ queryKey: ["admin", "profiles"] });
+                      } catch (err) {
+                        toast.error(err instanceof Error ? err.message : "Erro ao atualizar");
+                      }
+                    }}
+                    className={`inline-flex items-center justify-center h-8 w-8 rounded-md ${
+                      u.free_trial_enabled === true
+                        ? "text-primary hover:text-primary/80 hover:bg-primary/10"
+                        : "text-muted-foreground hover:text-primary hover:bg-primary/10"
+                    }`}
+                  >
+                    <Gift className="h-4 w-4" />
                   </button>
                   <button
                     title="Redefinir senha"
@@ -1967,6 +1988,7 @@ function SettingsPanel() {
   const [showPopup, setShowPopup] = useState(true);
   const [showTiktokPopup, setShowTiktokPopup] = useState(true);
   const [showButton, setShowButton] = useState(true);
+  const [freeTrialEnabled, setFreeTrialEnabled] = useState(true);
   const [loaded, setLoaded] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
 
@@ -1985,6 +2007,7 @@ function SettingsPanel() {
       setShowPopup(map.show_group_popup !== "false");
       setShowTiktokPopup(map.show_tiktok_popup !== "false");
       setShowButton(map.show_whatsapp_button !== "false");
+      setFreeTrialEnabled(map.free_trial_enabled !== "false");
       setLoaded(true);
       return map;
     },
@@ -2000,6 +2023,7 @@ function SettingsPanel() {
         { key: "show_group_popup", value: showPopup ? "true" : "false" },
         { key: "tiktok_group_link", value: tiktokLink },
         { key: "show_tiktok_popup", value: showTiktokPopup ? "true" : "false" },
+        { key: "free_trial_enabled", value: freeTrialEnabled ? "true" : "false" },
       ];
       for (const s of settings) {
         const { error } = await supabase.from("app_settings").upsert(s, { onConflict: "key" });
@@ -2092,6 +2116,19 @@ function SettingsPanel() {
             <p className="text-xs text-muted-foreground">Mostrar modal de convite do grupo de conversa para alunos ativos.</p>
           </div>
           <Switch checked={showTiktokPopup} onCheckedChange={setShowTiktokPopup} />
+        </div>
+      </div>
+
+      <div className="space-y-4 border-t border-border/40 pt-6">
+        <h3 className="font-display font-bold text-sm">Teste Grátis no Cadastro</h3>
+        <div className="flex items-center justify-between">
+          <div>
+            <Label className="text-xs font-semibold">Oferecer teste grátis</Label>
+            <p className="text-xs text-muted-foreground">
+              Quando ativo, quem se cadastra tem a opção de fazer o simulado grátis de 7 questões antes de ver os planos. Quando inativo, vai direto para o checkout. Você também pode liberar individualmente na lista de usuários.
+            </p>
+          </div>
+          <Switch checked={freeTrialEnabled} onCheckedChange={setFreeTrialEnabled} />
         </div>
       </div>
 

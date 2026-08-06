@@ -126,15 +126,29 @@ function CheckoutPage() {
   }, [isGiftOpened, user]);
   
   const [showTrialDialog, setShowTrialDialog] = useState(false);
+  const [freeTrialGlobalEnabled, setFreeTrialGlobalEnabled] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    supabase.from("app_settings").select("key, value").then(({ data }) => {
+      if (data) {
+        const map = Object.fromEntries(data.map((r) => [r.key, r.value]));
+        setFreeTrialGlobalEnabled(map.free_trial_enabled !== "false");
+      }
+    });
+  }, []);
+
+  const freeTrialEnabled = profile?.free_trial_enabled != null
+    ? profile.free_trial_enabled
+    : freeTrialGlobalEnabled !== false;
 
   useEffect(() => {
     if (!authLoading && user && profile && isProfileExpired(profile)) {
       const trialCompleted = localStorage.getItem(`nexia:trial_completed:${user.id}`) === "true";
-      if (!trialCompleted) {
+      if (!trialCompleted && freeTrialEnabled) {
         setShowTrialDialog(true);
       }
     }
-  }, [user, profile, authLoading]);
+  }, [user, profile, authLoading, freeTrialEnabled]);
 
   const pollingRef = useRef<NodeJS.Timeout | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);

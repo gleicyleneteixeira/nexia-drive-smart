@@ -122,6 +122,7 @@ export type Database = {
            employment_other: string | null
            employment_status: string | null
            expires_at: string | null
+           free_trial_enabled: boolean | null
            id: string
            is_first_access: boolean | null
            is_migrated: boolean | null
@@ -142,6 +143,7 @@ export type Database = {
             employment_other?: string | null
             employment_status?: string | null
             expires_at?: string | null
+            free_trial_enabled?: boolean | null
             id: string
             is_first_access?: boolean | null
             is_migrated?: boolean | null
@@ -162,6 +164,7 @@ export type Database = {
             employment_other?: string | null
             employment_status?: string | null
             expires_at?: string | null
+            free_trial_enabled?: boolean | null
             id?: string
             is_first_access?: boolean | null
             is_migrated?: boolean | null
