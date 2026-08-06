@@ -101,8 +101,8 @@ export function AppShell() {
           {/* Hub header: tagline */}
           {isActive && isHub && (
             <div className="hidden sm:flex items-center gap-2 text-xs text-muted-foreground">
-              <span>Seu acesso não expira —</span>
-              <span className="px-2 py-0.5 rounded-full bg-primary/10 border border-primary/30 text-primary font-bold">treine até se sentir pronto</span>
+              <span>Treine no seu ritmo e</span>
+              <span className="px-2 py-0.5 rounded-full bg-primary/10 border border-primary/30 text-primary font-bold">chegue pronto(a)</span>
               <span>para a prova</span>
             </div>
           )}
