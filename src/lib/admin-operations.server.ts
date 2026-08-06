@@ -637,6 +637,121 @@ export const resetFailedLoginAttempts = createServerFn({ method: "POST" })
     return { success: true };
   });
 
+export const bulkReleaseUserAccess = createServerFn({ method: "POST" })
+  .inputValidator((data: { userIds: string[]; reason?: string; expiresAt?: string | null }) => data)
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { getExpiryDate } = await import("@/lib/subscription");
+    if (!data.userIds.length) throw new Error("Nenhum usuário selecionado.");
+
+    const expiresAt = data.expiresAt
+      ? new Date(data.expiresAt).toISOString()
+      : getExpiryDate("6_months").toISOString();
+
+    const { error } = await supabaseAdmin
+      .from("profiles")
+      .update({
+        access_status: "active",
+        status: "ativo",
+        expires_at: expiresAt,
+        access_reason: data.reason ?? null,
+        updated_at: new Date().toISOString(),
+      })
+      .in("id", data.userIds);
+
+    if (error) throw new Error(error.message);
+    return { ok: true, updated: data.userIds.length };
+  });
+
+export const bulkSetExpiry = createServerFn({ method: "POST" })
+  .inputValidator((data: { userIds: string[]; expiresAt: string | null }) => data)
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    if (!data.userIds.length) throw new Error("Nenhum usuário selecionado.");
+
+    const { error } = await supabaseAdmin
+      .from("profiles")
+      .update({
+        expires_at: data.expiresAt,
+        status: "ativo",
+        updated_at: new Date().toISOString(),
+      })
+      .in("id", data.userIds);
+
+    if (error) throw new Error(error.message);
+    return { ok: true, updated: data.userIds.length };
+  });
+
+export const bulkExpireUsers = createServerFn({ method: "POST" })
+  .inputValidator((data: { userIds: string[] }) => data)
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    if (!data.userIds.length) throw new Error("Nenhum usuário selecionado.");
+
+    const { error } = await supabaseAdmin
+      .from("profiles")
+      .update({
+        status: "pendente_pagamento",
+        expires_at: null,
+        access_reason: null,
+        updated_at: new Date().toISOString(),
+      })
+      .in("id", data.userIds);
+
+    if (error) throw new Error(error.message);
+    return { ok: true, updated: data.userIds.length };
+  });
+
+export const bulkBlockUsers = createServerFn({ method: "POST" })
+  .inputValidator((data: { userIds: string[] }) => data)
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    if (!data.userIds.length) throw new Error("Nenhum usuário selecionado.");
+
+    const { error } = await supabaseAdmin
+      .from("profiles")
+      .update({ access_status: "blocked", updated_at: new Date().toISOString() })
+      .in("id", data.userIds);
+
+    if (error) throw new Error(error.message);
+    return { ok: true, updated: data.userIds.length };
+  });
+
+export const bulkUnblockUsers = createServerFn({ method: "POST" })
+  .inputValidator((data: { userIds: string[] }) => data)
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    if (!data.userIds.length) throw new Error("Nenhum usuário selecionado.");
+
+    const { error } = await supabaseAdmin
+      .from("profiles")
+      .update({ access_status: "active", updated_at: new Date().toISOString() })
+      .in("id", data.userIds);
+
+    if (error) throw new Error(error.message);
+    return { ok: true, updated: data.userIds.length };
+  });
+
+export const bulkDeleteUsers = createServerFn({ method: "POST" })
+  .inputValidator((data: { userIds: string[] }) => data)
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    if (!data.userIds.length) throw new Error("Nenhum usuário selecionado.");
+
+    let deleted = 0;
+    let lastError: string | null = null;
+    for (const id of data.userIds) {
+      const { error } = await supabaseAdmin.auth.admin.deleteUser(id);
+      if (error) {
+        lastError = error.message;
+      } else {
+        deleted++;
+      }
+    }
+    if (lastError) throw new Error("Alguns usuários falharam: " + lastError);
+    return { ok: true, deleted };
+  });
+
 export const requestPasswordResetSecure = createServerFn({ method: "POST" })
   .inputValidator((d: { input: string }) => d)
   .handler(async ({ data }) => {

@@ -12,7 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen, Video, BadgeDollarSign, Gift } from "lucide-react";
+import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen, Video, BadgeDollarSign, Gift, CheckCheck, CalendarClock, Lock } from "lucide-react";
 import * as XLSX from "xlsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { useServerFn } from "@tanstack/react-start";
@@ -492,6 +492,13 @@ function UsersPanel() {
   const [deleteTarget, setDeleteTarget] = useState<ProfileRow | null>(null);
   const [deleting, setDeleting] = useState(false);
 
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [bulkModal, setBulkModal] = useState<null | "release" | "expiry" | "expire" | "block" | "unblock" | "delete">(null);
+  const [bulkReason, setBulkReason] = useState<string>("pago");
+  const [bulkReleaseDate, setBulkReleaseDate] = useState<string>("");
+  const [bulkExpiryDate, setBulkExpiryDate] = useState<string>("");
+  const [bulkLoading, setBulkLoading] = useState(false);
+
   const { data: users = [], isLoading } = useQuery({
     queryKey: ["admin", "profiles"],
     queryFn: async () => {
@@ -571,6 +578,64 @@ function UsersPanel() {
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const safePage = Math.min(page, totalPages);
   const paginatedUsers = filtered.slice((safePage - 1) * pageSize, safePage * pageSize);
+
+  const allOnPageSelected = paginatedUsers.length > 0 && paginatedUsers.every((u) => selected.has(u.id));
+  const toggleSelect = (id: string) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+  const toggleSelectAllPage = () => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (allOnPageSelected) {
+        paginatedUsers.forEach((u) => next.delete(u.id));
+      } else {
+        paginatedUsers.forEach((u) => next.add(u.id));
+      }
+      return next;
+    });
+  };
+  const selectedUsers = filtered.filter((u) => selected.has(u.id));
+  const bulkSelectedIds = () => Array.from(selected);
+
+  async function runBulk(action: "release" | "expiry" | "expire" | "block" | "unblock" | "delete") {
+    if (selected.size === 0) return;
+    setBulkLoading(true);
+    try {
+      const ops = await import("@/lib/admin-operations.server");
+      if (action === "release") {
+        await ops.bulkReleaseUserAccess({
+          data: {
+            userIds: bulkSelectedIds(),
+            reason: bulkReason,
+            expiresAt: bulkReleaseDate ? `${bulkReleaseDate}T23:59:59` : null,
+          },
+        });
+      }
+      if (action === "expiry") {
+        await ops.bulkSetExpiry({
+          data: { userIds: bulkSelectedIds(), expiresAt: bulkExpiryDate ? `${bulkExpiryDate}T23:59:59` : null },
+        });
+      }
+      if (action === "expire") await ops.bulkExpireUsers({ data: { userIds: bulkSelectedIds() } });
+      if (action === "block") await ops.bulkBlockUsers({ data: { userIds: bulkSelectedIds() } });
+      if (action === "unblock") await ops.bulkUnblockUsers({ data: { userIds: bulkSelectedIds() } });
+      if (action === "delete") await ops.bulkDeleteUsers({ data: { userIds: bulkSelectedIds() } });
+
+      toast.success(`Ação aplicada a ${selected.size} usuário(s).`);
+      setSelected(new Set());
+      setBulkModal(null);
+      qc.invalidateQueries({ queryKey: ["admin", "profiles"] });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erro ao executar ação em massa.");
+    } finally {
+      setBulkLoading(false);
+    }
+  }
 
   function buildRows() {
     return filtered.map((u) => ({
@@ -756,6 +821,36 @@ function UsersPanel() {
         )}
       </div>
 
+      {selected.size > 0 && (
+        <div className="flex flex-wrap items-center gap-2 rounded-lg border border-primary/30 bg-primary/5 p-2.5">
+          <span className="text-sm font-semibold text-primary px-1">
+            <CheckCheck className="inline h-4 w-4 mr-1 -mt-0.5" />
+            {selected.size} selecionado(s)
+          </span>
+          <Button variant="outline" size="sm" onClick={() => { setBulkReason("pago"); setBulkReleaseDate(""); setBulkModal("release"); }}>
+            <CheckCircle2 className="h-4 w-4 mr-1" /> Liberar acesso
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => { setBulkExpiryDate(""); setBulkModal("expiry"); }}>
+            <CalendarClock className="h-4 w-4 mr-1" /> Data de expiração
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => { if (window.confirm(`Expirar/desativar ${selected.size} usuário(s)?`)) setBulkModal("expire"); }}>
+            <XCircle className="h-4 w-4 mr-1" /> Expirar
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => { if (window.confirm(`Bloquear ${selected.size} usuário(s)?`)) setBulkModal("block"); }}>
+            <Lock className="h-4 w-4 mr-1" /> Bloquear
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => { if (window.confirm(`Desbloquear ${selected.size} usuário(s)?`)) setBulkModal("unblock"); }}>
+            <LockOpen className="h-4 w-4 mr-1" /> Desbloquear
+          </Button>
+          <Button variant="destructive" size="sm" onClick={() => { if (window.confirm(`Excluir ${selected.size} usuário(s)? Esta ação não pode ser desfeita.`)) setBulkModal("delete"); }}>
+            <Trash2 className="h-4 w-4 mr-1" /> Excluir
+          </Button>
+          <Button variant="ghost" size="sm" onClick={() => setSelected(new Set())}>
+            Limpar
+          </Button>
+        </div>
+      )}
+
       {deleteTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" onClick={() => setDeleteTarget(null)}>
           <div className="bg-card rounded-2xl p-6 max-w-sm w-full mx-4 shadow-xl border" onClick={(e) => e.stopPropagation()}>
@@ -794,6 +889,14 @@ function UsersPanel() {
         <table className="w-full text-sm">
           <thead className="bg-background/50 text-xs uppercase text-muted-foreground">
             <tr>
+              <th className="px-3 py-2 w-10">
+                <input
+                  type="checkbox"
+                  checked={allOnPageSelected}
+                  onChange={toggleSelectAllPage}
+                  title="Selecionar todos da página"
+                />
+              </th>
               <SortableTh field="name" label="Nome" />
               <SortableTh field="email" label="E-mail" />
               <th className="text-left px-3 py-2">CPF</th>
@@ -810,6 +913,9 @@ function UsersPanel() {
           <tbody>
             {paginatedUsers.map((u) => (
               <tr key={u.id} className="border-t border-border/30">
+                <td className="px-3 py-2 w-10">
+                  <input type="checkbox" checked={selected.has(u.id)} onChange={() => toggleSelect(u.id)} />
+                </td>
                 <td className="px-3 py-2">{u.display_name ?? "—"}</td>
                 <td className="px-3 py-2">{u.email ?? "—"}</td>
                 <td className="px-3 py-2 whitespace-nowrap">{u.cpf ?? "—"}</td>
@@ -961,7 +1067,7 @@ function UsersPanel() {
               </tr>
             ))}
             {!isLoading && filtered.length === 0 && (
-              <tr><td colSpan={12} className="text-center text-muted-foreground py-6">Nenhum usuário encontrado.</td></tr>
+              <tr><td colSpan={13} className="text-center text-muted-foreground py-6">Nenhum usuário encontrado.</td></tr>
             )}
           </tbody>
         </table>
@@ -1169,6 +1275,112 @@ function UsersPanel() {
               </Button>
             </DialogFooter>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={bulkModal !== null} onOpenChange={(o) => { if (!o) setBulkModal(null); }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {bulkModal === "release" && "Liberar acesso em massa"}
+              {bulkModal === "expiry" && "Atualizar data de expiração em massa"}
+              {bulkModal === "expire" && "Expirar acesso em massa"}
+              {bulkModal === "block" && "Bloquear usuários em massa"}
+              {bulkModal === "unblock" && "Desbloquear usuários em massa"}
+              {bulkModal === "delete" && "Excluir usuários em massa"}
+            </DialogTitle>
+            <DialogDescription>
+              {selected.size > 0 && `Aplicando a ${selected.size} usuário(s) selecionado(s).`}
+            </DialogDescription>
+          </DialogHeader>
+          {bulkModal === "release" && (
+            <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); runBulk("release"); }}>
+              <div>
+                <Label>Motivo da liberação</Label>
+                <Select value={bulkReason} onValueChange={setBulkReason}>
+                  <SelectTrigger className="w-full"><SelectValue placeholder="Selecione o motivo" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pago">Pagou</SelectItem>
+                    <SelectItem value="interno">Liberado internamente</SelectItem>
+                    <SelectItem value="campanha">Campanha</SelectItem>
+                    <SelectItem value="sorteio">Sorteio</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="bulk-release-date">Até qual data (opcional)</Label>
+                <Input id="bulk-release-date" type="date" value={bulkReleaseDate} onChange={(e) => setBulkReleaseDate(e.target.value)} />
+                <p className="text-xs text-muted-foreground mt-1">Em branco = calcula 6 meses a partir de hoje.</p>
+              </div>
+              <DialogFooter>
+                <Button type="submit" disabled={bulkLoading} className="w-full">
+                  {bulkLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                  Liberar acesso
+                </Button>
+              </DialogFooter>
+            </form>
+          )}
+          {bulkModal === "expiry" && (
+            <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); runBulk("expiry"); }}>
+              <div>
+                <Label htmlFor="bulk-expiry-date">Nova data de expiração</Label>
+                <Input id="bulk-expiry-date" type="date" value={bulkExpiryDate} onChange={(e) => setBulkExpiryDate(e.target.value)} />
+                <p className="text-xs text-muted-foreground mt-1">Deixe em branco para remover a expiração (acesso sem data limite).</p>
+              </div>
+              <DialogFooter>
+                <Button type="submit" disabled={bulkLoading} className="w-full">
+                  {bulkLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                  Atualizar data
+                </Button>
+              </DialogFooter>
+            </form>
+          )}
+          {bulkModal === "expire" && (
+            <div className="space-y-4">
+              <p className="text-sm text-muted-foreground">Os usuários selecionados terão o acesso expirado (status pendente de pagamento).</p>
+              <DialogFooter>
+                <Button variant="destructive" disabled={bulkLoading} className="w-full" onClick={() => runBulk("expire")}>
+                  {bulkLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                  Confirmar expiração
+                </Button>
+              </DialogFooter>
+            </div>
+          )}
+          {bulkModal === "block" && (
+            <div className="space-y-4">
+              <p className="text-sm text-muted-foreground">Bloquear o login dos usuários selecionados?</p>
+              <DialogFooter>
+                <Button variant="destructive" disabled={bulkLoading} className="w-full" onClick={() => runBulk("block")}>
+                  {bulkLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                  Confirmar bloqueio
+                </Button>
+              </DialogFooter>
+            </div>
+          )}
+          {bulkModal === "unblock" && (
+            <div className="space-y-4">
+              <p className="text-sm text-muted-foreground">Desbloquear o login dos usuários selecionados?</p>
+              <DialogFooter>
+                <Button disabled={bulkLoading} className="w-full" onClick={() => runBulk("unblock")}>
+                  {bulkLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                  Confirmar desbloqueio
+                </Button>
+              </DialogFooter>
+            </div>
+          )}
+          {bulkModal === "delete" && (
+            <div className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Excluir definitivamente <strong>{selected.size}</strong> usuário(s)? Esta ação <strong>não pode ser desfeita</strong>.
+              </p>
+              <DialogFooter>
+                <Button variant="destructive" disabled={bulkLoading} className="w-full" onClick={() => runBulk("delete")}>
+                  {bulkLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                  Excluir definitivamente
+                </Button>
+              </DialogFooter>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>
