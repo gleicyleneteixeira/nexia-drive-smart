@@ -127,19 +127,22 @@ function CheckoutPage() {
   
   const [showTrialDialog, setShowTrialDialog] = useState(false);
   const [freeTrialGlobalEnabled, setFreeTrialGlobalEnabled] = useState<boolean | null>(null);
+  const [freeTrialQuestions, setFreeTrialQuestions] = useState(7);
 
   useEffect(() => {
     supabase.from("app_settings").select("key, value").then(({ data }) => {
       if (data) {
         const map = Object.fromEntries(data.map((r) => [r.key, r.value]));
         setFreeTrialGlobalEnabled(map.free_trial_enabled !== "false");
+        const n = parseInt(map.free_trial_questions ?? "", 10);
+        if (n === 3 || n === 5 || n === 7) setFreeTrialQuestions(n);
       }
     });
   }, []);
 
   const freeTrialEnabled = profile?.free_trial_enabled != null
     ? profile.free_trial_enabled
-    : freeTrialGlobalEnabled !== false;
+    : freeTrialGlobalEnabled === true;
 
   useEffect(() => {
     if (!authLoading && user && profile && isProfileExpired(profile)) {
@@ -156,11 +159,8 @@ function CheckoutPage() {
 
   useEffect(() => {
     if (!isGiftOpened && user) {
-      const trialCompleted = localStorage.getItem(`nexia:trial_completed:${user.id}`) === "true";
-      if (trialCompleted) {
-        const timer = setTimeout(() => setShowGiftDialog(true), 1500);
-        return () => clearTimeout(timer);
-      }
+      const timer = setTimeout(() => setShowGiftDialog(true), 2500);
+      return () => clearTimeout(timer);
     }
   }, [isGiftOpened, user]);
 
@@ -401,19 +401,7 @@ function CheckoutPage() {
         </div>
       )}
  
-      {/* Roulette activation banner — ONLY after spin */}
-      {isGiftOpened && discountTimeLeft === 0 && rouletteDiscount && (
-        <div className="animate-slide-down max-w-2xl mx-auto p-4 rounded-2xl border border-primary/30 bg-primary/5 text-center space-y-2">
-          <p className="text-sm font-semibold text-primary-glow flex items-center justify-center gap-2">
-            <Sparkles className="h-4 w-4 text-warning fill-warning" />
-            ⚡ Oportunidade Única: Desconto de {rouletteDiscount}% Ativado! ⚡
-            <Sparkles className="h-4 w-4 text-warning fill-warning" />
-          </p>
-          <p className="text-xs text-muted-foreground leading-relaxed">
-            Como seu tempo expirou, garantimos uma última chance com <strong className="text-primary-glow">{rouletteDiscount}% de desconto extra</strong> nos planos! Aproveite agora!
-          </p>
-        </div>
-      )}
+      
 
       {/* Plans grid with gift box dialog on top */}
       <div className="max-w-4xl mx-auto">
@@ -503,7 +491,7 @@ function CheckoutPage() {
               Teste Grátis Liberado! 🚦
             </DialogTitle>
             <DialogDescription className="text-sm text-muted-foreground leading-relaxed text-center">
-              Adoramos ter você aqui! Liberamos um **mini-simulado gratuito com 7 questões** para você testar seus conhecimentos e experimentar a nossa plataforma agora mesmo.
+              Adoramos ter você aqui! Liberamos um **mini-simulado gratuito com {freeTrialQuestions} questões** para você testar seus conhecimentos e experimentar a nossa plataforma agora mesmo.
             </DialogDescription>
           </DialogHeader>
 
@@ -526,7 +514,8 @@ function CheckoutPage() {
                   localStorage.setItem(`nexia:trial_completed:${user.id}`, "true");
                 }
                 setShowTrialDialog(false);
-                setTimeout(() => setShowGiftDialog(true), 1000);
+                setIsGiftOpened(false);
+                setTimeout(() => setShowGiftDialog(true), 2000);
               }}
               className="w-full h-11 rounded-xl font-medium text-xs text-muted-foreground hover:text-foreground cursor-pointer hover:bg-secondary/40"
             >

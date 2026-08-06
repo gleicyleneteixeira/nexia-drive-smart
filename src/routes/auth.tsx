@@ -96,51 +96,29 @@ function AuthPage() {
           return;
         }
 
-        const { data: signUpData, error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: window.location.origin,
-            data: {
-              display_name: name.trim().toUpperCase(),
-              cpf,
-              phone,
-              employment_status: employment,
-            },
-          },
-        });
-        if (error) {
-          if (error.message.toLowerCase().includes("already")) {
-            throw new Error("Este e-mail já está cadastrado. Faça login.");
-          }
-          const code = (error as { code?: string }).code;
-          if (code === "weak_password" || error.message.toLowerCase().includes("weak") || error.message.toLowerCase().includes("pwned")) {
-            throw new Error("Senha muito fraca ou vazada. Use uma senha forte com letras maiúsculas, minúsculas, números e símbolos (ex: Nexi@2026!Drv).");
-          }
-          throw error;
-        }
-        const userId = signUpData.user?.id;
-        if (userId) {
-          const { error: pErr } = await supabase.from("profiles").upsert({
-            id: userId,
-            display_name: name,
+        // Creates the account without a confirmation email (admin API with
+        // email_confirm: true), then signs in to get an immediate session.
+        const { createUserWithoutConfirmation } = await import("@/lib/admin-operations.server");
+        const createRes = await createUserWithoutConfirmation({
+          data: {
             email,
+            password,
+            display_name: name.trim().toUpperCase(),
             cpf,
-            phone,
+            phone: phone || null,
             employment_status: employmentToDb[employment] ?? employment,
             employment_other: employment === "outro" ? employmentOther : null,
-            needs_new_password: false,
-            is_first_access: false,
-          });
-          if (pErr) {
-            if (pErr.code === "23505") {
-              if (pErr.message?.toLowerCase().includes("cpf")) {
-                throw new Error("Este CPF já está cadastrado. Use outro ou entre em contato com o suporte.");
-              }
-              throw new Error("Este e-mail já está cadastrado. Faça login.");
-            }
-            throw pErr;
+          },
+        });
+        if (!createRes.success) {
+          if (createRes.alreadyRegistered) {
+            throw new Error("Este e-mail já está cadastrado. Faça login.");
           }
+          throw new Error(createRes.error || "Erro ao criar conta. Tente novamente.");
+        }
+        const sessionRes = await supabase.auth.signInWithPassword({ email, password });
+        if (sessionRes.error) {
+          throw sessionRes.error;
         }
         toast.success("Conta criada! Bem-vinda(o).");
         navigate({ to: "/" });

@@ -157,28 +157,39 @@ function CadastroPage() {
           return;
         }
         
-        // Register in Supabase auth with mock fallback
+        // Register in Supabase auth with mock fallback.
+        // Usa o admin API com email_confirm: true para NÃO enviar e-mail de
+        // confirmação ao cliente — a conta é criada e usada imediatamente.
         let signUpData = null;
         let authError: any = null;
 
         try {
-          const res = await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-              emailRedirectTo: window.location.origin,
-              data: {
-                display_name: name.trim().toUpperCase(),
-                cpf,
-                phone,
-                employment_status: employmentToDb[employment as Employment] ?? employment,
-                employment_other: employment === "outro" ? employmentOther.trim() : null,
-                status: "pendente_pagamento"
-              },
+          const { createUserWithoutConfirmation } = await import("@/lib/admin-operations.server");
+          const createRes = await createUserWithoutConfirmation({
+            data: {
+              email,
+              password,
+              display_name: name.trim().toUpperCase(),
+              cpf,
+              phone: phone || null,
+              employment_status: employmentToDb[employment as Employment] ?? employment,
+              employment_other: employment === "outro" ? employmentOther.trim() : null,
             },
           });
-          signUpData = res.data;
-          authError = res.error;
+
+          if (createRes.success && createRes.userId) {
+            // Sign in to establish the session
+            const sessionRes = await supabase.auth.signInWithPassword({ email, password });
+            if (sessionRes.error) {
+              authError = sessionRes.error;
+            } else {
+              signUpData = { user: sessionRes.data.user, session: sessionRes.data.session };
+            }
+          } else if (createRes.alreadyRegistered) {
+            authError = { message: "Este e-mail já possui cadastro em nosso sistema de alunos!" };
+          } else {
+            authError = { message: createRes.error || "Erro ao criar conta." };
+          }
         } catch (err) {
           authError = err;
         }
@@ -215,45 +226,51 @@ function CadastroPage() {
             }
             // Não conseguiu confirmar: tenta de novo o cadastro uma vez
             try {
-              const retry = await supabase.auth.signUp({
-                email,
-                password,
-                options: {
-                  emailRedirectTo: window.location.origin,
-                  data: {
-                    display_name: name.trim().toUpperCase(),
-                    cpf,
-                    phone,
-                    employment_status: employmentToDb[employment as Employment] ?? employment,
-                    employment_other: employment === "outro" ? employmentOther.trim() : null,
-                    status: "pendente_pagamento"
-                  },
+              const { createUserWithoutConfirmation } = await import("@/lib/admin-operations.server");
+              const retryCreate = await createUserWithoutConfirmation({
+                data: {
+                  email,
+                  password,
+                  display_name: name.trim().toUpperCase(),
+                  cpf,
+                  phone: phone || null,
+                  employment_status: employmentToDb[employment as Employment] ?? employment,
+                  employment_other: employment === "outro" ? employmentOther.trim() : null,
                 },
               });
-              if (!retry.error) {
-                signUpData = retry.data;
-                authError = null;
+              if (retryCreate.success && retryCreate.userId) {
+                const sessionRes = await supabase.auth.signInWithPassword({ email, password });
+                if (!sessionRes.error && sessionRes.data.session) {
+                  signUpData = { user: sessionRes.data.user, session: sessionRes.data.session };
+                  authError = null;
+                } else {
+                  authError = sessionRes.error;
+                  rawMsg = authError?.message || "";
+                }
+              } else if (retryCreate.alreadyRegistered) {
+                authError = { message: "already registered" };
+                rawMsg = "already registered";
               } else {
-                authError = retry.error;
+                authError = { message: retryCreate.error || "Erro ao criar conta." };
                 rawMsg = authError?.message || "";
-                // Se o retry diz que o e-mail já está cadastrado, a conta foi criada no
-                // primeiro envio — tenta o login uma última vez para confirmar.
-                if (/already registered|already been registered/i.test(rawMsg)) {
-                  try {
-                    const finalRecovery = await supabase.auth.signInWithPassword({ email, password });
-                    if (!finalRecovery.error && finalRecovery.data?.user) {
-                      await supabase
-                        .from("profiles")
-                        .update({ needs_new_password: false, is_first_access: false })
-                        .eq("id", finalRecovery.data.user.id);
-                      toast.success("Cadastro realizado com sucesso!");
-                      navigate({ to: "/checkout" });
-                      setLoading(false);
-                      return;
-                    }
-                  } catch (finalErr) {
-                    console.error("Erro no login final após retry:", finalErr);
+              }
+              // Se o retry diz que o e-mail já está cadastrado, a conta foi criada no
+              // primeiro envio — tenta o login uma última vez para confirmar.
+              if (/already registered|already been registered/i.test(rawMsg)) {
+                try {
+                  const finalRecovery = await supabase.auth.signInWithPassword({ email, password });
+                  if (!finalRecovery.error && finalRecovery.data?.user) {
+                    await supabase
+                      .from("profiles")
+                      .update({ needs_new_password: false, is_first_access: false })
+                      .eq("id", finalRecovery.data.user.id);
+                    toast.success("Cadastro realizado com sucesso!");
+                    navigate({ to: "/checkout" });
+                    setLoading(false);
+                    return;
                   }
+                } catch (finalErr) {
+                  console.error("Erro no login final após retry:", finalErr);
                 }
               }
             } catch (retryErr) {
@@ -312,48 +329,6 @@ function CadastroPage() {
             setLoading(false);
             return;
           }
-          await supabase
-            .from("profiles")
-            .update({ needs_new_password: false, is_first_access: false })
-            .eq("id", signUpData.user.id);
-          toast.success("Cadastro realizado com sucesso!");
-          navigate({ to: "/checkout" });
-          setLoading(false);
-          return;
-        }
-
-        if (signUpData?.user && !signUpData?.session) {
-          const hasIdentities = signUpData.user.identities && signUpData.user.identities.length > 0;
-          if (!hasIdentities) {
-            setErrorMsg("Este e-mail já está cadastrado. Faça login ou use outro e-mail.");
-            toast.error("Este e-mail já está cadastrado.");
-            setMode("login");
-            setPassword("");
-            setLoading(false);
-            return;
-          }
-
-          // Auto-confirm email and sign in
-          try {
-            const { autoConfirmEmail } = await import("@/lib/admin-operations.server");
-            await autoConfirmEmail({ data: { userId: signUpData.user.id } });
-          } catch (confirmErr) {
-            console.error("Auto-confirm error:", confirmErr);
-          }
-
-          const { error: signInErr } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-          });
-
-          if (signInErr) {
-            toast.success("Conta criada! Verifique seu e-mail para confirmar.");
-            setMode("login");
-            setPassword("");
-            setLoading(false);
-            return;
-          }
-
           await supabase
             .from("profiles")
             .update({ needs_new_password: false, is_first_access: false })

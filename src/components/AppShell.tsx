@@ -206,13 +206,9 @@ export function AppShell() {
             )}
 
             {isActive && !isHub && (
-              <div 
-                title="Dias seguidos de estudo (Ofensiva)"
-                className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full glass whitespace-nowrap"
-              >
+              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full glass whitespace-nowrap">
                 <Flame className="h-4 w-4 text-warning" />
-                <span className="text-sm font-semibold">7</span>
-                <span className="text-xs text-muted-foreground">dias seguidos</span>
+                <span className="text-sm font-semibold">Estudo em dia</span>
               </div>
             )}
 

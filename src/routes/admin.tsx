@@ -1989,6 +1989,7 @@ function SettingsPanel() {
   const [showTiktokPopup, setShowTiktokPopup] = useState(true);
   const [showButton, setShowButton] = useState(true);
   const [freeTrialEnabled, setFreeTrialEnabled] = useState(true);
+  const [freeTrialQuestions, setFreeTrialQuestions] = useState(7);
   const [loaded, setLoaded] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
 
@@ -2008,6 +2009,7 @@ function SettingsPanel() {
       setShowTiktokPopup(map.show_tiktok_popup !== "false");
       setShowButton(map.show_whatsapp_button !== "false");
       setFreeTrialEnabled(map.free_trial_enabled !== "false");
+      setFreeTrialQuestions(map.free_trial_questions ? parseInt(map.free_trial_questions, 10) : 7);
       setLoaded(true);
       return map;
     },
@@ -2024,6 +2026,7 @@ function SettingsPanel() {
         { key: "tiktok_group_link", value: tiktokLink },
         { key: "show_tiktok_popup", value: showTiktokPopup ? "true" : "false" },
         { key: "free_trial_enabled", value: freeTrialEnabled ? "true" : "false" },
+        { key: "free_trial_questions", value: String(freeTrialQuestions) },
       ];
       for (const s of settings) {
         const { error } = await supabase.from("app_settings").upsert(s, { onConflict: "key" });
@@ -2125,10 +2128,33 @@ function SettingsPanel() {
           <div>
             <Label className="text-xs font-semibold">Oferecer teste grátis</Label>
             <p className="text-xs text-muted-foreground">
-              Quando ativo, quem se cadastra tem a opção de fazer o simulado grátis de 7 questões antes de ver os planos. Quando inativo, vai direto para o checkout. Você também pode liberar individualmente na lista de usuários.
+              Quando ativo, quem se cadastra tem a opção de fazer o simulado grátis antes de ver os planos. Quando inativo, vai direto para o checkout. Você também pode liberar individualmente na lista de usuários.
             </p>
           </div>
           <Switch checked={freeTrialEnabled} onCheckedChange={setFreeTrialEnabled} />
+        </div>
+
+        <div className="flex items-center justify-between pt-2">
+          <div>
+            <Label className="text-xs font-semibold">Número de questões do teste grátis</Label>
+            <p className="text-xs text-muted-foreground">Quantas questões o aluno responde no simulado grátis (máximo 7).</p>
+          </div>
+          <div className="flex items-center gap-1.5">
+            {[3, 5, 7].map((n) => (
+              <button
+                key={n}
+                type="button"
+                onClick={() => setFreeTrialQuestions(n)}
+                className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors border ${
+                  freeTrialQuestions === n
+                    ? "bg-primary text-primary-foreground border-primary shadow-glow"
+                    : "bg-secondary/40 text-muted-foreground border-border/40 hover:bg-secondary/70"
+                }`}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 

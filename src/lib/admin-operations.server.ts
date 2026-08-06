@@ -192,6 +192,69 @@ export const checkCpfExists = createServerFn({ method: "POST" })
     return { exists: !!row };
   });
 
+type CreateUserInput = {
+  email: string;
+  password: string;
+  display_name: string;
+  cpf: string;
+  phone: string | null;
+  employment_status: string;
+  employment_other: string | null;
+};
+
+export const createUserWithoutConfirmation = createServerFn({ method: "POST" })
+  .inputValidator((d: CreateUserInput) => d)
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const emailClean = data.email.trim().toLowerCase();
+
+    // Creates the user already confirmed. This does NOT send a confirmation
+    // email — the account is usable immediately. The DB trigger
+    // (handle_new_user) creates the profiles row.
+    const { data: created, error: createError } = await supabaseAdmin.auth.admin.createUser({
+      email: emailClean,
+      password: data.password,
+      email_confirm: true,
+      user_metadata: {
+        display_name: data.display_name,
+        cpf: data.cpf,
+        phone: data.phone,
+        employment_status: data.employment_status,
+        employment_other: data.employment_other,
+        status: "pendente_pagamento",
+      },
+    });
+
+    if (createError && /already been registered|already registered/i.test(createError.message)) {
+      return { success: false, alreadyRegistered: true, error: null };
+    }
+    if (createError) {
+      console.error("Error creating user without confirmation:", createError);
+      return { success: false, error: createError.message };
+    }
+
+    const userId = created.user?.id;
+    if (userId) {
+      const { error: upsertErr } = await supabaseAdmin
+        .from("profiles")
+        .update({
+          cpf: data.cpf,
+          phone: data.phone,
+          employment_status: data.employment_status,
+          employment_other: data.employment_other,
+          display_name: data.display_name,
+          email: emailClean,
+          status: "pendente_pagamento",
+          needs_new_password: false,
+          is_first_access: false,
+        })
+        .eq("id", userId);
+      if (upsertErr) console.error("Error updating profile after create:", upsertErr);
+    }
+
+    return { success: true, userId, email: emailClean };
+  });
+
 export const lookupCpfForReset = createServerFn({ method: "POST" })
   .inputValidator((d: { cpf: string }) => d)
   .handler(async ({ data }) => {

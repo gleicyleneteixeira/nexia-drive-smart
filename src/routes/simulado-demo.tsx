@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { isProfileExpired } from "@/lib/subscription";
 import { AnimatePresence, motion } from "framer-motion";
@@ -135,6 +136,8 @@ function SimuladoDemoPage() {
 
   const isTrial = true;
 
+  const [trialCount, setTrialCount] = useState(7);
+
   const [questions, setQuestions] = useState<Question[]>([]);
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
@@ -143,6 +146,25 @@ function SimuladoDemoPage() {
   const [resumed, setResumed] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
   const dbQuestions = QUESTIONS;
+
+  // Carrega a quantidade de questões do teste grátis configurada no admin
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data } = await supabase
+          .from("app_settings")
+          .select("key, value")
+          .eq("key", "free_trial_questions")
+          .maybeSingle();
+        if (!cancelled && data?.value) {
+          const n = parseInt(data.value, 10);
+          if (n === 3 || n === 5 || n === 7) setTrialCount(n);
+        }
+      } catch {}
+    })();
+    return () => { cancelled = true; };
+  }, []);
 
   // Dispara pedido de avaliação 2s após terminar o simulado
   useEffect(() => {
@@ -157,7 +179,7 @@ function SimuladoDemoPage() {
     if (isTrial) {
       clearPersisted();
       const trialIds = ["qe60", "qe04", "qe39", "qe11", "qe74", "qe75", "q6"];
-      const fresh = trialIds.map(id => QUESTIONS.find(q => q.id === id)).filter(Boolean) as Question[];
+      const fresh = (trialIds.map(id => QUESTIONS.find(q => q.id === id)).filter(Boolean) as Question[]).slice(0, trialCount);
       setQuestions(fresh);
       setIndex(0);
       setSelected(null);
@@ -185,7 +207,7 @@ function SimuladoDemoPage() {
       setShowPicker(true);
     }
     setHydrated(true);
-  }, [isTrial]);
+  }, [isTrial, trialCount]);
 
   // Persiste a cada mudança relevante
   useEffect(() => {
@@ -201,22 +223,22 @@ function SimuladoDemoPage() {
 
   function startWithMode(mode: "completo" | Category) {
     clearPersisted();
-    const count = isTrial ? 7 : TOTAL;
+    const count = isTrial ? trialCount : TOTAL;
     let fresh: Question[];
     if (isTrial) {
       if (mode === "completo") {
         const trialIds = ["qe60", "qe04", "qe39", "qe11", "qe74", "qe75", "q6"];
-        fresh = trialIds.map(id => dbQuestions.find(q => q.id === id)).filter(Boolean) as Question[];
-        if (fresh.length < 7) {
-          fresh = buildFresh(dbQuestions, undefined, 7);
+        fresh = (trialIds.map(id => dbQuestions.find(q => q.id === id)).filter(Boolean) as Question[]).slice(0, trialCount);
+        if (fresh.length < trialCount) {
+          fresh = buildFresh(dbQuestions, undefined, trialCount);
         }
       } else {
         const categoryQuestions = dbQuestions.filter(q => q.category === mode);
         const trialIds = ["qe60", "qe04", "qe39", "qe11", "qe74", "qe75", "q6"];
         const specTrialQs = categoryQuestions.filter(q => trialIds.includes(q.id));
         const exclude = specTrialQs.map(q => q.id);
-        const others = getRandomizedQuestions(Math.max(0, 7 - specTrialQs.length), { exclude, categories: [mode], questionsList: dbQuestions });
-        fresh = [...specTrialQs, ...others].slice(0, 7);
+        const others = getRandomizedQuestions(Math.max(0, trialCount - specTrialQs.length), { exclude, categories: [mode], questionsList: dbQuestions });
+        fresh = [...specTrialQs, ...others].slice(0, trialCount);
       }
     } else {
       fresh = buildFresh(dbQuestions, mode === "completo" ? undefined : mode, count);
