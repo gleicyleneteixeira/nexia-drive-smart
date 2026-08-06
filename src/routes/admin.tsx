@@ -456,7 +456,7 @@ function UsersPanel() {
   const [expiresTo, setExpiresTo] = useState("");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState<number>(10);
-  const [sortField, setSortField] = useState<"name" | "email">("name");
+  const [sortField, setSortField] = useState<"name" | "email" | "status" | "password" | "block" | "created" | "expires">("name");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const [resetUser, setResetUser] = useState<ProfileRow | null>(null);
   const [newPassword, setNewPassword] = useState("");
@@ -547,11 +547,24 @@ function UsersPanel() {
       (u.phone ?? "").toLowerCase().includes(q)
     );
   }).sort((a, b) => {
-    const aVal = (sortField === "name" ? a.display_name ?? "" : a.email ?? "").toLowerCase();
-    const bVal = (sortField === "name" ? b.display_name ?? "" : b.email ?? "").toLowerCase();
-    if (aVal < bVal) return sortDir === "asc" ? -1 : 1;
-    if (aVal > bVal) return sortDir === "asc" ? 1 : -1;
-    return 0;
+    function valueOf(u: typeof a): string {
+      switch (sortField) {
+        case "email": return u.email ?? "";
+        case "status":
+          return u.status === "ativo" && isPaid(u)
+            ? "pago"
+            : u.status === "ativo"
+              ? "liberado gratis"
+              : u.status === "pendente_pagamento" ? "pendente" : (u.status ?? "");
+        case "password": return u.needs_new_password === true ? "sem senha" : "ok";
+        case "block": return u.access_status === "blocked" ? "bloqueado" : "ativo";
+        case "created": return u.created_at ?? "";
+        case "expires": return u.expires_at ?? "";
+        default: return u.display_name ?? "";
+      }
+    }
+    const cmp = valueOf(a).localeCompare(valueOf(b));
+    return sortDir === "asc" ? cmp : -cmp;
   });
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
@@ -603,6 +616,29 @@ function UsersPanel() {
     a.download = `usuarios-${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
+  }
+
+  function SortableTh({ field, label, className }: {
+    field: "name" | "email" | "status" | "password" | "block" | "created" | "expires";
+    label: string;
+    className?: string;
+  }) {
+    return (
+      <th className={`px-3 py-2 ${className ?? "text-left"}`}>
+        <button
+          onClick={() => {
+            if (sortField === field) setSortDir((d) => d === "asc" ? "desc" : "asc");
+            else { setSortField(field); setSortDir("asc"); }
+          }}
+          className={`inline-flex items-center gap-1 hover:text-foreground transition-colors ${className === "text-right" ? "flex-row-reverse" : ""}`}
+        >
+          {label}
+          {sortField === field ? (
+            sortDir === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />
+          ) : <ArrowUpDown className="h-3 w-3 opacity-40" />}
+        </button>
+      </th>
+    );
   }
 
   return (
@@ -757,36 +793,16 @@ function UsersPanel() {
         <table className="w-full text-sm">
           <thead className="bg-background/50 text-xs uppercase text-muted-foreground">
             <tr>
-              <th className="text-left px-3 py-2">
-                <button onClick={() => {
-                  if (sortField === "name") setSortDir((d) => d === "asc" ? "desc" : "asc");
-                  else { setSortField("name"); setSortDir("asc"); }
-                }} className="inline-flex items-center gap-1 hover:text-foreground transition-colors">
-                  Nome
-                  {sortField === "name" ? (
-                    sortDir === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />
-                  ) : <ArrowUpDown className="h-3 w-3 opacity-40" />}
-                </button>
-              </th>
-              <th className="text-left px-3 py-2">
-                <button onClick={() => {
-                  if (sortField === "email") setSortDir((d) => d === "asc" ? "desc" : "asc");
-                  else { setSortField("email"); setSortDir("asc"); }
-                }} className="inline-flex items-center gap-1 hover:text-foreground transition-colors">
-                  E-mail
-                  {sortField === "email" ? (
-                    sortDir === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />
-                  ) : <ArrowUpDown className="h-3 w-3 opacity-40" />}
-                </button>
-              </th>
+              <SortableTh field="name" label="Nome" />
+              <SortableTh field="email" label="E-mail" />
               <th className="text-left px-3 py-2">CPF</th>
               <th className="text-left px-3 py-2">Telefone</th>
-              <th className="text-left px-3 py-2">Motivo</th>
-              <th className="text-left px-3 py-2">Senha</th>
-              <th className="text-left px-3 py-2">Situação</th>
+              <SortableTh field="status" label="Motivo" />
+              <SortableTh field="password" label="Senha" />
+              <SortableTh field="block" label="Situação" />
               <th className="text-left px-3 py-2">Ocupação</th>
-              <th className="text-left px-3 py-2">Cadastro</th>
-              <th className="text-left px-3 py-2">Expiração</th>
+              <SortableTh field="created" label="Cadastro" />
+              <SortableTh field="expires" label="Expiração" />
               <th className="text-right px-3 py-2">Ações</th>
             </tr>
           </thead>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { X, MessageCircle, ExternalLink, Users } from "lucide-react";
+import { X, MessageCircle, ExternalLink, Users, Gift, PartyPopper } from "lucide-react";
 
 type GroupKey = "whatsapp" | "tiktok";
 
@@ -15,14 +15,29 @@ type GroupConfig = {
 
 const GROUP_KEYS: GroupKey[] = ["whatsapp", "tiktok"];
 
+// Depois que a pessoa clica "Agora não", o popup só reaparece após este intervalo
+const DISMISS_COOLDOWN_MS = 3 * 24 * 60 * 60 * 1000;
+
+function getDismissedAt(key: GroupKey): number | null {
+  if (typeof window === "undefined") return null;
+  const raw = localStorage.getItem(`nexia:group_dismissed_at:${key}`);
+  const n = raw ? Number(raw) : 0;
+  return n > 0 ? n : null;
+}
+
+function setDismissedAt(key: GroupKey) {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(`nexia:group_dismissed_at:${key}`, String(Date.now()));
+}
+
 const GROUP_CONFIG: Record<GroupKey, GroupConfig> = {
   whatsapp: {
     linkKey: "whatsapp_group_link",
     showKey: "show_group_popup",
-    title: "Faça parte da nossa Comunidade de Alunos!",
+    title: "Você foi convidado! Você está convidado a participar do nosso grupo exclusivo de primeiros condutores!",
     description:
-      "Tire dúvidas, receba dicas exclusivas e acompanhe novidades do simulador Nexia Drive diretamente no grupo.",
-    badge: "Comunidade no WhatsApp",
+      "Um grupo para você trocar experiências, tirar dúvidas e conversar com outras pessoas que estão passando pelo mesmo que você: a primeira habilitação. Não é um grupo grande — os alunos vão entrando e saindo conforme passam na prova — mas todo mundo que comprou o simulador pode participar. Vem com a gente!",
+    badge: "Grupo exclusivo de primeiros condutores",
   },
   tiktok: {
     linkKey: "tiktok_group_link",
@@ -34,9 +49,22 @@ const GROUP_CONFIG: Record<GroupKey, GroupConfig> = {
   },
 };
 
-export function GroupPopups({ userId, groupStatus }: { userId: string; groupStatus: string | null }) {
+export function GroupPopups({ userId, groupStatus, onDone, onVisibleChange }: {
+  userId: string;
+  groupStatus: string | null;
+  onDone?: () => void;
+  onVisibleChange?: (visible: boolean) => void;
+}) {
   const [settings, setSettings] = useState<Record<string, string>>({});
-  const [dismissed, setDismissed] = useState<Partial<Record<GroupKey, boolean>>>({});
+  const [dismissed, setDismissed] = useState<Partial<Record<GroupKey, boolean>>>(() => {
+    const now = Date.now();
+    const out: Partial<Record<GroupKey, boolean>> = {};
+    for (const key of GROUP_KEYS) {
+      const at = getDismissedAt(key);
+      if (at && now - at < DISMISS_COOLDOWN_MS) out[key] = true;
+    }
+    return out;
+  });
   const [tiktokJoined, setTiktokJoined] = useState(() => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("nexia:tiktok_group_joined") === "true";
@@ -62,19 +90,25 @@ export function GroupPopups({ userId, groupStatus }: { userId: string; groupStat
     return true;
   });
 
+  useEffect(() => {
+    onVisibleChange?.(!!pendingGroup);
+  }, [pendingGroup, onVisibleChange]);
+
   if (!pendingGroup) return null;
 
-  const cfg = GROUP_CONFIG[pendingGroup];
+  const activeGroup: GroupKey = pendingGroup;
+  const cfg = GROUP_CONFIG[activeGroup];
   const link = settings[cfg.linkKey];
 
   async function markJoined() {
-    if (pendingGroup === "whatsapp") {
+    if (activeGroup === "whatsapp") {
       await supabase.from("profiles").update({ group_status: "joined" }).eq("id", userId);
       setDismissed((d) => ({ ...d, whatsapp: true }));
     } else {
       localStorage.setItem("nexia:tiktok_group_joined", "true");
       setTiktokJoined(true);
     }
+    onDone?.();
   }
 
   async function openGroup() {
@@ -82,18 +116,24 @@ export function GroupPopups({ userId, groupStatus }: { userId: string; groupStat
     await markJoined();
   }
 
+  function dismiss() {
+    setDismissedAt(activeGroup);
+    setDismissed((d) => ({ ...d, [activeGroup]: true }));
+    onDone?.();
+  }
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
       <div className="bg-card rounded-2xl p-6 max-w-md w-full shadow-xl border relative animate-in fade-in zoom-in duration-200">
-        <button onClick={() => setDismissed((d) => ({ ...d, [pendingGroup]: true }))} className="absolute top-3 right-3 text-muted-foreground hover:text-foreground">
+        <button onClick={dismiss} className="absolute top-3 right-3 text-muted-foreground hover:text-foreground">
           <X className="h-5 w-5" />
         </button>
         <div className="space-y-4">
-          <div className="w-12 h-12 rounded-full bg-success/20 flex items-center justify-center mx-auto">
-            {pendingGroup === "whatsapp" ? (
-              <MessageCircle className="h-6 w-6 text-success" />
+          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-success to-emerald-600 flex items-center justify-center mx-auto shadow-lg">
+            {activeGroup === "whatsapp" ? (
+              <Gift className="h-7 w-7 text-white" />
             ) : (
-              <Users className="h-6 w-6 text-success" />
+              <Users className="h-7 w-7 text-white" />
             )}
           </div>
           <div className="text-center">
@@ -105,13 +145,13 @@ export function GroupPopups({ userId, groupStatus }: { userId: string; groupStat
           </div>
           <div className="space-y-2 pt-2">
             <Button className="w-full gap-2" onClick={openGroup}>
-              <ExternalLink className="h-4 w-4" /> Entrar no Grupo
+              <PartyPopper className="h-4 w-4" /> Quero participar
             </Button>
             <Button variant="outline" className="w-full" onClick={markJoined}>
               Já sou membro
             </Button>
             <button
-              onClick={() => setDismissed((d) => ({ ...d, [pendingGroup]: true }))}
+              onClick={dismiss}
               className="w-full text-xs text-muted-foreground hover:text-foreground py-2"
             >
               Agora não

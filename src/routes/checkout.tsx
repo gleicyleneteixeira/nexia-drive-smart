@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { toast } from "sonner";
 import { Loader2, CheckCircle2, Copy, Clock, CreditCard, Sparkles, Terminal, BookOpen } from "lucide-react";
 import { getExpiryDate, isProfileExpired } from "@/lib/subscription";
+import { GroupPopups } from "@/components/WhatsAppGroupPopup";
 
 export const Route = createFileRoute("/checkout")({
   component: CheckoutPage,
@@ -137,6 +138,7 @@ function CheckoutPage() {
 
   const pollingRef = useRef<NodeJS.Timeout | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const groupVisibleRef = useRef(false);
 
   useEffect(() => {
     if (!isGiftOpened && user) {
@@ -198,7 +200,9 @@ function CheckoutPage() {
           await refreshProfile();
           stopPolling(); stopTimer(); setPaymentConfirmed(true);
           toast.success("Pagamento confirmado com sucesso!");
-          setTimeout(() => { navigate({ to: "/app", replace: true }); }, 2000);
+          if (!groupVisibleRef.current) {
+            setTimeout(() => { navigate({ to: "/app", replace: true }); }, 1500);
+          }
         }
       } catch (err) { console.error("Erro no polling:", err); }
     }, 3000);
@@ -726,6 +730,16 @@ function CheckoutPage() {
           ) : null}
         </DialogContent>
       </Dialog>
+
+      {/* Caixinha surpresa do grupo — aparece logo após o pagamento confirmar */}
+      {paymentConfirmed && (
+        <GroupPopups
+          userId={user?.id ?? ""}
+          groupStatus={profile?.group_status ?? null}
+          onVisibleChange={(v) => { groupVisibleRef.current = v; }}
+          onDone={() => navigate({ to: "/app", replace: true })}
+        />
+      )}
     </div>
   );
 }
