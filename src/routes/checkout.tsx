@@ -187,6 +187,29 @@ function CheckoutPage() {
     }
   }, [user, profile, authLoading, navigate, paymentConfirmed]);
 
+  // Reconciliação automática: se o perfil ainda está pendente/expirado mas a
+  // pessoa já pagou (webhook pode não ter chegado), confirmamos de novo e
+  // ativamos o acesso na hora — inclusive consultando a EFI se preciso.
+  useEffect(() => {
+    if (authLoading || !user || !profile) return;
+    if (profile.status === "ativo" && !isProfileExpired(profile)) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { receivePixConfirmation } = await import("@/lib/admin-operations.server");
+        const res = await receivePixConfirmation({ data: { userId: user.id } });
+        if (!cancelled && res.activated) {
+          await refreshProfile();
+          toast.success("Pagamento confirmado com sucesso!");
+          setTimeout(() => navigate({ to: "/app", replace: true }), 1200);
+        }
+      } catch (err) {
+        console.warn("Reconciliação de pagamento falhou:", err);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [user, profile, authLoading, navigate, refreshProfile]);
+
   useEffect(() => {
     return () => { stopTimer(); stopPolling(); };
   }, []);

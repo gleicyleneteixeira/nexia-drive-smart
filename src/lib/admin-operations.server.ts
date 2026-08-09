@@ -486,6 +486,85 @@ export const activateUser = createServerFn({ method: "POST" })
     return { ok: true, planType, expiresAt };
   });
 
+export const receivePixConfirmation = createServerFn({ method: "POST" })
+  .inputValidator((d: { userId: string }) => d)
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { getExpiryDate } = await import("@/lib/subscription");
+
+    const { data: profile, error: profErr } = await supabaseAdmin
+      .from("profiles")
+      .select("status, expires_at")
+      .eq("id", data.userId)
+      .maybeSingle();
+    if (profErr) throw new Error(profErr.message);
+    if (!profile) return { ok: true, activated: false, reason: "no-profile" };
+
+    // Já ativo e não expirado: nada a fazer.
+    if (profile.status === "ativo" && profile.expires_at && new Date(profile.expires_at) > new Date()) {
+      return { ok: true, activated: false, reason: "already-active" };
+    }
+
+    const { data: txList } = await supabaseAdmin
+      .from("pix_transactions")
+      .select("txid, plan_type, amount, status")
+      .eq("user_id", data.userId)
+      .order("created_at", { ascending: false })
+      .limit(10);
+
+    if (!txList || txList.length === 0) {
+      return { ok: true, activated: false, reason: "no-transaction" };
+    }
+
+    // Varre todas as cobranças e ativa na primeira que estiver paga. Isso cobre
+    // o caso de o usuário gerar mais de um QR Code (ex.: expirou o primeiro) e
+    // ter pago a cobrança anterior à mais recente.
+    let activatedTx: { txid: string; plan_type?: string | null; amount?: number | null } | null = null;
+    for (const tx of txList) {
+      let finalStatus = tx.status;
+      if (finalStatus !== "CONCLUIDA") {
+        try {
+          const { getPixChargeStatus } = await import("@/lib/efi-pay.server");
+          const remote = await getPixChargeStatus(tx.txid);
+          if (remote === "CONCLUIDA" || remote === "paid") {
+            finalStatus = "CONCLUIDA";
+          }
+        } catch (efiErr) {
+          console.warn("Falha ao consultar status EFI na reconciliação:", (efiErr as Error).message);
+        }
+      }
+      if (finalStatus === "CONCLUIDA") {
+        activatedTx = tx;
+        break;
+      }
+    }
+
+    if (!activatedTx) {
+      return { ok: true, activated: false, reason: "not-paid" };
+    }
+
+    const expiresAt = getExpiryDate(activatedTx.plan_type ?? "1_month", activatedTx.amount).toISOString();
+    const { error: txErr } = await supabaseAdmin
+      .from("pix_transactions")
+      .update({ status: "CONCLUIDA", updated_at: new Date().toISOString() })
+      .eq("user_id", data.userId)
+      .eq("txid", activatedTx.txid);
+    if (txErr) console.warn("Erro ao marcar transação como CONCLUIDA:", txErr.message);
+
+    const { error } = await supabaseAdmin
+      .from("profiles")
+      .update({
+        status: "ativo",
+        expires_at: expiresAt,
+        access_reason: "pago",
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", data.userId);
+    if (error) throw new Error(error.message);
+
+    return { ok: true, activated: true, expiresAt };
+  });
+
 export const registerPixPayment = createServerFn({ method: "POST" })
   .inputValidator((d: { userId: string; amount?: number; planType?: string; expiresAt?: string | null }) => d)
   .handler(async ({ data }) => {

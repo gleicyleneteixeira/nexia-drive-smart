@@ -48,6 +48,7 @@ export async function handlePixWebhook(request: Request): Promise<Response> {
             .update({
               status: "ativo",
               expires_at: getExpiryDate(tx.plan_type, tx.amount).toISOString(),
+              access_reason: "pago",
               updated_at: new Date().toISOString(),
             })
             .eq("id", tx.user_id);
