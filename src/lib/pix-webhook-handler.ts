@@ -1,5 +1,5 @@
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
-import { getExpiryDate } from "@/lib/subscription";
+import { getPlanDays } from "@/lib/subscription";
 
 // EFI Pay envia callbacks para `POST url-webhook-cadastrada/pix` (sufixo "/pix"),
 // a menos que a URL seja cadastrada com "?ignorar=". Este handler é compartilhado
@@ -31,7 +31,7 @@ export async function handlePixWebhook(request: Request): Promise<Response> {
         // 1. Find user_id from txid
         const { data: tx, error: txErr } = await supabaseAdmin
           .from("pix_transactions")
-          .select("user_id, status, plan_type, amount")
+          .select("user_id, status, plan_type, amount, created_at")
           .eq("txid", txid)
           .single();
 
@@ -42,12 +42,19 @@ export async function handlePixWebhook(request: Request): Promise<Response> {
             .update({ status: "CONCLUIDA", updated_at: new Date().toISOString() })
             .eq("txid", txid);
 
-          // 3. Update user status to active
+          // 3. Update user status to active, with the period counted from the
+          // charge creation date (never from "now"), so a re-delivered or retried
+          // webhook cannot grant extra time for free.
+          const days = getPlanDays(tx.plan_type, tx.amount);
+          const base = tx.created_at ? new Date(tx.created_at) : new Date();
+          const expires = new Date(base);
+          expires.setDate(expires.getDate() + days);
+
           await supabaseAdmin
             .from("profiles")
             .update({
               status: "ativo",
-              expires_at: getExpiryDate(tx.plan_type, tx.amount).toISOString(),
+              expires_at: expires.toISOString(),
               access_reason: "pago",
               updated_at: new Date().toISOString(),
             })

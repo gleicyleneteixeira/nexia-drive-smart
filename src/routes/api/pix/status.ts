@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { getPixChargeStatus, isEfiConfigured } from "@/lib/efi-pay.server";
-import { getExpiryDate } from "@/lib/subscription";
+import { getPlanDays } from "@/lib/subscription";
 
 function isSupabaseConfigured(): boolean {
   return !!(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
@@ -32,7 +32,7 @@ export const Route = createFileRoute("/api/pix/status")({
 
               const { data: tx, error: txErr } = await supabaseAdmin
                 .from("pix_transactions")
-                .select("status, user_id, plan_type, amount")
+                .select("status, user_id, plan_type, amount, created_at")
                 .eq("txid", txid)
                 .single();
 
@@ -48,11 +48,17 @@ export const Route = createFileRoute("/api/pix/status")({
                         .from("pix_transactions")
                         .update({ status: "CONCLUIDA", updated_at: new Date().toISOString() })
                         .eq("txid", txid);
+
+                      const days = getPlanDays(tx.plan_type, tx.amount);
+                      const base = tx.created_at ? new Date(tx.created_at) : new Date();
+                      const expires = new Date(base);
+                      expires.setDate(expires.getDate() + days);
+
                       await supabaseAdmin
                         .from("profiles")
                         .update({
                           status: "ativo",
-                          expires_at: getExpiryDate(tx.plan_type, tx.amount).toISOString(),
+                          expires_at: expires.toISOString(),
                           access_reason: "pago",
                           updated_at: new Date().toISOString(),
                         })

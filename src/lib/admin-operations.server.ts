@@ -490,7 +490,7 @@ export const receivePixConfirmation = createServerFn({ method: "POST" })
   .inputValidator((d: { userId: string }) => d)
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { getExpiryDate } = await import("@/lib/subscription");
+    const { getPlanDays } = await import("@/lib/subscription");
 
     const { data: profile, error: profErr } = await supabaseAdmin
       .from("profiles")
@@ -507,7 +507,7 @@ export const receivePixConfirmation = createServerFn({ method: "POST" })
 
     const { data: txList } = await supabaseAdmin
       .from("pix_transactions")
-      .select("txid, plan_type, amount, status")
+      .select("txid, plan_type, amount, status, created_at")
       .eq("user_id", data.userId)
       .order("created_at", { ascending: false })
       .limit(10);
@@ -519,7 +519,14 @@ export const receivePixConfirmation = createServerFn({ method: "POST" })
     // Varre todas as cobranças e ativa na primeira que estiver paga. Isso cobre
     // o caso de o usuário gerar mais de um QR Code (ex.: expirou o primeiro) e
     // ter pago a cobrança anterior à mais recente.
-    let activatedTx: { txid: string; plan_type?: string | null; amount?: number | null } | null = null;
+    //
+    // IMPORTANTE: o prazo começa na DATA DA TRANSAÇÃO (created_at), não em
+    // "agora". Assim, uma cobrança antiga já vencida (ex.: plano pago há 60
+    // dias, depois gerou outra cobrança sem pagar) NÃO reativa o acesso de
+    // graça. Somente cobranças pagas cuja vigência ainda esteja válida contam.
+    let activatedTx: { txid: string; plan_type?: string | null; amount?: number | null; created_at?: string | null } | null = null;
+    let activatesAt: string | null = null;
+    const now = Date.now();
     for (const tx of txList) {
       let finalStatus = tx.status;
       if (finalStatus !== "CONCLUIDA") {
@@ -533,17 +540,28 @@ export const receivePixConfirmation = createServerFn({ method: "POST" })
           console.warn("Falha ao consultar status EFI na reconciliação:", (efiErr as Error).message);
         }
       }
-      if (finalStatus === "CONCLUIDA") {
-        activatedTx = tx;
-        break;
+      if (finalStatus !== "CONCLUIDA") {
+        continue;
       }
+
+      const days = getPlanDays(tx.plan_type ?? "1_month", tx.amount ?? undefined);
+      const base = tx.created_at ? new Date(tx.created_at) : new Date();
+      const candidateExpiry = new Date(base);
+      candidateExpiry.setDate(candidateExpiry.getDate() + days);
+      if (candidateExpiry.getTime() <= now) {
+        // Pagamento antigo já venceu — não conta para liberação.
+        continue;
+      }
+
+      activatedTx = tx;
+      activatesAt = candidateExpiry.toISOString();
+      break;
     }
 
     if (!activatedTx) {
       return { ok: true, activated: false, reason: "not-paid" };
     }
 
-    const expiresAt = getExpiryDate(activatedTx.plan_type ?? "1_month", activatedTx.amount).toISOString();
     const { error: txErr } = await supabaseAdmin
       .from("pix_transactions")
       .update({ status: "CONCLUIDA", updated_at: new Date().toISOString() })
@@ -555,14 +573,14 @@ export const receivePixConfirmation = createServerFn({ method: "POST" })
       .from("profiles")
       .update({
         status: "ativo",
-        expires_at: expiresAt,
+        expires_at: activatesAt,
         access_reason: "pago",
         updated_at: new Date().toISOString(),
       })
       .eq("id", data.userId);
     if (error) throw new Error(error.message);
 
-    return { ok: true, activated: true, expiresAt };
+    return { ok: true, activated: true, expiresAt: activatesAt };
   });
 
 export const registerPixPayment = createServerFn({ method: "POST" })
