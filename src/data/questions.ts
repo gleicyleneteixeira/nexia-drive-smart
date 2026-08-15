@@ -4582,6 +4582,30 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 3,
   },
+  {
+    id: "qp64",
+    category: "legislacao",
+    statement:
+      "De acordo com as regras gerais de circulação e conduta estabelecidas pelo Código de Trânsito Brasileiro (CTB), em uma via aberta à circulação, o trânsito de veículos deve ser feito pelo seguinte lado da pista:",
+    options: [
+      "Pelo lado esquerdo, seguindo o padrão internacional de trânsito rápido (mão inglesa), facilitando ultrapassagens seguras em vias urbanas.",
+      "Pelo lado direito da via, admitindo-se as exceções devidamente sinalizadas pelo órgão competente ou em manobras de ultrapassagem.",
+      "Pelo centro da via, para garantir uma distância segura dos acostamentos, calçadas e pedestres que circulam nas laterais.",
+      "Pelo lado que apresentar melhor estado de conservação do asfalto, cabendo ao condutor decidir livremente a faixa mais conveniente.",
+    ],
+    correctIndex: 1,
+    explanation:
+      "A circulação deve ocorrer pelo lado direito da via, salvo as exceções sinalizadas (Art. 29, II do CTB).",
+    detailedExplanation:
+      "O art. 29, inciso II do CTB estabelece expressamente que a circulação de veículos nas vias abertas ao tráfego obedecerá à norma de que ela deve ser feita pelo lado direito da via, admitindo-se as exceções devidamente sinalizadas. Transitar pela esquerda/contramão é proibido e gera infração gravíssima. A alternativa A induz ao erro fazendo referência à mão inglesa (padrão de países como Reino Unido e Japão). A alternativa C é incorreta e perigosa por sugerir circulação pelo centro. A alternativa D simula uma autonomia ilegal para o condutor escolher a faixa com base nas condições do pavimento.",
+    legalBase: "Art. 29, II do CTB",
+    commonMistake:
+      "Confundir a regra padrão com as exceções de circulação (como desvios sinalizados ou ultrapassagens), ou escolher alternativas longas que parecem priorizar o conforto do motorista com base nas condições do asfalto.",
+    tip: "Regra geral no Brasil: circulação sempre pelo lado direito. O lado esquerdo é para ultrapassar ou quando sinalizado.",
+    incidence: "altissima",
+    trap: true,
+    difficulty: 2,
+  },
 ];
 
 // Questões que realmente caíram na prova do DETRAN.
@@ -4602,6 +4626,7 @@ export const REAL_EXAM_IDS = [
   "qp62",
   "qp63",
   "sinistro-sinalizacao-001",
+  "qp64",
 ];
 
 export function getRandomizedQuestions(
