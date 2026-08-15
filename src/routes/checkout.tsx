@@ -761,6 +761,8 @@ function CheckoutPage() {
       {paymentConfirmed && (
         <GroupPopups
           userId={user?.id ?? ""}
+          whatsappInviteStatus={profile?.whatsapp_invite_status ?? null}
+          laterAt={profile?.whatsapp_invite_later_at ?? null}
           groupStatus={profile?.group_status ?? null}
           onVisibleChange={(v) => { groupVisibleRef.current = v; }}
           onDone={() => navigate({ to: "/app", replace: true })}

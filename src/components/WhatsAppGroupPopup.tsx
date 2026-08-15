@@ -15,7 +15,7 @@ type GroupConfig = {
 
 const GROUP_KEYS: GroupKey[] = ["whatsapp", "tiktok"];
 
-// Depois que a pessoa clica "Agora não", o popup só reaparece após este intervalo
+// Depois que a pessoa clica "Lembrar mais tarde", o popup só reaparece após este intervalo
 const DISMISS_COOLDOWN_MS = 3 * 24 * 60 * 60 * 1000;
 
 function getDismissedAt(key: GroupKey): number | null {
@@ -49,8 +49,44 @@ const GROUP_CONFIG: Record<GroupKey, GroupConfig> = {
   },
 };
 
-export function GroupPopups({ userId, groupStatus, onDone, onVisibleChange }: {
+type WhatsappInviteStatus = "pending" | "joined" | "dismissed" | "later";
+
+// Status persistido no banco (whatsapp_invite_status):
+//  - 'pending'   -> ainda não respondeu, o modal pode ser exibido
+//  - 'joined'    -> entrou no grupo, nunca mais exibir
+//  - 'dismissed' -> recusou permanentemente, nunca mais exibir
+//  - 'later'     -> adiou; só reaparece após o cooldown (whatsapp_invite_later_at)
+function getWhatsappShouldShow(
+  status: string | null,
+  laterAt: string | null,
+  legacyGroupStatus: string | null,
+): boolean {
+  if (legacyGroupStatus === "joined") return false;
+  if (status === "joined" || status === "dismissed") return false;
+
+  // Cooldown legado (localStorage) de quem clicou "Agora não" na versão antiga
+  const legacyAt = getDismissedAt("whatsapp");
+  if (legacyAt && Date.now() - legacyAt < DISMISS_COOLDOWN_MS) return false;
+
+  if (status === "later") {
+    const at = laterAt ? new Date(laterAt).getTime() : 0;
+    return at > 0 ? Date.now() - at >= DISMISS_COOLDOWN_MS : false;
+  }
+
+  return true;
+}
+
+export function GroupPopups({
+  userId,
+  whatsappInviteStatus,
+  laterAt,
+  groupStatus,
+  onDone,
+  onVisibleChange,
+}: {
   userId: string;
+  whatsappInviteStatus: string | null;
+  laterAt: string | null;
   groupStatus: string | null;
   onDone?: () => void;
   onVisibleChange?: (visible: boolean) => void;
@@ -58,11 +94,9 @@ export function GroupPopups({ userId, groupStatus, onDone, onVisibleChange }: {
   const [settings, setSettings] = useState<Record<string, string>>({});
   const [dismissed, setDismissed] = useState<Partial<Record<GroupKey, boolean>>>(() => {
     const now = Date.now();
+    const at = getDismissedAt("tiktok");
     const out: Partial<Record<GroupKey, boolean>> = {};
-    for (const key of GROUP_KEYS) {
-      const at = getDismissedAt(key);
-      if (at && now - at < DISMISS_COOLDOWN_MS) out[key] = true;
-    }
+    if (at && now - at < DISMISS_COOLDOWN_MS) out.tiktok = true;
     return out;
   });
   const [tiktokJoined, setTiktokJoined] = useState(() => {
@@ -85,8 +119,10 @@ export function GroupPopups({ userId, groupStatus, onDone, onVisibleChange }: {
     const cfg = GROUP_CONFIG[key];
     if (settings[cfg.showKey] === "false") return false;
     if (!settings[cfg.linkKey]) return false;
-    if (key === "whatsapp" && groupStatus === "joined") return false;
-    if (key === "tiktok" && tiktokJoined) return false;
+    if (key === "whatsapp") {
+      return getWhatsappShouldShow(whatsappInviteStatus, laterAt, groupStatus);
+    }
+    if (tiktokJoined) return false;
     return true;
   });
 
@@ -100,9 +136,22 @@ export function GroupPopups({ userId, groupStatus, onDone, onVisibleChange }: {
   const cfg = GROUP_CONFIG[activeGroup];
   const link = settings[cfg.linkKey];
 
-  async function markJoined() {
+  async function setWhatsappInviteStatus(status: WhatsappInviteStatus) {
+    const patch: {
+      whatsapp_invite_status: WhatsappInviteStatus;
+      whatsapp_invite_later_at?: string;
+    } = { whatsapp_invite_status: status };
+    if (status === "later") {
+      patch.whatsapp_invite_later_at = new Date().toISOString();
+    }
+    localStorage.removeItem("nexia:group_dismissed_at:whatsapp");
+    await supabase.from("profiles").update(patch).eq("id", userId);
+  }
+
+  async function openGroup() {
+    window.open(link, "_blank");
     if (activeGroup === "whatsapp") {
-      await supabase.from("profiles").update({ group_status: "joined" }).eq("id", userId);
+      await setWhatsappInviteStatus("joined");
       setDismissed((d) => ({ ...d, whatsapp: true }));
     } else {
       localStorage.setItem("nexia:tiktok_group_joined", "true");
@@ -111,21 +160,46 @@ export function GroupPopups({ userId, groupStatus, onDone, onVisibleChange }: {
     onDone?.();
   }
 
-  async function openGroup() {
-    window.open(link, "_blank");
-    await markJoined();
+  async function markJoined() {
+    if (activeGroup === "whatsapp") {
+      await setWhatsappInviteStatus("joined");
+      setDismissed((d) => ({ ...d, whatsapp: true }));
+    } else {
+      localStorage.setItem("nexia:tiktok_group_joined", "true");
+      setTiktokJoined(true);
+    }
+    onDone?.();
   }
 
-  function dismiss() {
-    setDismissedAt(activeGroup);
-    setDismissed((d) => ({ ...d, [activeGroup]: true }));
+  async function remindLater() {
+    if (activeGroup === "whatsapp") {
+      await setWhatsappInviteStatus("later");
+      setDismissed((d) => ({ ...d, whatsapp: true }));
+    } else {
+      setDismissedAt(activeGroup);
+      setDismissed((d) => ({ ...d, [activeGroup]: true }));
+    }
+    onDone?.();
+  }
+
+  async function refusePermanently() {
+    if (activeGroup === "whatsapp") {
+      await setWhatsappInviteStatus("dismissed");
+      setDismissed((d) => ({ ...d, whatsapp: true }));
+    } else {
+      setDismissedAt(activeGroup);
+      setDismissed((d) => ({ ...d, [activeGroup]: true }));
+    }
     onDone?.();
   }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
       <div className="bg-card rounded-2xl p-6 max-w-md w-full shadow-xl border relative animate-in fade-in zoom-in duration-200">
-        <button onClick={dismiss} className="absolute top-3 right-3 text-muted-foreground hover:text-foreground">
+        <button
+          onClick={remindLater}
+          className="absolute top-3 right-3 text-muted-foreground hover:text-foreground"
+        >
           <X className="h-5 w-5" />
         </button>
         <div className="space-y-4">
@@ -145,17 +219,42 @@ export function GroupPopups({ userId, groupStatus, onDone, onVisibleChange }: {
           </div>
           <div className="space-y-2 pt-2">
             <Button className="w-full gap-2" onClick={openGroup}>
-              <PartyPopper className="h-4 w-4" /> Quero participar
+              {activeGroup === "whatsapp" ? (
+                <>
+                  <ExternalLink className="h-4 w-4" /> Entrar no Grupo
+                </>
+              ) : (
+                <>
+                  <PartyPopper className="h-4 w-4" /> Quero participar
+                </>
+              )}
             </Button>
             <Button variant="outline" className="w-full" onClick={markJoined}>
               Já sou membro
             </Button>
-            <button
-              onClick={dismiss}
-              className="w-full text-xs text-muted-foreground hover:text-foreground py-2"
-            >
-              Agora não
-            </button>
+            {activeGroup === "whatsapp" ? (
+              <>
+                <button
+                  onClick={remindLater}
+                  className="w-full text-xs text-muted-foreground hover:text-foreground py-2"
+                >
+                  Lembrar mais tarde
+                </button>
+                <button
+                  onClick={refusePermanently}
+                  className="w-full text-xs text-destructive/80 hover:text-destructive py-2"
+                >
+                  Não quero participar
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={remindLater}
+                className="w-full text-xs text-muted-foreground hover:text-foreground py-2"
+              >
+                Agora não
+              </button>
+            )}
           </div>
         </div>
       </div>

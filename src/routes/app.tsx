@@ -90,7 +90,12 @@ function DashboardGate() {
       <DashboardController />
       {user && profile && profile.status === "ativo" && (
         <>
-          <GroupPopups userId={user.id} groupStatus={profile.group_status} />
+          <GroupPopups
+            userId={user.id}
+            whatsappInviteStatus={profile.whatsapp_invite_status}
+            laterAt={profile.whatsapp_invite_later_at}
+            groupStatus={profile.group_status}
+          />
         </>
       )}
     </>

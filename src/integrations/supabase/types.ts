@@ -130,10 +130,12 @@ export type Database = {
            phone: string | null
            studies: boolean | null
            status: string
-           updated_at: string
-            access_status: string | null
-            access_reason: string | null
-            group_status: string | null
+            updated_at: string
+             access_status: string | null
+             access_reason: string | null
+             group_status: string | null
+             whatsapp_invite_later_at: string | null
+             whatsapp_invite_status: string
            }
           Insert: {
             cpf?: string | null
@@ -155,6 +157,8 @@ export type Database = {
             access_status?: string | null
             access_reason?: string | null
             group_status?: string | null
+            whatsapp_invite_later_at?: string | null
+            whatsapp_invite_status?: string
            }
            Update: {
             cpf?: string | null
@@ -176,6 +180,8 @@ export type Database = {
             access_status?: string | null
             access_reason?: string | null
             group_status?: string | null
+            whatsapp_invite_later_at?: string | null
+            whatsapp_invite_status?: string
           }
           Relationships: []
         }
