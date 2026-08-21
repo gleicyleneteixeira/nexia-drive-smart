@@ -17,6 +17,7 @@ import { Route as BibliotecaRouteImport } from './routes/biblioteca'
 import { Route as CadastroRouteImport } from './routes/cadastro'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ConquistasRouteImport } from './routes/conquistas'
+import { Route as LivroRouteImport } from './routes/livro'
 import { Route as MaisCaemRouteImport } from './routes/mais-caem'
 import { Route as PlacasRouteImport } from './routes/placas'
 import { Route as PsicotecnicoRouteImport } from './routes/psicotecnico'
@@ -68,6 +69,11 @@ const CheckoutRoute = CheckoutRouteImport.update({
 const ConquistasRoute = ConquistasRouteImport.update({
   id: '/conquistas',
   path: '/conquistas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LivroRoute = LivroRouteImport.update({
+  id: '/livro',
+  path: '/livro',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MaisCaemRoute = MaisCaemRouteImport.update({
@@ -140,6 +146,7 @@ export interface FileRoutesByFullPath {
   '/cadastro': typeof CadastroRoute
   '/checkout': typeof CheckoutRoute
   '/conquistas': typeof ConquistasRoute
+  '/livro': typeof LivroRoute
   '/mais-caem': typeof MaisCaemRoute
   '/placas': typeof PlacasRoute
   '/psicotecnico': typeof PsicotecnicoRoute
@@ -162,6 +169,7 @@ export interface FileRoutesByTo {
   '/cadastro': typeof CadastroRoute
   '/checkout': typeof CheckoutRoute
   '/conquistas': typeof ConquistasRoute
+  '/livro': typeof LivroRoute
   '/mais-caem': typeof MaisCaemRoute
   '/placas': typeof PlacasRoute
   '/psicotecnico': typeof PsicotecnicoRoute
@@ -185,6 +193,7 @@ export interface FileRoutesById {
   '/cadastro': typeof CadastroRoute
   '/checkout': typeof CheckoutRoute
   '/conquistas': typeof ConquistasRoute
+  '/livro': typeof LivroRoute
   '/mais-caem': typeof MaisCaemRoute
   '/placas': typeof PlacasRoute
   '/psicotecnico': typeof PsicotecnicoRoute
@@ -209,6 +218,7 @@ export interface FileRouteTypes {
     | '/cadastro'
     | '/checkout'
     | '/conquistas'
+    | '/livro'
     | '/mais-caem'
     | '/placas'
     | '/psicotecnico'
@@ -231,6 +241,7 @@ export interface FileRouteTypes {
     | '/cadastro'
     | '/checkout'
     | '/conquistas'
+    | '/livro'
     | '/mais-caem'
     | '/placas'
     | '/psicotecnico'
@@ -253,6 +264,7 @@ export interface FileRouteTypes {
     | '/cadastro'
     | '/checkout'
     | '/conquistas'
+    | '/livro'
     | '/mais-caem'
     | '/placas'
     | '/psicotecnico'
@@ -276,6 +288,7 @@ export interface RootRouteChildren {
   CadastroRoute: typeof CadastroRoute
   CheckoutRoute: typeof CheckoutRoute
   ConquistasRoute: typeof ConquistasRoute
+  LivroRoute: typeof LivroRoute
   MaisCaemRoute: typeof MaisCaemRoute
   PlacasRoute: typeof PlacasRoute
   PsicotecnicoRoute: typeof PsicotecnicoRoute
@@ -344,6 +357,13 @@ declare module '@tanstack/react-router' {
       path: '/conquistas'
       fullPath: '/conquistas'
       preLoaderRoute: typeof ConquistasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/livro': {
+      id: '/livro'
+      path: '/livro'
+      fullPath: '/livro'
+      preLoaderRoute: typeof LivroRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mais-caem': {
@@ -466,6 +486,7 @@ const rootRouteChildren: RootRouteChildren = {
   CadastroRoute: CadastroRoute,
   CheckoutRoute: CheckoutRoute,
   ConquistasRoute: ConquistasRoute,
+  LivroRoute: LivroRoute,
   MaisCaemRoute: MaisCaemRoute,
   PlacasRoute: PlacasRoute,
   PsicotecnicoRoute: PsicotecnicoRoute,
