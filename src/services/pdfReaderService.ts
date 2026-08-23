@@ -26,7 +26,7 @@ export const PDFReaderService = {
     pageNumber: number,
     canvas: HTMLCanvasElement,
     scale: number = 1.2,
-  ): Promise<void> {
+  ): Promise<any> {
     const page = await pdfDoc.getPage(pageNumber);
     const viewport = page.getViewport({ scale });
 
@@ -41,6 +41,7 @@ export const PDFReaderService = {
       viewport: viewport,
     };
 
-    await page.render(renderContext).promise;
+    // Return the render task so caller can cancel/await
+    return page.render(renderContext);
   },
 };

@@ -30,6 +30,7 @@ export function PdfReader({ url, className = "" }: PdfReaderProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const renderTaskRef = useRef<any>(null);
   const [pageInput, setPageInput] = useState("");
   const [fileName, setFileName] = useState<string | null>(null);
 
@@ -37,10 +38,21 @@ export function PdfReader({ url, className = "" }: PdfReaderProps) {
     async (doc: PDFDocumentProxy, page: number, s: number) => {
       const canvas = canvasRef.current;
       if (!doc || !canvas) return;
+
+      // Cancel any pending render task before starting a new one
+      if (renderTaskRef.current) {
+        renderTaskRef.current.cancel();
+      }
+
       try {
-        await PDFReaderService.renderPageToCanvas(doc, page, canvas, s);
-      } catch (err) {
-        console.error("Erro ao renderizar página:", err);
+        const renderTask = await PDFReaderService.renderPageToCanvas(doc, page, canvas, s);
+        renderTaskRef.current = renderTask;
+        await renderTask.promise;
+      } catch (error: any) {
+        // Ignore cancellation errors (expected when cancelling previous renders)
+        if (error?.name !== "RenderingCancelledException") {
+          console.error("Erro ao renderizar página:", error);
+        }
       }
     },
     [],
@@ -51,6 +63,16 @@ export function PdfReader({ url, className = "" }: PdfReaderProps) {
       renderPage(pdfDoc, currentPage, scale);
     }
   }, [pdfDoc, currentPage, scale, numPages, renderPage]);
+
+  // Cleanup: cancel any ongoing render when dependencies change or component unmounts
+  useEffect(() => {
+    return () => {
+      if (renderTaskRef.current) {
+        renderTaskRef.current.cancel();
+        renderTaskRef.current = null;
+      }
+    };
+  }, [currentPage, scale, pdfDoc]);
 
   const loadFromUrl = async (fileUrl: string, name?: string) => {
     setLoading(true);
