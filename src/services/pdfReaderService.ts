@@ -1,7 +1,15 @@
 import * as pdfjsLib from "pdfjs-dist";
-import pdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url";
+import { VerbosityLevel } from "pdfjs-dist";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
+declare const setVerbosityLevel: (level: number) => void;
+
+// Configure PDF.js worker from CDN
+pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
+
+// Silence pdfjs-dist font warnings (TT: undefined function)
+if (typeof (pdfjsLib as any).setVerbosityLevel === "function") {
+  (pdfjsLib as any).setVerbosityLevel(VerbosityLevel.ERRORS);
+}
 
 export interface PDFDocumentProxy {
   numPages: number;

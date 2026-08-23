@@ -17,6 +17,9 @@ const GROUP_KEYS: GroupKey[] = ["whatsapp", "tiktok"];
 
 // Depois que a pessoa clica "Lembrar mais tarde", o popup só reaparece após este intervalo
 const DISMISS_COOLDOWN_MS = 3 * 24 * 60 * 60 * 1000;
+const REMIND_LATER_COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24h
+
+const REMIND_LATER_KEY = "nexia_whatsapp_reminder_time";
 
 function getDismissedAt(key: GroupKey): number | null {
   if (typeof window === "undefined") return null;
@@ -120,6 +123,9 @@ export function GroupPopups({
     if (settings[cfg.showKey] === "false") return false;
     if (!settings[cfg.linkKey]) return false;
     if (key === "whatsapp") {
+      // Check 24h "Lembrar mais tarde" cooldown from localStorage
+      const remindAt = localStorage.getItem(REMIND_LATER_KEY);
+      if (remindAt && Date.now() < Number(remindAt)) return false;
       return getWhatsappShouldShow(whatsappInviteStatus, laterAt, groupStatus);
     }
     if (tiktokJoined) return false;
@@ -148,10 +154,9 @@ export function GroupPopups({
     await supabase.from("profiles").update(patch).eq("id", userId);
   }
 
-  async function openGroup() {
-    window.open(link, "_blank");
+  function handleJoinClick() {
     if (activeGroup === "whatsapp") {
-      await setWhatsappInviteStatus("joined");
+      setWhatsappInviteStatus("joined");
       setDismissed((d) => ({ ...d, whatsapp: true }));
     } else {
       localStorage.setItem("nexia:tiktok_group_joined", "true");
@@ -174,6 +179,7 @@ export function GroupPopups({
   async function remindLater() {
     if (activeGroup === "whatsapp") {
       await setWhatsappInviteStatus("later");
+      localStorage.setItem(REMIND_LATER_KEY, String(Date.now() + REMIND_LATER_COOLDOWN_MS));
       setDismissed((d) => ({ ...d, whatsapp: true }));
     } else {
       setDismissedAt(activeGroup);
@@ -218,7 +224,13 @@ export function GroupPopups({
             <p className="text-sm text-muted-foreground mt-1">{cfg.description}</p>
           </div>
           <div className="space-y-2 pt-2">
-            <Button className="w-full gap-2" onClick={openGroup}>
+            <a
+              href={link}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={handleJoinClick}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-base font-bold text-primary-foreground shadow hover:bg-primary/90 transition"
+            >
               {activeGroup === "whatsapp" ? (
                 <>
                   <ExternalLink className="h-4 w-4" /> Entrar no Grupo
@@ -228,7 +240,7 @@ export function GroupPopups({
                   <PartyPopper className="h-4 w-4" /> Quero participar
                 </>
               )}
-            </Button>
+            </a>
             <Button variant="outline" className="w-full" onClick={markJoined}>
               Já sou membro
             </Button>

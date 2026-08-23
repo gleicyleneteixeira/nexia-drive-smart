@@ -11,8 +11,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen, Video, BadgeDollarSign, Gift, CheckCheck, CalendarClock, Lock } from "lucide-react";
+import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen, Video, BadgeDollarSign, Gift, CheckCheck, CalendarClock, Lock, ChevronUp, ChevronDown, GripVertical } from "lucide-react";
+import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import * as XLSX from "xlsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { useServerFn } from "@tanstack/react-start";
@@ -84,7 +86,13 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
   });
   const [editing, setEditing] = useState<LibraryItem | null>(null);
   const [tab, setTab] = useState("sales");
+  const [categoryFilter, setCategoryFilter] = useState<"all" | "teorico" | "psicotecnico" | "direcao">("all");
   const isSuper = email === SUPER_ADMIN_EMAIL;
+
+  // Filter items by selected category
+  const filteredItems = categoryFilter === "all"
+    ? items
+    : items.filter((item) => item.module_type === categoryFilter);
 
   async function onDelete(item: LibraryItem) {
     if (!confirm(`Apagar "${item.title}"?`)) return;
@@ -92,6 +100,35 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
     if (error) return toast.error(error.message);
     toast.success("Apagado");
     qc.invalidateQueries({ queryKey: ["library"] });
+  }
+
+  async function handleOnDragEnd(result: DropResult) {
+    if (!result.destination) return;
+    if (result.source.index === result.destination.index) return;
+
+    const newItems = Array.from(items);
+    const [movedItem] = newItems.splice(result.source.index, 1);
+    newItems.splice(result.destination.index, 0, movedItem);
+
+    // Update sort_order based on new positions
+    const updatedItems = newItems.map((item, index) => ({
+      ...item,
+      sort_order: index + 1,
+    }));
+
+    // Instant UI update
+    qc.setQueryData(["library", "all"], updatedItems);
+
+    // Persist to Supabase
+    try {
+      const updates = updatedItems.map((item) =>
+        supabase.from("library_items").update({ sort_order: item.sort_order }).eq("id", item.id)
+      );
+      await Promise.all(updates);
+    } catch (error) {
+      console.error("Erro ao salvar ordem:", error);
+      qc.setQueryData(["library", "all"], items); // Revert on error
+    }
   }
 
   return (
@@ -147,23 +184,71 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
             }}
           />
           <div className="glass rounded-2xl p-4">
-            <h2 className="font-display font-bold mb-3">Itens ({items.length})</h2>
-            <div className="space-y-2">
-              {items.map((item) => (
-                <div key={item.id} className="flex items-center justify-between gap-3 p-3 rounded-xl bg-background/50">
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold truncate">{item.title}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {item.item_type.toUpperCase()} · {item.published ? "Publicado" : "Rascunho"}
-                      {item.is_paid && ` · R$ ${((item.price_cents ?? 0) / 100).toFixed(2)}`}
-                    </p>
-                  </div>
-                  <Button size="icon" variant="ghost" onClick={() => setEditing(item)}><Pencil className="h-4 w-4" /></Button>
-                  <Button size="icon" variant="ghost" onClick={() => onDelete(item)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
-                </div>
-              ))}
-              {items.length === 0 && <p className="text-sm text-muted-foreground text-center py-6">Nenhum item ainda. Adicione abaixo.</p>}
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="font-display font-bold">Itens ({filteredItems.length})</h2>
+              <Tabs value={categoryFilter} onValueChange={(v) => setCategoryFilter(v as "all" | "teorico" | "psicotecnico" | "direcao")} className="flex-1 max-w-md">
+                <TabsList className="grid grid-cols-4">
+                  <TabsTrigger value="all">Todos</TabsTrigger>
+                  <TabsTrigger value="teorico">Teórico</TabsTrigger>
+                  <TabsTrigger value="psicotecnico">Psicotécnico</TabsTrigger>
+                  <TabsTrigger value="direcao">Prático</TabsTrigger>
+                </TabsList>
+              </Tabs>
             </div>
+            <DragDropContext onDragEnd={handleOnDragEnd}>
+              <Droppable droppableId="library-items">
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    className="space-y-2"
+                  >
+                    {filteredItems.map((item, index) => (
+                      <Draggable key={item.id} draggableId={item.id} index={index}>
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            className={`flex items-center justify-between gap-3 p-3 rounded-xl bg-background/50 transition-shadow ${
+                              snapshot.isDragging ? "shadow-xl ring-2 ring-primary" : ""
+                            }`}
+                          >
+                            <div
+                              {...provided.dragHandleProps}
+                              className="cursor-grab active:cursor-grabbing text-muted-foreground/50 hover:text-muted-foreground p-2"
+                              aria-label="Arrastar para reordenar"
+                            >
+                              <GripVertical className="h-5 w-5" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <p className="font-semibold truncate">{item.title}</p>
+                                <Badge variant="secondary" className="text-xs">
+                                  {item.module_type === "teorico" ? "Teórico" :
+                                   item.module_type === "psicotecnico" ? "Psicotécnico" :
+                                   item.module_type === "direcao" ? "Prático" : item.module_type}
+                                </Badge>
+                              </div>
+                              <p className="text-xs text-muted-foreground mt-1">
+                                {item.item_type.toUpperCase()} · {item.published ? "Publicado" : "Rascunho"}
+                                {item.is_paid && ` · R$ ${((item.price_cents ?? 0) / 100).toFixed(2)}`}
+                              </p>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Button size="icon" variant="ghost" onClick={() => setEditing(item)}><Pencil className="h-4 w-4" /></Button>
+                              <Button size="icon" variant="ghost" onClick={() => onDelete(item)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                            </div>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+            {filteredItems.length === 0 && <p className="text-sm text-muted-foreground text-center py-6">Nenhum item encontrado. Adicione abaixo ou altere o filtro.</p>}
           </div>
         </TabsContent>
       </Tabs>

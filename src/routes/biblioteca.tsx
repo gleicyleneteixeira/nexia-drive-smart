@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchLibraryItems, type LibraryItem } from "@/lib/library";
 import { Book, ExternalLink, Lock, FileText, BookOpen, Loader2, Play, Image as ImageIcon, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { NativePdfModal } from "@/components/NativePdfModal";
 
 export const Route = createFileRoute("/biblioteca")({
   component: BibliotecaPage,
@@ -205,6 +206,7 @@ function Section({ title, items }: { title: string; items: LibraryItem[] }) {
 
 function ItemCard({ item }: { item: LibraryItem }) {
   const [showLightbox, setShowLightbox] = useState(false);
+  const [showPdfModal, setShowPdfModal] = useState(false);
   const isVideo = item.item_type === "video";
   const isImage = item.item_type === "image";
   const isCarousel = item.item_type === "carousel";
@@ -219,6 +221,11 @@ function ItemCard({ item }: { item: LibraryItem }) {
     if (isImage && !item.narrated) {
       e.preventDefault();
       setShowLightbox(true);
+      return;
+    }
+    if (item.item_type === "pdf" && !item.is_paid) {
+      e.preventDefault();
+      setShowPdfModal(true);
       return;
     }
     if (item.is_paid && item.item_type !== "heyzine" && !isVideo) {
@@ -313,6 +320,14 @@ function ItemCard({ item }: { item: LibraryItem }) {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {showPdfModal && (
+        <NativePdfModal
+          pdfUrl={item.url || ""}
+          title={item.title}
+          onClose={() => setShowPdfModal(false)}
+        />
+      )}
     </>
   );
 }

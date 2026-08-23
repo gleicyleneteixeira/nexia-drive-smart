@@ -251,8 +251,8 @@ export function AppShell() {
         </div>
       </header>
 
-      {/* Expiration warning banner */}
-      {profile && !profile.is_migrated && profile.expires_at && (() => {
+      {/* Expiration warning banner — never shown for admins */}
+      {!isAdmin && profile && !profile.is_migrated && profile.expires_at && (() => {
         const diffTime = new Date(profile.expires_at).getTime() - new Date().getTime();
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         if (diffDays > 0 && diffDays <= 5) {

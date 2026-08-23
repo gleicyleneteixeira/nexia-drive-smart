@@ -168,3 +168,11 @@
     animation-play-state: paused;
   }
 }
+
+.pdf-text-highlight {
+  background-color: #fde047 !important;
+  color: #000 !important;
+  border-radius: 2px;
+  padding: 0 2px;
+  transition: background-color 0.1s;
+}
