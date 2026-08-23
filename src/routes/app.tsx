@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { isProfileExpired } from "@/lib/subscription";
 import { fetchLibraryItems } from "@/lib/library";
 import { GroupPopups } from "@/components/WhatsAppGroupPopup";
+import { NativePdfModal } from "@/components/NativePdfModal";
 import { Loader2 } from "lucide-react";
 import {
   Sparkles,
@@ -314,6 +315,7 @@ function TeoricoDashboard() {
     queryFn: () => fetchLibraryItems(false),
   });
   const teoricoItems = libraryItems.filter((i) => i.module_type === "teorico" && !i.is_paid);
+  const [pdfModal, setPdfModal] = useState<{ url: string; title: string } | null>(null);
 
   return (
     <motion.div
@@ -378,7 +380,7 @@ function TeoricoDashboard() {
         ) : teoricoItems.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {teoricoItems.slice(0, 6).map((item) => (
-              <LibraryCard key={item.id} item={item} />
+              <LibraryCard key={item.id} item={item} onPdfClick={setPdfModal} />
             ))}
           </div>
         ) : (
@@ -411,6 +413,13 @@ function TeoricoDashboard() {
           </div>
         </div>
       </section>
+      {pdfModal && (
+        <NativePdfModal
+          pdfUrl={pdfModal.url}
+          title={pdfModal.title}
+          onClose={() => setPdfModal(null)}
+        />
+      )}
     </motion.div>
   );
 }
@@ -426,6 +435,7 @@ function PsicotecnicoDashboard() {
   const psicoItems = libraryItems.filter(
     (i) => i.module_type === "psicotecnico" && !i.is_paid && !i.title.toLowerCase().includes("palografico") && !i.title.toLowerCase().includes("topografico")
   );
+  const [pdfModal, setPdfModal] = useState<{ url: string; title: string } | null>(null);
 
   return (
     <motion.div
@@ -498,7 +508,7 @@ function PsicotecnicoDashboard() {
         ) : psicoItems.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {psicoItems.slice(0, 6).map((item) => (
-              <LibraryCard key={item.id} item={item} />
+              <LibraryCard key={item.id} item={item} onPdfClick={setPdfModal} />
             ))}
           </div>
         ) : (
@@ -554,6 +564,13 @@ function PsicotecnicoDashboard() {
           </ul>
         </div>
       </section>
+      {pdfModal && (
+        <NativePdfModal
+          pdfUrl={pdfModal.url}
+          title={pdfModal.title}
+          onClose={() => setPdfModal(null)}
+        />
+      )}
     </motion.div>
   );
 }
@@ -943,6 +960,7 @@ function LightIconRenderer({
 
 function DirecaoDashboard() {
   const [activeSubModule, setActiveSubModule] = useState<"hub" | "luzes" | "baliza" | "checklist">("hub");
+  const [pdfModal, setPdfModal] = useState<{ url: string; title: string } | null>(null);
 
   // Fetch library items for 'direcao' module type (Módulo Prático)
   const { data: libraryItems = [], isLoading: libLoading } = useQuery({
@@ -1073,7 +1091,7 @@ function DirecaoDashboard() {
             ) : direcaoItems.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {direcaoItems.map((item) => (
-                  <LibraryCard key={item.id} item={item} />
+                  <LibraryCard key={item.id} item={item} onPdfClick={setPdfModal} />
                 ))}
               </div>
             ) : (
@@ -1124,6 +1142,13 @@ function DirecaoDashboard() {
           </button>
           <ExamChecklist />
         </div>
+      )}
+      {pdfModal && (
+        <NativePdfModal
+          pdfUrl={pdfModal.url}
+          title={pdfModal.title}
+          onClose={() => setPdfModal(null)}
+        />
       )}
     </div>
   );
@@ -2008,12 +2033,64 @@ function PanelLightsQuiz() {
   );
 }
 
-function LibraryCard({ item }: { item: { id: string; title: string; description: string | null; item_type: string; url: string; cover_url: string | null } }) {
+function LibraryCard({
+  item,
+  onPdfClick,
+}: {
+  item: { id: string; title: string; description: string | null; item_type: string; url: string; cover_url: string | null };
+  onPdfClick?: (pdf: { url: string; title: string }) => void;
+}) {
   const isVideo = item.item_type === "video";
   const isImage = item.item_type === "image";
-  const Icon = isImage ? ImageIcon : isVideo ? Play : item.item_type === "pdf" ? BookOpen : item.item_type === "heyzine" ? FileText : ExternalLink;
-  const typeLabel = isImage ? "Imagem" : isVideo ? "Vídeo" : item.item_type === "pdf" ? "Livrinho" : item.item_type === "heyzine" ? "Flipbook" : "Link";
+  const isPdf = item.item_type === "pdf";
+  const isHeyzine = item.item_type === "heyzine";
+  const isLink = item.item_type === "link";
+  const Icon = isImage ? ImageIcon : isVideo ? Play : isPdf ? BookOpen : isHeyzine ? FileText : ExternalLink;
+  const typeLabel = isImage ? "Imagem" : isVideo ? "Vídeo" : isPdf ? "Livrinho" : isHeyzine ? "Flipbook" : "Link";
 
+  const handleClick = (e: React.MouseEvent) => {
+    if (isPdf && onPdfClick) {
+      e.preventDefault();
+      onPdfClick({ url: item.url, title: item.title });
+    }
+    // For other types, let the <a> handle navigation
+  };
+
+  if (isPdf && onPdfClick) {
+    return (
+      <div
+        onClick={handleClick}
+        className="group glass rounded-2xl overflow-hidden hover:bg-accent/30 transition-all hover:-translate-y-0.5 hover:shadow-glow cursor-pointer"
+      >
+        <div className="aspect-[16/9] relative bg-gradient-to-br from-primary/15 to-primary-glow/15 overflow-hidden">
+          {item.cover_url ? (
+            <img src={item.cover_url} alt={item.title} className="w-full h-full object-cover" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <Icon className="h-10 w-10 text-primary/40" />
+            </div>
+          )}
+          <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md glass text-[10px] font-medium">
+            {typeLabel}
+          </div>
+          <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity">
+            <span className="px-3 py-1.5 rounded-full bg-white/90 text-xs font-bold text-primary">Ler no App</span>
+          </div>
+        </div>
+        <div className="p-3.5">
+          <h3 className="font-semibold text-sm text-foreground leading-tight">{item.title}</h3>
+          {item.description && (
+            <p className="text-[11px] text-muted-foreground mt-1 line-clamp-2">{item.description}</p>
+          )}
+          <span className="inline-flex items-center gap-1 mt-2 text-[10px] font-semibold text-primary group-hover:gap-1.5 transition-all">
+            Abrir no Leitor <ChevronRight className="h-3 w-3" />
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  // For non-PDF items, keep the <a> behavior
   return (
     <a
       href={item.url}
