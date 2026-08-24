@@ -88,7 +88,34 @@ function buildFresh(category?: Category): Question[] {
     }
     fresh = merged;
   } else {
-    fresh = getRandomizedQuestions(TOTAL, { exclude: seen, categories: [category] });
+    // Busca questões da categoria selecionada
+    const categoryQuestions = getRandomizedQuestions(TOTAL, { 
+      exclude: seen, 
+      categories: [category] 
+    });
+    
+    if (categoryQuestions.length >= 30) {
+      // Se a categoria já tem 30+, pega as primeiras 30 embaralhadas
+      fresh = categoryQuestions.slice(0, 30);
+    } else {
+      // Se tiver menos de 30, calcula quantas faltam para fechar 30
+      const needed = 30 - categoryQuestions.length;
+      
+      // Busca questões extras das outras categorias para completar a prova
+      const allQuestions = [...QUESTIONS];
+      const otherCategories = allQuestions.filter(q => q.category !== category);
+      const extraQuestions = getRandomizedQuestions(needed, { 
+        exclude: [...seen, ...categoryQuestions.map(q => q.id)], 
+        categories: otherCategories.map(q => q.category),
+        placasCount: 3 
+      });
+      
+      // Une as da categoria + as extras complementares
+      const fullExam = [...categoryQuestions, ...extraQuestions];
+      
+      // Define o estado com exatamente 30 questões
+      fresh = fullExam.slice(0, 30);
+    }
   }
   
   const newSeen = Array.from(new Set([...seen, ...fresh.map((q) => q.id)]));
@@ -415,11 +442,15 @@ function SimuladoPage() {
             </h2>
 
             {/* Placa visual oficial */}
-            {q.placa && (
+            {q.image_url ? (
+              <div className="mt-5 flex justify-center">
+                <img src={q.image_url} alt="placa de advertência" className="max-w-[170px]" />
+              </div>
+            ) : q.placa ? (
               <div className="mt-5 flex justify-center">
                 <Placa id={q.placa} size={170} />
               </div>
-            )}
+            ) : null}
 
             {/* Options */}
             <div className="mt-6 space-y-2.5">
@@ -962,11 +993,15 @@ function ReviewCard({
             className="overflow-hidden"
           >
             <div className="px-4 pb-4 space-y-3 border-t border-border/50 pt-3">
-              {q.placa && (
-                <div className="flex justify-center pt-2">
-                  <Placa id={q.placa} size={120} />
-                </div>
-              )}
+              {q.image_url ? (
+              <div className="flex justify-center pt-2">
+                <img src={q.image_url} alt="placa de advertência" className="max-w-[120px]" />
+              </div>
+            ) : q.placa ? (
+              <div className="flex justify-center pt-2">
+                <Placa id={q.placa} size={120} />
+              </div>
+            ) : null}
               {!skipped && !correct && (
                 <p className="text-sm">
                   <span className="text-destructive font-semibold">Sua resposta: </span>

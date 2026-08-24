@@ -17,6 +17,11 @@ import {
 
 const ZOOM_LEVELS = [0.5, 0.75, 1, 1.2, 1.5, 2, 2.5, 3];
 
+interface CachedLayout {
+  fullText: string;
+  orderedSpans: HTMLElement[];
+}
+
 interface PdfReaderProps {
   url?: string;
   className?: string;
@@ -38,6 +43,7 @@ export function PdfReader({ url, className = "" }: PdfReaderProps) {
   const [fileName, setFileName] = useState<string | null>(null);
   const [isReading, setIsReading] = useState(false);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const layoutCache = useRef<{ [key: string]: CachedLayout }>({});
 
   const cancelSpeech = useCallback(() => {
     window.speechSynthesis.cancel();
@@ -51,83 +57,151 @@ export function PdfReader({ url, className = "" }: PdfReaderProps) {
     }
   }, []);
 
-const speakPage = useCallback(async (doc: PDFDocumentProxy, pageNum: number) => {
-    if (!doc) return;
-    try {
-      cancelSpeech();
-      const page = await doc.getPage(pageNum);
-      
-      // Wait for text layer to render
-      await new Promise((r) => setTimeout(r, 100));
-      
-      if (!textLayerRef.current) return;
-      
-      // Capture all spans from TextLayer DOM (already in visual order by PDF.js)
-      const spans = Array.from(textLayerRef.current.querySelectorAll("span")) as HTMLElement[];
-      const validSpans = spans.filter((span) => span.innerText.trim().length > 0);
-      
-      if (validSpans.length === 0) return;
-      
-      let currentIndex = 0;
-      
-      const speakNext = () => {
-        if (currentIndex >= validSpans.length || !window.speechSynthesis) {
-          setIsReading(false);
-          return;
-        }
-        
-        const currentSpan = validSpans[currentIndex];
-        
-        // Highlight current span
-        validSpans.forEach((s) => s.classList.remove("pdf-text-highlight"));
-        currentSpan.classList.add("pdf-text-highlight");
-        
-        // Smart auto-scroll: only scroll if element is out of view
-        const rect = currentSpan.getBoundingClientRect();
-        const container = containerRef.current;
-        if (container) {
-          const containerRect = container.getBoundingClientRect();
-          if (rect.top < containerRect.top || rect.bottom > containerRect.bottom) {
-            currentSpan.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
-          }
-        }
-        
-        const utterance = new SpeechSynthesisUtterance(currentSpan.innerText);
-        utterance.lang = "pt-BR";
-        utterance.rate = 1.0;
-        utterance.volume = 1.0;
-        utteranceRef.current = utterance;
-        
-        utterance.onend = () => {
-          currentIndex++;
-          speakNext();
-        };
-        
-        utterance.onerror = (e) => {
-          if (e.error !== "interrupted") {
-            console.error("Speech error:", e.error);
-          }
-          setIsReading(false);
-        };
-        
-        window.speechSynthesis.speak(utterance);
-      };
-      
-      setIsReading(true);
-      speakNext();
-    } catch (err) {
-      console.error("Erro ao iniciar leitura:", err);
-      setIsReading(false);
-    }
-  }, [cancelSpeech]);
+  // Motor de Análise Visual e Agrupamento por Colunas/Regiões
+  const analyzeAndBuildReadingOrder = (
+    textLayerEl: HTMLElement,
+    readingDirection: 'TOP_TO_BOTTOM' | 'BOTTOM_TO_TOP' = 'TOP_TO_BOTTOM'
+  ): CachedLayout => {
+    const spans = Array.from(textLayerEl.querySelectorAll('span')) as HTMLElement[];
+    const validSpans = spans.filter(s => s.innerText && s.innerText.trim().length > 0);
 
-  const toggleReading = useCallback(async () => {
-    if (isReading) {
-      cancelSpeech();
-    } else if (pdfDoc) {
-      await speakPage(pdfDoc, currentPage);
+    if (validSpans.length === 0) return { fullText: '', orderedSpans: [] };
+
+    const containerRect = textLayerEl.getBoundingClientRect();
+    const pageHeight = containerRect.height;
+    const pageWidth = containerRect.width;
+
+    // 1. Mapear cada elemento com suas coordenadas e definir Páginas Lógicas (Superior vs Inferior)
+    const items = validSpans.map((span, index) => {
+      const rect = span.getBoundingClientRect();
+      const relY = rect.top - containerRect.top;
+      const relX = rect.left - containerRect.left;
+
+      return {
+        id: `span-${index}`,
+        span,
+        rect,
+        relX,
+        relY,
+        text: span.innerText.trim(),
+        // Divide a página física em 2 regiões se houver quebra horizontal (Página Lógica A / B)
+        regionIndex: relY < pageHeight * 0.48 ? 0 : 1
+      };
+    });
+
+    let finalOrderedItems: typeof items = [];
+    const regions = [0, 1]; // Região Superior (0) -> Região Inferior (1)
+
+    regions.forEach(regionId => {
+      const regionItems = items.filter(item => item.regionIndex === regionId);
+      if (regionItems.length === 0) return;
+
+      // Detectar Colunas dentro da mesma Região (Eixo X)
+      const midX = pageWidth / 2;
+      const leftColumn = regionItems.filter(item => item.relX < midX);
+      const rightColumn = regionItems.filter(item => item.relX >= midX);
+
+      // Função de ordenação vertical dentro de uma coluna isolada
+      const sortVertical = (colItems: typeof items) => {
+        return colItems.sort((a, b) => {
+          // Se estiverem na mesma linha (diferença Y <= 8px), ordena da esquerda para direita
+          if (Math.abs(a.relY - b.relY) <= 8) {
+            return a.relX - b.relX;
+          }
+          // Aplica o sentido de leitura configurado (Cima -> Baixo ou Baixo -> Cima)
+          return readingDirection === 'TOP_TO_BOTTOM' 
+            ? a.relY - b.relY 
+            : b.relY - a.relY;
+        });
+      };
+
+      const orderedLeft = sortVertical(leftColumn);
+      const orderedRight = sortVertical(rightColumn);
+
+      // Se houver 2 colunas distintas na região, lê toda a Esquerda e depois toda a Direita
+      if (orderedLeft.length > 0 && orderedRight.length > 0) {
+        finalOrderedItems.push(...orderedLeft, ...orderedRight);
+      } else {
+        finalOrderedItems.push(...sortVertical(regionItems));
+      }
+    });
+
+    const orderedSpans = finalOrderedItems.map(i => i.span);
+    const fullText = finalOrderedItems.map(i => i.text).join(' ');
+
+    return { fullText, orderedSpans };
+  };
+
+  const startReading = (readingDirection: 'TOP_TO_BOTTOM' | 'BOTTOM_TO_TOP' = 'TOP_TO_BOTTOM') => {
+    const textLayerEl = textLayerRef.current;
+    if (!textLayerEl) return;
+
+    const cacheKey = `${currentPage}_${readingDirection}`;
+    let layout = layoutCache.current[cacheKey];
+
+    // Se não existir no Cache, faz a análise e salva
+    if (!layout) {
+      layout = analyzeAndBuildReadingOrder(textLayerEl, readingDirection);
+      layoutCache.current[cacheKey] = layout;
     }
-  }, [isReading, pdfDoc, currentPage, cancelSpeech, speakPage]);
+
+    if (!layout.fullText) {
+        // Fallback: tentar extrair do PDF.js (note: startReading não é async,
+        // então apenas registramos e solicitamos nova análise na próxima vez)
+        console.log("Texto vazio - análise agendada para próxima interação");
+        setIsReading(false);
+        if (textLayerRef.current) {
+          const spans = textLayerRef.current.querySelectorAll('span');
+          spans.forEach(s => s.style.color = 'transparent');
+        }
+        // Pequena pausa para o usuário perceber o attempt
+        setTimeout(() => {}, 50);
+        return;
+      }
+
+    // Cancela áudios anteriores
+    window.speechSynthesis.cancel();
+    setIsReading(true);
+
+    // Aplica highlight amarelo nos elementos ordenados
+    layout.orderedSpans.forEach(s => s.classList.add('bg-yellow-200', 'text-black'));
+
+    // Auto-scroll para o início do conteúdo lido
+    if (layout.orderedSpans[0]) {
+      layout.orderedSpans[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    const utterance = new SpeechSynthesisUtterance(layout.fullText);
+    utterance.lang = 'pt-BR';
+    utterance.rate = 1.0;
+
+    utterance.onend = () => stopReading();
+    utterance.onerror = () => stopReading();
+
+    setTimeout(() => {
+      window.speechSynthesis.speak(utterance);
+    }, 100);
+  };
+
+const stopReading = () => {
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+    setIsReading(false);
+
+    if (textLayerRef.current) {
+      const spans = textLayerRef.current.querySelectorAll("span");
+      spans.forEach(s => s.classList.remove("bg-yellow-200", "text-black"));
+    }
+  };
+
+  const toggleReading = useCallback(() => {
+    if (isReading) {
+      stopReading();
+    } else if (pdfDoc) {
+      startReading();
+    }
+  }, [isReading, startReading, pdfDoc]);
 
   const renderPage = useCallback(
     async (doc: PDFDocumentProxy, page: number, s: number) => {

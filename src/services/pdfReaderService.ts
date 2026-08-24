@@ -44,6 +44,11 @@ export const PDFReaderService = {
     canvas.height = viewport.height;
     canvas.width = viewport.width;
 
+    // Define dimensões físicas reais baseadas no viewport calculado
+    // (sem max-width: 100% para permitir estouro horizontal no mobile)
+    canvas.style.width = `${viewport.width}px`;
+    canvas.style.height = `${viewport.height}px`;
+
     const renderContext = {
       canvasContext: context,
       viewport: viewport,

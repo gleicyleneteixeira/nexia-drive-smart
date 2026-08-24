@@ -28,6 +28,7 @@ export interface Question {
   trap?: boolean; // pegadinha clássica
   difficulty: 1 | 2 | 3;
   placa?: PlacaId; // placa visual oficial para questões de identificação
+  image_url?: string; // URL da imagem da placa (para renderização via img tag)
 }
 
 export const CATEGORY_LABELS: Record<Category, string> = {
@@ -2395,12 +2396,13 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 1,
   },
-  {
+{
     id: "p6",
     category: "placas",
     statement:
-      "Ao dirigir por uma estrada serrana de pista estreita, o condutor avista a placa de advertência representada abaixo, posicionada alguns metros antes de um trecho sinuoso. Considerando o significado das placas de advertência do Código de Trânsito Brasileiro (CTB), assinale a ação que o condutor deve adotar com a devida antecedência ao se deparar com essa sinalização:",
+      "Ao dirigir por uma estrada serrana de pista estreita, o condutor avisa a placa de advertência representada abaixo, posicionada alguns metros antes de um trecho sinuoso. Considerando o significado das placas de advertência do Código de Trânsito Brasileiro (CTB), assinale a ação que o condutor deve adotar com a devida antecedência ao se deparar com essa sinalização:",
     placa: "A-1a",
+    image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/placa-A-1a.png",
     options: [
       "Aumentar a velocidade para atravessar o trecho sinuoso rapidamente, reduzindo o tempo de exposição ao risco.",
       "Manter a velocidade constante, pois a placa possui apenas caráter informativo sobre a geometria da via à frente.",
@@ -2420,6 +2422,7 @@ export const QUESTIONS: Question[] = [
     category: "placas",
     statement:
       "Ao se aproximar de um trecho urbano de grande circulação de pessoas, o condutor avista no canteiro central a placa de advertência representada abaixo, sinalizando uma situação adiante na via. Considerando o significado das placas de advertência do Código de Trânsito Brasileiro (CTB) e a necessidade de proteção aos usuários mais vulneráveis da via, assinale a alternativa que indica o alerta transmitido por essa placa:",
+    image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/placa-passagem-sinalizada-de-pedestres-A32b.webp",
     placa: "A-32b",
     options: [
       "Que há uma instituição de ensino nas proximidades e que a velocidade deve ser drasticamente reduzida nos horários de entrada e saída de alunos.",
@@ -2441,6 +2444,7 @@ export const QUESTIONS: Question[] = [
     category: "placas",
     statement:
       "Ao trafegar por uma via que margeia uma instituição de ensino em horário de entrada dos alunos, o condutor avista a placa de advertência representada abaixo. Considerando o significado dessa sinalização e as práticas de direção defensiva, assinale a alternativa que indica o comportamento que o condutor deve adotar nesse local:",
+    image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/placa-area-escolar-A-33A.webp",
     placa: "A-33a",
     options: [
       "Manter a velocidade habitual, pois a placa possui apenas caráter informativo sobre a existência de um estabelecimento educacional na região.",
@@ -4437,11 +4441,12 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 3,
   },
-  {
+{
     id: "qp59",
     category: "direcao-defensiva",
     statement:
       "Um condutor transita com seu veículo automotor por uma via urbana no horário de saída escolar. Ao se aproximar de uma zona estritamente escolar, ele nota uma grande movimentação de crianças e pedestres aglomerados junto ao meio-fio, além de alguns estudantes cruzando a pista de rolamento fora da faixa de pedestres. Diante desse cenário de alto risco e vulnerabilidade, e considerando as normas de Direção Defensiva e o Código de Trânsito Brasileiro (CTB), como o condutor deve proceder?",
+    image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/placa-area-escolar-A-33A.webp",
     options: [
       "Acelerar moderadamente para ultrapassar rapidamente o trecho de aglomeração escolar, acionando continuamente a buzina para alertar e afastar os pedestres e crianças da pista de rolamento.",
       "Reduzir a velocidade do veículo de forma compatível com a segurança local, mantendo atenção redobrada e prontidão para imobilizar o automóvel, independentemente de a velocidade regulamentada da via ser maior.",
@@ -4452,7 +4457,7 @@ export const QUESTIONS: Question[] = [
     explanation:
       "Em área escolar com crianças e pedestres aglomerados, o correto é reduzir a velocidade compatível com a segurança local, redobrar a atenção e estar pronto para parar.",
     detailedExplanation:
-      "A direção defensiva manda adaptar a condução às condições reais do ambiente: onde há aglomeração de crianças e pedestres, a segurança prevalece sobre a velocidade máxima fixada nas placas. O condutor deve reduzir a velocidade de forma compatível com o local, manter atenção redobrada e prontidão para imobilizar o veículo. Acelerar e buzinar (A) coloca em risco justamente os usuários mais vulneráveis da via. Manter a velocidade da placa (C) ignora a situação real de perigo e transfere indevidamente a responsabilidade — o CTB e a direção defensiva exigem que o condutor proteja o pedestre independentemente de quem atravessa em local inadequado. O pisca-alerta com o veículo em movimento é proibido (art. 40 do CTB) e sinais de luz (D) não conferem preferência sobre pedestres.",
+      "A direção defensiva manda adaptar a condução às condições reais do ambiente: onde há aglomeração de crianças e pedestres, a segurança prevalece sobre a velocidade máxima fixada nas placas. O condutor deve reduzir a velocidade de forma compatível com o local, manter atenção redobrada e prontidão para imobilizar o veículo. Acelerar e buzinar (A) coloca em risco justamente os usuários mais vulneráveis da via. Manter a velocidade da placa (C) ignora a situação real de perigo e transfere indevidamente a responsabilidade — o CTB e a direção defensiva exigem que o condutor proteja o pedestre independentemente de quem atravessa em local inadequado. O pisca-alerta com o carro em movimento é proibido (art. 40 do CTB) e sinais de luz (D) não conferem preferência sobre pedestres.",
     legalBase: "Arts. 28, 29 e 40 do CTB e princípios da direção defensiva",
     commonMistake:
       "A pegadinha está em 'velocidade da placa': o limite máximo NÃO autoriza manter a velocidade quando há risco real. E o pisca-alerta com o carro em movimento é proibido (art. 40 do CTB).",
@@ -4606,7 +4611,69 @@ export const QUESTIONS: Question[] = [
     trap: true,
     difficulty: 2,
   },
-];
+  {
+    "id": "placa_a32a_alta",
+    "category": "legislacao",
+    "image_url": "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/placa-transito-de-pedestre-A32a.webp",
+    "statement": "Ao trafegar por uma via urbana, um condutor observa a placa de advertência A-32a. Diante dessa sinalização, de acordo com o Manual Brasileiro de Sinalização de Trânsito do CONTRAN e o Código de Trânsito Brasileiro (CTB), qual é o significado correto da placa e qual a conduta esperada do condutor ao se aproximar do local?",
+    "options": [
+      "A placa significa 'Trânsito de Pedestres'. Advertindo sobre a travessia habitual ou a presença de pedestres na via, o condutor deve redobrar a atenção e diminuir a velocidade, não sendo este local obrigatoriamente marcado com faixa delimitada.",
+      "A placa significa 'Passagem Sinalizada de Pedestres'. O condutor deve parar obrigatoriamente o veículo antes do local indicado, pois a sinalização indica obrigatoriedade de preferência devido à faixa pintada na pista.",
+      "A placa significa 'Área Escolar'. O condutor deve reduzir a velocidade para no máximo 30 km/h, pois indica a proximidade imediata de travessia exclusiva de alunos.",
+      "A placa significa 'Pedestre, ande pela esquerda'. Trata-se de uma ordem de regulamentação destinada ao trânsito de pedestres nos acostamentos das rodovias."
+    ],
+    "correctIndex": 0,
+    "explanation": "A placa A-32a sinaliza 'Trânsito de Pedestres' (advertência). Ela alerta sobre a possibilidade de presença/travessia de pedestres na via, diferenciando da A-32b ('Passagem Sinalizada de Pedestres').",
+    "detailedExplanation": "As placas de advertência têm caráter de alerta e não de imposição. A placa A-32a indica 'Trânsito de Pedestres', alertando o condutor sobre a presença habitual de pedestres no trecho, exigindo redução de velocidade e atenção. A pegadinha comum é confundir com a A-32b (que possui as faixas desenhadas na placa, indicando 'Passagem Sinalizada de Pedestres') ou com placas de regulamentação/área escolar (A-33a).",
+    "legalBase": "Código de Trânsito Brasileiro (CTB) e Resolução CONTRAN nº 160/04 (Manual de Sinalização - Formato e Significado das Placas de Advertência)",
+    "commonMistake": "Confundir a placa A-32a ('Trânsito de Pedestres') com a A-32b ('Passagem Sinalizada de Pedestres', que tem as zebras da faixa sob os pés da figura) ou com 'Área Escolar' (A-33a, que possui um adulto e uma criança com pasta).",
+    "tip": "Sem faixa desenhada na placa amarela = 'Trânsito de Pedestres' (A-32a). Com faixa desenhada sob os pés = 'Passagem Sinalizada de Pedestres' (A-32b).",
+    "incidence": "alta",
+    "trap": true,
+    "difficulty": 3
+  },
+  {
+    "id": "placa_regulamentacao_advertencia_alta",
+    "category": "legislacao",
+    "image_url": "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/placa-area-escolar-A-33A.webp",
+    "statement": "Ao conduzir um veículo por uma via urbana, o motorista observa duas placas de sinalização vertical: a primeira proíbe o acionamento de buzina ou sinal sonoro (R-20) e a segunda alerta para a proximidade de uma área escolar (A-33a). De acordo com o Código de Trânsito Brasileiro (CTB) e o Manual de Sinalização do CONTRAN, como são classificadas essas placas e qual a natureza de suas ordens?",
+    "options": [
+      "A primeira é uma Placa de Regulamentação (R-20), de caráter imperativo e punitivo; a segunda é uma Placa de Advertência (A-33a), de caráter informativo e de alerta, que indica a proximidade de área escolar.",
+      "A primeira é uma Placa de Advertência (R-20), que apenas sugere a não utilização de sinais sonoros; a segunda é uma Placa de Regulamentação (A-33a), que impõe o limite obrigatório de parada.",
+      "Ambas são Placas de Regulamentação, pois a primeira proíbe o sinal sonoro e a segunda obriga a redução imediata para no máximo 30 km/h sob pena de apreensão do veículo.",
+      "A primeira é uma Placa de Indicação, informando área hospitalar; a segunda é uma Placa de Advertência (A-32b), indicando obrigatoriedade de preferência sobre a faixa."
+    ],
+    "correctIndex": 0,
+    "explanation": "R-20 é de Regulamentação (impositiva/gera multa) e A-33a é de Advertência (alerta/área escolar).",
+    "detailedExplanation": "As placas de Regulamentação possuem caráter imperativo, estabelecendo proibições e obrigações cujo desrespeito constitui infração. Já as de Advertência alertam para condições potencialmente perigosas na via sem aplicar penalidade direta.",
+    "legalBase": "Art. 89 do CTB e Resolução CONTRAN nº 160/2004",
+    "commonMistake": "Confundir o caráter coercitivo da placa vermelha (regulamentação) com a função de alerta da amarela (advertência).",
+    "tip": "Placa Vermelha/Redonda = Regulamentação (Multa). Placa Amarela/Losango = Advertência (Alerta).",
+    "incidence": "alta",
+    "trap": true,
+    "difficulty": 3
+  },
+  {
+    "id": "placa_r20_proibido_buzina_alta",
+    "category": "legislacao",
+    "image_url": "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/placa-R-20.jpg",
+    "statement": "Ao trafegar por uma via urbana durante o período noturno nas proximidades de um hospital, o condutor visualiza a placa de sinalização R-20 instalada na via. Considerando os preceitos do Código de Trânsito Brasileiro (CTB) e as normas de sinalização do CONTRAN, assinale a alternativa que indica corretamente a classificação dessa placa, seu significado e a implicação do seu desrespeito:",
+    "options": [
+      "Trata-se de uma Placa de Regulamentação que proíbe o uso da buzina ou sinal sonoro no local indicado. O desrespeito a esta ordem imperativa constitui infração de trânsito de natureza leve, sujeita a penalidade de multa.",
+      "Trata-se de uma Placa de Advertência que apenas recomenda evitar o uso de sinal sonoro por cortesia urbana, não gerando autuação por infração de trânsito em caso de descumprimento.",
+      "Trata-se de uma Placa de Indicação destinada exclusivamente a veículos de emergência, permitindo o uso da buzina apenas quando estiverem em serviço de urgência com iluminação vermelha ligada.",
+      "Trata-se de uma Placa de Regulamentação que proíbe o uso de buzina no período das 22h às 6h, sendo o uso livre nos demais horários do dia."
+    ],
+    "correctIndex": 0,
+    "explanation": "A placa R-20 proíbe o uso de buzina/sinal sonoro. O desrespeito é infração LEVE (Art. 227, V do CTB).",
+    "detailedExplanation": "A placa R-20 proíbe acionar buzina ou sinal sonoro no trecho delimitado, a qualquer hora do dia ou da noite. O descumprimento gera penalidade de multa por infração leve.",
+    "legalBase": "Art. 227, V do CTB e Resolução CONTRAN nº 160/2004",
+    "commonMistake": "Achar que a proibição da buzina vale apenas no período noturno ou que se trata de mera recomendação de cortesia.",
+    "tip": "R-20 = Proibido Buzinar (vale 24h por dia). Desrespeito = Infração Leve.",
+    "incidence": "alta",
+    "trap": true,
+    "difficulty": 3
+  }];
 
 // Questões que realmente caíram na prova do DETRAN.
 // São forçadas em todo simulado completo e usadas no espelho de divulgação do super admin.
@@ -4627,6 +4694,27 @@ export const REAL_EXAM_IDS = [
   "qp63",
   "sinistro-sinalizacao-001",
   "qp64",
+  {
+    "id": "placa_r20_proibido_buzina_alta",
+    "category": "legislacao",
+    "statement": "Ao trafegar por uma via urbana durante o período noturno nas proximidades de um hospital, o condutor visualiza a placa de sinalização R-20 instalada na via. Considerando os preceitos do Código de Trânsito Brasileiro (CTB) e as normas de sinalização do CONTRAN, assinale a alternativa que indica corretamente a classificação dessa placa, seu significado e a implicação do seu desrespeito:",
+    "options": [
+      "Trata-se de uma Placa de Regulamentação que proíbe o uso da buzina ou sinal sonoro no local indicado. O desrespeito a esta ordem imperativa constitui infração de trânsito de natureza leve, sujeita a penalidade de multa.",
+      "Trata-se de uma Placa de Advertência que apenas recomenda evitar o uso de sinal sonoro por cortesia urbana, não gerando autuação por infração de trânsito em caso de descumprimento.",
+      "Trata-se de uma Placa de Indicação destinada exclusivamente a veículos de emergência, permitindo o uso da buzina apenas quando estiverem em serviço de urgência com iluminação vermelha ligada.",
+      "Trata-se de uma Placa de Regulamentação que proíbe o uso de buzina no período das 22h às 6h, sendo o uso livre nos demais horários do dia."
+    ],
+    "correctIndex": 0,
+    "explanation": "A placa R-20 é de Regulamentação ('Proibido acionar buzina ou sinal sonoro'). O descumprimento é infração LEVE (Art. 227, V do CTB).",
+    "detailedExplanation": "As placas de Regulamentação possuem caráter imperativo e impositivo. A placa R-20 proíbe o acionamento de buzina ou qualquer sinal sonoro no trecho delimitado, independente do horário. Segundo o Art. 227, V do CTB, descumprir essa sinalização constitui infração de natureza LEVE, sujeita a penalidade de multa.",
+    "legalBase": "Art. 227, inciso V do CTB e Resolução CONTRAN nº 160/2004",
+    "commonMistake": "Achar que a proibição da buzina se aplica apenas no período noturno ou considerar que placas de proibição de som possuem mero caráter educativo/advertência.",
+    "tip": "Placa R-20 (Borda Vermelha) = Regulamentação. Desrespeitar proibição de buzina = Infração LEVE.",
+    "incidence": "alta",
+    "trap": true,
+    "difficulty": 3,
+    "image_url": "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/placa-R-20.jpg"
+  }
 ];
 
 export function getRandomizedQuestions(
