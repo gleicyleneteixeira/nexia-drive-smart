@@ -20,8 +20,13 @@ import {
   Pause,
 } from "lucide-react";
 import memoriaImg from "@/assets/psico-memoria.png";
+import { isValidAnswer } from "@/utils/textMatcher";
 
 export const Route = createFileRoute("/psicotecnico")({
+  validateSearch: (search: Record<string, unknown>): { test?: string } => {
+    const test = typeof search.test === "string" ? search.test : undefined;
+    return { test };
+  },
   component: PsicoPage,
   head: () => ({
     meta: [
@@ -54,7 +59,7 @@ function useSpeech() {
         if (!enabled) return;
         const u = new SpeechSynthesisUtterance(text);
         u.lang = "pt-BR";
-        u.rate = 1;
+        u.rate = 1.03;
         u.pitch = 1;
         window.speechSynthesis.speak(u);
       } catch {}
@@ -71,7 +76,10 @@ function useSpeech() {
 
 // ===================== HUB =====================
 function PsicoPage() {
-  const [stage, setStage] = useState<Stage>("hub");
+  const { test } = Route.useSearch();
+  const initialStage: Stage =
+    test === "atencao" || test === "memoria" || test === "logico" ? test : "hub";
+  const [stage, setStage] = useState<Stage>(initialStage);
   const [scores, setScores] = useState<ScoreMap>({});
   const speech = useSpeech();
 
@@ -1578,26 +1586,28 @@ function Atencao({
 }
 
 // ===================== TEST 3: MEMÓRIA RÁPIDA =====================
-const MEM_REFERENCE_OBJECTS = [
-  "casa",
-  "árvore",
-  "sol",
-  "balão",
-  "avião",
-  "carro",
-  "moto",
-  "barco",
-  "bicicleta",
-  "guarda-chuva",
-  "cadeira",
-  "peixe",
-  "ferro",
-  "vela",
-  "ponte",
-  "pessoa",
-  "pipa",
-  "foice",
-  "placa",
+// Elementos presentes na cena do Teste de Memória Rápida, com variações aceitas
+// (sinônimos, acento/cedilha e pequenos erros de digitação via isValidAnswer)
+const MEMORY_IMAGE_ELEMENTS: { id: string; aliases: string[] }[] = [
+  { id: "casa", aliases: ["casa", "casas", "residencia", "lar", "sobrado"] },
+  { id: "arvore", aliases: ["arvore", "árvore", "arvores", "árvores", "planta", "arvorezinha"] },
+  { id: "sol", aliases: ["sol", "solzinho", "ensolarado"] },
+  { id: "balao", aliases: ["balao", "balão", "baloes", "balões", "aerostato"] },
+  { id: "aviao", aliases: ["aviao", "avião", "avioes", "aviões", "aeroplano"] },
+  { id: "carro", aliases: ["carro", "carros", "automovel", "automóvel", "veiculo", "veículo"] },
+  { id: "moto", aliases: ["moto", "motoque", "motoz", "motoca", "motocicleta"] },
+  { id: "barco", aliases: ["barco", "barcos", "barquinho", "embarcacao", "canoa"] },
+  { id: "bicicleta", aliases: ["bicicleta", "bicicletas", "bike", "bicicletinha"] },
+  { id: "guarda-chuva", aliases: ["guarda chuva", "guarda-chuva", "guarda sol", "guarda-chuve", "guarda-chuv"] },
+  { id: "cadeira", aliases: ["cadeira", "cadeiras", "assento", "sentar"] },
+  { id: "peixe", aliases: ["peixe", "peixes"] },
+  { id: "ferro", aliases: ["ferro", "ferro de passar", "ferro passar", "ferro passa roupa"] },
+  { id: "vela", aliases: ["vela", "velas"] },
+  { id: "ponte", aliases: ["ponte", "pontes"] },
+  { id: "pessoa", aliases: ["pessoa", "pessoas", "homem", "mulher", "crianca", "criança", "menino", "menina", "gente", "povo"] },
+  { id: "pipa", aliases: ["pipa", "pipas", "papagaio", "pandorga", "raia"] },
+  { id: "foice", aliases: ["foice", "fouce"] },
+  { id: "placa", aliases: ["placa", "placas", "placa de sinalizacao", "sinal", "sinalizacao", "sinalização"] },
 ];
 
 function Memoria({
@@ -1608,27 +1618,31 @@ function Memoria({
   onDone: (r: { items: number }) => void;
 }) {
   const MEM_SECS = 30;
-  const WRITE_SECS = 60;
+  const WRITE_SECS = 120;
   const [phase, setPhase] = useState<"intro" | "memorize" | "write" | "done">("intro");
   const [time, setTime] = useState(MEM_SECS);
   const [text, setText] = useState("");
 
   const score = useMemo(() => {
     const items = text
-      .toLowerCase()
       .split(/[\n,;]+/)
       .map((x) => x.trim())
       .filter(Boolean);
-    const matched = items.filter((w) =>
-      MEM_REFERENCE_OBJECTS.some((r) => w.includes(r) || r.includes(w)),
-    );
-    return matched.length;
+    // Cada elemento da imagem pontua no máximo 1 vez, mesmo que o aluno
+    // escreva sinônimos (ex: "casa" e "residencia").
+    let hits = 0;
+    for (const element of MEMORY_IMAGE_ELEMENTS) {
+      if (items.some((userItem) => isValidAnswer(userItem, element.aliases))) {
+        hits++;
+      }
+    }
+    return hits;
   }, [text]);
 
   useEffect(() => {
     if (phase === "intro")
       speech.speak(
-        "Teste de memória rápida. Você verá uma cena por 30 segundos. Memorize o máximo de objetos que conseguir. Depois, você terá 1 minuto para escrever tudo que lembrar.",
+        "Teste de Memória Rápida. Dica para você ter uma boa pontuação neste teste: não tente memorizar os desenhos de forma individual, faça o agrupamento por elementos. Por exemplo, ao memorizar uma casa, não grave apenas o conceito de casa, mas sim todos os seus componentes: casa, janela, telhado, caminho, chaminé e fumaça.",
       );
   }, [phase, speech]);
 
@@ -1651,6 +1665,13 @@ function Memoria({
 
   function finish() {
     onDone({ items: score });
+  }
+
+  function restart() {
+    speech.stop();
+    setText("");
+    setTime(MEM_SECS);
+    setPhase("intro");
   }
 
   return (
@@ -1725,7 +1746,9 @@ function Memoria({
         <DoneNext
           summary={`Objetos lembrados: ${score} · ${score >= 12 ? "Aprovado" : "Reprovado"} (Mínimo: 12)`}
           onNext={finish}
+          onRestart={restart}
           status={score >= 12 ? "success" : "danger"}
+          nextLabel="Próximo Teste"
         />
       )}
     </div>
@@ -2852,11 +2875,15 @@ function Intro({
 function DoneNext({
   summary,
   onNext,
+  onRestart,
   status,
+  nextLabel = "Continuar",
 }: {
   summary: string;
   onNext: () => void;
+  onRestart?: () => void;
   status?: "success" | "danger";
+  nextLabel?: string;
 }) {
   const isDanger = status === "danger";
   return (
@@ -2867,12 +2894,29 @@ function DoneNext({
         <Check className="h-10 w-10 text-success mx-auto" />
       )}
       <p className="mt-2 font-semibold">{summary}</p>
-      <button
-        onClick={onNext}
-        className="mt-4 inline-flex items-center gap-2 px-5 py-3 rounded-xl gradient-primary text-primary-foreground font-semibold shadow-glow cursor-pointer"
-      >
-        Continuar <ArrowRight className="h-4 w-4" />
-      </button>
+      {onRestart ? (
+        <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <button
+            onClick={onRestart}
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-secondary text-secondary-foreground font-semibold cursor-pointer hover:bg-secondary/80 transition-colors"
+          >
+            <RotateCcw className="h-4 w-4" /> Refazer Teste
+          </button>
+          <button
+            onClick={onNext}
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl gradient-primary text-primary-foreground font-semibold shadow-glow cursor-pointer"
+          >
+            {nextLabel} <ArrowRight className="h-4 w-4" />
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={onNext}
+          className="mt-4 inline-flex items-center gap-2 px-5 py-3 rounded-xl gradient-primary text-primary-foreground font-semibold shadow-glow cursor-pointer"
+        >
+          {nextLabel} <ArrowRight className="h-4 w-4" />
+        </button>
+      )}
     </div>
   );
 }

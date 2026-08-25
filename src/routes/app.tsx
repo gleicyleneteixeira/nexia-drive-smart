@@ -2141,6 +2141,7 @@ function PsicoTestCard({ title, desc, emoji, type }: { title: string; desc: stri
   return (
     <Link
       to="/psicotecnico"
+      search={{ test: type }}
       className="block glass rounded-2xl p-5 border-border/10 hover:border-success/30 hover:bg-accent/15 transition-all text-left space-y-3"
     >
       <div className="text-2xl">{emoji}</div>

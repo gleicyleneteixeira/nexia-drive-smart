@@ -13,13 +13,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen, Video, BadgeDollarSign, Gift, CheckCheck, CalendarClock, Lock, ChevronUp, ChevronDown, GripVertical, Trophy } from "lucide-react";
+import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, X, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen, Video, BadgeDollarSign, Gift, CheckCheck, CalendarClock, Lock,   ChevronUp, ChevronDown, GripVertical } from "lucide-react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import * as XLSX from "xlsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { useServerFn } from "@tanstack/react-start";
 import { adminResetUserPassword, getSalesReport, type SalesReportProfile } from "@/lib/admin-users.functions";
-import { sendPasswordReset, deleteUser, deactivateUser, sendViperConnectWelcome, gerarTextoRankingWhatsApp } from "@/lib/admin-operations.server";
+import { sendPasswordReset, deleteUser, deactivateUser, sendViperConnectWelcome } from "@/lib/admin-operations.server";
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
 
@@ -88,49 +88,6 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
   const [tab, setTab] = useState("sales");
   const [categoryFilter, setCategoryFilter] = useState<"all" | "teorico" | "psicotecnico" | "direcao">("all");
   const isSuper = email === SUPER_ADMIN_EMAIL;
-  
-  const [showRankingModal, setShowRankingModal] = useState(false);
-  const [rankingTexto, setRankingTexto] = useState<string>("");
-  const [rankingLoading, setRankLoading] = useState(false);
-
-  const rankingGenFn = useServerFn(gerarTextoRankingWhatsApp);
-
-  const gerarRanking = async () => {
-    setRankLoading(true);
-    try {
-      const { texto } = await rankingGenFn({
-        data: { data: new Date().toISOString().split("T")[0] },
-      });
-      if (texto) setRankingTexto(texto);
-    } catch (err) {
-      console.error("Erro ao carregar ranking:", err);
-      toast.error("Não foi possível carregar o ranking de hoje.");
-      setRankingTexto("");
-    } finally {
-      setRankLoading(false);
-    }
-  };
-
-  // Fecha o modal de ranking com ESC e dispara a geração ao abrir
-  useEffect(() => {
-    if (!showRankingModal) return;
-    gerarRanking();
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setShowRankingModal(false);
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showRankingModal]);
-
-  // Function to copy to clipboard
-  const copiarParaClipboard = (texto: string) => {
-    navigator.clipboard.writeText(texto).then(() => {
-      toast.success("Ranking copiado para a área de transferência!");
-    }).catch(() => {
-      toast.error("Falha ao copiar para a área de transferência");
-    });
-  };
 
   // Filter items by selected category
   const filteredItems = categoryFilter === "all"
@@ -186,16 +143,6 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
         </div>
         <Button variant="outline" onClick={onSignOut} size="sm">
           <LogOut className="h-4 w-4 mr-2" /> Sair
-        </Button>
-        <Button
-          type="button"
-          variant="outline"
-          size="icon"
-          onClick={() => setShowRankingModal(true)}
-          title="Ver Ranking do Dia (Top 3 Alunos)"
-          className="ml-2 h-9 w-9 rounded-lg border-border/50 hover:bg-secondary/60"
-        >
-          <Trophy className="h-5 w-5 text-amber-400" />
         </Button>
       </div>
 
@@ -301,49 +248,6 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
             {filteredItems.length === 0 && <p className="text-sm text-muted-foreground text-center py-6">Nenhum item encontrado. Adicione abaixo ou altere o filtro.</p>}
           </div>
         </TabsContent>
-        {/* Ranking do Dia para WhatsApp Modal */}
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70" role="dialog" aria-modal="true" onClick={(e) => { if (e.target === e.currentTarget) setShowRankingModal(false); }}>
-          <div className="bg-card rounded-2xl p-6 max-w-md w-full mx-8 transform scale-100 transition-transform relative" style={{ WebkitTransform: 'scale(1)' }} onClick={(e) => e.stopPropagation()}>
-            <button
-              type="button"
-              onClick={() => setShowRankingModal(false)}
-              aria-label="Fechar"
-              className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
-            >
-              <X className="h-5 w-5" />
-            </button>
-            <h3 className="font-display font-bold text-lg mb-3 pr-8">Copiar Ranking do Dia para WhatsApp</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Gerar ranking dos top 3 alunos do dia para enviar em grupos do WhatsApp.
-            </p>
-            <textarea
-              ref={rankingTexto ? null : undefined}
-              readOnly
-              disabled={rankingLoading}
-              className="w-full h-32 rounded-lg border border-border/30 p-3 font-mono text-sm resize-none bg-background"
-              value={rankingLoading ? "Carregando..." : rankingTexto || "Nenhum dado de ranking para hoje."}
-            ></textarea>
-            <div className="mt-4 flex gap-2">
-              <Button
-                onClick={() => {
-                  if (rankingTexto) {
-                    copiarParaClipboard(rankingTexto);
-                    setShowRankingModal(false);
-                  }
-                }}
-                disabled={!rankingTexto || rankingLoading}
-                className="flex-1 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
-                Copiar
-              </Button>
-              <Button
-                onClick={() => gerarRanking()}
-                disabled={rankingLoading}
-                className="flex-1 py-2 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/90 transition-colors">
-                {rankingLoading ? "Gerando..." : "Gerar"}
-              </Button>
-            </div>
-          </div>
-        </div>
       </Tabs>
     </div>
   );

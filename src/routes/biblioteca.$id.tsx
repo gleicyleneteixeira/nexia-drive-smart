@@ -126,7 +126,13 @@ function ItemViewer() {
 
           {item.item_type === "heyzine" && (
             <div className="w-full aspect-[4/3] md:aspect-video glass rounded-2xl overflow-hidden">
-              <iframe src={item.url} className="w-full h-full" allowFullScreen title={item.title} />
+              <iframe
+                src={item.url}
+                className="w-full h-full border-0"
+                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                allowFullScreen
+                title={item.title}
+              />
             </div>
           )}
 
