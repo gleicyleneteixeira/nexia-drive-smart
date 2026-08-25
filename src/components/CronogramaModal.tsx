@@ -376,9 +376,9 @@ function CronogramaForm({
   const allDays = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
 
   return (
-    <DialogContent>
+    <DialogContent className="w-[95vw] max-w-2xl max-h-[90vh] overflow-y-auto">
       <DialogHeader>
-        <DialogTitle>
+        <DialogTitle className="break-words">
           {isEditing ? "Editar seu Cronograma de Estudos" : "Configure seu Cronograma de Estudos"}
         </DialogTitle>
         <DialogDescription>
@@ -591,10 +591,10 @@ function CronogramaOverview({
   };
 
   return (
-    <DialogContent className="max-w-3xl">
+    <DialogContent className="w-[95vw] max-w-3xl max-h-[90vh] overflow-y-auto">
       <DialogHeader>
-        <DialogTitle>Seu Plano de Estudos Personalizado</DialogTitle>
-        <DialogDescription>
+        <DialogTitle className="break-words">Seu Plano de Estudos Personalizado</DialogTitle>
+        <DialogDescription className="break-words">
           Acompanhe suas metas para a prova do Detran
         </DialogDescription>
       </DialogHeader>
@@ -687,7 +687,7 @@ function CronogramaOverview({
       </div>
 
       <DialogFooter className="flex-col gap-2 sm:flex-row sm:justify-between">
-        <div className="flex gap-2 w-full sm:w-auto">
+        <div className="flex flex-wrap gap-2 w-full sm:w-auto">
           <Button
             type="button"
             variant="outline"
@@ -724,7 +724,7 @@ function CronogramaOverview({
               const targetPage = scheduleItems[0]?.paginaInicio ?? 17;
               window.open(getReadingUrl(targetPage), "_blank");
             }}
-            className="w-full sm:w-auto"
+            className="flex-1 sm:flex-none"
           >
             Começar a Estudar Agora
           </Button>
