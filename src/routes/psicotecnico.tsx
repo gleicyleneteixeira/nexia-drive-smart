@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import memoriaImg from "@/assets/psico-memoria.png";
 import { isValidAnswer } from "@/utils/textMatcher";
+import { COMPLETE_MEMORY_ELEMENTS } from "@/data/psicotecnico";
 
 export const Route = createFileRoute("/psicotecnico")({
   validateSearch: (search: Record<string, unknown>): { test?: string } => {
@@ -1586,29 +1587,6 @@ function Atencao({
 }
 
 // ===================== TEST 3: MEMÓRIA RÁPIDA =====================
-// Elementos presentes na cena do Teste de Memória Rápida, com variações aceitas
-// (sinônimos, acento/cedilha e pequenos erros de digitação via isValidAnswer)
-const MEMORY_IMAGE_ELEMENTS: { id: string; aliases: string[] }[] = [
-  { id: "casa", aliases: ["casa", "casas", "residencia", "lar", "sobrado"] },
-  { id: "arvore", aliases: ["arvore", "árvore", "arvores", "árvores", "planta", "arvorezinha"] },
-  { id: "sol", aliases: ["sol", "solzinho", "ensolarado"] },
-  { id: "balao", aliases: ["balao", "balão", "baloes", "balões", "aerostato"] },
-  { id: "aviao", aliases: ["aviao", "avião", "avioes", "aviões", "aeroplano"] },
-  { id: "carro", aliases: ["carro", "carros", "automovel", "automóvel", "veiculo", "veículo"] },
-  { id: "moto", aliases: ["moto", "motoque", "motoz", "motoca", "motocicleta"] },
-  { id: "barco", aliases: ["barco", "barcos", "barquinho", "embarcacao", "canoa"] },
-  { id: "bicicleta", aliases: ["bicicleta", "bicicletas", "bike", "bicicletinha"] },
-  { id: "guarda-chuva", aliases: ["guarda chuva", "guarda-chuva", "guarda sol", "guarda-chuve", "guarda-chuv"] },
-  { id: "cadeira", aliases: ["cadeira", "cadeiras", "assento", "sentar"] },
-  { id: "peixe", aliases: ["peixe", "peixes"] },
-  { id: "ferro", aliases: ["ferro", "ferro de passar", "ferro passar", "ferro passa roupa"] },
-  { id: "vela", aliases: ["vela", "velas"] },
-  { id: "ponte", aliases: ["ponte", "pontes"] },
-  { id: "pessoa", aliases: ["pessoa", "pessoas", "homem", "mulher", "crianca", "criança", "menino", "menina", "gente", "povo"] },
-  { id: "pipa", aliases: ["pipa", "pipas", "papagaio", "pandorga", "raia"] },
-  { id: "foice", aliases: ["foice", "fouce"] },
-  { id: "placa", aliases: ["placa", "placas", "placa de sinalizacao", "sinal", "sinalizacao", "sinalização"] },
-];
 
 function Memoria({
   speech,
@@ -1631,7 +1609,7 @@ function Memoria({
     // Cada elemento da imagem pontua no máximo 1 vez, mesmo que o aluno
     // escreva sinônimos (ex: "casa" e "residencia").
     let hits = 0;
-    for (const element of MEMORY_IMAGE_ELEMENTS) {
+    for (const element of COMPLETE_MEMORY_ELEMENTS) {
       if (items.some((userItem) => isValidAnswer(userItem, element.aliases))) {
         hits++;
       }
