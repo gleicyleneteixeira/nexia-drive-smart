@@ -88,6 +88,18 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
   const [tab, setTab] = useState("sales");
   const [categoryFilter, setCategoryFilter] = useState<"all" | "teorico" | "psicotecnico" | "direcao">("all");
   const isSuper = email === SUPER_ADMIN_EMAIL;
+  
+  const [showRankingModal, setShowRankingModal] = useState(false);
+  const [rankingTexto, setRankingTexto] = useState<string>("");
+
+  // Function to copy to clipboard
+  const copiarParaClipboard = (texto: string) => {
+    navigator.clipboard.writeText(texto).then(() => {
+      toast.success("Ranking copiado para a área de!");
+    }).catch(() => {
+      toast.error("Falha ao copiar para a área de transferência");
+    });
+  };
 
   // Filter items by selected category
   const filteredItems = categoryFilter === "all"
@@ -144,6 +156,11 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
         <Button variant="outline" onClick={onSignOut} size="sm">
           <LogOut className="h-4 w-4 mr-2" /> Sair
         </Button>
+        <Button
+          onClick={() => setShowRankingModal(true)}
+          className="ml-3 py-2 px-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
+          <span>📊</span> Copiar Ranking do Dia
+        </Button>
       </div>
 
       <Tabs value={tab} onValueChange={setTab}>
@@ -174,7 +191,7 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
         <TabsContent value="settings" className="mt-4">
           <SettingsPanel />
         </TabsContent>
-        <TabsContent value="library" className="mt-4 space-y-6">
+<TabsContent value="library" className="mt-4 space-y-6">
           <ItemForm
             editing={editing}
             onDone={() => {
@@ -221,20 +238,18 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
                             >
                               <GripVertical className="h-5 w-5" />
                             </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2">
-                                <p className="font-semibold truncate">{item.title}</p>
-                                <Badge variant="secondary" className="text-xs">
-                                  {item.module_type === "teorico" ? "Teórico" :
-                                   item.module_type === "psicotecnico" ? "Psicotécnico" :
-                                   item.module_type === "direcao" ? "Prático" : item.module_type}
-                                </Badge>
-                              </div>
-                              <p className="text-xs text-muted-foreground mt-1">
-                                {item.item_type.toUpperCase()} · {item.published ? "Publicado" : "Rascunho"}
-                                {item.is_paid && ` · R$ ${((item.price_cents ?? 0) / 100).toFixed(2)}`}
-                              </p>
+                            <div className="flex items-center gap-2">
+                              <p className="font-semibold truncate">{item.title}</p>
+                              <Badge variant="secondary" className="text-xs">
+                                {item.module_type === "teorico" ? "Teórico" :
+                                 item.module_type === "psicotecnico" ? "Psicotécnico" :
+                                 item.module_type === "direcao" ? "Prático" : item.module_type}
+                              </Badge>
                             </div>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {item.item_type.toUpperCase()} · {item.published ? "Publicado" : "Rascunho"}
+                              {item.is_paid && ` · R$ ${((item.price_cents ?? 0) / 100).toFixed(2)}`}
+                            </p>
                             <div className="flex items-center gap-1">
                               <Button size="icon" variant="ghost" onClick={() => setEditing(item)}><Pencil className="h-4 w-4" /></Button>
                               <Button size="icon" variant="ghost" onClick={() => onDelete(item)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
@@ -243,7 +258,6 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
                         )}
                       </Draggable>
                     ))}
-                    {provided.placeholder}
                   </div>
                 )}
               </Droppable>
@@ -251,6 +265,47 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
             {filteredItems.length === 0 && <p className="text-sm text-muted-foreground text-center py-6">Nenhum item encontrado. Adicione abaixo ou altere o filtro.</p>}
           </div>
         </TabsContent>
+        {/* Ranking do Dia para WhatsApp Modal */}
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70" role="dialog" aria-modal="true" onClick={(e) => { if (e.target === e.currentTarget) setShowRankingModal(false); }}>
+          <div className="bg-card rounded-2xl p-6 max-w-md w-full mx-8 transform scale-100 transition-transform" style={{ WebkitTransform: 'scale(1)' }} onClick={(e) => e.stopPropagation()}>
+            <h3 className="font-display font-bold text-lg mb-3">Copiar Ranking do Dia para WhatsApp</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Gerar ranking dos top 3 alunos do dia para enviar em grupos do WhatsApp.
+            </p>
+            <textarea
+              ref={rankingTexto ? null : undefined}
+              readOnly
+              className="w-full h-32 rounded-lg border border-border/30 p-3 font-mono text-sm resize-none {rankingTexto ? 'bg-primary/5 text-primary' : 'bg-background'}"
+              value={rankingTexto || 'Carregando...'}
+            ></textarea>
+            <div className="mt-4 flex gap-2">
+              <Button
+                onClick={() => {
+                  if (rankingTexto) {
+                    copiarParaClipboard(rankingTexto);
+                    setShowRankingModal(false);
+                  }
+                }}
+                className="flex-1 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
+                Copiar
+              </Button>
+              <Button
+                onClick={() => {
+                  // Generate new ranking
+                  const rankingFn = useServerFn(gerarTextoRankingWhatsApp);
+                  rankingFn({ data: { data: new Date().toISOString().split('T')[0] } }).then(({ texto, copia }) => {
+                    if (copia && texto) {
+                      setRankingTexto(texto);
+                      setShowRankingModal(true);
+                    }
+                  });
+                }}
+                className="flex-1 py-2 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/90 transition-colors">
+                Gerar
+              </Button>
+            </div>
+          </div>
+        </div>
       </Tabs>
     </div>
   );

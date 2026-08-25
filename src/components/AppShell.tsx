@@ -3,7 +3,9 @@ import { Link, Outlet, useLocation } from "@tanstack/react-router";
 import { Logo } from "./Logo";
 import { RequireAuth } from "./RequireAuth";
 import { RatingPrompt, triggerRatingPrompt } from "./RatingPrompt";
-import { Flame, Home, Sparkles, Zap, Trophy, TrafficCone, Brain, Library, LogIn, LogOut, UserCircle, Shield, Star, Car } from "lucide-react";
+import { Flame, Home, Sparkles, Zap, Trophy, TrafficCone, Brain, Library, LogIn, LogOut, UserCircle, Shield, Star, Car, Calendar } from "lucide-react";
+import { CronogramaModal } from "./CronogramaModal";
+import { DailyCheckinBanner } from "./DailyCheckinBanner";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
@@ -40,6 +42,7 @@ export function AppShell() {
     return "hub";
   });
 
+  const [cronogramaOpen, setCronogramaOpen] = useState(false);
   const [supportLink, setSupportLink] = useState<string | null>(null);
   const [showSupportButton, setShowSupportButton] = useState(true);
 
@@ -238,6 +241,15 @@ export function AppShell() {
                         Avaliar o app
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
+                      {activeModule === "teorico" && (
+                        <DropdownMenuItem
+                          onClick={() => setCronogramaOpen(true)}
+                          className="flex items-center gap-2 cursor-pointer"
+                        >
+                          <Calendar className="h-4 w-4 mr-2" />
+                          <span>Meu Cronograma</span>
+                        </DropdownMenuItem>
+                      )}
                     </>
                   )}
                   <DropdownMenuItem onClick={signOut} className="flex items-center gap-2 cursor-pointer text-destructive focus:text-destructive">
@@ -268,6 +280,10 @@ export function AppShell() {
       })()}
 
       <RatingPrompt />
+      {activeModule === "teorico" && <DailyCheckinBanner />}
+      {activeModule === "teorico" && (
+        <CronogramaModal open={cronogramaOpen} onOpenChange={setCronogramaOpen} />
+      )}
 
       {/* Floating WhatsApp button */}
       {showSupportButton && supportLink && (

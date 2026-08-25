@@ -165,11 +165,31 @@ function LibraryCarouselViewer({
 
   const slide = slides[current];
 
+  const organizeSlideText = (text: string): string => {
+    if (!text) return "";
+    const lines = text.split("\n").filter((line) => line.trim());
+    const leftCol: string[] = [];
+    const rightCol: string[] = [];
+    let currentCol: "left" | "right" = "left";
+
+    for (const line of lines) {
+      if (/^[A-Z]-\d+/.test(line.trim())) {
+        if (currentCol === "left") currentCol = "right";
+        else leftCol.push(line);
+      } else {
+        if (currentCol === "left") leftCol.push(line);
+        else rightCol.push(line);
+      }
+    }
+
+    return [...leftCol, ...rightCol].join(" ");
+  };
+
   const speakText = (text: string) => {
     if (typeof window === "undefined") return;
     try {
       window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
+      const u = new SpeechSynthesisUtterance(organizeSlideText(text));
       u.lang = "pt-BR";
       u.rate = 1.05;
       window.speechSynthesis.speak(u);
@@ -286,7 +306,7 @@ function LibraryCarouselViewer({
       {/* Slide Text Panel */}
       <div className="px-6 py-6 flex-1 flex flex-col justify-between space-y-6 min-h-[140px] bg-black/10">
         <p className="text-sm md:text-base text-muted-foreground leading-relaxed text-left">
-          {slide.text}
+          {organizeSlideText(slide.text)}
         </p>
 
         {/* Footer controls */}

@@ -113,7 +113,7 @@ export type Database = {
         }
         Relationships: []
       }
-       profiles: {
+profiles: {
         Row: {
            cpf: string | null
            created_at: string
@@ -130,13 +130,14 @@ export type Database = {
            phone: string | null
            studies: boolean | null
            status: string
+            selos: string[] | null
             updated_at: string
              access_status: string | null
              access_reason: string | null
              group_status: string | null
              whatsapp_invite_later_at: string | null
              whatsapp_invite_status: string
-           }
+         }
           Insert: {
             cpf?: string | null
             created_at?: string
@@ -153,6 +154,7 @@ export type Database = {
             phone?: string | null
             studies?: boolean | null
             status?: string
+            selos?: string[]
             updated_at?: string
             access_status?: string | null
             access_reason?: string | null
@@ -176,6 +178,7 @@ export type Database = {
             phone?: string | null
             studies?: boolean | null
             status?: string
+            selos?: string[]
             updated_at?: string
             access_status?: string | null
             access_reason?: string | null
@@ -203,6 +206,136 @@ export type Database = {
           }
           Relationships: []
         }
+      estudo_config: {
+        Row: {
+          id: string
+          user_id: string
+          exam_date: string | null
+          no_exam_date: boolean
+          days_of_week: Json | null
+          daily_time: number
+          reading_habit: string
+          is_intensive_mode: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          exam_date?: string | null
+          no_exam_date?: boolean
+          days_of_week?: Json | null
+          daily_time?: number
+          reading_habit?: string
+          is_intensive_mode?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          exam_date?: string | null
+          no_exam_date?: boolean
+          days_of_week?: Json | null
+          daily_time?: number
+          reading_habit?: string
+          is_intensive_mode?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_progress: {
+        Row: {
+          id: string
+          user_id: string
+          current_session_index: number
+          last_access_date: string | null
+          completed_pages: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          current_session_index?: number
+          last_access_date?: string | null
+          completed_pages?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          current_session_index?: number
+          last_access_date?: string | null
+          completed_pages?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cronograma_dias: {
+        Row: {
+          id: string
+          user_id: string
+          dia_numero: number
+          data_agendada: string
+          paginas_leitura: string
+          qtd_simulados_meta: number
+          concluido: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          dia_numero: number
+          data_agendada: string
+          paginas_leitura: string
+          qtd_simulados_meta?: number
+          concluido?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          dia_numero?: number
+          data_agendada?: string
+          paginas_leitura?: string
+          qtd_simulados_meta?: number
+          concluido?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      historico_ranking: {
+        Row: {
+          id: string
+          user_id: string
+          data: string
+          pontuacao_dia: number
+          simulados_aprovados_hoje: number
+          simulados_gabaritados_hoje: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          data: string
+          pontuacao_dia?: number
+          simulados_aprovados_hoje?: number
+          simulados_gabaritados_hoje?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          data?: string
+          pontuacao_dia?: number
+          simulados_aprovados_hoje?: number
+          simulados_gabaritados_hoje?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       pix_transactions: {
         Row: {
           id: string
@@ -279,6 +412,7 @@ export type Database = {
     Enums: {
       app_role: "admin" | "user"
       library_item_type: "pdf" | "heyzine" | "link" | "video" | "image" | "carousel"
+      reading_habit: "raramente" | "as_vezes" | "frequentemente"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -408,6 +542,7 @@ export const Constants = {
     Enums: {
       app_role: ["admin", "user"],
       library_item_type: ["pdf", "heyzine", "link", "video", "image", "carousel"],
+      reading_habit: ["raramente", "as_vezes", "frequentemente"],
     },
   },
 } as const

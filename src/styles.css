@@ -177,6 +177,26 @@
   transition: background-color 0.1s;
 }
 
+.reading-highlight {
+  /* Tarfa fina - underline sutil em amarelo claro sobre o texto */
+  text-decoration-line: none !important;
+  text-decoration-skip-ink: none !important;
+  position: relative;
+  padding-bottom: 2px !important;
+}
+
+.reading-highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #facc15;
+  border-radius: 2px;
+  opacity: 0.8;
+}
+
 .pdf-viewport-container {
   width: 100%;
   height: 100%;

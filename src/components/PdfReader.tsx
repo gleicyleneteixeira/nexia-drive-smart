@@ -45,89 +45,101 @@ export function PdfReader({ url, className = "" }: PdfReaderProps) {
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const layoutCache = useRef<{ [key: string]: CachedLayout }>({});
 
+  const highlightCurrentElement = (activeSpan: HTMLElement | null) => {
+    // 1. Limpa o destaque de TODOS os spans da camada de texto
+    if (textLayerRef.current) {
+      textLayerRef.current.querySelectorAll('.pdf-text-span').forEach((el) => {
+        el.classList.remove('reading-highlight');
+      });
+    }
+
+    // 2. Aplica a classe de destaque APENAS no span atual
+    if (activeSpan) {
+      activeSpan.classList.add('reading-highlight');
+    }
+  };
+
   const cancelSpeech = useCallback(() => {
     window.speechSynthesis.cancel();
     utteranceRef.current = null;
     setIsReading(false);
     // Clear highlights
-    if (textLayerRef.current) {
-      textLayerRef.current.querySelectorAll(".pdf-text-highlight").forEach((el) => {
-        el.classList.remove("pdf-text-highlight");
-      });
-    }
+    highlightCurrentElement(null);
   }, []);
+
+  // Função de divisão rigorosa por metades: isola Coluna Esquerda e Direita totalmente
+  const getTwoColumnOrderedNodes = (textLayer: HTMLElement) => {
+    const spans = Array.from(textLayer.querySelectorAll('span')) as HTMLElement[];
+    if (!spans.length) return [];
+
+    const containerRect = textLayer.getBoundingClientRect();
+    // Ponto exato que divide a folha ao meio (Eixo X)
+    const middleX = containerRect.left + (containerRect.width / 2);
+
+    // 1. Mapeia cada elemento calculando sua posição visual exata na tela
+    const items = spans.map(span => {
+      const rect = span.getBoundingClientRect();
+      return {
+        element: span,
+        text: span.innerText ? span.innerText.trim() : '',
+        // Distância do topo absoluto da janela (quanto menor, mais no topo está)
+        top: rect.top,
+        // Distância da esquerda da tela
+        left: rect.left,
+        // Pertence à coluna esquerda se o centro do elemento estiver do lado esquerdo do meio
+        // Usamos (rect.left + rect.width / 2) para pegar o centro do elemento
+        isLeftColumn: (rect.left + rect.width / 2) < middleX
+      };
+    }).filter(item => item.text.length > 0);
+
+    // 2. ISOLAMENTO TOTAL DAS DUAS COLUNAS
+    // NÃO misturamos elementos da esquerda com da direita em nenhuma etapa
+    const leftColumnItems = items.filter(item => item.isLeftColumn);
+    const rightColumnItems = items.filter(item => !item.isLeftColumn);
+
+    // 3. Ordena CADA coluna de CIMA PARA BAIXO de forma independente
+    // Tolerância de apenas 3px para palavras da mesma linha DENTRO da mesma coluna
+    const sortStrictlyVertical = (a: typeof items[0], b: typeof items[0]) => {
+      if (Math.abs(a.top - b.top) <= 3) {
+        // Mesmo linha dentro da coluna: ler da esquerda para a direita
+        return a.left - b.left;
+      }
+      // Menor 'top' vem PRIMEIRO (Garante leitura do topo para a base da coluna)
+      return a.top - b.top;
+    };
+
+    leftColumnItems.sort(sortStrictlyVertical);
+    rightColumnItems.sort(sortStrictlyVertical);
+
+    // 4. CONCATENAÇÃO SEQUENCIAL OBRIGATÓRIA:
+    // LÊ 100% DA COLUNA ESQUERDA (DO TOPO AO ROAPÉ) -> DEPOIS LÊ 100% DA COLUNA DIREITA
+    // NUNCA mistura linhas entre colunas
+    const finalSequence = [...leftColumnItems, ...rightColumnItems];
+
+    // Imprime a ordem para depuração
+    console.log("Ordem de leitura 2 colunas - Esquerda:", leftColumnItems.slice(0, 3).map(i => i.text.substring(0, 20)));
+    console.log("Ordem de leitura 2 colunas - Direita:", rightColumnItems.slice(0, 3).map(i => i.text.substring(0, 20)));
+
+    return finalSequence.map(item => item.element);
+  };
 
   // Motor de Análise Visual e Agrupamento por Colunas/Regiões
   const analyzeAndBuildReadingOrder = (
     textLayerEl: HTMLElement,
     readingDirection: 'TOP_TO_BOTTOM' | 'BOTTOM_TO_TOP' = 'TOP_TO_BOTTOM'
   ): CachedLayout => {
-    const spans = Array.from(textLayerEl.querySelectorAll('span')) as HTMLElement[];
+    const textLayer = textLayerEl;
+    const spans = Array.from(textLayer.querySelectorAll('.pdf-text-span')) as HTMLElement[];
     const validSpans = spans.filter(s => s.innerText && s.innerText.trim().length > 0);
 
     if (validSpans.length === 0) return { fullText: '', orderedSpans: [] };
 
-    const containerRect = textLayerEl.getBoundingClientRect();
-    const pageHeight = containerRect.height;
-    const pageWidth = containerRect.width;
+    // 1. Aplicar algoritmo definitivo de divisão por colunas com ordenação vertical rigorosa
+    //    Isola 100% da Coluna Esquerda e 100% da Coluna Direita, sem misturar linhas
+    const orderedSpans = getTwoColumnOrderedNodes(textLayer);
 
-    // 1. Mapear cada elemento com suas coordenadas e definir Páginas Lógicas (Superior vs Inferior)
-    const items = validSpans.map((span, index) => {
-      const rect = span.getBoundingClientRect();
-      const relY = rect.top - containerRect.top;
-      const relX = rect.left - containerRect.left;
-
-      return {
-        id: `span-${index}`,
-        span,
-        rect,
-        relX,
-        relY,
-        text: span.innerText.trim(),
-        // Divide a página física em 2 regiões se houver quebra horizontal (Página Lógica A / B)
-        regionIndex: relY < pageHeight * 0.48 ? 0 : 1
-      };
-    });
-
-    let finalOrderedItems: typeof items = [];
-    const regions = [0, 1]; // Região Superior (0) -> Região Inferior (1)
-
-    regions.forEach(regionId => {
-      const regionItems = items.filter(item => item.regionIndex === regionId);
-      if (regionItems.length === 0) return;
-
-      // Detectar Colunas dentro da mesma Região (Eixo X)
-      const midX = pageWidth / 2;
-      const leftColumn = regionItems.filter(item => item.relX < midX);
-      const rightColumn = regionItems.filter(item => item.relX >= midX);
-
-      // Função de ordenação vertical dentro de uma coluna isolada
-      const sortVertical = (colItems: typeof items) => {
-        return colItems.sort((a, b) => {
-          // Se estiverem na mesma linha (diferença Y <= 8px), ordena da esquerda para direita
-          if (Math.abs(a.relY - b.relY) <= 8) {
-            return a.relX - b.relX;
-          }
-          // Aplica o sentido de leitura configurado (Cima -> Baixo ou Baixo -> Cima)
-          return readingDirection === 'TOP_TO_BOTTOM' 
-            ? a.relY - b.relY 
-            : b.relY - a.relY;
-        });
-      };
-
-      const orderedLeft = sortVertical(leftColumn);
-      const orderedRight = sortVertical(rightColumn);
-
-      // Se houver 2 colunas distintas na região, lê toda a Esquerda e depois toda a Direita
-      if (orderedLeft.length > 0 && orderedRight.length > 0) {
-        finalOrderedItems.push(...orderedLeft, ...orderedRight);
-      } else {
-        finalOrderedItems.push(...sortVertical(regionItems));
-      }
-    });
-
-    const orderedSpans = finalOrderedItems.map(i => i.span);
-    const fullText = finalOrderedItems.map(i => i.text).join(' ');
+    const fullText = orderedSpans.length > 0 ? 
+      orderedSpans.map(s => s.innerText.trim()).join(' ') : '';
 
     return { fullText, orderedSpans };
   };
@@ -163,8 +175,10 @@ export function PdfReader({ url, className = "" }: PdfReaderProps) {
     window.speechSynthesis.cancel();
     setIsReading(true);
 
-    // Aplica highlight amarelo nos elementos ordenados
-    layout.orderedSpans.forEach(s => s.classList.add('bg-yellow-200', 'text-black'));
+    // Destaca APENAS o span inicial (frase atual em leitura)
+    if (layout.orderedSpans[0]) {
+      highlightCurrentElement(layout.orderedSpans[0]);
+    }
 
     // Auto-scroll para o início do conteúdo lido
     if (layout.orderedSpans[0]) {
@@ -189,9 +203,10 @@ const stopReading = () => {
     }
     setIsReading(false);
 
+    // Remove highlight de todos os spans
     if (textLayerRef.current) {
-      const spans = textLayerRef.current.querySelectorAll("span");
-      spans.forEach(s => s.classList.remove("bg-yellow-200", "text-black"));
+      const spans = textLayerRef.current.querySelectorAll(".pdf-text-span");
+      spans.forEach(s => s.classList.remove('reading-highlight'));
     }
   };
 
@@ -218,33 +233,35 @@ const stopReading = () => {
         renderTaskRef.current = renderTask;
         await renderTask.promise;
 
-        // Render text layer
-        if (textLayerRef.current) {
-          const pageObj = await doc.getPage(page);
-          const textContent = await pageObj.getTextContent();
-          const viewport = pageObj.getViewport({ scale: s });
-          
-          // Clear previous text layer
-          textLayerRef.current.innerHTML = "";
-          textLayerRef.current.style.width = `${viewport.width}px`;
-          textLayerRef.current.style.height = `${viewport.height}px`;
+// Render text layer
+          if (textLayerRef.current) {
+            const pageObj = await doc.getPage(page);
+            const textContent = await pageObj.getTextContent();
+            const viewport = pageObj.getViewport({ scale: s });
+            
+            // Clear previous text layer
+            textLayerRef.current.innerHTML = "";
+            textLayerRef.current.style.width = `${viewport.width}px`;
+            textLayerRef.current.style.height = `${viewport.height}px`;
 
-          // Create text layer using pdfjs-dist approach
-          textContent.items.forEach((item: any) => {
-            const div = document.createElement("div");
-            div.className = "pdf-text-item";
-            div.textContent = item.str;
-            div.style.position = "absolute";
-            div.style.left = `${item.transform[4]}px`;
-            div.style.top = `${item.transform[5]}px`;
-            div.style.fontSize = `${item.transform[0] * s}px`;
-            div.style.fontFamily = item.fontName || "sans-serif";
-            div.style.whiteSpace = "pre";
-            div.style.color = "transparent";
-            div.style.userSelect = "none";
-            textLayerRef.current?.appendChild(div);
-          });
-        }
+            // Create text layer using pdfjs-dist approach
+            // Using span elements for better text extraction and column detection
+            textContent.items.forEach((item: any) => {
+              const span = document.createElement("span");
+              span.className = "pdf-text-span";
+              span.textContent = item.str;
+              span.style.position = "absolute";
+              span.style.left = `${item.transform[4]}px`;
+              span.style.top = `${item.transform[5]}px`;
+              span.style.fontSize = `${item.transform[0] * s}px`;
+              span.style.fontFamily = item.fontName || "sans-serif";
+              span.style.whiteSpace = "nowrap";
+              span.style.color = "transparent";
+              span.style.userSelect = "none";
+              span.style.display = "inline-block";
+              textLayerRef.current?.appendChild(span);
+            });
+          }
       } catch (error: any) {
         if (error?.name !== "RenderingCancelledException") {
           console.error("Erro ao renderizar página:", error);

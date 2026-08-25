@@ -74,7 +74,7 @@ function TurboPage() {
         />
       </div>
 
-      <div className="relative h-[440px]">
+      <div className="relative min-h-[440px]">
         <AnimatePresence mode="wait">
           <motion.div
             key={`${seed}-${i}`}
@@ -85,7 +85,7 @@ function TurboPage() {
             animate={{ opacity: 1, scale: 1, x: 0 }}
             exit={{ opacity: 0, scale: 0.95, x: -50 }}
             transition={{ duration: 0.25 }}
-            className="absolute inset-0 glass rounded-3xl p-6 shadow-card cursor-grab active:cursor-grabbing flex flex-col"
+            className="relative w-full glass rounded-3xl p-6 shadow-card cursor-grab active:cursor-grabbing flex flex-col"
           >
             <div className="flex flex-wrap gap-1.5 mb-3">
               <span className={`text-[10px] px-2 py-0.5 rounded-full border ${m.className}`}>
