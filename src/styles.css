@@ -108,6 +108,8 @@
   html {
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    width: 100%;
+    overflow-x: hidden;
   }
 
   body {
@@ -117,7 +119,10 @@
       var(--color-background);
     background-attachment: fixed;
     color: var(--color-foreground);
+    width: 100%;
     min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
   }
 
   h1, h2, h3, h4 {
@@ -207,4 +212,44 @@
   touch-action: pan-x pan-y;
   position: relative;
   display: block;
+}
+
+/* ============================================================
+   Responsividade Mobile — scroll fluido e sem corte de conteúdo
+   ============================================================ */
+
+/* Contêineres de tabelas/cards: libera rolagem horizontal interna
+   quando o conteúdo é maior que a tela (ex.: tabelas do admin/cronograma). */
+.table-wrapper,
+.modal-container,
+.dashboard-content {
+  max-width: 100vw;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y;
+}
+
+/* Modais e cards não estouram a largura do celular */
+.modal-card,
+.admin-card,
+.schedule-modal {
+  width: 100%;
+  max-width: 100vw;
+}
+
+@media (max-width: 768px) {
+  .modal-card,
+  .admin-card,
+  .schedule-modal {
+    width: 95% !important;
+    max-width: 95vw !important;
+    padding: 12px !important;
+    margin: 0 auto;
+  }
+
+  /* Ajuste de telas longas: garante rolagem vertical suave */
+  #root,
+  .app-shell {
+    min-height: 100vh;
+  }
 }

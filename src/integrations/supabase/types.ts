@@ -206,6 +206,27 @@ profiles: {
           }
           Relationships: []
         }
+        system_settings: {
+          Row: {
+            id: string
+            key: string
+            value: string | null
+            updated_at: string
+          }
+          Insert: {
+            id?: string
+            key: string
+            value?: string | null
+            updated_at?: string
+          }
+          Update: {
+            id?: string
+            key?: string
+            value?: string | null
+            updated_at?: string
+          }
+          Relationships: []
+        }
       estudo_config: {
         Row: {
           id: string

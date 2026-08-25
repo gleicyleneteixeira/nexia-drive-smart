@@ -1402,3 +1402,18 @@ export const verificarSelos = createServerFn({ method: "POST" })
     };
   });
 
+export const sendViperConnectWelcome = createServerFn({ method: "POST" })
+  .inputValidator((d: { phone: string; name?: string }) => d)
+  .handler(async ({ data }) => {
+    const { dispatchViperConnectWelcome } = await import("@/lib/viperconnect");
+    const result = await dispatchViperConnectWelcome(data.phone, data.name || "aluno(a)");
+    if (!result.ok) throw new Error(result.error || "Falha ao enviar mensagem.");
+    return { success: true };
+  });
+
+export const getViperConnectSettingsAdmin = createServerFn({ method: "POST" })
+  .handler(async () => {
+    const { getViperConnectSettings } = await import("@/lib/viperconnect");
+    return await getViperConnectSettings();
+  });
+

@@ -61,6 +61,27 @@ export async function handlePixWebhook(request: Request): Promise<Response> {
             .eq("id", tx.user_id);
 
           console.log(`Usuário ${tx.user_id} ativado com sucesso.`);
+
+          // Disparo automático da mensagem de boas-vindas via ViperConnect (não bloqueia o webhook)
+          try {
+            const { data: profile } = await supabaseAdmin
+              .from("profiles")
+              .select("phone, display_name, email")
+              .eq("id", tx.user_id)
+              .maybeSingle();
+            if (profile?.phone) {
+              const { dispatchViperConnectWelcome } = await import("@/lib/viperconnect");
+              const welcomeName = profile.display_name || profile.email || "aluno(a)";
+              const res = await dispatchViperConnectWelcome(profile.phone, welcomeName);
+              if (!res.ok) {
+                console.warn(`Boas-vindas ViperConnect não enviada para ${tx.user_id}: ${res.error}`);
+              } else {
+                console.log(`Boas-vindas ViperConnect enviada para ${tx.user_id}.`);
+              }
+            }
+          } catch (wErr) {
+            console.error("Erro ao disparar boas-vindas ViperConnect:", wErr);
+          }
         } else {
           console.warn(`Transação com txid ${txid} não encontrada no banco.`);
         }

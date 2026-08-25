@@ -13,13 +13,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen, Video, BadgeDollarSign, Gift, CheckCheck, CalendarClock, Lock, ChevronUp, ChevronDown, GripVertical } from "lucide-react";
+import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen, Video, BadgeDollarSign, Gift, CheckCheck, CalendarClock, Lock, ChevronUp, ChevronDown, GripVertical, Trophy } from "lucide-react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import * as XLSX from "xlsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { useServerFn } from "@tanstack/react-start";
 import { adminResetUserPassword, getSalesReport, type SalesReportProfile } from "@/lib/admin-users.functions";
-import { sendPasswordReset, deleteUser, deactivateUser } from "@/lib/admin-operations.server";
+import { sendPasswordReset, deleteUser, deactivateUser, sendViperConnectWelcome, gerarTextoRankingWhatsApp } from "@/lib/admin-operations.server";
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
 
@@ -91,11 +91,42 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
   
   const [showRankingModal, setShowRankingModal] = useState(false);
   const [rankingTexto, setRankingTexto] = useState<string>("");
+  const [rankingLoading, setRankLoading] = useState(false);
+
+  const rankingGenFn = useServerFn(gerarTextoRankingWhatsApp);
+
+  const gerarRanking = async () => {
+    setRankLoading(true);
+    try {
+      const { texto } = await rankingGenFn({
+        data: { data: new Date().toISOString().split("T")[0] },
+      });
+      if (texto) setRankingTexto(texto);
+    } catch (err) {
+      console.error("Erro ao carregar ranking:", err);
+      toast.error("Não foi possível carregar o ranking de hoje.");
+      setRankingTexto("");
+    } finally {
+      setRankLoading(false);
+    }
+  };
+
+  // Fecha o modal de ranking com ESC e dispara a geração ao abrir
+  useEffect(() => {
+    if (!showRankingModal) return;
+    gerarRanking();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setShowRankingModal(false);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showRankingModal]);
 
   // Function to copy to clipboard
   const copiarParaClipboard = (texto: string) => {
     navigator.clipboard.writeText(texto).then(() => {
-      toast.success("Ranking copiado para a área de!");
+      toast.success("Ranking copiado para a área de transferência!");
     }).catch(() => {
       toast.error("Falha ao copiar para a área de transferência");
     });
@@ -157,9 +188,14 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
           <LogOut className="h-4 w-4 mr-2" /> Sair
         </Button>
         <Button
+          type="button"
+          variant="outline"
+          size="icon"
           onClick={() => setShowRankingModal(true)}
-          className="ml-3 py-2 px-4 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
-          <span>📊</span> Copiar Ranking do Dia
+          title="Ver Ranking do Dia (Top 3 Alunos)"
+          className="ml-2 h-9 w-9 rounded-lg border-border/50 hover:bg-secondary/60"
+        >
+          <Trophy className="h-5 w-5 text-amber-400" />
         </Button>
       </div>
 
@@ -267,16 +303,25 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
         </TabsContent>
         {/* Ranking do Dia para WhatsApp Modal */}
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70" role="dialog" aria-modal="true" onClick={(e) => { if (e.target === e.currentTarget) setShowRankingModal(false); }}>
-          <div className="bg-card rounded-2xl p-6 max-w-md w-full mx-8 transform scale-100 transition-transform" style={{ WebkitTransform: 'scale(1)' }} onClick={(e) => e.stopPropagation()}>
-            <h3 className="font-display font-bold text-lg mb-3">Copiar Ranking do Dia para WhatsApp</h3>
+          <div className="bg-card rounded-2xl p-6 max-w-md w-full mx-8 transform scale-100 transition-transform relative" style={{ WebkitTransform: 'scale(1)' }} onClick={(e) => e.stopPropagation()}>
+            <button
+              type="button"
+              onClick={() => setShowRankingModal(false)}
+              aria-label="Fechar"
+              className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            <h3 className="font-display font-bold text-lg mb-3 pr-8">Copiar Ranking do Dia para WhatsApp</h3>
             <p className="text-sm text-muted-foreground mb-4">
               Gerar ranking dos top 3 alunos do dia para enviar em grupos do WhatsApp.
             </p>
             <textarea
               ref={rankingTexto ? null : undefined}
               readOnly
-              className="w-full h-32 rounded-lg border border-border/30 p-3 font-mono text-sm resize-none {rankingTexto ? 'bg-primary/5 text-primary' : 'bg-background'}"
-              value={rankingTexto || 'Carregando...'}
+              disabled={rankingLoading}
+              className="w-full h-32 rounded-lg border border-border/30 p-3 font-mono text-sm resize-none bg-background"
+              value={rankingLoading ? "Carregando..." : rankingTexto || "Nenhum dado de ranking para hoje."}
             ></textarea>
             <div className="mt-4 flex gap-2">
               <Button
@@ -286,22 +331,15 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
                     setShowRankingModal(false);
                   }
                 }}
+                disabled={!rankingTexto || rankingLoading}
                 className="flex-1 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
                 Copiar
               </Button>
               <Button
-                onClick={() => {
-                  // Generate new ranking
-                  const rankingFn = useServerFn(gerarTextoRankingWhatsApp);
-                  rankingFn({ data: { data: new Date().toISOString().split('T')[0] } }).then(({ texto, copia }) => {
-                    if (copia && texto) {
-                      setRankingTexto(texto);
-                      setShowRankingModal(true);
-                    }
-                  });
-                }}
+                onClick={() => gerarRanking()}
+                disabled={rankingLoading}
                 className="flex-1 py-2 rounded-lg bg-secondary text-secondary-foreground hover:bg-secondary/90 transition-colors">
-                Gerar
+                {rankingLoading ? "Gerando..." : "Gerar"}
               </Button>
             </div>
           </div>
@@ -2345,6 +2383,19 @@ function SettingsPanel() {
   const [loaded, setLoaded] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
 
+  // ViperConnect / Uno API
+  const [vApiUrl, setVApiUrl] = useState("");
+  const [vToken, setVToken] = useState("");
+  const [vInstance, setVInstance] = useState("");
+  const [vWelcomeEnabled, setVWelcomeEnabled] = useState(true);
+  const [vWelcomeMessage, setVWelcomeMessage] = useState(
+    "Olá {nome}! Seja muito bem-vindo(a) ao Nexia Drive. Seu acesso já está liberado! 🚀"
+  );
+  const [vWelcomeMedia, setVWelcomeMedia] = useState("");
+  const [testPhone, setTestPhone] = useState("");
+  const [testName, setTestName] = useState("");
+  const [testing, setTesting] = useState(false);
+
   useQuery({
     queryKey: ["admin", "settings"],
     queryFn: async () => {
@@ -2362,10 +2413,56 @@ function SettingsPanel() {
       setShowButton(map.show_whatsapp_button !== "false");
       setFreeTrialEnabled(map.free_trial_enabled !== "false");
       setFreeTrialQuestions(map.free_trial_questions ? parseInt(map.free_trial_questions, 10) : 7);
+
+      // Configurações sensíveis da ViperConnect (somente admin)
+      const { data: vData, error: vError } = await supabase
+        .from("system_settings")
+        .select("key, value")
+        .in("key", [
+          "viperconnect_api_url",
+          "viperconnect_token",
+          "viperconnect_instance_id",
+          "viperconnect_welcome_enabled",
+          "viperconnect_welcome_message",
+          "viperconnect_welcome_media_url",
+        ]);
+      if (vError) {
+        setLoadError(vError.message);
+        throw vError;
+      }
+      const vmap = Object.fromEntries((vData ?? []).map((r) => [r.key, r.value ?? ""]));
+      setVApiUrl(vmap.viperconnect_api_url ?? "");
+      setVToken(vmap.viperconnect_token ?? "");
+      setVInstance(vmap.viperconnect_instance_id ?? "");
+      setVWelcomeEnabled(vmap.viperconnect_welcome_enabled !== "false");
+      setVWelcomeMessage(
+        vmap.viperconnect_welcome_message ??
+          "Olá {nome}! Seja muito bem-vindo(a) ao Nexia Drive. Seu acesso já está liberado! 🚀"
+      );
+      setVWelcomeMedia(vmap.viperconnect_welcome_media_url ?? "");
+
       setLoaded(true);
-      return map;
+      return { map, vmap };
     },
   });
+
+  const sendViperWelcomeFn = useServerFn(sendViperConnectWelcome);
+
+  async function handleTestWelcome() {
+    if (!testPhone) {
+      toast.error("Informe um número de telefone para o teste.");
+      return;
+    }
+    setTesting(true);
+    try {
+      await sendViperWelcomeFn({ data: { phone: testPhone, name: testName || "Teste" } });
+      toast.success("Mensagem de teste enviada! Verifique o WhatsApp.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Falha ao enviar teste");
+    } finally {
+      setTesting(false);
+    }
+  }
 
   async function handleSave() {
     setSaving(true);
@@ -2382,6 +2479,20 @@ function SettingsPanel() {
       ];
       for (const s of settings) {
         const { error } = await supabase.from("app_settings").upsert(s, { onConflict: "key" });
+        if (error) throw error;
+      }
+
+      // ViperConnect (system_settings — somente admin)
+      const vSettings = [
+        { key: "viperconnect_api_url", value: vApiUrl },
+        { key: "viperconnect_token", value: vToken },
+        { key: "viperconnect_instance_id", value: vInstance },
+        { key: "viperconnect_welcome_enabled", value: vWelcomeEnabled ? "true" : "false" },
+        { key: "viperconnect_welcome_message", value: vWelcomeMessage },
+        { key: "viperconnect_welcome_media_url", value: vWelcomeMedia },
+      ];
+      for (const s of vSettings) {
+        const { error } = await supabase.from("system_settings").upsert(s, { onConflict: "key" });
         if (error) throw error;
       }
       qc.invalidateQueries({ queryKey: ["admin", "settings"] });
@@ -2506,6 +2617,59 @@ function SettingsPanel() {
                 {n}
               </button>
             ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="space-y-4 border-t border-border/40 pt-6">
+        <h3 className="font-display font-bold text-sm">WhatsApp de Boas-Vindas (ViperConnect / Uno API)</h3>
+        <p className="text-xs text-muted-foreground">
+          Envia uma mensagem automática via WhatsApp quando o pagamento (Pix) é confirmado. As credenciais ficam restritas a administradores.
+        </p>
+
+        <div className="flex items-center justify-between">
+          <div>
+            <Label className="text-xs font-semibold">Ativar envio de boas-vindas</Label>
+            <p className="text-xs text-muted-foreground">Dispara a mensagem abaixo após a confirmação do Pix.</p>
+          </div>
+          <Switch checked={vWelcomeEnabled} onCheckedChange={setVWelcomeEnabled} />
+        </div>
+
+        <div className="space-y-2">
+          <Label className="text-xs font-semibold">URL da Instância (API)</Label>
+          <Input value={vApiUrl} onChange={(e) => setVApiUrl(e.target.value)} placeholder="https://sua-instancia-viperconnect.com" className="flex-1" />
+        </div>
+
+        <div className="space-y-2">
+          <Label className="text-xs font-semibold">Token da API</Label>
+          <Input type="password" value={vToken} onChange={(e) => setVToken(e.target.value)} placeholder="Token de acesso" className="flex-1" />
+        </div>
+
+        <div className="space-y-2">
+          <Label className="text-xs font-semibold">ID da Instância / Número</Label>
+          <Input value={vInstance} onChange={(e) => setVInstance(e.target.value)} placeholder="ID da instância" className="flex-1" />
+        </div>
+
+        <div className="space-y-2">
+          <Label className="text-xs font-semibold">Mensagem de Boas-Vindas</Label>
+          <Textarea value={vWelcomeMessage} onChange={(e) => setVWelcomeMessage(e.target.value)} rows={3} className="flex-1" />
+          <p className="text-xs text-muted-foreground">Use <code className="text-primary">{"{nome}"}</code> para inserir o nome do aluno.</p>
+        </div>
+
+        <div className="space-y-2">
+          <Label className="text-xs font-semibold">URL de Mídia (opcional)</Label>
+          <Input value={vWelcomeMedia} onChange={(e) => setVWelcomeMedia(e.target.value)} placeholder="https://…/imagem-ou-arquivo.png" className="flex-1" />
+        </div>
+
+        <div className="rounded-lg bg-secondary/30 border border-border/40 p-3 space-y-2">
+          <p className="text-xs font-semibold">Testar envio</p>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <Input value={testPhone} onChange={(e) => setTestPhone(e.target.value)} placeholder="DDD + número (ex: 11999999999)" className="flex-1" />
+            <Input value={testName} onChange={(e) => setTestName(e.target.value)} placeholder="Nome de teste" className="flex-1" />
+            <Button variant="outline" onClick={handleTestWelcome} disabled={testing} className="shrink-0">
+              {testing ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+              Enviar teste
+            </Button>
           </div>
         </div>
       </div>
