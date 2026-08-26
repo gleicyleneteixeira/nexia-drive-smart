@@ -1595,7 +1595,7 @@ function Memoria({
   speech: ReturnType<typeof useSpeech>;
   onDone: (r: { items: number }) => void;
 }) {
-  const MEM_SECS = 30;
+  const MEM_SECS = 60;
   const WRITE_SECS = 120;
   const [phase, setPhase] = useState<"intro" | "memorize" | "write" | "done">("intro");
   const [time, setTime] = useState(MEM_SECS);
