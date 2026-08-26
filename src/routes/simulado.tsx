@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { AnimatePresence, motion } from "framer-motion";
@@ -184,6 +184,7 @@ function getMemoryHook(q: Question): string {
 
 function SimuladoPage() {
   const { user, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
   const [hydrated, setHydrated] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [index, setIndex] = useState(0);
@@ -346,7 +347,7 @@ function SimuladoPage() {
       {/* Header */}
         <div className="flex items-center justify-between mb-4 gap-3">
         <button
-          onClick={restart}
+          onClick={() => navigate({ to: "/app" })}
           className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors shrink-0 cursor-pointer"
         >
           <ArrowLeft className="h-4 w-4" />

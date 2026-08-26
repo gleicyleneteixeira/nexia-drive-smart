@@ -12,6 +12,7 @@ import {
   ArrowRight,
   RotateCcw,
   Trophy,
+  ArrowLeft,
   Volume2,
   VolumeX,
   Check,
@@ -103,6 +104,14 @@ function PsicoPage() {
     <div className="mx-auto max-w-4xl px-4 py-6 md:py-10">
       <div className="flex items-start justify-between gap-3 mb-6 flex-wrap">
         <div>
+          {stage !== "hub" && (
+            <button
+              onClick={() => go("hub")}
+              className="inline-flex items-center gap-2 px-3 py-2 mb-3 rounded-lg glass text-xs font-medium hover:bg-accent/30 transition-colors"
+            >
+              <ArrowLeft className="h-4 w-4" /> Voltar
+            </button>
+          )}
           <p className="text-xs uppercase tracking-widest text-primary-glow font-semibold flex items-center gap-2">
             <Brain className="h-4 w-4" /> Psicotécnico
           </p>
