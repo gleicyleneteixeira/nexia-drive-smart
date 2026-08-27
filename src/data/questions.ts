@@ -4673,6 +4673,612 @@ export const QUESTIONS: Question[] = [
     "incidence": "alta",
     "trap": true,
     "difficulty": 3
+  },
+  {
+    id: "placa_r2_de_a_preferencia_alta_01",
+    category: "legislacao",
+    image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/51.jpg",
+    placa: "R-2",
+    statement: "Ao aproximar-se de um cruzamento em uma via urbana de fluxo intenso, o condutor observa no bordo direito uma placa vertical de regulamentação com formato triangular (borda vermelha e fundo branco). Não havendo foco semafórico nem agente de trânsito no local, qual é o dever do condutor e a implicação do seu descumprimento, segundo o CTB?",
+    options: [
+      "Deverá imobilizar obrigatoriamente o veículo antes da interseção, independentemente da presença de outros veículos, sob pena de cometer infração gravíssima.",
+      "Deverá dar preferência de passagem aos veículos que transitam pela via preferencial, reduzindo a velocidade ou parando se necessário, constituindo infração grave o seu descumprimento.",
+      "Trata-se de sinalização de advertência que apenas sugere cautela, não gerando aplicação de penalidades de multa por falta de parada.",
+      "Deverá manter a velocidade regulamentada da via, pois a forma triangular concede prioridade ao veículo que realiza a conversão à esquerda."
+    ],
+    correctIndex: 1,
+    explanation: "A placa R-2 (Dê a Preferência) exige ceder a passagem. Desrespeitá-la é infração GRAVE (Art. 215, II do CTB).",
+    detailedExplanation: "A placa R-2 possui formato triangular único entre as de regulamentação. Diferente da R-1 (Parada Obrigatória), a R-2 exige parar apenas se houver veículos transitando na via preferencial. A desobediência a esta sinalização configura infração de natureza grave.",
+    legalBase: "Art. 215, II do CTB e Resolução CONTRAN nº 160/2004",
+    commonMistake: "Confundir 'Dê a Preferência' (R-2 - Infração Grave) com 'Parada Obrigatória' (R-1 - Infração Gravíssima).",
+    tip: "Triângulo para baixo = Dê a Preferência (R-2). Não exige parada total se a via estiver livre.",
+    incidence: "alta",
+    trap: true,
+    difficulty: 3
+  },
+  {
+    id: "validade_cnh_renovacao_alta_01",
+    category: "legislacao",
+    statement: "Um condutor de 42 anos de idade, habilitado na categoria B, comparece ao DETRAN para realizar a renovação de sua Carteira Nacional de Habilitação (CNH). Considerando as atualizações do Código de Trânsito Brasileiro introduzidas pela Lei nº 14.071/2020, qual será o prazo máximo de validade do exame de aptidão física e mental a ser concedido pelo médico perito examinador, desde que não haja indícios de deficiência progressiva?",
+    options: [
+      "5 anos, devendo ser reduzido para 3 anos apenas quando o condutor atingir 50 anos de idade.",
+      "10 anos, pois o condutor possui idade inferior a 50 anos.",
+      "5 anos, estendendo-se a validade máxima de 10 anos exclusivamente para condutores profissionais da categoria C, D e E.",
+      "3 anos, haja vista o prazo padrão unificado para todas as faixas etárias após as recentes alterações legais."
+    ],
+    correctIndex: 1,
+    explanation: "Condutores com menos de 50 anos têm validade de CNH de até 10 anos (Art. 147, § 2º do CTB).",
+    detailedExplanation: "Conforme a atualização do CTB (Lei 14.071/2020), o exame de aptidão física e mental tem validade de: até 10 anos para condutores com idade inferior a 50 anos; até 5 anos para condutores com idade igual ou superior a 50 anos e inferior a 70 anos; e até 3 anos para condutores com idade igual ou superior a 70 anos.",
+    legalBase: "Art. 147, § 2º, incisos I, II e III do CTB",
+    commonMistake: "Marcar 5 anos acreditando na regra antiga anterior a 2021 ou achar que o prazo de 10 anos vale apenas para categorias profissionais.",
+    tip: "< 50 anos = 10 anos | 50 a 69 anos = 5 anos | 70+ anos = 3 anos.",
+    incidence: "alta",
+    trap: true,
+    difficulty: 3
+  },
+  {
+    id: "placa_r28_duplo_sentido_alta_01",
+    category: "legislacao",
+    image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/55.jpg",
+    statement: "Trafegando por uma via até então regulamentada para sentido único de circulação, o condutor se depara com a placa R-28. Com base na sinalização aplicada, qual é o entendimento correto sobre a alteração das regras de trânsito a partir daquele ponto?",
+    options: [
+      "Indica que a pista passa a ser de mão dupla de direção, alterando o fluxo para ambos os sentidos de circulação.",
+      "Informa que a via à frente possui faixa exclusiva reservada apenas para transporte coletivo e veículos de emergência.",
+      "Proíbe expressamente a mudança de faixa de rolamento no trecho seguinte.",
+      "Modifica a prioridade de passagem do cruzamento, tornando obrigatória a conversão à direita na próxima interseção."
+    ],
+    correctIndex: 0,
+    explanation: "A placa R-28 (Duplo sentido de circulação) regulamenta que a via passa a operar nos dois sentidos.",
+    detailedExplanation: "A placa de regulamentação R-28 informa ao condutor do veículo que a via, até então de sentido único, passa a operar em sentido duplo de circulação a partir do ponto de instalação da placa.",
+    legalBase: "Anexo II do CTB e Manual Brasileiro de Sinalização de Trânsito",
+    commonMistake: "Confundir a placa R-28 (Regulamentação) com a placa de Advertência A-22 (Mão dupla adiante).",
+    tip: "Placa circular vermelha R-28 indica que o sentido DUPLO começa imediatamente ali.",
+    incidence: "media",
+    trap: true,
+    difficulty: 3
+  },
+  {
+    id: "placa_r16_altura_maxima_alta_01",
+    category: "legislacao",
+    image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/52.jpg",
+    statement: "Um motorista conduz um veículo de carga cuja altura total, já computada a carga armazenada no baú, é de 4,20 metros. Ao aproximar-se da entrada de um viaduto, ele visualiza a placa R-16 com a indicação '4 m'. Qual conduta deve ser adotada e qual a infração correspondente em caso de avanço?",
+    options: [
+      "O condutor pode prosseguir na via desde que trafegue pelo centro do viaduto, não configurando infração por haver margem de tolerância.",
+      "O condutor está proibido de transitar pelo local, devendo buscar rota alternativa; desrespeitar essa limitação constitui infração de natureza grave.",
+      "A placa refere-se apenas à largura útil da pista de rolamento, autorizando a passagem de veículos de qualquer altura.",
+      "O condutor deve murchar parcialmente os pneus para rebaixar o veículo antes de transpor o obstáculo."
+    ],
+    correctIndex: 1,
+    explanation: "A placa R-16 estabelece a altura máxima permitida. Transitar com altura superior é infração GRAVE (Art. 231, VI do CTB).",
+    detailedExplanation: "A placa R-16 (Altura máxima permitida) estabelece o limite de altura total do veículo mais sua carga. Conduzir veículo com dimensões superiores aos limites estabelecidos pela sinalização sem autorização é infração de trânsito grave.",
+    legalBase: "Art. 231, VI do CTB",
+    commonMistake: "Confundir Altura Máxima Permitida (R-16 - Regulamentação) com Altura Limitada (A-37 - Advertência).",
+    tip: "Seta apontando para CIMA/BAIXO = ALTURA. Se o veículo ultrapassar o valor da placa, não pode passar.",
+    incidence: "alta",
+    trap: true,
+    difficulty: 3
+  },
+  {
+    id: "placa_a42a_inicio_pista_dupla_alta_01",
+    category: "legislacao",
+    image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/54.png",
+    statement: "Enquanto trafega por uma rodovia de pista simples, o condutor observa a placa de advertência A-42a. Qual é a correta interpretação desta sinalização quanto às condições da via adiante?",
+    options: [
+      "Adverte que a pista simples passará a ter sentidos opostos separados por um canteiro central ou barreira física (Início de pista dupla).",
+      "Adverte sobre o fim do canteiro central, voltando a pista a operar com fluxo em pista simples.",
+      "Alerta para a existência de um cruzamento com via preferencial a 100 metros.",
+      "Informa que o tráfego passará a ser canalizado em uma única faixa de rolamento por motivo de obras."
+    ],
+    correctIndex: 0,
+    explanation: "A placa A-42a adverte sobre o 'Início de Pista Dupla' adiante.",
+    detailedExplanation: "A sinalização de advertência A-42a alerta os usuários da via sobre o início de trecho com pista dupla, no qual os fluxos opostos de tráfego passam a ser divididos por um canteiro central ou elemento físico divisor.",
+    legalBase: "Manual Brasileiro de Sinalização de Trânsito - Volume II (CONTRAN)",
+    commonMistake: "Confundir 'Início de Pista Dupla' (A-42a) com 'Fim de Pista Dupla' (A-42b).",
+    tip: "Símbolo do canteiro no TOPO da placa com setas subindo/descendo = INÍCIO de pista dupla.",
+    incidence: "media",
+    trap: false,
+    difficulty: 2
+  },
+  {
+    id: "placa_a14_semaforo_frente_alta_01",
+    category: "legislacao",
+    image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/50.jpg",
+    statement: "Em um trecho periurbano de velocidade elevada, o condutor visualiza a placa de advertência A-14. Qual é a finalidade dessa sinalização e a ação preventiva adequada a ser adotada?",
+    options: [
+      "Advertir sobre a existência de controle semafórico adiante; o condutor deve reduzir a velocidade e preparar-se para eventual parada.",
+      "Indicar a obrigatoriedade de parada imediata no local onde a placa está instalada.",
+      "Alertar que o trecho está sob fiscalização eletrônica de velocidade por radar do tipo fotossensível.",
+      "Informar sobre a existência de cruzamento de vias sem qualquer tipo de sinalização de preferência."
+    ],
+    correctIndex: 0,
+    explanation: "A placa A-14 adverte sobre a presença de um 'Semáforo à frente'.",
+    detailedExplanation: "A placa A-14 (Semáforo à frente) pertence ao grupo de advertência. Sua função é alertar a presença de uma sinalização de regulamentação semafórica adiante, permitindo que o condutor adéque sua velocidade com antecedência.",
+    legalBase: "Resolução CONTRAN nº 160/2004",
+    commonMistake: "Achar que a placa exige parada imediata ao lado dela, em vez de atuar como alerta antecedente.",
+    tip: "Advertência (Amarela) apenas ALERTA sobre o semáforo que virá logo à frente.",
+    incidence: "alta",
+    trap: false,
+    difficulty: 2
+  },
+  {
+    id: "nova_velocidade_vias_locais_alta_01",
+    category: "legislacao",
+    statement: "Um condutor trafega por uma via urbana estritamente residencial, destituída de qualquer tipo de sinalização vertical de regulamentação de velocidade (placa R-19). Considerando as normas gerais de circulação e conduta estabelecidas pelo CTB para as vias abertas à circulação, qual é o limite máximo de velocidade que o condutor deve observar para não cometer infração de trânsito?",
+    options: [
+      "30 km/h, por tratar-se de via local destituída de sinalização regulamentadora.",
+      "40 km/h, equivalente ao limite padrão fixado para vias coletoras não sinalizadas.",
+      "50 km/h, haja vista tratar-se do limite geral para vias urbanas sem placas.",
+      "20 km/h, por ser área exclusivamente residencial com trânsito restrito a pedestres."
+    ],
+    correctIndex: 0,
+    explanation: "Na ausência de sinalização regulamentadora, a velocidade máxima nas vias locais é de 30 km/h (Art. 61, § 1º, I, 'd' do CTB).",
+    detailedExplanation: "Conforme o Art. 61 do CTB, onde não houver sinalização regulamentadora, a velocidade máxima nas vias urbanas será de: 80 km/h nas vias de trânsito rápido, 60 km/h nas vias arteriais, 40 km/h nas vias coletoras e 30 km/h nas vias locais.",
+    legalBase: "Art. 61, § 1º, I, d do CTB",
+    commonMistake: "Confundir o limite de via local (30 km/h) com o de via coletora (40 km/h) ou arterial (60 km/h).",
+    tip: "Via Local = 30 km/h | Via Coletora = 40 km/h | Via Arterial = 60 km/h | Trânsito Rápido = 80 km/h.",
+    incidence: "alta",
+    trap: true,
+    difficulty: 3
+  },
+  {
+    id: "nova_advertencia_escrito_alta_02",
+    category: "infracoes",
+    statement: "Um motorista cometeu uma infração de trânsito de natureza leve após transitar sem os documentos de porte obrigatório. Ao consultar seu prontuário, a autoridade de trânsito constata que o condutor não cometeu nenhuma outra infração nos últimos 12 meses. Segundo as regras do CTB atualizado, qual medida penal ou administrativa deve ser aplicada obrigatória e automaticamente?",
+    options: [
+      "Aplicação de multa com valor reduzido em 50% mais a pontuação respectiva na CNH.",
+      "Conversão da multa em penalidade de Advertência por Escrito, que possui caráter educativo.",
+      "Encaminhamento obrigatório do condutor para curso de reciclagem junto ao DETRAN.",
+      "Aplicação de penalidade de Suspensão do Direito de Dirigir por até 30 dias."
+    ],
+    correctIndex: 1,
+    explanation: "A penalidade de Advertência por Escrito deverá ser imposta para infrações leves ou médias se o condutor não for reincidente nos últimos 12 meses.",
+    detailedExplanation: "O Art. 267 do CTB (alterado pela Lei 14.071/2020) determina que a autoridade de trânsito DEVERÁ converter a penalidade de multa em advertência por escrito caso a infração seja de natureza leve ou média e o condutor não tenha cometido nenhuma outra infração nos últimos 12 meses.",
+    legalBase: "Art. 267 do CTB",
+    commonMistake: "Achar que a conversão em advertência por escrito é uma faculdade/opção da autoridade, quando hoje é impositiva/obrigatória.",
+    tip: "Infração Leve ou Média + 0 infrações em 12 meses = Advertência por Escrito Obrigatória.",
+    incidence: "alta",
+    trap: true,
+    difficulty: 3
+  },
+  {
+    id: "nova_psicoativas_reflexos_alta_03",
+    category: "direcao-defensiva",
+    statement: "O consumo de bebidas alcoólicas e substâncias psicoativas altera significativamente o funcionamento do sistema nervoso central do condutor. Além de comprometer a capacidade crítica de autoavaliação de riscos e elevar a falsa sensação de segurança, qual é a principal alteração psicológica e motora vivenciada pelo condutor embriagado?",
+    options: [
+      "Diminuição progressiva do tempo de reação com aceleração dos reflexos motores.",
+      "Retardamento dos reflexos e diminuição do campo de visão periférica (visão de túnel).",
+      "Aumento substancial da acuidade visual e da capacidade de concentração simultânea.",
+      "Melhoria temporária da percepção auditiva e redução dos pontos cegos do veículo."
+    ],
+    correctIndex: 1,
+    explanation: "O álcool deprime o sistema nervoso central, reduzindo a visão periférica e retardando o tempo de reação e reflexos.",
+    detailedExplanation: "O álcool atua como um depressor do sistema nervoso central. Ele retarda o processamento de informações no cérebro, reduz os reflexos, prejudica a coordenação motora e provoca a visão em túnel (perda da visão periférica).",
+    legalBase: "Art. 165 e Manual de Direção Defensiva do DENATRAN",
+    commonMistake: "Confundir 'aumento do tempo de reação' com 'aceleração dos reflexos'. A reação fica mais lenta (retardada).",
+    tip: "Álcool = Retarda reflexos + Visão de Túnel + Perda da capacidade de avaliar riscos.",
+    incidence: "alta",
+    trap: false,
+    difficulty: 2
+  },
+  {
+    id: "nova_meio_ambiente_respiratorio_alta_04",
+    category: "meio-ambiente",
+    statement: "A frota veicular emite continuamente gases poluentes como monóxido de carbono (CO), óxidos de nitrogênio (NOx) e material particulado. Em grandes centros urbanos, a exposição prolongada a essa poluição do ar impacta diretamente a saúde pública, resultando prioritariamente em qual grupo de patologias?",
+    options: [
+      "Doenças do aparelho digestivo e úlceras gástricas por ingestão involuntária de fuligem.",
+      "Doenças do sistema respiratório, como asma, bronquite crônica e enfisema pulmonar.",
+      "Alterações auditivas permanentes decorrentes da densidade de partículas no ar.",
+      "Doenças infectocontagiosas transmitidas exclusivamente pela queima de combustível adulterado."
+    ],
+    correctIndex: 1,
+    explanation: "A poluição atmosférica veicular atinge diretamente o sistema respiratório, provocando ou agravando bronquite, asma e alergias.",
+    detailedExplanation: "Os gases e partículas emitidos pelos escapamentos atacam as mucosas das vias aéreas superiores e pulmões, sendo a causa primária de complicações e doenças do aparelho respiratório na população urbana.",
+    legalBase: "Resoluções do CONAMA e Diretrizes de Meio Ambiente e Trânsito",
+    commonMistake: "Confundir os danos da poluição do ar (respiratórios) com os danos da poluição sonora (estresse/perda auditiva).",
+    tip: "Poluição do Ar = Doenças Respiratórias | Poluição Sonora = Estresse e Perda Auditiva.",
+    incidence: "media",
+    trap: false,
+    difficulty: 2
+  },
+  {
+    id: "nova_ultrapassagem_direita_excecao_alta_05",
+    category: "legislacao",
+    statement: "A regra geral do Código de Trânsito Brasileiro determina que a ultrapassagem deve ser efetuada sempre pela esquerda. No entanto, o CTB estabelece uma única exceção expressa em que a ultrapassagem pela direita é legalmente permitida. Assinale a alternativa que descreve essa exceção:",
+    options: [
+      "Quando o veículo da frente estiver trafegando em velocidade abaixo do limite máximo da via e o condutor buzinar solicitando passagem.",
+      "Quando o veículo que estiver à frente indicar devidamente, por sinal regulamentar, que vai dobrar ou entrar à esquerda.",
+      "Em rodovias de pista dupla, desde que o veículo que circula pela faixa da esquerda esteja impedindo o fluxo regular.",
+      "Em qualquer via urbana de sentido único quando o acostamento da direita estiver desocupado."
+    ],
+    correctIndex: 1,
+    explanation: "A ultrapassagem pela direita só é permitida quando o veículo da frente indicar por sinal que vai dobrar à esquerda (Art. 199 do CTB).",
+    detailedExplanation: "O Art. 199 do CTB tipifica como infração média ultrapassar pela direita, SALVO quando o veículo da frente estiver sinalizando a intenção de entrar à esquerda e já estiver posicionado para a manobra.",
+    legalBase: "Art. 199 do CTB",
+    commonMistake: "Acreditar que se pode ultrapassar pela direita em rodovias caso a faixa da esquerda esteja 'trancada'.",
+    tip: "Ultrapassagem pela direita: PERMITIDA APENAS se o carro da frente for virar à esquerda e sinalizar.",
+    incidence: "alta",
+    trap: true,
+    difficulty: 3
+  },
+  {
+    id: "nova_orgao_maximo_normativo_alta_06",
+    category: "legislacao",
+    statement: "Dentro da estrutura organizadora do Sistema Nacional de Trânsito (SNT), existem órgãos normativos, consultivos e executivos. O órgão colegiado máximo, de caráter exclusivamente NORMATIVO e CONSULTIVO do SNT, responsável por elaborar as Resoluções do trânsito brasileiro, é:",
+    options: [
+      "A Secretaria Nacional de Trânsito - SENATRAN.",
+      "O Conselho Nacional de Trânsito - CONTRAN.",
+      "O Departamento Estadual de Trânsito - DETRAN.",
+      "A Polícia Rodoviária Federal - PRF."
+    ],
+    correctIndex: 1,
+    explanation: "O CONTRAN é o órgão máximo normativo e consultivo do SNT (Art. 7º, I do CTB).",
+    detailedExplanation: "O CONTRAN (Conselho Nacional de Trânsito) tem a competência de expedir diretrizes e normas do CTB (Resoluções). A SENATRAN é o órgão executivo máximo da União, enquanto o DETRAN é o órgão executivo estadual.",
+    legalBase: "Art. 7º, inciso I e Art. 12 do CTB",
+    commonMistake: "Confundir o órgão NORMATIVO (CONTRAN) com o órgão EXECUTIVO de trânsito da União (SENATRAN).",
+    tip: "CONTRAN = Conselho = Norma/Resolução | SENATRAN = Secretaria = Executivos.",
+    incidence: "alta",
+    trap: true,
+    difficulty: 3
+  },
+  {
+    id: "nova_objetivo_sinalizacao_alta_07",
+    category: "legislacao",
+    statement: "A sinalização de trânsito é composta por elementos verticais, horizontais, dispositivos auxiliares, sinais luminosos, sonoros e gestos. Qual é a finalidade precípua e o objetivo fundamental da sinalização ao ser implantada nas vias públicas?",
+    options: [
+      "Informar aos usuários sobre as condições da via, regulamentar obrigações, restrições e proibições, e advertir sobre perigos potenciais.",
+      "Garantir a arrecadação de multas de trânsito pelos órgãos executivos em trechos de grande fluxo.",
+      "Identificar e cadastrar a frota de veículos licenciados que transitam entre municípios vizinhos.",
+      "Isentar a responsabilidade civil do Estado em caso de sinistros de trânsito em rodovias não concedidas."
+    ],
+    correctIndex: 0,
+    explanation: "A sinalização visa informar, orientar, admoestar e regulamentar o trânsito para a segurança dos usuários (Art. 80 do CTB).",
+    detailedExplanation: "A sinalização de trânsito tem como objetivo garantir um tráfego fluido e seguro, transmitindo ordens imperativas (regulamentação), alertas de perigo (advertência) ou informações de orientação e indicação.",
+    legalBase: "Art. 80 do CTB e Anexo II do CTB",
+    commonMistake: "Acreditar que a sinalização possui caráter meramente informativo ou punitivo.",
+    tip: "Sinalização = Informar, Advertir, Regulamentar e Garantir a Segurança.",
+    incidence: "media",
+    trap: false,
+    difficulty: 2
+  },
+  {
+    id: "nova_retorno_rodovia_acostamento_alta_08",
+    category: "legislacao",
+    statement: "Um condutor trafega por uma rodovia de pista simples e duplo sentido de circulação destituída de trevos, viadutos ou locais específicos para conversão. Desejando realizar uma manobra de retorno para a direção oposta, qual é a conduta correta estipulada pelo CTB?",
+    options: [
+      "Aproximar o veículo do eixo central da pista e aguardar a brecha no tráfego para virar imediatamente.",
+      "Parar o veículo no acostamento à direita, aguardar a oportunidade segura e cruzar a pista para efetuar o retorno.",
+      "Imobilizar o veículo na faixa da esquerda e acionar o pisca-alerta até que ambos os sentidos fiquem livres.",
+      "Avançar até o próximo acostamento da esquerda e realizar a conversão sem parar a marcha."
+    ],
+    correctIndex: 1,
+    explanation: "Nas rodovias, o retorno deve ser feito aguardando no acostamento à direita (Art. 204 do CTB).",
+    detailedExplanation: "Conforme o Art. 204 do CTB, nas rodovias sem local apropriado para retorno, o condutor deve parar no acostamento à direita e aguardar o momento oportuno para cruzar a via com segurança. Fazer o retorno saindo do meio da pista é infração gravíssima.",
+    legalBase: "Art. 38 e Art. 204 do CTB",
+    commonMistake: "Parar no meio da rodovia (eixo central) para fazer retorno, o que é extremamente perigoso e proibido.",
+    tip: "Retorno em Rodovia sem trevo = Entrar no acostamento à DIREITA e esperar a pista vagar.",
+    incidence: "alta",
+    trap: true,
+    difficulty: 3
+  },
+  {
+    id: "nova_balanceamento_rodas_sintomas_alta_09",
+    category: "mecanica",
+    statement: "Um condutor percebe que, ao atingir velocidades superiores a 80 km/h em uma rodovia plana, o volante do seu veículo começa a tremer e vibrar intensamente de forma anormal. Considerando a manutenção preventiva do sistema de rodagem, esse sintoma indica a necessidade imediata de:",
+    options: [
+      "Substituição das pastilhas de freio dianteiras e sangria do fluido de freio.",
+      "Execução do balanceamento das rodas para alinhar as massas do conjunto pneu e roda.",
+      "Calibragem dos pneus com pressão 50% superior à recomendada pelo fabricante.",
+      "Troca imediata do amortecedor traseiro e das buchas da suspensão."
+    ],
+    correctIndex: 1,
+    explanation: "Vibrações no volante em velocidades médias/altas indicam desbalanceamento do conjunto rodas/pneus.",
+    detailedExplanation: "O desbalanceamento das rodas causa trepidação na direção e no veículo, além de provocar o desgaste irregular e prematuro da banda de rodagem dos pneus e dos componentes da suspensão.",
+    legalBase: "Manual de Manutenção Veicular e Direção Defensiva",
+    commonMistake: "Confundir balanceamento (corrige vibrações nas rodas) com alinhamento (corrige o veículo puxando para os lados).",
+    tip: "Volante Trepidando/Vibrando = Balanceamento | Carro Puxando para o Lado = Alinhamento.",
+    incidence: "alta",
+    trap: true,
+    difficulty: 2
+  },
+  {
+    id: "nova_sinalizacao_horizontal_cores_alta_10",
+    category: "legislacao",
+    statement: "Na sinalização horizontal impressa sobre o pavimento das vias públicas, a aplicação das cores segue critérios estritos de regulamentação visual. Qual é a cor utilizada exclusivamente para a regulação de fluxos de sentidos opostos e delimitação de espaço de conversão à esquerda?",
+    options: [
+      "Branca, utilizada para separar fluxos opostos e marcar faixas de pedestres.",
+      "Amarela, empregada na divisão de fluxos de sentidos opostos e proibição de estacionamento.",
+      "Vermelha, utilizada para delimitar faixas de rolamento de veículos pesados.",
+      "Azul, destinada a separar faixas de trânsito do mesmo sentido de circulação."
+    ],
+    correctIndex: 1,
+    explanation: "A cor amarela é usada para dividir fluxos de sentidos opostos (Art. 90 do CTB / Manual de Sinalização).",
+    detailedExplanation: "A cor amarela na sinalização horizontal serve para: separar fluxos de sentidos opostos, delimitar espaços proibidos para estacionamento/parada e marcar linhas de retenção. A cor branca separa fluxos de MESMO sentido.",
+    legalBase: "Anexo II do CTB - Sinalização Horizontal",
+    commonMistake: "Confundir a função da cor amarela (sentidos opostos) com a cor branca (mesmo sentido).",
+    tip: "Linha AMARELA = Sentidos OPOSTOS (Mão dupla) | Linha BRANCA = MESMO sentido (Mão única).",
+    incidence: "alta",
+    trap: true,
+    difficulty: 3
+  },
+  {
+    id: "nova_posicao_faixas_transito_alta_11",
+    category: "legislacao",
+    statement: "Em uma pista de rolamento com várias faixas de trânsito no mesmo sentido de circulação, inexistindo uma faixa regulamentada como exclusiva para determinado tipo de veículo, onde devem posicionar-se os veículos mais lentos ou de maior porte?",
+    options: [
+      "Nas faixas mais à esquerda, destinadas à circulação desses veículos em velocidade reduzida.",
+      "Nas faixas mais à direita, devendo as faixas da esquerda ser destinadas à ultrapassagem e aos veículos de maior velocidade.",
+      "Em qualquer faixa indistintamente, desde que acionem o pisca-alerta em trechos de aclive.",
+      "Pelo acostamento da via, abrindo passagem contínua aos demais condutores."
+    ],
+    correctIndex: 1,
+    explanation: "Veículos mais lentos e de maior porte devem circular pelas faixas da direita (Art. 29, IV do CTB).",
+    detailedExplanation: "O Art. 29, inciso IV do CTB determina expressamente que os veículos mais lentos e os de maior porte devem ocupar as faixas mais à direita da pista de rolamento quando não houver faixa especial a eles destinada.",
+    legalBase: "Art. 29, inciso IV do CTB",
+    commonMistake: "Acreditar que a faixa da esquerda pode ser ocupada por veículos lentos se estes estiverem no limite de velocidade da via.",
+    tip: "Faixa da DIREITA = Veículos lentos e pesados | Faixa da ESQUERDA = Ultrapassagens e aceleração.",
+    incidence: "alta",
+    trap: false,
+    difficulty: 2
+  },
+  {
+    id: "nova_tecnica_curva_seguranca_alta_12",
+    category: "direcao-defensiva",
+    statement: "Um condutor trafega por uma rodovia e aproxima-se de um trecho sinuoso com curva acentuada à direita. Sob a ótica da Direção Defensiva e da física veicular (força centrífuga), qual é a conduta correta para realizar a manobra com estabilidade e segurança?",
+    options: [
+      "Acelerar fortemente no início da curva para aumentar a aderência dos pneus ao solo.",
+      "Reduzir a velocidade com antecedência ANTES de entrar na curva e acelerar suavemente durante a trajetória.",
+      "Manter a velocidade elevada e acionar o freio bruscamente no meio do ápice da curva.",
+      "Desengatar a marcha e fazer a curva em ponto morto para economizar combustível."
+    ],
+    correctIndex: 1,
+    explanation: "A frenagem deve ser feita antes da curva. Na curva, acelera-se gradativamente para manter a aderência.",
+    detailedExplanation: "Ao frear dentro da curva, a transferência de peso desestabiliza o veículo e pode provocar derrapagem pela perda de atrito (força centrífuga). A velocidade deve ser reduzida no trecho reto ANTES do início da curva.",
+    legalBase: "Manual de Direção Defensiva do DENATRAN",
+    commonMistake: "Deixar para frear dentro da curva ou fazer o percurso com o pedal da embreagem acionado.",
+    tip: "Freie ANTES da curva no trecho reto. Dentro da curva, apenas acelere suavemente.",
+    incidence: "alta",
+    trap: true,
+    difficulty: 2
+  },
+  {
+    id: "nova_painel_instrumentos_mecanica_alta_13",
+    category: "mecanica",
+    statement: "Os instrumentos do painel do veículo fornecem informações essenciais sobre a saúde mecânica e elétrica do automóvel. Assinale a alternativa que estabelece a correspondência TÉCNICA E LEGALMENTE CORRETA entre o instrumento e sua função:",
+    options: [
+      "Termômetro: mede a pressão do óleo lubrificante no cárter do motor.",
+      "Voltímetro: indica a taxa de rotação por minuto (RPM) das rodas.",
+      "Manômetro: indica a pressão de óleo na linha de lubrificação do motor.",
+      "Amperímetro: mede o nível e a temperatura da água no radiador."
+    ],
+    correctIndex: 2,
+    explanation: "O Manômetro indica a pressão do óleo de lubrificação do motor.",
+    detailedExplanation: "Manômetro = mede a pressão de fluidos (pressão do óleo). Termômetro = mede a temperatura do fluido de arrefecimento. Tacômetro (Conta-giros) = mede as rotações do motor (RPM). Amperímetro/Voltímetro = mede o sistema elétrico/bateria.",
+    legalBase: "Manual de Mecânica Básica Veicular",
+    commonMistake: "Confundir Manômetro (pressão de óleo) com Termômetro (temperatura do motor).",
+    tip: "MANÔMETRO = Pressão do Óleo | TERMÔMETRO = Temperatura da Água.",
+    incidence: "media",
+    trap: true,
+    difficulty: 3
+  },
+  {
+    id: "nova_chuva_cida_meio_ambiente_alta_14",
+    category: "meio-ambiente",
+    statement: "A queima de combustíveis fósseis lança dióxido de enxofre e óxidos de nitrogênio na atmosfera, os quais reagem com o vapor de água formando a chuva ácida. Além da contaminação do solo e recursos hídricos, qual é o impacto direto dessa precipitação sobre o patrimônio físico e veículos?",
+    options: [
+      "Corrosão e degradação de superfícies metálicas, pinturas veiculares e estruturas de concreto.",
+      "Geração instantânea de neblina densa e precipitação de granizo tóxico nas rodovias.",
+      "Destruição imediata dos pneus por atrito químico com o asfalto molhado.",
+      "Supressão da camada de ozônio nas camadas inferiores da atmosfera urbana."
+    ],
+    correctIndex: 0,
+    explanation: "A chuva ácida acelera a corrosão dos metais, danifica pinturas veiculares e desgasta monumentos e edifícios.",
+    detailedExplanation: "A acidez da chuva reage quimicamente com superfícies expostas, resultando na oxidação e corrosão acelerada de componentes metálicos, além de deteriorar monumentos, vegetação e corpos d'água.",
+    legalBase: "Diretrizes Ambientais do CONAMA",
+    commonMistake: "Confundir os efeitos químicos da chuva ácida em estruturas (corrosão) com efeitos biológicos diretos imediatos no condutor.",
+    tip: "Chuva Ácida = Corrosão em metais + Danos na vegetação e construções.",
+    incidence: "media",
+    trap: false,
+    difficulty: 2
+  },
+  {
+    id: "nova_prioridade_passagem_emergencia_alta_17",
+    category: "legislacao",
+    statement: "Um condutor trafega pela faixa da esquerda quando percebe a aproximação de uma ambulância com os dispositivos de alarme sonoro (sirene) e iluminação vermelha intermitente acionados. Qual procedimento deve ser adotado pelos condutores na via pública para dar passagem?",
+    options: [
+      "Os veículos da faixa da esquerda devem deslocar-se para a direita e parar se necessário, e os demais condutores devem deixar livre a faixa da esquerda.",
+      "Todos os veículos devem acelerar imediatamente para desobstruir o cruzamento mais próximo no menor tempo possível.",
+      "Os condutores devem deslocar-se exclusivamente para o acostamento da esquerda e parar com o pisca-alerta ligado.",
+      "Deve-se manter na faixa de rolamento e buzinar insistentemente para alertar os pedestres sobre a ambulância."
+    ],
+    correctIndex: 0,
+    explanation: "Ao ouvir a sirene, deite à direita e libere a faixa da ESQUERDA para o veículo de emergência (Art. 29, VII, 'a' do CTB).",
+    detailedExplanation: "O Art. 29, VII, 'a' do CTB estabelece que, ao se deparar com veículos de emergência com sinais acionados, todos os condutores deverão deixar livre a faixa da esquerda, deslocando-se para a direita da via e parando se necessário.",
+    legalBase: "Art. 29, inciso VII, alínea a do CTB",
+    commonMistake: "Ir para a esquerda em vez de ir para a direita para liberar a faixa da esquerda.",
+    tip: "Emergência vindo = Abra espaço abrindo para a DIREITA, liberando a ESQUERDA.",
+    incidence: "alta",
+    trap: true,
+    difficulty: 3
+  },
+  {
+    id: "nova_recolhimento_cnh_vencida_alta_18",
+    category: "infracoes",
+    statement: "Um condutor é abordado em uma fiscalização de trânsito de rotina. Ao apresentar seus documentos, o agente de trânsito constata que a Carteira Nacional de Habilitação (CNH) do motorista está vencida há 45 dias. Qual infração é configurada e qual é a medida administrativa aplicada no local?",
+    options: [
+      "Infração média, sujeita apenas à retenção do veículo até a chegada de condutor habilitado.",
+      "Infração gravíssima, punida com multa e recolhimento do documento de habilitação (CNH) como medida administrativa.",
+      "Infração grave, sujeita à penalidade automática de cassação do direito de dirigir e apreensão do veículo.",
+      "Crime de trânsito inafiançável com recolhimento imediato do condutor ao presídio estadual."
+    ],
+    correctIndex: 1,
+    explanation: "Dirigir CNH vencida há mais de 30 dias é infração GRAVÍSSIMA com recolhimento da CNH (Art. 162, V do CTB).",
+    detailedExplanation: "O Art. 162, V do CTB tipifica como infração GRAVÍSSIMA dirigir veículo com CNH ou PPD vencida há mais de 30 dias. A medida administrativa cabível é o recolhimento do documento de habilitação e retenção do veículo.",
+    legalBase: "Art. 162, inciso V do CTB",
+    commonMistake: "Achar que vencer CNH gera até 30 dias de tolerância sem infração (após 30 dias é que se torna infração gravíssima).",
+    tip: "CNH vencida até 30 dias = Tolerado | Vencida há +30 dias = Infração GRAVÍSSIMA + Recolhimento da CNH.",
+    incidence: "alta",
+    trap: true,
+    difficulty: 3
+  },
+  {
+    id: "nova_primeiros_socorros_colar_cervical_alta_19",
+    category: "primeiros-socorros",
+    statement: "Ao prestar atendimento inicial a uma vítima de acidente de trânsito com suspeita de trauma na coluna cervical devido a um forte impacto traseiro, qual equipamento ortopédico específico deve ser empregado para estabilizar o pescoço e evitar lesões medulares irreversíveis?",
+    options: [
+      "Torniquete arterial de compressão rápida.",
+      "Colar cervical ortopédico.",
+      "Garrote de borracha vulcanizada.",
+      "Bandagem elástica tipo atadura de compressão."
+    ],
+    correctIndex: 1,
+    explanation: "O colar cervical imobiliza a região cervical da coluna protegendo a medula espinhal.",
+    detailedExplanation: "A imobilização da coluna cervical com o colar apropriado é um procedimento vital de primeiros socorros em acidentes automobilísticos para evitar traumas definitivos na medula decorrentes do 'efeito chicote'.",
+    legalBase: "Manual de Primeiros Socorros no Trânsito (ABNT e PHTLS)",
+    commonMistake: "Confundir colar cervical com torniquete (usado para estancar hemorragias severas em membros).",
+    tip: "Suspeita de trauma no Pescoço/Coluna = Colar Cervical e Não movimentar a vítima.",
+    incidence: "alta",
+    trap: false,
+    difficulty: 2
+  },
+  {
+    id: "nova_deveres_condutor_passagem_ferrea_alta_24",
+    category: "legislacao",
+    statement: "Analisando os deveres e proibições impostos aos condutores pelo Código de Trânsito Brasileiro no que tange à circulação de veículos e preferência de passagem, assinale a alternativa juridicamente CORRETA:",
+    options: [
+      "Todo veículo poderá retornar em qualquer local nas vias urbanas, desde que não haja trânsito de pedestres.",
+      "A circulação de veículos de passeio pelo acostamento das rodovias é livre sempre que houver congestionamento.",
+      "É dever do condutor parar obrigatoriamente seu veículo antes de transpor linha férrea ou entrar em via com preferência de passagem onde haja sinalização.",
+      "O condutor deve dar preferência aos pedestres exclusivamente quando estes estiverem sobre a faixa de segurança."
+    ],
+    correctIndex: 2,
+    explanation: "Transpor linha férrea sem parar antes é infração gravíssima (Art. 212 do CTB).",
+    detailedExplanation: "O Art. 212 do CTB considera infração gravíssima deixar de parar o veículo antes de transpor linha férrea. Da mesma forma, antes de entrar em via preferencial com sinalização de parada (R-1), o condutor deve imobilizar o veículo.",
+    legalBase: "Art. 212 e Art. 214 do CTB",
+    commonMistake: "Achar que se pode cruzar linha férrea apenas reduzindo a velocidade sem imobilizar totalmente o veículo.",
+    tip: "Linha Férrea = Parada OBRIGATÓRIA antes de cruzar. Transgredir é infração GRAVÍSSIMA.",
+    incidence: "alta",
+    trap: true,
+    difficulty: 3
+  },
+  {
+    id: "nova_sinalizacao_horizontal_tachoes_alta_25",
+    category: "legislacao",
+    statement: "Para melhorar a visibilidade noturna, orientar a trajetória dos veículos e canalizar o fluxo em pontos críticos, utilizam-se dispositivos delimitadores e refletivos fixados diretamente no pavimento da via. Quais elementos cumprem essa função estrutural de sinalização?",
+    options: [
+      "Marcas transversais de retenção e faixas de pedestres.",
+      "As tachas e os tachões refletivos (conhecidos como 'olhos de gato').",
+      "Pinturas de legendas e símbolos de orientação de destino no asfalto.",
+      "Placas de advertência instaladas no canteiro central."
+    ],
+    correctIndex: 1,
+    explanation: "Tachas e tachões são dispositivos auxiliares de sinalização que separam fluxos e aumentam a visibilidade.",
+    detailedExplanation: "As tachas e tachões refletivos pertencem ao grupo de Dispositivos Auxiliares (Elementos Balizadores). Eles proporcionam excelente visibilidade noturna sob iluminação dos faróis e alerta tátil (trepidação) ao condutor que muda involuntariamente de faixa.",
+    legalBase: "Anexo II do CTB - Dispositivos Auxiliares",
+    commonMistake: "Confundir tachas e tachões com sinalização horizontal exclusiva de marcação transversal.",
+    tip: "Tachas/Tachões = Dispositivos refletivos fixados no asfalto para divisão de faixas.",
+    incidence: "media",
+    trap: false,
+    difficulty: 2
+  },
+  {
+    id: "nova_primeiros_socorros_epistaxe_alta_26",
+    category: "primeiros-socorros",
+    statement: "Durante o atendimento emergencial no local de um acidente, uma vítima consciente apresenta sangramento nasal abundante (epistaxe) sem sinais de fratura craniana grave. Qual é a conduta inicial e socorro adequado para conter o sangramento?",
+    options: [
+      "Manter a vítima com a cabeça ligeiramente elevada, comprimir as narinas por alguns minutos e aplicar compressas frias sobre o nariz.",
+      "Inclinar a cabeça da vítima totalmente para trás para fazer o sangue retornar à garganta.",
+      "Tampar as narinas com sacos plásticos herméticos para estancar o fluxo de ar e sangue.",
+      "Deitar a vítima de bruços e forçar a respiração exclusivamente pelo nariz."
+    ],
+    correctIndex: 0,
+    explanation: "Em caso de sangramento nasal, deve-se comprimir as narinas e colocar compressas frias com a cabeça elevada.",
+    detailedExplanation: "Para estancar a epistaxe (sangramento nasal), deve-se manter a cabeça ligeiramente inclinada para a frente/elevada (jamais para trás, para evitar aspiração ou deglutição de sangue), pressionar as narinas e aplicar pano frio/gelo no local.",
+    legalBase: "Manual de Primeiros Socorros no Trânsito",
+    commonMistake: "Inclinar a cabeça da vítima para trás, o que faz com que o sangue seja engolido ou vá para os pulmões.",
+    tip: "Sangramento Nasal = Pressionar narinas + Pano Frio + Cabeça elevada (NUNCA para trás).",
+    incidence: "alta",
+    trap: true,
+    difficulty: 3
+  },
+  {
+    id: "nova_distancia_frenagem_conceito_alta_27",
+    category: "direcao-defensiva",
+    statement: "No estudo da física aplicada à Direção Defensiva, a distância total percorrida por um veículo até a imobilização completa divide-se em etapas. Como é denominada especificamente a distância percorrida pelo veículo DESDE O MOMENTO EM QUE O CONDUTOR PISA NO PEDAL DO FREIO até a sua parada total?",
+    options: [
+      "Distância de Reação.",
+      "Distância de Seguimento.",
+      "Distância de Frenagem.",
+      "Distância de Parada Total."
+    ],
+    correctIndex: 2,
+    explanation: "Distância de Frenagem é o espaço percorrido desde o acionamento do freio até a parada completa do veículo.",
+    detailedExplanation: "Distância de Reação = Do perigo até pisar no freio. Distância de Frenagem = Do momento em que pisa no freio até o carro parar. Distância de Parada Total = Reação + Frenagem.",
+    legalBase: "Manual de Direção Defensiva do DENATRAN",
+    commonMistake: "Confundir Distância de Frenagem (só o ato de frear) com Distância de Parada (Reação + Frenagem).",
+    tip: "Viu o perigo até pisar no freio = REAÇÃO | Pisou no freio até parar = FRENAGEM | Soma dos dois = PARADA.",
+    incidence: "alta",
+    trap: true,
+    difficulty: 3
+  },
+  {
+    id: "nova_vias_coletoras_conceito_alta_28",
+    category: "legislacao",
+    statement: "O Código de Trânsito Brasileiro classifica as vias urbanas segundo a sua função operacional. De acordo com a definição do CTB, como são caracterizadas e conceituadas as VIAS COLETORAS?",
+    options: [
+      "Vias destinadas apenas ao acesso a áreas restritas ou estabelecimentos específicos.",
+      "Vias caracterizadas por interseções em nível, destinadas a coletar e distribuir o trânsito que entra ou sai das vias de trânsito rápido ou arteriais.",
+      "Vias sem interseções em nível, com acessos especiais e trânsito livre sem travessia de pedestres.",
+      "Vias rurais pavimentadas destinadas à circulação intermunicipal de alta velocidade."
+    ],
+    correctIndex: 1,
+    explanation: "Via coletora é aquela destinada a coletar e distribuir o trânsito para vias arteriais ou de trânsito rápido (Anexo I do CTB).",
+    detailedExplanation: "Conforme o Anexo I do CTB: Via Coletora = Coleta e distribui o trânsito no interior dos bairros para vias de maior fluxo (arteriais e trânsito rápido). Limite padrão: 40 km/h.",
+    legalBase: "Anexo I e Art. 61 do CTB",
+    commonMistake: "Confundir Via Coletora (coleta o trânsito dos bairros) com Via Local (acesso restrito) ou Via Arterial (liga regiões da cidade).",
+    tip: "Coletora = Recolhe o trânsito do bairro e joga nas avenidas principais (40 km/h).",
+    incidence: "alta",
+    trap: true,
+    difficulty: 3
+  },
+  {
+    id: "nova_primeiros_socorros_seguranca_local_alta_29",
+    category: "primeiros-socorros",
+    statement: "Ao deparar-se com um sinistro de trânsito em uma rodovia com vítimas presas às ferragens e derramamento de combustível na pista, a regra fundamental de Primeiros Socorros orienta que o socorrista deve 'prevenir-se ao prestar socorro'. O que significa concretamente este princípio?",
+    options: [
+      "Garantir primeiro a segurança pessoal e a sinalização do local para evitar novos acidentes (acidentes secundários) antes de tocar nas vítimas.",
+      "Prestar atendimento de saúde exclusivo se o socorrista estiver acompanhado de uma autoridade policial.",
+      "Evitar prestar socorro para não ser arrolado no processo criminal como testemunha do acidente.",
+      "Realizar a remoção imediata das vítimas para fora do veículo de qualquer maneira antes de sinalizar a pista."
+    ],
+    correctIndex: 0,
+    explanation: "A prioridade nos primeiros socorros é garantir a segurança do local e do socorrista (evitar acidentes secundários).",
+    detailedExplanation: "A regra de ouro nos Primeiros Socorros é: Socorrista morto ou ferido não salva ninguém. Primeiro sinaliza-se o local e garante-se a segurança da área para evitar explosões ou atropelamentos secundários.",
+    legalBase: "Manual de Primeiros Socorros no Trânsito (ABNT)",
+    commonMistake: "Atender as vítimas precipitadamente sem sinalizar a pista, causando um engavetamento ou atropelamento.",
+    tip: "1º Sinalizar o local e garantir segurança | 2º Chamar resgate | 3º Atender as vítimas.",
+    incidence: "alta",
+    trap: false,
+    difficulty: 2
+  },
+  {
+    id: "nova_direcao_defensiva_conceito_alta_30",
+    category: "direcao-defensiva",
+    statement: "O condutor defensivo é aquele que adota uma postura preventiva no trânsito, antecipando-se a situações de risco de modo a evitar sinistros, independentemente das condições adversas ou do erro dos outros usuários. Dentre as atitudes abaixo, qual caracteriza o comportamento de um condutor defensivo?",
+    options: [
+      "Manter velocidade adequada e compatível com as condições da via, do clima e do fluxo, preservando a distância de segurança.",
+      "Transitar sempre na velocidade máxima permitida pela via, mesmo sob chuva intensa ou neblina densa.",
+      "Realizar ultrapassagens pela direita em pontes e viadutos quando o fluxo da esquerda estiver lento.",
+      "Utilizar a buzina continuamente para abrir caminho e impor sua prioridade sobre os pedestres."
+    ],
+    correctIndex: 0,
+    explanation: "Dirigir defensivamente é trafegar em velocidade compatível com as condições da via e do tempo.",
+    detailedExplanation: "A Direção Defensiva exige que o motorista adéque sua velocidade às condições da via, do clima e do trânsito, mantendo sempre a distância de seguimento segura e antecipando-se aos perigos.",
+    legalBase: "Manual de Direção Defensiva do DENATRAN",
+    commonMistake: "Acreditar que andar sempre no limite máximo da placa é seguro em qualquer condição do tempo.",
+    tip: "Condição Adversa (Chuva/Neblina) = Reduzir a velocidade abaixo do limite da placa.",
+    incidence: "alta",
+    trap: false,
+    difficulty: 2
   }];
 
 // Questões que realmente caíram na prova do DETRAN.
