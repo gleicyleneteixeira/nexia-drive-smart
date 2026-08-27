@@ -5279,6 +5279,267 @@ export const QUESTIONS: Question[] = [
     incidence: "alta",
     trap: false,
     difficulty: 2
+  },
+  {
+    id: "nova_medida_admin_reprovacao_inspecao_01",
+    category: "legislacao",
+    statement: "Um veículo de carga é submetido à inspeção periódica de segurança veicular e de emissão de gases poluentes e ruídos efetuada pelo órgão ambiental/operacional competente, sendo reprovado por descumprir os parâmetros técnicos de emissão. De acordo com o Código de Trânsito Brasileiro, qual medida administrativa será imediatamente aplicada a esse veículo?",
+    options: [
+      "Penalidade direta de multa gravíssima aplicada pelo agente de trânsito no ato do exame.",
+      "Apreensão do veículo com recolhimento compulsório ao pátio do órgão de trânsito.",
+      "Recolhimento do veículo com perda definitiva do Certificado de Licenciamento Anual.",
+      "Medida administrativa de retenção do veículo para regularização ou sanção cabível."
+    ],
+    correctIndex: 3,
+    explanation: "A reprovação na inspeção de segurança e emissão de gases/ruídos acarreta a medida administrativa de RETENÇÃO do veículo (Art. 230, XVIII do CTB).",
+    detailedExplanation: "Conforme o Art. 230, inciso XVIII do CTB, conduzir veículo que não tenha sido submetido à inspeção de segurança veicular ou de emissões, ou no qual tenha sido reprovado, é infração grave, sujeita à penalidade de multa e à medida administrativa de RETENÇÃO do veículo para regularização.",
+    legalBase: "Art. 230, inciso XVIII do CTB",
+    commonMistake: "Confundir a medida administrativa (Retenção do veículo) com penalidades como Multa ou a antiga Apreensão.",
+    tip: "Inspeção Reprovada = Medida Administrativa de RETENÇÃO.",
+    incidence: "alta",
+    trap: true,
+    difficulty: 3
+  },
+  {
+    id: "nova_aquaplanagem_fatores_risco_02",
+    category: "direcao-defensiva",
+    statement: "A aquaplanagem ou hidroplanagem é a perda total de aderência dos pneus com o solo devido à formação de uma camada fina de água entre o pneu e o asfalto. Sob a ótica da física veicular e da Direção Defensiva, em qual combinação de fatores a ocorrência desse fenômeno crítico é substancialmente potencializada?",
+    options: [
+      "Pneus com sulcos em ótimas condições de conservação trafegando sobre pista molhada.",
+      "Pneus desgastados (carecas) trafegando em baixíssima velocidade sob chuva fraca.",
+      "Desenvolvimento de alta velocidade em pista molhada ou com acúmulo de lâmina d'água.",
+      "Transitabilidade em pista molhada mantendo velocidade reduzida e marcha forte engatada."
+    ],
+    correctIndex: 2,
+    explanation: "A alta velocidade aliada à lâmina d'água na pista reduz o escoamento pelos sulcos do pneu, causando aquaplanagem.",
+    detailedExplanation: "A aquaplanagem ocorre quando a água acumulada na pista não consegue ser escoada pelos sulcos do pneu a tempo. Os dois fatores determinantes para o surgimento do fenômeno são a alta velocidade do veículo e a presença de água/pista molhada.",
+    legalBase: "Manual de Direção Defensiva do DENATRAN",
+    commonMistake: "Achar que a baixa velocidade pode causar aquaplanagem se o pneu estiver careca; a velocidade elevada é o fator dinâmico principal.",
+    tip: "Aquaplanagem = Alta Velocidade + Água na Pista (Lâmina d'água).",
+    incidence: "alta",
+    trap: true,
+    difficulty: 2
+  },
+  {
+    id: "nova_telefone_policia_militar_03",
+    category: "primeiros-socorros",
+    statement: "Em uma situação de emergência viária com ocorrência de crime de trânsito, assalto ou necessidade de policiamento Ostensivo de Preservação da Ordem Pública em vias urbanas, qual é o número telefônico oficial de emergência da Polícia Militar (PM)?",
+    options: [
+      "190, destinado ao atendimento de emergência da Polícia Militar.",
+      "191, direcionado exclusivamente ao atendimento da Polícia Rodoviária Federal (PRF).",
+      "192, reservado ao Serviço de Atendimento Móvel de Urgência (SAMU).",
+      "193, pertencente ao Corpo de Bombeiros Militar."
+    ],
+    correctIndex: 0,
+    explanation: "O número 190 aciona a Polícia Militar.",
+    detailedExplanation: "Os telefones de emergência padrão no Brasil são: 190 (Polícia Militar), 191 (Polícia Rodoviária Federal), 192 (SAMU) e 193 (Corpo de Bombeiros).",
+    legalBase: "Diretrizes Nacionais de Urgência e Emergência",
+    commonMistake: "Confundir o número da Polícia Militar (190) com o da Polícia Rodoviária Federal (191).",
+    tip: "190 = Polícia Militar | 191 = PRF | 192 = SAMU | 193 = Bombeiros.",
+    incidence: "alta",
+    trap: false,
+    difficulty: 1
+  },
+  {
+    id: "nova_exame_pratico_velocidade_inadequada_04",
+    category: "legislacao",
+    statement: "Durante a realização do Exame de Direção Veicular para obtenção da CNH, sob chuva intensa e pista escorregadia, o candidato desenvolve velocidade incompatível e inadequada para as condições adversas do local e do clima. De acordo com a Resolução do CONTRAN que regulamenta a avaliação de candidatos, essa conduta é classificada como:",
+    options: [
+      "Falta eliminatória, resultando na reprovação imediata do candidato no exame prático.",
+      "Falta grave, acarretando a perda de 3 pontos na planilha de avaliação do examinador.",
+      "Falta média, acarretando a perda de 2 pontos na pontuação do candidato.",
+      "Falta leve, acarretando a perda de apenas 1 ponto na tabela do DETRAN."
+    ],
+    correctIndex: 1,
+    explanation: "Trafegar em velocidade inadequada para as condições adversas é falta GRAVE no exame prático (perde 3 pontos).",
+    detailedExplanation: "Conforme a Resolução CONTRAN nº 789/2020 (que atualizou a antiga 168/2004), trafegar em velocidade inadequada para as condições adversas da via, do clima ou da circulação constitui Falta Grave no Exame de Direção Veicular, penalizada com a perda de 3 pontos.",
+    legalBase: "Resolução CONTRAN nº 789/2020, Anexo (Tabela de Faltas no Exame Prático)",
+    commonMistake: "Acreditar que velocidade inadequada gera eliminação direta (Falta Eliminatória) por confundir com transgressões de trânsito com risco iminente.",
+    tip: "Velocidade inadequada no exame prático = Falta Grave (Perde 3 pontos).",
+    incidence: "alta",
+    trap: true,
+    difficulty: 3
+  },
+  {
+    id: "nova_infracao_deixar_sinalizar_obstaculo_05",
+    category: "infracoes",
+    statement: "A empresa responsável por uma obra na pista de rolamento deixa de sinalizar um buraco profundo e um obstáculo à livre circulação de pedestres e veículos. Considerando a gravidade da omissão e o risco de acidentes, o CTB estabelece que a falta de sinalização de obstáculo com fator multiplicador de 3 vezes pelo agente de trânsito configura infração de natureza:",
+    options: [
+      "Grave, com aplicação de penalidade de multa simples ao condutor do veículo envolvido.",
+      "Gravíssima, sujeita à penalidade de multa multiplicada por três vezes.",
+      "Leve, com conversão automática em advertência por escrito ao responsável pela obra.",
+      "Média, com retenção dos equipamentos de sinalização da empresa executora."
+    ],
+    correctIndex: 1,
+    explanation: "Deixar de sinalizar qualquer obstáculo à segurança do trânsito é infração GRAVÍSSIMA, com valor agravado de 3 a 5 vezes (Art. 226 do CTB).",
+    detailedExplanation: "O Art. 226 do CTB prevê que deixar de sinalizar qualquer obstáculo à segurança ou à livre circulação de pedestres e veículos constitui infração GRAVÍSSIMA, sendo a penalidade de multa agravada de 3 até 5 vezes a critério da autoridade de trânsito.",
+    legalBase: "Art. 226 do CTB",
+    commonMistake: "Achar que falta de sinalização de obra é infração apenas grave ou média por não ser cometida por motorista em movimento.",
+    tip: "Deixar de sinalizar obstáculo/obra = Infração GRAVÍSSIMA (com multiplicador de 3x a 5x).",
+    incidence: "alta",
+    trap: true,
+    difficulty: 3
+  },
+  {
+    id: "nova_placa_a28_pista_escorregadia_06",
+    category: "legislacao",
+    image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/Placas-de-transito-estudacnh-pista-escorregadia-A-28.png",
+    statement: "Ao aproximar-se de um trecho rodoviário, o condutor observa a placa de advertência A-28. Qual é o significado regulamentar correto dessa sinalização e a atitude preventiva exigida?",
+    options: [
+      "Atravessando pista alagada, alertando para o risco de calço hidráulico no motor.",
+      "Pista com aquaplanagem, indicando a obrigatoriedade do uso de correntes nos pneus.",
+      "Pista alagada, exigindo a parada total do veículo até o nível da água baixar.",
+      "Pista escorregadia, advertindo sobre a redução de aderência do pavimento à frente."
+    ],
+    correctIndex: 3,
+    explanation: "A placa A-28 indica 'Pista Escorregadia'.",
+    detailedExplanation: "A placa de advertência A-28 (Pista Escorregadia) alerta o condutor para a existência, adiante, de um trecho de pista que, sob certas condições (ex: umidade, óleo ou areia), pode tornar-se escorregadia, exigindo redução de velocidade.",
+    legalBase: "Anexo II do CTB - Sinalização Vertical de Advertência",
+    commonMistake: "Confundir 'Pista Escorregadia' (A-28) com 'Pista Alagada' ou 'Projeção de Cascalho' (A-29).",
+    tip: "Placa A-28 com rastro de pneu em S = Pista Escorregadia.",
+    incidence: "alta",
+    trap: false,
+    difficulty: 2
+  },
+  {
+    id: "nova_prevencao_colisao_cruzamento_07",
+    category: "direcao-defensiva",
+    statement: "Os cruzamentos urbanos são os locais de maior incidência de abalroamentos e colisões entre veículos e pedestres. De acordo com as regras de Direção Defensiva e normas do CTB, para transpor um cruzamento não semaforizado com segurança, qual postura deve ser adotada pelo condutor?",
+    options: [
+      "Buzinar de forma prolongada, mantendo a velocidade para forçar os pedestres a aguardarem na calçada.",
+      "Ligar os faróis altos e pisca-alerta para indicar aos demais motoristas que pretende passar primeiro.",
+      "Reduzir a velocidade, checar ambos os lados da via e respeitar a sinalização de preferência.",
+      "Acelerar e transpor a interseção o mais rápido possível para desobstruir o fluxo."
+    ],
+    correctIndex: 2,
+    explanation: "Aproximar-se do cruzamento exige velocidade reduzida, atenção redobrada e respeito às regras de preferência (Art. 44 do CTB).",
+    detailedExplanation: "O Art. 44 do CTB determina que ao aproximar-se de qualquer tipo de interseção, o condutor deve demonstrar prudência especial, transitando em velocidade reduzida de forma que possa parar o veículo com segurança para dar passagem a pedestres e veículos com preferência.",
+    legalBase: "Art. 44 do CTB",
+    commonMistake: "Usar a buzina ou os faróis para tentar impor prioridade na travessia de cruzamentos.",
+    tip: "Aproximação de cruzamento = Reduzir a velocidade + Prudência Especial + Respeitar preferência.",
+    incidence: "alta",
+    trap: false,
+    difficulty: 2
+  },
+  {
+    id: "nova_transito_condicoes_seguras_direito_08",
+    category: "legislacao",
+    statement: "O Código de Trânsito Brasileiro institui normas fundamentais voltadas à preservação da vida e do meio ambiente. Segundo o texto expresso do Art. 1º do CTB, o trânsito em condições seguras é:",
+    options: [
+      "Um direito de todos e dever dos órgãos e entidades componentes do Sistema Nacional de Trânsito.",
+      "Um privilégio exclusivo dos motoristas devidamente habilitados nas categorias profissionais.",
+      "Um direito restrito aos pedestres e ciclistas na utilização de passeios e ciclovias.",
+      "Uma responsabilidade facultativa dos motoristas de transporte coletivo de passageiros."
+    ],
+    correctIndex: 0,
+    explanation: "O trânsito seguro é um direito de TODOS e dever dos órgãos do SNT (Art. 1º, § 2º do CTB).",
+    detailedExplanation: "O Art. 1º, § 2º do CTB estabelece expressamente: 'O trânsito, em condições seguras, é um direito de todos e dever dos órgãos e entidades componentes do Sistema Nacional de Trânsito, a estes cabendo, no âmbito das respectivas competências, adotar as medidas destinadas a assegurar esse direito.'",
+    legalBase: "Art. 1º, § 2º do CTB",
+    commonMistake: "Restringir o direito ao trânsito seguro apenas aos condutores habilitados ou apenas aos pedestres.",
+    tip: "Trânsito seguro = DIREITO DE TODOS / DEVER DO ESTADO (SNT).",
+    incidence: "alta",
+    trap: false,
+    difficulty: 1
+  },
+  {
+    id: "nova_infracao_exceder_capacidade_tracao_09",
+    category: "infracoes",
+    statement: "Um motorista acopla um reboque de grande porte a seu veículo, fazendo com que a carga total ultrapasse substancialmente a Capacidade Máxima de Tração (CMT) especificada pelo fabricante. Transitar excedendo a CMT configura infração de trânsito de natureza:",
+    options: [
+      "Grave, sujeita à penalidade de multa e retenção do veículo para transbordo da carga excedente.",
+      "Média, caso o excesso seja inferior a 500 kg, e gravíssima com multiplicador caso superior.",
+      "Leve, com aplicação exclusiva de pontuação na carteira de habilitação do proprietário.",
+      "Média, sujeita à penalidade de multa e retenção do veículo."
+    ],
+    correctIndex: 3,
+    explanation: "Transitar com excesso de capacidade máxima de tração é infração MÉDIA (Art. 231, X do CTB).",
+    detailedExplanation: "Conforme o Art. 231, inciso X do CTB, transitar com o veículo excedendo a capacidade máxima de tração é infração de natureza MÉDIA, punida com multa e medida administrativa de retenção do veículo e transbordo de carga.",
+    legalBase: "Art. 231, inciso X do CTB",
+    commonMistake: "Acreditar que excesso de tração/peso constitui sempre infração grave ou gravíssima.",
+    tip: "Exceder Capacidade Máxima de Tração (CMT) = Infração MÉDIA + Retenção do veículo.",
+    incidence: "alta",
+    trap: true,
+    difficulty: 3
+  },
+  {
+    id: "nova_mecanica_falta_balanceamento_rodas_10",
+    category: "mecanica",
+    statement: "Durante a rodagem em velocidades médias e elevadas, a falta de balanceamento correto do conjunto de rodas e pneus de um automóvel provoca desequilíbrio de massa em rotação. Qual é a principal consequência direta sentida pelo condutor ao dirigir o veículo?",
+    options: [
+      "Direção excessivamente dura e travamento do sistema hidráulico/elétrico.",
+      "Trepidações e vibrações anormais transmitidas ao volante de direção.",
+      "Rangido contínuo e estridente dos pneus durante a realização de curvas fechadas.",
+      "Deformação imediata das longarinas do chassi e quebra da caixa de câmbio."
+    ],
+    correctIndex: 1,
+    explanation: "O desbalanceamento das rodas causa vibração e trepidação perceptível no volante.",
+    detailedExplanation: "O balanceamento tem a função de equilibrar as massas da roda e do pneu. Quando desbalanceado, gera vibrações no volante que se intensificam com o aumento da velocidade, provocando desgaste irregular dos pneus e folgas na suspensão.",
+    legalBase: "Manual de Manutenção Veicular e Direção Defensiva",
+    commonMistake: "Confundir trepidação por falta de balanceamento com direção dura (problema no sistema de direção/pressão dos pneus).",
+    tip: "Desbalanceamento = Trepidação/Vibração no volante em velocidade elevada.",
+    incidence: "alta",
+    trap: false,
+    difficulty: 2
+  },
+  {
+    id: "nova_exame_pratico_preferencia_pedestre_11",
+    category: "legislacao",
+    statement: "Durante o Exame de Direção Veicular, o candidato efetua uma conversão à direita em um cruzamento semaforizado. Embora o sinal verde autorize o avanço do veículo, um pedestre está concluindo a travessia na via transversal. Se o candidato não der preferência e avançar sobre o pedestre, qual pontuação/penalização será aplicada na prova?",
+    options: [
+      "Falta Eliminatória, ocasionando a reprovação imediata do candidato no exame prático.",
+      "Falta Grave, acarretando a perda de 3 pontos na planilha de avaliação.",
+      "Falta Média, acarretando a perda de 2 pontos na planilha de avaliação.",
+      "Falta Leve, acarretando a perda de apenas 1 ponto no prontuário do candidato."
+    ],
+    correctIndex: 1,
+    explanation: "Deixar de dar preferência a pedestre concluindo a travessia na conversão é falta GRAVE no exame (perde 3 pontos).",
+    detailedExplanation: "De acordo com a Resolução CONTRAN nº 789/2020 (Anexo - Tabela de Faltas no Exame Prático para Categoria B), não dar preferência de passagem ao pedestre que estiver atravessando a via transversal para onde se dirige o veículo constitui Falta Grave (perda de 3 pontos).",
+    legalBase: "Resolução CONTRAN nº 789/2020 (Anexo V - Faltas no Exame de Direção)",
+    commonMistake: "Acreditar que não dar preferência ao pedestre na conversão é motivo de eliminação direta (Falta Eliminatória).",
+    tip: "Não dar preferência ao pedestre na conversão durante o exame prático = Falta Grave (Perde 3 pontos).",
+    incidence: "alta",
+    trap: true,
+    difficulty: 3
+  },
+  {
+    id: "nova_primeiros_socorros_queimaduras_1grau_12",
+    category: "primeiros-socorros",
+    statement: "Nos acidentes de trânsito envolvendo incêndio ou contato com partes aquecidas do veículo, as queimaduras são classificadas pela profundidade dos tecidos atingidos. As lesões superficiais que atingem exclusivamente a camada externa da pele (epiderme), causando vermelhidão, inchaço e dor local sem formação de bolhas, são classificadas como queimaduras de:",
+    options: [
+      "1° grau.",
+      "2° grau.",
+      "3° grau.",
+      "4° grau."
+    ],
+    correctIndex: 0,
+    explanation: "Queimaduras de 1º grau atingem apenas a epiderme (camada superficial), gerando dor e vermelhidão sem bolhas.",
+    detailedExplanation: "1º Grau = Atinge apenas a epiderme (vermelhidão, dor local, sem bolhas). 2º Grau = Atinge a epiderme e derme (presença de bolhas ou flictenas). 3º Grau = Atinge todas as camadas da pele, tecidos subcutâneos e nervos (aspecto esbranquiçado/carbonizado e ausência de dor local devido à destruição das terminações nervosas).",
+    legalBase: "Manual de Primeiros Socorros no Trânsito (ABNT e PHTLS)",
+    commonMistake: "Confundir queimaduras de 1º grau (apenas epiderme e sem bolhas) com de 2º grau (com bolhas).",
+    tip: "Apenas epiderme / sem bolhas = 1º Grau | Com bolhas = 2º Grau | Destruição profunda / carbonizado = 3º Grau.",
+    incidence: "alta",
+    trap: false,
+    difficulty: 2
+  },
+  {
+    id: "nova_classificacao_vias_arterial_13",
+    category: "legislacao",
+    statement: "O Código de Trânsito Brasileiro (CTB) estabelece a divisão das vias abertas à circulação pública em vias urbanas e vias rurais. A via arterial, caracterizada por interseções em nível geralmente controladas por semáforo e que possibilita o trânsito entre as regiões da cidade, é um exemplo clássico de via:",
+    options: [
+      "Urbana.",
+      "Privada de acesso restrito.",
+      "Rural não pavimentada.",
+      "Expressa e exclusiva para trânsito internacional."
+    ],
+    correctIndex: 0,
+    explanation: "A via arterial é uma via URBANA (Art. 60, I, 'b' do CTB).",
+    detailedExplanation: "O Art. 60 do CTB divide as vias em: I - Vias Urbanas (Trânsito Rápido, Arterial, Coletora e Local); II - Vias Rurais (Rodovias e Estradas). Portanto, a via arterial é categorizada como uma via urbana.",
+    legalBase: "Art. 60, inciso I, alínea b do CTB",
+    commonMistake: "Confundir as vias urbanas (Trânsito Rápido, Arterial, Coletora, Local) com as rurais (Rodovias e Estradas).",
+    tip: "Vias URBANAS = Trânsito Rápido, Arterial, Coletora e Local.",
+    incidence: "alta",
+    trap: false,
+    difficulty: 1
   }];
 
 // Questões que realmente caíram na prova do DETRAN.
