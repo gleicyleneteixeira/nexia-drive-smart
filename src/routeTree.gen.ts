@@ -21,6 +21,7 @@ import { Route as LivroRouteImport } from './routes/livro'
 import { Route as MaisCaemRouteImport } from './routes/mais-caem'
 import { Route as PlacasRouteImport } from './routes/placas'
 import { Route as PsicotecnicoRouteImport } from './routes/psicotecnico'
+import { Route as RaciocinioLogicoMigRouteImport } from './routes/raciocinio-logico-mig'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SimuladoRouteImport } from './routes/simulado'
 import { Route as SimuladoDemoRouteImport } from './routes/simulado-demo'
@@ -91,6 +92,11 @@ const PsicotecnicoRoute = PsicotecnicoRouteImport.update({
   path: '/psicotecnico',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RaciocinioLogicoMigRoute = RaciocinioLogicoMigRouteImport.update({
+  id: '/raciocinio-logico-mig',
+  path: '/raciocinio-logico-mig',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
@@ -150,6 +156,7 @@ export interface FileRoutesByFullPath {
   '/mais-caem': typeof MaisCaemRoute
   '/placas': typeof PlacasRoute
   '/psicotecnico': typeof PsicotecnicoRoute
+  '/raciocinio-logico-mig': typeof RaciocinioLogicoMigRoute
   '/reset-password': typeof ResetPasswordRoute
   '/simulado': typeof SimuladoRoute
   '/simulado-demo': typeof SimuladoDemoRoute
@@ -173,6 +180,7 @@ export interface FileRoutesByTo {
   '/mais-caem': typeof MaisCaemRoute
   '/placas': typeof PlacasRoute
   '/psicotecnico': typeof PsicotecnicoRoute
+  '/raciocinio-logico-mig': typeof RaciocinioLogicoMigRoute
   '/reset-password': typeof ResetPasswordRoute
   '/simulado': typeof SimuladoRoute
   '/simulado-demo': typeof SimuladoDemoRoute
@@ -197,6 +205,7 @@ export interface FileRoutesById {
   '/mais-caem': typeof MaisCaemRoute
   '/placas': typeof PlacasRoute
   '/psicotecnico': typeof PsicotecnicoRoute
+  '/raciocinio-logico-mig': typeof RaciocinioLogicoMigRoute
   '/reset-password': typeof ResetPasswordRoute
   '/simulado': typeof SimuladoRoute
   '/simulado-demo': typeof SimuladoDemoRoute
@@ -222,6 +231,7 @@ export interface FileRouteTypes {
     | '/mais-caem'
     | '/placas'
     | '/psicotecnico'
+    | '/raciocinio-logico-mig'
     | '/reset-password'
     | '/simulado'
     | '/simulado-demo'
@@ -245,6 +255,7 @@ export interface FileRouteTypes {
     | '/mais-caem'
     | '/placas'
     | '/psicotecnico'
+    | '/raciocinio-logico-mig'
     | '/reset-password'
     | '/simulado'
     | '/simulado-demo'
@@ -268,6 +279,7 @@ export interface FileRouteTypes {
     | '/mais-caem'
     | '/placas'
     | '/psicotecnico'
+    | '/raciocinio-logico-mig'
     | '/reset-password'
     | '/simulado'
     | '/simulado-demo'
@@ -292,6 +304,7 @@ export interface RootRouteChildren {
   MaisCaemRoute: typeof MaisCaemRoute
   PlacasRoute: typeof PlacasRoute
   PsicotecnicoRoute: typeof PsicotecnicoRoute
+  RaciocinioLogicoMigRoute: typeof RaciocinioLogicoMigRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SimuladoRoute: typeof SimuladoRoute
   SimuladoDemoRoute: typeof SimuladoDemoRoute
@@ -385,6 +398,13 @@ declare module '@tanstack/react-router' {
       path: '/psicotecnico'
       fullPath: '/psicotecnico'
       preLoaderRoute: typeof PsicotecnicoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/raciocinio-logico-mig': {
+      id: '/raciocinio-logico-mig'
+      path: '/raciocinio-logico-mig'
+      fullPath: '/raciocinio-logico-mig'
+      preLoaderRoute: typeof RaciocinioLogicoMigRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
@@ -490,6 +510,7 @@ const rootRouteChildren: RootRouteChildren = {
   MaisCaemRoute: MaisCaemRoute,
   PlacasRoute: PlacasRoute,
   PsicotecnicoRoute: PsicotecnicoRoute,
+  RaciocinioLogicoMigRoute: RaciocinioLogicoMigRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SimuladoRoute: SimuladoRoute,
   SimuladoDemoRoute: SimuladoDemoRoute,
