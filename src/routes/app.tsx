@@ -7,6 +7,7 @@ import { isProfileExpired } from "@/lib/subscription";
 import { fetchLibraryItems } from "@/lib/library";
 import { GroupPopups } from "@/components/WhatsAppGroupPopup";
 import { NativePdfModal } from "@/components/NativePdfModal";
+import { RankingReprovacao } from "@/components/RankingReprovacao";
 import { Loader2 } from "lucide-react";
 import {
   Sparkles,
@@ -356,6 +357,9 @@ function TeoricoDashboard() {
           </div>
         </div>
       </section>
+
+      {/* Ranking de Reprovação DETRAN */}
+      <RankingReprovacao />
 
       {/* Livros e Materiais - BIBLIOTECA em destaque */}
       <section>
