@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -32,6 +32,10 @@ import { triggerRatingPrompt } from "@/components/RatingPrompt";
 
 export const Route = createFileRoute("/simulado")({
   component: SimuladoPage,
+  validateSearch: (search: Record<string, unknown>) => ({
+    categoria: typeof search.categoria === "string" ? (search.categoria as string) : undefined,
+    modo: typeof search.modo === "string" ? (search.modo as string) : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Simulado Inteligente — Nexia DETRAN" },
@@ -68,25 +72,30 @@ function buildFresh(category?: Category): Question[] {
   
   let fresh: Question[];
   if (!category) {
-    // Para simulados completos, garante a inclusão das 14 perguntas reais da prova
+    // Para simulados completos, garante a inclusão das perguntas reais da prova
     const fixedQuestions = QUESTIONS.filter((q) => REAL_EXAM_IDS.includes(q.id));
     const fixedIds = fixedQuestions.map((q) => q.id);
-    
-    // Pega as outras 16 questões randomizadas (excluindo as 14 fixas para não duplicar)
-    const otherQuestions = getRandomizedQuestions(16, { 
-      exclude: [...seen, ...fixedIds], 
-      placasCount: 3 
+
+    // Quantidade de questões restantes para fechar exatamente 30 (sem ultrapassar)
+    const remaining = Math.max(0, TOTAL - fixedQuestions.length);
+
+    // Pega as questões randomizadas restantes (excluindo as fixas para não duplicar)
+    const otherQuestions = getRandomizedQuestions(remaining, {
+      exclude: [...seen, ...fixedIds],
+      placasCount: 3,
     });
-    
-    // Une as 14 fixas com as 16 randomizadas
+
+    // Une as fixas com as randomizadas
     const merged = [...fixedQuestions, ...otherQuestions];
-    
+
     // Embaralha todas juntas para que fiquem misturadas de forma randômica
     for (let i = merged.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [merged[i], merged[j]] = [merged[j], merged[i]];
     }
-    fresh = merged;
+
+    // TRAVA OBRIGATÓRIA: garante que NUNCA passe de 30 questões
+    fresh = merged.slice(0, TOTAL);
   } else {
     // Busca questões da categoria selecionada
     const categoryQuestions = getRandomizedQuestions(TOTAL, { 
@@ -193,6 +202,7 @@ function SimuladoPage() {
   const [showResult, setShowResult] = useState(false);
   const [resumed, setResumed] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
+  const [mode, setMode] = useState<"completo" | Category | null>(null);
 
   // Dispara pedido de avaliação 2s após terminar o simulado
   useEffect(() => {
@@ -210,6 +220,7 @@ function SimuladoPage() {
       setSelected(persisted.selected);
       setAnswers(persisted.answers);
       setResumed(true);
+      setMode(persisted.mode ?? null);
       if (persisted.index >= persisted.questions.length) {
         setShowResult(true);
       }
@@ -231,6 +242,24 @@ function SimuladoPage() {
     });
   }, [hydrated, questions, index, selected, answers]);
 
+  // Auto-início via query param (usado pelo banner "Ir p/ Simulado"):
+  // modo=completo -> Simulado Geral (30 questões); categoria=X -> Simulado por categoria.
+  const search = Route.useSearch();
+  const autoStartedRef = useRef(false);
+  useEffect(() => {
+    if (!hydrated || autoStartedRef.current) return;
+    if (search.modo === "completo") {
+      autoStartedRef.current = true;
+      startWithMode("completo");
+    } else if (
+      search.categoria &&
+      (search.categoria as Category) in CATEGORY_LABELS
+    ) {
+      autoStartedRef.current = true;
+      startWithMode(search.categoria as Category);
+    }
+  }, [hydrated, search.modo, search.categoria]);
+
   function startWithMode(mode: "completo" | Category) {
     clearPersisted();
     const fresh = buildFresh(mode === "completo" ? undefined : mode);
@@ -241,6 +270,7 @@ function SimuladoPage() {
     setShowResult(false);
     setResumed(false);
     setShowPicker(false);
+    setMode(mode);
     savePersisted({
       questions: fresh,
       index: 0,
@@ -260,6 +290,7 @@ function SimuladoPage() {
     setShowResult(false);
     setResumed(false);
     setShowPicker(true);
+    setMode(null);
   }
 
   if (authLoading) {
@@ -319,6 +350,7 @@ function SimuladoPage() {
     setSelected(null);
     if (index + 1 >= questions.length) {
       setIndex(questions.length); // marca como finalizado
+      clearPersisted(); // libera a sessão para futuras escolhas
       setShowResult(true);
     } else {
       setIndex(index + 1);
@@ -336,6 +368,15 @@ function SimuladoPage() {
   const wrongCount = answered - score;
   const accPct = answered > 0 ? Math.round((score / answered) * 100) : 0;
   const errPct = answered > 0 ? 100 - accPct : 0;
+  const modeLabel = mode && mode !== "completo" ? CATEGORY_LABELS[mode] : "Geral";
+
+  const handleFinishEarly = () => {
+    const confirmExit = window.confirm("Deseja realmente finalizar este simulado?");
+    if (!confirmExit) return;
+    // LIMPA o cache de sessão salva para liberar a escolha de outro simulado
+    clearPersisted();
+    setShowResult(true);
+  };
   const incMeta = INCIDENCE_META[q.incidence];
   const progress =
     ((Math.min(index, questions.length) + (selected !== null ? 1 : 0)) /
@@ -355,7 +396,7 @@ function SimuladoPage() {
         </button>
         <div className="text-right">
           <p className="text-xs uppercase tracking-widest text-primary-glow font-semibold">
-            Simulado Inteligente
+            Simulado Inteligente{modeLabel ? ` — ${modeLabel}` : ""}
           </p>
           <h1 className="text-xl md:text-2xl font-display font-bold">
             Questão {Math.min(index + 1, questions.length)}{" "}
@@ -521,6 +562,25 @@ function SimuladoPage() {
             )}
           </motion.div>
         </AnimatePresence>
+      )}
+
+      {!showResult && (
+        <div className="mt-4 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          <button
+            type="button"
+            onClick={() => navigate({ to: "/app" })}
+            className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border border-border bg-secondary/50 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4" /> Voltar
+          </button>
+          <button
+            type="button"
+            onClick={handleFinishEarly}
+            className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-sm font-semibold transition"
+          >
+            Finalizar Simulado
+          </button>
+        </div>
       )}
 
       {/* Tela de Resultado + Revisão */}

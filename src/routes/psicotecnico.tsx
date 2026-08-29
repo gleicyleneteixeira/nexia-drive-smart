@@ -23,6 +23,7 @@ import {
 import memoriaImg from "@/assets/psico-memoria.png";
 import { isValidAnswer } from "@/utils/textMatcher";
 import { COMPLETE_MEMORY_ELEMENTS } from "@/data/psicotecnico";
+import { RaciocinioLogicoView } from "@/components/RaciocinioLogicoView";
 
 export const Route = createFileRoute("/psicotecnico")({
   validateSearch: (search: Record<string, unknown>): { test?: string } => {
@@ -36,7 +37,7 @@ export const Route = createFileRoute("/psicotecnico")({
       {
         name: "description",
         content:
-          "Treine os 4 testes do exame psicotécnico do DETRAN: palográfico (risquinhos), atenção, memória rápida e raciocínio lógico.",
+          "Treine os testes do exame psicotécnico do DETRAN: atenção, memória rápida e raciocínio lógico (com níveis de treino e prova oficial MIG).",
       },
     ],
   }),
@@ -51,7 +52,7 @@ interface ScoreMap {
 }
 
 // ===================== Speech (audio explicativo) =====================
-function useSpeech() {
+export function useSpeech() {
   const [enabled, setEnabled] = useState(true);
   const speak = useCallback(
     (text: string) => {
@@ -119,7 +120,7 @@ function PsicoPage() {
             Simulador <span className="gradient-text">Psicotécnico</span> DETRAN
           </h1>
           <p className="text-xs text-muted-foreground mt-1">
-            Os 4 testes oficiais. Treine antes do dia da avaliação.
+            Os testes oficiais do Detran. Treine antes do dia da avaliação.
           </p>
         </div>
         <button
@@ -163,15 +164,7 @@ function PsicoPage() {
           }}
         />
       )}
-      {stage === "logico" && (
-        <Logico
-          speech={speech}
-          onDone={(r) => {
-            setScores((s) => ({ ...s, logico: r }));
-            go("result");
-          }}
-        />
-      )}
+      {stage === "logico" && <RaciocinioLogicoView onBack={() => go("hub")} />}
       {stage === "result" && (
         <Result
           scores={scores}
@@ -210,7 +203,7 @@ const TESTS: {
   {
     id: "logico",
     title: "Raciocínio Lógico",
-    desc: "Figuras geométricas — encontre o padrão.",
+    desc: "Treino geométrico e Prova Oficial MIG — escolha o nível.",
     icon: Shapes,
     accent: "from-primary-glow to-primary",
   },
@@ -2649,23 +2642,25 @@ const LOG_QUESTIONS: LogQuestion[] = [
   },
 ];
 
-function Logico({
+export function Logico({
   speech,
   onDone,
+  timeLimit = 120,
 }: {
   speech: ReturnType<typeof useSpeech>;
   onDone: (r: { correct: number; total: number }) => void;
+  timeLimit?: number;
 }) {
   const [phase, setPhase] = useState<"intro" | "running" | "done">("intro");
   const [i, setI] = useState(0);
   const [picked, setPicked] = useState<string | null>(null);
   const [correct, setCorrect] = useState(0);
-  const [time, setTime] = useState(60);
+  const [time, setTime] = useState(timeLimit);
 
   useEffect(() => {
     if (phase === "intro")
       speech.speak(
-        "Teste de raciocínio lógico. Você tem 1 minuto. Olhe as figuras geométricas e escolha a alternativa correta o mais rápido que puder.",
+        "Teste de raciocínio lógico. Você tem 2 minutos. Olhe as figuras geométricas e escolha a alternativa correta o mais rápido que puder.",
       );
   }, [phase, speech]);
 
@@ -2710,7 +2705,7 @@ function Logico({
             setI(0);
             setCorrect(0);
             setPicked(null);
-            setTime(60);
+            setTime(timeLimit);
             setPhase("running");
           }}
           speech={speech}

@@ -9,7 +9,7 @@ export interface MIGQuestion {
 const SUPABASE_BASE_URL =
   "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images";
 
-export const RACIOCINIO_LOGICO_AVANCADO: MIGQuestion[] = [
+export const RACIOCINIO_LOGICO_FASE_2: MIGQuestion[] = [
   { id: 1, title: "Exemplo 01", isExample: true, imageUrl: `${SUPABASE_BASE_URL}/Teste_Atencao_Concentrada_heyzine-7.png`, correctAnswer: "B" },
   { id: 2, title: "Exemplo 02", isExample: true, imageUrl: `${SUPABASE_BASE_URL}/Teste_Atencao_Concentrada_heyzine-8.png`, correctAnswer: "C" },
   { id: 3, title: "Questão 01", isExample: false, imageUrl: `${SUPABASE_BASE_URL}/Teste_Atencao_Concentrada_heyzine-9.png`, correctAnswer: "C" },
@@ -45,7 +45,7 @@ export const RACIOCINIO_LOGICO_AVANCADO: MIGQuestion[] = [
 // Per the official MIG spec the batch contains 30 sequential items. The provided
 // source listed 29 entries (id 11 skipped). We expose a normalized sequential id
 // to keep the UI stable while preserving the original answer key above.
-export const MIG_QUESTIONS: MIGQuestion[] = RACIOCINIO_LOGICO_AVANCADO.map((q, i) => ({
+export const MIG_QUESTIONS: MIGQuestion[] = RACIOCINIO_LOGICO_FASE_2.map((q, i) => ({
   ...q,
   id: i + 1,
 }));

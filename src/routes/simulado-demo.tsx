@@ -6,6 +6,7 @@ import { isProfileExpired } from "@/lib/subscription";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   getRandomizedQuestions,
+  getBalancedQuestions,
   INCIDENCE_META,
   CATEGORY_LABELS,
   type Question,
@@ -67,9 +68,12 @@ function saveSeen(ids: string[]) {
 }
 function buildFresh(questionsList: Question[], category?: Category, count: number = TOTAL): Question[] {
   const seen = loadSeen();
-  const fresh = category
-    ? getRandomizedQuestions(count, { exclude: seen, categories: [category], questionsList })
-    : getRandomizedQuestions(count, { exclude: seen, placasCount: 3, questionsList });
+  const fresh = getBalancedQuestions({
+    questionsList,
+    categories: category ? [category] : undefined,
+    exclude: seen,
+    total: count,
+  });
   const newSeen = Array.from(new Set([...seen, ...fresh.map((q) => q.id)]));
   saveSeen(newSeen);
   return fresh;

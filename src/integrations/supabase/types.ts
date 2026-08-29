@@ -237,6 +237,9 @@ profiles: {
           daily_time: number
           reading_habit: string
           is_intensive_mode: boolean
+          current_chapter: number
+          current_page: number
+          completed_pages: number
           created_at: string
           updated_at: string
         }
@@ -249,6 +252,9 @@ profiles: {
           daily_time?: number
           reading_habit?: string
           is_intensive_mode?: boolean
+          current_chapter?: number
+          current_page?: number
+          completed_pages?: number
           created_at?: string
           updated_at?: string
         }
@@ -261,6 +267,9 @@ profiles: {
           daily_time?: number
           reading_habit?: string
           is_intensive_mode?: boolean
+          current_chapter?: number
+          current_page?: number
+          completed_pages?: number
           updated_at?: string
         }
         Relationships: []

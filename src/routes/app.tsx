@@ -478,27 +478,10 @@ function PsicotecnicoDashboard() {
           />
           <PsicoTestCard
             title="Raciocínio Lógico"
-            desc="Descubra a ordem lógica de figuras geométricas."
+            desc="Treino geométrico (Nível 1) e Prova Oficial MIG (Nível 2) com gabarito."
             emoji="🧩"
             type="logico"
           />
-          <Link
-            to="/raciocinio-logico-mig"
-            className="block glass rounded-2xl p-5 border-border/10 hover:border-primary/40 hover:bg-accent/15 transition-all text-left space-y-3"
-          >
-            <div className="text-2xl">📋</div>
-            <div>
-              <h3 className="font-bold text-sm text-foreground">
-                Raciocínio Lógico MIG
-              </h3>
-              <p className="text-[10px] text-muted-foreground mt-1 leading-relaxed">
-                Prova oficial avançada com 30 questões imagem a imagem e gabarito.
-              </p>
-            </div>
-            <div className="text-[10px] text-primary font-semibold flex items-center gap-0.5 pt-1">
-              Iniciar MIG <ChevronRight className="h-3 w-3" />
-            </div>
-          </Link>
         </div>
       </section>
 

@@ -5711,3 +5711,58 @@ function shuffleOptions(q: Question): Question {
     const newCorrect = indices.indexOf(q.correctIndex);
     return { ...q, options: newOptions, correctIndex: newCorrect };
 }
+
+// ---------------------------------------------------------------------------
+// Simulado balanceado por dificuldade (proporção 20/15/65)
+//   difficulty 3 (pegadinhas): 20%  -> 6 de 30
+//   difficulty 2 (difíceis)  : 15%  -> 5 de 30
+//   difficulty 1 (fáceis)    : 65%  -> 19 de 30
+// Fallback: se faltar questão em algum nível, completa com as disponíveis.
+// ---------------------------------------------------------------------------
+export interface BalancedOptions {
+    categories?: Category[];
+    exclude?: string[];
+    questionsList?: Question[];
+    total?: number;
+}
+
+export function getBalancedQuestions(opts?: BalancedOptions): Question[] {
+    const total = opts?.total ?? 30;
+    let pool = opts?.questionsList ? [...opts.questionsList] : [...QUESTIONS];
+
+    if (opts?.categories?.length) {
+        pool = pool.filter((q) => opts.categories!.includes(q.category));
+    }
+    if (opts?.exclude?.length) {
+        const ex = new Set(opts.exclude);
+        pool = pool.filter((q) => !ex.has(q.id));
+    }
+
+    const n3 = Math.round(total * 0.2); // 6
+    const n2 = Math.round(total * 0.15); // 5
+    const n1 = total - n3 - n2; // 19
+
+    const pickFromLevel = (level: 1 | 2 | 3, n: number): Question[] => {
+        const arr = pool.filter((q) => q.difficulty === level);
+        const shuffled = [...arr].sort(() => Math.random() - 0.5);
+        return shuffled.slice(0, n);
+    };
+
+    let selected: Question[] = [
+        ...pickFromLevel(3, n3),
+        ...pickFromLevel(2, n2),
+        ...pickFromLevel(1, n1),
+    ];
+
+    // Fallback: se faltou questão em algum nível, completa com as disponíveis.
+    const usedIds = new Set(selected.map((q) => q.id));
+    if (selected.length < total) {
+        const rest = pool
+            .filter((q) => !usedIds.has(q.id))
+            .sort(() => Math.random() - 0.5);
+        selected = [...selected, ...rest].slice(0, total);
+    }
+
+    // Embaralha a ordem final para não ficar agrupado por nível
+    return selected.sort(() => Math.random() - 0.5);
+}
