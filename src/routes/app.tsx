@@ -456,7 +456,8 @@ function PsicotecnicoDashboard() {
             <Brain className="h-3.5 w-3.5" /> Módulo Psicotécnico CNH
           </p>
           <h1 className="text-2xl md:text-4xl font-display font-bold mt-2 leading-tight">
-            Perca o medo e domine as pegadinhas do <span className="gradient-text">Psicotécnico</span>.
+            Perce o medo e domine os testes que mais reprovam no{" "}
+            <span className="gradient-text">Psicotécnico</span>.
           </h1>
           <p className="text-xs md:text-sm text-muted-foreground mt-2 max-w-lg leading-relaxed">
             O exame psicotécnico avalia atenção, memória e comportamento. Treine com nossos simulados interativos oficiais.
