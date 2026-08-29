@@ -7,44 +7,46 @@ import {
   XAxis,
   YAxis,
   Tooltip,
+  type TooltipProps,
   CartesianGrid,
   Cell,
 } from "recharts";
 
 interface StateData {
   uf: string;
+  nome: string;
   teorica: number;
   pratica: number;
 }
 
 const rawData: StateData[] = [
-  { uf: "MG", teorica: 48.0, pratica: 60.0 },
-  { uf: "RJ", teorica: 42.5, pratica: 46.7 },
-  { uf: "SP", teorica: 38.0, pratica: 42.0 },
-  { uf: "MT", teorica: 35.0, pratica: 39.7 },
-  { uf: "PR", teorica: 36.0, pratica: 38.5 },
-  { uf: "RS", teorica: 34.0, pratica: 37.0 },
-  { uf: "BA", teorica: 40.0, pratica: 36.5 },
-  { uf: "PE", teorica: 37.0, pratica: 35.0 },
-  { uf: "CE", teorica: 35.5, pratica: 34.0 },
-  { uf: "GO", teorica: 33.0, pratica: 32.5 },
-  { uf: "SC", teorica: 31.0, pratica: 31.0 },
-  { uf: "ES", teorica: 30.0, pratica: 29.5 },
-  { uf: "DF", teorica: 32.0, pratica: 28.0 },
-  { uf: "MA", teorica: 33.0, pratica: 27.0 },
-  { uf: "PB", teorica: 29.0, pratica: 26.0 },
-  { uf: "PA", teorica: 31.0, pratica: 25.0 },
-  { uf: "MS", teorica: 28.0, pratica: 24.0 },
-  { uf: "RN", teorica: 27.0, pratica: 23.0 },
-  { uf: "AL", teorica: 29.0, pratica: 22.0 },
-  { uf: "PI", teorica: 26.0, pratica: 20.0 },
-  { uf: "TO", teorica: 25.0, pratica: 20.0 },
-  { uf: "SE", teorica: 26.0, pratica: 19.0 },
-  { uf: "RO", teorica: 24.0, pratica: 18.0 },
-  { uf: "AM", teorica: 25.0, pratica: 17.0 },
-  { uf: "AC", teorica: 22.0, pratica: 15.0 },
-  { uf: "AP", teorica: 20.0, pratica: 12.0 },
-  { uf: "RR", teorica: 18.0, pratica: 10.0 },
+  { uf: "MG", nome: "Minas Gerais", teorica: 48.0, pratica: 60.0 },
+  { uf: "RJ", nome: "Rio de Janeiro", teorica: 42.5, pratica: 46.7 },
+  { uf: "SP", nome: "São Paulo", teorica: 38.0, pratica: 42.0 },
+  { uf: "MT", nome: "Mato Grosso", teorica: 35.0, pratica: 39.7 },
+  { uf: "PR", nome: "Paraná", teorica: 36.0, pratica: 38.5 },
+  { uf: "RS", nome: "Rio Grande do Sul", teorica: 34.0, pratica: 37.0 },
+  { uf: "BA", nome: "Bahia", teorica: 40.0, pratica: 36.5 },
+  { uf: "PE", nome: "Pernambuco", teorica: 37.0, pratica: 35.0 },
+  { uf: "CE", nome: "Ceará", teorica: 35.5, pratica: 34.0 },
+  { uf: "GO", nome: "Goiás", teorica: 33.0, pratica: 32.5 },
+  { uf: "SC", nome: "Santa Catarina", teorica: 31.0, pratica: 31.0 },
+  { uf: "ES", nome: "Espírito Santo", teorica: 30.0, pratica: 29.5 },
+  { uf: "DF", nome: "Distrito Federal", teorica: 32.0, pratica: 28.0 },
+  { uf: "MA", nome: "Maranhão", teorica: 33.0, pratica: 27.0 },
+  { uf: "PB", nome: "Paraíba", teorica: 29.0, pratica: 26.0 },
+  { uf: "PA", nome: "Pará", teorica: 31.0, pratica: 25.0 },
+  { uf: "MS", nome: "Mato Grosso do Sul", teorica: 28.0, pratica: 24.0 },
+  { uf: "RN", nome: "Rio Grande do Norte", teorica: 27.0, pratica: 23.0 },
+  { uf: "AL", nome: "Alagoas", teorica: 29.0, pratica: 22.0 },
+  { uf: "PI", nome: "Piauí", teorica: 26.0, pratica: 20.0 },
+  { uf: "TO", nome: "Tocantins", teorica: 25.0, pratica: 20.0 },
+  { uf: "SE", nome: "Sergipe", teorica: 26.0, pratica: 19.0 },
+  { uf: "RO", nome: "Rondônia", teorica: 24.0, pratica: 18.0 },
+  { uf: "AM", nome: "Amazonas", teorica: 25.0, pratica: 17.0 },
+  { uf: "AC", nome: "Acre", teorica: 22.0, pratica: 15.0 },
+  { uf: "AP", nome: "Amapá", teorica: 20.0, pratica: 12.0 },
+  { uf: "RR", nome: "Roraima", teorica: 18.0, pratica: 10.0 },
 ];
 
 export function RankingReprovacao({ userUF = "MG" }: { userUF?: string }) {
@@ -52,8 +54,6 @@ export function RankingReprovacao({ userUF = "MG" }: { userUF?: string }) {
   const [showTable, setShowTable] = useState(false);
 
   const sortedData = [...rawData].sort((a, b) => b[activeTab] - a[activeTab]);
-  const metricLabel =
-    activeTab === "teorica" ? "Reprovação Teórica" : "Reprovação Prática";
 
   return (
     <section className="glass rounded-3xl p-5 md:p-6 shadow-card space-y-4">
@@ -122,14 +122,27 @@ export function RankingReprovacao({ userUF = "MG" }: { userUF?: string }) {
             />
             <Tooltip
               cursor={{ fill: "rgba(255,255,255,0.06)" }}
-              contentStyle={{
-                background: "#0f172a",
-                border: "1px solid #334155",
-                borderRadius: 12,
-                color: "#fff",
-                fontSize: 12,
+              content={({ active, payload }: TooltipProps<number, string>) => {
+                if (active && payload && payload.length) {
+                  const d = payload[0].payload as StateData;
+                  const valor = activeTab === "teorica" ? d.teorica : d.pratica;
+                  return (
+                    <div className="bg-slate-950 border border-slate-700 p-3 rounded-xl shadow-2xl">
+                      <p className="text-sm font-bold text-white mb-1">
+                        {d.nome}{" "}
+                        <span className="text-amber-400">({d.uf})</span>
+                      </p>
+                      <p className="text-xs font-semibold text-slate-200">
+                        {activeTab === "teorica" ? "Prova Teórica" : "Prova Prática"}:{" "}
+                        <span className="text-emerald-400 font-extrabold">
+                          {valor}%
+                        </span>
+                      </p>
+                    </div>
+                  );
+                }
+                return null;
               }}
-              formatter={(value: number) => [`${value}%`, metricLabel]}
             />
             <Bar dataKey={activeTab} radius={[4, 4, 0, 0]} maxBarSize={26}>
               {sortedData.map((d) => (
