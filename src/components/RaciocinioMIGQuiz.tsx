@@ -14,11 +14,12 @@ import { type MIGQuestion } from "@/data/raciocinioLogicoMIG";
 
 type Answer = "A" | "B" | "C" | "D";
 const OPTIONS: Answer[] = ["A", "B", "C", "D"];
+const PASSING_SCORE = 20; // mínimo de 20 acertos (de 28) para aprovação no MIG
 
 export function RaciocinioMIGQuiz({
   mode,
   questions,
-  timeLimit = 120,
+  timeLimit = 300,
   onFinish,
   onHub,
 }: {
@@ -261,7 +262,7 @@ function ResultView({
     officialTotal > 0
       ? Math.round((officialCorrect / officialTotal) * 100)
       : 0;
-  const passMin = Math.ceil(officialTotal * 0.6);
+  const passMin = PASSING_SCORE;
   const isPassed = officialCorrect >= passMin;
 
   return (
@@ -287,7 +288,7 @@ function ResultView({
           <span className="text-xl opacity-70">/{officialTotal}</span>
         </p>
         <p className="text-xs text-muted-foreground">
-          Acertos em questões oficiais ({pct}%) · mínimo p/ aprovação: {passMin}
+          Acertos em questões oficiais ({pct}%) · mínimo p/ aprovação: {passMin} acertos
         </p>
       </div>
 
