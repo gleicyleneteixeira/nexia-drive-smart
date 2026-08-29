@@ -37,7 +37,6 @@ export function RaciocinioMIGQuiz({
   const total = questions.length;
   const selected = answers[q.id];
   const isLast = index === total - 1;
-  const revealOnAnswer = mode === "treino";
   const answered = !!selected;
 
   const onFinishRef = useRef(onFinish);
@@ -58,7 +57,7 @@ export function RaciocinioMIGQuiz({
   }, [timeLeft, finished, onFinishRef]);
 
   const setAnswer = (a: Answer) => {
-    if (answered && !revealOnAnswer) return;
+    if (answered) return;
     setAnswers((prev) => ({ ...prev, [q.id]: a }));
   };
 
@@ -80,18 +79,12 @@ export function RaciocinioMIGQuiz({
     setTimeLeft(timeLimit);
   };
 
-  const correctCount = useMemo(
-    () => questions.filter((qq) => answers[qq.id] === qq.correctAnswer).length,
-    [answers, questions],
-  );
-
   if (finished) {
     return (
       <ResultView
         mode={mode}
         questions={questions}
         answers={answers}
-        correctCount={correctCount}
         onRestart={restart}
         onHub={onHub}
       />
@@ -143,21 +136,17 @@ export function RaciocinioMIGQuiz({
           let cls =
             "border-border/30 bg-white/5 hover:bg-white/10 hover:border-primary/40";
           if (answered) {
-            if (revealOnAnswer) {
-              if (isCorrect)
-                cls = "border-success bg-success/20 shadow-success-glow";
-              else if (isSelected)
-                cls = "border-destructive bg-destructive/20 shadow-destructive-glow";
-              else cls = "border-border/20 bg-white/5 opacity-60";
-            } else if (isSelected) {
-              cls = "border-primary bg-primary/20";
-            }
+            if (isCorrect)
+              cls = "border-success bg-success/20 shadow-success-glow";
+            else if (isSelected)
+              cls = "border-destructive bg-destructive/20 shadow-destructive-glow";
+            else cls = "border-border/20 bg-white/5 opacity-60";
           }
           return (
             <button
               key={opt}
               onClick={() => setAnswer(opt)}
-              disabled={answered && !revealOnAnswer}
+              disabled={answered}
               className={`flex items-center gap-3 px-4 py-4 rounded-2xl border transition-all active:scale-95 ${cls}`}
             >
               <span
@@ -168,10 +157,10 @@ export function RaciocinioMIGQuiz({
                 {opt}
               </span>
               <span className="text-sm font-semibold">Alternativa {opt}</span>
-              {answered && revealOnAnswer && isCorrect && (
+              {answered && isCorrect && (
                 <Check className="h-4 w-4 text-success-glow ml-auto" />
               )}
-              {answered && revealOnAnswer && isSelected && !isCorrect && (
+              {answered && isSelected && !isCorrect && (
                 <X className="h-4 w-4 text-destructive-glow ml-auto" />
               )}
             </button>
@@ -179,8 +168,8 @@ export function RaciocinioMIGQuiz({
         })}
       </div>
 
-      {/* Feedback (treino) */}
-      {answered && revealOnAnswer && (
+      {/* Feedback */}
+      {answered && (
         <div
           className={`rounded-2xl p-3 text-center text-xs font-semibold border ${
             selected === q.correctAnswer
@@ -191,6 +180,17 @@ export function RaciocinioMIGQuiz({
           {selected === q.correctAnswer
             ? "✓ Resposta correta!"
             : `✗ Gabarito: Alternativa ${q.correctAnswer}`}
+          <p className="mt-1 font-normal text-muted-foreground">
+            {q.justification ??
+              "No Teste de Atenção Concentrada, observe a relação lógica entre as figuras para identificar o padrão correto."}
+          </p>
+          <button
+            onClick={next}
+            className="mt-3 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold shadow-glow active:scale-95 transition-transform"
+          >
+            {isLast ? "Ver Resultado" : "Próxima ➔"}
+            <ArrowRight className="h-4 w-4" />
+          </button>
         </div>
       )}
 
@@ -203,30 +203,12 @@ export function RaciocinioMIGQuiz({
         >
           Anterior
         </button>
-
-        {!answered ? (
-          <button
-            disabled
-            className="px-5 py-3 rounded-xl glass text-xs font-semibold opacity-40 cursor-not-allowed"
-          >
-            {isLast ? "Finalizar" : "Próxima"}
-          </button>
-        ) : (
-          <button
-            onClick={next}
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl gradient-primary text-primary-foreground font-semibold shadow-glow active:scale-95 transition-transform"
-          >
-            {isLast ? "Ver Resultado" : "Próxima"}
-            <ArrowRight className="h-4 w-4" />
-          </button>
-        )}
       </div>
 
-      {mode === "prova" && (
-        <p className="text-center text-[10px] text-muted-foreground">
-          No modo Prova Oficial o gabarito só é revelado ao final.
-        </p>
-      )}
+      <p className="text-center text-[10px] text-muted-foreground">
+        Após responder, o gabarito e a justificativa aparecem abaixo. Avance com o
+        botão “Próxima”.
+      </p>
     </div>
   );
 }
@@ -258,19 +240,29 @@ function ResultView({
   mode,
   questions,
   answers,
-  correctCount,
   onRestart,
   onHub,
 }: {
   mode: "treino" | "prova";
   questions: MIGQuestion[];
   answers: Record<number, Answer>;
-  correctCount: number;
   onRestart: () => void;
   onHub: () => void;
 }) {
-  const total = questions.length;
-  const pct = total > 0 ? Math.round((correctCount / total) * 100) : 0;
+  const official = useMemo(
+    () => questions.filter((q) => !q.isExample),
+    [questions],
+  );
+  const officialTotal = official.length;
+  const officialCorrect = official.filter(
+    (q) => answers[q.id] === q.correctAnswer,
+  ).length;
+  const pct =
+    officialTotal > 0
+      ? Math.round((officialCorrect / officialTotal) * 100)
+      : 0;
+  const passMin = Math.ceil(officialTotal * 0.6);
+  const isPassed = officialCorrect >= passMin;
 
   return (
     <div className="space-y-5">
@@ -278,20 +270,31 @@ function ResultView({
         <div className="w-16 h-16 mx-auto rounded-full bg-primary/20 flex items-center justify-center text-3xl mb-3 shadow-glow">
           🏆
         </div>
-        <h2 className="text-2xl font-display font-bold">Teste Finalizado!</h2>
+        <div
+          className={`text-4xl font-display font-black mt-2 ${
+            isPassed ? "text-success" : "text-destructive"
+          }`}
+        >
+          {isPassed ? "Aprovado! 🎉" : "Reprovado ❌"}
+        </div>
         <p className="text-xs text-muted-foreground mt-1">
-          {mode === "prova" ? "Prova Oficial MIG concluída." : "Treino concluído."}
+          {mode === "prova"
+            ? "Prova Oficial MIG concluída."
+            : "Treino concluído."}
         </p>
         <p className="text-4xl font-display font-black gradient-text mt-4">
-          {correctCount}/{total}
+          {officialCorrect}
+          <span className="text-xl opacity-70">/{officialTotal}</span>
         </p>
-        <p className="text-xs text-muted-foreground">Acertos ({pct}%)</p>
+        <p className="text-xs text-muted-foreground">
+          Acertos em questões oficiais ({pct}%) · mínimo p/ aprovação: {passMin}
+        </p>
       </div>
 
       {/* Gabarito */}
       <div className="glass rounded-3xl p-4 shadow-card space-y-3">
         <h3 className="text-sm font-display font-bold flex items-center gap-1.5">
-          <Trophy className="h-4 w-4 text-primary" /> Gabarito
+          <Trophy className="h-4 w-4 text-primary" /> Gabarito Completo
         </h3>
         <div className="grid sm:grid-cols-2 gap-2">
           {questions.map((qq) => {
@@ -312,6 +315,7 @@ function ResultView({
                 <div className="min-w-0 flex-1">
                   <p className="text-[10px] text-muted-foreground truncate">
                     {qq.title}
+                    {qq.isExample && " · Exemplo"}
                   </p>
                   <p className="text-xs font-semibold">
                     Sua: {ans ?? "—"} · Gab: {qq.correctAnswer}
@@ -333,13 +337,13 @@ function ResultView({
           onClick={onRestart}
           className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl gradient-primary text-primary-foreground font-semibold shadow-glow active:scale-95 transition-transform"
         >
-          <RotateCcw className="h-4 w-4" /> Refazer
+          <RotateCcw className="h-4 w-4" /> Refazer Teste
         </button>
         <button
           onClick={onHub}
           className="px-4 py-3 rounded-xl glass text-xs font-semibold flex items-center gap-2"
         >
-          <ArrowLeft className="h-4 w-4" /> Níveis
+          Próximo Teste ➔
         </button>
       </div>
     </div>

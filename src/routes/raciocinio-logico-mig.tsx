@@ -21,7 +21,7 @@ export const Route = createFileRoute("/raciocinio-logico-mig")({
   }),
 });
 
-type Level = "hub" | "treino" | "prova" | "result";
+type Level = "hub" | "treino" | "prova";
 
 function RaciocinioLogicoMIG() {
   const [level, setLevel] = useState<Level>("hub");
@@ -56,7 +56,7 @@ function RaciocinioLogicoMIG() {
           mode="treino"
           questions={MIG_QUESTIONS}
           timeLimit={120}
-          onFinish={() => setLevel("result")}
+          onFinish={() => {}}
           onHub={() => setLevel("hub")}
         />
       )}
@@ -65,11 +65,10 @@ function RaciocinioLogicoMIG() {
           mode="prova"
           questions={MIG_OFFICIAL}
           timeLimit={120}
-          onFinish={() => setLevel("result")}
+          onFinish={() => {}}
           onHub={() => setLevel("hub")}
         />
       )}
-      {level === "result" && <Result onRestart={() => setLevel("hub")} />}
     </div>
   );
 }
@@ -123,23 +122,6 @@ function Hub({ onPick }: { onPick: (l: Level) => void }) {
       >
         ← Voltar ao painel
       </Link>
-    </div>
-  );
-}
-
-function Result({ onRestart }: { onRestart: () => void }) {
-  return (
-    <div className="glass rounded-3xl p-8 text-center shadow-card space-y-4">
-      <h2 className="text-xl font-display font-bold">Que tal outro nível?</h2>
-      <p className="text-xs text-muted-foreground">
-        Volte ao menu e escolha o Nível 1 (Treino) ou o Nível 2 (Prova Oficial).
-      </p>
-      <button
-        onClick={onRestart}
-        className="inline-flex items-center gap-2 px-5 py-3 rounded-xl gradient-primary text-primary-foreground font-semibold shadow-glow"
-      >
-        <RotateCcw className="h-4 w-4" /> Escolher Nível
-      </button>
     </div>
   );
 }

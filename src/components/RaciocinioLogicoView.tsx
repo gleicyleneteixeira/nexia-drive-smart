@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Brain, ArrowLeft, GraduationCap, Sparkles } from "lucide-react";
 import { Logico, useSpeech } from "@/routes/psicotecnico";
 import { RaciocinioMIGQuiz } from "@/components/RaciocinioMIGQuiz";
-import { MIG_QUESTIONS } from "@/data/raciocinioLogicoMIG";
+import { MIG_OFFICIAL } from "@/data/raciocinioLogicoMIG";
 
 export function RaciocinioLogicoView({ onBack }: { onBack: () => void }) {
   const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
@@ -78,7 +78,7 @@ export function RaciocinioLogicoView({ onBack }: { onBack: () => void }) {
                 Avançado / Prova Oficial MIG
               </h3>
               <p className="text-sm text-muted-foreground">
-                {MIG_QUESTIONS.length} imagens oficiais do teste Detran com seleção
+                {MIG_OFFICIAL.length} imagens oficiais do teste Detran com seleção
                 [ A, B, C, D ].
               </p>
             </button>
@@ -109,7 +109,7 @@ export function RaciocinioLogicoView({ onBack }: { onBack: () => void }) {
           >
             <RaciocinioMIGQuiz
               mode="prova"
-              questions={MIG_QUESTIONS}
+              questions={MIG_OFFICIAL}
               timeLimit={120}
               onFinish={() => setSelectedLevel(null)}
               onHub={() => setSelectedLevel(null)}
