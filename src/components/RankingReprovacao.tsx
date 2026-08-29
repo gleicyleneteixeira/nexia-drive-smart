@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import {
   ResponsiveContainer,
   BarChart,
@@ -52,8 +53,25 @@ const rawData: StateData[] = [
 export function RankingReprovacao({ userUF = "MG" }: { userUF?: string }) {
   const [activeTab, setActiveTab] = useState<"teorica" | "pratica">("teorica");
   const [showTable, setShowTable] = useState(false);
+  const [data, setData] = useState<StateData[]>(rawData);
 
-  const sortedData = [...rawData].sort((a, b) => b[activeTab] - a[activeTab]);
+  // Preferir dados do banco (detran_stats); cai no hardcoded se vazio/falhar
+  useEffect(() => {
+    let active = true;
+    supabase
+      .from("detran_stats")
+      .select("uf, nome, teorica, pratica")
+      .order("uf", { ascending: true })
+      .then(({ data: db }) => {
+        if (active && db && db.length > 0) setData(db as StateData[]);
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const sortedData = [...data].sort((a, b) => b[activeTab] - a[activeTab]);
 
   return (
     <section className="glass rounded-3xl p-5 md:p-6 shadow-card space-y-4">
