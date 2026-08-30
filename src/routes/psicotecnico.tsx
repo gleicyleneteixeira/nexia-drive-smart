@@ -103,38 +103,40 @@ function PsicoPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-6 md:py-10">
-      <div className="flex items-start justify-between gap-3 mb-6 flex-wrap">
-        <div>
-          {stage !== "hub" && (
-            <button
-              onClick={() => go("hub")}
-              className="inline-flex items-center gap-2 px-3 py-2 mb-3 rounded-lg glass text-xs font-medium hover:bg-accent/30 transition-colors"
-            >
-              <ArrowLeft className="h-4 w-4" /> Voltar
-            </button>
-          )}
-          <p className="text-xs uppercase tracking-widest text-primary-glow font-semibold flex items-center gap-2">
-            <Brain className="h-4 w-4" /> Psicotécnico
-          </p>
-          <h1 className="text-2xl md:text-3xl font-display font-bold mt-1">
-            Simulador <span className="gradient-text">Psicotécnico</span> DETRAN
-          </h1>
-          <p className="text-xs text-muted-foreground mt-1">
-            Os testes oficiais do Detran. Treine antes do dia da avaliação.
-          </p>
+      {stage !== "logico" && (
+        <div className="flex items-start justify-between gap-3 mb-6 flex-wrap">
+          <div>
+            {stage !== "hub" && (
+              <button
+                onClick={() => go("hub")}
+                className="inline-flex items-center gap-2 px-3 py-2 mb-3 rounded-lg glass text-xs font-medium hover:bg-accent/30 transition-colors"
+              >
+                <ArrowLeft className="h-4 w-4" /> Voltar
+              </button>
+            )}
+            <p className="text-xs uppercase tracking-widest text-primary-glow font-semibold flex items-center gap-2">
+              <Brain className="h-4 w-4" /> Psicotécnico
+            </p>
+            <h1 className="text-2xl md:text-3xl font-display font-bold mt-1">
+              Simulador <span className="gradient-text">Psicotécnico</span> DETRAN
+            </h1>
+            <p className="text-xs text-muted-foreground mt-1">
+              Os testes oficiais do Detran. Treine antes do dia da avaliação.
+            </p>
+          </div>
+          <button
+            onClick={() => speech.setEnabled((v) => !v)}
+            className="px-3 py-2 rounded-xl glass text-xs flex items-center gap-2"
+          >
+            {speech.enabled ? (
+              <Volume2 className="h-4 w-4 text-primary" />
+            ) : (
+              <VolumeX className="h-4 w-4 text-muted-foreground" />
+            )}
+            {speech.enabled ? "Áudio ligado" : "Áudio mudo"}
+          </button>
         </div>
-        <button
-          onClick={() => speech.setEnabled((v) => !v)}
-          className="px-3 py-2 rounded-xl glass text-xs flex items-center gap-2"
-        >
-          {speech.enabled ? (
-            <Volume2 className="h-4 w-4 text-primary" />
-          ) : (
-            <VolumeX className="h-4 w-4 text-muted-foreground" />
-          )}
-          {speech.enabled ? "Áudio ligado" : "Áudio mudo"}
-        </button>
-      </div>
+      )}
 
       {stage === "hub" && (
         <Hub

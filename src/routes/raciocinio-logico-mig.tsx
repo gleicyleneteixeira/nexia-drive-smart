@@ -28,27 +28,28 @@ function RaciocinioLogicoMIG() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 md:py-10">
-      <div className="flex items-start justify-between gap-3 mb-6 flex-wrap">
-        <div>
-          <p className="text-xs uppercase tracking-widest text-primary-glow font-semibold flex items-center gap-2">
-            <Brain className="h-4 w-4" /> Raciocínio Lógico
-          </p>
-          <h1 className="text-2xl md:text-3xl font-display font-bold mt-1">
-            Teste <span className="gradient-text">MIG</span> — Prova Oficial
-          </h1>
-          <p className="text-xs text-muted-foreground mt-1">
-            Resolva questões imagem a imagem e confira seu desempenho com gabarito.
-          </p>
+      {level === "hub" ? (
+        <div className="flex items-start justify-between gap-3 mb-6 flex-wrap">
+          <div>
+            <p className="text-xs uppercase tracking-widest text-primary-glow font-semibold flex items-center gap-2">
+              <Brain className="h-4 w-4" /> Raciocínio Lógico
+            </p>
+            <h1 className="text-2xl md:text-3xl font-display font-bold mt-1">
+              Teste <span className="gradient-text">MIG</span> — Prova Oficial
+            </h1>
+            <p className="text-xs text-muted-foreground mt-1">
+              Resolva questões imagem a imagem e confira seu desempenho com gabarito.
+            </p>
+          </div>
         </div>
-        {level !== "hub" && (
-          <button
-            onClick={() => setLevel("hub")}
-            className="inline-flex items-center gap-2 px-3 py-2 rounded-lg glass text-xs font-medium hover:bg-accent/30 transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" /> Voltar
-          </button>
-        )}
-      </div>
+      ) : (
+        <button
+          onClick={() => setLevel("hub")}
+          className="inline-flex items-center gap-2 px-3 py-2 mb-4 rounded-lg glass text-xs font-medium hover:bg-accent/30 transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4" /> Voltar
+        </button>
+      )}
 
       {level === "hub" && <Hub onPick={setLevel} />}
       {level === "treino" && (

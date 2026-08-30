@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Brain, ArrowLeft, GraduationCap, Sparkles } from "lucide-react";
 import { Logico, useSpeech } from "@/routes/psicotecnico";
@@ -9,31 +9,79 @@ export function RaciocinioLogicoView({ onBack }: { onBack: () => void }) {
   const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
   const speech = useSpeech();
 
+  const MIG_VIEW_KEY = "mig_view_level";
+
+  const clearMigSessions = () => {
+    try {
+      sessionStorage.removeItem(MIG_VIEW_KEY);
+      localStorage.removeItem("mig_session_treino");
+      localStorage.removeItem("mig_session_prova");
+    } catch {
+      // ignore
+    }
+  };
+
+  // Restaura o nível ativo ao remontar (troca de aba / navegação entre menus)
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem(MIG_VIEW_KEY);
+      if (raw) {
+        const lvl = Number(raw);
+        if (lvl === 1 || lvl === 2) setSelectedLevel(lvl);
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  // Persiste o nível selecionado; limpa ao voltar à seleção
+  useEffect(() => {
+    if (selectedLevel === null) {
+      try {
+        sessionStorage.removeItem(MIG_VIEW_KEY);
+      } catch {
+        // ignore
+      }
+    } else {
+      try {
+        sessionStorage.setItem(MIG_VIEW_KEY, String(selectedLevel));
+      } catch {
+        // ignore
+      }
+    }
+  }, [selectedLevel]);
+
   return (
     <div className="mx-auto max-w-3xl px-1">
-      <div className="flex items-start justify-between gap-3 mb-5 flex-wrap">
-        <div>
-          <p className="text-xs uppercase tracking-widest text-primary-glow font-semibold flex items-center gap-2">
-            <Brain className="h-4 w-4" /> Raciocínio Lógico
-          </p>
-          <h2 className="text-2xl md:text-3xl font-display font-bold mt-1">
-            Teste <span className="gradient-text">MIG</span> — Detran
-          </h2>
-          <p className="text-xs text-muted-foreground mt-1">
-            Escolha o nível da avaliação. Você tem 2 minutos em cada um.
-          </p>
+      {selectedLevel === null ? (
+        <div className="flex items-start justify-between gap-3 mb-5 flex-wrap">
+          <div>
+            <p className="text-xs uppercase tracking-widest text-primary-glow font-semibold flex items-center gap-2">
+              <Brain className="h-4 w-4" /> Raciocínio Lógico
+            </p>
+            <h2 className="text-2xl md:text-3xl font-display font-bold mt-1">
+              Teste <span className="gradient-text">MIG</span> — Detran
+            </h2>
+            <p className="text-xs text-muted-foreground mt-1">
+              Escolha o nível da avaliação. Você tem 2 minutos em cada um.
+            </p>
+          </div>
+          <button
+            onClick={() => {
+              clearMigSessions();
+              onBack();
+            }}
+            className="inline-flex items-center gap-2 px-3 py-2 rounded-lg glass text-xs font-medium hover:bg-accent/30 transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4" /> Voltar
+          </button>
         </div>
+      ) : (
         <button
-          onClick={onBack}
-          className="inline-flex items-center gap-2 px-3 py-2 rounded-lg glass text-xs font-medium hover:bg-accent/30 transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4" /> Voltar
-        </button>
-      </div>
-
-      {selectedLevel !== null && (
-        <button
-          onClick={() => setSelectedLevel(null)}
+          onClick={() => {
+            clearMigSessions();
+            setSelectedLevel(null);
+          }}
           className="inline-flex items-center gap-2 px-3 py-2 mb-3 rounded-lg glass text-xs font-medium hover:bg-accent/30 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" /> Níveis

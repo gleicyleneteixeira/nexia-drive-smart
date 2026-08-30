@@ -127,15 +127,20 @@ function useAuthInternal() {
       }
     });
 
-    const { data: listener } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      // 🛑 Não reativa o loading nem zera o usuário em eventos de foco/refresh de
+      // token (ex.: TOKEN_REFRESHED, USER_UPDATED). Apenas eventos reais de sessão
+      // devem alterar o estado — evitando tela azul de carregamento e redirecionamento
+      // involuntário ao alternar de aba/minimizar a janela.
+      if (_event !== "INITIAL_SESSION" && _event !== "SIGNED_IN" && _event !== "SIGNED_OUT") {
+        return;
+      }
       const currentUser = session?.user ?? null;
       setUser(currentUser);
       if (currentUser) {
         setLoading(true);
-        await fetchProfileAndRole(currentUser.id);
-        setLoading(false);
+        fetchProfileAndRole(currentUser.id).finally(() => setLoading(false));
       } else {
-        // If mock mode was enabled, let's preserve it unless signing out
         if (localStorage.getItem("nexia:use_mock_mode") === "true") {
           return;
         }

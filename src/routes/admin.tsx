@@ -2349,8 +2349,9 @@ function SettingsPanel() {
           "viperconnect_welcome_media_url",
         ]);
       if (vError) {
-        setLoadError(vError.message);
-        throw vError;
+        // Tabela pode ainda não existir (404/PGRST116): não trava a tela,
+        // apenas deixa os campos ViperConnect vazios com seus defaults.
+        console.warn("Aviso ao carregar system_settings:", vError.message);
       }
       const vmap = Object.fromEntries((vData ?? []).map((r) => [r.key, r.value ?? ""]));
       setVApiUrl(vmap.viperconnect_api_url ?? "");
@@ -2415,7 +2416,7 @@ function SettingsPanel() {
       ];
       for (const s of vSettings) {
         const { error } = await supabase.from("system_settings").upsert(s, { onConflict: "key" });
-        if (error) throw error;
+        if (error) console.warn(`Falha ao salvar system_settings (${s.key}):`, error.message);
       }
       qc.invalidateQueries({ queryKey: ["admin", "settings"] });
       toast.success("Configurações salvas!");

@@ -1,10 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft,
   ArrowRight,
   RotateCcw,
-  Trophy,
   Check,
   X,
   ImageOff,
@@ -31,10 +30,49 @@ export function RaciocinioMIGQuiz({
   onHub: () => void;
   isAdminPreview?: boolean;
 }) {
-  const [index, setIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<number, Answer>>({});
+  const STORAGE_KEY = `mig_session_${mode}`;
+
+  const restoreSession = () => {
+    if (isAdminPreview) return null;
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      const s = JSON.parse(raw) as {
+        index: number;
+        answers: Record<number, Answer>;
+        timeLeft: number;
+      };
+      if (typeof s?.index !== "number" || typeof s?.answers !== "object") return null;
+      return s;
+    } catch {
+      return null;
+    }
+  };
+
+  const savedSession = restoreSession();
+
+  const [index, setIndex] = useState(
+    savedSession ? Math.min(savedSession.index, questions.length - 1) : 0,
+  );
+  const [answers, setAnswers] = useState<Record<number, Answer>>(
+    savedSession ? (savedSession.answers as Record<number, Answer>) : {},
+  );
   const [finished, setFinished] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(timeLimit);
+  const [timeLeft, setTimeLeft] = useState(
+    savedSession ? savedSession.timeLeft : timeLimit,
+  );
+
+  // Persiste o progresso para retomada após troca de aba/navegação
+  useEffect(() => {
+    if (isAdminPreview || finished) {
+      if (!isAdminPreview) localStorage.removeItem(STORAGE_KEY);
+      return;
+    }
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ index, answers, timeLeft }),
+    );
+  }, [index, answers, timeLeft, finished, isAdminPreview, STORAGE_KEY]);
 
   const q = questions[index];
   const total = questions.length;
@@ -63,16 +101,6 @@ export function RaciocinioMIGQuiz({
   const setAnswer = (a: Answer) => {
     if (answered) return;
     setAnswers((prev) => ({ ...prev, [q.id]: a }));
-    // Modo usuário: avança em silêncio, sem revelar o gabarito
-    if (!isAdminPreview) {
-      if (isLast) {
-        setFinished(true);
-        onFinishRef.current();
-      } else {
-        setIndex((i) => Math.min(total - 1, i + 1));
-      }
-    }
-    // Modo admin (preview): aguarda o botão "Próxima" para revelar o gabarito
   };
 
   const next = () => {
@@ -139,10 +167,20 @@ export function RaciocinioMIGQuiz({
         </div>
       )}
 
-      {/* Image */}
-      <div className="glass rounded-3xl p-4 shadow-card">
-        <MIGImage url={q.imageUrl} title={q.title} />
-      </div>
+      {/* Image com animação de virada de página */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={q.id}
+          initial={{ opacity: 0, x: 48, rotateY: 12 }}
+          animate={{ opacity: 1, x: 0, rotateY: 0 }}
+          exit={{ opacity: 0, x: -48, rotateY: -12 }}
+          transition={{ duration: 0.35, ease: "easeInOut" }}
+          className="glass rounded-3xl p-4 shadow-card [transform-style:preserve-3d]"
+          style={{ perspective: 1000 }}
+        >
+          <MIGImage url={q.imageUrl} title={q.title} />
+        </motion.div>
+      </AnimatePresence>
 
       {/* Options */}
       <div className="grid grid-cols-2 gap-3">
@@ -179,10 +217,10 @@ export function RaciocinioMIGQuiz({
                 {opt}
               </span>
               <span className="text-sm font-semibold">Alternativa {opt}</span>
-              {answered && isCorrect && (
+              {answered && isAdminPreview && isCorrect && (
                 <Check className="h-4 w-4 text-success-glow ml-auto" />
               )}
-              {answered && isSelected && !isCorrect && (
+              {answered && isAdminPreview && isSelected && !isCorrect && (
                 <X className="h-4 w-4 text-destructive-glow ml-auto" />
               )}
             </button>
@@ -206,44 +244,32 @@ export function RaciocinioMIGQuiz({
             {q.justification ??
               "No Teste de Atenção Concentrada, observe a relação lógica entre as figuras para identificar o padrão correto."}
           </p>
-          <button
-            onClick={next}
-            className="mt-3 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-semibold shadow-glow active:scale-95 transition-transform"
-          >
-            {isLast ? "Ver Resultado" : "Próxima ➔"}
-            <ArrowRight className="h-4 w-4" />
-          </button>
         </div>
       )}
 
-      {/* Modo usuário: navegação silenciosa (sem revelar gabarito) */}
-      {answered && !isAdminPreview && (
-        <div className="flex justify-end">
-          <button
-            onClick={next}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl glass text-xs font-semibold hover:bg-accent/30 transition-colors"
-          >
-            {isLast ? "Ver Resultado" : "Próxima ➔"}
-            <ArrowRight className="h-4 w-4" />
-          </button>
-        </div>
-      )}
-
-      {/* Navigation */}
+      {/* Navegação manual: avança apenas pelo botão "Próxima" */}
       <div className="flex items-center justify-between gap-3 pt-1">
         <button
           onClick={prev}
           disabled={index === 0}
-          className="px-4 py-3 rounded-xl glass text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
+          className="inline-flex items-center gap-1.5 px-4 py-3 rounded-xl glass text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          Anterior
+          <ArrowLeft className="h-4 w-4" /> Anterior
+        </button>
+        <button
+          onClick={next}
+          disabled={!answered}
+          className="inline-flex items-center gap-1.5 px-5 py-3 rounded-xl gradient-primary text-primary-foreground text-xs font-semibold shadow-glow active:scale-95 transition-transform disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          {isLast ? "Ver Resultado" : "Próxima ➔"}
+          <ArrowRight className="h-4 w-4" />
         </button>
       </div>
 
       <p className="text-center text-[10px] text-muted-foreground">
         {isAdminPreview
           ? "Modo pré-visualização (Admin): gabarito e justificativa aparecem abaixo de cada questão."
-          : "Responda e avance automaticamente. O gabarito completo só é revelado ao final do teste."}
+          : "Selecione uma alternativa e avance com o botão “Próxima”. O gabarito completo só é revelado ao final do teste."}
       </p>
     </div>
   );
@@ -326,87 +352,6 @@ function ResultView({
           Acertos em questões oficiais ({pct}%) · mínimo p/ aprovação: {passMin} acertos
         </p>
       </div>
-
-      {/* Gabarito */}
-      <div className="glass rounded-3xl p-4 shadow-card space-y-3">
-        <h3 className="text-sm font-display font-bold flex items-center gap-1.5">
-          <Trophy className="h-4 w-4 text-primary" /> Gabarito Completo
-        </h3>
-        <div className="grid sm:grid-cols-2 gap-2">
-          {questions.map((qq) => {
-            const ans = answers[qq.id];
-            const ok = ans === qq.correctAnswer;
-            return (
-              <div
-                key={qq.id}
-                className="flex items-center gap-2 rounded-xl border border-border/20 bg-black/20 p-2"
-              >
-                <div className="w-14 h-14 shrink-0 overflow-hidden rounded-lg bg-black/40">
-                  <img
-                    src={qq.imageUrl}
-                    alt={qq.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-[10px] text-muted-foreground truncate">
-                    {qq.title}
-                    {qq.isExample && " · Exemplo"}
-                  </p>
-                  <p className="text-xs font-semibold">
-                    Sua: {ans ?? "—"} · Gab: {qq.correctAnswer}
-                  </p>
-                </div>
-                {ok ? (
-                  <Check className="h-4 w-4 text-success-glow shrink-0" />
-                ) : (
-                  <X className="h-4 w-4 text-destructive-glow shrink-0" />
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Revisão dos Seus Erros */}
-      {questions.some(
-        (qq) => answers[qq.id] && answers[qq.id] !== qq.correctAnswer,
-      ) && (
-        <div className="glass rounded-3xl p-4 shadow-card space-y-3">
-          <h3 className="text-sm font-display font-bold flex items-center gap-1.5">
-            <X className="h-4 w-4 text-destructive" /> Revisão dos Seus Erros
-          </h3>
-          <div className="space-y-3">
-            {questions
-              .filter((qq) => answers[qq.id] && answers[qq.id] !== qq.correctAnswer)
-              .map((qq) => (
-                <div
-                  key={qq.id}
-                  className="flex gap-3 rounded-xl border border-destructive/30 bg-destructive/5 p-3"
-                >
-                  <div className="w-20 h-20 shrink-0 overflow-hidden rounded-lg bg-black/40">
-                    <img
-                      src={qq.imageUrl}
-                      alt={qq.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-[11px] text-muted-foreground font-semibold">
-                      {qq.title}
-                    </p>
-                    <p className="text-xs font-semibold mt-1 text-destructive">
-                      Sua resposta: Alternativa {answers[qq.id]}
-                    </p>
-                    <p className="text-xs font-semibold text-success">
-                      Resposta Correta: Alternativa {qq.correctAnswer}
-                    </p>
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div>
-      )}
 
       <div className="flex gap-2 flex-wrap">
         <button
