@@ -69,7 +69,7 @@ export function RaciocinioMIGQuiz({
         setFinished(true);
         onFinishRef.current();
       } else {
-        setIndex((i) => i + 1);
+        setIndex((i) => Math.min(total - 1, i + 1));
       }
     }
     // Modo admin (preview): aguarda o botão "Próxima" para revelar o gabarito
@@ -81,7 +81,7 @@ export function RaciocinioMIGQuiz({
       onFinishRef.current();
       return;
     }
-    setIndex((i) => i + 1);
+    setIndex((i) => Math.min(total - 1, i + 1));
   };
 
   const prev = () => setIndex((i) => Math.max(0, i - 1));

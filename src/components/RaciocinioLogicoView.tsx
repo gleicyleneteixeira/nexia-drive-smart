@@ -111,7 +111,7 @@ export function RaciocinioLogicoView({ onBack }: { onBack: () => void }) {
               mode="prova"
               questions={MIG_OFFICIAL}
               timeLimit={120}
-              onFinish={() => setSelectedLevel(null)}
+              onFinish={() => {}}
               onHub={() => setSelectedLevel(null)}
             />
           </motion.div>
