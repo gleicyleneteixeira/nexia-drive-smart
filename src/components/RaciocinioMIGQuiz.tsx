@@ -45,9 +45,9 @@ export function RaciocinioMIGQuiz({
   const onFinishRef = useRef(onFinish);
   onFinishRef.current = onFinish;
 
-  // Cronômetro global de prova
+  // Cronômetro global de prova (desativado no modo admin de divulgação)
   useEffect(() => {
-    if (finished) return;
+    if (finished || isAdminPreview) return;
     if (timeLeft <= 0) {
       setFinished(true);
       onFinishRef.current();
@@ -58,7 +58,7 @@ export function RaciocinioMIGQuiz({
       1000,
     );
     return () => clearTimeout(id);
-  }, [timeLeft, finished, onFinishRef]);
+  }, [timeLeft, finished, isAdminPreview, onFinishRef]);
 
   const setAnswer = (a: Answer) => {
     if (answered) return;
@@ -122,20 +122,22 @@ export function RaciocinioMIGQuiz({
           transition={{ type: "spring", stiffness: 200, damping: 25 }}
         />
       </div>
-      <div className="flex items-center justify-end gap-1.5 text-xs font-semibold">
-        <Timer
-          className={`h-4 w-4 ${
-            timeLeft <= 10 ? "text-destructive animate-pulse" : "text-primary"
-          }`}
-        />
-        <span
-          className={`font-display font-bold ${
-            timeLeft <= 10 ? "text-destructive" : "text-foreground"
-          }`}
-        >
-          {timeLeft}s
-        </span>
-      </div>
+      {!isAdminPreview && (
+        <div className="flex items-center justify-end gap-1.5 text-xs font-semibold">
+          <Timer
+            className={`h-4 w-4 ${
+              timeLeft <= 10 ? "text-destructive animate-pulse" : "text-primary"
+            }`}
+          />
+          <span
+            className={`font-display font-bold ${
+              timeLeft <= 10 ? "text-destructive" : "text-foreground"
+            }`}
+          >
+            {timeLeft}s
+          </span>
+        </div>
+      )}
 
       {/* Image */}
       <div className="glass rounded-3xl p-4 shadow-card">
@@ -365,6 +367,46 @@ function ResultView({
           })}
         </div>
       </div>
+
+      {/* Revisão dos Seus Erros */}
+      {questions.some(
+        (qq) => answers[qq.id] && answers[qq.id] !== qq.correctAnswer,
+      ) && (
+        <div className="glass rounded-3xl p-4 shadow-card space-y-3">
+          <h3 className="text-sm font-display font-bold flex items-center gap-1.5">
+            <X className="h-4 w-4 text-destructive" /> Revisão dos Seus Erros
+          </h3>
+          <div className="space-y-3">
+            {questions
+              .filter((qq) => answers[qq.id] && answers[qq.id] !== qq.correctAnswer)
+              .map((qq) => (
+                <div
+                  key={qq.id}
+                  className="flex gap-3 rounded-xl border border-destructive/30 bg-destructive/5 p-3"
+                >
+                  <div className="w-20 h-20 shrink-0 overflow-hidden rounded-lg bg-black/40">
+                    <img
+                      src={qq.imageUrl}
+                      alt={qq.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[11px] text-muted-foreground font-semibold">
+                      {qq.title}
+                    </p>
+                    <p className="text-xs font-semibold mt-1 text-destructive">
+                      Sua resposta: Alternativa {answers[qq.id]}
+                    </p>
+                    <p className="text-xs font-semibold text-success">
+                      Resposta Correta: Alternativa {qq.correctAnswer}
+                    </p>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
+      )}
 
       <div className="flex gap-2 flex-wrap">
         <button

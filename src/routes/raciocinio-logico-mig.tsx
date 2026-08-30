@@ -55,7 +55,7 @@ function RaciocinioLogicoMIG() {
         <RaciocinioMIGQuiz
           mode="treino"
           questions={MIG_QUESTIONS}
-          timeLimit={300}
+          timeLimit={120}
           onFinish={() => {}}
           onHub={() => setLevel("hub")}
         />
@@ -64,7 +64,7 @@ function RaciocinioLogicoMIG() {
         <RaciocinioMIGQuiz
           mode="prova"
           questions={MIG_OFFICIAL}
-          timeLimit={300}
+          timeLimit={120}
           onFinish={() => {}}
           onHub={() => setLevel("hub")}
         />
