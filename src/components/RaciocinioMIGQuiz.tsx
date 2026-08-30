@@ -22,12 +22,14 @@ export function RaciocinioMIGQuiz({
   timeLimit = 300,
   onFinish,
   onHub,
+  isAdminPreview = false,
 }: {
   mode: "treino" | "prova";
   questions: MIGQuestion[];
   timeLimit?: number;
   onFinish: () => void;
   onHub: () => void;
+  isAdminPreview?: boolean;
 }) {
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, Answer>>({});
@@ -47,6 +49,7 @@ export function RaciocinioMIGQuiz({
   useEffect(() => {
     if (finished) return;
     if (timeLeft <= 0) {
+      setFinished(true);
       onFinishRef.current();
       return;
     }
@@ -60,6 +63,16 @@ export function RaciocinioMIGQuiz({
   const setAnswer = (a: Answer) => {
     if (answered) return;
     setAnswers((prev) => ({ ...prev, [q.id]: a }));
+    // Modo usuário: avança em silêncio, sem revelar o gabarito
+    if (!isAdminPreview) {
+      if (isLast) {
+        setFinished(true);
+        onFinishRef.current();
+      } else {
+        setIndex((i) => i + 1);
+      }
+    }
+    // Modo admin (preview): aguarda o botão "Próxima" para revelar o gabarito
   };
 
   const next = () => {
@@ -137,11 +150,17 @@ export function RaciocinioMIGQuiz({
           let cls =
             "border-border/30 bg-white/5 hover:bg-white/10 hover:border-primary/40";
           if (answered) {
-            if (isCorrect)
-              cls = "border-success bg-success/20 shadow-success-glow";
-            else if (isSelected)
-              cls = "border-destructive bg-destructive/20 shadow-destructive-glow";
-            else cls = "border-border/20 bg-white/5 opacity-60";
+            if (isAdminPreview) {
+              if (isCorrect)
+                cls = "border-success bg-success/20 shadow-success-glow";
+              else if (isSelected)
+                cls = "border-destructive bg-destructive/20 shadow-destructive-glow";
+              else cls = "border-border/20 bg-white/5 opacity-60";
+            } else {
+              // Modo usuário: não revela o gabarito, apenas destaca a selecionada
+              if (isSelected) cls = "border-primary bg-primary/20";
+              else cls = "border-border/20 bg-white/5 opacity-60";
+            }
           }
           return (
             <button
@@ -169,8 +188,8 @@ export function RaciocinioMIGQuiz({
         })}
       </div>
 
-      {/* Feedback */}
-      {answered && (
+      {/* Feedback (modo admin) — revela gabarito e justificativa na hora */}
+      {answered && isAdminPreview && (
         <div
           className={`rounded-2xl p-3 text-center text-xs font-semibold border ${
             selected === q.correctAnswer
@@ -195,6 +214,19 @@ export function RaciocinioMIGQuiz({
         </div>
       )}
 
+      {/* Modo usuário: navegação silenciosa (sem revelar gabarito) */}
+      {answered && !isAdminPreview && (
+        <div className="flex justify-end">
+          <button
+            onClick={next}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl glass text-xs font-semibold hover:bg-accent/30 transition-colors"
+          >
+            {isLast ? "Ver Resultado" : "Próxima ➔"}
+            <ArrowRight className="h-4 w-4" />
+          </button>
+        </div>
+      )}
+
       {/* Navigation */}
       <div className="flex items-center justify-between gap-3 pt-1">
         <button
@@ -207,8 +239,9 @@ export function RaciocinioMIGQuiz({
       </div>
 
       <p className="text-center text-[10px] text-muted-foreground">
-        Após responder, o gabarito e a justificativa aparecem abaixo. Avance com o
-        botão “Próxima”.
+        {isAdminPreview
+          ? "Modo pré-visualização (Admin): gabarito e justificativa aparecem abaixo de cada questão."
+          : "Responda e avance automaticamente. O gabarito completo só é revelado ao final do teste."}
       </p>
     </div>
   );

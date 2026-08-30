@@ -5,6 +5,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchLibraryItems, checkIsAdmin, SUPER_ADMIN_EMAIL, type LibraryItem, type LibraryItemType } from "@/lib/library";
 import { SimuladoEspelho } from "@/components/SimuladoEspelho";
 import { AdminDetranStats } from "@/components/AdminDetranStats";
+import { AdminMigPreview } from "@/components/AdminMigPreview";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,7 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, X, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen, Video, BadgeDollarSign, Gift, CheckCheck, CalendarClock, Lock, ChevronUp, ChevronDown, GripVertical, BarChart3 } from "lucide-react";
+import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, X, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen, Video, BadgeDollarSign, Gift, CheckCheck, CalendarClock, Lock, ChevronUp, ChevronDown, GripVertical, BarChart3, Brain } from "lucide-react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import * as XLSX from "xlsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
@@ -148,7 +149,7 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
       </div>
 
       <Tabs value={tab} onValueChange={setTab}>
-        <TabsList className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-7 w-full">
+        <TabsList className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-8 w-full">
           <TabsTrigger value="sales" className="gap-2 whitespace-nowrap"><ShoppingBag className="h-4 w-4" /> Vendas</TabsTrigger>
           <TabsTrigger value="users" className="gap-2 whitespace-nowrap"><Users className="h-4 w-4" /> Usuários</TabsTrigger>
           <TabsTrigger value="library" className="gap-2 whitespace-nowrap"><Upload className="h-4 w-4" /> Biblioteca</TabsTrigger>
@@ -156,6 +157,11 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
           <TabsTrigger value="settings" className="gap-2 whitespace-nowrap"><Settings className="h-4 w-4" /> Configurações</TabsTrigger>
           {isSuper ? (
             <TabsTrigger value="detran" className="gap-2 whitespace-nowrap"><BarChart3 className="h-4 w-4" /> DETRAN</TabsTrigger>
+          ) : (
+            <div className="hidden md:block" />
+          )}
+          {isSuper ? (
+            <TabsTrigger value="mig" className="gap-2 whitespace-nowrap"><Brain className="h-4 w-4" /> MIG Preview</TabsTrigger>
           ) : (
             <div className="hidden md:block" />
           )}
@@ -182,6 +188,9 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
         </TabsContent>
         <TabsContent value="detran" className="mt-4">
           <AdminDetranStats />
+        </TabsContent>
+        <TabsContent value="mig" className="mt-4">
+          <AdminMigPreview />
         </TabsContent>
 <TabsContent value="library" className="mt-4 space-y-6">
           <ItemForm
