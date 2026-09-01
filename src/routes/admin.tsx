@@ -149,28 +149,18 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
       </div>
 
       <Tabs value={tab} onValueChange={setTab}>
-        <TabsList className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-8 w-full">
-          <TabsTrigger value="sales" className="gap-2 whitespace-nowrap"><ShoppingBag className="h-4 w-4" /> Vendas</TabsTrigger>
-          <TabsTrigger value="users" className="gap-2 whitespace-nowrap"><Users className="h-4 w-4" /> Usuários</TabsTrigger>
-          <TabsTrigger value="library" className="gap-2 whitespace-nowrap"><Upload className="h-4 w-4" /> Biblioteca</TabsTrigger>
-          <TabsTrigger value="ratings" className="gap-2 whitespace-nowrap"><Star className="h-4 w-4" /> Avaliações</TabsTrigger>
-          <TabsTrigger value="settings" className="gap-2 whitespace-nowrap"><Settings className="h-4 w-4" /> Configurações</TabsTrigger>
-          {isSuper ? (
-            <TabsTrigger value="detran" className="gap-2 whitespace-nowrap"><BarChart3 className="h-4 w-4" /> DETRAN</TabsTrigger>
-          ) : (
-            <div className="hidden md:block" />
-          )}
-          {isSuper ? (
-            <TabsTrigger value="mig" className="gap-2 whitespace-nowrap"><Brain className="h-4 w-4" /> MIG Preview</TabsTrigger>
-          ) : (
-            <div className="hidden md:block" />
-          )}
-          {isSuper ? (
-            <TabsTrigger value="espelho" className="gap-2 whitespace-nowrap"><Video className="h-4 w-4" /> Simulado p/ divulgação</TabsTrigger>
-          ) : (
-            <div className="hidden md:block" />
-          )}
-        </TabsList>
+        <div className="w-full overflow-x-auto scrollbar-none -mx-1 px-1">
+          <TabsList className="flex w-max min-w-full gap-1 p-1">
+            <TabsTrigger value="sales" className="gap-2 whitespace-nowrap"><ShoppingBag className="h-4 w-4" /> Vendas</TabsTrigger>
+            <TabsTrigger value="users" className="gap-2 whitespace-nowrap"><Users className="h-4 w-4" /> Usuários</TabsTrigger>
+            <TabsTrigger value="library" className="gap-2 whitespace-nowrap"><Upload className="h-4 w-4" /> Biblioteca</TabsTrigger>
+            <TabsTrigger value="ratings" className="gap-2 whitespace-nowrap"><Star className="h-4 w-4" /> Avaliações</TabsTrigger>
+            <TabsTrigger value="settings" className="gap-2 whitespace-nowrap"><Settings className="h-4 w-4" /> Configurações</TabsTrigger>
+            {isSuper && <TabsTrigger value="detran" className="gap-2 whitespace-nowrap"><BarChart3 className="h-4 w-4" /> DETRAN</TabsTrigger>}
+            {isSuper && <TabsTrigger value="mig" className="gap-2 whitespace-nowrap"><Brain className="h-4 w-4" /> MIG Preview</TabsTrigger>}
+            {isSuper && <TabsTrigger value="espelho" className="gap-2 whitespace-nowrap"><Video className="h-4 w-4" /> Simulado p/ divulgação</TabsTrigger>}
+          </TabsList>
+        </div>
         <TabsContent value="espelho" className="mt-4">
           <SimuladoEspelho onExit={() => setTab("sales")} />
         </TabsContent>
@@ -2314,9 +2304,52 @@ function SettingsPanel() {
     "Olá {nome}! Seja muito bem-vindo(a) ao Nexia Drive. Seu acesso já está liberado! 🚀"
   );
   const [vWelcomeMedia, setVWelcomeMedia] = useState("");
+  const [viperInstances, setViperInstances] = useState<Array<{ id: string; name: string; number: string }>>([]);
+  const [loadingViperInstances, setLoadingViperInstances] = useState(false);
+  const [webhookUrl, setWebhookUrl] = useState("");
+  const [webhookEnabled, setWebhookEnabled] = useState(true);
   const [testPhone, setTestPhone] = useState("");
   const [testName, setTestName] = useState("");
   const [testing, setTesting] = useState(false);
+
+  // Busca as instâncias/números disponíveis na API da ViperConnect a partir
+  // da URL e do Token informados, para popular o select de instância.
+  async function fetchViperInstances() {
+    if (!vApiUrl || !vToken) return;
+    setLoadingViperInstances(true);
+    try {
+      const base = vApiUrl.replace(/\/$/, "");
+      const response = await fetch(`${base}/instance/fetchInstances`, {
+        method: "GET",
+        headers: {
+          apikey: vToken,
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) throw new Error(`Falha ao conectar com a API (${response.status})`);
+      const data = await response.json();
+      const list: any[] = Array.isArray(data) ? data : Array.isArray(data?.data) ? data.data : [];
+      const formatted = list.map((inst: any) => ({
+        id: inst.instance?.instanceName || inst.id || inst.name || "",
+        name: inst.instance?.instanceName || inst.name || inst.id || "",
+        number: inst.instance?.owner || inst.number || "",
+      }));
+      setViperInstances(formatted.filter((i) => i.id));
+    } catch (error) {
+      console.error("Erro ao buscar instâncias da ViperConnect:", error);
+      toast.error("Não foi possível buscar as instâncias da ViperConnect.");
+    } finally {
+      setLoadingViperInstances(false);
+    }
+  }
+
+  // Dispara a busca automaticamente quando URL e Token estiverem preenchidos.
+  useEffect(() => {
+    if (vApiUrl && vToken && vToken.length > 5) {
+      fetchViperInstances();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [vApiUrl, vToken]);
 
   useQuery({
     queryKey: ["admin", "settings"],
@@ -2347,6 +2380,8 @@ function SettingsPanel() {
           "viperconnect_welcome_enabled",
           "viperconnect_welcome_message",
           "viperconnect_welcome_media_url",
+          "global_webhook_url",
+          "global_webhook_enabled",
         ]);
       if (vError) {
         // Tabela pode ainda não existir (404/PGRST116): não trava a tela,
@@ -2363,6 +2398,10 @@ function SettingsPanel() {
           "Olá {nome}! Seja muito bem-vindo(a) ao Nexia Drive. Seu acesso já está liberado! 🚀"
       );
       setVWelcomeMedia(vmap.viperconnect_welcome_media_url ?? "");
+
+      // Webhook global de eventos do sistema (somente admin)
+      setWebhookUrl(vmap.global_webhook_url ?? "");
+      setWebhookEnabled(vmap.global_webhook_enabled !== "false");
 
       setLoaded(true);
       return { map, vmap };
@@ -2413,6 +2452,8 @@ function SettingsPanel() {
         { key: "viperconnect_welcome_enabled", value: vWelcomeEnabled ? "true" : "false" },
         { key: "viperconnect_welcome_message", value: vWelcomeMessage },
         { key: "viperconnect_welcome_media_url", value: vWelcomeMedia },
+        { key: "global_webhook_url", value: webhookUrl },
+        { key: "global_webhook_enabled", value: webhookEnabled ? "true" : "false" },
       ];
       for (const s of vSettings) {
         const { error } = await supabase.from("system_settings").upsert(s, { onConflict: "key" });
@@ -2569,8 +2610,38 @@ function SettingsPanel() {
         </div>
 
         <div className="space-y-2">
-          <Label className="text-xs font-semibold">ID da Instância / Número</Label>
-          <Input value={vInstance} onChange={(e) => setVInstance(e.target.value)} placeholder="ID da instância" className="flex-1" />
+          <div className="flex items-center justify-between">
+            <Label className="text-xs font-semibold">ID da Instância / Número</Label>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={fetchViperInstances}
+              disabled={loadingViperInstances || !vApiUrl || !vToken}
+            >
+              {loadingViperInstances && <Loader2 className="h-3 w-3 mr-1 animate-spin" />}
+              Buscar Instâncias
+            </Button>
+          </div>
+          <Select value={vInstance} onValueChange={setVInstance}>
+            <SelectTrigger className="flex-1">
+              <SelectValue placeholder="Selecione a instância" />
+            </SelectTrigger>
+            <SelectContent>
+              {viperInstances.length === 0 ? (
+                <SelectItem value="__none" disabled>
+                  Nenhuma instância encontrada
+                </SelectItem>
+              ) : (
+                viperInstances.map((inst) => (
+                  <SelectItem key={inst.id} value={inst.id}>
+                    {inst.name}
+                    {inst.number ? ` (${inst.number})` : ""}
+                  </SelectItem>
+                ))
+              )}
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="space-y-2">
@@ -2594,6 +2665,39 @@ function SettingsPanel() {
               Enviar teste
             </Button>
           </div>
+        </div>
+      </div>
+
+      <div className="space-y-4 border-t border-border/40 pt-6">
+        <h3 className="font-display font-bold text-sm">Webhook Global de Eventos</h3>
+        <p className="text-xs text-muted-foreground">
+          Envia um POST (JSON) para a URL abaixo sempre que eventos importantes acontecerem na plataforma (cadastro, solicitação de senha, pagamento aprovado/recusado etc.). Use para integrar com N8N, Make, webhook.site ou qualquer sistema externo.
+        </p>
+
+        <div className="flex items-center justify-between">
+          <div>
+            <Label className="text-xs font-semibold">Status do Webhook</Label>
+            <p className="text-xs text-muted-foreground">Liga/desliga o envio de eventos para a URL cadastrada.</p>
+          </div>
+          <Switch checked={webhookEnabled} onCheckedChange={setWebhookEnabled} />
+        </div>
+
+        <div className="space-y-2">
+          <Label className="text-xs font-semibold">URL do Webhook Global</Label>
+          <div className="flex gap-2">
+            <Input
+              value={webhookUrl}
+              onChange={(e) => setWebhookUrl(e.target.value)}
+              placeholder="https://webhook.site/…  ou  https://n8n.seudominio.com/webhook/…"
+              className="flex-1"
+            />
+            {webhookUrl ? (
+              <Button variant="outline" size="icon" onClick={() => window.open(webhookUrl, "_blank")} title="Abrir URL">
+                <ExternalLink className="h-4 w-4" />
+              </Button>
+            ) : null}
+          </div>
+          <p className="text-xs text-muted-foreground">Se vazia ou desativada, o sistema ignora o envio sem causar lentidão.</p>
         </div>
       </div>
 

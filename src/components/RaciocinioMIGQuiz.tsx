@@ -61,6 +61,8 @@ export function RaciocinioMIGQuiz({
   const [timeLeft, setTimeLeft] = useState(
     savedSession ? savedSession.timeLeft : timeLimit,
   );
+  const [pageInput, setPageInput] = useState("");
+  const [autoAdvancing, setAutoAdvancing] = useState(false);
 
   // Persiste o progresso para retomada após troca de aba/navegação
   useEffect(() => {
@@ -101,7 +103,25 @@ export function RaciocinioMIGQuiz({
   const setAnswer = (a: Answer) => {
     if (answered) return;
     setAnswers((prev) => ({ ...prev, [q.id]: a }));
+    if (isAdminPreview) {
+      setAutoAdvancing(true);
+    }
   };
+
+  // Auto-advance after 0.5s when in admin preview
+  useEffect(() => {
+    if (!isAdminPreview || !autoAdvancing || !answered) return;
+    const timer = setTimeout(() => {
+      if (isLast) {
+        setFinished(true);
+        onFinishRef.current();
+      } else {
+        setIndex((i) => Math.min(total - 1, i + 1));
+      }
+      setAutoAdvancing(false);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [isAdminPreview, autoAdvancing, answered, isLast, total]);
 
   const next = () => {
     if (isLast) {
@@ -113,6 +133,13 @@ export function RaciocinioMIGQuiz({
   };
 
   const prev = () => setIndex((i) => Math.max(0, i - 1));
+
+  const goToPage = (num: number) => {
+    const n = Math.max(1, Math.min(total, num));
+    setIndex(n - 1);
+    setPageInput("");
+    setAutoAdvancing(false);
+  };
 
   const restart = () => {
     setAnswers({});
@@ -247,29 +274,69 @@ export function RaciocinioMIGQuiz({
         </div>
       )}
 
-      {/* Navegação manual: avança apenas pelo botão "Próxima" */}
+      {/* Navegação: admin tem input de página, não tem botão Próxima */}
       <div className="flex items-center justify-between gap-3 pt-1">
-        <button
-          onClick={prev}
-          disabled={index === 0}
-          className="inline-flex items-center gap-1.5 px-4 py-3 rounded-xl glass text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
-        >
-          <ArrowLeft className="h-4 w-4" /> Anterior
-        </button>
-        <button
-          onClick={next}
-          disabled={!answered}
-          className="inline-flex items-center gap-1.5 px-5 py-3 rounded-xl gradient-primary text-primary-foreground text-xs font-semibold shadow-glow active:scale-95 transition-transform disabled:opacity-40 disabled:cursor-not-allowed"
-        >
-          {isLast ? "Ver Resultado" : "Próxima ➔"}
-          <ArrowRight className="h-4 w-4" />
-        </button>
+        {isAdminPreview ? (
+          <>
+            <button
+              onClick={prev}
+              disabled={index === 0 || autoAdvancing}
+              className="inline-flex items-center gap-1.5 px-4 py-3 rounded-xl glass text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              <ArrowLeft className="h-4 w-4" /> Anterior
+            </button>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground">Ir p/</span>
+              <input
+                type="number"
+                min={1}
+                max={total}
+                value={pageInput}
+                onChange={(e) => setPageInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && pageInput) goToPage(Number(pageInput));
+                }}
+                onBlur={() => { if (pageInput) goToPage(Number(pageInput)); }}
+                placeholder="#"
+                className="w-14 h-9 rounded-lg border border-border/30 bg-white/5 text-center text-xs font-semibold text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-primary"
+              />
+              <span className="text-xs text-muted-foreground">/ {total}</span>
+            </div>
+            {isLast && answered && !autoAdvancing && (
+              <button
+                onClick={() => { setFinished(true); onFinishRef.current(); }}
+                className="inline-flex items-center gap-1.5 px-5 py-3 rounded-xl gradient-primary text-primary-foreground text-xs font-semibold shadow-glow active:scale-95 transition-transform"
+              >
+                Ver Resultado
+              </button>
+            )}
+            {!isLast && <div className="w-[120px]" />}
+          </>
+        ) : (
+          <>
+            <button
+              onClick={prev}
+              disabled={index === 0}
+              className="inline-flex items-center gap-1.5 px-4 py-3 rounded-xl glass text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              <ArrowLeft className="h-4 w-4" /> Anterior
+            </button>
+            <button
+              onClick={next}
+              disabled={!answered}
+              className="inline-flex items-center gap-1.5 px-5 py-3 rounded-xl gradient-primary text-primary-foreground text-xs font-semibold shadow-glow active:scale-95 transition-transform disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              {isLast ? "Ver Resultado" : "Próxima ➔"}
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          </>
+        )}
       </div>
 
       <p className="text-center text-[10px] text-muted-foreground">
         {isAdminPreview
-          ? "Modo pré-visualização (Admin): gabarito e justificativa aparecem abaixo de cada questão."
-          : "Selecione uma alternativa e avance com o botão “Próxima”. O gabarito completo só é revelado ao final do teste."}
+          ? "Clique na resposta para ver o gabarito. Avança automaticamente em 0.5s. Use o campo de página para pular direto."
+          : "Selecione uma alternativa e avance com o botão Próxima. O gabarito completo só é revelado ao final do teste."}
       </p>
     </div>
   );
