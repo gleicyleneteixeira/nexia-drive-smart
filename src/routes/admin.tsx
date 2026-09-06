@@ -3,6 +3,13 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchLibraryItems, checkIsAdmin, SUPER_ADMIN_EMAIL, type LibraryItem, type LibraryItemType } from "@/lib/library";
+import { 
+  fetchVideoTutorials, 
+  addVideoTutorial, 
+  updateVideoTutorial, 
+  deleteVideoTutorial,
+  type VideoTutorial 
+} from "@/lib/video-tutorials";
 import { SimuladoEspelho } from "@/components/SimuladoEspelho";
 import { AdminDetranStats } from "@/components/AdminDetranStats";
 import { AdminMigPreview } from "@/components/AdminMigPreview";
@@ -15,7 +22,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, X, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen, Video, BadgeDollarSign, Gift, CheckCheck, CalendarClock, Lock, ChevronUp, ChevronDown, GripVertical, BarChart3, Brain } from "lucide-react";
+import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, X, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen, Video, BadgeDollarSign, Gift, CheckCheck, CalendarClock, Lock, ChevronUp, ChevronDown, GripVertical, BarChart3, Brain, Play } from "lucide-react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import * as XLSX from "xlsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
@@ -87,8 +94,19 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
     queryFn: () => fetchLibraryItems(true),
   });
   const [editing, setEditing] = useState<LibraryItem | null>(null);
-  const [tab, setTab] = useState("sales");
-  const [categoryFilter, setCategoryFilter] = useState<"all" | "teorico" | "psicotecnico" | "direcao">("all");
+  
+  // Read tab from URL query parameter
+  const getInitialTab = () => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get("tab");
+      if (tabParam) return tabParam;
+    }
+    return "sales";
+  };
+  
+  const [tab, setTab] = useState(getInitialTab);
+  const [categoryFilter, setCategoryFilter] = useState<"all" | "teorico" | "psicotecnico" | "direcao" | "tutorial">("all");
   const isSuper = email === SUPER_ADMIN_EMAIL;
 
   // Filter items by selected category
@@ -133,91 +151,72 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
     }
   }
 
-  return (
-    <div className="mx-auto max-w-full px-4 lg:px-8 py-8 space-y-6">
-      <div className="flex items-center justify-between gap-3 flex-wrap">
-        <div>
-          <Link to="/" className="text-xs text-muted-foreground flex items-center gap-1 hover:text-foreground">
-            <ArrowLeft className="h-3 w-3" /> Início
-          </Link>
-          <h1 className="text-2xl font-display font-bold">Painel Admin</h1>
-          <p className="text-sm text-muted-foreground">{email}</p>
-        </div>
-        <Button variant="outline" onClick={onSignOut} size="sm">
-          <LogOut className="h-4 w-4 mr-2" /> Sair
-        </Button>
-      </div>
+  const menuItems = [
+    { id: "sales", label: "Vendas", icon: ShoppingBag },
+    { id: "users", label: "Usuários", icon: Users },
+    { id: "library", label: "Biblioteca", icon: Upload },
+    { id: "videos", label: "Vídeos", icon: Video },
+    { id: "ratings", label: "Avaliações", icon: Star },
+    { id: "settings", label: "Configurações", icon: Settings },
+  ];
 
-      <Tabs value={tab} onValueChange={setTab}>
-        <div className="w-full overflow-x-auto scrollbar-none -mx-1 px-1">
-          <TabsList className="flex w-max min-w-full gap-1 p-1">
-            <TabsTrigger value="sales" className="gap-2 whitespace-nowrap"><ShoppingBag className="h-4 w-4" /> Vendas</TabsTrigger>
-            <TabsTrigger value="users" className="gap-2 whitespace-nowrap"><Users className="h-4 w-4" /> Usuários</TabsTrigger>
-            <TabsTrigger value="library" className="gap-2 whitespace-nowrap"><Upload className="h-4 w-4" /> Biblioteca</TabsTrigger>
-            <TabsTrigger value="ratings" className="gap-2 whitespace-nowrap"><Star className="h-4 w-4" /> Avaliações</TabsTrigger>
-            <TabsTrigger value="settings" className="gap-2 whitespace-nowrap"><Settings className="h-4 w-4" /> Configurações</TabsTrigger>
-            {isSuper && <TabsTrigger value="detran" className="gap-2 whitespace-nowrap"><BarChart3 className="h-4 w-4" /> DETRAN</TabsTrigger>}
-            {isSuper && <TabsTrigger value="mig" className="gap-2 whitespace-nowrap"><Brain className="h-4 w-4" /> MIG Preview</TabsTrigger>}
-            {isSuper && <TabsTrigger value="espelho" className="gap-2 whitespace-nowrap"><Video className="h-4 w-4" /> Simulado p/ divulgação</TabsTrigger>}
-          </TabsList>
-        </div>
-        <TabsContent value="espelho" className="mt-4">
-          <SimuladoEspelho onExit={() => setTab("sales")} />
-        </TabsContent>
-        <TabsContent value="sales" className="mt-4">
-          <SalesPanel />
-        </TabsContent>
-        <TabsContent value="users" className="mt-4">
-          <UsersPanel />
-        </TabsContent>
-        <TabsContent value="ratings" className="mt-4">
-          <RatingsPanel />
-        </TabsContent>
-        <TabsContent value="settings" className="mt-4">
-          <SettingsPanel />
-        </TabsContent>
-        <TabsContent value="detran" className="mt-4">
-          <AdminDetranStats />
-        </TabsContent>
-        <TabsContent value="mig" className="mt-4">
-          <AdminMigPreview />
-        </TabsContent>
-<TabsContent value="library" className="mt-4 space-y-6">
-          <ItemForm
-            editing={editing}
-            onDone={() => {
-              setEditing(null);
-              refetch();
-              qc.invalidateQueries({ queryKey: ["library"] });
-            }}
-          />
-          <div className="glass rounded-2xl p-4">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="font-display font-bold">Itens ({filteredItems.length})</h2>
-              <Tabs value={categoryFilter} onValueChange={(v) => setCategoryFilter(v as "all" | "teorico" | "psicotecnico" | "direcao")} className="flex-1 max-w-md">
-                <TabsList className="grid grid-cols-4">
-                  <TabsTrigger value="all">Todos</TabsTrigger>
-                  <TabsTrigger value="teorico">Teórico</TabsTrigger>
-                  <TabsTrigger value="psicotecnico">Psicotécnico</TabsTrigger>
-                  <TabsTrigger value="direcao">Prático</TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
-            <DragDropContext onDragEnd={handleOnDragEnd}>
-              <Droppable droppableId="library-items">
-                {(provided, snapshot) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                    className="space-y-2"
-                  >
-                    {filteredItems.map((item, index) => (
-                      <Draggable key={item.id} draggableId={item.id} index={index}>
-                        {(provided, snapshot) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
+  const superItems = [
+    { id: "detran", label: "DETRAN", icon: BarChart3 },
+    { id: "mig", label: "Teste MIG (Preview Admin)", icon: Brain },
+    { id: "espelho", label: "Simulado p/ divulgação", icon: Video },
+  ];
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Main Content */}
+      <main className="overflow-y-auto">
+        <div className="p-6">
+          {tab === "espelho" && <SimuladoEspelho onExit={() => setTab("sales")} />}
+          {tab === "sales" && <SalesPanel />}
+          {tab === "users" && <UsersPanel />}
+          {tab === "ratings" && <RatingsPanel />}
+          {tab === "settings" && <SettingsPanel />}
+          {tab === "videos" && <VideoTutorialsPanel />}
+          {tab === "detran" && <AdminDetranStats />}
+          {tab === "mig" && <AdminMigPreview />}
+          {tab === "library" && (
+            <div className="space-y-6">
+              <ItemForm
+                editing={editing}
+                onDone={() => {
+                  setEditing(null);
+                  refetch();
+                  qc.invalidateQueries({ queryKey: ["library"] });
+                }}
+              />
+              <div className="glass rounded-2xl p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <h2 className="font-display font-bold">Itens ({filteredItems.length})</h2>
+                  <Tabs value={categoryFilter} onValueChange={(v) => setCategoryFilter(v as "all" | "teorico" | "psicotecnico" | "direcao" | "tutorial")} className="flex-1 max-w-md">
+                    <TabsList className="grid grid-cols-5">
+                      <TabsTrigger value="all">Todos</TabsTrigger>
+                      <TabsTrigger value="teorico">Teórico</TabsTrigger>
+                      <TabsTrigger value="psicotecnico">Psicotécnico</TabsTrigger>
+                      <TabsTrigger value="direcao">Prático</TabsTrigger>
+                      <TabsTrigger value="tutorial">Tutorial</TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+                </div>
+                <DragDropContext onDragEnd={handleOnDragEnd}>
+                  <Droppable droppableId="library-items">
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        className="space-y-2"
+                      >
+                        {filteredItems.map((item, index) => (
+                          <Draggable key={item.id} draggableId={item.id} index={index}>
+                            {(provided, snapshot) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
                             className={`flex items-center justify-between gap-3 p-3 rounded-xl bg-background/50 transition-shadow ${
                               snapshot.isDragging ? "shadow-xl ring-2 ring-primary" : ""
                             }`}
@@ -234,7 +233,8 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
                               <Badge variant="secondary" className="text-xs">
                                 {item.module_type === "teorico" ? "Teórico" :
                                  item.module_type === "psicotecnico" ? "Psicotécnico" :
-                                 item.module_type === "direcao" ? "Prático" : item.module_type}
+                                 item.module_type === "direcao" ? "Prático" :
+                                 item.module_type === "tutorial" ? "Tutorial" : item.module_type}
                               </Badge>
                             </div>
                             <p className="text-xs text-muted-foreground mt-1">
@@ -255,8 +255,10 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
             </DragDropContext>
             {filteredItems.length === 0 && <p className="text-sm text-muted-foreground text-center py-6">Nenhum item encontrado. Adicione abaixo ou altere o filtro.</p>}
           </div>
-        </TabsContent>
-      </Tabs>
+        </div>
+      )}
+        </div>
+      </main>
     </div>
   );
 }
@@ -299,9 +301,10 @@ function dayKey(iso: string): string {
   return `${d.getFullYear()}-${m}-${day}`;
 }
 
-function SalesPanel() {
+export function SalesPanel() {
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+  const [showBestDays, setShowBestDays] = useState(false);
   const salesFn = useServerFn(getSalesReport);
 
   const { data, isLoading } = useQuery({
@@ -345,7 +348,29 @@ function SalesPanel() {
       };
     });
 
-  function applyPreset(preset: "hoje" | "7" | "30" | "tudo") {
+  const bestDaysData = Array.from(byDay.entries())
+    .sort((a, b) => b[1] - a[1])
+    .map(([k, count], index) => {
+      const [, m, d] = k.split("-").map(Number);
+      const revenueForDay = filtered
+        .filter((s) => dayKey(s.created_at) === k)
+        .reduce((acc, s) => acc + (s.amount ?? 0), 0);
+      return {
+        rank: index + 1,
+        date: `${String(d).padStart(2, "0")}/${String(m).padStart(2, "0")}`,
+        fullDate: k,
+        vendas: count,
+        receita: revenueForDay,
+        isHoje: k === todayKey,
+      };
+    });
+
+  function applyPreset(preset: "hoje" | "7" | "30" | "tudo" | "bestDays") {
+    if (preset === "bestDays") {
+      setShowBestDays(true);
+      return;
+    }
+    setShowBestDays(false);
     if (preset === "tudo") {
       setDateFrom("");
       setDateTo("");
@@ -379,10 +404,16 @@ function SalesPanel() {
           <Input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className="w-40" />
         </div>
         <div className="flex gap-1.5 flex-wrap">
-          {(["hoje", "7", "30", "tudo"] as const).map((p) => {
-            const label = p === "hoje" ? "Hoje" : p === "7" ? "Últimos 7 dias" : p === "30" ? "Últimos 30 dias" : "Tudo";
+          {(["hoje", "7", "30", "tudo", "bestDays"] as const).map((p) => {
+            const label = p === "hoje" ? "Hoje" : p === "7" ? "Últimos 7 dias" : p === "30" ? "Últimos 30 dias" : p === "bestDays" ? "🏆 Melhores Dias" : "Tudo";
+            const isActive = p === "bestDays" ? showBestDays : !showBestDays;
             return (
-              <Button key={p} size="sm" variant="outline" onClick={() => applyPreset(p)}>
+              <Button 
+                key={p} 
+                size="sm" 
+                variant={isActive && ((p === "bestDays" && showBestDays) || (p !== "bestDays" && !showBestDays)) ? "default" : "outline"} 
+                onClick={() => applyPreset(p)}
+              >
                 {label}
               </Button>
             );
@@ -441,6 +472,54 @@ function SalesPanel() {
           </ChartContainer>
         )}
       </div>
+
+      {/* Melhores Dias Ranking */}
+      {showBestDays && bestDaysData.length > 0 && (
+        <div className="glass rounded-2xl p-4">
+          <h2 className="font-display font-bold mb-3 flex items-center gap-2">
+            🏆 Ranking de Melhores Dias
+            <span className="text-xs font-normal text-muted-foreground">(ordenado por vendas)</span>
+          </h2>
+          <div className="overflow-x-auto rounded-lg border border-border/40">
+            <table className="w-full text-sm">
+              <thead className="bg-background/50 text-xs uppercase text-muted-foreground">
+                <tr>
+                  <th className="text-center px-3 py-2 w-16">#</th>
+                  <th className="text-left px-3 py-2">Data</th>
+                  <th className="text-center px-3 py-2">Vendas</th>
+                  <th className="text-right px-3 py-2">Receita</th>
+                </tr>
+              </thead>
+              <tbody>
+                {bestDaysData.map((day) => (
+                  <tr 
+                    key={day.fullDate} 
+                    className={`border-t border-border/30 ${
+                      day.rank <= 3 ? 'bg-primary/5' : ''
+                    } ${day.isHoje ? 'bg-success/10' : ''}`}
+                  >
+                    <td className="text-center px-3 py-2">
+                      {day.rank === 1 ? '🥇' : day.rank === 2 ? '🥈' : day.rank === 3 ? '🥉' : (
+                        <span className="text-muted-foreground">{day.rank}º</span>
+                      )}
+                    </td>
+                    <td className="px-3 py-2 font-medium">
+                      {day.date}
+                      {day.isHoje && <span className="ml-2 text-xs text-success">(Hoje)</span>}
+                    </td>
+                    <td className="text-center px-3 py-2">
+                      <span className="font-bold text-primary">{day.vendas}</span>
+                    </td>
+                    <td className="text-right px-3 py-2 text-success font-medium">
+                      {currency.format(day.receita)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
 
       <div className="glass rounded-2xl p-4">
         <h2 className="font-display font-bold mb-3">Compradores ({filtered.length})</h2>
@@ -534,7 +613,7 @@ const EMPLOYMENT_LABELS: Record<string, string> = {
 
 const PAGE_SIZES = [10, 20, 50, 100, 500, 1000, 99999] as const;
 
-function UsersPanel() {
+export function UsersPanel() {
   const qc = useQueryClient();
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<string>("all");
@@ -1486,7 +1565,7 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
   const [isPaid, setIsPaid] = useState(false);
   const [priceCents, setPriceCents] = useState("");
   const [published, setPublished] = useState(true);
-  const [moduleType, setModuleType] = useState<"teorico" | "psicotecnico" | "direcao">("teorico");
+  const [moduleType, setModuleType] = useState<"teorico" | "psicotecnico" | "direcao" | "tutorial">("teorico");
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
@@ -1700,12 +1779,13 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
         </div>
         <div>
           <Label>Categoria *</Label>
-          <Select value={moduleType} onValueChange={(v) => setModuleType(v as "teorico" | "psicotecnico" | "direcao")}>
+          <Select value={moduleType} onValueChange={(v) => setModuleType(v as "teorico" | "psicotecnico" | "direcao" | "tutorial")}>
             <SelectTrigger><SelectValue /></SelectTrigger>
             <SelectContent>
               <SelectItem value="teorico">Teórico</SelectItem>
               <SelectItem value="psicotecnico">Psicotécnico</SelectItem>
               <SelectItem value="direcao">Direção</SelectItem>
+              <SelectItem value="tutorial">Tutorial</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -1908,6 +1988,59 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
         <Label>Capa (imagem — opcional)</Label>
         <Input type="file" accept="image/*" onChange={(e) => setCoverFile(e.target.files?.[0] ?? null)} />
         {coverUrl && !coverFile && <p className="text-xs text-muted-foreground mt-1">Capa atual definida.</p>}
+        
+        {/* Video frame selector for video items */}
+        {itemType === "video" && url && (
+          <div className="mt-3 space-y-2">
+            <p className="text-xs text-muted-foreground">
+              {url.includes('youtube') || url.includes('youtu.be') 
+                ? "Capa buscada automaticamente do YouTube."
+                : "Selecione um frame do vídeo como capa (funciona para TikTok, Instagram, Facebook, etc.):"}
+            </p>
+            {!url.includes('youtube') && !url.includes('youtu.be') && (
+              <>
+                <div className="relative rounded-lg overflow-hidden border border-border/40">
+                  <video
+                    src={url}
+                    controls
+                    className="w-full h-auto max-h-48"
+                    onLoadedMetadata={(e) => {
+                      const video = e.currentTarget;
+                      video.currentTime = 1;
+                    }}
+                  />
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    const video = document.querySelector('video[src="' + url + '"]') as HTMLVideoElement;
+                    if (video) {
+                      const canvas = document.createElement('canvas');
+                      canvas.width = video.videoWidth;
+                      canvas.height = video.videoHeight;
+                      const ctx = canvas.getContext('2d');
+                      if (ctx) {
+                        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                        canvas.toBlob((blob) => {
+                          if (blob) {
+                            const file = new File([blob], 'frame-capa.jpg', { type: 'image/jpeg' });
+                            setCoverFile(file);
+                            setCoverUrl(URL.createObjectURL(blob));
+                          }
+                        }, 'image/jpeg', 0.9);
+                      }
+                    }
+                  }}
+                  className="w-full"
+                >
+                  📷 Capturar frame atual como capa
+                </Button>
+              </>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 items-end">
@@ -1947,7 +2080,7 @@ type RatingRow = {
   updated_at: string;
 };
 
-function RatingsPanel() {
+export function RatingsPanel() {
   const [dateFrom, setDateFrom] = useState<string>("");
   const [dateTo, setDateTo] = useState<string>("");
 
@@ -2281,7 +2414,323 @@ function ContributionsPanel({ dateFrom, dateTo }: { dateFrom: string; dateTo: st
   );
 }
 
-function SettingsPanel() {
+export function VideoTutorialsPanel() {
+  const qc = useQueryClient();
+  const [videos, setVideos] = useState<VideoTutorial[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [editing, setEditing] = useState<VideoTutorial | null>(null);
+  const [showForm, setShowForm] = useState(false);
+  
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [url, setUrl] = useState("");
+  const [thumbnailUrl, setThumbnailUrl] = useState("");
+  const [module, setModule] = useState<"hub" | "psicotecnico" | "teorico" | "direcao">("hub");
+
+  useEffect(() => {
+    loadVideos();
+  }, []);
+
+  async function loadVideos() {
+    setLoading(true);
+    const data = await fetchVideoTutorials();
+    setVideos(data.sort((a, b) => a.sort_order - b.sort_order));
+    setLoading(false);
+  }
+
+  function resetForm() {
+    setTitle("");
+    setDescription("");
+    setUrl("");
+    setThumbnailUrl("");
+    setModule("hub");
+    setEditing(null);
+    setShowForm(false);
+  }
+
+  function startEdit(video: VideoTutorial) {
+    setEditing(video);
+    setTitle(video.title);
+    setDescription(video.description);
+    setUrl(video.url);
+    setThumbnailUrl(video.thumbnail_url);
+    setModule(video.module);
+    setShowForm(true);
+  }
+
+  async function handleSave() {
+    if (!title || !url) {
+      toast.error("Título e URL são obrigatórios");
+      return;
+    }
+
+    setSaving(true);
+    try {
+      if (editing) {
+        await updateVideoTutorial(editing.id, {
+          title,
+          description,
+          url,
+          thumbnail_url: thumbnailUrl,
+          module,
+        });
+        toast.success("Vídeo atualizado!");
+      } else {
+        await addVideoTutorial({
+          title,
+          description,
+          url,
+          thumbnail_url: thumbnailUrl,
+          module,
+          sort_order: videos.length,
+        });
+        toast.success("Vídeo adicionado!");
+      }
+      resetForm();
+      await loadVideos();
+      qc.invalidateQueries({ queryKey: ["video-tutorials"] });
+    } catch (error) {
+      toast.error("Erro ao salvar vídeo");
+    }
+    setSaving(false);
+  }
+
+  async function handleDelete(id: string) {
+    if (!confirm("Apagar este vídeo?")) return;
+    
+    try {
+      await deleteVideoTutorial(id);
+      toast.success("Vídeo apagado!");
+      await loadVideos();
+      qc.invalidateQueries({ queryKey: ["video-tutorials"] });
+    } catch (error) {
+      toast.error("Erro ao apagar vídeo");
+    }
+  }
+
+  async function handleMove(id: string, direction: "up" | "down") {
+    const index = videos.findIndex((v) => v.id === id);
+    if (index === -1) return;
+    
+    const newIndex = direction === "up" ? index - 1 : index + 1;
+    if (newIndex < 0 || newIndex >= videos.length) return;
+    
+    const newVideos = [...videos];
+    [newVideos[index], newVideos[newIndex]] = [newVideos[newIndex], newVideos[index]];
+    
+    const orderedIds = newVideos.map((v) => v.id);
+    const { reorderVideoTutorials } = await import("@/lib/video-tutorials");
+    await reorderVideoTutorials(orderedIds);
+    setVideos(newVideos);
+  }
+
+  const moduleLabels = {
+    hub: "Início",
+    psicotecnico: "Psicotécnico",
+    teorico: "Teórico",
+    direcao: "Prático",
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-lg font-display font-bold flex items-center gap-2">
+            <Video className="h-5 w-5 text-primary" />
+            Vídeos Tutoriais
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Gerencie os vídeos que aparecem na página inicial
+          </p>
+        </div>
+        <Button 
+          onClick={() => setShowForm(true)}
+          className="gradient-primary"
+        >
+          <Video className="h-4 w-4 mr-2" /> Adicionar Vídeo
+        </Button>
+      </div>
+
+      {/* Form Dialog */}
+      <Dialog open={showForm} onOpenChange={setShowForm}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>{editing ? "Editar Vídeo" : "Adicionar Vídeo"}</DialogTitle>
+            <DialogDescription>
+              Adicione um vídeo do YouTube ou outra plataforma
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>Título *</Label>
+              <Input
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Ex: Como funciona o sistema"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label>Descrição</Label>
+              <Textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Breve descrição do vídeo"
+                rows={2}
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label>URL do Vídeo *</Label>
+              <Input
+                value={url}
+                onChange={(e) => {
+                  const newUrl = e.target.value;
+                  setUrl(newUrl);
+                  // Auto-fetch thumbnail for YouTube URLs
+                  const ytMatch = newUrl.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+                  if (ytMatch && !thumbnailUrl) {
+                    setThumbnailUrl(`https://img.youtube.com/vi/${ytMatch[1]}/maxresdefault.jpg`);
+                  }
+                }}
+                placeholder="https://www.youtube.com/watch?v=... ou https://www.tiktok.com/..."
+              />
+              <p className="text-xs text-muted-foreground">
+                YouTube (busca capa automática), TikTok, Instagram, Facebook ou qualquer URL de vídeo.
+              </p>
+            </div>
+            
+            <div className="space-y-2">
+              <Label>URL da Thumbnail (opcional)</Label>
+              <Input
+                value={thumbnailUrl}
+                onChange={(e) => setThumbnailUrl(e.target.value)}
+                placeholder="Buscada automaticamente do YouTube"
+              />
+              {thumbnailUrl && (
+                <div className="mt-2 rounded-lg overflow-hidden border border-border/40 w-full h-24">
+                  <img src={thumbnailUrl} alt="Prévia da capa" className="w-full h-full object-cover" />
+                </div>
+              )}
+            </div>
+            
+            <div className="space-y-2">
+              <Label>Módulo</Label>
+              <Select value={module} onValueChange={(v) => setModule(v as any)}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="hub">Início</SelectItem>
+                  <SelectItem value="psicotecnico">Psicotécnico</SelectItem>
+                  <SelectItem value="teorico">Teórico</SelectItem>
+                  <SelectItem value="direcao">Prático</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={resetForm}>
+              Cancelar
+            </Button>
+            <Button onClick={handleSave} disabled={saving}>
+              {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+              {editing ? "Salvar" : "Adicionar"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Videos List */}
+      {loading ? (
+        <div className="flex justify-center py-8">
+          <Loader2 className="h-6 w-6 animate-spin text-primary" />
+        </div>
+      ) : videos.length === 0 ? (
+        <div className="glass rounded-2xl p-8 text-center">
+          <Video className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+          <p className="text-muted-foreground">
+            Nenhum vídeo cadastrado. Clique em "Adicionar Vídeo" para começar.
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {videos.map((video, index) => (
+            <div
+              key={video.id}
+              className="glass rounded-xl p-4 flex items-center gap-4"
+            >
+              <div className="w-32 h-20 rounded-lg overflow-hidden bg-background/50 shrink-0">
+                {video.thumbnail_url ? (
+                  <img 
+                    src={video.thumbnail_url} 
+                    alt={video.title}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <Play className="h-8 w-8 text-muted-foreground" />
+                  </div>
+                )}
+              </div>
+              
+              <div className="flex-1 min-w-0">
+                <h3 className="font-semibold truncate">{video.title}</h3>
+                <p className="text-xs text-muted-foreground truncate">
+                  {video.description || "Sem descrição"}
+                </p>
+                <div className="flex items-center gap-2 mt-1">
+                  <Badge variant="outline" className="text-xs">
+                    {moduleLabels[video.module]}
+                  </Badge>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-1">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleMove(video.id, "up")}
+                  disabled={index === 0}
+                >
+                  <ChevronUp className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleMove(video.id, "down")}
+                  disabled={index === videos.length - 1}
+                >
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => startEdit(video)}
+                >
+                  <Pencil className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleDelete(video.id)}
+                  className="text-destructive hover:text-destructive"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function SettingsPanel() {
   const qc = useQueryClient();
   const [saving, setSaving] = useState(false);
   const [groupLink, setGroupLink] = useState("");
@@ -2289,6 +2738,8 @@ function SettingsPanel() {
   const [tiktokLink, setTiktokLink] = useState("");
   const [showPopup, setShowPopup] = useState(true);
   const [showTiktokPopup, setShowTiktokPopup] = useState(true);
+  const [whatsappCover, setWhatsappCover] = useState("");
+  const [tiktokCover, setTiktokCover] = useState("");
   const [showButton, setShowButton] = useState(true);
   const [freeTrialEnabled, setFreeTrialEnabled] = useState(true);
   const [freeTrialQuestions, setFreeTrialQuestions] = useState(7);
@@ -2365,6 +2816,8 @@ function SettingsPanel() {
       setTiktokLink(map.tiktok_group_link ?? "");
       setShowPopup(map.show_group_popup !== "false");
       setShowTiktokPopup(map.show_tiktok_popup !== "false");
+      setWhatsappCover(map.whatsapp_group_cover ?? "");
+      setTiktokCover(map.tiktok_group_cover ?? "");
       setShowButton(map.show_whatsapp_button !== "false");
       setFreeTrialEnabled(map.free_trial_enabled !== "false");
       setFreeTrialQuestions(map.free_trial_questions ? parseInt(map.free_trial_questions, 10) : 7);
@@ -2436,6 +2889,8 @@ function SettingsPanel() {
         { key: "show_group_popup", value: showPopup ? "true" : "false" },
         { key: "tiktok_group_link", value: tiktokLink },
         { key: "show_tiktok_popup", value: showTiktokPopup ? "true" : "false" },
+        { key: "whatsapp_group_cover", value: whatsappCover },
+        { key: "tiktok_group_cover", value: tiktokCover },
         { key: "free_trial_enabled", value: freeTrialEnabled ? "true" : "false" },
         { key: "free_trial_questions", value: String(freeTrialQuestions) },
       ];
@@ -2520,6 +2975,16 @@ function SettingsPanel() {
             </Button>
           </div>
         </div>
+        <div className="space-y-2">
+          <Label className="text-xs font-semibold">Capa do Grupo (URL da imagem)</Label>
+          <Input value={whatsappCover} onChange={(e) => setWhatsappCover(e.target.value)} placeholder="https://exemplo.com/capa.jpg" />
+          <p className="text-xs text-muted-foreground">URL da imagem que aparece no topo do popup. Se vazio, mostra ícone padrão.</p>
+          {whatsappCover && (
+            <div className="mt-2 rounded-lg overflow-hidden border border-border/40 w-full h-24">
+              <img src={whatsappCover} alt="Prévia da capa" className="w-full h-full object-cover" />
+            </div>
+          )}
+        </div>
         <div className="flex items-center justify-between">
           <div>
             <Label className="text-xs font-semibold">Exibir Pop-up do Grupo</Label>
@@ -2539,6 +3004,16 @@ function SettingsPanel() {
               <ExternalLink className="h-4 w-4" />
             </Button>
           </div>
+        </div>
+        <div className="space-y-2">
+          <Label className="text-xs font-semibold">Capa do Grupo (URL da imagem)</Label>
+          <Input value={tiktokCover} onChange={(e) => setTiktokCover(e.target.value)} placeholder="https://exemplo.com/capa.jpg" />
+          <p className="text-xs text-muted-foreground">URL da imagem que aparece no topo do popup. Se vazio, mostra ícone padrão.</p>
+          {tiktokCover && (
+            <div className="mt-2 rounded-lg overflow-hidden border border-border/40 w-full h-24">
+              <img src={tiktokCover} alt="Prévia da capa" className="w-full h-full object-cover" />
+            </div>
+          )}
         </div>
         <div className="flex items-center justify-between">
           <div>

@@ -1,0 +1,142 @@
+Warning: Please use the `legacy` build in Node.js environments.
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-users.functions.ts:5:39 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-users.functions.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:14:27 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:23:34 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:35:35 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:52:40 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:98:35 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:167:33 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:178:31 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:205:46 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:258:34 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:285:36 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:320:40 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:428:31 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:447:29 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:489:39 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:586:35 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:630:38 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:652:41 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:683:34 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:723:41 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:737:38 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:763:30 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:782:32 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:802:31 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:817:33 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:832:32 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:852:43 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:942:32 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:1207:38 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:1259:42 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:1322:31 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+[2m20:59:19[22m [33m[1m[vite][22m[39m [33m[2m(client)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts:1405:40 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:client[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-operations.server.ts[39m
+TanStack Start server functions are not protected by the CSRF middleware.
+
+Server functions are same-origin RPC endpoints and should be protected from cross-site requests.
+
+Add the CSRF middleware in src/start.ts:
+
+  const csrfMiddleware = createCsrfMiddleware({
+    filter: (ctx) => ctx.handlerType === 'serverFn',
+  })
+
+  export const startInstance = createStart(() => ({
+    requestMiddleware: [csrfMiddleware],
+  }))
+
+If you intentionally handle CSRF another way, disable this warning:
+
+  tanstackStart({
+    serverFns: {
+      disableCsrfMiddlewareWarning: true,
+    },
+  })
+[2m20:59:21[22m [33m[1m[vite][22m[39m [33m[2m(ssr)[22m[39m [33mwarning: C:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-users.functions.ts?tss-serverfn-split:5:39 createServerFn().inputValidator() is deprecated. Use createServerFn().validator() instead.[39m
+  Plugin: [35mtanstack-start-core::server-fn:ssr[39m
+  File: [36mC:/Users/Win 10/OneDrive/Desktop/git/nexia-drive-smart/src/lib/admin-users.functions.ts?tss-serverfn-split[39m
+TanStack Start server functions are not protected by the CSRF middleware.
+
+Server functions are same-origin RPC endpoints and should be protected from cross-site requests.
+
+Add the CSRF middleware in src/start.ts:
+
+  const csrfMiddleware = createCsrfMiddleware({
+    filter: (ctx) => ctx.handlerType === 'serverFn',
+  })
+
+  export const startInstance = createStart(() => ({
+    requestMiddleware: [csrfMiddleware],
+  }))
+
+If you intentionally handle CSRF another way, disable this warning:
+
+  tanstackStart({
+    serverFns: {
+      disableCsrfMiddlewareWarning: true,
+    },
+  })

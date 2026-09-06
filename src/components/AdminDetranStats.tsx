@@ -271,7 +271,7 @@ export function AdminDetranStats() {
                     onChange={(e) =>
                       handleChange(item.uf, "pratica", e.target.value)
                     }
-                    className="w-24 px-3 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-center text-rose-400 font-bold focus:outline-none focus:border-rose-500"
+                    className="w-24 px-3 py-1.5 bg-background border border-border rounded-lg text-center text-primary font-bold focus:outline-none focus:border-primary"
                   />{" "}
                   %
                 </td>

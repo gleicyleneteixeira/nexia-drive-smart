@@ -5,11 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Loader2, Eye, EyeOff, User, ShieldCheck, ArrowLeft } from "lucide-react";
+import { Loader2, Eye, EyeOff, User, ArrowLeft } from "lucide-react";
 import { formatCpf, isValidCpf } from "@/lib/cpf";
+import { triggerWebhook } from "@/services/webhookService";
 
 export const Route = createFileRoute("/auth")({
   component: AuthPage,
@@ -29,7 +30,7 @@ const employmentToDb: Record<string, string> = {
 
 function AuthPage() {
   const navigate = useNavigate();
-  const [portal, setPortal] = useState<"user" | "admin">("user");
+  const portal = "user";
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -54,9 +55,9 @@ function AuthPage() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: portal === "admin" ? "/admin" : "/" });
+      if (data.session) navigate({ to: "/app" });
     });
-  }, [navigate, portal]);
+  }, [navigate]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -186,7 +187,7 @@ function AuthPage() {
         }
 
         toast.success("Bem-vinda(o) de volta!");
-        navigate({ to: portal === "admin" ? "/admin" : "/" });
+        navigate({ to: "/app" });
       }
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Erro";
@@ -236,7 +237,7 @@ function AuthPage() {
 
       toast.success("Senha cadastrada com sucesso! Bem-vindo(a)!");
       setLegacyUserModal(false);
-      navigate({ to: portal === "admin" ? "/admin" : "/" });
+      navigate({ to: "/app" });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Erro ao atualizar senha.");
     } finally {
@@ -250,6 +251,7 @@ function AuthPage() {
     try {
       const { requestPasswordResetSecure } = await import("@/lib/admin-operations.server");
       await requestPasswordResetSecure({ data: { input: forgotEmail } });
+      triggerWebhook("PASSWORD_RESET_REQUESTED", { email: forgotEmail });
       toast.success("Senha temporária gerada e enviada para o seu e-mail!");
       setForgotOpen(false);
       setForgotEmail("");
@@ -260,41 +262,23 @@ function AuthPage() {
     }
   }
 
-  const isAdminPortal = portal === "admin";
-
   return (
     <div className="mx-auto max-w-md px-4 py-10">
       <Link to="/" className="text-xs text-muted-foreground flex items-center gap-1 mb-3 hover:text-foreground">
         <ArrowLeft className="h-3 w-3" /> Início
       </Link>
-      <Tabs value={portal} onValueChange={(v) => { setPortal(v as "user" | "admin"); setMode("login"); }}>
-        <TabsList className="grid grid-cols-2 w-full h-11 mb-4">
-          <TabsTrigger value="user" className="gap-2"><User className="h-4 w-4" /> Usuário</TabsTrigger>
-          <TabsTrigger value="admin" className="gap-2"><ShieldCheck className="h-4 w-4" /> Gestão</TabsTrigger>
-        </TabsList>
 
-        <TabsContent value="user" />
-        <TabsContent value="admin" />
-      </Tabs>
-
-      <div className={`glass rounded-3xl p-7 shadow-card border ${isAdminPortal ? "border-primary/40" : "border-border/40"}`}>
-        {isAdminPortal && (
-          <div className="mb-4 flex items-center gap-2 text-xs text-primary bg-primary/10 rounded-lg px-3 py-2">
-            <ShieldCheck className="h-4 w-4" /> Acesso restrito à equipe de gestão.
-          </div>
-        )}
+      <div className="glass rounded-3xl p-7 shadow-card border border-border/40">
         <h1 className="text-2xl font-display font-bold mb-1">
           {mode === "login" ? "Entrar" : "Criar conta"}
         </h1>
         <p className="text-sm text-muted-foreground mb-5">
-          {isAdminPortal
-            ? "Acesso administrativo"
-            : mode === "login"
+          {mode === "login"
             ? "Acesse sua conta"
             : "Cadastro rápido — comece agora"}
         </p>
         <form onSubmit={onSubmit} className="space-y-4">
-          {mode === "signup" && !isAdminPortal && (
+          {mode === "signup" && (
             <>
               <div>
                 <Label htmlFor="name">Nome completo *</Label>
@@ -370,12 +354,10 @@ function AuthPage() {
             {mode === "login" ? "Entrar" : "Criar conta"}
           </Button>
         </form>
-        {!isAdminPortal && (
-          <button type="button" onClick={() => setMode(mode === "login" ? "signup" : "login")}
-            className="mt-4 text-sm text-muted-foreground hover:text-foreground w-full text-center">
-            {mode === "login" ? "Não tem conta? Criar uma" : "Já tem conta? Entrar"}
-          </button>
-        )}
+        <button type="button" onClick={() => setMode(mode === "login" ? "signup" : "login")}
+          className="mt-4 text-sm text-muted-foreground hover:text-foreground w-full text-center">
+          {mode === "login" ? "Não tem conta? Criar uma" : "Já tem conta? Entrar"}
+        </button>
       </div>
 
       <Dialog open={forgotOpen} onOpenChange={setForgotOpen}>

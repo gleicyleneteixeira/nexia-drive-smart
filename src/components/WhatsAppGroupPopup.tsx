@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { X, MessageCircle, ExternalLink, Users, Gift, PartyPopper } from "lucide-react";
+import { X, MessageCircle, ExternalLink, Users, Gift, PartyPopper, Image as ImageIcon } from "lucide-react";
 
 type GroupKey = "whatsapp" | "tiktok";
 
@@ -120,7 +120,7 @@ export function GroupPopups({
   const pendingGroup = GROUP_KEYS.find((key) => {
     if (dismissed[key]) return false;
     const cfg = GROUP_CONFIG[key];
-    if (settings[cfg.showKey] === "false") return false;
+    if (settings[cfg.showKey] === "false" || settings[cfg.showKey] === undefined) return false;
     if (!settings[cfg.linkKey]) return false;
     if (key === "whatsapp") {
       // Check 24h "Lembrar mais tarde" cooldown from localStorage
@@ -199,6 +199,8 @@ export function GroupPopups({
     onDone?.();
   }
 
+  const coverImage = settings[activeGroup === "whatsapp" ? "whatsapp_group_cover" : "tiktok_group_cover"];
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
       <div className="bg-card rounded-2xl p-6 max-w-md w-full shadow-xl border relative animate-in fade-in zoom-in duration-200">
@@ -209,13 +211,19 @@ export function GroupPopups({
           <X className="h-5 w-5" />
         </button>
         <div className="space-y-4">
-          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-success to-emerald-600 flex items-center justify-center mx-auto shadow-lg">
-            {activeGroup === "whatsapp" ? (
-              <Gift className="h-7 w-7 text-white" />
-            ) : (
-              <Users className="h-7 w-7 text-white" />
-            )}
-          </div>
+          {coverImage ? (
+            <div className="w-full h-32 rounded-xl overflow-hidden mx-auto">
+              <img src={coverImage} alt="Capa do grupo" className="w-full h-full object-cover" />
+            </div>
+          ) : (
+            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-success to-emerald-600 flex items-center justify-center mx-auto shadow-lg">
+              {activeGroup === "whatsapp" ? (
+                <MessageCircle className="h-7 w-7 text-white" />
+              ) : (
+                <Users className="h-7 w-7 text-white" />
+              )}
+            </div>
+          )}
           <div className="text-center">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-primary/10 border border-primary/30 text-[10px] font-bold text-primary mb-2">
               {cfg.badge}

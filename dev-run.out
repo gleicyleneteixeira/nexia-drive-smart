@@ -1,0 +1,31 @@
+
+> dev
+> vite dev
+
+
+  [32m[1mVITE[22m v7.3.6[39m  [2mready in [0m[1m3637[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m8080[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.100.48:[1m8080[22m/[39m
+[2m[32m  ➜[39m[22m[2m  press [22m[1mh + enter[22m[2m to show help[22m
+[vite] connected.
+[2m21:22:05[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles.css?direct, /src/components/RaciocinioMIGQuiz.tsx[22m
+[2m21:22:12[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles.css?direct, /src/components/RaciocinioMIGQuiz.tsx[22m
+[2m21:22:20[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles.css?direct, /src/components/RaciocinioMIGQuiz.tsx[22m
+[2m21:22:28[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles.css?direct, /src/components/RaciocinioMIGQuiz.tsx[22m
+[2m21:22:37[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles.css?direct, /src/components/RaciocinioMIGQuiz.tsx[22m
+[2m21:22:44[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles.css?direct, /src/components/RaciocinioMIGQuiz.tsx[22m
+[2m21:23:00[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles.css?direct, /src/routes/admin.tsx, /src/routes/admin.tsx?tsr-split=component[22m
+[2m21:23:00[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2msrc/routes/admin.tsx[22m
+[vite] program reload
+[2m21:23:04[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles.css?direct, /src/routes/admin.tsx, /src/routes/admin.tsx?tsr-split=component[22m
+[2m21:23:04[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2msrc/routes/admin.tsx[22m
+[2m21:30:25[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles.css?direct, /src/components/RaciocinioMIGQuiz.tsx[22m
+[2m21:30:25[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2msrc/components/RaciocinioMIGQuiz.tsx[22m
+[vite] program reload
+[2m21:30:40[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles.css?direct, /src/components/RaciocinioMIGQuiz.tsx[22m
+[2m21:30:40[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2msrc/components/RaciocinioMIGQuiz.tsx[22m
+[2m21:31:05[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles.css?direct, /src/components/RaciocinioMIGQuiz.tsx[22m
+[2m21:31:05[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2msrc/components/RaciocinioMIGQuiz.tsx[22m
+[2m21:31:12[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles.css?direct, /src/routes/raciocinio-logico-mig.tsx[22m
+[2m21:31:12[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2msrc/routes/raciocinio-logico-mig.tsx[22m

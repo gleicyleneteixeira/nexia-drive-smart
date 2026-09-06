@@ -102,7 +102,7 @@ export function RankingReprovacao({ userUF = "MG" }: { userUF?: string }) {
             onClick={() => setActiveTab("pratica")}
             className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${
               activeTab === "pratica"
-                ? "bg-rose-500 text-white shadow-md"
+                ? "bg-primary text-primary-foreground shadow-md"
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >

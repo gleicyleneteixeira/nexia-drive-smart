@@ -12,6 +12,7 @@ import { formatCpf, isValidCpf } from "@/lib/cpf";
 import { formatPhone } from "@/lib/phone";
 import { useAuth } from "@/hooks/use-auth";
 import { isProfileExpired } from "@/lib/subscription";
+import { triggerWebhook } from "@/services/webhookService";
 
 export const Route = createFileRoute("/cadastro")({
   component: CadastroPage,
@@ -334,6 +335,13 @@ function CadastroPage() {
             .update({ needs_new_password: false, is_first_access: false })
             .eq("id", signUpData.user.id);
           toast.success("Cadastro realizado com sucesso!");
+          triggerWebhook("USER_CREATED", {
+            id: signUpData.user.id,
+            email,
+            name: name.trim().toUpperCase(),
+            phone,
+            cpf,
+          });
           navigate({ to: "/checkout" });
           setLoading(false);
           return;

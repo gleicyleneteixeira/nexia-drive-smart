@@ -3,11 +3,18 @@ import { Link, Outlet, useLocation } from "@tanstack/react-router";
 import { Logo } from "./Logo";
 import { RequireAuth } from "./RequireAuth";
 import { RatingPrompt, triggerRatingPrompt } from "./RatingPrompt";
-import { Flame, Home, Sparkles, Zap, Trophy, TrafficCone, Brain, Library, LogIn, LogOut, UserCircle, Shield, Star, Car, Calendar } from "lucide-react";
+import { 
+  Flame, Home, Sparkles, Zap, Trophy, TrafficCone, Brain, Library, 
+  LogIn, LogOut, UserCircle, Shield, Star, Car, Calendar,
+  BookOpen, GraduationCap, Target, Settings, ChevronLeft, ChevronRight,
+  Palette, Upload, Video, BarChart3, Users, ShoppingBag, MessageCircle
+} from "lucide-react";
 import { CronogramaModal } from "./CronogramaModal";
 import { DailyCheckinBanner } from "./DailyCheckinBanner";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
+import { useTheme } from "@/hooks/use-theme";
+import { themes } from "@/lib/themes";
 import { supabase } from "@/integrations/supabase/client";
 import { isProfileExpired } from "@/lib/subscription";
 import {
@@ -18,22 +25,50 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const NAV_TEORICO = [
-  { to: "/app", label: "Início", icon: Home },
-] as const;
+type NavItem = { 
+  to: string; 
+  label: string; 
+  icon: any; 
+  module?: "teorico" | "psicotecnico" | "direcao";
+  adminSection?: string;
+};
 
-const NAV_PSICOTECNICO = [
-  { to: "/app", label: "Início", icon: Home },
-] as const;
+const NAV_ITEMS: NavItem[] = [
+  { to: "/app", label: "Inicio", icon: Home },
+  { to: "/app", label: "Psicotecnico", icon: Brain, module: "psicotecnico" },
+  { to: "/app", label: "Teorico", icon: BookOpen, module: "teorico" },
+  { to: "/app", label: "Pratico", icon: Car, module: "direcao" },
+  { to: "/biblioteca", label: "Biblioteca", icon: Library },
+  { to: "/simulado", label: "Simulado", icon: Target },
+  { to: "/conquistas", label: "Conquistas", icon: Trophy },
+];
+
+const ADMIN_ITEMS: NavItem[] = [
+  { to: "/admin", label: "Vendas", icon: ShoppingBag, adminSection: "sales" },
+  { to: "/admin", label: "Usuarios", icon: Users, adminSection: "users" },
+  { to: "/admin", label: "Biblioteca Admin", icon: Upload, adminSection: "library" },
+  { to: "/admin", label: "Videos", icon: Video, adminSection: "videos" },
+  { to: "/admin", label: "Avaliacoes", icon: Star, adminSection: "ratings" },
+  { to: "/admin", label: "Configuracoes", icon: Settings, adminSection: "settings" },
+];
+
+const SUPER_ADMIN_ITEMS: NavItem[] = [
+  { to: "/admin", label: "DETRAN", icon: BarChart3, adminSection: "detran" },
+  { to: "/admin", label: "Teste MIG (Preview Admin)", icon: Brain, adminSection: "mig" },
+  { to: "/admin", label: "Simulado Divulgacao", icon: Video, adminSection: "espelho" },
+];
+
+const STORAGE_SIDEBAR_KEY = '@nexia_sidebar_collapsed';
 
 export function AppShell() {
   const { pathname } = useLocation();
   const { user, profile, isAdmin, signOut } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   const isPublicPage = pathname === "/" || pathname === "/cadastro" || pathname === "/auth" || pathname === "/reset-password" || pathname === "/simulado-demo";
   const isActive = (profile?.status === "ativo" && !isProfileExpired(profile)) || isAdmin;
   const isPending = (profile?.status === "pendente_pagamento" || isProfileExpired(profile)) && !isAdmin;
-  const activeAuth = pathname === "/cadastro" || pathname === "/auth" || pathname === "/admin";
+  const activeAuth = pathname === "/cadastro" || pathname === "/auth";
 
   const [activeModule, setActiveModule] = useState<"hub" | "teorico" | "psicotecnico" | "direcao">(() => {
     if (typeof window !== "undefined") {
@@ -45,6 +80,21 @@ export function AppShell() {
   const [cronogramaOpen, setCronogramaOpen] = useState(false);
   const [supportLink, setSupportLink] = useState<string | null>(null);
   const [showSupportButton, setShowSupportButton] = useState(true);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem(STORAGE_SIDEBAR_KEY);
+      return stored === "true";
+    }
+    return false;
+  });
+  const [activeAdminSection, setActiveAdminSection] = useState<string | null>(null);
+  const [isAdminMenuOpen, setIsAdminMenuOpen] = useState(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("nexia:admin_menu_open");
+      return stored !== "false"; // Default to open
+    }
+    return true;
+  });
 
   useEffect(() => {
     supabase
@@ -81,13 +131,31 @@ export function AppShell() {
     }
   };
 
+  const handleToggleSidebar = () => {
+    const newState = !sidebarCollapsed;
+    setSidebarCollapsed(newState);
+    localStorage.setItem(STORAGE_SIDEBAR_KEY, String(newState));
+  };
+
+  const handleToggleAdminMenu = () => {
+    const newState = !isAdminMenuOpen;
+    setIsAdminMenuOpen(newState);
+    localStorage.setItem("nexia:admin_menu_open", String(newState));
+  };
+
   const isHub = activeModule === "hub";
-  const navItems = activeModule === "teorico" ? NAV_TEORICO : NAV_PSICOTECNICO;
+  const navItems = activeModule === "teorico" ? NAV_ITEMS : NAV_ITEMS;
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="sticky top-0 z-40 glass border-b border-border/40">
-        <div className="mx-auto max-w-6xl px-4 h-16 flex items-center justify-between gap-3">
+    <div className="min-h-screen bg-background font-sans text-foreground flex flex-col">
+      {/* Sidebar - Videoooo Style */}
+      {!isPublicPage && isActive && (
+        <aside 
+          className={`fixed left-0 top-0 h-screen z-50 bg-card border-r border-border/50 flex flex-col py-4 gap-2 transition-all duration-300 ${
+            sidebarCollapsed ? 'w-[72px] items-center' : 'w-[200px] px-3'
+          }`}
+        >
+          {/* Logo */}
           <Link
             to={isActive ? "/app" : "/"}
             onClick={() => {
@@ -96,220 +164,313 @@ export function AppShell() {
                 window.dispatchEvent(new Event("nexia:active_module:change"));
               }
             }}
-            className="shrink-0 flex items-center gap-2"
+            className={`rounded-xl gradient-primary flex items-center justify-center text-primary-foreground font-black shadow-glow mb-4 ${
+              sidebarCollapsed ? 'w-12 h-12 text-lg' : 'w-12 h-12 text-lg'
+            }`}
           >
-            <Logo />
+            N
           </Link>
 
-          {/* Hub header: tagline */}
-          {isActive && isHub && (
-            <div className="hidden sm:flex items-center gap-2 text-xs text-muted-foreground">
-              <span>Treine no seu ritmo e</span>
-              <span className="px-2 py-0.5 rounded-full bg-primary/10 border border-primary/30 text-primary font-bold">chegue pronto(a)</span>
-              <span>para a prova</span>
-            </div>
-          )}
-
-          {/* Module header: switcher + nav items */}
-          {isActive && !isHub && (
-            <div className="hidden sm:flex items-center gap-4 min-w-0 flex-1 justify-center">
-              {/* Module Switcher */}
-              <div className="flex items-center gap-1 p-1 rounded-xl bg-background/50 border border-border/20 shrink-0">
-                <button
-                  onClick={() => handleToggleModule("psicotecnico")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
-                    activeModule === "psicotecnico"
-                      ? "bg-primary text-primary-foreground shadow-glow"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  <span>🧠</span> Psicotécnico
-                </button>
-                <button
-                  onClick={() => handleToggleModule("teorico")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
-                    activeModule === "teorico"
-                      ? "bg-primary text-primary-foreground shadow-glow"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  <span>📘</span> Teórico
-                </button>
-                <button
-                  onClick={() => handleToggleModule("direcao")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
-                    activeModule === "direcao"
-                      ? "bg-primary text-primary-foreground shadow-glow"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  <Car className="h-3.5 w-3.5" /> Prático
-                </button>
-              </div>
-
-              {/* Separator line */}
-              {!isHub && <div className="hidden lg:block h-5 w-px bg-border/40 shrink-0" />}
-
-              {/* Navigation Items */}
-              {!isHub && (
-              <div className="hidden lg:flex items-center gap-0.5">
-                {navItems.map((item) => {
-                  const active = pathname === item.to;
-                  const Icon = item.icon;
-                  const isInicio = item.to === "/app";
-                  return (
-                    <Link
-                      key={item.to}
-                      to={item.to}
-                      search={(item.to as string) === "/biblioteca" ? { module_type: activeModule } : undefined}
-                      onClick={isInicio ? () => {
-                        localStorage.removeItem("nexia:active_module");
-                        window.dispatchEvent(new Event("nexia:active_module:change"));
-                      } : undefined}
-                      className={`relative px-2 py-2 rounded-lg text-sm font-medium flex items-center gap-1.5 whitespace-nowrap transition-colors ${
-                        active
-                          ? "text-foreground"
-                          : "text-muted-foreground hover:text-foreground"
-                      }`}
-                    >
-                      <Icon className="h-4 w-4 shrink-0" />
-                      {item.label}
-                      {active && (
-                        <motion.div
-                          layoutId="nav-pill"
-                          className="absolute inset-0 -z-10 rounded-lg bg-primary/15 border border-primary/30"
-                          transition={{ type: "spring", stiffness: 300, damping: 28 }}
-                        />
-                      )}
-                    </Link>
-                  );
-                })}
-              </div>
-              )}
-            </div>
-          )}
-
-          <div className="flex items-center gap-3 shrink-0">
-            {/* Small screen inline module toggle — only inside a module */}
-            {isActive && !isHub && (
-              <div className="sm:hidden flex items-center bg-background/50 border border-border/20 rounded-lg p-0.5">
-                <button
-                  onClick={() => {
-                    if (activeModule === "psicotecnico") handleToggleModule("teorico");
-                    else if (activeModule === "teorico") handleToggleModule("direcao");
-                    else handleToggleModule("psicotecnico");
-                  }}
-                  className="px-2 py-1 text-xs font-bold text-primary flex items-center gap-1 cursor-pointer"
-                >
-                  {activeModule === "teorico" && "📘 Teórico"}
-                  {activeModule === "psicotecnico" && "🧠 Psico"}
-                  {activeModule === "direcao" && <><Car className="h-3 w-3" /> Prático</>}
-                </button>
-              </div>
-            )}
-
-            {isActive && !isHub && (
-              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full glass whitespace-nowrap">
-                <Flame className="h-4 w-4 text-warning" />
-                <span className="text-sm font-semibold">Estudo em dia</span>
-              </div>
-            )}
-
-            {/* Auth menu */}
-            {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button className={`relative px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors text-muted-foreground hover:text-foreground cursor-pointer`}>
-                    <UserCircle className="h-4 w-4" />
-                    <span className="max-w-[120px] truncate">{user.email}</span>
+          {/* Navigation Items */}
+          <nav className={`flex flex-col gap-1 flex-1 ${sidebarCollapsed ? 'items-center' : 'items-stretch'} overflow-y-auto`}>
+            {/* App Navigation Items */}
+            {navItems.map((item) => {
+              const active = item.module 
+                ? activeModule === item.module && !activeAdminSection
+                : pathname === item.to && activeModule === "hub" && !activeAdminSection;
+              const Icon = item.icon;
+              
+              const handleNavClick = () => {
+                setActiveAdminSection(null);
+                if (item.module) {
+                  handleToggleModule(item.module);
+                } else if (item.label === "Inicio") {
+                  localStorage.removeItem("nexia:active_module");
+                  window.dispatchEvent(new Event("nexia:active_module:change"));
+                  window.location.href = "/app";
+                }
+              };
+              
+              if (item.label === "Inicio") {
+                return (
+                  <button
+                    key={item.label}
+                    onClick={handleNavClick}
+                    className={`relative flex items-center gap-3 rounded-xl transition-all text-left ${
+                      sidebarCollapsed ? 'w-12 h-12 justify-center' : 'h-12 px-3'
+                    } ${
+                      active
+                        ? 'bg-primary/15 text-primary border border-primary/30'
+                        : 'text-muted-foreground hover:bg-accent hover:text-foreground'
+                    }`}
+                    title={item.label}
+                  >
+                    <Icon className="h-5 w-5 shrink-0" />
+                    {!sidebarCollapsed && (
+                      <span className="text-sm font-medium truncate">{item.label}</span>
+                    )}
                   </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  {isActive && (
-                    <>
-                      <DropdownMenuItem asChild>
-                        <Link to="/admin" className="flex items-center gap-2 cursor-pointer">
-                          <Shield className="h-4 w-4" />
-                          Admin
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => triggerRatingPrompt("manual")}
-                        className="flex items-center gap-2 cursor-pointer"
-                      >
-                        <Star className="h-4 w-4" />
-                        Avaliar o app
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      {activeModule === "teorico" && (
+                );
+              }
+              
+              return (
+                <button
+                  key={item.label}
+                  onClick={handleNavClick}
+                  className={`relative flex items-center gap-3 rounded-xl transition-all text-left ${
+                    sidebarCollapsed ? 'w-12 h-12 justify-center' : 'h-12 px-3'
+                  } ${
+                    active
+                      ? 'bg-primary/15 text-primary border border-primary/30'
+                      : 'text-muted-foreground hover:bg-accent hover:text-foreground'
+                  }`}
+                  title={item.label}
+                >
+                  <Icon className="h-5 w-5 shrink-0" />
+                  {!sidebarCollapsed && (
+                    <span className="text-sm font-medium truncate">{item.label}</span>
+                  )}
+                </button>
+              );
+            })}
+
+            {/* Admin Navigation Items - Expandable accordion */}
+            {isAdmin && !sidebarCollapsed && (
+              <div className="mt-auto pt-4 border-t border-border/30">
+                {/* Toggle button */}
+                <button
+                  onClick={handleToggleAdminMenu}
+                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-all"
+                >
+                  <span className="flex items-center gap-2">
+                    <Shield className="h-4 w-4" />
+                    Admin
+                  </span>
+                  <ChevronRight 
+                    className={`h-4 w-4 transition-transform duration-200 ${isAdminMenuOpen ? 'rotate-90' : ''}`} 
+                  />
+                </button>
+
+                {/* Admin Items - Visible when expanded */}
+                {isAdminMenuOpen && (
+                  <div className="mt-1 space-y-1 pl-2 border-l border-border/30 ml-4">
+                    {ADMIN_ITEMS.map((item) => {
+                      const active = pathname === "/admin" && activeAdminSection === item.adminSection;
+                      const Icon = item.icon;
+                      return (
+                        <button
+                          key={item.label}
+                          onClick={() => {
+                            setActiveAdminSection(item.adminSection ?? null);
+                            window.location.href = `/admin?tab=${item.adminSection}`;
+                          }}
+                          className={`w-full flex items-center gap-3 rounded-xl transition-all text-left h-10 px-3 text-sm ${
+                            active
+                              ? 'bg-primary/15 text-primary border border-primary/30'
+                              : 'text-muted-foreground hover:bg-accent hover:text-foreground'
+                          }`}
+                          title={item.label}
+                        >
+                          <Icon className="h-4 w-4 shrink-0" />
+                          <span className="truncate">{item.label}</span>
+                        </button>
+                      );
+                    })}
+
+                    {/* Super Admin Sub-section */}
+                    <div className="pt-2 pb-1 px-3">
+                      <p className="text-[10px] font-bold text-primary/70 uppercase tracking-wider">Super Admin</p>
+                    </div>
+                    
+                    {SUPER_ADMIN_ITEMS.map((item) => {
+                      const active = pathname === "/admin" && activeAdminSection === item.adminSection;
+                      const Icon = item.icon;
+                      return (
+                        <button
+                          key={item.label}
+                          onClick={() => {
+                            setActiveAdminSection(item.adminSection ?? null);
+                            window.location.href = `/admin?tab=${item.adminSection}`;
+                          }}
+                          className={`w-full flex items-center gap-3 rounded-xl transition-all text-left h-10 px-3 text-sm ${
+                            active
+                              ? 'bg-primary/15 text-primary border border-primary/30'
+                              : 'text-muted-foreground hover:bg-accent hover:text-foreground'
+                          }`}
+                          title={item.label}
+                        >
+                          <Icon className="h-4 w-4 shrink-0" />
+                          <span className="truncate">{item.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
+          </nav>
+
+          {/* Bottom Actions */}
+          <div className="flex flex-col items-center gap-2 mt-auto">
+            <button
+              onClick={toggleTheme}
+              className="w-12 h-12 rounded-xl flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition-all"
+              title={theme === 'rosa' ? "Mudar para tema Azul" : "Mudar para tema Rosa"}
+            >
+              <span className="text-xl" role="img" aria-label="Tema">{themes[theme].icon}</span>
+            </button>
+            <button
+              onClick={handleToggleSidebar}
+              className="w-12 h-12 rounded-xl flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition-all"
+              title={sidebarCollapsed ? "Expandir sidebar" : "Recolher sidebar"}
+            >
+              {sidebarCollapsed ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
+            </button>
+          </div>
+        </aside>
+      )}
+
+      {/* Main Content Area */}
+      <div className={`flex-1 flex flex-col transition-all duration-300 ${!isPublicPage && isActive ? (sidebarCollapsed ? 'pl-[72px]' : 'pl-[200px]') : ''}`}>
+        {/* Header - Videoooo Style */}
+        {!isPublicPage && isActive && (
+          <header className="sticky top-0 z-40 h-16 bg-card/90 backdrop-blur-xl border-b border-border/50 flex items-center justify-between px-6">
+            {/* Left: Page Title */}
+            <div className="flex items-center gap-4">
+              <h1 className="text-lg font-semibold text-foreground">
+                {pathname === "/app" && (
+                  activeModule === "psicotecnico" ? "Psicotecnico" :
+                  activeModule === "teorico" ? "Teorico" :
+                  activeModule === "direcao" ? "Pratico" :
+                  "Inicio"
+                )}
+                {pathname === "/psicotecnico" && "Psicotecnico"}
+                {pathname === "/biblioteca" && "Biblioteca"}
+                {pathname === "/simulado" && "Simulado"}
+                {pathname === "/conquistas" && "Conquistas"}
+              </h1>
+            </div>
+
+            {/* Center: Tagline */}
+            {isActive && isHub && (
+              <div className="hidden sm:flex items-center gap-2 text-xs text-muted-foreground">
+                <span>Treine no seu ritmo e</span>
+                <span className="px-2 py-0.5 rounded-full bg-primary/10 border border-primary/30 text-primary font-bold">chegue pronto</span>
+                <span>para a prova</span>
+              </div>
+            )}
+
+            {/* Right: User Menu */}
+            <div className="flex items-center gap-3">
+              {isActive && !isHub && (
+                <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/50 border border-border/20">
+                  <Flame className="h-4 w-4 text-amber-500" />
+                  <span className="text-sm font-semibold">Estudo em dia</span>
+                </div>
+              )}
+
+              {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="flex items-center gap-2 px-3 py-2 rounded-xl bg-background/50 border border-border/20 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
+                      <UserCircle className="h-4 w-4" />
+                      <span className="max-w-[120px] truncate hidden sm:inline">{user.email}</span>
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48 bg-card border-border">
+                    {isActive && (
+                      <>
+                        <DropdownMenuItem asChild>
+                          <Link to="/admin" className="flex items-center gap-2 cursor-pointer">
+                            <Shield className="h-4 w-4" />
+                            Admin
+                          </Link>
+                        </DropdownMenuItem>
                         <DropdownMenuItem
-                          onClick={() => setCronogramaOpen(true)}
+                          onClick={() => triggerRatingPrompt("manual")}
                           className="flex items-center gap-2 cursor-pointer"
                         >
-                          <Calendar className="h-4 w-4 mr-2" />
-                          <span>Meu Cronograma</span>
+                          <Star className="h-4 w-4" />
+                          Avaliar o app
                         </DropdownMenuItem>
-                      )}
-                    </>
-                  )}
-                  <DropdownMenuItem onClick={signOut} className="flex items-center gap-2 cursor-pointer text-destructive focus:text-destructive">
-                    <LogOut className="h-4 w-4" />
-                    Sair
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : null}
-          </div>
-        </div>
-      </header>
-
-      {/* Expiration warning banner — never shown for admins */}
-      {!isAdmin && profile && !profile.is_migrated && profile.expires_at && (() => {
-        const diffTime = new Date(profile.expires_at).getTime() - new Date().getTime();
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        if (diffDays > 0 && diffDays <= 5) {
-          return (
-            <div className="bg-amber-500/15 border-b border-amber-500/30 text-amber-400 text-xs py-2.5 px-4 text-center font-medium flex items-center justify-center gap-1.5">
-              <span>⚠️</span>
-              <span>Atenção: Seu período de teste/acesso expira em <strong>{diffDays} {diffDays === 1 ? "dia" : "dias"}</strong>!</span>
-              <Link to="/checkout" className="underline font-bold text-foreground hover:text-primary-glow ml-2">Renove seu plano agora</Link>
+                        <DropdownMenuSeparator />
+                        {activeModule === "teorico" && (
+                          <DropdownMenuItem
+                            onClick={() => setCronogramaOpen(true)}
+                            className="flex items-center gap-2 cursor-pointer"
+                          >
+                            <Calendar className="h-4 w-4 mr-2" />
+                            <span>Meu Cronograma</span>
+                          </DropdownMenuItem>
+                        )}
+                      </>
+                    )}
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={toggleTheme}
+                      className="flex items-center gap-2 cursor-pointer"
+                    >
+                      <Palette className="h-4 w-4" />
+                      Tema {theme === 'rosa' ? 'Azul' : 'Rosa'}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={signOut} className="flex items-center gap-2 cursor-pointer text-destructive focus:text-destructive">
+                      <LogOut className="h-4 w-4" />
+                      Sair
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : null}
             </div>
-          );
-        }
-        return null;
-      })()}
-
-      <RatingPrompt />
-      {activeModule === "teorico" && <DailyCheckinBanner />}
-      {activeModule === "teorico" && (
-        <CronogramaModal open={cronogramaOpen} onOpenChange={setCronogramaOpen} />
-      )}
-
-      {/* Floating WhatsApp button */}
-      {showSupportButton && supportLink && (
-        <a
-          href={supportLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="fixed bottom-4 right-4 z-50 flex items-center justify-center h-11 w-11 sm:h-14 sm:w-14 sm:bottom-6 sm:right-6 rounded-full bg-[#25D366] text-white shadow-lg hover:bg-[#22c35e] hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
-          title="Fale conosco no WhatsApp"
-        >
-          <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5 sm:h-7 sm:w-7">
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-          </svg>
-        </a>
-      )}
-
-      <main className="flex-1 pb-20 sm:pb-0">
-        {isPublicPage ? (
-          <Outlet />
-        ) : (
-          <RequireAuth>
-            <Outlet />
-          </RequireAuth>
+          </header>
         )}
-      </main>
+
+        {/* Expiration warning banner */}
+        {!isAdmin && profile && !profile.is_migrated && profile.expires_at && (() => {
+          const diffTime = new Date(profile.expires_at).getTime() - new Date().getTime();
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          if (diffDays > 0 && diffDays <= 5) {
+            return (
+              <div className="bg-amber-500/15 border-b border-amber-500/30 text-amber-400 text-xs py-2.5 px-4 text-center font-medium flex items-center justify-center gap-1.5">
+                <span>Atencao: Seu periodo de acesso expira em <strong>{diffDays} {diffDays === 1 ? "dia" : "dias"}</strong>!</span>
+                <Link to="/checkout" className="underline font-bold text-foreground hover:text-primary ml-2">Renove agora</Link>
+              </div>
+            );
+          }
+          return null;
+        })()}
+
+        <RatingPrompt />
+        {activeModule === "teorico" && <DailyCheckinBanner />}
+        {activeModule === "teorico" && (
+          <CronogramaModal open={cronogramaOpen} onOpenChange={setCronogramaOpen} />
+        )}
+
+        {/* Floating WhatsApp button */}
+        {showSupportButton && supportLink && (
+          <a
+            href={supportLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="fixed bottom-6 right-6 z-40 flex items-center justify-center h-14 w-14 rounded-full bg-[#25D366] text-white shadow-lg hover:bg-[#22c35e] hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer"
+            title="Fale conosco no WhatsApp"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21" />
+            </svg>
+          </a>
+        )}
+
+        {/* Main Content */}
+        <main className="flex-1 pb-20 sm:pb-0">
+          {isPublicPage ? (
+            <Outlet />
+          ) : (
+            <RequireAuth>
+              <Outlet />
+            </RequireAuth>
+          )}
+        </main>
+      </div>
     </div>
   );
 }
-

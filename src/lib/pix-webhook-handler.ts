@@ -1,5 +1,6 @@
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { getPlanDays } from "@/lib/subscription";
+import { triggerWebhook } from "@/services/webhookService";
 
 // EFI Pay envia callbacks para `POST url-webhook-cadastrada/pix` (sufixo "/pix"),
 // a menos que a URL seja cadastrada com "?ignorar=". Este handler é compartilhado
@@ -36,6 +37,44 @@ export async function handlePixWebhook(request: Request): Promise<Response> {
           .single();
 
         if (!txErr && tx) {
+          // Detecta se o pagamento foi aprovado ou recusado/cancelado/expirado.
+          const rawStatus = (item.status || "CONCLUIDA").toString().toUpperCase();
+          const isApproved =
+            rawStatus === "CONCLUIDA" ||
+            rawStatus === "REALIZADO" ||
+            rawStatus === "PAID" ||
+            rawStatus === "ATIVA";
+
+          // Dados do perfil para o webhook e para a mensagem de boas-vindas.
+          const { data: profile } = await supabaseAdmin
+            .from("profiles")
+            .select("phone, display_name, email")
+            .eq("id", tx.user_id)
+            .maybeSingle();
+
+          const userData = {
+            id: tx.user_id,
+            email: profile?.email ?? undefined,
+            name: profile?.display_name ?? undefined,
+            phone: profile?.phone ?? undefined,
+          };
+
+          if (!isApproved) {
+            // Pagamento recusado / cancelado / expirado.
+            await supabaseAdmin
+              .from("pix_transactions")
+              .update({ status: item.status || "RECUSADO", updated_at: new Date().toISOString() })
+              .eq("txid", txid);
+
+            triggerWebhook("PAYMENT_REFUSED", userData, {
+              status: item.status || "RECUSADO",
+              plan: tx.plan_type,
+              amount: tx.amount,
+            });
+            console.log(`Pagamento recusado (${item.status}) para txid ${txid}.`);
+            continue;
+          }
+
           // 2. Update transaction status
           await supabaseAdmin
             .from("pix_transactions")
@@ -62,13 +101,14 @@ export async function handlePixWebhook(request: Request): Promise<Response> {
 
           console.log(`Usuário ${tx.user_id} ativado com sucesso.`);
 
+          // Disparo do webhook global de pagamento aprovado (não bloqueia).
+          triggerWebhook("PAYMENT_APPROVED", userData, {
+            amount: tx.amount,
+            plan: tx.plan_type,
+          });
+
           // Disparo automático da mensagem de boas-vindas via ViperConnect (não bloqueia o webhook)
           try {
-            const { data: profile } = await supabaseAdmin
-              .from("profiles")
-              .select("phone, display_name, email")
-              .eq("id", tx.user_id)
-              .maybeSingle();
             if (profile?.phone) {
               const { dispatchViperConnectWelcome } = await import("@/lib/viperconnect");
               const welcomeName = profile.display_name || profile.email || "aluno(a)";

@@ -223,13 +223,13 @@ export function DailyCheckinBanner() {
   if (!visible || !pending || loading) return null;
 
   return (
-    <div className="relative bg-slate-900 border-b border-slate-800 text-white">
+    <div className="relative bg-card border-b border-border text-foreground">
       <div className="mx-auto max-w-6xl px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3">
         <div className="flex-1 min-w-0 pr-8">
-          <p className="text-sm font-semibold text-blue-400">👋 Que bom te ver de volta!</p>
-          <p className="text-xs text-slate-300 mt-0.5">
+          <p className="text-sm font-semibold text-primary">👋 Que bom te ver de volta!</p>
+          <p className="text-xs text-muted-foreground mt-0.5">
             Sua meta pendente:{" "}
-            <strong className="text-white">
+            <strong className="text-foreground">
               {pending.capitulo} — Páginas {pending.paginaInicio} a {pending.paginaFim} (Capítulo {pending.capituloId || "—"})
             </strong>
           </p>
@@ -248,7 +248,7 @@ export function DailyCheckinBanner() {
             variant="outline"
             onClick={handleLerAgora}
             disabled={saving}
-            className="border-slate-700 text-slate-200 hover:bg-slate-800"
+            className="border-border text-foreground hover:bg-accent"
           >
             <BookOpen className="h-4 w-4 mr-1.5" /> Ler Agora
           </Button>
@@ -256,7 +256,7 @@ export function DailyCheckinBanner() {
             type="button"
             variant="outline"
             onClick={handleGoSimulado}
-            className="border-slate-700 text-slate-200 hover:bg-slate-800"
+            className="border-border text-foreground hover:bg-accent"
           >
             <FileText className="h-4 w-4 mr-1.5" /> Ir p/ Simulado
           </Button>
@@ -265,7 +265,7 @@ export function DailyCheckinBanner() {
           type="button"
           onClick={() => setVisible(false)}
           aria-label="Fechar"
-          className="absolute right-3 top-3 text-slate-400 hover:text-white"
+          className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
         >
           <X className="h-4 w-4" />
         </button>

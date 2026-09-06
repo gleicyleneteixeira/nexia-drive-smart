@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";
 import { isProfileExpired } from "@/lib/subscription";
 import { fetchLibraryItems } from "@/lib/library";
+import { fetchVideoTutorials, type VideoTutorial } from "@/lib/video-tutorials";
 import { GroupPopups } from "@/components/WhatsAppGroupPopup";
 import { NativePdfModal } from "@/components/NativePdfModal";
 import { RankingReprovacao } from "@/components/RankingReprovacao";
@@ -151,6 +152,20 @@ function DashboardController() {
 // 1. HUB SELECTION COMPONENT
 // ==========================================
 function ModuleHub({ onSelect }: { onSelect: (mod: "teorico" | "psicotecnico" | "direcao") => void }) {
+  const { data: videos = [], isLoading: videosLoading } = useQuery({
+    queryKey: ["video-tutorials"],
+    queryFn: fetchVideoTutorials,
+  });
+
+  const { data: libraryItems = [], isLoading: libLoading } = useQuery({
+    queryKey: ["library", "hub-tutorials"],
+    queryFn: () => fetchLibraryItems(false),
+  });
+
+  const hubVideos = videos.filter((v) => v.module === "hub");
+  const tutorialItems = libraryItems.filter((i) => i.module_type === "tutorial" && !i.is_paid);
+  const [selectedVideo, setSelectedVideo] = useState<VideoTutorial | null>(null);
+
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 md:py-20 space-y-8 text-center relative">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[400px] pointer-events-none -z-10">
@@ -165,9 +180,155 @@ function ModuleHub({ onSelect }: { onSelect: (mod: "teorico" | "psicotecnico" | 
       >
         <h1 className="text-3xl md:text-5xl font-display font-bold">O que você deseja estudar hoje?</h1>
         <p className="text-muted-foreground text-sm md:text-base leading-relaxed">
-          Sua aprovação no DETRAN começa aqui. Selecione o módulo desejado para ver materiais exclusivos, simulados e vídeos explicativos.
+          Sua aprovação no DETRAN começa aqui. Assista aos tutoriais e selecione o módulo desejado para ver materiais exclusivos e simulados.
         </p>
       </motion.div>
+
+      {/* Video Tutorials Section */}
+      {hubVideos.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="max-w-4xl mx-auto"
+        >
+          <div className="flex items-center gap-2 justify-center mb-4">
+            <Video className="h-5 w-5 text-primary" />
+            <h2 className="text-lg font-display font-bold">Como funciona o sistema</h2>
+          </div>
+          
+          {videosLoading ? (
+            <div className="flex justify-center py-8">
+              <Loader2 className="h-6 w-6 animate-spin text-primary" />
+            </div>
+          ) : (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {hubVideos.map((video) => (
+                <motion.div
+                  key={video.id}
+                  whileHover={{ scale: 1.02 }}
+                  onClick={() => setSelectedVideo(video)}
+                  className="glass rounded-2xl overflow-hidden cursor-pointer border border-border/30 hover:border-primary/50 transition-all shadow-card hover:shadow-glow"
+                >
+                  <div className="aspect-video relative bg-background/50">
+                    {video.thumbnail_url ? (
+                      <img 
+                        src={video.thumbnail_url} 
+                        alt={video.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-primary-glow/20">
+                        <Play className="h-12 w-12 text-primary/50" />
+                      </div>
+                    )}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-full bg-primary/90 flex items-center justify-center shadow-glow">
+                        <Play className="h-5 w-5 text-primary-foreground ml-0.5" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-3 text-left">
+                    <h3 className="font-semibold text-sm line-clamp-1">{video.title}</h3>
+                    {video.description && (
+                      <p className="text-xs text-muted-foreground line-clamp-2 mt-1">{video.description}</p>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </motion.div>
+      )}
+
+      {/* Tutorial Items from Library */}
+      {tutorialItems.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="max-w-4xl mx-auto"
+        >
+          <div className="flex items-center gap-2 justify-center mb-4">
+            <BookOpen className="h-5 w-5 text-primary" />
+            <h2 className="text-lg font-display font-bold">Tutoriais</h2>
+          </div>
+          
+          {libLoading ? (
+            <div className="flex justify-center py-8">
+              <Loader2 className="h-6 w-6 animate-spin text-primary" />
+            </div>
+          ) : (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {tutorialItems.map((item) => (
+                <motion.div
+                  key={item.id}
+                  whileHover={{ scale: 1.02 }}
+                  className="glass rounded-2xl overflow-hidden border border-border/30 hover:border-primary/50 transition-all shadow-card hover:shadow-glow"
+                >
+                  <div className="aspect-video relative bg-background/50">
+                    {item.cover_url ? (
+                      <img 
+                        src={item.cover_url} 
+                        alt={item.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-primary-glow/20">
+                        <BookOpen className="h-12 w-12 text-primary/50" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-3 text-left">
+                    <h3 className="font-semibold text-sm line-clamp-1">{item.title}</h3>
+                    {item.description && (
+                      <p className="text-xs text-muted-foreground line-clamp-2 mt-1">{item.description}</p>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </motion.div>
+      )}
+
+      {/* Video Player Modal */}
+      {selectedVideo && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+          onClick={() => setSelectedVideo(null)}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="w-full max-w-3xl glass rounded-3xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-4 flex items-center justify-between border-b border-border/30">
+              <h3 className="font-display font-bold">{selectedVideo.title}</h3>
+              <button 
+                onClick={() => setSelectedVideo(null)}
+                className="p-2 rounded-xl hover:bg-accent transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="aspect-video">
+              <iframe
+                src={selectedVideo.url}
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+            {selectedVideo.description && (
+              <div className="p-4 text-sm text-muted-foreground">
+                {selectedVideo.description}
+              </div>
+            )}
+          </motion.div>
+        </div>
+      )}
 
       <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto pt-6">
         {/* Module 1: Psicotecnico */}
@@ -272,6 +433,11 @@ function ModuleHub({ onSelect }: { onSelect: (mod: "teorico" | "psicotecnico" | 
           </div>
         </motion.div>
       </div>
+
+      {/* Ranking de Reprovação */}
+      <div className="max-w-4xl mx-auto pt-4">
+        <RankingReprovacao />
+      </div>
     </div>
   );
 }
@@ -357,9 +523,6 @@ function TeoricoDashboard() {
           </div>
         </div>
       </section>
-
-      {/* Ranking de Reprovação DETRAN */}
-      <RankingReprovacao />
 
       {/* Livros e Materiais - BIBLIOTECA em destaque */}
       <section>
