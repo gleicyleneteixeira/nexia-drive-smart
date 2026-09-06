@@ -67,9 +67,13 @@ function getWhatsappShouldShow(
   if (legacyGroupStatus === "joined") return false;
   if (status === "joined" || status === "dismissed") return false;
 
-  // Cooldown legado (localStorage) de quem clicou "Agora não" na versão antiga
-  const legacyAt = getDismissedAt("whatsapp");
-  if (legacyAt && Date.now() - legacyAt < DISMISS_COOLDOWN_MS) return false;
+  // Check localStorage first (for immediate persistence)
+  const localDismissed = getDismissedAt("whatsapp");
+  if (localDismissed && Date.now() - localDismissed < DISMISS_COOLDOWN_MS) return false;
+
+  // Check database status
+  const dbDismissed = getDismissedAt("whatsapp");
+  if (dbDismissed && Date.now() - dbDismissed < DISMISS_COOLDOWN_MS) return false;
 
   if (status === "later") {
     const at = laterAt ? new Date(laterAt).getTime() : 0;
@@ -168,6 +172,7 @@ export function GroupPopups({
   async function markJoined() {
     if (activeGroup === "whatsapp") {
       await setWhatsappInviteStatus("joined");
+      localStorage.setItem("nexia:group_dismissed_at:whatsapp", String(Date.now()));
       setDismissed((d) => ({ ...d, whatsapp: true }));
     } else {
       localStorage.setItem("nexia:tiktok_group_joined", "true");
@@ -180,6 +185,7 @@ export function GroupPopups({
     if (activeGroup === "whatsapp") {
       await setWhatsappInviteStatus("later");
       localStorage.setItem(REMIND_LATER_KEY, String(Date.now() + REMIND_LATER_COOLDOWN_MS));
+      localStorage.setItem("nexia:group_dismissed_at:whatsapp", String(Date.now()));
       setDismissed((d) => ({ ...d, whatsapp: true }));
     } else {
       setDismissedAt(activeGroup);
@@ -191,6 +197,7 @@ export function GroupPopups({
   async function refusePermanently() {
     if (activeGroup === "whatsapp") {
       await setWhatsappInviteStatus("dismissed");
+      localStorage.setItem("nexia:group_dismissed_at:whatsapp", String(Date.now()));
       setDismissed((d) => ({ ...d, whatsapp: true }));
     } else {
       setDismissedAt(activeGroup);

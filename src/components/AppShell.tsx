@@ -478,7 +478,7 @@ export function AppShell() {
             href={supportLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="fixed bottom-20 right-5 z-30 flex items-center justify-center h-12 w-12 rounded-full bg-[#25D366] text-white shadow-lg hover:bg-[#22c35e] hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer"
+            className="fixed bottom-5 right-5 z-30 flex items-center justify-center h-12 w-12 rounded-full bg-[#25D366] text-white shadow-lg hover:bg-[#22c35e] hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer"
             title="Fale conosco no WhatsApp"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
