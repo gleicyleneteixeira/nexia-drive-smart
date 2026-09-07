@@ -5760,6 +5760,526 @@ export const QUESTIONS: Question[] = [
         incidence: 'media',
         trap: true,
         difficulty: 3
+    },
+    {
+        id: "detran_30q_001",
+        category: "legislacao",
+        statement: "Durante a condução de um veículo automotor em uma via urbana, o condutor observa uma placa octogonal de fundo vermelho instalada ao lado direito da pista com a inscrição 'PARE'. Sob a ótica da classificação geral da sinalização de trânsito estipulada pelo Código de Trânsito Brasileiro (CTB), essa placa e sua respectiva categoria pertencem a qual modalidade de sinalização?",
+        options: [
+            "Sinalização Vertical de Regulamentação, que impõe obrigações, limitações, proibições ou restrições cujo desrespeito constitui infração.",
+            "Dispositivos Auxiliares de Sinalização, destinados a alertar sobre situações de perigo iminente na via.",
+            "Sinalização Horizontal de Advertência, que serve apenas para orientar o fluxo de pedestres no acostamento.",
+            "Sinalização Semafórica de Controle de Fluxo, com função de alternar o direito de passagem em cruzamentos."
+        ],
+        correctIndex: 0,
+        explanation: "Placas fixadas ao lado ou suspensas sobre a via são sinalização vertical (Regulamentação).",
+        detailedExplanation: "Conforme os Arts. 87 e 89 do CTB, a sinalização vertical é classificada em Regulamentação, Advertência e Indicação. A placa 'PARE' (R-1) é uma placa de regulamentação fixada na vertical.",
+        legalBase: "Art. 87, I do CTB e Resolução CONTRAN nº 973/2022",
+        commonMistake: "Confundir sinalização vertical (placas) com sinalização horizontal (pintura no pavimento).",
+        tip: "Placa em pé = Vertical. Pintura no chão = Horizontal.",
+        incidence: "alta",
+        trap: false,
+        difficulty: 3
+    },
+    {
+        id: "detran_30q_002",
+        category: "legislacao",
+        statement: "Um condutor trafega por uma via de duplo sentido de circulação e pretende realizar uma conversão à direita para ingressar em uma rua transversal. De acordo com as normas gerais de circulação e conduta do CTB, qual deve ser o posicionamento prévio obrigatório do veículo antes de iniciar a manobra?",
+        options: [
+            "Aproximar-se o máximo possível do bordo direito da via enquanto sinaliza a intenção.",
+            "Aproximar-se do eixo central da pista para ter mais ângulo e espaço de manobra.",
+            "Manter-se exatamente no centro da faixa de rolamento e desacelerar bruscamente no momento da virada.",
+            "Deslocar-se para o bordo esquerdo da via antes de virar para garantir visibilidade dos veículos que vêm em sentido contrário."
+        ],
+        correctIndex: 0,
+        explanation: "Para virar à direita, encoste ao máximo no bordo direito (guia/meio-fio).",
+        detailedExplanation: "O Art. 38, I do CTB determina que, ao sair da via pelo lado direito, o condutor deve aproximar-se o máximo possível do bordo direito da pista e executar a manobra no menor espaço possível.",
+        legalBase: "Art. 38, I do CTB",
+        commonMistake: "Confundir o posicionamento da conversão à direita com o da conversão à esquerda em via de duplo sentido.",
+        tip: "Vai virar pra direita? Cole no bordo direito.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 3
+    },
+    {
+        id: "detran_30q_003",
+        category: "direcao-defensiva",
+        statement: "Trafegando em uma rodovia de trânsito rápido a 100 km/h, um motorista percebe no último segundo que ultrapassou a alça de saída para o seu destino. Diante desse cenário e visando à máxima segurança viária, qual é a conduta correta a ser adotada?",
+        options: [
+            "Continuar o trajeto com segurança e realizar o retorno no próximo viaduto ou alça regulamentada.",
+            "Imobilizar o veículo no acostamento, acionar o pisca-alerta e efetuar a marcha à ré até o ponto da saída.",
+            "Realizar uma conversão brusca cruzando as faixas de rolamento para alcançar a alça de saída antes do canteiro central.",
+            "Efetuar o retorno sobre o canteiro central divisor de pistas assim que houver uma brecha no tráfego."
+        ],
+        correctIndex: 0,
+        explanation: "Errou a saída? Siga em frente até o próximo retorno seguro.",
+        detailedExplanation: "A Marcha à ré em rodovias ou acostamentos é infração gravíssima (Art. 194 do CTB). A única atitude segura e legal é seguir até a próxima oportunidade de retorno.",
+        legalBase: "Art. 194 do CTB",
+        commonMistake: "Achar que dar ré no acostamento em rodovias é uma manobra permitida em emergências.",
+        tip: "Nunca dê ré em rodovias ou acostamentos.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 3
+    },
+    {
+        id: "detran_30q_004",
+        category: "legislacao",
+        statement: "Ao circular por um cruzamento complexo, o condutor visualiza no pavimento marcações zebradas na cor amarela acompanhadas de linhas contínuas. A sinalização horizontal que utiliza 'marcas de canalização' tem como finalidade principal:",
+        options: [
+            "Orientar e direcionar o fluxo de veículos, ordenando a circulação e proibindo o trânsito ou estacionamento sobre elas.",
+            "Indicar zonas onde o estacionamento é livre para carga e descarga de mercadorias durante o horário comercial.",
+            "Delimitar a área exclusiva destinada ao trânsito de ciclistas e pedestres nos cruzamentos urbanos.",
+            "Alertar sobre a proximidade de radares fixos de fiscalização eletrônica de velocidade."
+        ],
+        correctIndex: 0,
+        explanation: "Marcas de canalização (zebrados) direcionam o trânsito; é proibido transitar ou parar sobre elas.",
+        detailedExplanation: "As marcas de canalização direcionam os fluxos do tráfego. Transitar sobre marcas de canalização é infração gravíssima (Art. 214/231 do CTB), e estacionar sobre elas é infração grave (Art. 181, VIII).",
+        legalBase: "Anexo II do CTB e Art. 181, VIII do CTB",
+        commonMistake: "Achar que a marca de canalização serve de acostamento ou refúgio temporário.",
+        tip: "Zebrado no chão = Proibido pisar, parar ou passar por cima.",
+        incidence: "media",
+        trap: false,
+        difficulty: 3
+    },
+    {
+        id: "detran_30q_005",
+        category: "meio-ambiente",
+        statement: "No âmbito do programa de Condução Ecológica (Eco-driving) e manutenção preventiva, qual das seguintes condutas do motorista possui maior impacto direto na redução do consumo de combustível e da emissão de gases poluentes?",
+        options: [
+            "Manter os pneus do veículo constantemente calibrados de acordo com a pressão recomendada pelo fabricante.",
+            "Utilizar o veículo exclusivamente com o tanque de combustível na capacidade máxima em trajetos curtos.",
+            "Efetuar trocas de óleo do motor com intervalos menores que o recomendado no manual do proprietário.",
+            "Trafegar sempre com as janelas abertas em velocidades acima de 100 km/h para evitar ligar o ar-condicionado."
+        ],
+        correctIndex: 0,
+        explanation: "Pneu murcho aumenta o atrito com o solo e eleva o consumo de combustível.",
+        detailedExplanation: "A calibração correta reduz a resistência ao rolamento dos pneus, otimizando o consumo em até 5% e diminuindo a emissão de CO2. Janelas abertas em alta velocidade aumentam o atrito aerodinâmico.",
+        legalBase: "Manual de Condução Ecológica do CONTRAN",
+        commonMistake: "Acreditar que abrir os vidros em alta velocidade gasta menos combustível do que usar o ar-condicionado.",
+        tip: "Pneu calibrado = Menos atrito = Menos combustível gasto.",
+        incidence: "media",
+        trap: true,
+        difficulty: 3
+    },
+    {
+        id: "detran_30q_006",
+        category: "legislacao",
+        statement: "A atualização das normas e Manuais Brasileiros de Sinalização de Trânsito passou a adotar oficialmente o termo 'Sinistro de Trânsito' em substituição à antiga palavra 'Acidente de Trânsito'. Qual é a razão fundamentada para essa mudança conceitual?",
+        options: [
+            "Evidenciar que a grande maioria dos eventos no trânsito é evitável e decorrente de falha humana (imprudência, negligência ou imperícia), desmistificando a ideia de 'obra do acaso'.",
+            "Indicar que a palavra 'acidente' aplica-se exclusivamente a colisões que resultam em óbito confirmado no local.",
+            "Padronizar a legislação de trânsito apenas para fins de ressarcimento do seguro obrigatório DPVAT/SPVAT.",
+            "Restringir a aplicação da legislação às ocorrências registradas em rodovias federais e estaduais."
+        ],
+        correctIndex: 0,
+        explanation: "'Sinistro' reforça que quase todo evento de trânsito é evitável e culpa do fator humano.",
+        detailedExplanation: "A NBR 10697 da ABNT e o CTB atualizaram a nomenclatura porque 'acidente' passa a ideia de algo inevitável/casual, quando na verdade mais de 90% dos sinistros ocorrem por falha humana evitável.",
+        legalBase: "ABNT NBR 10697 e Resoluções do CONTRAN",
+        commonMistake: "Achar que a mudança foi meramente burocrática para atender seguradoras.",
+        tip: "Sinistro = Evento evitável. Não é obra do acaso.",
+        incidence: "alta",
+        trap: false,
+        difficulty: 3
+    },
+    {
+        id: "detran_30q_007",
+        category: "legislacao",
+        statement: "As placas de sinalização vertical de Indicação que possuem fundo na cor predominantemente VERDE têm por objetivo principal:",
+        options: [
+            "Orientar os condutores quanto às direções, destinos, distâncias e rotas, sendo amplamente aplicadas em rodovias e vias expressas.",
+            "Alertar sobre áreas de preservação ambiental e parques ecológicos nacionais.",
+            "Alertar sobre perigos potenciais na via, tais como curvas acentuadas e aclives pronunciados.",
+            "Indicar locais de interesse turístico, cultural ou histórico aos usuários da via."
+        ],
+        correctIndex: 0,
+        explanation: "Placa verde é de indicação de direção, destino e distância em estradas/rodovias.",
+        detailedExplanation: "As placas de indicação de destino e rota em rodovias possuem fundo verde com letras brancas. Placas turísticas são marrons e placas de advertência são amarelas.",
+        legalBase: "Anexo II do CTB - Sinalização Vertical de Indicação",
+        commonMistake: "Confundir placas verdes (destino/orientação) com placas marrons (atrativos turísticos).",
+        tip: "Verde = Destino e distância. Marrom = Turismo.",
+        incidence: "media",
+        trap: false,
+        difficulty: 3
+    },
+    {
+        id: "detran_30q_008",
+        category: "direcao-defensiva",
+        statement: "A afirmação 'No trânsito, o equilíbrio emocional é tão importante quanto o sistema de freios do veículo' expressa um princípio fundamental da Direção Defensiva. Isso significa que:",
+        options: [
+            "A estabilidade psíquica e o autocontrole do condutor são fatores essenciais de segurança passiva e ativa para a prevenção de sinistros.",
+            "Condutores sob forte estresse emocional estão isentos de responsabilidade jurídica em caso de colisão.",
+            "O estado emocional do motorista altera diretamente a resposta mecânica do sistema hidráulico de travagem.",
+            "A capacidade de frenagem do veículo depende unicamente do estado das pastilhas e discos de freio."
+        ],
+        correctIndex: 0,
+        explanation: "O controle emocional evita reações agressivas e decisões imprudentes ao dirigir.",
+        detailedExplanation: "A Direção Defensiva baseia-se em 5 elementos (Conhecimento, Atenção, Previsão, Decisão e Habilidade). O equilíbrio emocional afeta diretamente a Atenção e a Decisão do condutor.",
+        legalBase: "Manual de Direção Defensiva do DENATRAN",
+        commonMistake: "Desconsiderar o fator psicológico como elemento essencial da segurança viária.",
+        tip: "Emoção descontrolada = Decisão errada no trânsito.",
+        incidence: "media",
+        trap: false,
+        difficulty: 3
+    },
+    {
+        id: "detran_30q_009",
+        category: "direcao-defensiva",
+        statement: "O princípio defensivo 'Ver e Ser Visto' exige que o condutor adote medidas para garantir a visibilidade mútua no trânsito. Qual das alternativas apresenta uma conduta correta alinhada a esse princípio?",
+        options: [
+            "Manter lentes dos faróis e lanternas limpas, reguladas e em perfeito estado de funcionamento.",
+            "Utilizar películas insulfilm escuras no para-brisa dianteiro acima dos limites legais para evitar o ofuscamento.",
+            "Circular apenas com as luzes de posição (lanternas) acesas em rodovias durante a noite para economizar bateria.",
+            "Desligar os faróis ao cruzar com outros veículos para não incomodar os motoristas no sentido oposto."
+        ],
+        correctIndex: 0,
+        explanation: "Faróis limpos e regulados garantem que você enxergue a pista e seja visto pelos outros.",
+        detailedExplanation: "O Art. 250 do CTB e as regras de Direção Defensiva exigem que o sistema de iluminação esteja em perfeito estado. Trafegar com faróis desregulados ou queimados prejudica a sinalização e a visão.",
+        legalBase: "Art. 250 do CTB",
+        commonMistake: "Achar que luzes de posição (lanterna) substituem o farol baixo à noite ou em rodovias.",
+        tip: "Ver e ser visto = Faróis limpos, regulados e acesos.",
+        incidence: "alta",
+        trap: false,
+        difficulty: 3
+    },
+    {
+        id: "detran_30q_010",
+        category: "infracoes",
+        statement: "Um motorista realiza uma mudança abrupta de faixa de rolamento sem acionar a luz indicadora de direção (seta) nem fazer sinal regulamentar de braço. De acordo com o Art. 196 do CTB, qual é a gravidade desta infração e qual penalidade está sujeita?",
+        options: [
+            "Infração Grave, sujeita a penalidade de Multa.",
+            "Infração Gravíssima, sujeita a Multa e Recolhimento da CNH.",
+            "Infração Média, sujeita a Advertência por escrito apenas.",
+            "Infração Leve, sem aplicação de pontos no prontuário do condutor."
+        ],
+        correctIndex: 0,
+        explanation: "Deixar de dar seta ao mudar de faixa ou virar é infração GRAVE (5 pontos).",
+        detailedExplanation: "Art. 196 do CTB: Deixar de indicar com antecedência, mediante gesto regulamentar de braço ou luz indicadora de direção, a realização de manobra: Infração - GRAVE (5 pontos na CNH); Penalidade - Multa.",
+        legalBase: "Art. 196 do CTB",
+        commonMistake: "Achar que não dar seta é infração média ou leve por ser uma conduta muito comum.",
+        tip: "Seta não é opcional! Esqueceu a seta = Infração GRAVE (5 pontos).",
+        incidence: "alta",
+        trap: true,
+        difficulty: 3
+    },
+    {
+        id: "detran_30q_011",
+        category: "legislacao",
+        statement: "Ao trafegar por uma via urbana classificada como LOCAL (rua residencial ou de acesso restrito) onde NÃO exista sinalização regulamentadora de velocidade, qual é a velocidade máxima permitida pelo CTB (Art. 61)?",
+        options: [
+            "30 km/h.",
+            "40 km/h.",
+            "60 km/h.",
+            "80 km/h."
+        ],
+        correctIndex: 0,
+        explanation: "A velocidade máxima padrão para via local não sinalizada é 30 km/h.",
+        detailedExplanation: "O Art. 61, § 1º, I do CTB estabelece para vias urbanas não sinalizadas: Trânsito Rápido = 80 km/h; Arterial = 60 km/h; Coletora = 40 km/h; Local = 30 km/h.",
+        legalBase: "Art. 61, § 1º, I, 'd' do CTB",
+        commonMistake: "Confundir a velocidade da via local (30 km/h) com a da via coletora (40 km/h).",
+        tip: "Vias Urbanas: Rápida (80) - Arterial (60) - Coletora (40) - Local (30).",
+        incidence: "alta",
+        trap: true,
+        difficulty: 3
+    },
+    {
+        id: "detran_30q_012",
+        category: "infracoes",
+        statement: "Um condutor de automóvel passeio decide transitar pela faixa da direita regulamentada como EXCLUSIVA para ônibus de transporte público coletivo para fugir de um congestionamento. Segundo o Art. 184, III do CTB, essa conduta é classificada como:",
+        options: [
+            "Infração Gravíssima, sujeita a penalidade de Multa e medida administrativa de Remoção do Veículo.",
+            "Infração Grave, sujeita apenas a penalidade de Multa.",
+            "Infração Média, com retenção do veículo até a chegada do transporte público.",
+            "Permitida fora dos horários de pico, não constituindo infração de trânsito."
+        ],
+        correctIndex: 0,
+        explanation: "Transitar em faixa exclusiva de ônibus é infração GRAVÍSSIMA com remoção do veículo.",
+        detailedExplanation: "A Lei 13.154/2015 alterou o Art. 184, III do CTB: Transitar na faixa/via de trânsito exclusivo regulamentada para o transporte público coletivo de passageiros é infração GRAVÍSSIMA, com Multa e Remoção do veículo.",
+        legalBase: "Art. 184, III do CTB",
+        commonMistake: "Achar que a infração é apenas grave ou média por ser uma invasão temporária.",
+        tip: "Faixa Exclusiva de Ônibus = Gravíssima + Guincho (Remoção).",
+        incidence: "alta",
+        trap: true,
+        difficulty: 3
+    },
+    {
+        id: "detran_30q_013",
+        category: "mecanica",
+        statement: "O sistema de Airbag (bolsa inflável de segurança) é um equipamento de segurança passiva obrigatório nos veículos modernos. Para que o airbag cumpra sua função sem causar lesões graves ao ocupante, é indispensável o uso concomitante do:",
+        options: [
+            "Cinto de segurança, que retém o corpo e evita que o ocupante seja projetado contra a bolsa em expansão.",
+            "Freio ABS, que impede o travamento das rodas durante o acionamento do airbag.",
+            "Encosto de cabeça ajustado na altura do pescoço para evitar o efeito chicote no impacto lateral.",
+            "Limpador de para-brisa em velocidade máxima para manter a visibilidade durante a colisão."
+        ],
+        correctIndex: 0,
+        explanation: "O airbag complementa o cinto de segurança; sem o cinto, a explosão do airbag pode ferir gravemente.",
+        detailedExplanation: "O airbag é um sistema complementar de retenção. Se o ocupante não estiver usando o cinto de segurança, a força de expansão da bolsa (mais de 300 km/h) pode causar traumas cervicais ou fatais.",
+        legalBase: "Manual de Segurança Veicular - CONTRAN",
+        commonMistake: "Acreditar que o airbag substitui a necessidade do cinto de segurança.",
+        tip: "Airbag SEM cinto de segurança = Risco de lesão gravíssima.",
+        incidence: "media",
+        trap: false,
+        difficulty: 3
+    },
+    {
+        id: "detran_30q_014",
+        category: "direcao-defensiva",
+        statement: "Ao entrar em uma via de trânsito rápido ou rodovia através de uma alça de acesso, o condutor se depara com a 'faixa de aceleração'. Qual é a função técnica dessa faixa e a postura correta a adotar?",
+        options: [
+            "Aumentar a velocidade do veículo na faixa suplementar para equipará-la ao fluxo da via principal antes de efetuar a fusão (incorporação).",
+            "Imobilizar o veículo no início da faixa e aguardar até que a via principal esteja totalmente deserta.",
+            "Reduzir a velocidade para 20 km/h e buzinar para que os veículos da via principal deem passagem.",
+            "Servir como acostamento temporário para parada de emergência e desembarque de passageiros."
+        ],
+        correctIndex: 0,
+        explanation: "A faixa de aceleração serve para atingir a velocidade do fluxo e entrar na pista com segurança.",
+        detailedExplanation: "A faixa de aceleração permite que o veículo ganhe velocidade para intercalar-se no tráfego da via preferencial sem interromper o fluxo constante dos veículos que já circulam por ela.",
+        legalBase: "Anexo I do CTB e Manual de Sinalização Urbana",
+        commonMistake: "Parar o carro no meio da faixa de aceleração em vez de usar o espaço para ganhar velocidade.",
+        tip: "Faixa de Aceleração = Acelere para entrar na mesma velocidade do trânsito.",
+        incidence: "alta",
+        trap: false,
+        difficulty: 3
+    },
+    {
+        id: "detran_30q_015",
+        category: "infracoes",
+        statement: "Um condutor trafega atrás de uma ambulância que está com os alarmes sonoros e iluminação vermelha intermitente acionados, utilizando o 'vácuo' do veículo de emergência para ultrapassar o trânsito congestionado. Essa conduta configura qual tipo de infração segundo o Art. 190 do CTB?",
+        options: [
+            "Infração Grave, sujeita a penalidade de Multa.",
+            "Infração Gravíssima, com suspensão imediata do direito de dirigir.",
+            "Infração Média, com retenção do veículo.",
+            "Conduta permitida, desde que se mantenha distância de segurança de 5 metros."
+        ],
+        correctIndex: 0,
+        explanation: "Seguir veículo de socorro/emergência em serviço é infração GRAVE (5 pontos).",
+        detailedExplanation: "Art. 190 do CTB: Seguir veículo em serviço de urgência, com alarme sonoro ou iluminação regulamentar acionados: Infração - GRAVE (5 pontos na CNH); Penalidade - Multa.",
+        legalBase: "Art. 190 do CTB",
+        commonMistake: "Achar que seguir ambulância é apenas falta de educação e não infração prevista no CTB.",
+        tip: "Aproveitar o 'vácuo' de ambulância = Infração GRAVE.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 3
+    },
+    {
+        id: "detran_30q_016",
+        category: "direcao-defensiva",
+        statement: "Sob o conceito técnico de Cidadania e Direção Defensiva, qual das seguintes opções expressa o verdadeiro perfil de um 'bom condutor'?",
+        options: [
+            "Aquele que cumpre rigorosamente as normas de trânsito, antecipa perigos e age com cortesia, abrindo mão de seu direito para preservar vidas.",
+            "Aquele que trafega sempre no limite máximo de velocidade para não atrasar os demais condutores.",
+            "Aquele que domina manobras de alta perícia em piso molhado e utiliza atalhos não regulamentados.",
+            "Aquele que possui veículo moderno equipado com assistentes eletrônicos de última geração."
+        ],
+        correctIndex: 0,
+        explanation: "O bom condutor dirige defensivamente, respeita as leis e foca na segurança coletiva.",
+        detailedExplanation: "Direção defensiva é dirigir de modo a evitar acidentes, apesar das ações incorretas dos outros e das condições adversas. Envolve postura cidadã, respeito e prevenção.",
+        legalBase: "Manual de Direção Defensiva - DENATRAN",
+        commonMistake: "Confundir habilidade técnica/perícia rápida com postura defensiva e segura.",
+        tip: "Bom condutor = Prevenção + Cortesia + Respeito às leis.",
+        incidence: "baixa",
+        trap: false,
+        difficulty: 3
+    },
+    {
+        id: "detran_30q_017",
+        category: "direcao-defensiva",
+        statement: "Ao aproximar-se de um cruzamento urbano, o condutor observa um pedestre iniciando a travessia da via fora da faixa de pedestres. Diante do princípio da vulnerabilidade no trânsito (Art. 29, § 2º do CTB), qual deve ser a atitude do motorista?",
+        options: [
+            "Reduzir a velocidade do veículo, dar a preferência ao pedestre e aguardar a travessia com segurança.",
+            "Buzinar continuamente para advertir o pedestre e manter a velocidade, pois a preferência é do veículo.",
+            "Efetuar uma frenagem brusca sobre a pista e acionar o pisca-alerta imediatamente.",
+            "Apressar a marcha acelerando o motor para passar antes que o pedestre tome o centro da pista."
+        ],
+        correctIndex: 0,
+        explanation: "O pedestre é o ente mais vulnerável; o condutor deve sempre zelar pela sua segurança.",
+        detailedExplanation: "Art. 29, § 2º do CTB: Os veículos de maior porte serão sempre responsáveis pela segurança dos menores, os motorizados pelos não motorizados e, juntos, pela proteção dos pedestres.",
+        legalBase: "Art. 29, § 2º do CTB",
+        commonMistake: "Acreditar que, por estar fora da faixa, o pedestre perde o direito à vida e à proteção do condutor.",
+        tip: "Pedestre é sempre prioridade de proteção, estando ou não na faixa.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 3
+    },
+    {
+        id: "detran_30q_018",
+        category: "infracoes",
+        statement: "Durante uma fiscalização de rotina na rodovia, o condutor desobedece às ordens claras de parada emanadas de um Agente da Autoridade de Trânsito devidamente uniformizado. Segundo o Art. 195 do CTB, qual é a gravidade dessa infração?",
+        options: [
+            "Infração Grave, sujeita a penalidade de Multa.",
+            "Infração Gravíssima, com cassação imediata do documento de habilitação.",
+            "Infração Média, sujeita apenas a advertência verbal posterior.",
+            "Infração Leve, não gerando pontos no prontuário."
+        ],
+        correctIndex: 0,
+        explanation: "Desobedecer ordens do Agente de Trânsito é infração GRAVE (Art. 195).",
+        detailedExplanation: "Art. 195 do CTB: Desobedecer às ordens emanadas da autoridade competente de trânsito ou de seus agentes: Infração - GRAVE (5 pontos); Penalidade - Multa.",
+        legalBase: "Art. 195 do CTB",
+        commonMistake: "Confundir desobedecer agente de trânsito (Grave - Art. 195) com furar bloqueio policial (Gravíssima - Art. 210).",
+        tip: "Desobedecer sinal/ordem do agente = Infração GRAVE.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 3
+    },
+    {
+        id: "detran_30q_019",
+        category: "legislacao",
+        statement: "Ao trafegar por uma via urbana, o condutor observa elementos de sinalização vertical e dispositivos temporários com fundo na cor LARANJA. Essa coloração específica indica:",
+        options: [
+            "Sinalização de Obras e situações temporárias na via, exigindo maior atenção e redução de velocidade.",
+            "Pontos turísticos de interesse histórico e cultural na região.",
+            "Locais com alto índice de travessia de escolares e crianças.",
+            "Áreas de estacionamento exclusivo para veículos de emergência."
+        ],
+        correctIndex: 0,
+        explanation: "A cor laranja é usada exclusivamente para sinalização temporária e de Obras.",
+        detailedExplanation: "A sinalização temporária (obras, desvios, manutenções na via) utiliza a cor laranja como padrão para alertar o condutor sobre alterações atípicas nas condições normais do tráfego.",
+        legalBase: "Anexo II do CTB - Sinalização de Obras",
+        commonMistake: "Confundir a cor laranja (obras) com a cor amarela (advertência permanente).",
+        tip: "Cor Laranja = Obras e intervenções temporárias na pista.",
+        incidence: "media",
+        trap: false,
+        difficulty: 3
+    },
+    {
+        id: "detran_30q_020",
+        category: "meio-ambiente",
+        statement: "No contexto da mobilidade urbana sustentável para trajetos de curta distância, qual modal de transporte apresenta custo financeiro zero, impacto ambiental nulo na emissão de poluentes e benefícios diretos à saúde do cidadão?",
+        options: [
+            "Deslocamento a pé (Caminhada).",
+            "Uso de ciclomotores elétricos de alta velocidade.",
+            "Automóveis movidos a biocombustíveis e carona paga.",
+            "Motocicletas de baixa cilindrada."
+        ],
+        correctIndex: 0,
+        explanation: "A caminhada a pé é a forma mais limpa, barata e sustentável de mobilidade ativa.",
+        detailedExplanation: "A mobilidade a pé (transporte ativo) não gera qualquer emissão de CO2 ou poluentes atmosféricos, não consome energia não renovável e possui custo direto zero.",
+        legalBase: "Diretrizes da Política Nacional de Mobilidade Urbana (Lei 12.587/2012)",
+        commonMistake: "Acreditar que ciclomotores ou motos elétricas possuem impacto ambiental nulo na fabricação/descarte de baterias.",
+        tip: "Impacto totalmente NULO e custo ZERO = Caminhada.",
+        incidence: "baixa",
+        trap: false,
+        difficulty: 3
+    },
+    {
+        id: "detran_30q_021",
+        category: "legislacao",
+        statement: "Dois veículos aproximam-se simultaneamente de uma interseção em nível em formato de ROTATÓRIA não sinalizada. Segundo as regras gerais de preferência de passagem do CTB (Art. 29, III, 'b'), a preferência pertence:",
+        options: [
+            "Ao veículo que já estiver circulando pela rotatória.",
+            "Ao veículo que se aproxima pelo lado direito do cruzamento, independentemente de estar dentro da rotatória.",
+            "Ao veículo de maior de porte ou que estiver trafegando em maior velocidade.",
+            "Ao veículo que pretende efetuar a conversão à esquerda no anel viário."
+        ],
+        correctIndex: 0,
+        explanation: "Na rotatória sem sinalização, a preferência é do veículo que já está circulando dentro dela.",
+        detailedExplanation: "Art. 29, III, 'b' do CTB: No caso de rotatória, a preferência de passagem será do veículo que estiver circulando por ela.",
+        legalBase: "Art. 29, III, 'b' do CTB",
+        commonMistake: "Aplicar a regra genérica da 'direita' em locais onde existe rotatória.",
+        tip: "Rotatória = Preferência de quem JÁ ESTÁ dentro dela.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 3
+    },
+    {
+        id: "detran_30q_022",
+        category: "legislacao",
+        statement: "Um cidadão habilitado exclusivamente na Categoria 'B' pretende conduzir um veículo utilitário do tipo Picape/Camioneta. Para permanecer dentro dos limites legais estipulados pelo Art. 143 do CTB, o veículo deve atender às seguintes condições simultâneas:",
+        options: [
+            "Peso Bruto Total (PBT) de até 3.500 kg e lotação que não exceda a 8 lugares, excluído o do motorista.",
+            "Peso Bruto Total (PBT) de até 6.000 kg e lotação de até 12 passageiros.",
+            "Qualquer peso bruto total, desde que o veículo não transporte carga perigosa.",
+            "Lotação máxima de até 15 passageiros, independentemente do peso do veículo."
+        ],
+        correctIndex: 0,
+        explanation: "Categoria B autoriza veículos com PBT de até 3.500 kg e máximo de 8 passageiros.",
+        detailedExplanation: "Art. 143, II do CTB: Categoria B - condutor de veículo motorizado cujo peso bruto total não exceda a 3.500 kg e cuja lotação não exceda a 8 lugares, excluído o do condutor.",
+        legalBase: "Art. 143, II do CTB",
+        commonMistake: "Achar que a categoria B permite conduzir vans com mais de 8 passageiros ou caminhões leves acima de 3,5t.",
+        tip: "Categoria B = Até 3.500 kg PBT + Até 8 passageiros.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 3
+    },
+    {
+        id: "detran_30q_023",
+        category: "legislacao",
+        statement: "Ao chegar a um cruzamento sinalizado com semáforo, o condutor observa que a luz vermelha está acesa. Contudo, um Agente da Autoridade de Trânsito no local faz gestos claros ordenando que o veículo avance. Qual instrução deve ser seguida segundo a hierarquia das sinalizações (Art. 89 do CTB)?",
+        options: [
+            "Seguir a ordem do Agente de Trânsito, pois suas ordens prevalecem sobre as indicações do semáforo e demais sinais.",
+            "Aguardar a luz verde do semáforo, pois equipamentos eletrônicos possuem prioridade sobre ordens humanas.",
+            "Imobilizar o veículo e aguardar a chegada de uma viatura policial para confirmação da ordem.",
+            "Seguir as regras da placa de 'PARE' que porventura esteja afixada no local."
+        ],
+        correctIndex: 0,
+        explanation: "A ordem do Agente de Trânsito prevalece sobre TODOS os outros sinais e regras.",
+        detailedExplanation: "Art. 89 do CTB estabelece a hierarquia: I - as ordens do agente de trânsito prevalecem sobre as indicações dos sinais e as demais normas de trânsito; II - as indicações do semáforo sobre os demais sinais.",
+        legalBase: "Art. 89, I do CTB",
+        commonMistake: "Acreditar que o sinal vermelho obriga o motorista a parar mesmo se o agente mandar passar.",
+        tip: "No topo da hierarquia do trânsito está SEMPRE a ordem do Agente.",
+        incidence: "alta",
+        trap: false,
+        difficulty: 3
+    },
+    {
+        id: "detran_30q_024",
+        category: "infracoes",
+        statement: "Um veículo é flagrado por um radar fixo trafegando a 72 km/h em uma via cuja velocidade máxima permitida era de 60 km/h (excesso de velocidade de 20%). De acordo com o Art. 218, I do CTB, qual é a gravidade desta infração?",
+        options: [
+            "Infração Média, sujeita a penalidade de Multa.",
+            "Infração Grave, com retenção da CNH do condutor.",
+            "Infração Gravíssima, com suspensão automática do direito de dirigir.",
+            "Infração Leve, sujeita apenas a advertência pedagógica."
+        ],
+        correctIndex: 0,
+        explanation: "Excesso de velocidade em ATÉ 20% acima do limite é infração MÉDIA (4 pontos).",
+        detailedExplanation: "Art. 218 do CTB: I - quando a velocidade for superior à máxima em até 20%: Infração - MÉDIA; II - de 20% até 50%: Infração - GRAVE; III - superior a 50%: Infração - GRAVÍSSIMA.",
+        legalBase: "Art. 218, I do CTB",
+        commonMistake: "Confundir os limites de enquadramento da velocidade (Até 20% = Média; De 20% a 50% = Grave; Acima de 50% = Gravíssima).",
+        tip: "Velocidade: Até +20% (Média) | +20% a +50% (Grave) | Mais de +50% (Gravíssima).",
+        incidence: "alta",
+        trap: true,
+        difficulty: 3
+    },
+    {
+        id: "detran_30q_025",
+        category: "direcao-defensiva",
+        statement: "A sinalização antecedente de manobras mediante uso de seta (luz indicadora de direção) é um dever de todo condutor. O objetivo fundamental dessa exigência legal e defensiva é:",
+        options: [
+            "Garantir a previsibilidade das ações do motorista, permitindo que os demais usuários da via reajam com segurança.",
+            "Evitar a descarga excessiva da bateria do veículo durante deslocamentos noturnos.",
+            "Garantir o direito de preferência absoluto sobre pedestres e veículos ao mudar de faixa.",
+            "Cumprir uma mera formalidade administrativa sem impacto na prevenção de sinistros."
+        ],
+        correctIndex: 0,
+        explanation: "A seta serve para dar previsibilidade às suas manobras para os outros condutores.",
+        detailedExplanation: "A Direção Defensiva fundamenta-se na 'Previsão'. Indicar previamente a intenção de mudar de faixa ou virar permite que os outros motoristas e pedestres antecipem o movimento e evitem colisões.",
+        legalBase: "Art. 196 do CTB e Manual de Direção Defensiva",
+        commonMistake: "Achar que dar a seta dá 'direito automático de passagem' e obriga os outros a cederem espaço.",
+        tip: "Seta comunica intenção e gera PREVISIBILIDADE. Não dá prioridade.",
+        incidence: "media",
+        trap: false,
+        difficulty: 3
+    },
+    {
+        id: "detran_30q_026",
+        category: "direcao-defensiva",
+        statement: "O Código de Trânsito Brasileiro estabelece a regra de proteção aos mais vulneráveis. De acordo com a legislação e os princípios da Direção Defensiva, qual é a ordem correta de responsabilidade pela segurança no trânsito?",
+        options: [
+            "Os veículos de maior porte são responsáveis pelos menores, os motorizados pelos não motorizados, e todos juntos pela proteção dos pedestres.",
+            "Os pedestres são totalmente responsáveis por sua própria segurança, devendo ceder passagem a qualquer tipo de veículo.",
+            "Veículos de transporte coletivo possuem prioridade absoluta e isenção de responsabilidade sobre ciclistas.",
+            "Os veículos mais rápidos e modernos possuem preferência legal de passagem sobre os mais antigos."
+        ],
+        correctIndex: 0,
+        explanation: "O maior protege o menor, o motorizado protege o não motorizado e todos protegem o pedestre.",
+        detailedExplanation: "Art. 29, § 2º do CTB consolida o princípio da vulnerabilidade no trânsito, impondo maior dever de cuidado aos condutores de veículos de grande porte em relação aos pedestres e ciclistas.",
+        legalBase: "Art. 29, § 2º do CTB",
+        commonMistake: "Inverter a ordem de responsabilidade achando que o pedestre deve sempre parar para o carro.",
+        tip: "Maior protege o menor. Todos protegem o pedestre.",
+        incidence: "alta",
+        trap: false,
+        difficulty: 3
     }
 ];
 // Questões que realmente caíram na prova do DETRAN.
