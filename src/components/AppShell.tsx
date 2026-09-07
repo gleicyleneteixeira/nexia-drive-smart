@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, Outlet, useLocation } from "@tanstack/react-router";
+import { Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
 import { RequireAuth } from "./RequireAuth";
 import { RatingPrompt, triggerRatingPrompt } from "./RatingPrompt";
 import { 
@@ -61,6 +61,7 @@ const STORAGE_SIDEBAR_KEY = '@nexia_sidebar_collapsed';
 
 export function AppShell() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const { user, profile, isAdmin, signOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
@@ -142,7 +143,7 @@ export function AppShell() {
     window.dispatchEvent(new Event("nexia:active_module:change"));
     setMenuOpen(false);
     if (typeof window !== "undefined" && window.location.pathname !== "/app") {
-      window.location.href = "/app";
+      navigate({ to: "/app" });
     }
   };
 
@@ -237,7 +238,7 @@ export function AppShell() {
                         } else if (item.label === "Inicio") {
                           localStorage.removeItem("nexia:active_module");
                           window.dispatchEvent(new Event("nexia:active_module:change"));
-                          window.location.href = "/app";
+                          navigate({ to: "/app" });
                         }
                       }}
                       className={`relative flex items-center gap-3 rounded-xl transition-all text-left ${
@@ -282,7 +283,7 @@ export function AppShell() {
                               onClick={() => {
                                 setActiveAdminSection(item.adminSection ?? null);
                                 setMenuOpen(false);
-                                window.location.href = `/admin?tab=${item.adminSection}`;
+                                navigate({ to: "/admin", search: { tab: item.adminSection } });
                               }}
                               className={`w-full flex items-center gap-2.5 rounded-lg transition-all text-left h-9 px-3 text-[13px] ${
                                 active
@@ -307,7 +308,7 @@ export function AppShell() {
                               onClick={() => {
                                 setActiveAdminSection(item.adminSection ?? null);
                                 setMenuOpen(false);
-                                window.location.href = `/admin?tab=${item.adminSection}`;
+                                navigate({ to: "/admin", search: { tab: item.adminSection } });
                               }}
                               className={`w-full flex items-center gap-2.5 rounded-lg transition-all text-left h-9 px-3 text-[13px] ${
                                 active
