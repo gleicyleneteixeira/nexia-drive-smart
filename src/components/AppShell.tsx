@@ -6,7 +6,7 @@ import {
   Flame, Home, Brain, Library, Trophy, Target, Settings, 
   ChevronLeft, ChevronRight, Shield, Star, Car, Calendar,
   BookOpen, Upload, Video, BarChart3, Users, ShoppingBag, 
-  LogOut, UserCircle, Palette, Menu, X
+  LogOut, UserCircle, Palette, Menu
 } from "lucide-react";
 import { CronogramaModal } from "./CronogramaModal";
 import { DailyCheckinBanner } from "./DailyCheckinBanner";
@@ -127,6 +127,15 @@ export function AppShell() {
     setMenuOpen(false);
   }, [pathname]);
 
+  // Auto-close sidebar after 15 seconds of inactivity
+  useEffect(() => {
+    if (!menuOpen) return;
+    const timer = setTimeout(() => {
+      setMenuOpen(false);
+    }, 15000);
+    return () => clearTimeout(timer);
+  }, [menuOpen]);
+
   const handleToggleModule = (mod: "teorico" | "psicotecnico" | "direcao") => {
     setActiveModule(mod);
     localStorage.setItem("nexia:active_module", mod);
@@ -159,7 +168,7 @@ export function AppShell() {
       {!isPublicPage && isActive && (
         <button
           onClick={() => setMenuOpen(true)}
-          className="fixed bottom-5 left-5 z-30 flex items-center justify-center h-12 w-12 rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer"
+          className="fixed bottom-5 left-5 z-30 flex items-center justify-center h-12 w-12 rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30 border-2 border-white/30 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer ring-2 ring-primary/20"
           title="Abrir menu"
         >
           <Menu className="h-5 w-5" />
@@ -189,7 +198,7 @@ export function AppShell() {
               className="fixed left-0 top-0 bottom-0 z-50 bg-card border-r border-border/50 flex flex-col py-3"
               style={{ width: drawerWidth }}
             >
-              {/* Header row: Logo + close/expand */}
+              {/* Header row: Logo only */}
               <div className={`flex items-center gap-2 mb-3 px-3 ${expanded ? '' : 'justify-center'}`}>
                 <Link
                   to={isActive ? "/app" : "/"}
@@ -207,12 +216,6 @@ export function AppShell() {
                 {expanded && (
                   <span className="text-sm font-bold text-foreground truncate flex-1">Menu</span>
                 )}
-                <button
-                  onClick={() => setMenuOpen(false)}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition-all shrink-0"
-                >
-                  <X className="h-4 w-4" />
-                </button>
               </div>
 
               {/* Nav Items */}

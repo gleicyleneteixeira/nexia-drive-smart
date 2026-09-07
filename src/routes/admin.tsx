@@ -168,6 +168,13 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Back button */}
+      <div className="p-4 pb-0">
+        <Link to="/app" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <ArrowLeft className="h-4 w-4" />
+          Voltar
+        </Link>
+      </div>
       {/* Main Content */}
       <main className="overflow-y-auto">
         <div className="p-6">
