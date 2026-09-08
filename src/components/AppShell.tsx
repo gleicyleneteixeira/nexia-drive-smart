@@ -328,15 +328,52 @@ export function AppShell() {
 
                 {/* Admin icon when collapsed */}
                 {isAdmin && !expanded && (
-                  <div className="mt-auto pt-2 border-t border-border/30 flex flex-col items-center">
-                    <Link
-                      to="/admin"
-                      onClick={() => setMenuOpen(false)}
+                  <div className="mt-auto pt-2 border-t border-border/30 flex flex-col items-center gap-1">
+                    <button
+                      onClick={handleToggleAdminMenu}
                       className="w-10 h-10 rounded-xl flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition-all"
                       title="Admin"
                     >
                       <Shield className="h-[18px] w-[18px]" />
-                    </Link>
+                    </button>
+                    {isAdminMenuOpen && (
+                      <>
+                        {ADMIN_ITEMS.map((item) => {
+                          const Icon = item.icon;
+                          return (
+                            <button
+                              key={item.label}
+                              onClick={() => {
+                                setActiveAdminSection(item.adminSection ?? null);
+                                setMenuOpen(false);
+                                navigate({ to: "/admin", search: { tab: item.adminSection } });
+                              }}
+                              className="w-10 h-10 rounded-xl flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-foreground transition-all"
+                              title={item.label}
+                            >
+                              <Icon className="h-[18px] w-[18px]" />
+                            </button>
+                          );
+                        })}
+                        {SUPER_ADMIN_ITEMS.map((item) => {
+                          const Icon = item.icon;
+                          return (
+                            <button
+                              key={item.label}
+                              onClick={() => {
+                                setActiveAdminSection(item.adminSection ?? null);
+                                setMenuOpen(false);
+                                navigate({ to: "/admin", search: { tab: item.adminSection } });
+                              }}
+                              className="w-10 h-10 rounded-xl flex items-center justify-center text-primary/70 hover:bg-accent hover:text-foreground transition-all"
+                              title={item.label}
+                            >
+                              <Icon className="h-[18px] w-[18px]" />
+                            </button>
+                          );
+                        })}
+                      </>
+                    )}
                   </div>
                 )}
               </nav>
