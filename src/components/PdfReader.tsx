@@ -74,33 +74,33 @@ export function PdfReader({ url, className = "" }: PdfReaderProps) {
     const spans = Array.from(textLayer.querySelectorAll('span')) as HTMLElement[];
     if (!spans.length) return [];
 
-    const containerRect = textLayer.getBoundingClientRect();
-    const middleX = containerRect.left + (containerRect.width / 2);
+    const containerWidth = textLayer.offsetWidth;
+    const middleX = containerWidth / 2;
 
+    // Usar offsetTop/offsetLeft (coordenadas relativas ao text layer, NÃO da tela)
     const items = spans.map(span => {
-      const rect = span.getBoundingClientRect();
+      const text = span.innerText ? span.innerText.trim() : '';
       return {
         element: span,
-        text: span.innerText ? span.innerText.trim() : '',
-        top: rect.top,
-        left: rect.left,
-        centerX: rect.left + rect.width / 2,
+        text,
+        // offsetTop/offsetLeft = posição relativa ao text layer (fixo, não muda com scroll)
+        top: span.offsetTop,
+        left: span.offsetLeft,
+        centerX: span.offsetLeft + span.offsetWidth / 2,
       };
     }).filter(item => item.text.length > 0);
 
     if (items.length === 0) return [];
 
     // Detectar se é 2 colunas: verificar se existe uma faixa central vazia
-    const margin = containerRect.width * 0.1; // 10% de margem no centro
+    const margin = containerWidth * 0.1;
     const leftItems = items.filter(i => i.centerX < middleX - margin);
     const rightItems = items.filter(i => i.centerX > middleX + margin);
     const centerItems = items.filter(i => i.centerX >= middleX - margin && i.centerX <= middleX + margin);
 
-    // Se há muitos itens no centro, é coluna única (texto cruza o meio)
     const isTwoColumns = rightItems.length > 0 && leftItems.length > 0 && centerItems.length < 3;
 
     const sortByTop = (a: typeof items[0], b: typeof items[0]) => {
-      // Mesma linha horizontal (tolerância 5px): ler da esquerda para a direita
       if (Math.abs(a.top - b.top) <= 5) {
         return a.left - b.left;
       }
@@ -108,12 +108,10 @@ export function PdfReader({ url, className = "" }: PdfReaderProps) {
     };
 
     if (!isTwoColumns) {
-      // COLUNA ÚNICA: ordenar todos os spans de cima para baixo
       items.sort(sortByTop);
       return items.map(i => i.element);
     }
 
-    // DUAS COLUNAS: ler coluna esquerda inteira, depois coluna direita
     leftItems.sort(sortByTop);
     rightItems.sort(sortByTop);
 
