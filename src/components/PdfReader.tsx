@@ -246,8 +246,10 @@ const stopReading = () => {
               span.className = "pdf-text-span";
               span.textContent = item.str;
               span.style.position = "absolute";
+              // PDF.js transform[5] mede do RODAPÉ (bottom). CSS top mede do TOPO.
+              // Inverter: top = viewport.height - transform[5]
               span.style.left = `${item.transform[4]}px`;
-              span.style.top = `${item.transform[5]}px`;
+              span.style.top = `${viewport.height - item.transform[5]}px`;
               span.style.fontSize = `${item.transform[0] * s}px`;
               span.style.fontFamily = item.fontName || "sans-serif";
               span.style.whiteSpace = "nowrap";
