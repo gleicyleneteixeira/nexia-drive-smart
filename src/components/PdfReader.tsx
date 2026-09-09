@@ -288,16 +288,6 @@ const stopReading = () => {
     };
   }, [cancelSpeech]);
 
-  // Auto-start reading when page changes while reading is active
-  useEffect(() => {
-    if (isReading && pdfDoc) {
-      const timer = setTimeout(() => {
-        startReading();
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [currentPage]);
-
   const loadFromUrl = async (fileUrl: string, name?: string) => {
     cancelSpeech();
     setLoading(true);
@@ -348,6 +338,7 @@ const stopReading = () => {
   }, [pdfDoc, cancelSpeech]);
 
   const goToPage = (p: number) => {
+    cancelSpeech();
     const n = Math.max(1, Math.min(numPages, p));
     setCurrentPage(n);
     setPageInput("");
