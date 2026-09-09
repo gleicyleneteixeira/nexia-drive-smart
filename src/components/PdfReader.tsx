@@ -93,13 +93,6 @@ export function PdfReader({ url, className = "" }: PdfReaderProps) {
 
     if (items.length === 0) return [];
 
-    // Log de debug (primeiros 5 itens)
-    console.log("PDF Read Order (top→bottom):", items.slice(0, 5).map(i => ({
-      text: i.text.substring(0, 30),
-      top: Math.round(i.top),
-      left: Math.round(i.left),
-    })));
-
     // Detectar se é 2 colunas
     const margin = containerWidth * 0.1;
     const leftItems = items.filter(i => i.centerX < middleX - margin);
