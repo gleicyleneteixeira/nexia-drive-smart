@@ -239,6 +239,8 @@ export function AppShell() {
                           localStorage.removeItem("nexia:active_module");
                           window.dispatchEvent(new Event("nexia:active_module:change"));
                           navigate({ to: "/app" });
+                        } else {
+                          navigate({ to: item.to });
                         }
                       }}
                       className={`relative flex items-center gap-3 rounded-xl transition-all text-left ${
