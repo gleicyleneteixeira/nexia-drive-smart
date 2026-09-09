@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 
 const ZOOM_LEVELS = [0.5, 0.75, 1, 1.2, 1.5, 2, 2.5, 3];
+const SPEECH_RATES = [0.75, 1.0, 1.25, 1.5] as const;
 
 interface CachedLayout {
   fullText: string;
@@ -42,6 +43,7 @@ export function PdfReader({ url, className = "" }: PdfReaderProps) {
   const [pageInput, setPageInput] = useState("");
   const [fileName, setFileName] = useState<string | null>(null);
   const [isReading, setIsReading] = useState(false);
+  const [speechRate, setSpeechRate] = useState<number>(1.0);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const layoutCache = useRef<{ [key: string]: CachedLayout }>({});
 
@@ -67,66 +69,61 @@ export function PdfReader({ url, className = "" }: PdfReaderProps) {
     highlightCurrentElement(null);
   }, []);
 
-  // Função de divisão rigorosa por metades: isola Coluna Esquerda e Direita totalmente
-  const getTwoColumnOrderedNodes = (textLayer: HTMLElement) => {
+  // Detecta se o PDF tem layout de 2 colunas ou 1 coluna e ordena de cima para baixo
+  const getOrderedNodes = (textLayer: HTMLElement) => {
     const spans = Array.from(textLayer.querySelectorAll('span')) as HTMLElement[];
     if (!spans.length) return [];
 
     const containerRect = textLayer.getBoundingClientRect();
-    // Ponto exato que divide a folha ao meio (Eixo X)
     const middleX = containerRect.left + (containerRect.width / 2);
 
-    // 1. Mapeia cada elemento calculando sua posição visual exata na tela
     const items = spans.map(span => {
       const rect = span.getBoundingClientRect();
       return {
         element: span,
         text: span.innerText ? span.innerText.trim() : '',
-        // Distância do topo absoluto da janela (quanto menor, mais no topo está)
         top: rect.top,
-        // Distância da esquerda da tela
         left: rect.left,
-        // Pertence à coluna esquerda se o centro do elemento estiver do lado esquerdo do meio
-        // Usamos (rect.left + rect.width / 2) para pegar o centro do elemento
-        isLeftColumn: (rect.left + rect.width / 2) < middleX
+        centerX: rect.left + rect.width / 2,
       };
     }).filter(item => item.text.length > 0);
 
-    // 2. ISOLAMENTO TOTAL DAS DUAS COLUNAS
-    // NÃO misturamos elementos da esquerda com da direita em nenhuma etapa
-    const leftColumnItems = items.filter(item => item.isLeftColumn);
-    const rightColumnItems = items.filter(item => !item.isLeftColumn);
+    if (items.length === 0) return [];
 
-    // 3. Ordena CADA coluna de CIMA PARA BAIXO de forma independente
-    // Tolerância de apenas 3px para palavras da mesma linha DENTRO da mesma coluna
-    const sortStrictlyVertical = (a: typeof items[0], b: typeof items[0]) => {
-      if (Math.abs(a.top - b.top) <= 3) {
-        // Mesmo linha dentro da coluna: ler da esquerda para a direita
+    // Detectar se é 2 colunas: verificar se existe uma faixa central vazia
+    const margin = containerRect.width * 0.1; // 10% de margem no centro
+    const leftItems = items.filter(i => i.centerX < middleX - margin);
+    const rightItems = items.filter(i => i.centerX > middleX + margin);
+    const centerItems = items.filter(i => i.centerX >= middleX - margin && i.centerX <= middleX + margin);
+
+    // Se há muitos itens no centro, é coluna única (texto cruza o meio)
+    const isTwoColumns = rightItems.length > 0 && leftItems.length > 0 && centerItems.length < 3;
+
+    const sortByTop = (a: typeof items[0], b: typeof items[0]) => {
+      // Mesma linha horizontal (tolerância 5px): ler da esquerda para a direita
+      if (Math.abs(a.top - b.top) <= 5) {
         return a.left - b.left;
       }
-      // Menor 'top' vem PRIMEIRO (Garante leitura do topo para a base da coluna)
       return a.top - b.top;
     };
 
-    leftColumnItems.sort(sortStrictlyVertical);
-    rightColumnItems.sort(sortStrictlyVertical);
+    if (!isTwoColumns) {
+      // COLUNA ÚNICA: ordenar todos os spans de cima para baixo
+      items.sort(sortByTop);
+      return items.map(i => i.element);
+    }
 
-    // 4. CONCATENAÇÃO SEQUENCIAL OBRIGATÓRIA:
-    // LÊ 100% DA COLUNA ESQUERDA (DO TOPO AO ROAPÉ) -> DEPOIS LÊ 100% DA COLUNA DIREITA
-    // NUNCA mistura linhas entre colunas
-    const finalSequence = [...leftColumnItems, ...rightColumnItems];
+    // DUAS COLUNAS: ler coluna esquerda inteira, depois coluna direita
+    leftItems.sort(sortByTop);
+    rightItems.sort(sortByTop);
 
-    // Imprime a ordem para depuração
-    console.log("Ordem de leitura 2 colunas - Esquerda:", leftColumnItems.slice(0, 3).map(i => i.text.substring(0, 20)));
-    console.log("Ordem de leitura 2 colunas - Direita:", rightColumnItems.slice(0, 3).map(i => i.text.substring(0, 20)));
-
-    return finalSequence.map(item => item.element);
+    return [...leftItems, ...rightItems].map(i => i.element);
   };
 
   // Motor de Análise Visual e Agrupamento por Colunas/Regiões
   const analyzeAndBuildReadingOrder = (
     textLayerEl: HTMLElement,
-    readingDirection: 'TOP_TO_BOTTOM' | 'BOTTOM_TO_TOP' = 'TOP_TO_BOTTOM'
+    _readingDirection: 'TOP_TO_BOTTOM' | 'BOTTOM_TO_TOP' = 'TOP_TO_BOTTOM'
   ): CachedLayout => {
     const textLayer = textLayerEl;
     const spans = Array.from(textLayer.querySelectorAll('.pdf-text-span')) as HTMLElement[];
@@ -134,9 +131,7 @@ export function PdfReader({ url, className = "" }: PdfReaderProps) {
 
     if (validSpans.length === 0) return { fullText: '', orderedSpans: [] };
 
-    // 1. Aplicar algoritmo definitivo de divisão por colunas com ordenação vertical rigorosa
-    //    Isola 100% da Coluna Esquerda e 100% da Coluna Direita, sem misturar linhas
-    const orderedSpans = getTwoColumnOrderedNodes(textLayer);
+    const orderedSpans = getOrderedNodes(textLayer);
 
     const fullText = orderedSpans.length > 0 ? 
       orderedSpans.map(s => s.innerText.trim()).join(' ') : '';
@@ -187,7 +182,7 @@ export function PdfReader({ url, className = "" }: PdfReaderProps) {
 
     const utterance = new SpeechSynthesisUtterance(layout.fullText);
     utterance.lang = 'pt-BR';
-    utterance.rate = 1.0;
+    utterance.rate = speechRate;
 
     utterance.onend = () => stopReading();
     utterance.onerror = () => stopReading();
@@ -521,6 +516,26 @@ const stopReading = () => {
                   <VolumeX className="h-4 w-4" />
                 )}
               </Button>
+
+              {/* Speech Rate Selector */}
+              <select
+                value={speechRate}
+                onChange={(e) => {
+                  const newRate = parseFloat(e.target.value);
+                  setSpeechRate(newRate);
+                  if (isReading) {
+                    stopReading();
+                    setTimeout(() => startReading(), 100);
+                  }
+                }}
+                className="h-8 px-2 rounded-lg bg-background/50 border border-border/20 text-xs font-semibold text-foreground outline-none focus:border-primary/50 cursor-pointer"
+              >
+                {SPEECH_RATES.map((rate) => (
+                  <option key={rate} value={rate}>
+                    {rate}x
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Right: zoom controls */}

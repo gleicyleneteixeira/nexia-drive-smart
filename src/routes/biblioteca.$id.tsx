@@ -168,6 +168,7 @@ function LibraryCarouselViewer({
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
+  const [speechRate, setSpeechRate] = useState<number>(1.05);
 
   const slide = slides[current];
 
@@ -197,7 +198,7 @@ function LibraryCarouselViewer({
       window.speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(organizeSlideText(text));
       u.lang = "pt-BR";
-      u.rate = 1.05;
+      u.rate = speechRate;
       window.speechSynthesis.speak(u);
     } catch {}
   };
@@ -253,22 +254,41 @@ function LibraryCarouselViewer({
           {item.item_type === "carousel" ? "Carrossel de Dicas" : "Imagem Narrada"}
         </span>
         {item.narrated && (
-          <button
-            onClick={() => setIsMuted(!isMuted)}
-            className="px-3 py-1.5 rounded-xl glass text-xs font-semibold text-white/80 hover:text-white flex items-center gap-2 transition-all cursor-pointer"
-          >
-            {isMuted ? (
-              <>
-                <VolumeX className="h-4 w-4 text-destructive-glow" />
-                <span>🔇 Mudo</span>
-              </>
-            ) : (
-              <>
-                <Volume2 className="h-4 w-4 text-primary-glow" />
-                <span>🔊 Ouvir Narração</span>
-              </>
-            )}
-          </button>
+          <div className="flex items-center gap-2">
+            <select
+              value={speechRate}
+              onChange={(e) => {
+                const newRate = parseFloat(e.target.value);
+                setSpeechRate(newRate);
+                if (window.speechSynthesis.speaking) {
+                  window.speechSynthesis.cancel();
+                  setTimeout(() => speakText(slide.text), 100);
+                }
+              }}
+              className="h-7 px-2 rounded-lg bg-black/40 border border-white/10 text-[11px] font-semibold text-white/80 outline-none cursor-pointer"
+            >
+              <option value={0.75}>0.75x</option>
+              <option value={1.0}>1.0x</option>
+              <option value={1.25}>1.25x</option>
+              <option value={1.5}>1.5x</option>
+            </select>
+            <button
+              onClick={() => setIsMuted(!isMuted)}
+              className="px-3 py-1.5 rounded-xl glass text-xs font-semibold text-white/80 hover:text-white flex items-center gap-2 transition-all cursor-pointer"
+            >
+              {isMuted ? (
+                <>
+                  <VolumeX className="h-4 w-4 text-destructive-glow" />
+                  <span>🔇 Mudo</span>
+                </>
+              ) : (
+                <>
+                  <Volume2 className="h-4 w-4 text-primary-glow" />
+                  <span>🔊 Ouvir</span>
+                </>
+              )}
+            </button>
+          </div>
         )}
       </div>
 
