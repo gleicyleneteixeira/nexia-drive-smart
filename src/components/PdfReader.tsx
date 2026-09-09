@@ -77,22 +77,30 @@ export function PdfReader({ url, className = "" }: PdfReaderProps) {
     const containerWidth = textLayer.offsetWidth;
     const middleX = containerWidth / 2;
 
-    // Usar offsetTop/offsetLeft (coordenadas relativas ao text layer, NÃO da tela)
+    // Ler top/left DIRETO do CSS inline (mais confiável que offsetTop ou getBoundingClientRect)
     const items = spans.map(span => {
       const text = span.innerText ? span.innerText.trim() : '';
+      const topVal = parseFloat(span.style.top) || 0;
+      const leftVal = parseFloat(span.style.left) || 0;
       return {
         element: span,
         text,
-        // offsetTop/offsetLeft = posição relativa ao text layer (fixo, não muda com scroll)
-        top: span.offsetTop,
-        left: span.offsetLeft,
-        centerX: span.offsetLeft + span.offsetWidth / 2,
+        top: topVal,
+        left: leftVal,
+        centerX: leftVal + (span.offsetWidth || 0) / 2,
       };
     }).filter(item => item.text.length > 0);
 
     if (items.length === 0) return [];
 
-    // Detectar se é 2 colunas: verificar se existe uma faixa central vazia
+    // Log de debug (primeiros 5 itens)
+    console.log("PDF Read Order (top→bottom):", items.slice(0, 5).map(i => ({
+      text: i.text.substring(0, 30),
+      top: Math.round(i.top),
+      left: Math.round(i.left),
+    })));
+
+    // Detectar se é 2 colunas
     const margin = containerWidth * 0.1;
     const leftItems = items.filter(i => i.centerX < middleX - margin);
     const rightItems = items.filter(i => i.centerX > middleX + margin);
