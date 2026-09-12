@@ -21,7 +21,6 @@ export function getExpiryDate(planType: string, amount?: number): Date {
 
 export function isProfileExpired(profile: { status: string; expires_at: string | null; is_migrated?: boolean | null } | null): boolean {
   if (!profile) return true;
-  if (profile.is_migrated) return false;
   if (profile.status !== "ativo") return true;
   if (!profile.expires_at) return false;
   return new Date(profile.expires_at) < new Date();

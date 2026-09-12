@@ -678,24 +678,54 @@ export function UsersPanel() {
   const { data: users = [], isLoading } = useQuery({
     queryKey: ["admin", "profiles"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("id, display_name, email, cpf, phone, employment_status, employment_other, status, expires_at, created_at, needs_new_password, access_status, access_reason, free_trial_enabled")
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return (data ?? []) as ProfileRow[];
+      const allProfiles: ProfileRow[] = [];
+      let from = 0;
+      const batchSize = 1000;
+      let hasMore = true;
+
+      while (hasMore) {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("id, display_name, email, cpf, phone, employment_status, employment_other, status, expires_at, created_at, needs_new_password, access_status, access_reason, free_trial_enabled")
+          .order("created_at", { ascending: false })
+          .range(from, from + batchSize - 1);
+        if (error) throw error;
+        if (data && data.length > 0) {
+          allProfiles.push(...(data as ProfileRow[]));
+          from += batchSize;
+          hasMore = data.length === batchSize;
+        } else {
+          hasMore = false;
+        }
+      }
+      return allProfiles;
     },
   });
 
   const { data: paidTx = [] } = useQuery({
     queryKey: ["admin", "paidTx"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("pix_transactions")
-        .select("user_id")
-        .eq("status", "CONCLUIDA");
-      if (error) throw error;
-      return (data ?? []) as { user_id: string }[];
+      const allTx: { user_id: string }[] = [];
+      let from = 0;
+      const batchSize = 1000;
+      let hasMore = true;
+
+      while (hasMore) {
+        const { data, error } = await supabase
+          .from("pix_transactions")
+          .select("user_id")
+          .eq("status", "CONCLUIDA")
+          .range(from, from + batchSize - 1);
+        if (error) throw error;
+        if (data && data.length > 0) {
+          allTx.push(...(data as { user_id: string }[]));
+          from += batchSize;
+          hasMore = data.length === batchSize;
+        } else {
+          hasMore = false;
+        }
+      }
+      return allTx;
     },
   });
 
