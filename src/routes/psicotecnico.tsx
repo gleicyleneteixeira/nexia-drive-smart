@@ -2679,6 +2679,15 @@ export function Logico({
 
   const q = LOG_QUESTIONS[i];
 
+  const shuffledOptions = useMemo(() => {
+    const arr = [...q.options];
+    for (let j = arr.length - 1; j > 0; j--) {
+      const k = Math.floor(Math.random() * (j + 1));
+      [arr[j], arr[k]] = [arr[k], arr[j]];
+    }
+    return arr;
+  }, [i]);
+
   function next() {
     setPicked(null);
     if (i + 1 >= LOG_QUESTIONS.length) {
@@ -2735,7 +2744,7 @@ export function Logico({
           <p className="text-base md:text-lg font-medium mb-4">{q.question}</p>
           {q.prompt && <div className="mb-5">{q.prompt()}</div>}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {q.options.map((opt) => {
+            {shuffledOptions.map((opt) => {
               const isPicked = picked === opt.key;
               return (
                 <button
