@@ -417,6 +417,47 @@ function ResultView({
         </p>
       </div>
 
+      {/* Relatório detalhado */}
+      <div className="glass rounded-3xl p-4 md:p-6 shadow-card">
+        <h3 className="font-display font-bold text-sm mb-3">Relatório de Respostas</h3>
+        <div className="space-y-2">
+          {questions.map((q) => {
+            const userAnswer = answers[q.id];
+            const isCorrect = userAnswer === q.correctAnswer;
+            const wasAnswered = !!userAnswer;
+            return (
+              <div
+                key={q.id}
+                className={`flex items-center gap-3 p-2 rounded-xl border text-sm ${
+                  !wasAnswered
+                    ? "border-border/30 bg-white/5"
+                    : isCorrect
+                      ? "border-success/40 bg-success/5"
+                      : "border-destructive/40 bg-destructive/5"
+                }`}
+              >
+                <img
+                  src={q.imageUrl}
+                  alt={q.title}
+                  className="w-10 h-10 rounded-lg object-cover bg-black/20 shrink-0"
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-xs truncate">{q.title}</p>
+                  <p className="text-[11px] text-muted-foreground">
+                    {wasAnswered
+                      ? `Sua: ${userAnswer} · Gabarito: ${q.correctAnswer}`
+                      : "Não respondida"}
+                  </p>
+                </div>
+                <span className={`text-xs font-bold shrink-0 ${!wasAnswered ? "text-muted-foreground" : isCorrect ? "text-success" : "text-destructive"}`}>
+                  {!wasAnswered ? "—" : isCorrect ? "✓" : "✗"}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       <div className="flex gap-2 flex-wrap">
         <button
           onClick={onRestart}
