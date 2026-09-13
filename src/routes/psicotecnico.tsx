@@ -2748,9 +2748,11 @@ export function Logico({
                     if (opt.key === q.correct) setCorrect((c) => c + 1);
                   }}
                   className={`rounded-2xl border-2 bg-white p-4 flex flex-col items-center gap-2 transition-all ${
-                    reveal && isPicked
-                      ? "border-primary bg-primary/10"
-                      : "border-border hover:border-primary/50"
+                    reveal && isCorrect
+                      ? "border-success bg-success/10"
+                      : reveal && isPicked
+                        ? "border-destructive bg-destructive/10"
+                        : "border-border hover:border-primary/50"
                   }`}
                 >
                   <span className="self-start text-xs font-bold text-zinc-700">{opt.key}</span>
@@ -2764,11 +2766,21 @@ export function Logico({
               <motion.div
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mt-4 p-4 rounded-2xl border border-primary/40 bg-primary/5"
+                className={`mt-4 p-4 rounded-2xl border ${
+                  picked === q.correct
+                    ? "border-success/40 bg-success/5"
+                    : "border-destructive/40 bg-destructive/5"
+                }`}
               >
-                <p className="text-sm font-semibold flex items-center gap-2 text-primary">
-                  Resposta selecionada: {picked}
+                <p className="text-sm font-semibold flex items-center gap-2">
+                  {picked === q.correct ? (
+                    <Check className="h-4 w-4 text-success" />
+                  ) : (
+                    <X className="h-4 w-4 text-destructive" />
+                  )}
+                  Resposta: {q.correct}
                 </p>
+                <p className="text-sm text-foreground/90 mt-1">{q.explain}</p>
                 <button
                   onClick={next}
                   className="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-xl gradient-primary text-primary-foreground text-sm font-semibold"
