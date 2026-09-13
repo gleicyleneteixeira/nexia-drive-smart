@@ -2751,7 +2751,7 @@ export function Logico({
                       : "border-border bg-white hover:border-primary/50"
                   }`}
                 >
-                  <span className="self-start text-xs font-bold text-zinc-700 bg-white/80 rounded px-1.5 py-0.5">{opt.key}</span>
+                  <span className="self-start text-xs font-bold text-zinc-700 bg-white rounded px-1.5 py-0.5 shadow-sm">{opt.key}</span>
                   {opt.render()}
                 </button>
               );
