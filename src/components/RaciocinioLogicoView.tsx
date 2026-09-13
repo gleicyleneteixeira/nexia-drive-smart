@@ -142,7 +142,7 @@ export function RaciocinioLogicoView({ onBack }: { onBack: () => void }) {
           >
             <Logico
               speech={speech}
-              timeLimit={120}
+              timeLimit={180}
               onDone={() => setSelectedLevel(null)}
             />
           </motion.div>
@@ -158,7 +158,7 @@ export function RaciocinioLogicoView({ onBack }: { onBack: () => void }) {
             <RaciocinioMIGQuiz
               mode="prova"
               questions={MIG_QUESTIONS}
-              timeLimit={120}
+              timeLimit={180}
               onFinish={() => {}}
               onHub={() => setSelectedLevel(null)}
             />
