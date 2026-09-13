@@ -48,7 +48,9 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
 
     if (profile) {
       if (profile.needs_new_password) {
-        navigate({ to: "/reset-password", replace: true });
+        if (!pathname.startsWith("/reset-password")) {
+          navigate({ to: "/reset-password", replace: true });
+        }
         return;
       }
 

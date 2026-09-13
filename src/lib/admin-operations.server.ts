@@ -56,6 +56,7 @@ export const checkLegacyAccessSecure = createServerFn({ method: "POST" })
     isMigratedUser: boolean;
     needsFirstAccess: boolean;
     needsNewPassword: boolean;
+    hasAuthAccount: boolean;
     userEmail: string;
   }> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -73,7 +74,16 @@ export const checkLegacyAccessSecure = createServerFn({ method: "POST" })
     const { data: profile, error } = await query.maybeSingle();
 
     if (error || !profile) {
-      return { found: false, isMigratedUser: false, needsFirstAccess: false, needsNewPassword: false, userEmail: "" };
+      return { found: false, isMigratedUser: false, needsFirstAccess: false, needsNewPassword: false, hasAuthAccount: false, userEmail: "" };
+    }
+
+    // Check if user already has an auth account
+    let hasAuthAccount = false;
+    try {
+      const { data: authUser } = await supabaseAdmin.auth.admin.getUserById(profile.id);
+      hasAuthAccount = !!authUser?.user;
+    } catch {
+      hasAuthAccount = false;
     }
 
     const isMigratedUser = "is_migrated" in profile ? !!(profile as any).is_migrated : true;
@@ -91,6 +101,7 @@ export const checkLegacyAccessSecure = createServerFn({ method: "POST" })
       isMigratedUser,
       needsFirstAccess,
       needsNewPassword,
+      hasAuthAccount,
       userEmail: profile.email || "",
     };
   });

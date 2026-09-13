@@ -1,11 +1,12 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Loader2, Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/reset-password")({
   component: ResetPasswordPage,
@@ -14,6 +15,7 @@ export const Route = createFileRoute("/reset-password")({
 
 function ResetPasswordPage() {
   const navigate = useNavigate();
+  const { refreshProfile } = useAuth();
   const [ready, setReady] = useState(false);
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -60,6 +62,9 @@ function ResetPasswordPage() {
       }
 
       toast.success("Senha atualizada com sucesso!");
+
+      // Atualiza o contexto do React para que RequireAuth veja needs_new_password: false
+      await refreshProfile();
 
       const { data: profile } = await supabase
         .from("profiles")

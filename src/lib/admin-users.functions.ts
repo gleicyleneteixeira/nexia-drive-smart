@@ -25,12 +25,12 @@ export const adminResetUserPassword = createServerFn({ method: "POST" })
     });
     if (error) throw new Error(error.message);
 
-    // Unblock user and mark as needing password reset on next login
+    // Unblock user — the admin just set the password, user can log in immediately
     await supabaseAdmin
       .from("profiles")
       .update({
         access_status: "active",
-        needs_new_password: true,
+        needs_new_password: false,
       })
       .eq("id", data.userId);
 
