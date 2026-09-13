@@ -2745,13 +2745,13 @@ export function Logico({
                     setPicked(opt.key);
                     if (opt.key === q.correct) setCorrect((c) => c + 1);
                   }}
-                  className={`rounded-2xl border-2 p-4 flex flex-col items-center gap-2 transition-all ${
+                  className={`rounded-2xl border-2 p-4 flex flex-col items-center gap-2 transition-all bg-white ${
                     isPicked
-                      ? "border-primary bg-primary/5"
-                      : "border-border bg-white hover:border-primary/50"
+                      ? "border-primary shadow-[0_0_12px_rgba(168,85,247,0.25)]"
+                      : "border-border hover:border-primary/50"
                   }`}
                 >
-                  <span className="self-start text-xs font-bold text-zinc-700 bg-white rounded px-1.5 py-0.5 shadow-sm">{opt.key}</span>
+                  <span className="self-start text-xs font-bold text-zinc-700">{opt.key}</span>
                   {opt.render()}
                 </button>
               );
