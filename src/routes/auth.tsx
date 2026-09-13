@@ -55,7 +55,7 @@ function AuthPage() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/app" });
+      if (data.session) navigate({ to: "/cadastro" });
     });
   }, [navigate]);
 
@@ -187,7 +187,6 @@ function AuthPage() {
         }
 
         toast.success("Bem-vinda(o) de volta!");
-        navigate({ to: "/app" });
       }
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Erro";

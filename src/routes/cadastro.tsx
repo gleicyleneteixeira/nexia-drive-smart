@@ -630,7 +630,7 @@ function CadastroPage() {
 
       toast.success("Senha cadastrada com sucesso! Bem-vindo(a)!");
       setLegacyUserModal(false);
-      navigate({ to: "/app" });
+      // Redirect handled by useEffect — checks isProfileExpired
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Erro ao atualizar senha.");
     } finally {
