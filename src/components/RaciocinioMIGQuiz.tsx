@@ -214,7 +214,7 @@ export function RaciocinioMIGQuiz({
         {OPTIONS.map((opt) => {
           const isSelected = selected === opt;
           let cls =
-            "border-border/30 bg-white hover:bg-white/10 hover:border-primary/40";
+            "border-border/30 bg-white/5 hover:bg-white/10 hover:border-primary/40";
           if (answered) {
             if (isAdminPreview) {
               const isCorrect = q.correctAnswer === opt;
@@ -224,7 +224,7 @@ export function RaciocinioMIGQuiz({
                 cls = "border-destructive bg-destructive/20 shadow-destructive-glow";
               else cls = "border-border/20 bg-white/5 opacity-60";
             } else {
-              if (isSelected) cls = "border-primary bg-white";
+              if (isSelected) cls = "border-primary bg-white/10";
               else cls = "border-border/20 bg-white/5 opacity-60";
             }
           }
