@@ -448,29 +448,41 @@ export const activateUser = createServerFn({ method: "POST" })
   .inputValidator((d: { userId: string; reason?: string; expiresAt?: string | null }) => d)
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { getExpiryDate } = await import("@/lib/subscription");
+    const { getExpiryDate, getTrialExpiryDate } = await import("@/lib/subscription");
 
-    let planType = "6_months";
+    let expiresAt: string;
 
-    let amount = 0;
+    if (data.reason === "liberado") {
+      // Trial gratuito: sempre 30 dias a partir de agora
+      expiresAt = data.expiresAt
+        ? new Date(data.expiresAt).toISOString()
+        : getTrialExpiryDate().toISOString();
+    } else {
+      // Pago: usar duração do plano contratado (2 ou 6 meses)
+      let planType = "6_months";
+      let amount = 0;
 
-    const { data: tx } = await supabaseAdmin
-      .from("pix_transactions")
-      .select("plan_type, amount")
-      .eq("user_id", data.userId)
-      .eq("status", "CONCLUIDA")
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .single();
+      const { data: tx } = await supabaseAdmin
+        .from("pix_transactions")
+        .select("plan_type, amount")
+        .eq("user_id", data.userId)
+        .eq("status", "CONCLUIDA")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .single();
 
-    if (tx?.plan_type) {
-      planType = tx.plan_type;
-      amount = tx.amount;
+      if (tx?.plan_type) {
+        planType = tx.plan_type;
+        amount = tx.amount;
+      }
+
+      // Se foi passado expiresAt explicitamente e é válido, usar; senão calcular do plano
+      if (data.expiresAt) {
+        expiresAt = new Date(data.expiresAt).toISOString();
+      } else {
+        expiresAt = getExpiryDate(planType, amount).toISOString();
+      }
     }
-
-    const expiresAt = data.expiresAt
-      ? new Date(data.expiresAt).toISOString()
-      : getExpiryDate(planType, amount).toISOString();
 
     const { error } = await supabaseAdmin
       .from("profiles")
@@ -483,7 +495,7 @@ export const activateUser = createServerFn({ method: "POST" })
       .eq("id", data.userId);
 
     if (error) throw new Error(error.message);
-    return { ok: true, planType, expiresAt };
+    return { ok: true, expiresAt };
   });
 
 export const receivePixConfirmation = createServerFn({ method: "POST" })
@@ -827,6 +839,30 @@ export const bulkUnblockUsers = createServerFn({ method: "POST" })
 
     if (error) throw new Error(error.message);
     return { ok: true, updated: data.userIds.length };
+  });
+
+export const blockUser = createServerFn({ method: "POST" })
+  .inputValidator((data: { userId: string }) => data)
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin
+      .from("profiles")
+      .update({ access_status: "blocked", updated_at: new Date().toISOString() })
+      .eq("id", data.userId);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const unblockUser = createServerFn({ method: "POST" })
+  .inputValidator((data: { userId: string }) => data)
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin
+      .from("profiles")
+      .update({ access_status: "active", updated_at: new Date().toISOString() })
+      .eq("id", data.userId);
+    if (error) throw new Error(error.message);
+    return { ok: true };
   });
 
 export const bulkDeleteUsers = createServerFn({ method: "POST" })

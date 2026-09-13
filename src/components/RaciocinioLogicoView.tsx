@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Brain, ArrowLeft, GraduationCap, Sparkles } from "lucide-react";
 import { Logico, useSpeech } from "@/routes/psicotecnico";
 import { RaciocinioMIGQuiz } from "@/components/RaciocinioMIGQuiz";
-import { MIG_OFFICIAL } from "@/data/raciocinioLogicoMIG";
+import { MIG_QUESTIONS, MIG_OFFICIAL } from "@/data/raciocinioLogicoMIG";
 
 export function RaciocinioLogicoView({ onBack }: { onBack: () => void }) {
   const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
@@ -157,7 +157,7 @@ export function RaciocinioLogicoView({ onBack }: { onBack: () => void }) {
           >
             <RaciocinioMIGQuiz
               mode="prova"
-              questions={MIG_OFFICIAL}
+              questions={MIG_QUESTIONS}
               timeLimit={120}
               onFinish={() => {}}
               onHub={() => setSelectedLevel(null)}

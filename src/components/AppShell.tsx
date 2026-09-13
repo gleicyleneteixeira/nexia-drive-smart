@@ -409,6 +409,19 @@ export function AppShell() {
         {!isPublicPage && isActive && (
           <header className="sticky top-0 z-30 h-14 bg-card/90 backdrop-blur-xl border-b border-border/50 flex items-center justify-between px-4 sm:px-6">
             <div className="flex items-center gap-3">
+              <Link
+                to={isActive ? "/app" : "/"}
+                onClick={() => {
+                  if (isActive) {
+                    localStorage.removeItem("nexia:active_module");
+                    window.dispatchEvent(new Event("nexia:active_module:change"));
+                  }
+                }}
+                className="rounded-xl gradient-primary w-9 h-9 flex items-center justify-center text-primary-foreground font-black shadow-glow text-base shrink-0 cursor-pointer focus:outline-none hover:scale-105 transition-transform"
+                title="Voltar ao Início"
+              >
+                N
+              </Link>
               <h1 className="text-base font-semibold text-foreground">
                 {pathname === "/app" && (
                   activeModule === "psicotecnico" ? "Psicotecnico" :

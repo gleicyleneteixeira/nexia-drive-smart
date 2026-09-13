@@ -224,7 +224,6 @@ export function RaciocinioMIGQuiz({
                 cls = "border-destructive bg-destructive/20 shadow-destructive-glow";
               else cls = "border-border/20 bg-white/5 opacity-60";
             } else {
-              // Modo usuário: não revela o gabarito, apenas destaca a selecionada
               if (isSelected) cls = "border-primary bg-primary/20";
               else cls = "border-border/20 bg-white/5 opacity-60";
             }

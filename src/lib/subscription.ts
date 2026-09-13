@@ -19,6 +19,12 @@ export function getExpiryDate(planType: string, amount?: number): Date {
   return expires;
 }
 
+export function getTrialExpiryDate(): Date {
+  const expires = new Date();
+  expires.setDate(expires.getDate() + 30);
+  return expires;
+}
+
 export function isProfileExpired(profile: { status: string; expires_at: string | null; is_migrated?: boolean | null } | null): boolean {
   if (!profile) return true;
   if (profile.status !== "ativo") return true;

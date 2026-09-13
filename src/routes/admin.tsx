@@ -285,9 +285,8 @@ type SaleRow = {
 };
 
 const PLAN_SALES_LABELS: Record<string, string> = {
-  "1_month": "Plano Intensivo (30 dias)",
-  "3_months": "Plano Trimestral (90 dias)",
-  "6_months": "Combo CNH Aprovada (6 meses)",
+  "1_month": "2 meses",
+  "6_months": "6 meses",
 };
 
 function salesPlanLabel(plan: string | null): string {
@@ -591,22 +590,6 @@ export function SalesPanel() {
   );
 }
 
-type ProfileRow = {
-  id: string;
-  display_name: string | null;
-  email: string | null;
-  cpf: string | null;
-  phone: string | null;
-  employment_status: string | null;
-  employment_other: string | null;
-  status: string | null;
-  expires_at: string | null;
-  created_at: string;
-  needs_new_password: boolean | null;
-  access_status?: string | null;
-  access_reason?: string | null;
-  free_trial_enabled?: boolean | null;
-};
 const EMPLOYMENT_LABELS: Record<string, string> = {
   clt: "CLT",
   carteira_assinada: "CLT",
@@ -618,7 +601,143 @@ const EMPLOYMENT_LABELS: Record<string, string> = {
   outro: "Outros",
 };
 
-const PAGE_SIZES = [10, 20, 50, 100, 500, 1000, 99999] as const;
+const PAGE_SIZES = [10, 100, 1000, 99999] as const;
+
+type ProfileRow = {
+  id: string;
+  display_name: string | null;
+  email: string | null;
+  cpf: string | null;
+  phone: string | null;
+  employment_status: string | null;
+  employment_other: string | null;
+  status: string;
+  expires_at: string | null;
+  created_at: string;
+  needs_new_password: boolean | null;
+  access_status: string | null;
+  access_reason: string | null;
+  free_trial_enabled: boolean | null;
+};
+
+function StatusSelect({ user, isPaid, onRefresh }: { user: ProfileRow; isPaid: boolean; onRefresh: () => void }) {
+  const [saving, setSaving] = useState(false);
+  const qc = useQueryClient();
+
+  const currentValue = user.status === "ativo" && isPaid
+    ? "pago"
+    : user.status === "ativo" && !isPaid
+      ? "liberado"
+      : user.status === "pendente_pagamento"
+        ? "pendente_pagamento"
+        : user.status ?? "pendente_pagamento";
+
+  async function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    const newValue = e.target.value;
+    if (newValue === currentValue) return;
+    setSaving(true);
+    try {
+      const ops = await import("@/lib/admin-operations.server");
+      if (newValue === "pago") {
+        // Pago: NÃO passar expiresAt — activateUser calcula do plano (2 ou 6 meses)
+        await ops.activateUser({
+          data: {
+            userId: user.id,
+            reason: "pago",
+          },
+        });
+      } else if (newValue === "liberado") {
+        // Liberado (trial): sempre 30 dias a partir de agora
+        await ops.activateUser({
+          data: {
+            userId: user.id,
+            reason: "liberado",
+          },
+        });
+      } else if (newValue === "pendente_pagamento") {
+        await ops.deactivateUser({ data: { userId: user.id } });
+      }
+      toast.success("Status atualizado");
+      onRefresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erro ao atualizar");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  const colorClass = currentValue === "pago"
+    ? "text-success bg-success/10 border-success/30"
+    : currentValue === "liberado"
+      ? "text-warning bg-warning/10 border-warning/30"
+      : "text-muted-foreground bg-muted/40 border-border/40";
+
+  return (
+    <div className="relative inline-flex items-center">
+      <select
+        value={currentValue}
+        onChange={handleChange}
+        disabled={saving}
+        className={`appearance-none text-[11px] font-bold px-2 py-0.5 pr-5 rounded-full border cursor-pointer hover:opacity-80 transition-opacity bg-transparent ${colorClass} ${saving ? "opacity-50" : ""}`}
+        style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat: "no-repeat", backgroundPosition: "right 4px center" }}
+      >
+        <option value="pago">Pago</option>
+        <option value="liberado">Liberado</option>
+        <option value="pendente_pagamento">Pendente</option>
+      </select>
+    </div>
+  );
+}
+
+function BlockStatusSelect({ user, onRefresh }: { user: ProfileRow; onRefresh: () => void }) {
+  const [saving, setSaving] = useState(false);
+
+  const isBlocked = user.access_status === "blocked";
+  const isExpired = user.expires_at ? new Date(user.expires_at).getTime() < Date.now() : false;
+  const currentValue = isBlocked ? "blocked" : isExpired ? "expired" : "active";
+
+  async function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    const newValue = e.target.value;
+    if (newValue === currentValue) return;
+    setSaving(true);
+    try {
+      const ops = await import("@/lib/admin-operations.server");
+      if (newValue === "active") {
+        await ops.unblockUser({ data: { userId: user.id } });
+      } else if (newValue === "blocked") {
+        await ops.blockUser({ data: { userId: user.id } });
+      }
+      toast.success("Situação atualizada");
+      onRefresh();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erro ao atualizar");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  const colorClass = currentValue === "active"
+    ? "text-success bg-success/10 border-success/30"
+    : currentValue === "expired"
+      ? "text-warning bg-warning/10 border-warning/30"
+      : "text-destructive bg-destructive/10 border-destructive/30";
+
+  return (
+    <div className="relative inline-flex items-center">
+      <select
+        value={currentValue}
+        onChange={handleChange}
+        disabled={saving}
+        className={`appearance-none text-[11px] font-bold px-2 py-0.5 pr-5 rounded-full border cursor-pointer hover:opacity-80 transition-opacity bg-transparent ${colorClass} ${saving ? "opacity-50" : ""}`}
+        style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat: "no-repeat", backgroundPosition: "right 4px center" }}
+      >
+        <option value="active">Ativo</option>
+        <option value="expired">Trial expirado</option>
+        <option value="blocked">Bloqueado</option>
+      </select>
+    </div>
+  );
+}
 
 export function UsersPanel() {
   const qc = useQueryClient();
@@ -633,8 +752,8 @@ export function UsersPanel() {
   const [expiresTo, setExpiresTo] = useState("");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState<number>(10);
-  const [sortField, setSortField] = useState<"name" | "email" | "status" | "password" | "block" | "created" | "expires">("name");
-  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+  const [sortField, setSortField] = useState<"name" | "email" | "plan" | "status" | "password" | "block" | "created" | "expires">("created");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [resetUser, setResetUser] = useState<ProfileRow | null>(null);
   const [newPassword, setNewPassword] = useState("");
   const [resetLoading, setResetLoading] = useState(false);
@@ -705,7 +824,7 @@ export function UsersPanel() {
   const { data: paidTx = [] } = useQuery({
     queryKey: ["admin", "paidTx"],
     queryFn: async () => {
-      const allTx: { user_id: string }[] = [];
+      const allTx: { user_id: string; plan_type: string | null }[] = [];
       let from = 0;
       const batchSize = 1000;
       let hasMore = true;
@@ -713,12 +832,12 @@ export function UsersPanel() {
       while (hasMore) {
         const { data, error } = await supabase
           .from("pix_transactions")
-          .select("user_id")
+          .select("user_id, plan_type")
           .eq("status", "CONCLUIDA")
           .range(from, from + batchSize - 1);
         if (error) throw error;
         if (data && data.length > 0) {
-          allTx.push(...(data as { user_id: string }[]));
+          allTx.push(...(data as { user_id: string; plan_type: string | null }[]));
           from += batchSize;
           hasMore = data.length === batchSize;
         } else {
@@ -731,6 +850,7 @@ export function UsersPanel() {
 
   const paidUserIds = new Set(paidTx.map((t) => t.user_id));
   const isPaid = (u: ProfileRow) => u.access_reason === "pago" || paidUserIds.has(u.id);
+  const userPlanMap = new Map(paidTx.map((t) => [t.user_id, t.plan_type]));
 
   const filtered = users.filter((u) => {
     if (filter !== "all" && u.employment_status !== filter) return false;
@@ -764,6 +884,7 @@ export function UsersPanel() {
     function valueOf(u: typeof a): string {
       switch (sortField) {
         case "email": return u.email ?? "";
+        case "plan": return salesPlanLabel(userPlanMap.get(u.id) ?? null);
         case "status":
           return u.status === "ativo" && isPaid(u)
             ? "pago"
@@ -891,7 +1012,7 @@ export function UsersPanel() {
   }
 
   function SortableTh({ field, label, className }: {
-    field: "name" | "email" | "status" | "password" | "block" | "created" | "expires";
+    field: "name" | "email" | "plan" | "status" | "password" | "block" | "created" | "expires";
     label: string;
     className?: string;
   }) {
@@ -1105,6 +1226,7 @@ export function UsersPanel() {
               </th>
               <SortableTh field="name" label="Nome" />
               <SortableTh field="email" label="E-mail" />
+              <th className="text-left px-3 py-2">Plano</th>
               <th className="text-left px-3 py-2">CPF</th>
               <th className="text-left px-3 py-2">Telefone</th>
               <SortableTh field="status" label="Motivo" />
@@ -1124,27 +1246,21 @@ export function UsersPanel() {
                 </td>
                 <td className="px-3 py-2">{u.display_name ?? "—"}</td>
                 <td className="px-3 py-2">{u.email ?? "—"}</td>
+                <td className="px-3 py-2 whitespace-nowrap">
+                  {(() => {
+                    const plan = userPlanMap.get(u.id);
+                    if (!plan) return <span className="text-muted-foreground">—</span>;
+                    return (
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold text-sky-400 bg-sky-500/10 border border-sky-500/30">
+                        {salesPlanLabel(plan)}
+                      </span>
+                    );
+                  })()}
+                </td>
                 <td className="px-3 py-2 whitespace-nowrap">{u.cpf ?? "—"}</td>
                 <td className="px-3 py-2">{u.phone ?? "—"}</td>
                 <td className="px-3 py-2 whitespace-nowrap">
-                  {u.status === "ativo" && isPaid(u) ? (
-                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-success bg-success/10 border border-success/30 px-2 py-0.5 rounded-full">
-                      <span className="w-1.5 h-1.5 rounded-full bg-success" />
-                      Pago
-                    </span>
-                  ) : u.status === "ativo" && !isPaid(u) ? (
-                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-warning bg-warning/10 border border-warning/30 px-2 py-0.5 rounded-full">
-                      <span className="w-1.5 h-1.5 rounded-full bg-warning" />
-                      Liberado grátis
-                    </span>
-                  ) : u.status === "pendente_pagamento" ? (
-                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-muted-foreground bg-muted/40 border border-border/40 px-2 py-0.5 rounded-full">
-                      <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground" />
-                      Pendente de pagamento
-                    </span>
-                  ) : (
-                    <span className="text-[11px] text-muted-foreground">{u.status ?? "—"}</span>
-                  )}
+                  <StatusSelect user={u} isPaid={isPaid(u)} onRefresh={() => qc.invalidateQueries({ queryKey: ["admin", "profiles"] })} />
                 </td>
                 <td className="px-3 py-2 whitespace-nowrap">
                   {u.needs_new_password === true ? (
@@ -1160,17 +1276,7 @@ export function UsersPanel() {
                   )}
                 </td>
                 <td className="px-3 py-2 whitespace-nowrap">
-                  {u.access_status === "blocked" ? (
-                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-destructive bg-destructive/10 border border-destructive/30 px-2 py-0.5 rounded-full">
-                      <span className="w-1.5 h-1.5 rounded-full bg-destructive animate-pulse" />
-                      Bloqueado
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-success bg-success/10 border border-success/30 px-2 py-0.5 rounded-full">
-                      <span className="w-1.5 h-1.5 rounded-full bg-success" />
-                      Ativo
-                    </span>
-                  )}
+                  <BlockStatusSelect user={u} onRefresh={() => qc.invalidateQueries({ queryKey: ["admin", "profiles"] })} />
                 </td>
                 <td className="px-3 py-2">
                   {u.employment_status === "outro"
