@@ -224,7 +224,7 @@ export function RaciocinioMIGQuiz({
                 cls = "border-destructive bg-destructive/20 shadow-destructive-glow";
               else cls = "border-border/20 bg-white/5 opacity-60";
             } else {
-              if (isSelected) cls = "border-primary bg-primary/20";
+              if (isSelected) cls = "border-primary bg-white";
               else cls = "border-border/20 bg-white/5 opacity-60";
             }
           }
@@ -236,9 +236,7 @@ export function RaciocinioMIGQuiz({
               className={`flex items-center gap-3 px-4 py-4 rounded-2xl border transition-all active:scale-95 ${cls}`}
             >
               <span
-                className={`w-8 h-8 rounded-lg flex items-center justify-center font-display font-bold ${
-                  isSelected ? "bg-primary text-primary-foreground" : "bg-black/30"
-                }`}
+                className="w-8 h-8 rounded-lg flex items-center justify-center font-display font-bold bg-black/30"
               >
                 {opt}
               </span>
