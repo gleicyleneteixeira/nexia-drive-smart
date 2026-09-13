@@ -63,7 +63,7 @@ export function RaciocinioLogicoView({ onBack }: { onBack: () => void }) {
               Teste <span className="gradient-text">MIG</span> — Detran
             </h2>
             <p className="text-xs text-muted-foreground mt-1">
-              Escolha o nível da avaliação. Você tem 2 minutos em cada um.
+              Escolha o nível da avaliação. Você tem 5 minutos em cada um.
             </p>
           </div>
           <button
@@ -142,7 +142,7 @@ export function RaciocinioLogicoView({ onBack }: { onBack: () => void }) {
           >
             <Logico
               speech={speech}
-              timeLimit={240}
+              timeLimit={300}
               onDone={() => setSelectedLevel(null)}
             />
           </motion.div>
@@ -158,7 +158,7 @@ export function RaciocinioLogicoView({ onBack }: { onBack: () => void }) {
             <RaciocinioMIGQuiz
               mode="prova"
               questions={MIG_QUESTIONS}
-              timeLimit={240}
+              timeLimit={300}
               onFinish={() => {}}
               onHub={() => setSelectedLevel(null)}
             />

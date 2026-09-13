@@ -2662,7 +2662,7 @@ export function Logico({
   useEffect(() => {
     if (phase === "intro")
       speech.speak(
-        "Teste de raciocínio lógico. Você tem 2 minutos. Olhe as figuras geométricas e escolha a alternativa correta o mais rápido que puder.",
+        "Teste de raciocínio lógico. Você tem 5 minutos. Olhe as figuras geométricas e escolha a alternativa correta o mais rápido que puder.",
       );
   }, [phase, speech]);
 
