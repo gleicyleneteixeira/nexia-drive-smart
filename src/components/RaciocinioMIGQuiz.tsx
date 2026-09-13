@@ -213,11 +213,11 @@ export function RaciocinioMIGQuiz({
       <div className="grid grid-cols-2 gap-3">
         {OPTIONS.map((opt) => {
           const isSelected = selected === opt;
-          const isCorrect = q.correctAnswer === opt;
           let cls =
-            "border-border/30 bg-white/5 hover:bg-white/10 hover:border-primary/40";
+            "border-border/30 bg-white hover:bg-white/10 hover:border-primary/40";
           if (answered) {
             if (isAdminPreview) {
+              const isCorrect = q.correctAnswer === opt;
               if (isCorrect)
                 cls = "border-success bg-success/20 shadow-success-glow";
               else if (isSelected)
@@ -241,10 +241,10 @@ export function RaciocinioMIGQuiz({
                 {opt}
               </span>
               <span className="text-sm font-semibold">Alternativa {opt}</span>
-              {answered && isAdminPreview && isCorrect && (
+              {answered && isAdminPreview && q.correctAnswer === opt && (
                 <Check className="h-4 w-4 text-success-glow ml-auto" />
               )}
-              {answered && isAdminPreview && isSelected && !isCorrect && (
+              {answered && isAdminPreview && isSelected && q.correctAnswer !== opt && (
                 <X className="h-4 w-4 text-destructive-glow ml-auto" />
               )}
             </button>
