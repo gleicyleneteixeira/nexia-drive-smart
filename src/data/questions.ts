@@ -6562,6 +6562,128 @@ export const QUESTIONS: Question[] = [
         tip: "Abrir a porta do carro = Olhar primeiro se não há perigo na via!",
         incidence: "alta",
         trap: false
+    },
+    // ============ NÍVEL 1 – COMPACTO (q28-q30) ============
+    {
+        id: "detran_q28_n1",
+        category: "infracoes",
+        difficulty: 1,
+        statement: "Em locais de trânsito de pedestres, não reduzir a velocidade é considerada uma infração:",
+        options: [
+            "Gravíssima.",
+            "Leve.",
+            "Grave.",
+            "Não é infração."
+        ],
+        correctIndex: 2,
+        explanation: "Não desacelerar o carro onde há muitos pedestres é infração grave.",
+        detailedExplanation: "Deixar de reduzir a velocidade em locais com grande movimentação de pedestres coloca vidas em risco e é infração de trânsito grave (Art. 220, I do CTB).",
+        legalBase: "Art. 220, I do CTB",
+        commonMistake: "Confundir com infração gravíssima por achar que envolve pedestres.",
+        tip: "Não reduzir a velocidade perto de pedestres = Infração Grave!",
+        incidence: "alta",
+        trap: true
+    },
+    {
+        id: "detran_q29_n1",
+        category: "direcao-defensiva",
+        difficulty: 1,
+        statement: "A fumaça de queimadas reduz a visibilidade na pista. O condutor deverá:",
+        options: [
+            "Reduzir a velocidade e ligar a luz baixa do farol",
+            "Parar o veículo em local seguro e aguardar o fim da queimada",
+            "Parar o veículo em local seguro e ligar o pisca alerta",
+            "Manter sua velocidade e ligar a luz alta do farol"
+        ],
+        correctIndex: 0,
+        explanation: "Na fumaça, diminua a marcha e acenda a luz baixa do farol.",
+        detailedExplanation: "Com pouca visibilidade provocada por fumaça de queimadas, reduza a velocidade e use a luz baixa (farol baixo), pois a luz alta causa ofuscamento ao refletir na fumaça.",
+        legalBase: "Art. 40, § 1º do CTB e Manual de Direção Defensiva",
+        commonMistake: "Usar farol alto achando que ilumina melhor a fumaça.",
+        tip: "Fumaça na pista = Farol baixo e velocidade reduzida!",
+        incidence: "alta",
+        trap: false
+    },
+    {
+        id: "detran_q30_n1",
+        category: "legislacao",
+        difficulty: 1,
+        statement: "Não obstruir a marcha normal dos veículos, sem causa justificada. Estamos falando sobre:",
+        options: [
+            "Normas de circulação.",
+            "Procedimentos adotados somente nas estradas.",
+            "Procedimentos adotados.",
+            "Direção Defensiva."
+        ],
+        correctIndex: 0,
+        explanation: "Não atrapalhar o fluxo do trânsito sem motivo é uma regra das normas de circulação.",
+        detailedExplanation: "O Código de Trânsito Brasileiro estabelece nas Normas Gerais de Circulação e Conduta que o condutor não deve andar devagar demais sem justificativa ou obstruir o trânsito (Art. 43 e 219 do CTB).",
+        legalBase: "Art. 43 e Art. 219 do CTB",
+        commonMistake: "Achar que se trata apenas de uma dica de Direção Defensiva e não de regra de lei.",
+        tip: "Não segurar o trânsito sem motivo = Regra das Normas de Circulação!",
+        incidence: "media",
+        trap: false
+    },
+    // ============ NÍVEL 2 – INTERMEDIÁRIO (q28-q30) ============
+    {
+        id: "detran_q28_n2",
+        category: "infracoes",
+        difficulty: 2,
+        statement: "Ao circular por trechos urbanos ou rurais com grande concentração e movimentação de pedestres, não reduzir a velocidade do veículo de forma compatível com a segurança do trânsito é considerada uma infração de natureza:",
+        options: [
+            "Gravíssima.",
+            "Leve.",
+            "Grave.",
+            "Não é infração."
+        ],
+        correctIndex: 2,
+        explanation: "Diminua a velocidade na presença de pedestres; não fazer isso gera infração grave.",
+        detailedExplanation: "O Art. 220, I do CTB estabelece que não adequar a velocidade em locais de trânsito ou aglomeração de pedestres constitui infração grave, punida com multa.",
+        legalBase: "Art. 220, I do CTB",
+        commonMistake: "Marcar gravíssima por associar o risco ao pedestre diretamente à pena máxima.",
+        tip: "Locais de pedestres exige velocidade reduzida = Infração Grave!",
+        incidence: "alta",
+        trap: true
+    },
+    {
+        id: "detran_q29_n2",
+        category: "direcao-defensiva",
+        difficulty: 2,
+        statement: "A fumaça produzida pelas queimadas nos terrenos à margem da via provoca drástica redução da visibilidade. Diante dessa situação de risco, qual o procedimento correto do condutor?",
+        options: [
+            "Reduzir a velocidade e ligar a luz baixa do farol",
+            "Parar o veículo em local seguro e aguardar o fim da queimada",
+            "Parar o veículo em local seguro e ligar o pisca alerta",
+            "Manter sua velocidade e ligar a luz alta do farol"
+        ],
+        correctIndex: 0,
+        explanation: "Diminua o ritmo e acione o farol baixo para não ofuscar a visão na fumaça.",
+        detailedExplanation: "Em condições adversas de visibilidade (fumaça/neblina), o motorista deve desacelerar e manter a luz baixa ligada. Parar na pista ou acostamento aumenta o risco de engavetamento.",
+        legalBase: "Art. 40, § 1º do CTB e Manual de Direção Defensiva",
+        commonMistake: "Ligar o farol alto, que reflete nas partículas de fumaça e cega o motorista.",
+        tip: "Fumaça ou neblina = Luz baixa + desacelerar sem parar na pista!",
+        incidence: "alta",
+        trap: false
+    },
+    {
+        id: "detran_q30_n2",
+        category: "legislacao",
+        difficulty: 2,
+        statement: "O preceito que estabelece que o condutor não deve obstruir a marcha normal dos demais veículos, abstendo-se de trafegar em velocidade anormalmente reduzida sem causa justificada, enquadra-se no conceito de:",
+        options: [
+            "Normas de circulação.",
+            "Procedimentos adotados somente nas estradas.",
+            "Procedimentos adotados.",
+            "Direção Defensiva."
+        ],
+        correctIndex: 0,
+        explanation: "Faz parte das Normas Gerais de Circulação e Conduta impostas pelo CTB.",
+        detailedExplanation: "As regras sobre fluxo livre, limites mínimos de velocidade (metade da máxima) e proibição de obstruir a marcha de outros veículos constituem a base das Normas Gerais de Circulação e Conduta (Art. 43 e 219 do CTB).",
+        legalBase: "Art. 43 e Art. 219 do CTB",
+        commonMistake: "Confundir obrigações legais de circulação com meros conselhos de direção defensiva.",
+        tip: "Velocidade mínima e fluxo livre = Normas Gerais de Circulação!",
+        incidence: "media",
+        trap: false
     }
 ];
 // Questões que realmente caíram na prova do DETRAN.
