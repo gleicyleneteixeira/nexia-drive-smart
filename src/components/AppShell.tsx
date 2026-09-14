@@ -463,12 +463,6 @@ export function AppShell() {
                   <DropdownMenuContent align="end" className="w-48 bg-card border-border">
                     {isActive && (
                       <>
-                        <DropdownMenuItem asChild>
-                          <Link to="/admin" className="flex items-center gap-2 cursor-pointer">
-                            <Shield className="h-4 w-4" />
-                            Admin
-                          </Link>
-                        </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() => triggerRatingPrompt("manual")}
                           className="flex items-center gap-2 cursor-pointer"
