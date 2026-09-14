@@ -6280,6 +6280,288 @@ export const QUESTIONS: Question[] = [
         incidence: "alta",
         trap: false,
         difficulty: 3
+    },
+    // ============ NÍVEL 1 – COMPACTO ============
+    {
+        id: "detran_q20_n1",
+        category: "infracoes",
+        difficulty: 1,
+        statement: "Molhar pedestres na calçada passando por poça d'água após chuva é:",
+        options: [
+            "Infração média e multa.",
+            "Uma brincadeira de mau gosto.",
+            "Um grande desrespeito pelos pedestres.",
+            "Infração leve com advertência verbal."
+        ],
+        correctIndex: 0,
+        explanation: "Jogar água de poça nos pedestres na calçada é infração média com multa.",
+        detailedExplanation: "Usar o carro para jogar água ou sujeira nas pessoas na rua é infração de trânsito média e gera multa (Art. 171 do CTB).",
+        legalBase: "Art. 171 do CTB",
+        commonMistake: "Achar que é só falta de educação e não dá multa.",
+        tip: "Jogar água no pedestre = Multa de infração média!",
+        incidence: "alta",
+        trap: true
+    },
+    {
+        id: "detran_q21_n1",
+        category: "primeiros-socorros",
+        difficulty: 1,
+        statement: "Sempre que auxiliar vítimas que estejam sangrando, é aconselhável:",
+        options: [
+            "Utilize uma luva de borracha ou similar.",
+            "Faça torniquete.",
+            "Faça compressa fria.",
+            "Faça garrote."
+        ],
+        correctIndex: 0,
+        explanation: "Use luvas de borracha para não pegar doenças pelo sangue da vítima.",
+        detailedExplanation: "Para se proteger de doenças transmitidas pelo sangue (biossegurança), use sempre luvas de borracha ou sacos plásticos antes de socorrer quem está sangrando.",
+        legalBase: "Manual de Primeiros Socorros do DENATRAN",
+        commonMistake: "Achar que deve fazer torniquete ou garrote em qualquer sangramento.",
+        tip: "Vítima sangrando = Use luva para se proteger!",
+        incidence: "alta",
+        trap: false
+    },
+    {
+        id: "detran_q23_n1",
+        category: "infracoes",
+        difficulty: 1,
+        statement: "Ultrapassar pela contramão outro veículo sobre faixa de pedestre é:",
+        options: [
+            "Infração Leve",
+            "Infração Média",
+            "Infração Gravíssima",
+            "Infração Grave"
+        ],
+        correctIndex: 2,
+        explanation: "Ultrapassar pela contramão em cima da faixa de pedestre é infração gravíssima.",
+        detailedExplanation: "Passar outro carro invadindo a pista contrária (contramão) em cima da travessia de pedestres é estritamente proibido e gera infração gravíssima (Art. 203, II do CTB).",
+        legalBase: "Art. 203, II do CTB",
+        commonMistake: "Confundir com infração grave pelo perigo de atropelamento.",
+        tip: "Ultrapassar na contramão na faixa de pedestre = Gravíssima!",
+        incidence: "alta",
+        trap: true
+    },
+    {
+        id: "detran_q24_n1",
+        category: "primeiros-socorros",
+        difficulty: 1,
+        statement: "No atendimento a vítima de acidente, a conduta sobre líquidos é:",
+        options: [
+            "Liberar líquidos apenas se a vítima estiver lúcida.",
+            "Manter a vítima em jejum até avaliação da equipe de saúde.",
+            "Oferecer água para acalmar a vítima.",
+            "Dar suco para evitar queda de pressão."
+        ],
+        correctIndex: 1,
+        explanation: "Deixe o ferido sem comer e sem beber nada até o médico chegar.",
+        detailedExplanation: "Não dê água nem comida para o ferido (manter em jejum), pois se ele precisar de cirurgia urgente no hospital ou desmaiar, pode se engasgar (broncoaspiração).",
+        legalBase: "Manual de Primeiros Socorros do DENATRAN",
+        commonMistake: "Dar água para 'acalmar' a vítima assustada.",
+        tip: "Vítima de acidente = Nada de água ou comida!",
+        incidence: "alta",
+        trap: true
+    },
+    {
+        id: "detran_q25_n1",
+        category: "mecanica",
+        difficulty: 1,
+        statement: "Quando o painel acusar problema no arrefecimento, o correto é:",
+        options: [
+            "Parar o veículo e verificar o nível de óleo.",
+            "Desligar o manômetro.",
+            "Parar o veículo e verificar o nível de água.",
+            "Continuar a viagem."
+        ],
+        correctIndex: 2,
+        explanation: "Luz de temperatura acendeu? Pare o carro e olhe a água do motor.",
+        detailedExplanation: "Se o painel avisar esquentamento no sistema de resfriamento do motor (sistema de arrefecimento), pare em local seguro e confira o nível do líquido/água com o motor frio.",
+        legalBase: "Manual do Condutor / Mecânica Básica",
+        commonMistake: "Confundir água do arrefecimento com nível de óleo do motor.",
+        tip: "Luz de arrefecimento = Parar e conferir a água!",
+        incidence: "media",
+        trap: false
+    },
+    {
+        id: "detran_q26_n1",
+        category: "legislacao",
+        difficulty: 1,
+        statement: "Diante do sinal semafórico SS-08 para pedestre, a atitude é:",
+        options: [
+            "Pode seguir.",
+            "Não pode ultrapassar.",
+            "Atenção.",
+            "Pare o veículo."
+        ],
+        correctIndex: 1,
+        explanation: "Sinaleiro vermelho para pedestre (SS-08) significa que você não pode atravessar.",
+        detailedExplanation: "A placa/sinalização SS-08 indica o bonequinho vermelho aceso (semáforo de pedestre). O pedestre não pode atravessar a rua (não pode ultrapassar a linha de espera).",
+        legalBase: "Resolução CONTRAN nº 973/2022 (Sinalização Semafórica)",
+        commonMistake: "Achar que a palavra 'ultrapassar' é exclusiva para motoristas.",
+        tip: "Sinal vermelho no semáforo de pedestre = Proibido atravessar!",
+        incidence: "alta",
+        trap: true
+    },
+    {
+        id: "detran_q27_n1",
+        category: "legislacao",
+        difficulty: 1,
+        statement: "Assinale a alternativa correta sobre as regras do trânsito:",
+        options: [
+            "Os animais isolados ou em grupos não poderão circular nas vias urbanas ou rurais.",
+            "A parada 'embarque de passageiros' não poderá ser feita quando proibido o estacionamento.",
+            "O condutor e o passageiro não deverão abrir a porta sem certificar-se de que não há perigo.",
+            "Em nenhuma hipótese será permitida a circulação de bicicletas nos passeios."
+        ],
+        correctIndex: 2,
+        explanation: "Só abra a porta do carro depois de olhar se não vem vindo ninguém.",
+        detailedExplanation: "Motorista e passageiros só podem abrir as portas do carro após olhar pelos espelhos e ter certeza de que não vão atingir ciclistas, pedestres ou outros carros (Art. 49 do CTB).",
+        legalBase: "Art. 49 do CTB",
+        commonMistake: "Achar que é permitido desembarcar rápido sem olhar se vem bicicleta ou moto.",
+        tip: "Vai abrir a porta? Olhe antes para não causar acidente!",
+        incidence: "alta",
+        trap: false
+    },
+    // ============ NÍVEL 2 – INTERMEDIÁRIO ============
+    {
+        id: "detran_q20_n2",
+        category: "infracoes",
+        difficulty: 2,
+        statement: "Após uma forte chuva você está trafegando por uma avenida e passa sobre uma poça d'água molhando alguns pedestres na calçada. Essa atitude é considerada pelas autoridades como:",
+        options: [
+            "Uma infração média e penalidade de multa.",
+            "Uma brincadeira de mau gosto.",
+            "Um grande desrespeito pelos pedestres.",
+            "Uma infração leve sujeita somente a uma advertência verbal."
+        ],
+        correctIndex: 0,
+        explanation: "Arremessar água em pedestres é infração média punida com multa de trânsito.",
+        detailedExplanation: "Passar por poças d'água de propósito ou por falta de atenção espirrando água nas pessoas na calçada é infração de trânsito média (Art. 171 do CTB), gerando penalidade de multa.",
+        legalBase: "Art. 171 do CTB",
+        commonMistake: "Achar que por ser na calçada é apenas uma falha de postura ou infração leve.",
+        tip: "Molhou pedestre com o carro = Infração Média com Multa!",
+        incidence: "alta",
+        trap: true
+    },
+    {
+        id: "detran_q21_n2",
+        category: "primeiros-socorros",
+        difficulty: 2,
+        statement: "Ao prestar o primeiro atendimento a uma vítima de acidente que apresenta ferimentos com sangramento abundante, é aconselhável que o socorrista:",
+        options: [
+            "Utilize uma luva de borracha ou similar.",
+            "Faça torniquete.",
+            "Faça compressa fria.",
+            "Faça garrote."
+        ],
+        correctIndex: 0,
+        explanation: "Sempre coloque luvas antes de tocar em ferimentos sangrando para sua própria proteção.",
+        detailedExplanation: "Em qualquer socorro com sangramento, a primeira regra de proteção do socorrista (biossegurança) é usar luvas de borracha/látex para evitar infecção ou contágio por doenças transmitidas pelo sangue.",
+        legalBase: "Manual de Primeiros Socorros do DENATRAN",
+        commonMistake: "Tentar fazer garrote ou torniquete sem treinamento adequado.",
+        tip: "Sangramento na vítima = Proteja-se com luvas em 1º lugar!",
+        incidence: "alta",
+        trap: false
+    },
+    {
+        id: "detran_q23_n2",
+        category: "infracoes",
+        difficulty: 2,
+        statement: "O condutor que realiza a ultrapassagem de outro veículo invadindo a contramão de direção exatamente sobre a faixa destinada a pedestres comete uma infração:",
+        options: [
+            "Leve",
+            "Média",
+            "Gravíssima",
+            "Grave"
+        ],
+        correctIndex: 2,
+        explanation: "Ultrapassar invadindo a pista contrária na faixa de pedestre é infração gravíssima.",
+        detailedExplanation: "Fazer ultrapassagem pela pista contrária (contramão) em trechos perigosos como faixas de pedestres, pontes ou cruzamentos é infração de natureza gravíssima (Art. 203, II do CTB).",
+        legalBase: "Art. 203, II do CTB",
+        commonMistake: "Confundir a ultrapassagem proibida com infração grave.",
+        tip: "Ultrapassagem na contramão em faixa de pedestre = Gravíssima!",
+        incidence: "alta",
+        trap: true
+    },
+    {
+        id: "detran_q24_n2",
+        category: "primeiros-socorros",
+        difficulty: 2,
+        statement: "No atendimento inicial a uma vítima de acidente de trânsito, qual é a conduta correta quanto à ingestão de líquidos?",
+        options: [
+            "Liberar líquidos apenas se a vítima estiver lúcida.",
+            "Manter a vítima em jejum até avaliação da equipe de saúde.",
+            "Oferecer água para acalmar a vítima.",
+            "Dar suco para evitar queda de pressão."
+        ],
+        correctIndex: 1,
+        explanation: "Não ofereça água ou comida; mantenha o ferido em jejum total.",
+        detailedExplanation: "O ferido não deve beber nada (manter em jejum) para não se engasgar ou vomitar em caso de perda de consciência, além de não atrapalhar procedimentos com anestesia no hospital.",
+        legalBase: "Manual de Primeiros Socorros do DENATRAN",
+        commonMistake: "Dar água ou suco imaginando que vai ajudar a conter a queda de pressão.",
+        tip: "Atendimento inicial = Vítima sempre em JEJUM!",
+        incidence: "alta",
+        trap: true
+    },
+    {
+        id: "detran_q25_n2",
+        category: "mecanica",
+        difficulty: 2,
+        statement: "Quando o painel do seu veículo acusar problema no sistema de arrefecimento, o procedimento correto é:",
+        options: [
+            "Parar o veículo e verificar o nível de óleo.",
+            "Desligar o manômetro.",
+            "Parar o veículo e verificar o nível de água.",
+            "Continuar a viagem."
+        ],
+        correctIndex: 2,
+        explanation: "Esquentou no painel? Pare o carro em local seguro e verifique o nível da água.",
+        detailedExplanation: "O sistema de arrefecimento controla a temperatura do motor através da circulação de água/aditivo. Se o painel alertar superaquecimento, o correto é encostar o carro e verificar o reservatório de água.",
+        legalBase: "Manual do Condutor / Mecânica Básica",
+        commonMistake: "Checar o óleo do motor quando o alerta é de temperatura/arrefecimento.",
+        tip: "Alerta de arrefecimento no painel = Pare e olhe o nível da água!",
+        incidence: "media",
+        trap: false
+    },
+    {
+        id: "detran_q26_n2",
+        category: "legislacao",
+        difficulty: 2,
+        statement: "O procedimento do pedestre diante da sinalização semafórica identificada na cartela pelo código SS-08 é:",
+        options: [
+            "Pode seguir.",
+            "Não pode ultrapassar.",
+            "Atenção.",
+            "Pare o veículo."
+        ],
+        correctIndex: 1,
+        explanation: "Sinal SS-08 é o semáforo vermelho do pedestre; ele proíbe o pedestre de iniciar a travessia.",
+        detailedExplanation: "A sinalização semafórica SS-08 representa o sinal vermelho para pedestres. Quando acesa, significa que o pedestre não pode ultrapassar a guia/linha de retenção para atravessar a pista.",
+        legalBase: "Resolução CONTRAN nº 973/2022 (Sinalização Semafórica)",
+        commonMistake: "Confundir com código de sinalização de trânsito de veículos.",
+        tip: "Semáforo SS-08 vermelho para pedestre = Não pode atravessar!",
+        incidence: "alta",
+        trap: true
+    },
+    {
+        id: "detran_q27_n2",
+        category: "legislacao",
+        difficulty: 2,
+        statement: "Analisando as normas gerais de circulação e conduta previstas no CTB, assinale a alternativa correta:",
+        options: [
+            "Os animais isolados ou em grupos não poderão circular nas vias urbanas ou rurais.",
+            "A parada 'embarque de passageiros' não poderá ser feita quando proibido o estacionamento na via.",
+            "O condutor e o passageiro não deverão abrir a porta do veículo, sem antes certificar-se que isso não constitui perigo para eles e outros usuários da via.",
+            "Em nenhuma hipótese será permitida a circulação de bicicletas nos passeios."
+        ],
+        correctIndex: 2,
+        explanation: "Verifique os retrovisores antes de abrir as portas para não atingir ninguém na via.",
+        detailedExplanation: "É regra de segurança obrigatória que motoristas e passageiros só abram as portas do veículo após olhar o movimento ao redor (bordo da pista) e garantir que não causarão riscos a pedestres ou ciclistas (Art. 49 do CTB).",
+        legalBase: "Art. 49 do CTB",
+        commonMistake: "Achar que é proibido parar para desembarque em locais onde apenas o estacionamento é proibido.",
+        tip: "Abrir a porta do carro = Olhar primeiro se não há perigo na via!",
+        incidence: "alta",
+        trap: false
     }
 ];
 // Questões que realmente caíram na prova do DETRAN.
