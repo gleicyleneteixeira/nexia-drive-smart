@@ -166,7 +166,7 @@ export function AppShell() {
   return (
     <div className="min-h-screen bg-background font-sans text-foreground flex flex-col">
       {/* Floating Menu Button */}
-      {!isPublicPage && isActive && (
+      {!isPublicPage && user && (
         <button
           onClick={() => setMenuOpen(true)}
           className="fixed bottom-5 left-5 z-30 flex items-center justify-center h-12 w-12 rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30 border-2 border-white/30 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer ring-2 ring-primary/20"
@@ -406,7 +406,7 @@ export function AppShell() {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        {!isPublicPage && isActive && (
+        {!isPublicPage && user && (
           <header className="sticky top-0 z-30 h-14 bg-card/90 backdrop-blur-xl border-b border-border/50 flex items-center justify-between px-4 sm:px-6">
             <div className="flex items-center gap-3">
               <Link
