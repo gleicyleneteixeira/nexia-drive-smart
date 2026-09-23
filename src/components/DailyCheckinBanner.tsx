@@ -220,7 +220,31 @@ export function DailyCheckinBanner() {
     }
   };
 
-  if (!visible || !pending || loading) return null;
+  if (!pending && !loading) {
+    return (
+      <div className="relative bg-green-500/20 border-b border-green-500/30 text-foreground">
+        <div className="mx-auto max-w-6xl px-4 py-4 flex flex-col sm:flex-row sm:items-center gap-3">
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-green-400">🎉 Cronograma concluído!</p>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              Você completou todas as metas de hoje. Parabéns!
+            </p>
+          </div>
+          <Button
+            type="button"
+            onClick={handleGoSimulado}
+            className="bg-emerald-600 hover:bg-emerald-500 text-white shrink-0"
+          >
+            <FileText className="h-4 w-4 mr-1.5" /> Ir p/ Simulado
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (loading) return null;
+
+  if (!pending) return null;
 
   return (
     <div className="relative bg-card border-b border-border text-foreground">
