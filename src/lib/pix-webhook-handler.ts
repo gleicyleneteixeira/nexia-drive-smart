@@ -1,0 +1,149 @@
+import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { getPlanDays } from "@/lib/subscription";
+import { triggerWebhook } from "@/services/webhookService";
+
+// EFI Pay envia callbacks para `POST url-webhook-cadastrada/pix` (sufixo "/pix"),
+// a menos que a URL seja cadastrada com "?ignorar=". Este handler é compartilhado
+// pelas rotas /api/pix/webhook e /api/pix/webhook/pix.
+export async function handlePixWebhook(request: Request): Promise<Response> {
+  try {
+    // EFI Pay webhook verification handshake or payload
+    let body: any = {};
+    try {
+      body = await request.json();
+    } catch (e) {
+      // If body is empty or not JSON, just return 200 for validation handshake
+      return new Response(JSON.stringify({ ok: true, message: "Handshake received" }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    console.log("Recebido Webhook Pix da EFI Pay:", JSON.stringify(body));
+
+    // EFI Pix webhook structure: body.pix contains an array of received payments
+    const pixList = body.pix || [];
+
+    for (const item of pixList) {
+      const txid = item.txid;
+      if (txid) {
+        console.log(`Confirmando pagamento para txid: ${txid} via Webhook`);
+
+        // 1. Find user_id from txid
+        const { data: tx, error: txErr } = await supabaseAdmin
+          .from("pix_transactions")
+          .select("user_id, status, plan_type, amount, created_at")
+          .eq("txid", txid)
+          .single();
+
+        if (!txErr && tx) {
+          // Detecta se o pagamento foi aprovado ou recusado/cancelado/expirado.
+          const rawStatus = (item.status || "CONCLUIDA").toString().toUpperCase();
+          const isApproved =
+            rawStatus === "CONCLUIDA" ||
+            rawStatus === "REALIZADO" ||
+            rawStatus === "PAID" ||
+            rawStatus === "ATIVA";
+
+          // Dados do perfil para o webhook e para a mensagem de boas-vindas.
+          const { data: profile } = await supabaseAdmin
+            .from("profiles")
+            .select("phone, display_name, email")
+            .eq("id", tx.user_id)
+            .maybeSingle();
+
+          const userData = {
+            id: tx.user_id,
+            email: profile?.email ?? undefined,
+            name: profile?.display_name ?? undefined,
+            phone: profile?.phone ?? undefined,
+          };
+
+          if (!isApproved) {
+            // Pagamento recusado / cancelado / expirado.
+            await supabaseAdmin
+              .from("pix_transactions")
+              .update({ status: item.status || "RECUSADO", updated_at: new Date().toISOString() })
+              .eq("txid", txid);
+
+            triggerWebhook("PAYMENT_REFUSED", userData, {
+              status: item.status || "RECUSADO",
+              plan: tx.plan_type,
+              amount: tx.amount,
+            });
+            console.log(`Pagamento recusado (${item.status}) para txid ${txid}.`);
+            continue;
+          }
+
+          // 2. Update transaction status
+          await supabaseAdmin
+            .from("pix_transactions")
+            .update({ status: "CONCLUIDA", updated_at: new Date().toISOString() })
+            .eq("txid", txid);
+
+          // 3. Update user status to active, with the period counted from the
+          // charge creation date (never from "now"), so a re-delivered or retried
+          // webhook cannot grant extra time for free.
+          const days = getPlanDays(tx.plan_type, tx.amount);
+          const base = tx.created_at ? new Date(tx.created_at) : new Date();
+          const expires = new Date(base);
+          expires.setDate(expires.getDate() + days);
+
+          await supabaseAdmin
+            .from("profiles")
+            .update({
+              status: "ativo",
+              expires_at: expires.toISOString(),
+              access_reason: "pago",
+              updated_at: new Date().toISOString(),
+            })
+            .eq("id", tx.user_id);
+
+          console.log(`Usuário ${tx.user_id} ativado com sucesso.`);
+
+          // Disparo do webhook global de pagamento aprovado (não bloqueia).
+          triggerWebhook("PAYMENT_APPROVED", userData, {
+            amount: tx.amount,
+            plan: tx.plan_type,
+          });
+
+          // Disparo automático da mensagem de boas-vindas via ViperConnect (não bloqueia o webhook)
+          try {
+            if (profile?.phone) {
+              const { dispatchViperConnectWelcome } = await import("@/lib/viperconnect");
+              const welcomeName = profile.display_name || profile.email || "aluno(a)";
+              const res = await dispatchViperConnectWelcome(profile.phone, welcomeName);
+              if (!res.ok) {
+                console.warn(`Boas-vindas ViperConnect não enviada para ${tx.user_id}: ${res.error}`);
+              } else {
+                console.log(`Boas-vindas ViperConnect enviada para ${tx.user_id}.`);
+              }
+            }
+          } catch (wErr) {
+            console.error("Erro ao disparar boas-vindas ViperConnect:", wErr);
+          }
+        } else {
+          console.warn(`Transação com txid ${txid} não encontrada no banco.`);
+        }
+      }
+    }
+
+    // EFI expects status 200 response to acknowledge receipt
+    return new Response(JSON.stringify({ ok: true }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (err) {
+    console.error("Erro no handler webhook Pix:", err);
+    // Return 200 even on error so EFI doesn't block the webhook, or 500 to retry
+    return new Response(
+      JSON.stringify({
+        error: err instanceof Error ? err.message : "Internal Server Error",
+      }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  }
+}
