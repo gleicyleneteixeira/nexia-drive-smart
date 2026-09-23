@@ -198,7 +198,6 @@ export function DailyCheckinBanner() {
     const today = new Date().toISOString().split("T")[0];
     const next: UserProgress = { ...progress, last_access_date: today };
     setProgress(next);
-    setVisible(false);
     window.open(getReadingUrl(pending.paginaInicio), "_blank");
     toast.success("Abra o livro e continue de onde parou! 📖");
     void persist(next);
@@ -245,6 +244,8 @@ export function DailyCheckinBanner() {
   if (loading) return null;
 
   if (!pending) return null;
+
+  if (!visible) return null;
 
   return (
     <div className="relative bg-card border-b border-border text-foreground">
