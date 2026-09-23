@@ -52,6 +52,7 @@ export const Route = createFileRoute("/simulado-demo")({
 const TOTAL = 30;
 const STORAGE_KEY = "nexia:simulado_demo:v3";
 const SEEN_KEY = "nexia:simulado:seen:v1";
+const SESSION_SEEN_KEY = "nexia:simulado:session:v1";
 
 function loadSeen(): string[] {
   if (typeof window === "undefined") return [];
@@ -68,16 +69,50 @@ function saveSeen(ids: string[]) {
     window.localStorage.setItem(SEEN_KEY, JSON.stringify(ids));
   } catch {}
 }
+function loadSessionSeen(category?: string): string[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.sessionStorage.getItem(SESSION_SEEN_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as Record<string, string[]>;
+    return parsed[category ?? "all"] ?? [];
+  } catch {
+    return [];
+  }
+}
+function saveSessionSeen(ids: string[], category?: string) {
+  if (typeof window === "undefined") return;
+  try {
+    const key = category ?? "all";
+    const raw = window.sessionStorage.getItem(SESSION_SEEN_KEY);
+    const existing: Record<string, string[]> = raw ? JSON.parse(raw) : {};
+    existing[key] = Array.from(new Set([...(existing[key] ?? []), ...ids]));
+    window.sessionStorage.setItem(SESSION_SEEN_KEY, JSON.stringify(existing));
+  } catch {}
+}
 function buildFresh(questionsList: Question[], category?: Category, count: number = TOTAL): Question[] {
   const seen = loadSeen();
-  const fresh = getBalancedQuestions({
+  const sessionSeen = loadSessionSeen(category);
+  const allExcluded = [...seen, ...sessionSeen];
+  let fresh = getBalancedQuestions({
     questionsList,
     categories: category ? [category] : undefined,
-    exclude: seen,
+    exclude: allExcluded,
     total: count,
   });
   const newSeen = Array.from(new Set([...seen, ...fresh.map((q) => q.id)]));
   saveSeen(newSeen);
+  saveSessionSeen(fresh.map((q) => q.id), category);
+
+  // GARANTIA FINAL: preencher se ainda faltar questões
+  if (fresh.length < count) {
+    const needed = count - fresh.length;
+    const freshIds = new Set(fresh.map(q => q.id));
+    const remainingPool = QUESTIONS.filter(q => !freshIds.has(q.id) && !allExcluded.includes(q.id));
+    const fillQuestions = getRandomizedQuestions(needed, { questionsList: remainingPool });
+    fresh = [...fresh, ...fillQuestions].slice(0, count);
+  }
+
   return fresh;
 }
 

@@ -158,7 +158,18 @@ function buildFresh(category?: Category): Question[] {
       fresh = fullExam.slice(0, 30);
     }
   }
-  
+
+  // GARANTIA FINAL: preencher com questões de todas as categorias se ainda faltar
+  if (fresh.length < TOTAL) {
+    const needed = TOTAL - fresh.length;
+    const freshIds = new Set(fresh.map(q => q.id));
+    const remainingPool = QUESTIONS.filter(q => !freshIds.has(q.id) && !allExcluded.includes(q.id));
+    const fillQuestions = getRandomizedQuestions(needed, {
+      questionsList: remainingPool,
+    });
+    fresh = [...fresh, ...fillQuestions].slice(0, TOTAL);
+  }
+
   // Salva IDs na memória global e na sessão
   const newSeen = Array.from(new Set([...seen, ...fresh.map((q) => q.id)]));
   saveSeen(newSeen);

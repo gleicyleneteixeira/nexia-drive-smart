@@ -6892,7 +6892,7 @@ export const QUESTIONS: Question[] = [
     },
     {
         id: 'q_new_03',
-        category: 'sinalizacao',
+        category: 'placas',
         statement: 'O que indica a placa de advertência em losango amarelo com símbolo preto?',
         options: [
             'Obrigação',
@@ -6955,7 +6955,7 @@ export const QUESTIONS: Question[] = [
     },
     {
         id: 'q_new_06',
-        category: 'sinalizacao',
+        category: 'placas',
         statement: 'Qual a função da placa retangular azul com símbolo branco?',
         options: [
             'Proibir',
@@ -7018,7 +7018,7 @@ export const QUESTIONS: Question[] = [
     },
     {
         id: 'q_new_09',
-        category: 'sinalizacao',
+        category: 'placas',
         statement: 'O que significa uma placa circular vermelha com faixa branca horizontal?',
         options: [
             'Pare obrigatório',
@@ -7122,6 +7122,231 @@ export const REAL_EXAM_IDS = [
         "trap": true,
         "difficulty": 3,
         "image_url": "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/placa-R-20.jpg"
+    },
+    {
+        id: "q3181",
+        category: "legislacao",
+        statement: "Em um cruzamento sem sinalização entre uma rodovia e uma estrada, quem tem preferência?",
+        options: [
+            "Quem trafega pela estrada.",
+            "Quem se aproximar pela direita do outro condutor.",
+            "Quem trafega pela rodovia.",
+            "Quem chegar primeiro e alertar o outro, dando breves toques na buzina."
+        ],
+        correctIndex: 2,
+        explanation: "O CTB estabelece que em cruzamentos sem sinalização entre rodovias e estradas, o veículo que trafega pela rodovia tem preferência.",
+        incidence: "alta",
+        difficulty: 2
+    },
+    {
+        id: "q3182",
+        category: "legislacao",
+        statement: "Dentro da rotatória, qual é o comportamento correto?",
+        options: [
+            "Se perceber o trânsito muito lento, buzinar para apressar os veículos da frente.",
+            "Mudar de faixa várias vezes, sempre garantindo um deslocamento mais rápido a fim de não prejudicar o fluxo.",
+            "Manter-se na faixa adequada, em velocidade moderada, e atento ao fluxo de veículos e pedestres.",
+            "Dirigir sem se preocupar com os outros veículos, pois você está na preferencial da rotatória."
+        ],
+        correctIndex: 2,
+        explanation: "Dentro da rotatória, o condutor deve manter-se na faixa adequada, em velocidade moderada, e atento ao fluxo de veículos e pedestres.",
+        incidence: "alta",
+        difficulty: 1
+    },
+    {
+        id: "q3183",
+        category: "legislacao",
+        statement: "O fluxo de duas vias sem sinalização se cruzam, mas nenhuma delas é uma rodovia. Quem tem a preferência da passagem, nesse caso?",
+        options: [
+            "A ambulância terá sempre a preferência de passagem, pois trata-se de veículo de salvamento.",
+            "Pela regra de prioridade, o veículo mais pesado, por não ter como parar fácil, deve passar primeiro.",
+            "Os veículos de transporte coletivo de passageiros, têm preferência de passagem sobre os outros.",
+            "Se não houver rodovia ou rotatória, o CTB estabelece a preferência ao veículo que se aproximar pela direita do outro."
+        ],
+        correctIndex: 3,
+        explanation: "O CTB estabelece a preferência ao veículo que se aproximar pela direita do outro em cruzamentos sem sinalização, rodovias ou rotatórias.",
+        incidence: "media",
+        difficulty: 1
+    },
+    {
+        id: "q3184",
+        category: "infracoes",
+        statement: "O que o novo condutor NÃO pode fazer durante o período de Permissão para Dirigir?",
+        options: [
+            "Não pode dirigir nas avenidas movimentadas de grandes metrópoles, como São Paulo ou Rio de Janeiro.",
+            "Não pode cometer infração grave ou gravíssima nem ser reincidente em infrações médias.",
+            "Não pode transportar crianças menores de 10 anos no banco traseiro do carro, mesmo que elas estejam utilizando o dispositivo de retenção adequado.",
+            "Não pode dirigir em rodovias federais com mais de três faixas de trânsito."
+        ],
+        correctIndex: 1,
+        explanation: "Durante o período probatório, o novo condutor não pode cometer infração grave ou gravíssima nem ser reincidente em infrações médias.",
+        incidence: "alta",
+        difficulty: 2
+    },
+    {
+        id: "q3185",
+        category: "legislacao",
+        statement: "Durante uma ultrapassagem, o condutor:",
+        options: [
+            "Pode exceder o limite de velocidade, lembrando que essa exceção é só durante a ultrapassagem.",
+            "Deve realizar a manobra pela esquerda, respeitando a sinalização e a distância segura.",
+            "Pode realizar a manobra pela direita, sempre que entender ser essa a forma melhor para o trânsito.",
+            "Deve utilizar a buzina de forma obrigatória antes de toda ultrapassagem."
+        ],
+        correctIndex: 1,
+        explanation: "A ultrapassagem deve ser realizada pela esquerda, respeitando a sinalização e a distância segura conforme o CTB.",
+        incidence: "alta",
+        difficulty: 1
+    },
+    {
+        id: "q3201",
+        category: "legislacao",
+        statement: "Você está dentro de uma rotatória e percebe uma viatura policial se aproximando com os dispositivos luminosos e sonoros desligados. Como agir nesse caso?",
+        options: [
+            "Parar e deixar que a viatura policial entrar na sua frente. Pois, viaturas têm prioridade independentemente de estar com os dispositivos, sonoro e luminoso, ligados.",
+            "Parar para deixar a viatura entrar, desde que isso não seja prejudicial ao fluxo de veículos.",
+            "Seguir o fluxo dentro da rotatória. Pois, nesse caso, a viatura policial não tem prerrogativa de passagem.",
+            "Parar ou seguir, ficando a cargo do motorista decidir, na hora, o que fazer."
+        ],
+        correctIndex: 2,
+        explanation: "Viaturas policiais só têm prerrogativa de passagem com os dispositivos luminosos e sonoros LIGADOS. Desligados, não têm prioridade.",
+        incidence: "alta",
+        difficulty: 2
+    },
+    {
+        id: "q3202",
+        category: "legislacao",
+        statement: "Em uma via com várias faixas de trânsito na mesma direção, onde as motocicletas devem circular?",
+        options: [
+            "Qualquer faixa, desde que evitem se posicionar dentro dos pontos cegos de outros condutores.",
+            "Somente na faixa da esquerda, por serem veículos mais velozes que os outros.",
+            "Sobre a linha que divide as faixas de trânsito, os chamados 'corredores' entre veículos.",
+            "Somente no corredor, em alta velocidade, aproveitando sua potência e perícia do condutor."
+        ],
+        correctIndex: 0,
+        explanation: "Motocicletas podem circular em qualquer faixa, desde que evitem os pontos cegos de outros condutores.",
+        incidence: "media",
+        difficulty: 1
+    },
+    {
+        id: "q3203",
+        category: "legislacao",
+        statement: "Por regra geral, em qual lado da pista o veículo deve trafegar?",
+        options: [
+            "Pelo lado esquerdo, pois é mais rápido.",
+            "Em qualquer lado da via, desde que obedeça à velocidade máxima permitida.",
+            "Pelo lado direito da via, salvo sinalização dizendo o contrário.",
+            "Pelo meio da pista, para ter melhor visibilidade."
+        ],
+        correctIndex: 2,
+        explanation: "O CTB estabelece que o veículo deve trafegar pelo lado direito da via, salvo sinalização em contrário.",
+        incidence: "altissima",
+        difficulty: 1
+    },
+    {
+        id: "q3204",
+        category: "legislacao",
+        statement: "Nas vias com várias faixas de trânsito na mesma direção, os veículos grandes e lentos devem...",
+        options: [
+            "circular na faixa da esquerda.",
+            "seguir pelo acostamento para ter maior fluidez.",
+            "ficar trocando de faixa durante o trajeto, para chegar logo ao destino.",
+            "circular na faixa da direita."
+        ],
+        correctIndex: 3,
+        explanation: "Veículos grandes e lentos devem circular na faixa da direita para não impedir o fluxo mais rápido.",
+        incidence: "media",
+        difficulty: 1
+    },
+    {
+        id: "q3205",
+        category: "legislacao",
+        statement: "Conforme o Código de Trânsito Brasileiro, quando um veículo permanece imobilizado por tempo superior ao necessário para embarque e desembarque de passageiros, podemos dizer que ele está:",
+        options: [
+            "Em imobilização de emergência.",
+            "Parado.",
+            "Parado ou Estacionado.",
+            "Estacionado."
+        ],
+        correctIndex: 3,
+        explanation: "O CTB diferencia parado (temporariamente, para embarque/desembarque) de estacionado (tempo superior ao necessário).",
+        incidence: "media",
+        difficulty: 2
+    },
+    {
+        id: "q3206",
+        category: "placas",
+        statement: "Faixa de pedestres elevada serve para:",
+        options: [
+            "Forçar redução de velocidade dos veículos e dar prioridade segura ao pedestre.",
+            "Facilitar ultrapassagens em locais com grande fluxo de veículos.",
+            "Causar transtornos à circulação de veículos em frente às escolas",
+            "Servir de estacionamento temporário para embarque e desembarque na frente das escolas."
+        ],
+        correctIndex: 0,
+        explanation: "A faixa de pedestres elevada (zebra crossing elevada) serve para forçar redução de velocidade e dar prioridade segura ao pedestre.",
+        incidence: "alta",
+        difficulty: 1
+    },
+    {
+        id: "q3207",
+        category: "placas",
+        statement: "Ao enxergar uma faixa de pedestres, o condutor deve:",
+        options: [
+            "Acelerar para dar mais fluidez ao trânsito, deixando a via livre para o pedestre atravessar.",
+            "Parar sobre a faixa, obrigando o pedestre a dar a volta para atravessar a rua.",
+            "Reduzir a velocidade e parar dando preferência ao pedestre.",
+            "Tocar buzina para que o pedestre atravesse com mais rapidez."
+        ],
+        correctIndex: 2,
+        explanation: "O condutor deve reduzir a velocidade e parar dando preferência ao pedestre ao enxergar uma faixa de pedestres.",
+        incidence: "altissima",
+        difficulty: 1
+    },
+    {
+        id: "q3208",
+        category: "legislacao",
+        statement: "Sobre as faixas exclusivas para o transporte público coletivo (ônibus):",
+        options: [
+            "Não podem ser utilizadas por outros veículos, nos dias e horários estabelecidos pela sinalização.",
+            "Podem ser usadas para adiantar a viagem e ultrapassar os veículos mais lentos.",
+            "Nunca podem ser utilizadas por outros veículos, mesmo fora dos dias e horários estabelecidos na sinalizacao",
+            "Servem apenas para ônibus de transporte escolar."
+        ],
+        correctIndex: 0,
+        explanation: "As faixas exclusivas de ônibus só podem ser utilizadas por veículos de transporte público nos dias e horários estabelecidos.",
+        incidence: "media",
+        difficulty: 1
+    },
+    {
+        id: "q3209",
+        category: "legislacao",
+        statement: "Parar o veículo em fila dupla para embarcar alunos em frente à escola, é...",
+        options: [
+            "Perigoso, prejudica a fluidez do trânsito e constitui infração de trânsito de natureza média.",
+            "Permitido em horários de pico, para dar mais agilidade à saída nas escolas.",
+            "Atrapalha o trânsito, mas não é perigoso nem infração de trânsito.",
+            "Permitido se o pisca-alerta estiver ligado e não demorar mais que dois minutos."
+        ],
+        correctIndex: 0,
+        explanation: "Filha dupla para embarcar alunos é perigosa, prejudica a fluidez e constitui infração média.",
+        incidence: "alta",
+        difficulty: 1
+    },
+    {
+        id: "q3210",
+        category: "legislacao",
+        statement: "Fabiana está conduzindo sua motocicleta quando, de repente, se depara com um ônibus parado. O que ela deve fazer?",
+        options: [
+            "Passar pela direita, bem colada ao ônibus, para não atrapalhar o trânsito.",
+            "Ziguezaguear entre os carros, mas com cuidado para não cair.",
+            "Subir na calçada, desviando com cuidado dos pedestres que esteja circulando.",
+            "Esperar o ônibus sair ou ultrapassar pela esquerda com cuidado."
+        ],
+        correctIndex: 3,
+        explanation: "Ao encontrar um ônibus parado, o motociclista deve esperar o ônibus sair ou ultrapassar pela esquerda com cuidado.",
+        incidence: "media",
+        difficulty: 2
     }
 ];
 export function getRandomizedQuestions(count: number, opts?: {
