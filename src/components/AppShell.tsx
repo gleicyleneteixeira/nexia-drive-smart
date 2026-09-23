@@ -517,7 +517,7 @@ export function AppShell() {
         })()}
 
         <RatingPrompt />
-        {activeModule === "teorico" && <DailyCheckinBanner />}
+        {activeModule === "teorico" && pathname === "/app" && <DailyCheckinBanner />}
         {activeModule === "teorico" && (
           <CronogramaModal open={cronogramaOpen} onOpenChange={setCronogramaOpen} />
         )}

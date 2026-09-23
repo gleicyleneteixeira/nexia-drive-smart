@@ -39,11 +39,11 @@ function mapChapterToCategory(capituloId: number): Category | null {
 export function DailyCheckinBanner() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [visible, setVisible] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [items, setItems] = React.useState<ScheduleItem[]>([]);
   const [plano, setPlano] = React.useState<PlanoEstudo | null>(null);
   const [pending, setPending] = React.useState<ScheduleItem | null>(null);
+  const [hasCronograma, setHasCronograma] = React.useState(false);
   const [progress, setProgress] = React.useState<UserProgress>({
     current_session_index: 1,
     last_access_date: null,
@@ -66,6 +66,7 @@ export function DailyCheckinBanner() {
           if (!cancelled) setLoading(false);
           return;
         }
+        if (!cancelled) setHasCronograma(true);
         const plan: PlanoEstudo = buildPlanoFromConfig(config as EstudoConfigRow);
         const sched = buildScheduleItems(plan);
         if (cancelled) return;
@@ -112,7 +113,6 @@ export function DailyCheckinBanner() {
         setProgress(p);
         const sess = sched[p.current_session_index - 1] ?? null;
         setPending(sess);
-        setVisible(!!sess);
       } catch {
         /* silencioso: não bloqueia o app */
       } finally {
@@ -184,7 +184,6 @@ export function DailyCheckinBanner() {
     const nextSess = items[next.current_session_index - 1] ?? null;
     setPending(nextSess);
     if (!nextSess) {
-      setVisible(false);
       toast.success("Cronograma concluído! Parabéns! 🎉");
     } else {
       toast.success("Meta concluída! Bora para a próxima.");
@@ -219,7 +218,9 @@ export function DailyCheckinBanner() {
     }
   };
 
-  if (!pending && !loading) {
+  if (!hasCronograma || loading) return null;
+
+  if (!pending) {
     return (
       <div className="relative bg-green-500/20 border-b border-green-500/30 text-foreground">
         <div className="mx-auto max-w-6xl px-4 py-4 flex flex-col sm:flex-row sm:items-center gap-3">
@@ -241,16 +242,10 @@ export function DailyCheckinBanner() {
     );
   }
 
-  if (loading) return null;
-
-  if (!pending) return null;
-
-  if (!visible) return null;
-
   return (
     <div className="relative bg-card border-b border-border text-foreground">
       <div className="mx-auto max-w-6xl px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3">
-        <div className="flex-1 min-w-0 pr-8">
+        <div className="flex-1 min-w-0">
           <p className="text-sm font-semibold text-primary">👋 Que bom te ver de volta!</p>
           <p className="text-xs text-muted-foreground mt-0.5">
             Sua meta pendente:{" "}
@@ -286,14 +281,6 @@ export function DailyCheckinBanner() {
             <FileText className="h-4 w-4 mr-1.5" /> Ir p/ Simulado
           </Button>
         </div>
-        <button
-          type="button"
-          onClick={() => setVisible(false)}
-          aria-label="Fechar"
-          className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
-        >
-          <X className="h-4 w-4" />
-        </button>
       </div>
     </div>
   );
