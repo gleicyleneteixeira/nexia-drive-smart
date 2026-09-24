@@ -26,7 +26,7 @@ import {
 } from "@/lib/schedule";
 import { getReadingUrl } from "@/lib/heyzine";
 import { fetchCronogramaBook, type LibraryItem } from "@/lib/library";
-import type { Category } from "@/data/questions";
+import { CATEGORY_LABELS, type Category } from "@/data/questions";
 import type { Database } from "@/integrations/supabase/types";
 
 type EstudoConfigRow = Database["public"]["Tables"]["estudo_config"]["Row"];
@@ -77,6 +77,8 @@ export function DailyCheckinBanner() {
     completed_pages: 0,
   });
   const [saving, setSaving] = React.useState(false);
+  // Oferta de simulado após concluir a lição (categoria da lição concluída)
+  const [quizOffer, setQuizOffer] = React.useState<{ category: Category | null } | null>(null);
   // Livrinho do cronograma vinculado no admin (botão Ouvir) + modal de audição
   const [livro, setLivro] = React.useState<LibraryItem | null>(null);
   const [pdfModal, setPdfModal] = React.useState<{ url: string; title: string; page: number } | null>(null);
@@ -264,6 +266,16 @@ export function DailyCheckinBanner() {
         toast.success("Meta concluída! Bora para a próxima.");
       }
 
+      // Concluiu a lição (chegou ao fim da meta ou leu adiante): oferece o
+      // simulado da categoria — "Parabéns, vamos testar seu conhecimento".
+      // Usa o pending ANTIGO (a lição recém-concluída), não a nova meta.
+      const completouLicao = informedPage >= fimMetaAnterior;
+      if (completouLicao) {
+        const isIntensivo = (plano?.studyDaysNeeded ?? 999) <= 3;
+        const category = !isIntensivo && pending ? mapChapterToCategory(pending.capituloId) : null;
+        setQuizOffer({ category });
+      }
+
       if (novo.ajustado && !old?.ajustado) {
         toast.info(`Ritmo ajustado para ${novo.blocoUsado} páginas/dia`, {
           description: "Ajuste automático para chegar antes da prova.",
@@ -326,6 +338,18 @@ export function DailyCheckinBanner() {
     } else {
       navigate({ to: "/simulado", search: { modo: "completo", categoria: undefined } });
     }
+  };
+
+  const handleQuizOfferGo = () => {
+    if (!quizOffer) return;
+    // Destino guardado na hora da conclusão (categoria da lição concluída).
+    const isIntensivo = (plano?.studyDaysNeeded ?? 999) <= 3;
+    if (isIntensivo || !quizOffer.category) {
+      navigate({ to: "/simulado", search: { modo: "completo", categoria: undefined } });
+    } else {
+      navigate({ to: "/simulado", search: { modo: undefined, categoria: quizOffer.category } });
+    }
+    setQuizOffer(null);
   };
 
   const handleAjustarCronograma = () => {
@@ -528,6 +552,40 @@ export function DailyCheckinBanner() {
           </DialogContent>
         </Dialog>
       )}
+      {/* Parabéns + convite ao simulado da categoria recém-concluída */}
+      <Dialog open={quizOffer !== null} onOpenChange={(o) => { if (!o) setQuizOffer(null); }}>
+        <DialogContent className="sm:max-w-sm text-center">
+          <DialogHeader>
+            <DialogTitle>Parabéns! 🎉</DialogTitle>
+            <DialogDescription>
+              Lição concluída! Vamos testar seu conhecimento
+              {quizOffer?.category ? (
+                <> de <strong className="text-foreground">{CATEGORY_LABELS[quizOffer.category]}</strong></>
+              ) : (
+                " geral"
+              )}
+              ?
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col gap-2">
+            <Button
+              type="button"
+              onClick={handleQuizOfferGo}
+              className="bg-emerald-600 hover:bg-emerald-500 text-white w-full"
+            >
+              <FileText className="h-4 w-4 mr-1.5" /> Fazer simulado agora
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => setQuizOffer(null)}
+              className="w-full"
+            >
+              Agora não
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
       {pdfModal && (
         <NativePdfModal
           pdfUrl={pdfModal.url}
