@@ -6,9 +6,13 @@ interface NativePdfModalProps {
   pdfUrl: string;
   title: string;
   onClose: () => void;
+  /** Página inicial (ex.: meta do cronograma). */
+  initialPage?: number;
+  /** Tenta narrar sozinho ao abrir. */
+  autoStart?: boolean;
 }
 
-export function NativePdfModal({ pdfUrl, title, onClose }: NativePdfModalProps) {
+export function NativePdfModal({ pdfUrl, title, onClose, initialPage, autoStart }: NativePdfModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -46,7 +50,7 @@ export function NativePdfModal({ pdfUrl, title, onClose }: NativePdfModalProps) 
 
         {/* PDF Reader */}
         <div className="flex-1 overflow-hidden min-h-0">
-          <PdfReader url={pdfUrl} title={title} className="h-full w-full" />
+          <PdfReader url={pdfUrl} title={title} initialPage={initialPage} autoStart={autoStart} className="h-full w-full" />
         </div>
       </div>
     </div>

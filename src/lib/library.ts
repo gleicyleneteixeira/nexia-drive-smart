@@ -73,6 +73,34 @@ function extractStoragePath(url: string): string | null {
 
 export const SUPER_ADMIN_EMAIL = "gleicileneteixeira.gd@gmail.com";
 
+/**
+ * VÍNCULO ÚNICO do livrinho do cronograma: o id do library_item (PDF) que o
+ * botão "Ouvir" do painel abre na página da meta. Guardado em app_settings
+ * (upsert por chave = só um por vez; marcar outro desvincula o anterior).
+ */
+export const CRONOGRAMA_BOOK_KEY = "cronograma_book_item_id";
+
+export async function fetchCronogramaBookId(): Promise<string | null> {
+  const { data, error } = await supabase
+    .from("app_settings")
+    .select("value")
+    .eq("key", CRONOGRAMA_BOOK_KEY)
+    .maybeSingle();
+  if (error) return null;
+  return (data as { value?: string } | null)?.value ?? null;
+}
+
+/** Livrinho vinculado (com URL assinada pronta p/ o leitor). Null se nenhum. */
+export async function fetchCronogramaBook(): Promise<LibraryItem | null> {
+  const id = await fetchCronogramaBookId();
+  if (!id) return null;
+  try {
+    return await fetchLibraryItem(id);
+  } catch {
+    return null;
+  }
+}
+
 export async function checkIsAdmin(): Promise<boolean> {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return false;

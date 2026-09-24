@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, BookOpen, FileText, AlertTriangle, CalendarClock } from "lucide-react";
+import { CheckCircle2, BookOpen, FileText, AlertTriangle, CalendarClock, Headphones } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -14,6 +14,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { NativePdfModal } from "@/components/NativePdfModal";
 import { buildPlanoFromConfig, type PlanoEstudo } from "@/components/CronogramaModal";
 import {
   gerarCronograma,
@@ -24,6 +25,7 @@ import {
   type ScheduleItem,
 } from "@/lib/schedule";
 import { getReadingUrl } from "@/lib/heyzine";
+import { fetchCronogramaBook, type LibraryItem } from "@/lib/library";
 import type { Category } from "@/data/questions";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -75,6 +77,9 @@ export function DailyCheckinBanner() {
     completed_pages: 0,
   });
   const [saving, setSaving] = React.useState(false);
+  // Livrinho do cronograma vinculado no admin (botão Ouvir) + modal de audição
+  const [livro, setLivro] = React.useState<LibraryItem | null>(null);
+  const [pdfModal, setPdfModal] = React.useState<{ url: string; title: string; page: number } | null>(null);
   // Guarda o cronograma anterior durante um informe, p/ classificar o resultado.
   const cronoRef = React.useRef<CronogramaGerado | null>(null);
 
@@ -106,6 +111,15 @@ export function DailyCheckinBanner() {
         }
         if (!cancelled) setHasCronograma(true);
         const plan: PlanoEstudo = buildPlanoFromConfig(config as EstudoConfigRow);
+
+        // Livrinho vinculado no admin (botão Ouvir) — em paralelo, sem bloquear
+        fetchCronogramaBook()
+          .then((book) => {
+            if (!cancelled) setLivro(book && book.published ? book : null);
+          })
+          .catch(() => {
+            /* sem livrinho: esconde o botão Ouvir */
+          });
 
         // Progresso: localStorage é a fonte única (estudo_config não tem
         // colunas de progresso e a tabela user_progress não existe no banco).
@@ -291,6 +305,13 @@ export function DailyCheckinBanner() {
     toast.success("Abra o livro e continue de onde parou! 📖");
   };
 
+  const handleOuvir = () => {
+    if (!pending || !livro) return;
+    // Abre o livrinho vinculado DIRETO na página da meta e tenta narrar
+    const startPage = Math.max(pending.paginaInicio, progress.completed_pages + 1);
+    setPdfModal({ url: livro.url, title: livro.title, page: startPage });
+  };
+
   const handleGoSimulado = () => {
     // Cronograma INTENSIVO (poucos dias de estudo): vai para o Simulado Geral (30 questões).
     // Cronograma REGULAR: vai para o Simulado por categoria do capítulo da meta pendente.
@@ -391,6 +412,17 @@ export function DailyCheckinBanner() {
           >
             <BookOpen className="h-4 w-4 mr-1.5" /> Ler Agora
           </Button>
+          {livro && (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleOuvir}
+              disabled={saving}
+              className="border-border text-foreground hover:bg-accent"
+            >
+              <Headphones className="h-4 w-4 mr-1.5" /> Ouvir
+            </Button>
+          )}
           <Button
             type="button"
             variant="outline"
@@ -495,6 +527,15 @@ export function DailyCheckinBanner() {
             )}
           </DialogContent>
         </Dialog>
+      )}
+      {pdfModal && (
+        <NativePdfModal
+          pdfUrl={pdfModal.url}
+          title={pdfModal.title}
+          initialPage={pdfModal.page}
+          autoStart
+          onClose={() => setPdfModal(null)}
+        />
       )}
     </div>
   );

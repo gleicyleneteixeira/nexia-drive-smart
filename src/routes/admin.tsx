@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetchLibraryItems, checkIsAdmin, SUPER_ADMIN_EMAIL, type LibraryItem, type LibraryItemType } from "@/lib/library";
+import { fetchLibraryItems, checkIsAdmin, SUPER_ADMIN_EMAIL, CRONOGRAMA_BOOK_KEY, fetchCronogramaBookId, type LibraryItem, type LibraryItemType } from "@/lib/library";
 import { 
   fetchVideoTutorials, 
   addVideoTutorial, 
@@ -94,6 +94,11 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
     queryFn: () => fetchLibraryItems(true),
   });
   const [editing, setEditing] = useState<LibraryItem | null>(null);
+  // Id do PDF vinculado como livrinho do cronograma (vínculo único)
+  const { data: cronogramaBookId = null } = useQuery({
+    queryKey: ["admin", "cronograma-book"],
+    queryFn: fetchCronogramaBookId,
+  });
   
   // Read tab from URL query parameter
   const getInitialTab = () => {
@@ -118,6 +123,11 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
     if (!confirm(`Apagar "${item.title}"?`)) return;
     const { error } = await supabase.from("library_items").delete().eq("id", item.id);
     if (error) return toast.error(error.message);
+    // Se era o livrinho do cronograma, limpa o vínculo junto
+    if (cronogramaBookId === item.id) {
+      await supabase.from("app_settings").delete().eq("key", CRONOGRAMA_BOOK_KEY);
+      qc.invalidateQueries({ queryKey: ["admin", "cronograma-book"] });
+    }
     toast.success("Apagado");
     qc.invalidateQueries({ queryKey: ["library"] });
   }
@@ -237,6 +247,11 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
                             </div>
                             <div className="flex items-center gap-2">
                               <p className="font-semibold truncate">{item.title}</p>
+                              {cronogramaBookId === item.id && (
+                                <Badge className="text-xs bg-primary/15 text-primary border border-primary/30 shrink-0">
+                                  📖 Livro do cronograma
+                                </Badge>
+                              )}
                               <Badge variant="secondary" className="text-xs">
                                 {item.module_type === "teorico" ? "Teórico" :
                                  item.module_type === "psicotecnico" ? "Psicotécnico" :
@@ -1700,6 +1715,7 @@ export function UsersPanel() {
 }
 
 function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: () => void }) {
+  const qc = useQueryClient();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [itemType, setItemType] = useState<LibraryItemType>("pdf");
@@ -1716,6 +1732,8 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
     { id: Math.random().toString(), file: null, image_url: "", text: "", audioFile: null, audio_url: "" },
   ]);
   const [narrated, setNarrated] = useState(false);
+  // Marcado = este PDF é O livrinho do cronograma (botão Ouvir do painel)
+  const [isCronogramaBook, setIsCronogramaBook] = useState(false);
 
   // Carregar rascunho do localStorage ao montar
   useEffect(() => {
@@ -1776,6 +1794,16 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
       setPublished(editing.published);
       setModuleType((editing.module_type as "teorico" | "psicotecnico" | "direcao") || "teorico");
       setNarrated(editing.narrated ?? false);
+      // Marca o checkbox se este item é o vinculado atualmente
+      setIsCronogramaBook(false);
+      supabase
+        .from("app_settings")
+        .select("value")
+        .eq("key", CRONOGRAMA_BOOK_KEY)
+        .maybeSingle()
+        .then(({ data }) => {
+          if (data?.value === editing.id) setIsCronogramaBook(true);
+        });
       if (editing.item_type === "carousel" && Array.isArray(editing.slides)) {
         setSlides(
           editing.slides.map((s: any) => ({
@@ -1790,6 +1818,8 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
       } else {
         setSlides([{ id: Math.random().toString(), file: null, image_url: "", text: "", audioFile: null, audio_url: "" }]);
       }
+    } else {
+      setIsCronogramaBook(false);
     }
   }, [editing]);
 
@@ -1799,6 +1829,7 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
     setPdfFile(null); setCoverFile(null); setModuleType("teorico");
     setSlides([{ id: Math.random().toString(), file: null, image_url: "", text: "", audioFile: null, audio_url: "" }]);
     setNarrated(false);
+    setIsCronogramaBook(false);
     if (typeof window !== "undefined") {
       localStorage.removeItem("nexia:admin:draft_library_item");
     }
@@ -1871,15 +1902,42 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
         narrated,
       };
 
+      let savedId: string | null = editing ? editing.id : null;
       if (editing) {
         const { error } = await supabase.from("library_items").update(payload).eq("id", editing.id);
         if (error) throw error;
         toast.success("Atualizado");
       } else {
         const { data: { user } } = await supabase.auth.getUser();
-        const { error } = await supabase.from("library_items").insert({ ...payload, created_by: user?.id });
+        const { data: ins, error } = await supabase
+          .from("library_items")
+          .insert({ ...payload, created_by: user?.id })
+          .select("id")
+          .single();
         if (error) throw error;
+        savedId = ins.id;
         toast.success("Item adicionado");
+      }
+      // VÍNCULO ÚNICO do livrinho do cronograma (só vale p/ PDF): upsert por
+      // chave sobrescreve o anterior — sempre há no máximo um vinculado.
+      if (itemType === "pdf" && savedId) {
+        if (isCronogramaBook) {
+          const { error: linkErr } = await supabase
+            .from("app_settings")
+            .upsert({ key: CRONOGRAMA_BOOK_KEY, value: savedId }, { onConflict: "key" });
+          if (linkErr) throw linkErr;
+          toast.success("📖 Vinculado como livrinho do cronograma");
+        } else {
+          const { data: cur } = await supabase
+            .from("app_settings")
+            .select("value")
+            .eq("key", CRONOGRAMA_BOOK_KEY)
+            .maybeSingle();
+          if (cur?.value === savedId) {
+            await supabase.from("app_settings").delete().eq("key", CRONOGRAMA_BOOK_KEY);
+          }
+        }
+        qc.invalidateQueries({ queryKey: ["admin", "cronograma-book"] });
       }
       reset();
       onDone();
@@ -1948,6 +2006,15 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
             onChange={(e) => setPdfFile(e.target.files?.[0] ?? null)}
           />
           {editing && url && <p className="text-xs text-muted-foreground mt-1">Atual: {url.split("/").pop()}</p>}
+          <div className="flex items-start gap-2 mt-3 rounded-xl border border-primary/30 bg-primary/5 p-3">
+            <Switch checked={isCronogramaBook} onCheckedChange={setIsCronogramaBook} id="cronobook" />
+            <div>
+              <Label htmlFor="cronobook">📖 Livrinho do cronograma (botão Ouvir)</Label>
+              <p className="text-[11px] text-muted-foreground mt-0.5">
+                Só um por vez — marcar este desvincula o anterior automaticamente.
+              </p>
+            </div>
+          </div>
         </div>
       )}
 

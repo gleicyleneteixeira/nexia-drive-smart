@@ -29,9 +29,13 @@ interface PdfReaderProps {
   className?: string;
   /** Nome do livro: aparece minúsculo sob a pílula flutuante (não ocupa layout). */
   title?: string;
+  /** Página inicial (ex.: meta do cronograma). Padrão: 1. */
+  initialPage?: number;
+  /** Tenta começar a narrar sozinho ao abrir (o usuário pode ter que tocar em Ouvir, conforme o navegador). */
+  autoStart?: boolean;
 }
 
-export function PdfReader({ url, title, className = "" }: PdfReaderProps) {
+export function PdfReader({ url, title, initialPage, autoStart, className = "" }: PdfReaderProps) {
   const [pdfDoc, setPdfDoc] = useState<PDFDocumentProxy | null>(null);
   const [numPages, setNumPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -61,6 +65,9 @@ export function PdfReader({ url, title, className = "" }: PdfReaderProps) {
   // true quando o usuário mexeu no zoom — aí o ajuste automático sai da frente.
   const zoomManualRef = useRef(false);
   const aplicarFitRef = useRef<() => Promise<void>>(async () => {});
+  // Abertura dirigida (cronograma): posiciona na página uma única vez por PDF.
+  const didInitRef = useRef(false);
+  const autoStartRef = useRef(false);
   const startReadingRef = useRef<() => void>(() => {});
 
   const highlightCurrentElement = (activeSpan: HTMLElement | null) => {
@@ -81,6 +88,9 @@ export function PdfReader({ url, title, className = "" }: PdfReaderProps) {
     // Invalida a sessão ANTES de cancelar: o cancel pode disparar
     // onend/onerror residual — já chega morto e não avança a página.
     sessaoLeituraRef.current += 1;
+    // Parada total também cancela retomada pendente e auto-início.
+    autoReadRef.current = false;
+    autoStartRef.current = false;
     window.speechSynthesis.cancel();
     utteranceRef.current = null;
     setIsReading(false);
@@ -332,10 +342,11 @@ const stopReading = () => {
 
           renderSeqRef.current += 1;
           // Retomada de leitura: terminou de montar a nova página e há
-          // pedido pendente (avanço automático ou troca manual com áudio
-          // ativo) — começa a narrar a nova página.
-          if (autoReadRef.current) {
+          // pedido pendente (avanço automático, troca manual com áudio
+          // ativo ou auto-início da abertura dirigida) — narra a página.
+          if (autoReadRef.current || autoStartRef.current) {
             autoReadRef.current = false;
+            autoStartRef.current = false;
             const sessao = sessaoLeituraRef.current;
             const seq = renderSeqRef.current;
             setTimeout(() => {
@@ -379,7 +390,9 @@ const stopReading = () => {
   const loadFromUrl = async (fileUrl: string) => {
     cancelSpeech();
     autoReadRef.current = false;
+    autoStartRef.current = false;
     didFitRef.current = false;
+    didInitRef.current = false;
     fitScaleRef.current = 1;
     zoomManualRef.current = false;
     setLoading(true);
@@ -440,6 +453,16 @@ const stopReading = () => {
     didFitRef.current = true;
     void aplicarFitRef.current();
   }, [pdfDoc]);
+
+  useEffect(() => {
+    if (!pdfDoc || numPages < 1 || didInitRef.current) return;
+    didInitRef.current = true;
+    // Posiciona na página dirigida (uma vez por PDF)...
+    const target = initialPage && initialPage > 1 ? Math.min(initialPage, numPages) : 1;
+    if (target !== currentPage) goToPage(target);
+    // ...e arma o auto-início (dispara ao concluir a renderização).
+    if (autoStart) autoStartRef.current = true;
+  }, [pdfDoc, numPages]);
 
   useEffect(() => {
     const onResize = () => {
