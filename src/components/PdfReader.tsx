@@ -504,9 +504,43 @@ const stopReading = () => {
               </div>
             </div>
 
-            {/* Camada flutuante SOBRE o PDF: navegação + ouvir + velocidade.
+            {/* Camada flutuante SOBRE o PDF: zoom + navegação + ouvir.
                 Não ocupa espaço de layout e fica visível mesmo rolando a página. */}
             <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 flex flex-wrap items-center justify-center gap-1.5 rounded-full border border-white/10 bg-black/70 px-2.5 py-1.5 shadow-xl backdrop-blur-md max-w-[calc(100%-1rem)]">
+              {/* Zoom — flutua sobre o PDF, não ocupa espaço de layout */}
+              <div className="flex items-center gap-0.5">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 text-white/90 hover:text-white hover:bg-white/10"
+                  disabled={scale <= ZOOM_LEVELS[0]}
+                  onClick={zoomOut}
+                  aria-label="Diminuir zoom"
+                >
+                  <ZoomOut className="h-4 w-4" />
+                </Button>
+                <button
+                  onClick={resetZoom}
+                  title="Redefinir zoom"
+                  className="w-10 text-center text-[11px] font-bold text-white/70 hover:text-white cursor-pointer"
+                >
+                  {Math.round(scale * 100)}%
+                </button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 text-white/90 hover:text-white hover:bg-white/10"
+                  disabled={scale >= ZOOM_LEVELS[ZOOM_LEVELS.length - 1]}
+                  onClick={zoomIn}
+                  aria-label="Aumentar zoom"
+                >
+                  <ZoomIn className="h-4 w-4" />
+                </Button>
+              </div>
+
+              <div className="w-px h-5 bg-white/15 mx-1" />
+
+              {/* Navegação de página — colada no Ouvir/Parar */}
               <Button
                 variant="ghost"
                 size="icon"
@@ -546,39 +580,6 @@ const stopReading = () => {
               >
                 <ChevronRight className="h-4 w-4" />
               </Button>
-
-              <div className="w-px h-5 bg-white/15 mx-1" />
-
-              {/* Zoom — flutua sobre o PDF, não ocupa espaço de layout */}
-              <div className="flex items-center gap-0.5">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 text-white/90 hover:text-white hover:bg-white/10"
-                  disabled={scale <= ZOOM_LEVELS[0]}
-                  onClick={zoomOut}
-                  aria-label="Diminuir zoom"
-                >
-                  <ZoomOut className="h-4 w-4" />
-                </Button>
-                <button
-                  onClick={resetZoom}
-                  title="Redefinir zoom"
-                  className="w-10 text-center text-[11px] font-bold text-white/70 hover:text-white cursor-pointer"
-                >
-                  {Math.round(scale * 100)}%
-                </button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 text-white/90 hover:text-white hover:bg-white/10"
-                  disabled={scale >= ZOOM_LEVELS[ZOOM_LEVELS.length - 1]}
-                  onClick={zoomIn}
-                  aria-label="Aumentar zoom"
-                >
-                  <ZoomIn className="h-4 w-4" />
-                </Button>
-              </div>
 
               {/* Ouvir / Parar leitura em voz alta */}
               <Button
