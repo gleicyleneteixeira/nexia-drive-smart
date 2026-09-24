@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import { PDFReaderService, type PDFDocumentProxy } from "@/services/pdfReaderService";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,6 +16,8 @@ import {
 
 const ZOOM_LEVELS = [0.5, 0.75, 1, 1.2, 1.5, 2, 2.5, 3];
 const SPEECH_RATES = [0.75, 1.0, 1.25, 1.5] as const;
+// Máximo de páginas vazias puladas em sequência antes de pausar.
+const MAX_PULOS_PAGINA_VAZIA = 5;
 
 interface CachedLayout {
   fullText: string;
@@ -49,6 +52,7 @@ export function PdfReader({ url, className = "" }: PdfReaderProps) {
   const sessaoLeituraRef = useRef(0);
   const autoReadRef = useRef(false);
   const renderSeqRef = useRef(0);
+  const paginasVaziasRef = useRef(0);
   const startReadingRef = useRef<() => void>(() => {});
 
   const highlightCurrentElement = (activeSpan: HTMLElement | null) => {
@@ -161,19 +165,40 @@ export function PdfReader({ url, className = "" }: PdfReaderProps) {
       layoutCache.current[cacheKey] = layout;
     }
 
-    if (!layout.fullText) {
-        // Fallback: tentar extrair do PDF.js (note: startReading não é async,
-        // então apenas registramos e solicitamos nova análise na próxima vez)
-        console.log("Texto vazio - análise agendada para próxima interação");
-        setIsReading(false);
+    // Página em branco (sem texto, ou só número/cabeçalho): pula sozinha
+    // após uma pausa curta, para o usuário perceber a virada.
+    if (!layout.fullText || layout.fullText.trim().length < 3) {
+        window.speechSynthesis.cancel();
         if (textLayerRef.current) {
           const spans = textLayerRef.current.querySelectorAll('span');
           spans.forEach(s => s.style.color = 'transparent');
         }
-        // Pequena pausa para o usuário perceber o attempt
-        setTimeout(() => {}, 50);
+        if (currentPage < numPages && paginasVaziasRef.current < MAX_PULOS_PAGINA_VAZIA) {
+          paginasVaziasRef.current += 1;
+          if (paginasVaziasRef.current === 1) {
+            toast.info(`Página ${currentPage} sem texto para ler — avançando...`);
+          }
+          // Mantém o estado "lendo" (o Parar continua valendo) e vira a
+          // página após 800ms.
+          setIsReading(true);
+          autoReadRef.current = true;
+          setTimeout(() => {
+            if (sessaoLeituraRef.current === sessao) {
+              setPageInput("");
+              setCurrentPage(currentPage + 1);
+            }
+          }, 800);
+        } else {
+          paginasVaziasRef.current = 0;
+          stopReading();
+          if (currentPage < numPages) {
+            toast.warning("Várias páginas sem texto — leitura pausada.");
+          }
+        }
         return;
       }
+      // Página com conteúdo: zera o contador de pulos em sequência.
+      paginasVaziasRef.current = 0;
 
     // Cancela áudios anteriores
     window.speechSynthesis.cancel();
@@ -224,6 +249,8 @@ const stopReading = () => {
     // Invalida a sessão ANTES de cancelar (o cancel pode disparar
     // onend/onerror residual — já chega morto e não avança a página).
     sessaoLeituraRef.current += 1;
+    // Parada total também cancela retomada pendente (pulo de página vazia).
+    autoReadRef.current = false;
     if (typeof window !== "undefined" && window.speechSynthesis) {
       window.speechSynthesis.cancel();
     }
