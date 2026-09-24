@@ -1,4 +1,4 @@
-import React, { useEffect, useState, createContext, useContext, ReactNode } from "react";
+import React, { useEffect, useState, useRef, createContext, useContext, ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
 
@@ -51,6 +51,12 @@ function useAuthInternal() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isMock, setIsMock] = useState(false);
+  // Espelho mutável do usuário atual (para o listener abaixo decidir sem
+  // depender de closure obsoleta).
+  const userRef = useRef<User | null>(null);
+  useEffect(() => {
+    userRef.current = user;
+  }, [user]);
 
   const fetchProfileAndRole = async (userId: string) => {
     // 1. Check if mock mode is active
@@ -136,6 +142,16 @@ function useAuthInternal() {
         return;
       }
       const currentUser = session?.user ?? null;
+      const prev = userRef.current;
+      userRef.current = currentUser;
+      // Mesma sessão de antes (ex.: voltou de outra aba e o Supabase reemitiu
+      // SIGNED_IN): atualiza o perfil em SILÊNCIO, sem loading — o RequireAuth
+      // mostra spinner com loading=true e DESMONTA as telas, o que apagava
+      // formulários em preenchimento (ex.: capa no admin).
+      if (currentUser && prev && currentUser.id === prev.id) {
+        fetchProfileAndRole(currentUser.id);
+        return;
+      }
       setUser(currentUser);
       if (currentUser) {
         setLoading(true);
