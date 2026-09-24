@@ -43,6 +43,14 @@ export function PdfReader({ url, className = "" }: PdfReaderProps) {
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const layoutCache = useRef<{ [key: string]: CachedLayout }>({});
 
+  // Leitura contínua: sessão atual (invalida eventos onend/onerror de
+  // falas canceladas/substituídas), pedido de retomada após renderizar
+  // a página e sequência de render (descarta retomadas obsoletas).
+  const sessaoLeituraRef = useRef(0);
+  const autoReadRef = useRef(false);
+  const renderSeqRef = useRef(0);
+  const startReadingRef = useRef<() => void>(() => {});
+
   const highlightCurrentElement = (activeSpan: HTMLElement | null) => {
     // 1. Limpa o destaque de TODOS os spans da camada de texto
     if (textLayerRef.current) {
@@ -58,6 +66,9 @@ export function PdfReader({ url, className = "" }: PdfReaderProps) {
   };
 
   const cancelSpeech = useCallback(() => {
+    // Invalida a sessão ANTES de cancelar: o cancel pode disparar
+    // onend/onerror residual — já chega morto e não avança a página.
+    sessaoLeituraRef.current += 1;
     window.speechSynthesis.cancel();
     utteranceRef.current = null;
     setIsReading(false);
@@ -135,6 +146,9 @@ export function PdfReader({ url, className = "" }: PdfReaderProps) {
   };
 
   const startReading = (readingDirection: 'TOP_TO_BOTTOM' | 'BOTTOM_TO_TOP' = 'TOP_TO_BOTTOM') => {
+    // Nova sessão de leitura: invalida eventos de falas anteriores.
+    const sessao = ++sessaoLeituraRef.current;
+
     const textLayerEl = textLayerRef.current;
     if (!textLayerEl) return;
 
@@ -179,15 +193,37 @@ export function PdfReader({ url, className = "" }: PdfReaderProps) {
     utterance.lang = 'pt-BR';
     utterance.rate = speechRate;
 
-    utterance.onend = () => stopReading();
-    utterance.onerror = () => stopReading();
+    // Fim NATURAL da página (mesma sessão): vira a página sozinho e a
+    // retomada acontece ao concluir a renderização (ver renderPage).
+    // Eventos de sessões antigas (canceladas/substituídas) são ignorados.
+    utterance.onend = () => {
+      if (sessaoLeituraRef.current !== sessao) return;
+      if (currentPage < numPages) {
+        autoReadRef.current = true;
+        setPageInput("");
+        setCurrentPage(currentPage + 1);
+      } else {
+        stopReading();
+      }
+    };
+    utterance.onerror = () => {
+      if (sessaoLeituraRef.current !== sessao) return;
+      stopReading();
+    };
 
     setTimeout(() => {
-      window.speechSynthesis.speak(utterance);
+      // Só fala se esta sessão continuar válida (o usuário pode ter
+      // apertado Parar ou trocado de página durante a espera).
+      if (sessaoLeituraRef.current === sessao) {
+        window.speechSynthesis.speak(utterance);
+      }
     }, 100);
   };
 
 const stopReading = () => {
+    // Invalida a sessão ANTES de cancelar (o cancel pode disparar
+    // onend/onerror residual — já chega morto e não avança a página).
+    sessaoLeituraRef.current += 1;
     if (typeof window !== "undefined" && window.speechSynthesis) {
       window.speechSynthesis.cancel();
     }
@@ -207,6 +243,10 @@ const stopReading = () => {
       startReading();
     }
   }, [isReading, startReading, pdfDoc]);
+
+  // Espelho da última versão de startReading para uso dentro de
+  // callbacks estáveis (retomada após renderizar a nova página).
+  startReadingRef.current = startReading;
 
   const renderPage = useCallback(
     async (doc: PDFDocumentProxy, page: number, s: number) => {
@@ -254,6 +294,23 @@ const stopReading = () => {
               textLayerRef.current?.appendChild(span);
             });
           }
+
+          renderSeqRef.current += 1;
+          // Retomada de leitura: terminou de montar a nova página e há
+          // pedido pendente (avanço automático ou troca manual com áudio
+          // ativo) — começa a narrar a nova página.
+          if (autoReadRef.current) {
+            autoReadRef.current = false;
+            const sessao = sessaoLeituraRef.current;
+            const seq = renderSeqRef.current;
+            setTimeout(() => {
+              // Só retoma se nada mais novo aconteceu (outra troca de
+              // página ou Parar invalida a sessão/sequência).
+              if (sessaoLeituraRef.current === sessao && renderSeqRef.current === seq) {
+                startReadingRef.current();
+              }
+            }, 250);
+          }
       } catch (error: any) {
         if (error?.name !== "RenderingCancelledException") {
           console.error("Erro ao renderizar página:", error);
@@ -286,6 +343,7 @@ const stopReading = () => {
 
   const loadFromUrl = async (fileUrl: string) => {
     cancelSpeech();
+    autoReadRef.current = false;
     setLoading(true);
     setError(null);
     setPdfDoc(null);
@@ -321,9 +379,17 @@ const stopReading = () => {
     };
   }, [pdfDoc, cancelSpeech]);
 
+  // Troca de página: pausa a fala atual; se estava lendo, a leitura
+  // recomeça sozinha na nova página (ver retomada em renderPage).
   const goToPage = (p: number) => {
+    const estavaLendo = isReading;
     cancelSpeech();
     const n = Math.max(1, Math.min(numPages, p));
+    if (n === currentPage) {
+      if (estavaLendo) startReading();
+      return;
+    }
+    autoReadRef.current = estavaLendo;
     setCurrentPage(n);
     setPageInput("");
   };
