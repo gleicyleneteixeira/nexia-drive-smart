@@ -30,26 +30,22 @@ export function NativePdfModal({ pdfUrl, title, onClose }: NativePdfModalProps) 
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-2"
       onClick={handleOverlayClick}
     >
-      <div className="bg-card rounded-2xl w-full max-w-6xl h-[90vh] flex flex-col shadow-2xl border animate-in fade-in zoom-in duration-200">
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b">
-          <h2 className="font-display font-bold text-lg truncate max-w-[calc(100%-120px)]">{title}</h2>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={onClose}
-              className="p-2 rounded-xl hover:bg-accent/30 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
-        </div>
+      <div className="relative bg-card rounded-2xl w-full max-w-7xl h-[calc(100dvh-2rem)] flex flex-col shadow-2xl border animate-in fade-in zoom-in duration-200">
+        {/* Fechar — flutuante sobre o PDF, sem barra de topo */}
+        <button
+          onClick={onClose}
+          aria-label="Fechar leitor"
+          className="absolute top-3 right-3 z-20 p-2 rounded-full bg-black/70 text-white/90 hover:text-white hover:bg-black/90 backdrop-blur-md transition-colors"
+        >
+          <X className="h-5 w-5" />
+        </button>
 
         {/* PDF Reader */}
         <div className="flex-1 overflow-hidden min-h-0">
-          <PdfReader url={pdfUrl} className="h-full w-full" />
+          <PdfReader url={pdfUrl} title={title} className="h-full w-full" />
         </div>
       </div>
     </div>

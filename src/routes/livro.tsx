@@ -10,8 +10,8 @@ export const Route = createFileRoute("/livro")({
 function LivroPage() {
   return (
     <RequireAuth>
-      <div className="mx-auto max-w-6xl px-4 py-6 min-h-[80vh] flex flex-col">
-        <h1 className="text-xl font-display font-bold mb-4">Leitor de Livros PDF</h1>
+      <div className="mx-auto max-w-7xl px-2 sm:px-4 py-3 min-h-[85vh] flex flex-col">
+        <h1 className="text-sm font-semibold text-muted-foreground mb-2">Leitor de Livros PDF</h1>
         <PdfReader className="flex-1" />
       </div>
     </RequireAuth>

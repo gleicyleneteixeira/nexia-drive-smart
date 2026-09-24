@@ -27,9 +27,11 @@ interface CachedLayout {
 interface PdfReaderProps {
   url?: string;
   className?: string;
+  /** Nome do livro: aparece minúsculo sob a pílula flutuante (não ocupa layout). */
+  title?: string;
 }
 
-export function PdfReader({ url, className = "" }: PdfReaderProps) {
+export function PdfReader({ url, title, className = "" }: PdfReaderProps) {
   const [pdfDoc, setPdfDoc] = useState<PDFDocumentProxy | null>(null);
   const [numPages, setNumPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -506,7 +508,8 @@ const stopReading = () => {
 
             {/* Camada flutuante SOBRE o PDF: zoom + navegação + ouvir.
                 Não ocupa espaço de layout e fica visível mesmo rolando a página. */}
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 flex flex-wrap items-center justify-center gap-1.5 rounded-full border border-white/10 bg-black/70 px-2.5 py-1.5 shadow-xl backdrop-blur-md max-w-[calc(100%-1rem)]">
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1 max-w-[calc(100%-1rem)]">
+              <div className="flex flex-wrap items-center justify-center gap-1.5 rounded-full border border-white/10 bg-black/70 px-2.5 py-1.5 shadow-xl backdrop-blur-md max-w-full">
               {/* Zoom — flutua sobre o PDF, não ocupa espaço de layout */}
               <div className="flex items-center gap-0.5">
                 <Button
@@ -621,6 +624,12 @@ const stopReading = () => {
                   </option>
                 ))}
               </select>
+              </div>
+              {title && (
+                <p className="text-[10px] font-medium text-white/50 bg-black/50 rounded-full px-2.5 py-0.5 backdrop-blur-sm truncate max-w-full">
+                  {title}
+                </p>
+              )}
             </div>
           </div>
         </>
