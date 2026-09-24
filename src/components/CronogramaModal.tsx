@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogD
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Download, Edit3, FileDown, BookOpen } from "lucide-react";
+import { Download, Edit3, FileDown, BookOpen, Trash2 } from "lucide-react";
 import { toPng } from "html-to-image";
 import { exportScheduleToPDF } from "@/lib/exportUtils";
 import { getReadingUrl } from "@/lib/heyzine";
@@ -254,8 +254,14 @@ export const CronogramaModal = ({ open, onOpenChange }: CronogramaModalProps) =>
             user?.email ||
             "Aluno(a)"
           }
+          userId={user?.id || ""}
           onEdit={() => setIsEditing(true)}
           onClose={() => onOpenChange(false)}
+          onDeleted={() => {
+            setPlano(null);
+            setConfigInicial(null);
+            onOpenChange(false);
+          }}
         />
       ) : (
         <CronogramaForm
@@ -343,6 +349,11 @@ function CronogramaForm({
             daily_time: tempoDiario,
             reading_habit: habitoLeitura,
             is_intensive_mode: intensiveAtivo,
+            // Novo cronograma (criação ou edição) começa do zero:
+            // limpa o progresso de leitura anterior salvo.
+            current_chapter: 1,
+            current_page: 0,
+            completed_pages: 0,
             updated_at: new Date().toISOString(),
           },
           { onConflict: "user_id" }
@@ -350,8 +361,26 @@ function CronogramaForm({
 
       if (error) throw error;
 
+      // Limpa também os backups de progresso (banco e localStorage)
+      try {
+        await supabase.from("user_progress").delete().eq("user_id", userId);
+      } catch {
+        /* tabela pode não existir */
+      }
+      try {
+        await supabase.from("cronograma_dias").delete().eq("user_id", userId);
+      } catch {
+        /* tabela pode não existir */
+      }
+      try {
+        localStorage.removeItem(`cronograma_progress_${userId}`);
+      } catch {
+        /* localStorage indisponível */
+      }
+      window.dispatchEvent(new Event("nexia:cronograma:change"));
+
       toast.success(isEditing ? "Cronograma atualizado!" : "Cronograma criado!", {
-        description: "Seu plano de estudos foi configurado com sucesso.",
+        description: "Seu plano de estudos foi configurado com sucesso. O progresso de leitura anterior foi zerado.",
       });
 
       onSuccess(
@@ -528,16 +557,56 @@ function CronogramaForm({
 function CronogramaOverview({
   plan,
   userName,
+  userId,
   onEdit,
   onClose,
+  onDeleted,
 }: {
   plan: PlanoEstudo;
   userName: string;
+  userId: string;
   onEdit: () => void;
   onClose: () => void;
+  onDeleted: () => void;
 }) {
   const scheduleItems = React.useMemo(() => buildScheduleItems(plan), [plan]);
   const [isPdfGenerating, setIsPdfGenerating] = React.useState(false);
+  const [isDeleting, setIsDeleting] = React.useState(false);
+
+  const handleExcluir = async () => {
+    if (!userId) return;
+    const ok = window.confirm(
+      "Excluir seu cronograma? O progresso de leitura também será apagado. Você poderá criar um novo depois."
+    );
+    if (!ok) return;
+    setIsDeleting(true);
+    try {
+      await supabase.from("cronograma_dias").delete().eq("user_id", userId);
+      try {
+        await supabase.from("user_progress").delete().eq("user_id", userId);
+      } catch {
+        /* tabela pode não existir */
+      }
+      const { error } = await supabase.from("estudo_config").delete().eq("user_id", userId);
+      if (error) throw error;
+      try {
+        localStorage.removeItem(`cronograma_progress_${userId}`);
+      } catch {
+        /* localStorage indisponível */
+      }
+      window.dispatchEvent(new Event("nexia:cronograma:change"));
+      toast.success("Cronograma excluído", {
+        description: "O progresso de leitura também foi apagado.",
+      });
+      onDeleted();
+    } catch (err: any) {
+      toast.error("Erro ao excluir", {
+        description: err?.message || "Tente novamente em alguns instantes.",
+      });
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   const handleDownloadPdf = async () => {
     if (!cardRef.current) return;
@@ -716,6 +785,16 @@ function CronogramaOverview({
           >
             <Edit3 className="h-4 w-4 mr-2" />
             Editar Cronograma
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleExcluir}
+            disabled={isDeleting}
+            className="flex-1 sm:flex-none border-red-500/40 text-red-400 hover:bg-red-500/10 hover:text-red-300"
+          >
+            <Trash2 className="h-4 w-4 mr-2" />
+            {isDeleting ? "Excluindo..." : "Excluir"}
           </Button>
           <Button
             type="button"

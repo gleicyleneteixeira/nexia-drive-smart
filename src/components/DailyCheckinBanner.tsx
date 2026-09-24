@@ -5,7 +5,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { X, CheckCircle2, BookOpen, FileText } from "lucide-react";
+import { CheckCircle2, BookOpen, FileText } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { toast } from "sonner";
 import {
   buildPlanoFromConfig,
@@ -44,6 +51,17 @@ export function DailyCheckinBanner() {
   const [plano, setPlano] = React.useState<PlanoEstudo | null>(null);
   const [pending, setPending] = React.useState<ScheduleItem | null>(null);
   const [hasCronograma, setHasCronograma] = React.useState(false);
+  const [reloadKey, setReloadKey] = React.useState(0);
+
+  // Recarrega quando o cronograma é criado/editado/excluído em outro componente
+  React.useEffect(() => {
+    const handler = () => setReloadKey((k) => k + 1);
+    window.addEventListener("nexia:cronograma:change", handler);
+    return () => window.removeEventListener("nexia:cronograma:change", handler);
+  }, []);
+  const [partialOpen, setPartialOpen] = React.useState(false);
+  const [partialPage, setPartialPage] = React.useState("");
+  const [partialChoice, setPartialChoice] = React.useState<"full" | "partial">("full");
   const [progress, setProgress] = React.useState<UserProgress>({
     current_session_index: 1,
     last_access_date: null,
@@ -56,6 +74,9 @@ export function DailyCheckinBanner() {
     let cancelled = false;
     (async () => {
       setLoading(true);
+      // Zera o estado anterior (importante após editar/excluir o cronograma)
+      setHasCronograma(false);
+      setPending(null);
       try {
         const { data: config } = await supabase
           .from("estudo_config")
@@ -122,7 +143,7 @@ export function DailyCheckinBanner() {
     return () => {
       cancelled = true;
     };
-  }, [user?.id]);
+  }, [user?.id, reloadKey]);
 
   const persist = async (next: UserProgress) => {
     if (!user?.id) return;
@@ -192,12 +213,43 @@ export function DailyCheckinBanner() {
     setSaving(false);
   };
 
+  const handleSavePartial = () => {
+    if (!pending) return;
+    const page = Number(partialPage);
+    if (!Number.isInteger(page) || page < pending.paginaInicio || page > pending.paginaFim) {
+      toast.error(`Informe uma página entre ${pending.paginaInicio} e ${pending.paginaFim}`);
+      return;
+    }
+    if (page >= pending.paginaFim) {
+      // Informou que leu até o fim da meta → comporta-se como "Li tudo"
+      setPartialOpen(false);
+      handleCompleteAndNext();
+      return;
+    }
+    setSaving(true);
+    const today = new Date().toISOString().split("T")[0];
+    const next: UserProgress = {
+      current_session_index: progress.current_session_index,
+      completed_pages: page,
+      last_access_date: today,
+    };
+    setProgress(next);
+    void persist(next);
+    setSaving(false);
+    setPartialOpen(false);
+    toast.success(`Progresso salvo: leu até a página ${page}. 📖`, {
+      description: "A meta continua pendente a partir da próxima página.",
+    });
+  };
+
   const handleLerAgora = () => {
     if (!pending) return;
     const today = new Date().toISOString().split("T")[0];
     const next: UserProgress = { ...progress, last_access_date: today };
     setProgress(next);
-    window.open(getReadingUrl(pending.paginaInicio), "_blank");
+    // Abre na primeira página ainda não lida da meta atual
+    const startPage = Math.max(pending.paginaInicio, progress.completed_pages + 1);
+    window.open(getReadingUrl(startPage), "_blank");
     toast.success("Abra o livro e continue de onde parou! 📖");
     void persist(next);
   };
@@ -219,6 +271,15 @@ export function DailyCheckinBanner() {
   };
 
   if (!hasCronograma || loading) return null;
+
+  // Páginas restantes da meta atual (considera leitura parcial já registrada)
+  const partialRead =
+    pending != null &&
+    progress.completed_pages >= pending.paginaInicio &&
+    progress.completed_pages < pending.paginaFim;
+  const startPage = pending
+    ? Math.max(pending.paginaInicio, progress.completed_pages + 1)
+    : 0;
 
   if (!pending) {
     return (
@@ -250,19 +311,14 @@ export function DailyCheckinBanner() {
           <p className="text-xs text-muted-foreground mt-0.5">
             Sua meta pendente:{" "}
             <strong className="text-foreground">
-              {pending.capitulo} — Páginas {pending.paginaInicio} a {pending.paginaFim} (Capítulo {pending.capituloId || "—"})
+              {pending.capitulo} — Páginas {startPage} a {pending.paginaFim} (Capítulo {pending.capituloId || "—"})
             </strong>
+            {partialRead && (
+              <span className="text-amber-400"> · você já leu até a página {progress.completed_pages}</span>
+            )}
           </p>
         </div>
         <div className="flex flex-wrap gap-2 shrink-0">
-          <Button
-            type="button"
-            onClick={handleCompleteAndNext}
-            disabled={saving}
-            className="bg-emerald-600 hover:bg-emerald-500 text-white"
-          >
-            <CheckCircle2 className="h-4 w-4 mr-1.5" /> Já li e quero a próxima
-          </Button>
           <Button
             type="button"
             variant="outline"
@@ -280,8 +336,111 @@ export function DailyCheckinBanner() {
           >
             <FileText className="h-4 w-4 mr-1.5" /> Ir p/ Simulado
           </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleGoSimulado}
+            className="border-border text-foreground hover:bg-accent"
+          >
+            <FileText className="h-4 w-4 mr-1.5" /> Ir p/ Simulado
+          </Button>
+          <Button
+            type="button"
+            onClick={() => {
+              // Popup de confirmação: a pessoa escolhe entre lição completa
+              // ou leitura parcial (ajustando a página lida).
+              setPartialChoice("full");
+              setPartialPage(pending ? String(pending.paginaFim) : "");
+              setPartialOpen(true);
+            }}
+            disabled={saving}
+            className="bg-emerald-600 hover:bg-emerald-500 text-white"
+          >
+            <CheckCircle2 className="h-4 w-4 mr-1.5" /> Já completei essa lição
+          </Button>
         </div>
       </div>
+      {pending && (
+        <Dialog open={partialOpen} onOpenChange={setPartialOpen}>
+          <DialogContent className="sm:max-w-sm">
+            <DialogHeader>
+              <DialogTitle>Como foi sua leitura?</DialogTitle>
+              <DialogDescription>
+                Meta de hoje: páginas {pending.paginaInicio} a {pending.paginaFim} (
+                {pending.capitulo}). Selecione o que você conseguiu ler.
+              </DialogDescription>
+            </DialogHeader>
+
+            {partialChoice === "full" ? (
+              <div className="flex flex-col gap-2">
+                <Button
+                  type="button"
+                  onClick={() => {
+                    setPartialOpen(false);
+                    handleCompleteAndNext();
+                  }}
+                  disabled={saving}
+                  className="bg-emerald-600 hover:bg-emerald-500 text-white w-full"
+                >
+                  <CheckCircle2 className="h-4 w-4 mr-1.5" /> Li tudo
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setPartialChoice("partial");
+                    setPartialPage(
+                      partialRead ? String(progress.completed_pages) : ""
+                    );
+                  }}
+                  disabled={saving}
+                  className="border-border text-foreground hover:bg-accent w-full"
+                >
+                  Li parcialmente
+                </Button>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-sm text-muted-foreground">Li até a página</span>
+                  <input
+                    type="number"
+                    value={partialPage}
+                    onChange={(e) => setPartialPage(e.target.value)}
+                    min={pending.paginaInicio}
+                    max={pending.paginaFim}
+                    placeholder={`${pending.paginaInicio}–${pending.paginaFim}`}
+                    autoFocus
+                    className="w-24 rounded-md border border-border bg-background px-2 py-1.5 text-sm text-foreground"
+                  />
+                  <span className="text-xs text-muted-foreground">
+                    de {pending.paginaInicio} a {pending.paginaFim}
+                  </span>
+                </div>
+                <div className="flex justify-end gap-2">
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => setPartialChoice("full")}
+                  >
+                    Voltar
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={handleSavePartial}
+                    disabled={saving}
+                    className="bg-amber-600 hover:bg-amber-500 text-white"
+                  >
+                    Salvar progresso
+                  </Button>
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }
