@@ -30,10 +30,11 @@ export function NativePdfModal({ pdfUrl, title, onClose }: NativePdfModalProps) 
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-2"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-2 max-sm:p-0"
       onClick={handleOverlayClick}
     >
-      <div className="relative bg-card rounded-2xl w-full max-w-7xl h-[calc(100dvh-2rem)] flex flex-col shadow-2xl border animate-in fade-in zoom-in duration-200">
+      {/* No celular: tela cheia de verdade (sem margem, borda ou raio) */}
+      <div className="relative bg-card rounded-2xl w-full max-w-7xl h-[calc(100dvh-2rem)] flex flex-col shadow-2xl border animate-in fade-in zoom-in duration-200 max-sm:h-dvh max-sm:max-w-none max-sm:rounded-none max-sm:border-0">
         {/* Fechar — flutuante sobre o PDF, sem barra de topo */}
         <button
           onClick={onClose}

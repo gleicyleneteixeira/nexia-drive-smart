@@ -413,9 +413,15 @@ const stopReading = () => {
       try {
         const pageObj = await pdfDoc.getPage(1);
         const v = pageObj.getViewport({ scale: 1 });
-        const cw = containerRef.current?.clientWidth ?? 0;
-        if (v.width > 0 && cw > 32) {
-          const fit = Math.min(2, Math.max(0.5, (cw - 32) / v.width));
+        const el = containerRef.current;
+        const cw = el?.clientWidth ?? 0;
+        // Mede o respiro real (no celular o padding é menor) p/ preencher tudo.
+        const style = el ? getComputedStyle(el) : null;
+        const padX = style
+          ? (parseFloat(style.paddingLeft) || 0) + (parseFloat(style.paddingRight) || 0)
+          : 32;
+        if (v.width > 0 && cw > padX) {
+          const fit = Math.min(2, Math.max(0.5, (cw - padX) / v.width));
           fitScaleRef.current = fit;
           setScale(fit);
         }
@@ -519,7 +525,7 @@ const stopReading = () => {
           <div className="flex-1 min-h-0 relative rounded-2xl glass">
             <div
               ref={containerRef}
-              className="h-full overflow-auto p-4 flex flex-col items-center"
+              className="h-full overflow-auto p-4 max-sm:p-1 flex flex-col items-center"
             >
               <div className="relative w-fit">
                 <canvas
