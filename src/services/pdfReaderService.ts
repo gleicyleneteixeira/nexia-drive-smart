@@ -1,14 +1,22 @@
-import * as pdfjsLib from "pdfjs-dist";
-import { VerbosityLevel } from "pdfjs-dist";
+// pdf.js usa DOMMatrix no top-level e NÃO existe no Node — import estático
+// aqui quebrava o SSR (HTTP 500 no /app). Import dinâmico: só carrega no
+// navegador, na primeira utilização real.
+type PdfJsLib = typeof import("pdfjs-dist");
+let pdfjsPromise: Promise<PdfJsLib> | null = null;
 
-declare const setVerbosityLevel: (level: number) => void;
-
-// Configure PDF.js worker from CDN
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
-
-// Silence pdfjs-dist font warnings (TT: undefined function)
-if (typeof (pdfjsLib as any).setVerbosityLevel === "function") {
-  (pdfjsLib as any).setVerbosityLevel(VerbosityLevel.ERRORS);
+async function getPdfjs(): Promise<PdfJsLib> {
+  if (!pdfjsPromise) {
+    pdfjsPromise = import("pdfjs-dist").then((lib) => {
+      // Configure PDF.js worker from CDN
+      lib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${lib.version}/pdf.worker.min.mjs`;
+      // Silence pdfjs-dist font warnings (TT: undefined function)
+      if (typeof (lib as any).setVerbosityLevel === "function") {
+        (lib as any).setVerbosityLevel((lib as any).VerbosityLevel.ERRORS);
+      }
+      return lib;
+    });
+  }
+  return pdfjsPromise;
 }
 
 export interface PDFDocumentProxy {
@@ -25,7 +33,7 @@ export const PDFReaderService = {
     } else {
       source = { url: fileOrUrl };
     }
-    const loadingTask = pdfjsLib.getDocument(source);
+    const loadingTask = (await getPdfjs()).getDocument(source);
     return await loadingTask.promise;
   },
 
