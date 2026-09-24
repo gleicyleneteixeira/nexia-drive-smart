@@ -576,7 +576,8 @@ const stopReading = () => {
               ref={containerRef}
               className="h-full overflow-auto p-4 max-sm:p-1 flex flex-col items-center"
             >
-              <div className="relative w-fit">
+              {/* m-auto: centraliza no espaço livre; com rolagem comporta-se normal */}
+              <div className="relative w-fit m-auto">
                 <canvas
                   ref={canvasRef}
                   className="shadow-2xl rounded-sm"
@@ -592,13 +593,13 @@ const stopReading = () => {
             {/* Camada flutuante SOBRE o PDF: zoom + navegação + ouvir.
                 Não ocupa espaço de layout e fica visível mesmo rolando a página. */}
             <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1 max-w-[calc(100%-1rem)]">
-              <div className="flex flex-wrap items-center justify-center gap-1.5 rounded-full border border-white/10 bg-black/70 px-2.5 py-1.5 shadow-xl backdrop-blur-md max-w-full">
+              <div className="flex flex-wrap items-center justify-center gap-1.5 rounded-full border border-white/10 bg-black/70 px-2.5 py-1.5 shadow-xl backdrop-blur-md max-w-full max-sm:gap-1 max-sm:px-2 max-sm:py-1">
               {/* Zoom — flutua sobre o PDF, não ocupa espaço de layout */}
               <div className="flex items-center gap-0.5">
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 text-white/90 hover:text-white hover:bg-white/10"
+                  className="h-8 w-8 text-white/90 hover:text-white hover:bg-white/10 max-sm:h-7 max-sm:w-7"
                   disabled={scale <= ZOOM_LEVELS[0]}
                   onClick={zoomOut}
                   aria-label="Diminuir zoom"
@@ -608,14 +609,14 @@ const stopReading = () => {
                 <button
                   onClick={resetZoom}
                   title="Redefinir zoom"
-                  className="w-10 text-center text-[11px] font-bold text-white/70 hover:text-white cursor-pointer"
+                  className="w-10 text-center text-[11px] font-bold text-white/70 hover:text-white cursor-pointer max-sm:w-8"
                 >
                   {Math.round(scale * 100)}%
                 </button>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 text-white/90 hover:text-white hover:bg-white/10"
+                  className="h-8 w-8 text-white/90 hover:text-white hover:bg-white/10 max-sm:h-7 max-sm:w-7"
                   disabled={scale >= ZOOM_LEVELS[ZOOM_LEVELS.length - 1]}
                   onClick={zoomIn}
                   aria-label="Aumentar zoom"
@@ -630,7 +631,7 @@ const stopReading = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 text-white/90 hover:text-white hover:bg-white/10"
+                className="h-8 w-8 text-white/90 hover:text-white hover:bg-white/10 max-sm:h-7 max-sm:w-7"
                 disabled={currentPage <= 1}
                 onClick={() => goToPage(currentPage - 1)}
                 aria-label="Página anterior"
@@ -659,7 +660,7 @@ const stopReading = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 text-white/90 hover:text-white hover:bg-white/10"
+                className="h-8 w-8 text-white/90 hover:text-white hover:bg-white/10 max-sm:h-7 max-sm:w-7"
                 disabled={currentPage >= numPages}
                 onClick={() => goToPage(currentPage + 1)}
                 aria-label="Próxima página"
@@ -673,8 +674,8 @@ const stopReading = () => {
                 size="sm"
                 className={
                   isReading
-                    ? "h-8 gap-1.5 px-3 text-xs font-bold rounded-full bg-red-500/85 text-white hover:bg-red-500 hover:text-white"
-                    : "h-8 gap-1.5 px-3 text-xs font-bold rounded-full bg-white text-black hover:bg-white/90 hover:text-black"
+                    ? "h-8 gap-1.5 px-3 max-sm:h-7 max-sm:px-2 text-xs font-bold rounded-full bg-red-500/85 text-white hover:bg-red-500 hover:text-white"
+                    : "h-8 gap-1.5 px-3 max-sm:h-7 max-sm:px-2 text-xs font-bold rounded-full bg-white text-black hover:bg-white/90 hover:text-black"
                 }
                 onClick={toggleReading}
                 aria-label={isReading ? "Parar leitura" : "Iniciar leitura"}
@@ -698,7 +699,7 @@ const stopReading = () => {
                     setTimeout(() => startReading(), 100);
                   }
                 }}
-                className="h-8 px-1.5 rounded-md bg-white/10 border border-white/15 text-xs font-semibold text-white outline-none focus:border-white/40 cursor-pointer"
+                className="h-8 px-1.5 rounded-md bg-white/10 border border-white/15 text-xs font-semibold text-white outline-none focus:border-white/40 cursor-pointer max-sm:h-7"
                 aria-label="Velocidade da voz"
               >
                 {SPEECH_RATES.map((rate) => (
