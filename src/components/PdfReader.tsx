@@ -12,7 +12,7 @@ import {
   AlertCircle,
   BookOpen,
   Volume2,
-  VolumeX,
+  Square,
 } from "lucide-react";
 
 const ZOOM_LEVELS = [0.5, 0.75, 1, 1.2, 1.5, 2, 2.5, 3];
@@ -463,82 +463,6 @@ const stopReading = () => {
               />
             </div>
 
-            {/* Center: page navigation + TTS */}
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-8 w-8"
-                disabled={currentPage <= 1}
-                onClick={() => goToPage(currentPage - 1)}
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-              <div className="flex items-center gap-1 text-xs font-semibold">
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  value={pageInput || currentPage}
-                  onChange={(e) => handlePageInputChange(e.target.value)}
-                  onBlur={() => setPageInput("")}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      const n = parseInt(pageInput || "0", 10);
-                      if (!isNaN(n)) goToPage(n);
-                      (e.target as HTMLInputElement).blur();
-                    }
-                  }}
-                  className="w-10 text-center bg-background/50 border border-border/20 rounded-lg px-1 py-1 text-xs font-bold outline-none focus:border-primary/50"
-                />
-                <span className="text-muted-foreground">/</span>
-                <span className="text-muted-foreground">{numPages}</span>
-              </div>
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-8 w-8"
-                disabled={currentPage >= numPages}
-                onClick={() => goToPage(currentPage + 1)}
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-
-              {/* TTS Button */}
-              <Button
-                variant={isReading ? "default" : "outline"}
-                size="icon"
-                className="h-8 w-8"
-                onClick={toggleReading}
-                aria-label={isReading ? "Parar leitura" : "Iniciar leitura"}
-              >
-                {isReading ? (
-                  <Volume2 className="h-4 w-4 text-primary animate-pulse" />
-                ) : (
-                  <VolumeX className="h-4 w-4" />
-                )}
-              </Button>
-
-              {/* Speech Rate Selector */}
-              <select
-                value={speechRate}
-                onChange={(e) => {
-                  const newRate = parseFloat(e.target.value);
-                  setSpeechRate(newRate);
-                  if (isReading) {
-                    stopReading();
-                    setTimeout(() => startReading(), 100);
-                  }
-                }}
-                className="h-8 px-2 rounded-lg bg-background/50 border border-border/20 text-xs font-semibold text-foreground outline-none focus:border-primary/50 cursor-pointer"
-              >
-                {SPEECH_RATES.map((rate) => (
-                  <option key={rate} value={rate}>
-                    {rate}x
-                  </option>
-                ))}
-              </select>
-            </div>
-
             {/* Right: zoom controls */}
             <div className="flex items-center gap-1.5">
               <Button
@@ -573,42 +497,111 @@ const stopReading = () => {
             </div>
           </div>
 
-          {/* Canvas area with TextLayer overlay */}
-          <div
-            ref={containerRef}
-            className="flex-1 overflow-auto rounded-2xl glass p-4 flex flex-col items-center relative"
-          >
-            <div className="relative w-fit">
-              <canvas
-                ref={canvasRef}
-                className="shadow-2xl rounded-sm"
-              />
-              <div
-                ref={textLayerRef}
-                className="absolute inset-0 pointer-events-none"
-                style={{ fontSize: "1px" }}
-              />
+          {/* Canvas area — PDF ocupa todo o espaço; controles flutuam POR CIMA */}
+          <div className="flex-1 min-h-0 relative rounded-2xl glass">
+            <div
+              ref={containerRef}
+              className="h-full overflow-auto p-4 flex flex-col items-center"
+            >
+              <div className="relative w-fit">
+                <canvas
+                  ref={canvasRef}
+                  className="shadow-2xl rounded-sm"
+                />
+                <div
+                  ref={textLayerRef}
+                  className="absolute inset-0 pointer-events-none"
+                  style={{ fontSize: "1px" }}
+                />
+              </div>
             </div>
-          </div>
 
-          {/* Bottom navigation bar (mobile-friendly) */}
-          <div className="flex items-center justify-center gap-3 pt-4">
-            <Button
-              variant="outline"
-              disabled={currentPage <= 1}
-              onClick={() => goToPage(currentPage - 1)}
-              className="gap-1.5"
-            >
-              <ChevronLeft className="h-4 w-4" /> Anterior
-            </Button>
-            <Button
-              variant="outline"
-              disabled={currentPage >= numPages}
-              onClick={() => goToPage(currentPage + 1)}
-              className="gap-1.5"
-            >
-              Próxima <ChevronRight className="h-4 w-4" />
-            </Button>
+            {/* Camada flutuante SOBRE o PDF: navegação + ouvir + velocidade.
+                Não ocupa espaço de layout e fica visível mesmo rolando a página. */}
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 flex items-center gap-1.5 rounded-full border border-white/10 bg-black/70 px-2.5 py-1.5 shadow-xl backdrop-blur-md">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-white/90 hover:text-white hover:bg-white/10"
+                disabled={currentPage <= 1}
+                onClick={() => goToPage(currentPage - 1)}
+                aria-label="Página anterior"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <div className="flex items-center gap-1 text-xs font-semibold">
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={pageInput || currentPage}
+                  onChange={(e) => handlePageInputChange(e.target.value)}
+                  onBlur={() => setPageInput("")}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      const n = parseInt(pageInput || "0", 10);
+                      if (!isNaN(n)) goToPage(n);
+                      (e.target as HTMLInputElement).blur();
+                    }
+                  }}
+                  className="w-9 text-center bg-white/10 border border-white/15 rounded-md px-1 py-0.5 text-xs font-bold text-white outline-none focus:border-white/40"
+                />
+                <span className="text-white/60">/</span>
+                <span className="text-white/60">{numPages}</span>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-white/90 hover:text-white hover:bg-white/10"
+                disabled={currentPage >= numPages}
+                onClick={() => goToPage(currentPage + 1)}
+                aria-label="Próxima página"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+
+              <div className="w-px h-5 bg-white/15 mx-1" />
+
+              {/* Ouvir / Parar leitura em voz alta */}
+              <Button
+                variant="ghost"
+                size="sm"
+                className={
+                  isReading
+                    ? "h-8 gap-1.5 px-3 text-xs font-bold rounded-full bg-red-500/85 text-white hover:bg-red-500 hover:text-white"
+                    : "h-8 gap-1.5 px-3 text-xs font-bold rounded-full bg-white text-black hover:bg-white/90 hover:text-black"
+                }
+                onClick={toggleReading}
+                aria-label={isReading ? "Parar leitura" : "Iniciar leitura"}
+              >
+                {isReading ? (
+                  <Square className="h-3.5 w-3.5 fill-current" />
+                ) : (
+                  <Volume2 className="h-3.5 w-3.5" />
+                )}
+                {isReading ? "Parar" : "Ouvir"}
+              </Button>
+
+              {/* Velocidade da voz */}
+              <select
+                value={speechRate}
+                onChange={(e) => {
+                  const newRate = parseFloat(e.target.value);
+                  setSpeechRate(newRate);
+                  if (isReading) {
+                    stopReading();
+                    setTimeout(() => startReading(), 100);
+                  }
+                }}
+                className="h-8 px-1.5 rounded-md bg-white/10 border border-white/15 text-xs font-semibold text-white outline-none focus:border-white/40 cursor-pointer"
+                aria-label="Velocidade da voz"
+              >
+                {SPEECH_RATES.map((rate) => (
+                  <option key={rate} value={rate} className="bg-white text-black">
+                    {rate}x
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </>
       )}
