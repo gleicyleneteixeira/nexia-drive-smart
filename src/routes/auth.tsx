@@ -202,6 +202,9 @@ function AuthPage() {
         }
 
         toast.success("Bem-vinda(o) de volta!");
+        // Pós-login: vai p/ /cadastro, que encaminha sozinho p/ /app (perfil
+        // ok) ou /checkout (expirado). Sem isso a tela ficava estática.
+        navigate({ to: "/cadastro", replace: true });
       }
     } catch (err) {
       const msg = String(err instanceof Error ? (err.message || "") : err);
