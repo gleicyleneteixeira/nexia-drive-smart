@@ -30,7 +30,7 @@ export function PdfReader({ url, className = "" }: PdfReaderProps) {
   const [pdfDoc, setPdfDoc] = useState<PDFDocumentProxy | null>(null);
   const [numPages, setNumPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [scale, setScale] = useState(1.5);
+  const [scale, setScale] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -291,13 +291,13 @@ const stopReading = () => {
     setPdfDoc(null);
     setNumPages(0);
     setCurrentPage(1);
-    setScale(1.5);
+    setScale(1);
     try {
       const doc = await PDFReaderService.loadDocument(fileUrl);
       setPdfDoc(doc);
       setNumPages(doc.numPages);
       setCurrentPage(1);
-      setScale(1.5);
+      setScale(1);
     } catch (err) {
       console.error("Erro ao carregar PDF:", err);
       setError("Não foi possível carregar o PDF. Verifique o arquivo e tente novamente.");
@@ -346,7 +346,7 @@ const stopReading = () => {
     if (idx > 0) setScale(ZOOM_LEVELS[idx - 1]);
   };
 
-  const resetZoom = () => setScale(1.5);
+  const resetZoom = () => setScale(1);
 
   return (
     <div className={`flex flex-col h-full ${className}`}>

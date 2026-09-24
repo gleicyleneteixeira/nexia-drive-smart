@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { X, Download } from "lucide-react";
+import { X } from "lucide-react";
 import { PdfReader } from "./PdfReader";
 
 interface NativePdfModalProps {
@@ -38,14 +38,6 @@ export function NativePdfModal({ pdfUrl, title, onClose }: NativePdfModalProps) 
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="font-display font-bold text-lg truncate max-w-[calc(100%-120px)]">{title}</h2>
           <div className="flex items-center gap-2">
-            <a
-              href={pdfUrl}
-              download
-              className="p-2 rounded-xl hover:bg-accent/30 text-muted-foreground hover:text-foreground transition-colors"
-              title="Baixar PDF"
-            >
-              <Download className="h-5 w-5" />
-            </a>
             <button
               onClick={onClose}
               className="p-2 rounded-xl hover:bg-accent/30 text-muted-foreground hover:text-foreground transition-colors"
