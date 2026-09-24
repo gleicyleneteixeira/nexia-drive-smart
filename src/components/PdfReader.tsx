@@ -6,8 +6,6 @@ import {
   ChevronRight,
   ZoomIn,
   ZoomOut,
-  RotateCcw,
-  Upload,
   Loader2,
   AlertCircle,
   BookOpen,
@@ -37,11 +35,9 @@ export function PdfReader({ url, className = "" }: PdfReaderProps) {
   const [error, setError] = useState<string | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const renderTaskRef = useRef<any>(null);
   const textLayerRef = useRef<HTMLDivElement>(null);
   const [pageInput, setPageInput] = useState("");
-  const [fileName, setFileName] = useState<string | null>(null);
   const [isReading, setIsReading] = useState(false);
   const [speechRate, setSpeechRate] = useState<number>(1.0);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
@@ -288,7 +284,7 @@ const stopReading = () => {
     };
   }, [cancelSpeech]);
 
-  const loadFromUrl = async (fileUrl: string, name?: string) => {
+  const loadFromUrl = async (fileUrl: string) => {
     cancelSpeech();
     setLoading(true);
     setError(null);
@@ -296,7 +292,6 @@ const stopReading = () => {
     setNumPages(0);
     setCurrentPage(1);
     setScale(1.5);
-    setFileName(name ?? null);
     try {
       const doc = await PDFReaderService.loadDocument(fileUrl);
       setPdfDoc(doc);
@@ -309,17 +304,6 @@ const stopReading = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    if (file.type !== "application/pdf") {
-      setError("Selecione um arquivo PDF válido.");
-      return;
-    }
-    const objectUrl = URL.createObjectURL(file);
-    await loadFromUrl(objectUrl, file.name);
   };
 
   useEffect(() => {
@@ -366,62 +350,29 @@ const stopReading = () => {
 
   return (
     <div className={`flex flex-col h-full ${className}`}>
-      {/* Upload when no PDF loaded */}
+      {/* Estado vazio/erro — o usuário NÃO envia arquivos aqui (o livro vem
+          da Biblioteca, vinculado pelo admin). Este leitor só abre e narra. */}
       {!pdfDoc && !loading && (
-        <div
-          onClick={() => fileInputRef.current?.click()}
-          onDragOver={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-          onDrop={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const file = e.dataTransfer.files?.[0];
-            if (file && file.type === "application/pdf") {
-              const objectUrl = URL.createObjectURL(file);
-              loadFromUrl(objectUrl, file.name);
-            }
-          }}
-          className="glass rounded-3xl p-12 text-center cursor-pointer hover:border-primary/50 transition-all border-2 border-dashed border-border/30"
-        >
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="application/pdf"
-            onChange={handleFileChange}
-            className="hidden"
-          />
+        <div className="glass rounded-3xl p-12 text-center border border-border/30">
           {error ? (
-            <div className="space-y-3">
+            <div className="space-y-2">
               <AlertCircle className="h-12 w-12 mx-auto text-destructive" />
               <p className="text-sm text-destructive">{error}</p>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setError(null);
-                  fileInputRef.current?.click();
-                }}
-              >
-                Tentar novamente
-              </Button>
+              <p className="text-xs text-muted-foreground">
+                Volte à Biblioteca e abra o livro novamente.
+              </p>
             </div>
           ) : (
             <div className="space-y-4">
               <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/25 flex items-center justify-center mx-auto">
-                <Upload className="h-8 w-8 text-primary" />
+                <BookOpen className="h-8 w-8 text-primary" />
               </div>
               <div>
-                <h3 className="font-display font-bold text-lg">Abrir um livro PDF</h3>
+                <h3 className="font-display font-bold text-lg">Nenhum livro aberto</h3>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Arraste um arquivo aqui ou clique para selecionar
+                  Abra um livro pela Biblioteca para ler e ouvir aqui.
                 </p>
               </div>
-              <p className="text-xs text-muted-foreground/60">
-                PDFs são processados inteiramente no seu navegador — sem envio ao servidor.
-              </p>
             </div>
           )}
         </div>
@@ -440,64 +391,8 @@ const stopReading = () => {
       {/* Reader */}
       {pdfDoc && !loading && (
         <>
-          {/* Toolbar */}
-          <div className="glass rounded-2xl px-4 py-2.5 flex items-center justify-between gap-3 mb-4 flex-wrap">
-            {/* Left: file info + upload new */}
-            <div className="flex items-center gap-3 min-w-0">
-              <BookOpen className="h-4 w-4 text-primary shrink-0" />
-              <span className="text-xs font-semibold text-muted-foreground truncate max-w-[180px] md:max-w-xs">
-                {fileName ?? "PDF"}
-              </span>
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="text-[10px] text-primary hover:text-primary-glow font-semibold shrink-0 cursor-pointer"
-              >
-                Trocar arquivo
-              </button>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="application/pdf"
-                onChange={handleFileChange}
-                className="hidden"
-              />
-            </div>
-
-            {/* Right: zoom controls */}
-            <div className="flex items-center gap-1.5">
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-8 w-8"
-                disabled={scale <= ZOOM_LEVELS[0]}
-                onClick={zoomOut}
-              >
-                <ZoomOut className="h-4 w-4" />
-              </Button>
-              <span className="text-xs font-bold text-muted-foreground w-12 text-center">
-                {Math.round(scale * 100)}%
-              </span>
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-8 w-8"
-                disabled={scale >= ZOOM_LEVELS[ZOOM_LEVELS.length - 1]}
-                onClick={zoomIn}
-              >
-                <ZoomIn className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-8 w-8"
-                onClick={resetZoom}
-              >
-                <RotateCcw className="h-3.5 w-3.5" />
-              </Button>
-            </div>
-          </div>
-
-          {/* Canvas area — PDF ocupa todo o espaço; controles flutuam POR CIMA */}
+          {/* Canvas area — SEM barra de topo: o PDF ocupa 100% da altura;
+              todos os controles flutuam POR CIMA da página. */}
           <div className="flex-1 min-h-0 relative rounded-2xl glass">
             <div
               ref={containerRef}
@@ -518,7 +413,7 @@ const stopReading = () => {
 
             {/* Camada flutuante SOBRE o PDF: navegação + ouvir + velocidade.
                 Não ocupa espaço de layout e fica visível mesmo rolando a página. */}
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 flex items-center gap-1.5 rounded-full border border-white/10 bg-black/70 px-2.5 py-1.5 shadow-xl backdrop-blur-md">
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 flex flex-wrap items-center justify-center gap-1.5 rounded-full border border-white/10 bg-black/70 px-2.5 py-1.5 shadow-xl backdrop-blur-md max-w-[calc(100%-1rem)]">
               <Button
                 variant="ghost"
                 size="icon"
@@ -560,6 +455,37 @@ const stopReading = () => {
               </Button>
 
               <div className="w-px h-5 bg-white/15 mx-1" />
+
+              {/* Zoom — flutua sobre o PDF, não ocupa espaço de layout */}
+              <div className="flex items-center gap-0.5">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 text-white/90 hover:text-white hover:bg-white/10"
+                  disabled={scale <= ZOOM_LEVELS[0]}
+                  onClick={zoomOut}
+                  aria-label="Diminuir zoom"
+                >
+                  <ZoomOut className="h-4 w-4" />
+                </Button>
+                <button
+                  onClick={resetZoom}
+                  title="Redefinir zoom"
+                  className="w-10 text-center text-[11px] font-bold text-white/70 hover:text-white cursor-pointer"
+                >
+                  {Math.round(scale * 100)}%
+                </button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 text-white/90 hover:text-white hover:bg-white/10"
+                  disabled={scale >= ZOOM_LEVELS[ZOOM_LEVELS.length - 1]}
+                  onClick={zoomIn}
+                  aria-label="Aumentar zoom"
+                >
+                  <ZoomIn className="h-4 w-4" />
+                </Button>
+              </div>
 
               {/* Ouvir / Parar leitura em voz alta */}
               <Button

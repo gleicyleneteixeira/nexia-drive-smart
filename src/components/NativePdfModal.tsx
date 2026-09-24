@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { X, Download, ExternalLink } from "lucide-react";
+import { X, Download } from "lucide-react";
 import { PdfReader } from "./PdfReader";
 
 interface NativePdfModalProps {
@@ -38,15 +38,6 @@ export function NativePdfModal({ pdfUrl, title, onClose }: NativePdfModalProps) 
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="font-display font-bold text-lg truncate max-w-[calc(100%-120px)]">{title}</h2>
           <div className="flex items-center gap-2">
-            <a
-              href={pdfUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-primary text-sm font-medium flex items-center gap-1"
-            >
-              <ExternalLink className="h-4 w-4" />
-              Abrir em nova aba
-            </a>
             <a
               href={pdfUrl}
               download
