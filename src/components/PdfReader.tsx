@@ -55,9 +55,12 @@ export function PdfReader({ url, title, className = "" }: PdfReaderProps) {
   const autoReadRef = useRef(false);
   const renderSeqRef = useRef(0);
   const paginasVaziasRef = useRef(0);
-  // Zoom que preenche a largura (calculado ao abrir o PDF; o % reseta p/ ele).
+  // Zoom que encaixa a página na tela (calculado ao abrir; o % reseta p/ ele).
   const fitScaleRef = useRef(1);
   const didFitRef = useRef(false);
+  // true quando o usuário mexeu no zoom — aí o ajuste automático sai da frente.
+  const zoomManualRef = useRef(false);
+  const aplicarFitRef = useRef<() => Promise<void>>(async () => {});
   const startReadingRef = useRef<() => void>(() => {});
 
   const highlightCurrentElement = (activeSpan: HTMLElement | null) => {
@@ -378,6 +381,7 @@ const stopReading = () => {
     autoReadRef.current = false;
     didFitRef.current = false;
     fitScaleRef.current = 1;
+    zoomManualRef.current = false;
     setLoading(true);
     setError(null);
     setPdfDoc(null);
@@ -404,31 +408,46 @@ const stopReading = () => {
     }
   }, [url]);
 
-  // Zoom inicial: ajusta à largura disponível para o PDF preencher o
-  // espaço (ler e ouvir ao mesmo tempo, sem faixa vazia nas laterais).
+  // Zoom inicial: encaixa a PÁGINA INTEIRA na tela (menor entre ajuste
+  // à largura e à altura) — quase sem barra de rolagem. Reajusta sozinho
+  // se a tela mudar (girar o celular, redimensionar a janela), a menos
+  // que o usuário tenha mexido no zoom manualmente.
+  const aplicarFit = async () => {
+    if (!pdfDoc) return;
+    try {
+      const pageObj = await pdfDoc.getPage(1);
+      const v = pageObj.getViewport({ scale: 1 });
+      const el = containerRef.current;
+      if (!el || v.width <= 0 || v.height <= 0) return;
+      // Mede o respiro real (no celular o padding é menor).
+      const style = getComputedStyle(el);
+      const padX = (parseFloat(style.paddingLeft) || 0) + (parseFloat(style.paddingRight) || 0);
+      const padY = (parseFloat(style.paddingTop) || 0) + (parseFloat(style.paddingBottom) || 0);
+      const dispW = el.clientWidth - padX;
+      const dispH = el.clientHeight - padY;
+      if (dispW <= 0 || dispH <= 0) return;
+      const fit = Math.min(2, Math.max(0.5, Math.min(dispW / v.width, dispH / v.height)));
+      fitScaleRef.current = fit;
+      setScale(fit);
+    } catch {
+      /* mantém o zoom atual */
+    }
+  };
+  aplicarFitRef.current = aplicarFit;
+
   useEffect(() => {
     if (!pdfDoc || didFitRef.current) return;
     didFitRef.current = true;
-    (async () => {
-      try {
-        const pageObj = await pdfDoc.getPage(1);
-        const v = pageObj.getViewport({ scale: 1 });
-        const el = containerRef.current;
-        const cw = el?.clientWidth ?? 0;
-        // Mede o respiro real (no celular o padding é menor) p/ preencher tudo.
-        const style = el ? getComputedStyle(el) : null;
-        const padX = style
-          ? (parseFloat(style.paddingLeft) || 0) + (parseFloat(style.paddingRight) || 0)
-          : 32;
-        if (v.width > 0 && cw > padX) {
-          const fit = Math.min(2, Math.max(0.5, (cw - padX) / v.width));
-          fitScaleRef.current = fit;
-          setScale(fit);
-        }
-      } catch {
-        /* mantém 100% */
-      }
-    })();
+    void aplicarFitRef.current();
+  }, [pdfDoc]);
+
+  useEffect(() => {
+    const onResize = () => {
+      if (!pdfDoc || zoomManualRef.current) return;
+      void aplicarFitRef.current();
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, [pdfDoc]);
 
   useEffect(() => {
@@ -464,18 +483,23 @@ const stopReading = () => {
   };
 
   const zoomIn = () => {
-    // Robusto a escalas intermediárias (ajuste à largura pode não cair num nível).
+    // Robusto a escalas intermediárias (ajuste à tela pode não cair num nível).
+    zoomManualRef.current = true;
     const next = ZOOM_LEVELS.find((l) => l > scale + 1e-6);
     if (next !== undefined) setScale(next);
   };
 
   const zoomOut = () => {
+    zoomManualRef.current = true;
     const prev = [...ZOOM_LEVELS].reverse().find((l) => l < scale - 1e-6);
     if (prev !== undefined) setScale(prev);
   };
 
-  // Reset volta ao ajuste à largura (zoom inicial).
-  const resetZoom = () => setScale(fitScaleRef.current);
+  // Reset volta ao ajuste à tela.
+  const resetZoom = () => {
+    zoomManualRef.current = false;
+    setScale(fitScaleRef.current);
+  };
 
   return (
     <div className={`flex flex-col h-full ${className}`}>
