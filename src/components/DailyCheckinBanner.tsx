@@ -107,39 +107,41 @@ export function DailyCheckinBanner() {
         if (!cancelled) setHasCronograma(true);
         const plan: PlanoEstudo = buildPlanoFromConfig(config as EstudoConfigRow);
 
-        // Progresso: prioriza estudo_config (tabela central já usada com sucesso).
-        // Cai p/ user_progress caso já exista progresso salvo lá.
-        let chapter = (config as EstudoConfigRow & { current_chapter?: number; completed_pages?: number }).current_chapter ?? 1;
-        let completed = (config as EstudoConfigRow & { completed_pages?: number }).completed_pages ?? 0;
+        // Progresso: localStorage é a fonte primária neste navegador;
+        // fallback para profiles.studies (progresso entre dispositivos).
+        // Obs.: estudo_config não possui colunas de progresso no banco real.
+        let completed = 0;
         let lastAccess: string | null = null;
-        try {
-          const { data: up } = await supabase
-            .from("user_progress")
-            .select("*")
-            .eq("user_id", user.id)
-            .maybeSingle();
-          if (up) {
-            if (!chapter || chapter < 1) chapter = up.current_session_index ?? 1;
-            if (!completed) completed = up.completed_pages ?? 0;
-            lastAccess = up.last_access_date ?? null;
-          }
-        } catch {
-          /* user_progress pode não existir */
-        }
-        // Reidratação local: garante estado correto ao remontar a aba,
-        // mesmo se o Supabase ainda não tiver o valor mais recente.
+        let temLocal = false;
         try {
           const raw = localStorage.getItem(`cronograma_progress_${user.id}`);
           if (raw) {
             const lp = JSON.parse(raw);
-            if (lp.current_session_index && lp.current_session_index > chapter) chapter = lp.current_session_index;
-            if (lp.completed_pages && lp.completed_pages > completed) completed = lp.completed_pages;
-            if (lp.last_access_date && !lastAccess) lastAccess = lp.last_access_date;
+            if (typeof lp.completed_pages === "number") {
+              completed = lp.completed_pages;
+              lastAccess = lp.last_access_date ?? null;
+              temLocal = true;
+            }
           }
         } catch {
           /* localStorage indisponível */
         }
-        if (!chapter || chapter < 1) chapter = 1;
+        if (!temLocal) {
+          try {
+            const { data: prof } = await supabase
+              .from("profiles")
+              .select("studies")
+              .eq("id", user.id)
+              .maybeSingle();
+            const rp = (prof as any)?.studies?.reading_progress;
+            if (rp && typeof rp.completed_pages === "number") {
+              completed = rp.completed_pages;
+              lastAccess = rp.last_access_date ?? null;
+            }
+          } catch {
+            /* profiles indisponível — silencioso */
+          }
+        }
 
         if (cancelled) return;
 
@@ -174,42 +176,9 @@ export function DailyCheckinBanner() {
     };
   }, [user?.id, reloadKey]);
 
-  const persist = async (next: UserProgress): Promise<boolean> => {
-    if (!user?.id) return false;
-    let ok = false;
-    // 1. Persistência principal em estudo_config (fonte da verdade do cronograma)
-    try {
-      const { error } = await supabase
-        .from("estudo_config")
-        .update({
-          current_chapter: next.current_session_index,
-          current_page: next.completed_pages,
-          completed_pages: next.completed_pages,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("user_id", user.id);
-      if (error) throw error;
-      ok = true;
-    } catch {
-      toast.error("Não foi possível salvar seu progresso");
-      return false;
-    }
-    // 2. Backup em user_progress (caso a tabela exista)
-    try {
-      await supabase.from("user_progress").upsert(
-        {
-          user_id: user.id,
-          current_session_index: next.current_session_index,
-          completed_pages: next.completed_pages,
-          last_access_date: next.last_access_date,
-          updated_at: new Date().toISOString(),
-        },
-        { onConflict: "user_id" }
-      );
-    } catch {
-      /* tabela pode não existir */
-    }
-    // 3. Backup local para reidratação instantânea ao remontar a aba
+  const persist = async (next: UserProgress) => {
+    if (!user?.id) return;
+    // 1. Garantido: localStorage (fonte primária neste navegador)
     try {
       localStorage.setItem(
         `cronograma_progress_${user.id}`,
@@ -221,9 +190,40 @@ export function DailyCheckinBanner() {
         })
       );
     } catch {
-      /* localStorage indisponível */
+      toast.warning("Não foi possível guardar o progresso neste navegador", {
+        description: "Seu navegador pode estar em modo privado.",
+      });
     }
-    return ok;
+    // 2. Best-effort: profiles.studies (progresso entre dispositivos).
+    // Escrita silenciosa: se RLS ou linha ausente bloquearem, o localStorage
+    // acima já garantiu o progresso.
+    try {
+      const { data: prof } = await supabase
+        .from("profiles")
+        .select("studies")
+        .eq("id", user.id)
+        .maybeSingle();
+      const estudos: any =
+        prof?.studies && typeof prof.studies === "object" && !Array.isArray(prof.studies)
+          ? prof.studies
+          : {};
+      await supabase
+        .from("profiles")
+        .update({
+          studies: {
+            ...estudos,
+            reading_progress: {
+              current_session_index: next.current_session_index,
+              completed_pages: next.completed_pages,
+              last_access_date: next.last_access_date,
+              updated_at: new Date().toISOString(),
+            },
+          },
+        })
+        .eq("id", user.id);
+    } catch {
+      /* silencioso: localStorage já garantiu o progresso */
+    }
   };
 
   /**
@@ -269,8 +269,7 @@ export function DailyCheckinBanner() {
         last_access_date: today,
         completed_pages: informedPage,
       };
-      const ok = await persist(next);
-      if (!ok) return; // toast de erro já emitido em persist
+      await persist(next);
 
       // 4. Atualiza estado local
       const pend = primeiraPendente(novo.blocos);

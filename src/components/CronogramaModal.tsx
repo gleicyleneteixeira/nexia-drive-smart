@@ -192,6 +192,45 @@ export function buildPlanoFromConfig(config: EstudoConfigRow): PlanoEstudo {
   });
 }
 
+/**
+ * Zera o progresso de leitura (criação/edição/exclusão de cronograma).
+ * Garantido: localStorage (fonte primária neste navegador).
+ * Best-effort: profiles.studies.reading_progress (progresso entre
+ * dispositivos; falha silenciosa se a política RLS bloquear a escrita).
+ */
+async function zerarProgresso(userId: string): Promise<void> {
+  const zerado = {
+    current_session_index: 1,
+    completed_pages: 0,
+    last_access_date: null,
+    updated_at: new Date().toISOString(),
+  };
+  try {
+    localStorage.setItem(`cronograma_progress_${userId}`, JSON.stringify(zerado));
+  } catch {
+    /* localStorage indisponível */
+  }
+  try {
+    const { data: prof } = await supabase
+      .from("profiles")
+      .select("studies")
+      .eq("id", userId)
+      .maybeSingle();
+    const estudos: any =
+      prof?.studies && typeof prof.studies === "object" && !Array.isArray(prof.studies)
+        ? prof.studies
+        : {};
+    if (estudos.reading_progress) {
+      await supabase
+        .from("profiles")
+        .update({ studies: { ...estudos, reading_progress: zerado } })
+        .eq("id", userId);
+    }
+  } catch {
+    /* profiles pode bloquear escrita (RLS) — silencioso */
+  }
+}
+
 export const CronogramaModal = ({ open, onOpenChange }: CronogramaModalProps) => {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = React.useState(true);
@@ -332,6 +371,8 @@ function CronogramaForm({
       : dataProva;
 
     try {
+      // Somente colunas que existem de fato em estudo_config — a tabela real
+      // não possui colunas de progresso (elas vivem em localStorage/profiles).
       const { error } = await supabase
         .from("estudo_config")
         .upsert(
@@ -343,11 +384,6 @@ function CronogramaForm({
             daily_time: tempoDiario,
             reading_habit: habitoLeitura,
             is_intensive_mode: intensiveAtivo,
-            // Novo cronograma (criação ou edição) começa do zero:
-            // limpa o progresso de leitura anterior salvo.
-            current_chapter: 1,
-            current_page: 0,
-            completed_pages: 0,
             updated_at: new Date().toISOString(),
           },
           { onConflict: "user_id" }
@@ -355,22 +391,10 @@ function CronogramaForm({
 
       if (error) throw error;
 
-      // Limpa também os backups de progresso (banco e localStorage)
-      try {
-        await supabase.from("user_progress").delete().eq("user_id", userId);
-      } catch {
-        /* tabela pode não existir */
-      }
-      try {
-        await supabase.from("cronograma_dias").delete().eq("user_id", userId);
-      } catch {
-        /* tabela pode não existir */
-      }
-      try {
-        localStorage.removeItem(`cronograma_progress_${userId}`);
-      } catch {
-        /* localStorage indisponível */
-      }
+      // Novo cronograma (criação ou edição) começa do zero:
+      // limpa o progresso de leitura anterior.
+      await zerarProgresso(userId);
+
       window.dispatchEvent(new Event("nexia:cronograma:change"));
 
       toast.success(isEditing ? "Cronograma atualizado!" : "Cronograma criado!", {
@@ -575,19 +599,10 @@ function CronogramaOverview({
     if (!ok) return;
     setIsDeleting(true);
     try {
-      await supabase.from("cronograma_dias").delete().eq("user_id", userId);
-      try {
-        await supabase.from("user_progress").delete().eq("user_id", userId);
-      } catch {
-        /* tabela pode não existir */
-      }
       const { error } = await supabase.from("estudo_config").delete().eq("user_id", userId);
       if (error) throw error;
-      try {
-        localStorage.removeItem(`cronograma_progress_${userId}`);
-      } catch {
-        /* localStorage indisponível */
-      }
+      // Zera também o progresso de leitura associado ao cronograma
+      await zerarProgresso(userId);
       window.dispatchEvent(new Event("nexia:cronograma:change"));
       toast.success("Cronograma excluído", {
         description: "O progresso de leitura também foi apagado.",
