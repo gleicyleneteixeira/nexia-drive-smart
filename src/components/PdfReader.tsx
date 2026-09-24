@@ -55,6 +55,9 @@ export function PdfReader({ url, title, className = "" }: PdfReaderProps) {
   const autoReadRef = useRef(false);
   const renderSeqRef = useRef(0);
   const paginasVaziasRef = useRef(0);
+  // Zoom que preenche a largura (calculado ao abrir o PDF; o % reseta p/ ele).
+  const fitScaleRef = useRef(1);
+  const didFitRef = useRef(false);
   const startReadingRef = useRef<() => void>(() => {});
 
   const highlightCurrentElement = (activeSpan: HTMLElement | null) => {
@@ -373,6 +376,8 @@ const stopReading = () => {
   const loadFromUrl = async (fileUrl: string) => {
     cancelSpeech();
     autoReadRef.current = false;
+    didFitRef.current = false;
+    fitScaleRef.current = 1;
     setLoading(true);
     setError(null);
     setPdfDoc(null);
@@ -398,6 +403,27 @@ const stopReading = () => {
       loadFromUrl(url);
     }
   }, [url]);
+
+  // Zoom inicial: ajusta à largura disponível para o PDF preencher o
+  // espaço (ler e ouvir ao mesmo tempo, sem faixa vazia nas laterais).
+  useEffect(() => {
+    if (!pdfDoc || didFitRef.current) return;
+    didFitRef.current = true;
+    (async () => {
+      try {
+        const pageObj = await pdfDoc.getPage(1);
+        const v = pageObj.getViewport({ scale: 1 });
+        const cw = containerRef.current?.clientWidth ?? 0;
+        if (v.width > 0 && cw > 32) {
+          const fit = Math.min(2, Math.max(0.5, (cw - 32) / v.width));
+          fitScaleRef.current = fit;
+          setScale(fit);
+        }
+      } catch {
+        /* mantém 100% */
+      }
+    })();
+  }, [pdfDoc]);
 
   useEffect(() => {
     return () => {
@@ -432,16 +458,18 @@ const stopReading = () => {
   };
 
   const zoomIn = () => {
-    const idx = ZOOM_LEVELS.indexOf(scale);
-    if (idx < ZOOM_LEVELS.length - 1) setScale(ZOOM_LEVELS[idx + 1]);
+    // Robusto a escalas intermediárias (ajuste à largura pode não cair num nível).
+    const next = ZOOM_LEVELS.find((l) => l > scale + 1e-6);
+    if (next !== undefined) setScale(next);
   };
 
   const zoomOut = () => {
-    const idx = ZOOM_LEVELS.indexOf(scale);
-    if (idx > 0) setScale(ZOOM_LEVELS[idx - 1]);
+    const prev = [...ZOOM_LEVELS].reverse().find((l) => l < scale - 1e-6);
+    if (prev !== undefined) setScale(prev);
   };
 
-  const resetZoom = () => setScale(1);
+  // Reset volta ao ajuste à largura (zoom inicial).
+  const resetZoom = () => setScale(fitScaleRef.current);
 
   return (
     <div className={`flex flex-col h-full ${className}`}>
