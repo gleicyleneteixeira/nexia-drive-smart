@@ -107,12 +107,10 @@ export function DailyCheckinBanner() {
         if (!cancelled) setHasCronograma(true);
         const plan: PlanoEstudo = buildPlanoFromConfig(config as EstudoConfigRow);
 
-        // Progresso: localStorage é a fonte primária neste navegador;
-        // fallback para profiles.studies (progresso entre dispositivos).
-        // Obs.: estudo_config não possui colunas de progresso no banco real.
+        // Progresso: localStorage é a fonte única (estudo_config não tem
+        // colunas de progresso e a tabela user_progress não existe no banco).
         let completed = 0;
         let lastAccess: string | null = null;
-        let temLocal = false;
         try {
           const raw = localStorage.getItem(`cronograma_progress_${user.id}`);
           if (raw) {
@@ -120,27 +118,10 @@ export function DailyCheckinBanner() {
             if (typeof lp.completed_pages === "number") {
               completed = lp.completed_pages;
               lastAccess = lp.last_access_date ?? null;
-              temLocal = true;
             }
           }
         } catch {
           /* localStorage indisponível */
-        }
-        if (!temLocal) {
-          try {
-            const { data: prof } = await supabase
-              .from("profiles")
-              .select("studies")
-              .eq("id", user.id)
-              .maybeSingle();
-            const rp = (prof as any)?.studies?.reading_progress;
-            if (rp && typeof rp.completed_pages === "number") {
-              completed = rp.completed_pages;
-              lastAccess = rp.last_access_date ?? null;
-            }
-          } catch {
-            /* profiles indisponível — silencioso */
-          }
         }
 
         if (cancelled) return;
@@ -178,7 +159,8 @@ export function DailyCheckinBanner() {
 
   const persist = async (next: UserProgress) => {
     if (!user?.id) return;
-    // 1. Garantido: localStorage (fonte primária neste navegador)
+    // localStorage: fonte única do progresso de leitura (o banco não possui
+    // tabela/coluna de progresso — estudo_config só guarda a CONFIGURAÇÃO).
     try {
       localStorage.setItem(
         `cronograma_progress_${user.id}`,
@@ -193,36 +175,6 @@ export function DailyCheckinBanner() {
       toast.warning("Não foi possível guardar o progresso neste navegador", {
         description: "Seu navegador pode estar em modo privado.",
       });
-    }
-    // 2. Best-effort: profiles.studies (progresso entre dispositivos).
-    // Escrita silenciosa: se RLS ou linha ausente bloquearem, o localStorage
-    // acima já garantiu o progresso.
-    try {
-      const { data: prof } = await supabase
-        .from("profiles")
-        .select("studies")
-        .eq("id", user.id)
-        .maybeSingle();
-      const estudos: any =
-        prof?.studies && typeof prof.studies === "object" && !Array.isArray(prof.studies)
-          ? prof.studies
-          : {};
-      await supabase
-        .from("profiles")
-        .update({
-          studies: {
-            ...estudos,
-            reading_progress: {
-              current_session_index: next.current_session_index,
-              completed_pages: next.completed_pages,
-              last_access_date: next.last_access_date,
-              updated_at: new Date().toISOString(),
-            },
-          },
-        })
-        .eq("id", user.id);
-    } catch {
-      /* silencioso: localStorage já garantiu o progresso */
     }
   };
 

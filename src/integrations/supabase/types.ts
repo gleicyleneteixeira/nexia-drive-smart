@@ -128,7 +128,7 @@ profiles: {
            is_migrated: boolean | null
            needs_new_password: boolean | null
            phone: string | null
-           studies: Json | null
+           studies: boolean | null
            status: string
             selos: string[] | null
             updated_at: string
@@ -152,7 +152,7 @@ profiles: {
             is_migrated?: boolean | null
             needs_new_password?: boolean | null
             phone?: string | null
-            studies?: Json | null
+            studies?: boolean | null
             status?: string
             selos?: string[]
             updated_at?: string
@@ -176,7 +176,7 @@ profiles: {
             is_migrated?: boolean | null
             needs_new_password?: boolean | null
             phone?: string | null
-            studies?: Json | null
+            studies?: boolean | null
             status?: string
             selos?: string[]
             updated_at?: string
