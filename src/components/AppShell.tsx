@@ -124,6 +124,14 @@ export function AppShell() {
     return () => window.removeEventListener("nexia:active_module:change", handler);
   }, [activeModule]);
 
+  // Abre o modal do cronograma a partir de CTAs em outros componentes
+  // (ex.: alerta de risco de prazo no banner diário).
+  useEffect(() => {
+    const handler = () => setCronogramaOpen(true);
+    window.addEventListener("nexia:abrir-cronograma", handler);
+    return () => window.removeEventListener("nexia:abrir-cronograma", handler);
+  }, []);
+
   useEffect(() => {
     setMenuOpen(false);
   }, [pathname]);

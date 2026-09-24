@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, BookOpen, FileText } from "lucide-react";
+import { CheckCircle2, BookOpen, FileText, AlertTriangle, CalendarClock } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -14,12 +14,15 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { buildPlanoFromConfig, type PlanoEstudo } from "@/components/CronogramaModal";
 import {
-  buildPlanoFromConfig,
-  buildScheduleItems,
-  type PlanoEstudo,
+  gerarCronograma,
+  classificarLeitura,
+  primeiraPendente,
+  END_PAGE,
+  type CronogramaGerado,
   type ScheduleItem,
-} from "@/components/CronogramaModal";
+} from "@/lib/schedule";
 import { getReadingUrl } from "@/lib/heyzine";
 import type { Category } from "@/data/questions";
 import type { Database } from "@/integrations/supabase/types";
@@ -43,22 +46,26 @@ function mapChapterToCategory(capituloId: number): Category | null {
   return map[capituloId] ?? null;
 }
 
+function isoHoje(): string {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+function formatarDataBR(iso: string): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  if (!y || !m || !d) return iso;
+  return new Date(y, m - 1, d).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
+}
+
 export function DailyCheckinBanner() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(true);
-  const [items, setItems] = React.useState<ScheduleItem[]>([]);
+  const [crono, setCrono] = React.useState<CronogramaGerado | null>(null);
   const [plano, setPlano] = React.useState<PlanoEstudo | null>(null);
   const [pending, setPending] = React.useState<ScheduleItem | null>(null);
   const [hasCronograma, setHasCronograma] = React.useState(false);
   const [reloadKey, setReloadKey] = React.useState(0);
-
-  // Recarrega quando o cronograma é criado/editado/excluído em outro componente
-  React.useEffect(() => {
-    const handler = () => setReloadKey((k) => k + 1);
-    window.addEventListener("nexia:cronograma:change", handler);
-    return () => window.removeEventListener("nexia:cronograma:change", handler);
-  }, []);
   const [partialOpen, setPartialOpen] = React.useState(false);
   const [partialPage, setPartialPage] = React.useState("");
   const [partialChoice, setPartialChoice] = React.useState<"full" | "partial">("full");
@@ -68,6 +75,15 @@ export function DailyCheckinBanner() {
     completed_pages: 0,
   });
   const [saving, setSaving] = React.useState(false);
+  // Guarda o cronograma anterior durante um informe, p/ classificar o resultado.
+  const cronoRef = React.useRef<CronogramaGerado | null>(null);
+
+  // Recarrega quando o cronograma é criado/editado/excluído em outro componente
+  React.useEffect(() => {
+    const handler = () => setReloadKey((k) => k + 1);
+    window.addEventListener("nexia:cronograma:change", handler);
+    return () => window.removeEventListener("nexia:cronograma:change", handler);
+  }, []);
 
   React.useEffect(() => {
     if (!user?.id) return;
@@ -77,6 +93,7 @@ export function DailyCheckinBanner() {
       // Zera o estado anterior (importante após editar/excluir o cronograma)
       setHasCronograma(false);
       setPending(null);
+      setCrono(null);
       try {
         const { data: config } = await supabase
           .from("estudo_config")
@@ -89,15 +106,12 @@ export function DailyCheckinBanner() {
         }
         if (!cancelled) setHasCronograma(true);
         const plan: PlanoEstudo = buildPlanoFromConfig(config as EstudoConfigRow);
-        const sched = buildScheduleItems(plan);
-        if (cancelled) return;
-        setItems(sched);
-        setPlano(plan);
 
         // Progresso: prioriza estudo_config (tabela central já usada com sucesso).
         // Cai p/ user_progress caso já exista progresso salvo lá.
         let chapter = (config as EstudoConfigRow & { current_chapter?: number; completed_pages?: number }).current_chapter ?? 1;
         let completed = (config as EstudoConfigRow & { completed_pages?: number }).completed_pages ?? 0;
+        let lastAccess: string | null = null;
         try {
           const { data: up } = await supabase
             .from("user_progress")
@@ -107,6 +121,7 @@ export function DailyCheckinBanner() {
           if (up) {
             if (!chapter || chapter < 1) chapter = up.current_session_index ?? 1;
             if (!completed) completed = up.completed_pages ?? 0;
+            lastAccess = up.last_access_date ?? null;
           }
         } catch {
           /* user_progress pode não existir */
@@ -119,6 +134,7 @@ export function DailyCheckinBanner() {
             const lp = JSON.parse(raw);
             if (lp.current_session_index && lp.current_session_index > chapter) chapter = lp.current_session_index;
             if (lp.completed_pages && lp.completed_pages > completed) completed = lp.completed_pages;
+            if (lp.last_access_date && !lastAccess) lastAccess = lp.last_access_date;
           }
         } catch {
           /* localStorage indisponível */
@@ -126,14 +142,27 @@ export function DailyCheckinBanner() {
         if (!chapter || chapter < 1) chapter = 1;
 
         if (cancelled) return;
+
+        // Projeção adaptativa do cronograma a partir do progresso atual.
+        const leuHoje = lastAccess === isoHoje();
+        const c = gerarCronograma({
+          progresso: completed,
+          selectedDays: plan.selectedDays,
+          blockPages: plan.calculatedPages,
+          examDate: plan.semData ? null : plan.dataProva,
+          leuHoje,
+        });
+        const pend = primeiraPendente(c.blocos);
         const p: UserProgress = {
-          current_session_index: chapter,
-          last_access_date: null,
+          current_session_index: pend ? pend.dia : c.blocos.length,
+          last_access_date: lastAccess,
           completed_pages: completed,
         };
+        setPlano(plan);
+        setCrono(c);
+        cronoRef.current = c;
         setProgress(p);
-        const sess = sched[p.current_session_index - 1] ?? null;
-        setPending(sess);
+        setPending(pend);
       } catch {
         /* silencioso: não bloqueia o app */
       } finally {
@@ -145,9 +174,10 @@ export function DailyCheckinBanner() {
     };
   }, [user?.id, reloadKey]);
 
-  const persist = async (next: UserProgress) => {
-    if (!user?.id) return;
-    // 1. Persistência principal em estudo_config (tabela central do cronograma)
+  const persist = async (next: UserProgress): Promise<boolean> => {
+    if (!user?.id) return false;
+    let ok = false;
+    // 1. Persistência principal em estudo_config (fonte da verdade do cronograma)
     try {
       const { error } = await supabase
         .from("estudo_config")
@@ -159,8 +189,10 @@ export function DailyCheckinBanner() {
         })
         .eq("user_id", user.id);
       if (error) throw error;
+      ok = true;
     } catch {
       toast.error("Não foi possível salvar seu progresso");
+      return false;
     }
     // 2. Backup em user_progress (caso a tabela exista)
     try {
@@ -184,74 +216,128 @@ export function DailyCheckinBanner() {
         JSON.stringify({
           current_session_index: next.current_session_index,
           completed_pages: next.completed_pages,
+          last_access_date: next.last_access_date,
           updated_at: new Date().toISOString(),
         })
       );
     } catch {
       /* localStorage indisponível */
     }
+    return ok;
+  };
+
+  /**
+   * FLUXO ÚNICO de informe de leitura (tanto "Li tudo" quanto "Li parcialmente").
+   *
+   * `informedPage` pode ir até END_PAGE (adiantamento permitido) — a única
+   * restrição é ser maior que o progresso atual.
+   */
+  const reportarLeitura = async (informedPage: number) => {
+    if (!plano || saving) return;
+    const minPage = progress.completed_pages + 1;
+    if (!Number.isInteger(informedPage) || informedPage < minPage || informedPage > END_PAGE) {
+      toast.error(`Informe uma página entre ${minPage} e ${END_PAGE}.`);
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const old = cronoRef.current;
+      const fimMetaAnterior = pending ? pending.paginaFim : informedPage;
+
+      // 1. Gera o novo cronograma projetado (mono: só avança)
+      const novo = gerarCronograma({
+        progresso: informedPage,
+        selectedDays: plano.selectedDays,
+        blockPages: plano.calculatedPages,
+        examDate: plano.semData ? null : plano.dataProva,
+        leuHoje: true,
+      });
+
+      // 2. Classifica ANTES de substituir (usa old vs novo)
+      const { tipo, diasGanhos } = classificarLeitura({
+        informado: informedPage,
+        fimMetaAnterior,
+        dataFinalAntes: old?.dataFinal ?? null,
+        dataFinalDepois: novo.dataFinal,
+      });
+
+      // 3. Persiste (fonte da verdade)
+      const today = isoHoje();
+      const next: UserProgress = {
+        current_session_index: primeiraPendente(novo.blocos)?.dia ?? novo.blocos.length,
+        last_access_date: today,
+        completed_pages: informedPage,
+      };
+      const ok = await persist(next);
+      if (!ok) return; // toast de erro já emitido em persist
+
+      // 4. Atualiza estado local
+      const pend = primeiraPendente(novo.blocos);
+      setProgress(next);
+      setCrono(novo);
+      cronoRef.current = novo;
+      setPending(pend);
+      setPartialOpen(false);
+
+      // 5. Feedback diferenciado
+      if (tipo === "CRONOGRAMA_CONCLUIDO") {
+        toast.success("Cronograma concluído! Parabéns! 🎉");
+      } else if (tipo === "ADIANTADO") {
+        toast.success(`Você avançou ${diasGanhos} ${diasGanhos === 1 ? "dia" : "dias"}! 🎉`, {
+          description: "Seu cronograma foi encurtado — continue assim!",
+          duration: 6000,
+        });
+      } else if (tipo === "REAGENDADO") {
+        const proxData = pend?.data ? formatarDataBR(pend.data) : "";
+        toast.success(`Progresso salvo: leu até a página ${informedPage}. 📖`, {
+          description: proxData
+            ? `Suas próximas metas foram reagendadas — nova meta em ${proxData}.`
+            : "Suas próximas metas foram reagendadas.",
+        });
+      } else {
+        toast.success("Meta concluída! Bora para a próxima.");
+      }
+
+      if (novo.ajustado && !old?.ajustado) {
+        toast.info(`Ritmo ajustado para ${novo.blocoUsado} páginas/dia`, {
+          description: "Ajuste automático para chegar antes da prova.",
+          duration: 5000,
+        });
+      }
+      if (novo.risco && !old?.risco) {
+        toast.warning("⚠️ Prazo apertado para a prova", {
+          description: "Ajuste seus dias ou ritmo no botão “Ajustar cronograma”.",
+          duration: 8000,
+        });
+      }
+    } catch {
+      toast.error("Não foi possível salvar seu progresso");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleCompleteAndNext = () => {
     if (!pending) return;
-    setSaving(true);
-    const today = new Date().toISOString().split("T")[0];
-    const next: UserProgress = {
-      current_session_index: progress.current_session_index + 1,
-      completed_pages: pending.paginaFim,
-      last_access_date: today,
-    };
-    setProgress(next);
-    const nextSess = items[next.current_session_index - 1] ?? null;
-    setPending(nextSess);
-    if (!nextSess) {
-      toast.success("Cronograma concluído! Parabéns! 🎉");
-    } else {
-      toast.success("Meta concluída! Bora para a próxima.");
-    }
-    void persist(next);
-    setSaving(false);
+    void reportarLeitura(pending.paginaFim);
   };
 
   const handleSavePartial = () => {
-    if (!pending) return;
     const page = Number(partialPage);
-    if (!Number.isInteger(page) || page < pending.paginaInicio || page > pending.paginaFim) {
-      toast.error(`Informe uma página entre ${pending.paginaInicio} e ${pending.paginaFim}`);
+    if (!Number.isInteger(page)) {
+      toast.error("Informe uma página válida.");
       return;
     }
-    if (page >= pending.paginaFim) {
-      // Informou que leu até o fim da meta → comporta-se como "Li tudo"
-      setPartialOpen(false);
-      handleCompleteAndNext();
-      return;
-    }
-    setSaving(true);
-    const today = new Date().toISOString().split("T")[0];
-    const next: UserProgress = {
-      current_session_index: progress.current_session_index,
-      completed_pages: page,
-      last_access_date: today,
-    };
-    setProgress(next);
-    void persist(next);
-    setSaving(false);
-    setPartialOpen(false);
-    toast.success(`Progresso salvo: leu até a página ${page}. 📖`, {
-      description: "A meta continua pendente a partir da próxima página.",
-    });
+    void reportarLeitura(page);
   };
 
   const handleLerAgora = () => {
     if (!pending) return;
-    const today = new Date().toISOString().split("T")[0];
-    const next: UserProgress = { ...progress, last_access_date: today };
-    setProgress(next);
     // Abre na primeira página ainda não lida da meta atual
     const startPage = Math.max(pending.paginaInicio, progress.completed_pages + 1);
     window.open(getReadingUrl(startPage), "_blank");
     toast.success("Abra o livro e continue de onde parou! 📖");
-    void persist(next);
   };
 
   const handleGoSimulado = () => {
@@ -268,6 +354,10 @@ export function DailyCheckinBanner() {
     } else {
       navigate({ to: "/simulado", search: { modo: "completo", categoria: undefined } });
     }
+  };
+
+  const handleAjustarCronograma = () => {
+    window.dispatchEvent(new CustomEvent("nexia:abrir-cronograma"));
   };
 
   if (!hasCronograma || loading) return null;
@@ -305,6 +395,25 @@ export function DailyCheckinBanner() {
 
   return (
     <div className="relative bg-card border-b border-border text-foreground">
+      {crono?.risco && (
+        <div className="bg-red-500/15 border-b border-red-500/30">
+          <div className="mx-auto max-w-6xl px-4 py-2 flex flex-col sm:flex-row sm:items-center gap-2">
+            <div className="flex-1 flex items-center gap-2 text-red-400 text-xs font-medium">
+              <AlertTriangle className="h-4 w-4 shrink-0" />
+              Prazo apertado: não há como terminar a leitura antes da prova com o ritmo atual.
+            </div>
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={handleAjustarCronograma}
+              className="border-red-500/40 text-red-400 hover:bg-red-500/10 shrink-0"
+            >
+              <CalendarClock className="h-3.5 w-3.5 mr-1" /> Ajustar cronograma
+            </Button>
+          </div>
+        </div>
+      )}
       <div className="mx-auto max-w-6xl px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3">
         <div className="flex-1 min-w-0">
           <p className="text-sm font-semibold text-primary">👋 Que bom te ver de volta!</p>
@@ -313,6 +422,9 @@ export function DailyCheckinBanner() {
             <strong className="text-foreground">
               {pending.capitulo} — Páginas {startPage} a {pending.paginaFim} (Capítulo {pending.capituloId || "—"})
             </strong>
+            {pending.data && (
+              <span className="text-muted-foreground"> · {formatarDataBR(pending.data)}</span>
+            )}
             {partialRead && (
               <span className="text-amber-400"> · você já leu até a página {progress.completed_pages}</span>
             )}
@@ -327,14 +439,6 @@ export function DailyCheckinBanner() {
             className="border-border text-foreground hover:bg-accent"
           >
             <BookOpen className="h-4 w-4 mr-1.5" /> Ler Agora
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleGoSimulado}
-            className="border-border text-foreground hover:bg-accent"
-          >
-            <FileText className="h-4 w-4 mr-1.5" /> Ir p/ Simulado
           </Button>
           <Button
             type="button"
@@ -366,8 +470,8 @@ export function DailyCheckinBanner() {
             <DialogHeader>
               <DialogTitle>Como foi sua leitura?</DialogTitle>
               <DialogDescription>
-                Meta de hoje: páginas {pending.paginaInicio} a {pending.paginaFim} (
-                {pending.capitulo}). Selecione o que você conseguiu ler.
+                Meta: páginas {pending.paginaInicio} a {pending.paginaFim} ({pending.capitulo}).
+                Selecione o que você conseguiu ler.
               </DialogDescription>
             </DialogHeader>
 
@@ -407,14 +511,14 @@ export function DailyCheckinBanner() {
                     type="number"
                     value={partialPage}
                     onChange={(e) => setPartialPage(e.target.value)}
-                    min={pending.paginaInicio}
-                    max={pending.paginaFim}
-                    placeholder={`${pending.paginaInicio}–${pending.paginaFim}`}
+                    min={progress.completed_pages + 1}
+                    max={END_PAGE}
+                    placeholder={`${progress.completed_pages + 1}–${END_PAGE}`}
                     autoFocus
                     className="w-24 rounded-md border border-border bg-background px-2 py-1.5 text-sm text-foreground"
                   />
                   <span className="text-xs text-muted-foreground">
-                    de {pending.paginaInicio} a {pending.paginaFim}
+                    (até a {END_PAGE} — pode ler adiante!)
                   </span>
                 </div>
                 <div className="flex justify-end gap-2">

@@ -16,6 +16,27 @@ import { getReadingUrl } from "@/lib/heyzine";
 
 type EstudoConfigRow = Database["public"]["Tables"]["estudo_config"]["Row"];
 
+// Constantes e tipos puros migrados para @/lib/schedule (fonte única de verdade).
+// Re-exportados aqui para manter compatibilidade com imports existentes.
+export {
+  BOOK_CHAPTERS,
+  TOTAL_THEORETICAL_PAGES,
+  START_PAGE,
+  END_PAGE,
+  DAY_NAMES,
+  capituloDaPagina,
+  type ScheduleItem,
+} from "@/lib/schedule";
+import {
+  BOOK_CHAPTERS,
+  START_PAGE,
+  END_PAGE,
+  DAY_NAMES,
+  TOTAL_THEORETICAL_PAGES,
+  capituloDaPagina,
+  type ScheduleItem,
+} from "@/lib/schedule";
+
 export interface PlanoEstudo {
   habitoLeitura: string;
   tempoDiario: number;
@@ -35,20 +56,6 @@ interface CronogramaModalProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export const BOOK_CHAPTERS = [
-  { id: 1, title: "Capítulo 1 - Legislação de Trânsito", startPage: 17, endPage: 44, totalPages: 28 },
-  { id: 2, title: "Capítulo 2 - Direção Defensiva", startPage: 45, endPage: 71, totalPages: 27 },
-  { id: 3, title: "Capítulo 3 - Noções de Primeiros Socorros", startPage: 72, endPage: 78, totalPages: 7 },
-  { id: 4, title: "Capítulo 4 - Meio Ambiente e Convívio Social", startPage: 79, endPage: 95, totalPages: 17 },
-  { id: 5, title: "Capítulo 5 - Funcionamento do Veículo (Mecânica)", startPage: 96, endPage: 104, totalPages: 9 },
-];
-
-export const TOTAL_THEORETICAL_PAGES = 88;
-const START_PAGE = 17;
-const END_PAGE = 104;
-
-const DAY_NAMES = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
-
 const META_POR_CAPITULO: Record<number, string> = {
   1: "Fixar regras de sinalização e legislação",
   2: "Praticar a postura de direção defensiva",
@@ -56,20 +63,6 @@ const META_POR_CAPITULO: Record<number, string> = {
   4: "Refletir sobre o convívio social no trânsito",
   5: "Entender os componentes do veículo",
 };
-
-export interface ScheduleItem {
-  dia: number;
-  data: string;
-  capitulo: string;
-  capituloId: number;
-  paginaInicio: number;
-  paginaFim: number;
-}
-
-function capituloDaPagina(pag: number): { titulo: string; id: number } {
-  const c = BOOK_CHAPTERS.find((ch) => pag >= ch.startPage && pag <= ch.endPage);
-  return c ? { titulo: c.title, id: c.id } : { titulo: "Livro do Detran", id: 0 };
-}
 
 export function buildScheduleItems(plan: PlanoEstudo): ScheduleItem[] {
   const items: ScheduleItem[] = [];
@@ -92,6 +85,7 @@ export function buildScheduleItems(plan: PlanoEstudo): ScheduleItem[] {
         capituloId: cap.id,
         paginaInicio: paginaAtual,
         paginaFim,
+        concluido: false,
       });
       paginaAtual = paginaFim + 1;
       diaNum++;
