@@ -973,6 +973,65 @@ export const requestPasswordResetSecure = createServerFn({ method: "POST" })
     return { success: true };
   });
 
+/** Só dígitos (CPF/telefone podem estar salvos com ou sem máscara). */
+function onlyDigits(v: string | null | undefined): string {
+  return (v ?? "").replace(/\D/g, "");
+}
+
+/**
+ * Confere a identidade para recuperação de senha: e-mail + CPF + telefone
+ * precisam pertencer à MESMA conta. Erro sempre genérico (não revela qual
+ * campo errou nem se o e-mail existe).
+ */
+async function findProfileForRecovery(email: string, cpf: string, phone: string) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const emailClean = email.trim().toLowerCase();
+  const cpfD = onlyDigits(cpf);
+  const phoneD = onlyDigits(phone);
+  if (!emailClean || cpfD.length !== 11 || phoneD.length < 10) {
+    throw new Error("Os dados não conferem. Verifique e tente novamente.");
+  }
+  const { data: profile } = await supabaseAdmin
+    .from("profiles")
+    .select("id, email, cpf, phone")
+    .eq("email", emailClean)
+    .maybeSingle();
+  if (!profile || onlyDigits(profile.cpf) !== cpfD || onlyDigits(profile.phone) !== phoneD) {
+    throw new Error("Os dados não conferem. Verifique e tente novamente.");
+  }
+  return profile;
+}
+
+export const verifyRecoveryIdentitySecure = createServerFn({ method: "POST" })
+  .inputValidator((d: { email: string; cpf: string; phone: string }) => d)
+  .handler(async ({ data }) => {
+    await findProfileForRecovery(data.email, data.cpf, data.phone);
+    return { ok: true };
+  });
+
+export const resetPasswordWithIdentitySecure = createServerFn({ method: "POST" })
+  .inputValidator((d: { email: string; cpf: string; phone: string; newPassword: string }) => {
+    if (!d.newPassword || d.newPassword.length < 6 || d.newPassword.length > 72) {
+      throw new Error("A senha deve ter pelo menos 6 caracteres.");
+    }
+    return d;
+  })
+  .handler(async ({ data }) => {
+    // Revalida tudo aqui (a troca nunca confia só na etapa anterior).
+    const profile = await findProfileForRecovery(data.email, data.cpf, data.phone);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error: authErr } = await supabaseAdmin.auth.admin.updateUserById(profile.id, {
+      password: data.newPassword,
+    });
+    if (authErr) throw new Error("Erro ao atualizar credenciais: " + authErr.message);
+    // Desbloqueia e limpa pendências de primeiro acesso
+    await supabaseAdmin
+      .from("profiles")
+      .update({ access_status: "active", needs_new_password: false, is_first_access: false })
+      .eq("id", profile.id);
+    return { ok: true };
+  });
+
 function pagesPerReadingBlock(v: string | undefined): number {
   switch (v) {
     case "raramente":
