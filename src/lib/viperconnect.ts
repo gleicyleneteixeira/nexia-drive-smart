@@ -219,8 +219,10 @@ export async function getWaTemplates(): Promise<WaTemplates> {
   const map = Object.fromEntries((data ?? []).map((r) => [r.key, r.value ?? ""]));
   const build = (k: WaTemplateKey): WaTemplate => {
     const delay = parseInt(map[`wa_${k}_delay_sec`] ?? "", 10);
+    const raw = map[`wa_${k}_enabled`];
     return {
-      enabled: map[`wa_${k}_enabled`] === "true",
+      // Reset nasce LIGADO por padrão (só desliga se gravado "false"); demais nascem desligadas
+      enabled: k === "reset" ? raw !== "false" : raw === "true",
       message: map[`wa_${k}_message`] || WA_DEFAULTS[k].message,
       media_url: map[`wa_${k}_media_url`] ?? "",
       delay_sec: Number.isFinite(delay) && delay >= 0 ? delay : 3,

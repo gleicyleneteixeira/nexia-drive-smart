@@ -3097,7 +3097,7 @@ export function SettingsPanel() {
   const [vWelcomeMedia, setVWelcomeMedia] = useState("");
   // Templates de mensagens automáticas WhatsApp (liga/desliga + texto + mídia)
   const [waTpl, setWaTpl] = useState<Record<WaTemplateKey, { enabled: boolean; message: string; media_url: string; delay_sec: number }>>({
-    reset: { enabled: false, message: "", media_url: "", delay_sec: 3 },
+    reset: { enabled: true, message: "", media_url: "", delay_sec: 3 },
     reminder: { enabled: false, message: "", media_url: "", delay_sec: 3 },
     billing: { enabled: false, message: "", media_url: "", delay_sec: 3 },
     abandoned: { enabled: false, message: "", media_url: "", delay_sec: 3 },
@@ -3496,8 +3496,9 @@ export function SettingsPanel() {
         const next = { ...p };
         for (const k of waKeys) {
           const delay = parseInt(vmap[`wa_${k}_delay_sec`] ?? "", 10);
+          const raw = vmap[`wa_${k}_enabled`];
           next[k] = {
-            enabled: vmap[`wa_${k}_enabled`] === "true",
+            enabled: k === "reset" ? raw !== "false" : raw === "true",
             message: vmap[`wa_${k}_message`] ?? "",
             media_url: vmap[`wa_${k}_media_url`] ?? "",
             delay_sec: Number.isFinite(delay) && delay >= 0 ? delay : 3,
@@ -4016,7 +4017,7 @@ export function SettingsPanel() {
       <div className="space-y-4 border-t border-border/40 pt-6">
         <h3 className="font-display font-bold text-sm">Mensagens automáticas WhatsApp</h3>
         <p className="text-xs text-muted-foreground">
-          Lembrete, cobrança e abandono — cada uma já vem com texto padrão (em cinza); clique em <strong>Editar mensagem</strong> para personalizar em caixas (cada caixa = uma mensagem) com <code className="text-primary">{"{nome}"}</code> e <code className="text-primary">{"{saudacao}"}</code>; emojis liberados. Todas começam <strong>desligadas</strong>. O reset de senha fica na seção acima (uso diário).
+          Lembrete, cobrança e abandono — cada uma já vem com texto padrão (em cinza); clique em <strong>Editar mensagem</strong> para personalizar em caixas (cada caixa = uma mensagem) com <code className="text-primary">{"{nome}"}</code> e <code className="text-primary">{"{saudacao}"}</code>; emojis liberados. O reset nasce <strong>ligado</strong> (desligue se precisar); as demais começam <strong>desligadas</strong>. O reset de senha fica na seção acima (uso diário).
         </p>
 
         {(["reminder", "billing", "abandoned"] as WaTemplateKey[]).map((k) => renderTemplateCard(k))}
