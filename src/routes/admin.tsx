@@ -3296,7 +3296,7 @@ export function SettingsPanel() {
 
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Label className="text-xs font-semibold">ID da Instância / Número</Label>
+            <Label className="text-xs font-semibold">Sessão conectada (número do WhatsApp)</Label>
             <Button
               type="button"
               variant="outline"
@@ -3310,7 +3310,7 @@ export function SettingsPanel() {
           </div>
           <Select value={vInstance} onValueChange={setVInstance}>
             <SelectTrigger className="flex-1">
-              <SelectValue placeholder="Selecione a instância" />
+              <SelectValue placeholder="Selecione a sessão (número conectado)" />
             </SelectTrigger>
             <SelectContent>
               {viperInstances.length === 0 ? (
@@ -3319,7 +3319,7 @@ export function SettingsPanel() {
                 </SelectItem>
               ) : (
                 viperInstances.map((inst) => (
-                  <SelectItem key={inst.id} value={inst.id}>
+                  <SelectItem key={inst.id} value={inst.number || inst.id}>
                     {inst.name}
                     {inst.number ? ` (${inst.number})` : ""}
                   </SelectItem>
@@ -3327,6 +3327,7 @@ export function SettingsPanel() {
               )}
             </SelectContent>
           </Select>
+          <p className="text-xs text-muted-foreground">É por este número que as mensagens saem (contrato oficial: /v15.0/{`{número}`}/messages).</p>
         </div>
 
         <div className="space-y-2">

@@ -352,9 +352,12 @@ function AuthPage() {
                   value={formatCpf(cpf)} onChange={(e) => setCpf(e.target.value)} />
               </div>
               <div>
-                <Label htmlFor="phone">Telefone *</Label>
+                <Label htmlFor="phone">WhatsApp *</Label>
                 <Input id="phone" required inputMode="tel" placeholder="(00) 00000-0000"
                   value={phone} onChange={(e) => setPhone(e.target.value)} />
+                <p className="text-xs text-muted-foreground mt-1">
+                  📲 Cadastre seu WhatsApp com DDD — ele será usado para notificações e para recuperar sua senha.
+                </p>
               </div>
               <div>
                 <Label htmlFor="employment">Situação profissional *</Label>

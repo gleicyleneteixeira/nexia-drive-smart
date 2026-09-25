@@ -54,53 +54,48 @@ export interface DispatchResult {
   error?: string;
 }
 
-// Envia a mensagem de boas-vindas. O texto suporta o placeholder {nome}.
-// ⚠️ O formato exato da chamada (endpoint, header de auth e body) deve ser
-// confirmado com a documentação da ViperConnect / Uno API — ajuste os pontos
-// marcados abaixo conforme o contrato real da sua instância.
-export async function dispatchViperConnectWelcome(
-  phone: string,
-  name: string
-): Promise<DispatchResult> {
+// Envio genérico no contrato OFICIAL ViperConnect (formato WhatsApp Cloud API):
+//   POST {api_url}/v15.0/{SESSAO}/messages
+//   Header: Authorization: <UNOAPI_AUTH_TOKEN> (token puro, sem "Bearer")
+//   Body: { messaging_product, to, type, text/image }
+// Fonte: README + guia de desenvolvimento oficiais do ViperConnect.
+export interface SendWhatsAppArgs {
+  /** WhatsApp do destinatário (qualquer formato — normalizado p/ dígitos c/ DDI). */
+  to: string;
+  /** Texto da mensagem (ou legenda, se houver imagem). */
+  body: string;
+  /** URL pública de imagem (opcional — envia como imagem com legenda). */
+  imageUrl?: string;
+}
+
+export async function sendWhatsAppMessage({ to, body, imageUrl }: SendWhatsAppArgs): Promise<DispatchResult> {
   const s = await getViperConnectSettings();
 
-  if (s.welcome_enabled !== "true") {
-    return { ok: false, error: "Envio de boas-vindas desativado nas configurações." };
-  }
   if (!s.api_url || !s.token) {
-    return { ok: false, error: "ViperConnect não configurado (URL ou token ausente)." };
+    return { ok: false, error: "ViperConnect não configurado (URL ou token ausente). Ajuste em Admin → Configurações → WhatsApp." };
   }
+  // {SESSAO} = número do WhatsApp conectado (só dígitos, com DDI 55).
+  const session = normalizePhone(s.instance_id);
+  if (session.length < 10) {
+    return { ok: false, error: "Sessão do WhatsApp não configurada (número da sessão)." };
+  }
+  const dest = normalizePhone(to);
+  if (dest.length < 10) return { ok: false, error: "Número de destino inválido." };
 
-  const to = normalizePhone(phone);
-  if (!to) return { ok: false, error: "Número de telefone inválido." };
-
-  const message = (s.welcome_message || "Olá {nome}!").replace(/\{nome\}/gi, name || "aluno(a)");
-
-  // ───────────────────────────────────────────────────────────────────────────
-  // CONFIRMAR COM A DOCUMENTAÇÃO DA VI PERCONNECT / UNO API:
-  //  - URL completa do endpoint (abaixo é um palpite comum: /message/sendText)
-  //  - header de autenticação (Bearer, apikey ou instância em query string)
-  //  - campos do body (phone, instance, message, media)
-  // ───────────────────────────────────────────────────────────────────────────
-  const endpoint = `${s.api_url.replace(/\/$/, "")}/message/sendText`;
+  const endpoint = `${s.api_url.replace(/\/$/, "")}/v15.0/${session}/messages`;
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${s.token}`,
+    Authorization: s.token,
   };
-  const body: Record<string, unknown> = {
-    instance: s.instance_id,
-    phone: to,
-    message,
-  };
-  if (s.welcome_media_url) {
-    body.mediaUrl = s.welcome_media_url;
-  }
+  const payload: Record<string, unknown> = imageUrl
+    ? { messaging_product: "whatsapp", to: dest, type: "image", image: { link: imageUrl, caption: body } }
+    : { messaging_product: "whatsapp", to: dest, type: "text", text: { body } };
 
   try {
     const res = await fetch(endpoint, {
       method: "POST",
       headers,
-      body: JSON.stringify(body),
+      body: JSON.stringify(payload),
     });
     const text = await res.text().catch(() => "");
     if (!res.ok) {
@@ -113,4 +108,23 @@ export async function dispatchViperConnectWelcome(
     console.error("Erro ao chamar ViperConnect:", msg);
     return { ok: false, error: msg };
   }
+}
+
+// Envia a mensagem de boas-vindas. O texto suporta o placeholder {nome}.
+export async function dispatchViperConnectWelcome(
+  phone: string,
+  name: string
+): Promise<DispatchResult> {
+  const s = await getViperConnectSettings();
+
+  if (s.welcome_enabled !== "true") {
+    return { ok: false, error: "Envio de boas-vindas desativado nas configurações." };
+  }
+
+  const message = (s.welcome_message || "Olá {nome}!").replace(/\{nome\}/gi, name || "aluno(a)");
+  return sendWhatsAppMessage({
+    to: phone,
+    body: message,
+    imageUrl: s.welcome_media_url || undefined,
+  });
 }

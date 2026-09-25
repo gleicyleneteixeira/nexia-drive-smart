@@ -715,7 +715,7 @@ function CadastroPage() {
                 />
               </div>
               <div>
-                <Label htmlFor="phone">WhatsApp (Telefone) *</Label>
+                <Label htmlFor="phone">WhatsApp *</Label>
                 <Input 
                   id="phone" 
                   required 
@@ -726,6 +726,9 @@ function CadastroPage() {
                   onChange={(e) => setPhone(e.target.value)} 
                   className="bg-background/40 border-border/30"
                 />
+                <p className="text-xs text-muted-foreground mt-1">
+                  📲 Cadastre seu WhatsApp com DDD — ele será usado para notificações e para recuperar sua senha.
+                </p>
               </div>
               <div>
                 <Label htmlFor="employment">Situação profissional *</Label>
