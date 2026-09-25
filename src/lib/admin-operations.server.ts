@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabase } from "@/integrations/supabase/client";
 
 function getAdminAuthHeader(): string | null {
@@ -1524,5 +1525,85 @@ export const getViperConnectSettingsAdmin = createServerFn({ method: "POST" })
   .handler(async () => {
     const { getViperConnectSettings } = await import("@/lib/viperconnect");
     return await getViperConnectSettings();
+  });
+
+export const getWaTemplatesAdmin = createServerFn({ method: "POST" })
+  .handler(async () => {
+    const { getWaTemplates } = await import("@/lib/viperconnect");
+    return await getWaTemplates();
+  });
+
+async function requireAdminUserId(context: { supabase: any; userId: string }): Promise<void> {
+  const { data: isAdmin } = await context.supabase.rpc("has_role", {
+    _user_id: context.userId,
+    _role: "admin",
+  });
+  if (isAdmin === true) return;
+  // Super admin por e-mail (mesma regra do checkIsAdmin do painel)
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { SUPER_ADMIN_EMAIL } = await import("@/lib/library");
+  const { data: u } = await supabaseAdmin.auth.admin.getUserById(context.userId);
+  if (u?.user?.email !== SUPER_ADMIN_EMAIL) throw new Error("Acesso negado.");
+}
+
+/** Envio de teste de um template a partir do painel (somente admin). */
+export const sendWaTest = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { template: string; phone: string; name?: string }) => d)
+  .handler(async ({ data, context }) => {
+    await requireAdminUserId(context);
+    const { sendWaTemplate, WA_TEMPLATE_META } = await import("@/lib/viperconnect");
+    const key = data.template as keyof typeof WA_TEMPLATE_META;
+    if (!WA_TEMPLATE_META[key]) throw new Error("Template inválido.");
+    const result = await sendWaTemplate(data.phone, data.name || "Teste", key, { force: true });
+    if (!result.ok) throw new Error(result.error || "Falha ao enviar teste.");
+    return { success: true };
+  });
+
+/**
+ * Gatilho de notificação WhatsApp para o PRÓPRIO usuário logado (o telefone
+ * sai do cadastro dele no servidor — o cliente nunca escolhe o destino).
+ * Regras anti-spam e de elegibilidade aplicadas aqui (além das do cliente).
+ */
+export const triggerWaNotification = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { template: string }) => d)
+  .handler(async ({ data, context }) => {
+    const { sendWaTemplate, getWaTemplates, WA_TEMPLATE_META } = await import("@/lib/viperconnect");
+    const key = data.template as keyof typeof WA_TEMPLATE_META;
+    if (!WA_TEMPLATE_META[key]) throw new Error("Template inválido.");
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: profile } = await supabaseAdmin
+      .from("profiles")
+      .select("id, display_name, phone, status, expires_at, created_at")
+      .eq("id", context.userId)
+      .maybeSingle();
+    if (!profile?.phone) return { sent: false, reason: "no-phone" };
+
+    // Elegibilidade por template (servidor — não confia só no cliente)
+    if (key === "abandoned") {
+      if (profile.status !== "pendente_pagamento") return { sent: false, reason: "not-pending" };
+      const { abandoned_hours } = await getWaTemplates();
+      const ageH = (Date.now() - new Date(profile.created_at).getTime()) / 36e5;
+      // Só contas recentes: a partir do prazo, com tolerância de +48h.
+      // Conta antiga nunca recebe (não faz sentido cobrar quem cadastrou há meses).
+      if (!(ageH >= abandoned_hours && ageH <= abandoned_hours + 48)) {
+        return { sent: false, reason: "out-of-window" };
+      }
+    }
+    if (key === "billing") {
+      const expired = profile.expires_at ? new Date(profile.expires_at).getTime() < Date.now() : false;
+      if (profile.status === "ativo" && !expired) return { sent: false, reason: "active" };
+      // Pendente recente é da régua do abandoned — não duplica a mensagem.
+      const { abandoned_hours } = await getWaTemplates();
+      const ageH = (Date.now() - new Date(profile.created_at).getTime()) / 36e5;
+      if (profile.status === "pendente_pagamento" && ageH <= abandoned_hours + 48) {
+        return { sent: false, reason: "owned-by-abandoned" };
+      }
+    }
+
+    const result = await sendWaTemplate(profile.phone, profile.display_name || "aluno(a)", key);
+    return { sent: result.sent };
   });
 

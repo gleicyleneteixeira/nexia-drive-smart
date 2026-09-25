@@ -92,6 +92,36 @@ export function DailyCheckinBanner() {
     return () => window.removeEventListener("nexia:cronograma:change", handler);
   }, []);
 
+  // Lembrete de estudo no WhatsApp: tem meta pendente e ainda não leu hoje.
+  // 1x ao dia; o servidor só envia se o template estiver ligado.
+  React.useEffect(() => {
+    if (!user?.id || !pending || saving) return;
+    const hoje = isoHoje();
+    if (progress.last_access_date === hoje) return;
+    const key = `wa_reminder_${user.id}_${hoje}`;
+    try {
+      if (localStorage.getItem(key)) return;
+    } catch {
+      return;
+    }
+    (async () => {
+      try {
+        const { triggerWaNotification } = await import("@/lib/admin-operations.server");
+        const r = await triggerWaNotification({ data: { template: "reminder" } });
+        if (r?.sent) {
+          try {
+            localStorage.setItem(key, "1");
+          } catch {
+            /* sem localStorage */
+          }
+        }
+      } catch {
+        /* silencioso */
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id, pending]);
+
   React.useEffect(() => {
     if (!user?.id) return;
     let cancelled = false;

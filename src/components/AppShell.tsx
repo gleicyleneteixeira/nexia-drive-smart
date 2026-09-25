@@ -132,6 +132,35 @@ export function AppShell() {
     return () => window.removeEventListener("nexia:abrir-cronograma", handler);
   }, []);
 
+  // Notificações WhatsApp automáticas (abandono de cadastro + cobrança).
+  // Disparo único / 1x ao dia; elegibilidade final validada no servidor.
+  useEffect(() => {
+    if (!user || !profile || isAdmin || isPublicPage) return;
+    (async () => {
+      try {
+        const { triggerWaNotification } = await import("@/lib/admin-operations.server");
+        // 1. Cadastrou e não pagou (só contas recentes — 1x, nunca repete)
+        const abKey = `wa_abandoned_${user.id}`;
+        if (profile.status === "pendente_pagamento" && !localStorage.getItem(abKey)) {
+          const r = await triggerWaNotification({ data: { template: "abandoned" } });
+          if (r?.sent) localStorage.setItem(abKey, "1");
+        }
+        // 2. Cobrança/acesso (pendente antigo ou expirado) — 1x ao dia
+        const day = new Date().toISOString().slice(0, 10);
+        const billKey = `wa_billing_${user.id}_${day}`;
+        if (
+          (profile.status === "pendente_pagamento" || isProfileExpired(profile)) &&
+          !localStorage.getItem(billKey)
+        ) {
+          const r = await triggerWaNotification({ data: { template: "billing" } });
+          if (r?.sent) localStorage.setItem(billKey, "1");
+        }
+      } catch {
+        /* silencioso: nunca bloqueia o app */
+      }
+    })();
+  }, [user, profile, isAdmin, isPublicPage]);
+
   useEffect(() => {
     setMenuOpen(false);
   }, [pathname]);

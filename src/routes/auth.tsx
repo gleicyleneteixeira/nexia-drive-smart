@@ -310,6 +310,13 @@ function AuthPage() {
         password: forgotNewPw,
       });
       if (signInErr) throw signInErr;
+      // Aviso de reset no WhatsApp (silencioso — a senha já foi trocada)
+      try {
+        const { triggerWaNotification } = await import("@/lib/admin-operations.server");
+        await triggerWaNotification({ data: { template: "reset" } });
+      } catch {
+        /* sem WhatsApp vinculado ou template desligado */
+      }
       toast.success("Senha atualizada! Bem-vinda(o) de volta!");
       setForgotOpen(false);
       setForgotStep(1);

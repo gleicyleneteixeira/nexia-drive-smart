@@ -28,7 +28,8 @@ import * as XLSX from "xlsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { useServerFn } from "@tanstack/react-start";
 import { adminResetUserPassword, getSalesReport, type SalesReportProfile } from "@/lib/admin-users.functions";
-import { sendPasswordReset, deleteUser, deactivateUser, sendViperConnectWelcome } from "@/lib/admin-operations.server";
+import { sendPasswordReset, deleteUser, deactivateUser, sendViperConnectWelcome, sendWaTest } from "@/lib/admin-operations.server";
+import { WA_TEMPLATE_META, type WaTemplateKey } from "@/lib/viperconnect";
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
 
@@ -2965,6 +2966,16 @@ export function SettingsPanel() {
     "Olá {nome}! Seja muito bem-vindo(a) ao Nexia Drive. Seu acesso já está liberado! 🚀"
   );
   const [vWelcomeMedia, setVWelcomeMedia] = useState("");
+  // Templates de mensagens automáticas WhatsApp (liga/desliga + texto + mídia)
+  const [waTpl, setWaTpl] = useState<Record<WaTemplateKey, { enabled: boolean; message: string; media_url: string }>>({
+    reset: { enabled: false, message: "", media_url: "" },
+    reminder: { enabled: false, message: "", media_url: "" },
+    billing: { enabled: false, message: "", media_url: "" },
+    abandoned: { enabled: false, message: "", media_url: "" },
+  });
+  const [waHours, setWaHours] = useState("48");
+  const setWa = (k: WaTemplateKey, patch: Partial<{ enabled: boolean; message: string; media_url: string }>) =>
+    setWaTpl((p) => ({ ...p, [k]: { ...p[k], ...patch } }));
   const [viperInstances, setViperInstances] = useState<Array<{ id: string; name: string; number: string }>>([]);
   const [loadingViperInstances, setLoadingViperInstances] = useState(false);
   const [webhookUrl, setWebhookUrl] = useState("");
@@ -3043,6 +3054,19 @@ export function SettingsPanel() {
           "viperconnect_welcome_enabled",
           "viperconnect_welcome_message",
           "viperconnect_welcome_media_url",
+          "wa_reset_enabled",
+          "wa_reset_message",
+          "wa_reset_media_url",
+          "wa_reminder_enabled",
+          "wa_reminder_message",
+          "wa_reminder_media_url",
+          "wa_billing_enabled",
+          "wa_billing_message",
+          "wa_billing_media_url",
+          "wa_abandoned_enabled",
+          "wa_abandoned_message",
+          "wa_abandoned_media_url",
+          "wa_abandoned_hours",
           "global_webhook_url",
           "global_webhook_enabled",
         ]);
@@ -3062,6 +3086,21 @@ export function SettingsPanel() {
       );
       setVWelcomeMedia(vmap.viperconnect_welcome_media_url ?? "");
 
+      // Templates de mensagens automáticas WhatsApp
+      const waKeys: WaTemplateKey[] = ["reset", "reminder", "billing", "abandoned"];
+      setWaTpl((p) => {
+        const next = { ...p };
+        for (const k of waKeys) {
+          next[k] = {
+            enabled: vmap[`wa_${k}_enabled`] === "true",
+            message: vmap[`wa_${k}_message`] ?? "",
+            media_url: vmap[`wa_${k}_media_url`] ?? "",
+          };
+        }
+        return next;
+      });
+      setWaHours(vmap.wa_abandoned_hours ?? "48");
+
       // Webhook global de eventos do sistema (somente admin)
       setWebhookUrl(vmap.global_webhook_url ?? "");
       setWebhookEnabled(vmap.global_webhook_enabled !== "false");
@@ -3072,6 +3111,23 @@ export function SettingsPanel() {
   });
 
   const sendViperWelcomeFn = useServerFn(sendViperConnectWelcome);
+  const sendWaTestFn = useServerFn(sendWaTest);
+
+  async function handleTestWa(template: WaTemplateKey) {
+    if (!testPhone) {
+      toast.error("Informe um número no campo de teste (seção Boas-Vindas).");
+      return;
+    }
+    setTesting(true);
+    try {
+      await sendWaTestFn({ data: { template, phone: testPhone, name: testName || "Teste" } });
+      toast.success("Teste enviado! Verifique o WhatsApp.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Falha ao enviar teste");
+    } finally {
+      setTesting(false);
+    }
+  }
 
   async function handleTestWelcome() {
     if (!testPhone) {
@@ -3117,6 +3173,19 @@ export function SettingsPanel() {
         { key: "viperconnect_welcome_enabled", value: vWelcomeEnabled ? "true" : "false" },
         { key: "viperconnect_welcome_message", value: vWelcomeMessage },
         { key: "viperconnect_welcome_media_url", value: vWelcomeMedia },
+        { key: "wa_reset_enabled", value: waTpl.reset.enabled ? "true" : "false" },
+        { key: "wa_reset_message", value: waTpl.reset.message },
+        { key: "wa_reset_media_url", value: waTpl.reset.media_url },
+        { key: "wa_reminder_enabled", value: waTpl.reminder.enabled ? "true" : "false" },
+        { key: "wa_reminder_message", value: waTpl.reminder.message },
+        { key: "wa_reminder_media_url", value: waTpl.reminder.media_url },
+        { key: "wa_billing_enabled", value: waTpl.billing.enabled ? "true" : "false" },
+        { key: "wa_billing_message", value: waTpl.billing.message },
+        { key: "wa_billing_media_url", value: waTpl.billing.media_url },
+        { key: "wa_abandoned_enabled", value: waTpl.abandoned.enabled ? "true" : "false" },
+        { key: "wa_abandoned_message", value: waTpl.abandoned.message },
+        { key: "wa_abandoned_media_url", value: waTpl.abandoned.media_url },
+        { key: "wa_abandoned_hours", value: waHours },
         { key: "global_webhook_url", value: webhookUrl },
         { key: "global_webhook_enabled", value: webhookEnabled ? "true" : "false" },
       ];
@@ -3352,6 +3421,57 @@ export function SettingsPanel() {
             </Button>
           </div>
         </div>
+      </div>
+
+      <div className="space-y-4 border-t border-border/40 pt-6">
+        <h3 className="font-display font-bold text-sm">Mensagens automáticas WhatsApp</h3>
+        <p className="text-xs text-muted-foreground">
+          Cada mensagem tem liga/desliga e texto próprio (use <code className="text-primary">{"{nome}"}</code> para o nome do aluno, emojis liberados). Mídia opcional (imagem/figurinha por URL). O teste usa o número acima.
+        </p>
+
+        {(Object.keys(WA_TEMPLATE_META) as WaTemplateKey[]).map((k) => (
+          <div key={k} className="rounded-xl border border-border/40 p-3 space-y-2 bg-background/20">
+            <div className="flex items-center justify-between gap-2">
+              <div>
+                <p className="text-xs font-semibold">{WA_TEMPLATE_META[k].title}</p>
+                <p className="text-[11px] text-muted-foreground">{WA_TEMPLATE_META[k].description}</p>
+              </div>
+              <Switch checked={waTpl[k].enabled} onCheckedChange={(v) => setWa(k, { enabled: v })} />
+            </div>
+            <Textarea
+              value={waTpl[k].message}
+              onChange={(e) => setWa(k, { message: e.target.value })}
+              rows={3}
+              placeholder="Vazio = mensagem padrão do sistema"
+              className="flex-1 text-xs"
+            />
+            <Input
+              value={waTpl[k].media_url}
+              onChange={(e) => setWa(k, { media_url: e.target.value })}
+              placeholder="URL de imagem/figurinha (opcional)"
+              className="flex-1 text-xs"
+            />
+            {k === "abandoned" && (
+              <div className="flex items-center gap-2">
+                <Label className="text-xs font-semibold shrink-0">Cobrar após (horas)</Label>
+                <Input
+                  type="number"
+                  min={1}
+                  value={waHours}
+                  onChange={(e) => setWaHours(e.target.value)}
+                  className="w-24 text-xs"
+                />
+                <p className="text-[11px] text-muted-foreground">Só contas recentes (até +48h do prazo). Conta antiga nunca recebe.</p>
+              </div>
+            )}
+            <div className="flex justify-end">
+              <Button variant="outline" size="sm" onClick={() => handleTestWa(k)} disabled={testing}>
+                {testing ? <Loader2 className="h-3 w-3 animate-spin mr-1" /> : null}
+                Enviar teste
+              </Button>
+            </div>
+          </div>
+        ))}
       </div>
 
       <div className="space-y-4 border-t border-border/40 pt-6">
