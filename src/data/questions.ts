@@ -7537,6 +7537,201 @@ export const QUESTIONS: Question[] = [
         legalBase: "Art. 218 do CTB",
         incidence: "alta",
         difficulty: 2
+    },
+    {
+        id: "rst_01",
+        categoria: "Legislação de Trânsito",
+        enunciado: "O uso do cinto de segurança é obrigatório para condutor e passageiros em todas as vias do território nacional. A exceção a essa regra aplica-se APENAS em qual situação?",
+        alternativas: [
+          "Em trajetos curtos dentro do perímetro urbano",
+          "Para passageiros no banco traseiro em vias coletoras",
+          "Não existe exceção legal, sendo o uso obrigatório para todos os ocupantes",
+          "Apenas para condutores de veículos de transporte de carga"
+        ],
+        correta: 2,
+        image_url: ""
+    },
+    {
+        id: "rst_02",
+        categoria: "Legislação de Trânsito",
+        enunciado: "A ultrapassagem de outro veículo em movimento na pista de rolamento deve ser realizada SOMENTE pela esquerda. Em qual hipótese é permitida a ultrapassagem pela direita?",
+        alternativas: [
+          "Quando o veículo da frente estiver na faixa da esquerda e em baixa velocidade",
+          "Quando o veículo a ser ultrapassado estiver sinalizando que vai dobrar à esquerda",
+          "Em vias de trânsito rápido durante períodos de cerração ou neblina",
+          "Quando a via for de pista simples em aclive acentuado"
+        ],
+        correta: 1,
+        image_url: ""
+    },
+    {
+        id: "rst_03",
+        categoria: "Direção Defensiva",
+        enunciado: "O condutor NUNCA deve acionar o pisca-alerta do veículo em movimento na pista de rolamento, EXCETO quando:",
+        alternativas: [
+          "Estiver trafegando em velocidade reduzida sob cerração ou neblina intensa",
+          "A sinalização da via assim o determinar ou em imobilizações de emergência",
+          "Estiver realizando uma transposição de faixa em via arterial",
+          "Desejar estacionar o veículo no bordo da pista em local proibido"
+        ],
+        correta: 1,
+        image_url: ""
+    },
+    {
+        id: "rst_04",
+        categoria: "Legislação de Trânsito",
+        enunciado: "A preferência de passagem em interseção não sinalizada pertence EXCLUSIVAMENTE ao veículo que se aproxima pela direita do condutor. Essa regra NUNCA se aplica quando:",
+        alternativas: [
+          "Um dos veículos estiver circulando por uma rotatória ou ingressando de rodovia",
+          "Ambos os veículos transitarem por vias urbanas coletoras perpendiculares",
+          "A interseção for composta por vias paralelas de fluxo único",
+          "O cruzamento ocorrer dentro do perímetro urbano em trecho plano"
+        ],
+        correta: 0,
+        image_url: ""
+    },
+    {
+        id: "rst_05",
+        categoria: "Legislação de Trânsito",
+        enunciado: "A circulação de veículos automotores sobre passeios, calçadas e canteiros centrais é expressamente proibida. O tráfego nesses locais é permitido APENAS para:",
+        alternativas: [
+          "Evitar congestionamentos em vias arteriais de fluxo intenso",
+          "Entrar ou sair de imóveis ou de áreas ladeadas de estacionamento",
+          "Realizar embarque ou desembarque rápido no bordo da pista",
+          "Fazer conversão à esquerda quando a via estiver deserta"
+        ],
+        correta: 1,
+        image_url: ""
+    },
+    {
+        id: "rst_06",
+        categoria: "Direção Defensiva",
+        enunciado: "Ao transitar por uma via em declive acentuado, o condutor NUNCA deve colocar o câmbio em marcha neutra (ponto morto). Qual é o risco técnico dessa prática?",
+        alternativas: [
+          "Acelerar o desgaste do motor pela falta de lubrificação",
+          "Perder a ação do freio motor e sobrecarregar o sistema de freios de serviço",
+          "Travar as rodas traseiras impedindo a conversão na pista de rolamento",
+          "Provocar o desligamento automático dos faróis em alta velocidade"
+        ],
+        correta: 1,
+        image_url: ""
+    },
+    {
+        id: "rst_07",
+        categoria: "Legislação de Trânsito",
+        enunciado: "A luz de buzina deve ser utilizada em toques breves. O uso da buzina é terminantemente proibido e NUNCA deve ocorrer em qual situação?",
+        alternativas: [
+          "Fora do perímetro urbano para advertir sobre intenção de ultrapassar",
+          "Entre as vinte e duas e as seis horas ou em locais sinalizados com proibição",
+          "Como advertência preventiva para evitar acidentes na interseção",
+          "Ao aproximar-se de pedestres que estejam no bordo da pista"
+        ],
+        correta: 1,
+        image_url: ""
+    },
+    {
+        id: "rst_08",
+        categoria: "Legislação de Trânsito",
+        enunciado: "Os veículos de emergência (ambulâncias e polícia) têm prioridade de trânsito e gozam de livre circulação SOMENTE quando:",
+        alternativas: [
+          "Estiverem transitando por vias de trânsito rápido no perímetro urbano",
+          "Estiverem em serviço de urgência e devidamente identificados por alarme e luzes",
+          "Retornarem de uma ocorrência para o pátio do órgão responsável",
+          "Estiverem circulando em trechos em aclive ou declive de rodovias"
+        ],
+        correta: 1,
+        image_url: ""
+    },
+    {
+        id: "rst_09",
+        categoria: "Legislação de Trânsito",
+        enunciado: "A parada de um veículo no bordo da pista para embarque ou desembarque de passageiros deve ocorrer EXCLUSIVAMENTE sob qual condição legal?",
+        alternativas: [
+          "Pelo tempo estritamente necessário e sem interromper a fluidez do trânsito",
+          "Com o pisca-alerta ligado em qualquer trecho da via arterial",
+          "Sempre no sentido oposto ao fluxo para facilitar a visibilidade do pedestre",
+          "Apenas quando houver recuo específico no canteiro central da pista"
+        ],
+        correta: 0,
+        image_url: ""
+    },
+    {
+        id: "rst_10",
+        categoria: "Legislação de Trânsito",
+        enunciado: "Em vias urbanas sem sinalização regulamentadora, a velocidade máxima de 80 km/h é permitida EXCLUSIVAMENTE em quais vias?",
+        alternativas: [
+          "Nas vias arteriais que cruzam o perímetro urbano",
+          "Nas vias coletoras adjacentes a áreas residenciais",
+          "Nas vias de trânsito rápido",
+          "Em qualquer via urbana com pistas duplas e paralelas"
+        ],
+        correta: 2,
+        image_url: ""
+    },
+    {
+        id: "rst_11",
+        categoria: "Direção Defensiva",
+        enunciado: "Em trechos em aclive com visibilidade reduzida e pista simples, a ultrapassagem é permitida SOMENTE quando houver:",
+        alternativas: [
+          "Espaço suficiente na pista de rolamento sem tráfego de pedestres",
+          "Sinalização horizontal com linha amarela contínua na sua faixa",
+          "Sinalização horizontal com linha amarela seccionada na sua mão de direção",
+          "Cerração leve que permita enxergar as luzes dos veículos opostos"
+        ],
+        correta: 2,
+        image_url: ""
+    },
+    {
+        id: "rst_12",
+        categoria: "Legislação de Trânsito",
+        enunciado: "O tráfego de bicicletas deve ocorrer nos bordos da pista de rolamento no mesmo sentido dos veículos. A circulação em calçadas é permitida APENAS quando:",
+        alternativas: [
+          "O trânsito na pista de rolamento estiver muito congestionado",
+          "Houver autorização expressa do órgão com jurisdição e sinalização adequada",
+          "O ciclista estiver conduzindo a bicicleta em velocidade reduzida",
+          "A via transversal for classificada como de trânsito rápido"
+        ],
+        correta: 1,
+        image_url: ""
+    },
+    {
+        id: "rst_13",
+        categoria: "Primeiros Socorros",
+        enunciado: "Ao socorrer uma vítima de acidente de trânsito na pista de rolamento, o prestador de socorro NUNCA deve:",
+        alternativas: [
+          "Sinalizar o local do acidente antes de iniciar o atendimento",
+          "Movimentar a vítima ou retirar o capacete de um motociclista acidentado",
+          "Chamar o serviço especializado de emergência (192 ou 193)",
+          "Desligar a ignição do veículo acidentado para evitar incêndio"
+        ],
+        correta: 1,
+        image_url: ""
+    },
+    {
+        id: "rst_14",
+        categoria: "Mecânica Básica",
+        enunciado: "A verificação da pressão de calibragem dos pneus do veículo deve ser realizada EXCLUSIVAMENTE quando os pneus estiverem:",
+        alternativas: [
+          "Aquececidos após trafegar em alta velocidade na rodovia",
+          "Frios, preferencialmente antes de colocar o veículo em circulação",
+          "Totalmente descalibrados para ajuste do sistema de suspensão",
+          "Molhados após rodar sob chuva forte ou pista escorregadia"
+        ],
+        correta: 1,
+        image_url: ""
+    },
+    {
+        id: "rst_15",
+        categoria: "Legislação de Trânsito",
+        enunciado: "A conversão à esquerda em vias urbanas de sentido duplo de circulação deve ser executada APENAS após o condutor:",
+        alternativas: [
+          "Aproximar o veículo do bordo esquerdo da pista de rolamento",
+          "Aproximar o veículo da linha divisória do fluxo e ceder preferência ao sentido oposto",
+          "Acionar o pisca-alerta e avançar sobre a linha de retenção",
+          "Aumentar a velocidade para concluir a manobra antes do cruzamento"
+        ],
+        correta: 1,
+        image_url: ""
     }
 ];
 // Questões que realmente caíram na prova do DETRAN.
