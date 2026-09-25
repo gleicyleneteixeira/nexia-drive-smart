@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Loader2, Eye, EyeOff, User, LogIn, ArrowLeft, Sparkles, TriangleAlert } from "lucide-react";
+import { Loader2, Eye, EyeOff, User, LogIn, ArrowLeft, Sparkles } from "lucide-react";
 import { formatCpf, cleanCpf, isValidCpf } from "@/lib/cpf";
 import { formatPhone, cleanPhone } from "@/lib/phone";
 import { useAuth } from "@/hooks/use-auth";
@@ -726,9 +726,8 @@ function CadastroPage() {
                   onChange={(e) => setPhone(cleanPhone(e.target.value))} 
                   className="bg-background/40 border-border/30"
                 />
-                <p className="text-xs text-amber-400 mt-1 flex items-center gap-1">
-                  <TriangleAlert className="h-3.5 w-3.5 shrink-0" />
-                  📲 Cadastre seu WhatsApp com DDD — ele será usado para notificações e para recuperar sua senha. Verifique se o número está correto, pois as notificações serão recebidas através dele.
+                <p className="text-xs text-amber-400 mt-1">
+                  ⚠️ 📲 Cadastre seu WhatsApp com DDD — ele será usado para notificações e para recuperar sua senha. Verifique se o número está correto, pois as notificações serão recebidas através dele.
                 </p>
               </div>
               <div>

@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Loader2, Eye, EyeOff, User, ArrowLeft, TriangleAlert } from "lucide-react";
+import { Loader2, Eye, EyeOff, User, ArrowLeft } from "lucide-react";
 import { formatCpf, cleanCpf, isValidCpf } from "@/lib/cpf";
 import { formatPhone, cleanPhone } from "@/lib/phone";
 import { triggerWebhook } from "@/services/webhookService";
@@ -316,9 +316,8 @@ function AuthPage() {
                 <Label htmlFor="phone">WhatsApp *</Label>
                 <Input id="phone" required inputMode="tel" placeholder="(00) 00000-0000"
                   value={formatPhone(phone)} onChange={(e) => setPhone(cleanPhone(e.target.value))} />
-                <p className="text-xs text-amber-400 mt-1 flex items-center gap-1">
-                  <TriangleAlert className="h-3.5 w-3.5 shrink-0" />
-                  📲 Cadastre seu WhatsApp com DDD — ele será usado para notificações e para recuperar sua senha. Verifique se o número está correto, pois as notificações serão recebidas através dele.
+                <p className="text-xs text-amber-400 mt-1">
+                  ⚠️ 📲 Cadastre seu WhatsApp com DDD — ele será usado para notificações e para recuperar sua senha. Verifique se o número está correto, pois as notificações serão recebidas através dele.
                 </p>
               </div>
               <div>
