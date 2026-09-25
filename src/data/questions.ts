@@ -7078,6 +7078,465 @@ export const QUESTIONS: Question[] = [
         incidence: 'alta',
         difficulty: 2,
         trap: true
+    },
+    {
+        id: "td_01",
+        category: "direcao-defensiva",
+        statement: "Você trafega por via urbana de trânsito rápido com neblina ou cerração densa. Pela direção defensiva e pelo CTB, o que deve fazer para evitar acidente?",
+        options: [
+            "Manter os faróis baixos acesos e aumentar a distância de seguimento.",
+            "Reduzir a velocidade aos poucos, sem freadas bruscas.",
+            "Não ligar o pisca-alerta com o veículo em movimento na pista.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Com cerração: farol baixo, mais distância, sem freada brusca e sem pisca-alerta andando.',
+        incidence: "alta",
+        difficulty: 2
+    },
+    {
+        id: "td_02",
+        category: "legislacao",
+        statement: "Numa interseção sem sinalização dentro do perímetro urbano, a preferência é de quem?",
+        options: [
+            "De quem vem pela direita do condutor no cruzamento.",
+            "De quem circula pela rodovia, quando ela cruza a via.",
+            "De quem já circula pela rotatória antes de entrar na interseção.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Preferência: direita, rodovia sobre via e quem já está na rotatória.',
+        incidence: "alta",
+        difficulty: 2
+    },
+    {
+        id: "td_03",
+        category: "direcao-defensiva",
+        statement: "Você vai fazer transposição de faixa numa via arterial de fluxo intenso. O que é obrigatório?",
+        options: [
+            "Sinalizar antes com a seta de direção.",
+            "Checar retrovisores e o ponto cego do veículo.",
+            "Dar preferência a quem já está na faixa pretendida.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Mudar de faixa: seta antes, espelho + ponto cego e preferência de quem já está lá.',
+        incidence: "alta",
+        difficulty: 2
+    },
+    {
+        id: "td_04",
+        category: "legislacao",
+        statement: "Numa via de pista dupla sem sinalização específica, como deve ser a ultrapassagem de outro veículo em movimento?",
+        options: [
+            "Sempre pela esquerda da pista de rolamento.",
+            "Voltar à faixa de origem só com distância segura.",
+            "Sinalizar antes para o condutor que vem atrás.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Ultrapassagem: pela esquerda, sinaliza antes e volta só com segurança.',
+        incidence: "alta",
+        difficulty: 2
+    },
+    {
+        id: "td_05",
+        category: "legislacao",
+        statement: "Para estacionar junto ao bordo da pista em vias coletoras urbanas, o que o CTB exige?",
+        options: [
+            "Respeitar 5 metros do bordo da via transversal.",
+            "Não travar a pista nem a visibilidade.",
+            "Manobrar no sentido do fluxo, paralelo ao meio-fio.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Estacionar: 5 m da transversal, sem travar a via e no sentido do fluxo.',
+        incidence: "media",
+        difficulty: 2
+    },
+    {
+        id: "td_06",
+        category: "infracoes",
+        statement: "Na descida de um declive acentuado, qual atitude comete infração e põe a segurança em risco?",
+        options: [
+            "Descer em ponto morto (banguela) para economizar combustível.",
+            "Desligar o motor na descida, ficando sem freio e direção assistidos.",
+            "Manter o câmbio em neutro e frear somente em cima da hora.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Banguela de qualquer jeito é infração: sem freio motor o carro ganha velocidade e o freio superaquece.',
+        incidence: "media",
+        difficulty: 2
+    },
+    {
+        id: "td_07",
+        category: "legislacao",
+        statement: "Num aclive de via rural de pista simples, quando a ultrapassagem é permitida?",
+        options: [
+            "Com faixa amarela seccionada na sua mão de direção.",
+            "Com visibilidade total à frente e nada em sentido oposto.",
+            "Com terceira faixa para veículos lentos.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'No aclive só ultrapassa com faixa permitida, visão total ou faixa extra.',
+        incidence: "media",
+        difficulty: 2
+    },
+    {
+        id: "td_08",
+        category: "legislacao",
+        statement: "Sem faixa de pedestres por perto no perímetro urbano, como o pedestre deve cruzar a pista?",
+        options: [
+            "Em sentido perpendicular ao eixo da via.",
+            "Pelo caminho mais curto, sem parar sobre a pista.",
+            "Dando prioridade aos veículos quando estiverem próximos.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Sem faixa: atravessa em 90 graus, sem parar na pista e com carro perto a vez é dele.',
+        legalBase: "Arts. 69 e 70 do CTB",
+        incidence: "alta",
+        difficulty: 2
+    },
+    {
+        id: "td_09",
+        category: "legislacao",
+        statement: "Quando é proibido parar ou estacionar perto de cruzamentos e vias transversais?",
+        options: [
+            "A menos de 5 metros do bordo da via transversal.",
+            "Prejudicando a visibilidade na interseção.",
+            "Sobre a área de cruzamento das vias.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Perto de cruzamento: 5 m da transversal, sem tirar visibilidade e nunca sobre o cruzamento.',
+        incidence: "media",
+        difficulty: 2
+    },
+    {
+        id: "td_10",
+        category: "legislacao",
+        statement: "Quem tem prioridade e livre circulação/estacionamento em serviço de urgência?",
+        options: [
+            "Veículos de socorro de incêndio e salvamento.",
+            "Ambulâncias e viaturas policiais identificadas.",
+            "Veículos de fiscalização e operação de trânsito em serviço.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Em urgência: bombeiros, ambulância, polícia e fiscalização têm prioridade total.',
+        legalBase: "Art. 29, VII do CTB",
+        incidence: "media",
+        difficulty: 1
+    },
+    {
+        id: "td_11",
+        category: "legislacao",
+        statement: "Para conversar à esquerda em via urbana de mão dupla sem canteiro central, o que fazer?",
+        options: [
+            "Chegar o máximo possível na linha divisória do fluxo.",
+            "Ligar a seta com antecedência.",
+            "Ceder a vez a quem vem em sentido contrário.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Conversão à esquerda: cola na divisória, seta antes e espera o fluxo contrário.',
+        incidence: "media",
+        difficulty: 2
+    },
+    {
+        id: "td_12",
+        category: "legislacao",
+        statement: "Sem placa de velocidade na via urbana, qual é a máxima permitida?",
+        options: [
+            "80 km/h nas vias de trânsito rápido.",
+            "60 km/h nas vias arteriais.",
+            "40 km/h nas vias coletoras.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Sem placa: trânsito rápido 80, arterial 60, coletora 40 (e local 30).',
+        legalBase: "Arts. 60 e 61 do CTB",
+        incidence: "altissima",
+        difficulty: 2
+    },
+    {
+        id: "td_13",
+        category: "infracoes",
+        statement: "O que na pista configura infração gravíssima pelo CTB?",
+        options: [
+            "Andar com o veículo em calçadas, passeios e canteiros.",
+            "Avançar o vermelho do semáforo ou a parada obrigatória.",
+            "Andar na contramão em via de sentido único.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Calçada, vermelho e contramão: tudo gravíssima.',
+        incidence: "media",
+        difficulty: 1
+    },
+    {
+        id: "td_14",
+        category: "direcao-defensiva",
+        statement: "Com chuva forte ou cerração na rodovia, o que o condutor defensivo DEVE evitar?",
+        options: [
+            "Farol alto, que ofusca pelo reflexo na neblina.",
+            "Freada brusca sobre a pista molhada.",
+            "Pisca-alerta ligado com o veículo em movimento.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Na chuva/cerração: sem farol alto, sem freada brusca e sem pisca andando.',
+        incidence: "media",
+        difficulty: 2,
+        trap: true
+    },
+    {
+        id: "td_15",
+        category: "legislacao",
+        statement: "Quando a buzina é permitida no perímetro urbano?",
+        options: [
+            "Em toques breves como advertência para evitar acidente.",
+            "Fora da cidade, para avisar que vai ultrapassar.",
+            "Nunca entre 22h e 6h.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Buzina: toque breve de advertência, fora da cidade p/ ultrapassar e nada de 22h às 6h.',
+        legalBase: "Art. 227 do CTB",
+        incidence: "alta",
+        difficulty: 2
+    },
+    {
+        id: "td_16",
+        category: "direcao-defensiva",
+        statement: "Em vias paralelas de fluxo único, o que exige a mudança de faixa para a direita ou esquerda?",
+        options: [
+            "Sinalizar com a seta apropriada.",
+            "Conferir se a faixa adjacente está livre antes de entrar.",
+            "Respeitar quem já circula na faixa de destino.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Trocar de faixa: seta, faixa livre e preferência de quem já está lá.',
+        incidence: "media",
+        difficulty: 2
+    },
+    {
+        id: "td_17",
+        category: "direcao-defensiva",
+        statement: "Em via de trânsito rápido chegando num aclive sem visibilidade, o que fazer?",
+        options: [
+            "Manter o veículo no centro da sua faixa.",
+            "Reduzir para velocidade segura de frenagem.",
+            "Não ultrapassar no trecho sem visibilidade.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Aclive sem visão: centro da faixa, devagar e sem ultrapassar.',
+        incidence: "media",
+        difficulty: 2
+    },
+    {
+        id: "td_18",
+        category: "primeiros-socorros",
+        statement: "Parou no bordo da pista por emergência. O que é obrigatório?",
+        options: [
+            "Ligar o pisca-alerta na hora.",
+            "Triângulo a distância regulamentar da traseira.",
+            "Tirar os ocupantes para fora da pista, em local seguro.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Pane na pista: pisca, triângulo atrás e todo mundo fora do carro.',
+        incidence: "media",
+        difficulty: 2
+    },
+    {
+        id: "td_19",
+        category: "infracoes",
+        statement: "Em vias arteriais e coletoras, o que é expressamente proibido ao condutor?",
+        options: [
+            "Ultrapassar pelo acostamento ou pela direita, salvo exceção.",
+            "Converter onde a sinalização proíbe.",
+            "Dirigir de fone ou mexendo no celular.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Acostamento, conversão proibida e celular ao volante: tudo proibido.',
+        incidence: "media",
+        difficulty: 2
+    },
+    {
+        id: "td_20",
+        category: "placas",
+        statement: "Para que serve a sinalização horizontal pintada na pista?",
+        options: [
+            "Organizar e orientar o fluxo nas faixas.",
+            "Avisar de risco e proibição de ultrapassagem.",
+            "Regular onde pode ou não estacionar no bordo.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Pintura na pista: organiza fluxo, avisa risco e regula estacionamento.',
+        incidence: "media",
+        difficulty: 2
+    },
+    {
+        id: "td_21",
+        category: "legislacao",
+        statement: "Em via de trânsito rápido no perímetro urbano, quem tem prioridade nos acessos de entrada?",
+        options: [
+            "Quem já circula na pista da via principal.",
+            "Quem vem pela aceleração já na velocidade da via.",
+            "Quem segue sem semáforo nem cruzamento na principal.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Na entrada da rápida: a vez é de quem já está nela.',
+        incidence: "media",
+        difficulty: 2
+    },
+    {
+        id: "td_22",
+        category: "direcao-defensiva",
+        statement: "O que na via exige atenção redobrada e velocidade menor?",
+        options: [
+            "Pista esburacada, ondulada ou escorregadia.",
+            "Declive forte com curva fechada e sem acostamento.",
+            "Falta de acostamento com mato no bordo.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Pista ruim, declive com curva e sem acostamento: devagar e atenção total.',
+        incidence: "media",
+        difficulty: 2
+    },
+    {
+        id: "td_23",
+        category: "legislacao",
+        statement: "Na arterial, para conversar à direita, qual é a conduta?",
+        options: [
+            "Colar o máximo possível no bordo direito da pista.",
+            "Ligar a seta com antecedência regulamentar.",
+            "Fazer devagar e com segurança.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Conversão à direita: cola no bordo, seta antes e vai devagar.',
+        incidence: "media",
+        difficulty: 2
+    },
+    {
+        id: "td_24",
+        category: "legislacao",
+        statement: "Quando a luz baixa é obrigatória na pista?",
+        options: [
+            "À noite em qualquer via, com ou sem luz.",
+            "De dia em rodovia simples fora do perímetro urbano.",
+            "Em túneis com iluminação, de dia ou de noite.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Farol baixo: à noite sempre, de dia em rodovia simples e em túnel.',
+        legalBase: "Art. 40 do CTB",
+        incidence: "alta",
+        difficulty: 1
+    },
+    {
+        id: "td_25",
+        category: "legislacao",
+        statement: "Para embarcar ou desembarcar passageiros no perímetro urbano, o que seguir?",
+        options: [
+            "Sempre pelo lado da calçada, menos o condutor.",
+            "Com o veículo parado junto ao bordo.",
+            "Sem travar o trânsito da pista.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Embarque: lado da calçada, carro parado no bordo e sem travar a via.',
+        legalBase: "Art. 49 do CTB",
+        incidence: "media",
+        difficulty: 2
+    },
+    {
+        id: "td_26",
+        category: "legislacao",
+        statement: "Na transversal com placa R-1 de PARADA OBRIGATÓRIA, o que fazer?",
+        options: [
+            "Parar totalmente antes de entrar na interseção.",
+            "Dar vez a todos da via preferencial.",
+            "Dar vez aos pedestres atravessando.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'R-1: para total, vez da preferencial e dos pedestres.',
+        incidence: "alta",
+        difficulty: 2
+    },
+    {
+        id: "td_27",
+        category: "legislacao",
+        statement: "Sem ciclovia ou ciclofaixa, o que vale para bicicletas nas vias urbanas?",
+        options: [
+            "Andar nos bordos da pista, no sentido dos veículos.",
+            "Ter preferência sobre os automotores.",
+            "Ser ultrapassada com 1,5 m de distância lateral.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Sem ciclovia: bike no bordo no sentido da via, com preferência e 1,5 m ao ultrapassar.',
+        legalBase: "Art. 58 do CTB",
+        incidence: "media",
+        difficulty: 2
+    },
+    {
+        id: "td_28",
+        category: "mecanica",
+        statement: "Antes de rodar no perímetro urbano ou rodovia, o que checar obrigatoriamente?",
+        options: [
+            "Todos os equipamentos obrigatórios funcionando.",
+            "Combustível suficiente até o destino.",
+            "Freios, luzes e pneus em ordem.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Antes de sair: equipamentos, combustível e freios/luzes/pneus.',
+        incidence: "media",
+        difficulty: 1
+    },
+    {
+        id: "td_29",
+        category: "legislacao",
+        statement: "Duas vias perpendiculares se cruzam sem placa de preferência. Qual é a regra?",
+        options: [
+            "Passa primeiro quem vem pela direita.",
+            "Todos reduzem antes de entrar na interseção.",
+            "Pedestre na travessia tem prioridade sobre quem vai virar.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Sem placa: direita primeiro, reduz ao entrar e pedestre na travessia manda.',
+        incidence: "alta",
+        difficulty: 2
+    },
+    {
+        id: "td_30",
+        category: "infracoes",
+        statement: "A mais de 20% acima da máxima em coletora ou arterial dá o quê?",
+        options: [
+            "Infração de natureza média.",
+            "Multa para o dono/condutor.",
+            "4 pontos na CNH.",
+            "Todas as alternativas acima estão corretas."
+        ],
+        correctIndex: 3,
+        explanation: 'Até 20% acima: média + multa + 4 pontos.',
+        legalBase: "Art. 218 do CTB",
+        incidence: "alta",
+        difficulty: 2
     }
 ];
 // Questões que realmente caíram na prova do DETRAN.
