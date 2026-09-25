@@ -16,3 +16,10 @@ export function formatPhone(value: string): string {
   }
   return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7, 11)}`;
 }
+
+/** Padroniza telefone para o banco: só dígitos, sem DDI 55 (10–11 dígitos). */
+export function normalizePhoneDb(value: string | null | undefined): string | null {
+  const digits = (value ?? "").replace(/\D/g, "");
+  if (!digits) return null;
+  return digits.length > 11 && digits.startsWith("55") ? digits.slice(2) : digits;
+}

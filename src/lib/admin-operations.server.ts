@@ -219,6 +219,11 @@ export const createUserWithoutConfirmation = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const emailClean = data.email.trim().toLowerCase();
+    // Padronização do banco: CPF e telefone sempre só dígitos, sem máscara.
+    const { cleanCpf } = await import("@/lib/cpf");
+    const { normalizePhoneDb } = await import("@/lib/phone");
+    const cpfDb = cleanCpf(data.cpf ?? "");
+    const phoneDb = normalizePhoneDb(data.phone);
 
     // Creates the user already confirmed. This does NOT send a confirmation
     // email — the account is usable immediately. The DB trigger
@@ -229,8 +234,8 @@ export const createUserWithoutConfirmation = createServerFn({ method: "POST" })
       email_confirm: true,
       user_metadata: {
         display_name: data.display_name,
-        cpf: data.cpf,
-        phone: data.phone,
+        cpf: cpfDb,
+        phone: phoneDb,
         employment_status: data.employment_status,
         employment_other: data.employment_other,
         status: "pendente_pagamento",
@@ -253,8 +258,8 @@ export const createUserWithoutConfirmation = createServerFn({ method: "POST" })
       const { error: upsertErr } = await supabaseAdmin
         .from("profiles")
         .update({
-          cpf: data.cpf,
-          phone: data.phone,
+          cpf: cpfDb,
+          phone: phoneDb,
           employment_status: data.employment_status,
           employment_other: data.employment_other,
           display_name: data.display_name,
@@ -1122,16 +1127,23 @@ export const searchProfilesAdmin = createServerFn({ method: "POST" })
     }));
   });
 
-/** Só dígitos (CPF/telefone podem estar salvos com ou sem máscara). */
+/*
+ * ═══════════════════════════════════════════════════════════════════════════
+ * 2ª OPÇÃO FUTURA (desativada por enquanto — NÃO apagar)
+ * Verificação tripla de identidade (e-mail + CPF + telefone) para o resgate
+ * de senha. Ideia: oferecer como alternativa caso a pessoa marque que NÃO
+ * recebeu a mensagem no WhatsApp. Para reativar, basta descomentar o bloco
+ * abaixo e voltar a chamá-lo no diálogo "Esqueci minha senha" (auth.tsx).
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+// Só dígitos (CPF/telefone podem estar salvos com ou sem máscara).
 function onlyDigits(v: string | null | undefined): string {
   return (v ?? "").replace(/\D/g, "");
 }
 
-/**
- * Confere a identidade para recuperação de senha: e-mail + CPF + telefone
- * precisam pertencer à MESMA conta. Erro sempre genérico (não revela qual
- * campo errou nem se o e-mail existe).
- */
+// Confere a identidade para recuperação de senha: e-mail + CPF + telefone
+// precisam pertencer à MESMA conta. Erro sempre genérico (não revela qual
+// campo errou nem se o e-mail existe).
 async function findProfileForRecovery(email: string, cpf: string, phone: string) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const emailClean = email.trim().toLowerCase();
@@ -1181,15 +1193,29 @@ export const resetPasswordWithIdentitySecure = createServerFn({ method: "POST" }
     return { ok: true };
   });
 
+ * FIM DA 2ª OPÇÃO FUTURA — fim do bloco comentado.
+ */
+
 /**
- * Autoatendimento: confere e-mail+CPF+telefone, gera temporária, salva no
- * banco e manda no WhatsApp (fallback: e-mail). A pessoa entra com a
- * temporária e troca no 1º acesso.
+ * Autoatendimento (fluxo atual): só o e-mail. Gera temporária, salva no
+ * banco e manda no WhatsApp do cadastro (fallback: e-mail). A pessoa entra
+ * com a temporária e troca no 1º acesso. Retorna o final do telefone para
+ * exibir na confirmação ("enviada para o final 1234").
  */
 export const requestPasswordResetWhatsApp = createServerFn({ method: "POST" })
-  .inputValidator((d: { email: string; cpf: string; phone: string }) => d)
+  .inputValidator((d: { email: string }) => d)
   .handler(async ({ data }) => {
-    const profile = await findProfileForRecovery(data.email, data.cpf, data.phone);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const emailClean = data.email.trim().toLowerCase();
+    if (!emailClean) throw new Error("Informe seu e-mail.");
+    const { data: profile } = await supabaseAdmin
+      .from("profiles")
+      .select("id, email, display_name, cpf, phone")
+      .eq("email", emailClean)
+      .maybeSingle();
+    if (!profile) {
+      throw new Error("Não encontramos nenhuma conta com este e-mail.");
+    }
     const temp = generateTempPassword(8);
     await applyTempPassword(
       {
@@ -1201,19 +1227,21 @@ export const requestPasswordResetWhatsApp = createServerFn({ method: "POST" })
       },
       temp
     );
+    const phoneDigits = ((profile as any).phone ?? "").replace(/\D/g, "");
+    const phoneTail = phoneDigits.slice(-4);
     const sentWa = await sendTempPasswordWhatsApp(
       { phone: profile.phone, display_name: (profile as any).display_name ?? null },
       temp,
       false
     );
-    if (sentWa) return { ok: true, channel: "whatsapp" as const };
+    if (sentWa) return { ok: true, channel: "whatsapp" as const, phoneTail };
     const email = (profile as any).email as string | null;
     if (email) {
       await sendTempPasswordEmail(
         { email, display_name: (profile as any).display_name ?? null },
         temp
       );
-      return { ok: true, channel: "email" as const };
+      return { ok: true, channel: "email" as const, phoneTail };
     }
     throw new Error("Não foi possível enviar a nova senha. Fale com o suporte.");
   });

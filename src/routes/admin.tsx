@@ -3141,6 +3141,13 @@ export function SettingsPanel() {
   const [webhookEnabled, setWebhookEnabled] = useState(true);
   const [testPhone, setTestPhone] = useState("");
   const [testName, setTestName] = useState("");
+  // Telefone de teste por template (cada cartão testa no seu número)
+  const [waTestPhone, setWaTestPhone] = useState<Record<WaTemplateKey, string>>({
+    reset: "",
+    reminder: "",
+    billing: "",
+    abandoned: "",
+  });
   // Qual teste está em andamento ("welcome" ou `wa-<template>`) — spinner só no botão certo
   const [testingKey, setTestingKey] = useState<string | null>(null);
 
@@ -3296,7 +3303,15 @@ export function SettingsPanel() {
           {savingKey === `wa-${k}` ? <Loader2 className="h-3 w-3 animate-spin mr-1" /> : null}
           Salvar mensagem
         </Button>
-        <Button variant="outline" size="sm" onClick={() => handleTestWa(k)} disabled={testingKey !== null}>
+      </div>
+      <div className="flex gap-2">
+        <Input
+          value={waTestPhone[k]}
+          onChange={(e) => setWaTestPhone((p) => ({ ...p, [k]: e.target.value.replace(/[^\d]/g, "").slice(0, 13) }))}
+          placeholder="Seu número p/ testar (ex.: 5531991777947)"
+          className="flex-1 text-xs"
+        />
+        <Button variant="outline" size="sm" onClick={() => handleTestWa(k)} disabled={testingKey !== null} className="shrink-0">
           {testingKey === `wa-${k}` ? <Loader2 className="h-3 w-3 animate-spin mr-1" /> : null}
           Enviar teste
         </Button>
@@ -3567,13 +3582,14 @@ export function SettingsPanel() {
   }
 
   async function handleTestWa(template: WaTemplateKey) {
-    if (!testPhone) {
-      toast.error("Informe um número no campo de teste (seção Boas-Vindas).");
+    const phone = (waTestPhone[template] || "").trim();
+    if (!phone) {
+      toast.error("Digite seu número abaixo para testar esta mensagem.");
       return;
     }
     setTestingKey(`wa-${template}`);
     try {
-      await sendWaTestFn({ data: { template, phone: testPhone, name: testName || "Teste" } });
+      await sendWaTestFn({ data: { template, phone, name: testName || "Teste" } });
       toast.success("Teste enviado! Verifique o WhatsApp.");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Falha ao enviar teste");
@@ -3983,7 +3999,7 @@ export function SettingsPanel() {
         <div className="rounded-lg bg-secondary/30 border border-border/40 p-3 space-y-2">
           <p className="text-xs font-semibold">Testar envio</p>
           <div className="flex flex-col sm:flex-row gap-2">
-            <Input value={testPhone} onChange={(e) => setTestPhone(e.target.value)} placeholder="Ex.: 5531991777947 ou 31991777947" className="flex-1" />
+            <Input value={testPhone} onChange={(e) => setTestPhone(e.target.value.replace(/[^\d]/g, "").slice(0, 13))} placeholder="Ex.: 5531991777947 ou 31991777947" className="flex-1" />
             <Input value={testName} onChange={(e) => setTestName(e.target.value)} placeholder="Nome de teste" className="flex-1" />
             <Button onClick={() => { setEditingWelcome(false); saveWelcome(); }} disabled={busy} className="shrink-0" size="sm">
               {savingKey === "welcome" ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}

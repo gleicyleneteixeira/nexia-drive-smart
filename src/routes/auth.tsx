@@ -8,8 +8,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Loader2, Eye, EyeOff, User, ArrowLeft } from "lucide-react";
-import { formatCpf, isValidCpf } from "@/lib/cpf";
+import { Loader2, Eye, EyeOff, User, ArrowLeft, TriangleAlert } from "lucide-react";
+import { formatCpf, cleanCpf, isValidCpf } from "@/lib/cpf";
+import { formatPhone, cleanPhone } from "@/lib/phone";
 import { triggerWebhook } from "@/services/webhookService";
 
 export const Route = createFileRoute("/auth")({
@@ -46,9 +47,7 @@ function AuthPage() {
   const [forgotEmail, setForgotEmail] = useState("");
   const [forgotLoading, setForgotLoading] = useState(false);
   // Recuperação: confere e-mail+CPF+telefone, gera temporária e envia no WhatsApp
-  const [forgotCpf, setForgotCpf] = useState("");
-  const [forgotPhone, setForgotPhone] = useState("");
-  const [forgotDone, setForgotDone] = useState<null | "whatsapp" | "email">(null);
+  const [forgotDone, setForgotDone] = useState<null | { channel: "whatsapp" | "email"; phoneTail: string }>(null);
   const [legacyUserModal, setLegacyUserModal] = useState(false);
   const [legacyEmail, setLegacyEmail] = useState("");
   const [legacyPassword, setLegacyPassword] = useState("");
@@ -267,8 +266,8 @@ function AuthPage() {
     }
   }
 
-  // Recuperação: se os 3 dados conferirem, o sistema gera uma senha
-  // temporária e manda no WhatsApp (ou e-mail, se o WhatsApp falhar).
+  // Recuperação: informa só o e-mail; o sistema gera uma senha temporária
+  // e manda no WhatsApp do cadastro (ou e-mail, se o WhatsApp falhar).
   // A pessoa entra com ela e troca no 1º acesso.
   async function onForgot(e: React.FormEvent) {
     e.preventDefault();
@@ -276,9 +275,9 @@ function AuthPage() {
     try {
       const { requestPasswordResetWhatsApp } = await import("@/lib/admin-operations.server");
       const res = await requestPasswordResetWhatsApp({
-        data: { email: forgotEmail, cpf: forgotCpf, phone: forgotPhone },
+        data: { email: forgotEmail },
       });
-      setForgotDone(res.channel);
+      setForgotDone({ channel: res.channel, phoneTail: res.phoneTail });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Erro ao verificar dados.");
     } finally {
@@ -311,14 +310,18 @@ function AuthPage() {
               <div>
                 <Label htmlFor="cpf">CPF *</Label>
                 <Input id="cpf" required inputMode="numeric" placeholder="000.000.000-00" maxLength={14}
-                  value={formatCpf(cpf)} onChange={(e) => setCpf(e.target.value)} />
+                  value={formatCpf(cpf)} onChange={(e) => setCpf(cleanCpf(e.target.value))} />
               </div>
               <div>
                 <Label htmlFor="phone">WhatsApp *</Label>
                 <Input id="phone" required inputMode="tel" placeholder="(00) 00000-0000"
-                  value={phone} onChange={(e) => setPhone(e.target.value)} />
+                  value={formatPhone(phone)} onChange={(e) => setPhone(cleanPhone(e.target.value))} />
                 <p className="text-xs text-muted-foreground mt-1">
                   📲 Cadastre seu WhatsApp com DDD — ele será usado para notificações e para recuperar sua senha.
+                </p>
+                <p className="text-xs text-amber-400 mt-1 flex items-center gap-1">
+                  <TriangleAlert className="h-3.5 w-3.5 shrink-0" />
+                  Verifique se o número está correto, pois as notificações serão recebidas através dele.
                 </p>
               </div>
               <div>
@@ -400,9 +403,9 @@ function AuthPage() {
           {forgotDone ? (
             <div className="space-y-4">
               <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-sm">
-                {forgotDone === "whatsapp" ? (
+                {forgotDone.channel === "whatsapp" ? (
                   <>
-                    📲 <strong>Confira seu WhatsApp!</strong> Enviamos sua senha temporária para o número cadastrado. Entre com ela e crie uma nova senha em seguida.
+                    📲 <strong>Foi enviada uma nova senha para o telefone cadastrado final {forgotDone.phoneTail || "••••"}!</strong> Entre com ela e crie uma nova senha em seguida.
                   </>
                 ) : (
                   <>
@@ -429,16 +432,6 @@ function AuthPage() {
                 <Label htmlFor="forgotEmail">E-mail do cadastro</Label>
                 <Input id="forgotEmail" type="email" required
                   value={forgotEmail} onChange={(e) => setForgotEmail(e.target.value)} />
-              </div>
-              <div>
-                <Label htmlFor="forgotCpf">CPF do cadastro</Label>
-                <Input id="forgotCpf" required inputMode="numeric" placeholder="000.000.000-00" maxLength={14}
-                  value={formatCpf(forgotCpf)} onChange={(e) => setForgotCpf(e.target.value)} />
-              </div>
-              <div>
-                <Label htmlFor="forgotPhone">WhatsApp do cadastro</Label>
-                <Input id="forgotPhone" required inputMode="tel" placeholder="(00) 00000-0000"
-                  value={forgotPhone} onChange={(e) => setForgotPhone(e.target.value)} />
               </div>
               <DialogFooter>
                 <Button type="submit" disabled={forgotLoading} className="w-full">
