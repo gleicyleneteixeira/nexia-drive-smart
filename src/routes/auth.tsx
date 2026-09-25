@@ -318,7 +318,7 @@ function AuthPage() {
                   value={formatPhone(phone)} onChange={(e) => setPhone(cleanPhone(e.target.value))} />
                 <p className="text-xs text-amber-400 mt-1 flex items-center gap-1">
                   <TriangleAlert className="h-3.5 w-3.5 shrink-0" />
-                  Cadastre seu WhatsApp com DDD — ele será usado para notificações e para recuperar sua senha. Verifique se o número está correto, pois as notificações serão recebidas através dele.
+                  📲 Cadastre seu WhatsApp com DDD — ele será usado para notificações e para recuperar sua senha. Verifique se o número está correto, pois as notificações serão recebidas através dele.
                 </p>
               </div>
               <div>
