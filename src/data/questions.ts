@@ -7349,6 +7349,23 @@ export const REAL_EXAM_IDS = [
         difficulty: 2
     }
 ];
+export function getRealExamQuestions(): Question[] {
+    // Pool validado "Prova Real": resolve os ids string para QUESTIONS e
+    // inclui os objetos inline, sem duplicar. Usado no modo Prova Real
+    // (e na inclusão forçada do completo).
+    const byId = new Map(QUESTIONS.map((q) => [q.id, q]));
+    const out: Question[] = [];
+    const seen = new Set<string>();
+    for (const entry of REAL_EXAM_IDS) {
+        const q = typeof entry === "string" ? byId.get(entry) : (entry as Question);
+        if (q && q.id && !seen.has(q.id)) {
+            seen.add(q.id);
+            out.push(q);
+        }
+    }
+    return out;
+}
+
 export function getRandomizedQuestions(count: number, opts?: {
     categories?: Category[];
     seed?: number;

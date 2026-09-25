@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
 import { RequireAuth } from "./RequireAuth";
 import { RatingPrompt, triggerRatingPrompt } from "./RatingPrompt";
-import { 
-  Flame, Home, Brain, Library, Trophy, Target, Settings, 
+import {
+  Flame, Home, Brain, Library, Trophy, Target, Settings,
   ChevronLeft, ChevronRight, Shield, Star, Car, Calendar,
-  BookOpen, Upload, Video, BarChart3, Users, ShoppingBag, 
-  LogOut, UserCircle, Palette, Menu
+  BookOpen, Upload, Video, BarChart3, Users, ShoppingBag,
+  LogOut, UserCircle, Palette, Menu, RefreshCw
 } from "lucide-react";
 import { CronogramaModal } from "./CronogramaModal";
 import { DailyCheckinBanner } from "./DailyCheckinBanner";
@@ -16,6 +16,8 @@ import { useTheme } from "@/hooks/use-theme";
 import { themes } from "@/lib/themes";
 import { supabase } from "@/integrations/supabase/client";
 import { isProfileExpired } from "@/lib/subscription";
+import { APP_VERSION } from "@/lib/app-version";
+import { toast } from "sonner";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -79,6 +81,31 @@ export function AppShell() {
   const [supportLink, setSupportLink] = useState<string | null>(null);
   const [showSupportButton, setShowSupportButton] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  // Versão do app: SOMENTE manual (menu do perfil → "Atualizar a versão").
+  // Nada automático: nenhuma faixa, nenhuma verificação sozinha.
+  const fetchServerVersion = useCallback(async (): Promise<string | null> => {
+    try {
+      const { getServerAppVersion } = await import("@/lib/admin-operations.server");
+      const { version } = await getServerAppVersion();
+      return version ?? null;
+    } catch {
+      return null;
+    }
+  }, []);
+
+  // "Atualizar a versão" no menu do perfil: força a verificação agora.
+  // Se houver versão nova, recarrega; se não, confirma que está em dia.
+  const handleManualUpdate = useCallback(async () => {
+    const version = await fetchServerVersion();
+    if (version && version !== APP_VERSION) {
+      window.location.reload();
+    } else if (version) {
+      toast.success("Você já está na versão mais recente ✅");
+    } else {
+      toast.error("Não foi possível verificar agora. Tente de novo.");
+    }
+  }, [fetchServerVersion]);
 
   // Sidebar expanded inside the drawer (icon+label vs icon-only)
   const [sidebarExpanded, setSidebarExpanded] = useState(() => {
@@ -519,6 +546,13 @@ export function AppShell() {
                         )}
                       </>
                     )}
+                    <DropdownMenuItem
+                      onClick={handleManualUpdate}
+                      className="flex items-center gap-2 cursor-pointer"
+                    >
+                      <RefreshCw className="h-4 w-4" />
+                      <span>Atualizar a versão</span>
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                       onClick={toggleTheme}

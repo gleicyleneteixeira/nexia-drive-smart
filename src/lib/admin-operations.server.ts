@@ -1791,6 +1791,13 @@ export const getWaTemplatesAdmin = createServerFn({ method: "POST" })
     return await getWaTemplates();
   });
 
+/** Versão do build no SERVIDOR (pública — só o hash/timestamp, sem dados). */
+export const getServerAppVersion = createServerFn({ method: "POST" })
+  .handler(async () => {
+    const { APP_VERSION } = await import("@/lib/app-version");
+    return { version: APP_VERSION };
+  });
+
 async function requireAdminUserId(context: { supabase: any; userId: string }): Promise<void> {
   const { data: isAdmin } = await context.supabase.rpc("has_role", {
     _user_id: context.userId,

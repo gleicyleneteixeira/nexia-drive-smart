@@ -12,6 +12,14 @@ export default defineConfig({
       port: 3001,
       host: "localhost",
     },
+    // Versão do build (hash do commit na Vercel ou timestamp local).
+    // O AppShell compara a versão do bundle do navegador com a do servidor
+    // e avisa quando há atualização (resolve o "cache" pós-deploy).
+    define: {
+      __APP_VERSION__: JSON.stringify(
+        process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? `local-${Date.now()}`
+      ),
+    },
   },
   tanstackStart: {
     server: { entry: "server" },

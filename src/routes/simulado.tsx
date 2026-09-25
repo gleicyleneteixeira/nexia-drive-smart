@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   getRandomizedQuestions,
+  getRealExamQuestions,
   INCIDENCE_META,
   CATEGORY_LABELS,
   REAL_EXAM_IDS,
@@ -26,9 +27,12 @@ import {
   Brain,
   Sparkles,
   ListChecks,
+  BadgeCheck,
 } from "lucide-react";
 import { Placa } from "@/components/Placa";
 import { triggerRatingPrompt } from "@/components/RatingPrompt";
+import { toast } from "sonner";
+import { registrarSimuladoConcluido, registrarSimuladoIniciado } from "@/lib/simulados-concluidos";
 
 export const Route = createFileRoute("/simulado")({
   component: SimuladoPage,
@@ -53,6 +57,9 @@ const STORAGE_KEY = "nexia:simulado:v3";
 const SEEN_KEY = "nexia:simulado:seen:v1";
 const SESSION_SEEN_KEY = "nexia:simulado:session:v1";
 const LETTERS = ['A', 'B', 'C', 'D'];
+
+// Modos do simulado: geral, por categoria ou só validadas (Prova Real).
+type SimMode = "completo" | Category | "prova-real";
 
 function loadSeen(): string[] {
   if (typeof window === "undefined") return [];
@@ -90,13 +97,13 @@ function saveSessionSeen(ids: string[], category?: string) {
     window.sessionStorage.setItem(SESSION_SEEN_KEY, JSON.stringify(existing));
   } catch {}
 }
-function buildFresh(category?: Category): Question[] {
+function buildFresh(mode?: Category | "prova-real"): Question[] {
   const seen = loadSeen();
-  const sessionSeen = loadSessionSeen(category);
+  const sessionSeen = loadSessionSeen(mode);
   const allExcluded = [...seen, ...sessionSeen];
-  
+
   let fresh: Question[];
-  if (!category) {
+  if (!mode) {
     // Para simulados completos, garante a inclusão das perguntas reais da prova
     const fixedQuestions = QUESTIONS.filter((q) => REAL_EXAM_IDS.includes(q.id));
     const fixedIds = fixedQuestions.map((q) => q.id);
@@ -121,11 +128,35 @@ function buildFresh(category?: Category): Question[] {
 
     // TRAVA OBRIGATÓRIA: garante que NUNCA passe de 30 questões
     fresh = merged.slice(0, TOTAL);
+  } else if (mode === "prova-real") {
+    // Pool validado (bônus "caiu na prova"): só validadas, sem repetir.
+    // Como o pool é limitado, ao esgotar permite repetir SÓ reais da sessão
+    // — nunca mistura com as demais (senão quebra a promessa do modo).
+    const realPool = getRealExamQuestions();
+    fresh = getRandomizedQuestions(TOTAL, {
+      questionsList: realPool,
+      exclude: allExcluded,
+    });
+    if (fresh.length < TOTAL) {
+      const retry = getRandomizedQuestions(TOTAL, {
+        questionsList: realPool,
+        exclude: sessionSeen,
+      });
+      const ids = new Set(fresh.map((q) => q.id));
+      for (const q of retry) {
+        if (fresh.length >= TOTAL) break;
+        if (!ids.has(q.id)) {
+          fresh.push(q);
+          ids.add(q.id);
+        }
+      }
+      fresh = fresh.slice(0, TOTAL);
+    }
   } else {
     // Busca questões da categoria selecionada — exclui vistas globalmente E da sessão
     const categoryQuestions = getRandomizedQuestions(TOTAL, { 
       exclude: allExcluded, 
-      categories: [category] 
+      categories: [mode] 
     });
     
     if (categoryQuestions.length >= 30) {
@@ -140,7 +171,7 @@ function buildFresh(category?: Category): Question[] {
       if (fullExam.length < 30) {
         const needed = 30 - fullExam.length;
         const allQuestions = [...QUESTIONS];
-        const otherCategories = allQuestions.filter(q => q.category !== category);
+        const otherCategories = allQuestions.filter(q => q.category !== mode);
         const extraQuestions = getRandomizedQuestions(needed, { 
           exclude: [...allExcluded, ...fullExam.map(q => q.id)], 
           categories: otherCategories.map(q => q.category),
@@ -160,7 +191,8 @@ function buildFresh(category?: Category): Question[] {
   }
 
   // GARANTIA FINAL: preencher com questões de todas as categorias se ainda faltar
-  if (fresh.length < TOTAL) {
+  // (NÃO vale p/ prova-real — lá o pool é só de validadas, por promessa do modo)
+  if (mode !== "prova-real" && fresh.length < TOTAL) {
     const needed = TOTAL - fresh.length;
     const freshIds = new Set(fresh.map(q => q.id));
     const remainingPool = QUESTIONS.filter(q => !freshIds.has(q.id) && !allExcluded.includes(q.id));
@@ -173,7 +205,7 @@ function buildFresh(category?: Category): Question[] {
   // Salva IDs na memória global e na sessão
   const newSeen = Array.from(new Set([...seen, ...fresh.map((q) => q.id)]));
   saveSeen(newSeen);
-  saveSessionSeen(fresh.map((q) => q.id), category);
+  saveSessionSeen(fresh.map((q) => q.id), mode);
   return fresh;
 }
 
@@ -183,7 +215,7 @@ interface PersistedState {
   selected: number | null;
   answers: (number | null)[]; // index escolhido por questão
   startedAt: number;
-  mode?: "completo" | Category;
+  mode?: SimMode;
 }
 
 function loadPersisted(): PersistedState | null {
@@ -247,7 +279,21 @@ function SimuladoPage() {
   const [showResult, setShowResult] = useState(false);
   const [resumed, setResumed] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
-  const [mode, setMode] = useState<"completo" | Category | null>(null);
+  const [mode, setMode] = useState<SimMode | null>(null);
+  // Total de simulados finalizados (exibido no resultado)
+  const [concluidos, setConcluidos] = useState(0);
+
+  // Registra 1 simulado finalizado (qualquer categoria/modo do teórico).
+  // Abandonar no meio NÃO conta — só conclusão (última questão ou finalizar).
+  const contarConclusao = () => {
+    const { total, marco } = registrarSimuladoConcluido(user?.id, mode ?? "completo");
+    setConcluidos(total);
+    if (marco) {
+      toast.success(`🏁 ${marco} simulados concluídos! Você está voando! 🎉`, {
+        duration: 6000,
+      });
+    }
+  };
 
   // Dispara pedido de avaliação 2s após terminar o simulado
   useEffect(() => {
@@ -296,6 +342,9 @@ function SimuladoPage() {
     if (search.modo === "completo") {
       autoStartedRef.current = true;
       startWithMode("completo");
+    } else if (search.modo === "prova-real") {
+      autoStartedRef.current = true;
+      startWithMode("prova-real");
     } else if (
       search.categoria &&
       (search.categoria as Category) in CATEGORY_LABELS
@@ -305,9 +354,12 @@ function SimuladoPage() {
     }
   }, [hydrated, search.modo, search.categoria]);
 
-  function startWithMode(mode: "completo" | Category) {
+  function startWithMode(mode: SimMode) {
     clearPersisted();
     const fresh = buildFresh(mode === "completo" ? undefined : mode);
+    if (!fresh.length) return;
+    // Conta como INICIADO (retomada de salvo não passa por aqui)
+    registrarSimuladoIniciado(user?.id);
     setQuestions(fresh);
     setIndex(0);
     setSelected(null);
@@ -396,6 +448,7 @@ function SimuladoPage() {
     if (index + 1 >= questions.length) {
       setIndex(questions.length); // marca como finalizado
       clearPersisted(); // libera a sessão para futuras escolhas
+      contarConclusao();
       setShowResult(true);
     } else {
       setIndex(index + 1);
@@ -413,13 +466,14 @@ function SimuladoPage() {
   const wrongCount = answered - score;
   const accPct = answered > 0 ? Math.round((score / answered) * 100) : 0;
   const errPct = answered > 0 ? 100 - accPct : 0;
-  const modeLabel = mode && mode !== "completo" ? CATEGORY_LABELS[mode] : "Geral";
+  const modeLabel = !mode || mode === "completo" ? "Geral" : mode === "prova-real" ? "Prova Real" : CATEGORY_LABELS[mode];
 
   const handleFinishEarly = () => {
     const confirmExit = window.confirm("Deseja realmente finalizar este simulado?");
     if (!confirmExit) return;
     // LIMPA o cache de sessão salva para liberar a escolha de outro simulado
     clearPersisted();
+    contarConclusao();
     setShowResult(true);
   };
   const incMeta = INCIDENCE_META[q.incidence];
@@ -635,6 +689,7 @@ function SimuladoPage() {
             questions={questions}
             answers={answers}
             score={score}
+            concluidos={concluidos}
             onRestart={restart}
           />
         )}
@@ -707,7 +762,8 @@ function DetailedFeedback({
   );
 }
 
-function ModePicker({ onPick }: { onPick: (m: "completo" | Category) => void }) {
+function ModePicker({ onPick }: { onPick: (m: SimMode) => void }) {
+  const realCount = getRealExamQuestions().length;
   const cats: { id: Category; icon: string }[] = [
     { id: "legislacao", icon: "📘" },
     { id: "placas", icon: "🚸" },
@@ -758,6 +814,27 @@ function ModePicker({ onPick }: { onPick: (m: "completo" | Category) => void }) 
         </div>
       </button>
 
+      <button
+        onClick={() => onPick("prova-real")}
+        className="w-full text-left rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-5 hover:bg-emerald-500/15 transition-colors mt-3"
+      >
+        <div className="flex items-start gap-3">
+          <div className="w-11 h-11 rounded-xl bg-emerald-500/20 flex items-center justify-center shrink-0">
+            <BadgeCheck className="h-5 w-5 text-emerald-400" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-[10px] uppercase tracking-widest text-emerald-400 font-bold">
+              Bônus validado · {realCount} questões
+            </p>
+            <p className="font-display font-bold text-lg">Prova Real</p>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              Só perguntas que já caíram na prova — estude junto com o geral.
+            </p>
+          </div>
+          <ArrowRight className="h-5 w-5 text-emerald-400 mt-2 shrink-0" />
+        </div>
+      </button>
+
       <div className="mt-6">
         <p className="text-xs uppercase tracking-widest text-muted-foreground font-semibold flex items-center gap-1.5 mb-3">
           <ListChecks className="h-3.5 w-3.5" /> Ou treine por categoria
@@ -783,11 +860,13 @@ function ResultScreen({
   questions,
   answers,
   score,
+  concluidos,
   onRestart,
 }: {
   questions: Question[];
   answers: (number | null)[];
   score: number;
+  concluidos: number;
   onRestart: () => void;
 }) {
   const [tab, setTab] = useState<"resumo" | "erradas" | "todas">("resumo");
@@ -861,6 +940,11 @@ function ResultScreen({
           {score}/{total}{" "}
           <span className="text-lg text-muted-foreground">({accuracy}%)</span>
         </h2>
+        {concluidos > 0 && (
+          <p className="text-xs font-semibold text-primary-glow mt-1">
+            🏁 Este foi seu {concluidos}º simulado concluído!
+          </p>
+        )}
         <p className="text-muted-foreground mt-1">
           {approved
             ? "Você atingiu a nota mínima para a prova teórica. Siga praticando para garantir!"
