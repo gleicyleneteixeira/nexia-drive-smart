@@ -22,14 +22,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, X, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen, Video, BadgeDollarSign, Gift, CheckCheck, CalendarClock, Lock, ChevronUp, ChevronDown, GripVertical, BarChart3, Brain, Play } from "lucide-react";
+import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, X, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen, Video, BadgeDollarSign, Gift, CheckCheck, CalendarClock, Lock, ChevronUp, ChevronDown, GripVertical, BarChart3, Brain, Play, Eye, EyeOff } from "lucide-react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import * as XLSX from "xlsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { useServerFn } from "@tanstack/react-start";
 import { adminResetUserPassword, getSalesReport, type SalesReportProfile } from "@/lib/admin-users.functions";
-import { sendPasswordReset, deleteUser, deactivateUser, sendViperConnectWelcome, sendWaTest } from "@/lib/admin-operations.server";
-import { WA_TEMPLATE_META, type WaTemplateKey } from "@/lib/viperconnect";
+import { sendPasswordReset, deleteUser, deactivateUser, sendViperConnectWelcome, sendWaTest, listViperSessions } from "@/lib/admin-operations.server";
+import { WA_TEMPLATE_META, WA_DEFAULT_MESSAGES, type WaTemplateKey } from "@/lib/viperconnect";
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
 
@@ -327,6 +327,8 @@ export function SalesPanel() {
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [showBestDays, setShowBestDays] = useState(false);
+  // Preset ativo (para destacar o botão); null = período personalizado (De/Até)
+  const [activePreset, setActivePreset] = useState<string | null>("tudo");
   const salesFn = useServerFn(getSalesReport);
 
   const { data, isLoading } = useQuery({
@@ -387,7 +389,10 @@ export function SalesPanel() {
       };
     });
 
-  function applyPreset(preset: "hoje" | "7" | "30" | "tudo" | "bestDays") {
+  type PeriodPreset = "hoje" | "7" | "15" | "30" | "mes" | "tudo" | "bestDays";
+
+  function applyPreset(preset: PeriodPreset) {
+    setActivePreset(preset);
     if (preset === "bestDays") {
       setShowBestDays(true);
       return;
@@ -399,11 +404,20 @@ export function SalesPanel() {
       return;
     }
     const today = new Date();
-    const from = new Date(today);
-    if (preset === "7") from.setDate(today.getDate() - 6);
-    else if (preset === "30") from.setDate(today.getDate() - 29);
     const fmt = (dt: Date) =>
       `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, "0")}-${String(dt.getDate()).padStart(2, "0")}`;
+    // Último mês = mês civil anterior (ex.: em set/2026, 01/08 a 31/08)
+    if (preset === "mes") {
+      const first = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+      const last = new Date(today.getFullYear(), today.getMonth(), 0);
+      setDateFrom(fmt(first));
+      setDateTo(fmt(last));
+      return;
+    }
+    const from = new Date(today);
+    if (preset === "7") from.setDate(today.getDate() - 6);
+    else if (preset === "15") from.setDate(today.getDate() - 14);
+    else if (preset === "30") from.setDate(today.getDate() - 29);
     setDateFrom(fmt(from));
     setDateTo(fmt(today));
   }
@@ -419,22 +433,34 @@ export function SalesPanel() {
       <div className="glass rounded-2xl p-4 flex flex-wrap items-end gap-3">
         <div>
           <Label className="text-xs">De</Label>
-          <Input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className="w-40" />
+          <Input type="date" value={dateFrom} onChange={(e) => { setDateFrom(e.target.value); setActivePreset(null); }} className="w-40" />
         </div>
         <div>
           <Label className="text-xs">Até</Label>
-          <Input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className="w-40" />
+          <Input type="date" value={dateTo} onChange={(e) => { setDateTo(e.target.value); setActivePreset(null); }} className="w-40" />
         </div>
         <div className="flex gap-1.5 flex-wrap">
-          {(["hoje", "7", "30", "tudo", "bestDays"] as const).map((p) => {
-            const label = p === "hoje" ? "Hoje" : p === "7" ? "Últimos 7 dias" : p === "30" ? "Últimos 30 dias" : p === "bestDays" ? "🏆 Melhores Dias" : "Tudo";
-            const isActive = p === "bestDays" ? showBestDays : !showBestDays;
+          {(["hoje", "7", "15", "30", "mes", "tudo", "bestDays"] as const).map((p) => {
+            const label =
+              p === "hoje" ? "Hoje"
+              : p === "7" ? "Últimos 7 dias"
+              : p === "15" ? "Quinzena"
+              : p === "30" ? "Últimos 30 dias"
+              : p === "mes" ? "Último mês"
+              : p === "bestDays" ? "🏆 Melhores Dias"
+              : "Tudo";
+            const selected = p === "bestDays" ? showBestDays : activePreset === p && !showBestDays;
             return (
-              <Button 
-                key={p} 
-                size="sm" 
-                variant={isActive && ((p === "bestDays" && showBestDays) || (p !== "bestDays" && !showBestDays)) ? "default" : "outline"} 
+              <Button
+                key={p}
+                size="sm"
+                variant={selected ? "default" : "outline"}
                 onClick={() => applyPreset(p)}
+                title={
+                  p === "mes" ? "Do dia 1 ao último dia do mês anterior"
+                  : p === "15" ? "Últimos 15 dias"
+                  : undefined
+                }
               >
                 {label}
               </Button>
@@ -773,6 +799,7 @@ export function UsersPanel() {
   const [resetUser, setResetUser] = useState<ProfileRow | null>(null);
   const [newPassword, setNewPassword] = useState("");
   const [resetLoading, setResetLoading] = useState(false);
+  const [waResetLoading, setWaResetLoading] = useState(false);
   const [releaseTarget, setReleaseTarget] = useState<ProfileRow | null>(null);
   const [releaseReason, setReleaseReason] = useState<string>("pago");
   const [releaseDate, setReleaseDate] = useState<string>("");
@@ -783,6 +810,28 @@ export function UsersPanel() {
   const [pixDate, setPixDate] = useState<string>("");
   const [pixLoading, setPixLoading] = useState(false);
   const resetPasswordFn = useServerFn(adminResetUserPassword);
+
+  // Admin: gera temporária, salva no banco e envia no WhatsApp do cadastro
+  // (troca obrigatória no 1º acesso). Fallback: e-mail.
+  async function handleWaReset() {
+    if (!resetUser) return;
+    setWaResetLoading(true);
+    try {
+      const ops = await import("@/lib/admin-operations.server");
+      const res = await ops.adminSendPasswordReset({ data: { userId: resetUser.id } });
+      toast.success(
+        res.channel === "whatsapp"
+          ? `Temporária enviada no WhatsApp de ${resetUser.display_name ?? resetUser.email}.`
+          : `WhatsApp indisponível — temporária enviada no e-mail de ${resetUser.display_name ?? resetUser.email}.`
+      );
+      setResetUser(null);
+      setNewPassword("");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erro ao enviar reset.");
+    } finally {
+      setWaResetLoading(false);
+    }
+  }
 
   async function handleReset(e: React.FormEvent) {
     e.preventDefault();
@@ -1449,6 +1498,23 @@ export function UsersPanel() {
               </Button>
             </DialogFooter>
           </form>
+          <div className="relative text-center text-xs text-muted-foreground">
+            <span className="bg-card px-2 relative z-10">ou</span>
+            <div className="absolute inset-x-0 top-1/2 border-t border-border/40" />
+          </div>
+          <Button
+            type="button"
+            variant="outline"
+            disabled={waResetLoading || resetLoading}
+            onClick={handleWaReset}
+            className="w-full"
+          >
+            {waResetLoading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
+            📲 Gerar temporária e enviar no WhatsApp
+          </Button>
+          <p className="text-[11px] text-muted-foreground text-center">
+            Gera senha automática, salva no banco e manda no WhatsApp do cadastro (troca obrigatória no 1º acesso).
+          </p>
         </DialogContent>
       </Dialog>
 
@@ -2941,9 +3007,71 @@ export function VideoTutorialsPanel() {
   );
 }
 
+export interface ViperSession {
+  id: string;
+  name: string;
+  number: string;
+  status?: string;
+}
+
+/** Seletor do número que dispara (sessão conectada) + busca oficial na API. */
+function SessionPicker({
+  value,
+  onChange,
+  sessions,
+  loading,
+  onSearch,
+  canSearch,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  sessions: ViperSession[];
+  loading: boolean;
+  onSearch: () => void;
+  canSearch: boolean;
+}) {
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center justify-between gap-2">
+        <Label className="text-xs font-semibold">Número que vai disparar</Label>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={onSearch}
+          disabled={loading || !canSearch}
+        >
+          {loading && <Loader2 className="h-3 w-3 mr-1 animate-spin" />}
+          Buscar números conectados
+        </Button>
+      </div>
+      <Select value={value} onValueChange={onChange}>
+        <SelectTrigger className="flex-1">
+          <SelectValue placeholder="Selecione a sessão (número conectado)" />
+        </SelectTrigger>
+        <SelectContent>
+          {sessions.length === 0 ? (
+            <SelectItem value="__none" disabled>
+              Clique em "Buscar números conectados"
+            </SelectItem>
+          ) : (
+            sessions.map((inst) => (
+              <SelectItem key={inst.id} value={inst.number || inst.id}>
+                {inst.number}
+                {inst.status ? ` • ${inst.status}` : ""}
+              </SelectItem>
+            ))
+          )}
+        </SelectContent>
+      </Select>
+    </div>
+  );
+}
+
 export function SettingsPanel() {
   const qc = useQueryClient();
-  const [saving, setSaving] = useState(false);
+  const [savingKey, setSavingKey] = useState<string | null>(null);
+  const busy = savingKey !== null;
   const [groupLink, setGroupLink] = useState("");
   const [supportLink, setSupportLink] = useState("");
   const [tiktokLink, setTiktokLink] = useState("");
@@ -2960,6 +3088,7 @@ export function SettingsPanel() {
   // ViperConnect / Uno API
   const [vApiUrl, setVApiUrl] = useState("");
   const [vToken, setVToken] = useState("");
+  const [showVToken, setShowVToken] = useState(false);
   const [vInstance, setVInstance] = useState("");
   const [vWelcomeEnabled, setVWelcomeEnabled] = useState(true);
   const [vWelcomeMessage, setVWelcomeMessage] = useState(
@@ -2974,9 +3103,22 @@ export function SettingsPanel() {
     abandoned: { enabled: false, message: "", media_url: "" },
   });
   const [waHours, setWaHours] = useState("48");
+  // Envio manual de senha (busca de cliente + disparo)
+  const [manualQ, setManualQ] = useState("");
+  const [manualResults, setManualResults] = useState<Array<{ id: string; display_name: string | null; email: string | null; cpf: string | null; phone: string | null }>>([]);
+  const [manualSearching, setManualSearching] = useState(false);
+  const [manualSearchError, setManualSearchError] = useState<string | null>(null);
+  const [manualSelected, setManualSelected] = useState<{ id: string; display_name: string | null; email: string | null; cpf: string | null; phone: string | null } | null>(null);
+  const [manualSending, setManualSending] = useState(false);
+  // Confirmação visível do último envio (nome + canal + hora)
+  const [manualSent, setManualSent] = useState<{ name: string; channel: string; at: string } | null>(null);
+  // Erro visível do último envio (não some como o toast)
+  const [manualError, setManualError] = useState<string | null>(null);
+  // Cartão com mensagem em edição (só um por vez); demais exibem o texto fixo em cinza
+  const [editingTpl, setEditingTpl] = useState<WaTemplateKey | null>(null);
   const setWa = (k: WaTemplateKey, patch: Partial<{ enabled: boolean; message: string; media_url: string }>) =>
     setWaTpl((p) => ({ ...p, [k]: { ...p[k], ...patch } }));
-  const [viperInstances, setViperInstances] = useState<Array<{ id: string; name: string; number: string }>>([]);
+  const [viperInstances, setViperInstances] = useState<Array<{ id: string; name: string; number: string; status?: string }>>([]);
   const [loadingViperInstances, setLoadingViperInstances] = useState(false);
   const [webhookUrl, setWebhookUrl] = useState("");
   const [webhookEnabled, setWebhookEnabled] = useState(true);
@@ -2984,32 +3126,30 @@ export function SettingsPanel() {
   const [testName, setTestName] = useState("");
   const [testing, setTesting] = useState(false);
 
-  // Busca as instâncias/números disponíveis na API da ViperConnect a partir
-  // da URL e do Token informados, para popular o select de instância.
+  // Busca as sessões/números conectados na API oficial (GET /sessions).
+  // Roda no servidor: o token nunca trafega no navegador além do que você digitou.
+  const listViperSessionsFn = useServerFn(listViperSessions);
+
   async function fetchViperInstances() {
     if (!vApiUrl || !vToken) return;
     setLoadingViperInstances(true);
     try {
-      const base = vApiUrl.replace(/\/$/, "");
-      const response = await fetch(`${base}/instance/fetchInstances`, {
-        method: "GET",
-        headers: {
-          apikey: vToken,
-          "Content-Type": "application/json",
-        },
-      });
-      if (!response.ok) throw new Error(`Falha ao conectar com a API (${response.status})`);
-      const data = await response.json();
-      const list: any[] = Array.isArray(data) ? data : Array.isArray(data?.data) ? data.data : [];
-      const formatted = list.map((inst: any) => ({
-        id: inst.instance?.instanceName || inst.id || inst.name || "",
-        name: inst.instance?.instanceName || inst.name || inst.id || "",
-        number: inst.instance?.owner || inst.number || "",
+      const sessions = await listViperSessionsFn({ data: { apiUrl: vApiUrl, token: vToken } });
+      const formatted = (sessions as Array<{ number: string; status?: string }>).map((s) => ({
+        id: s.number,
+        name: s.number,
+        number: s.number,
+        status: s.status,
       }));
       setViperInstances(formatted.filter((i) => i.id));
+      if (formatted.length === 0) {
+        toast.warning("Nenhuma sessão encontrada na API. Confira se há número conectado.");
+      } else {
+        toast.success(`${formatted.length} sessão(ões) encontrada(s)! Escolha o número.`);
+      }
     } catch (error) {
-      console.error("Erro ao buscar instâncias da ViperConnect:", error);
-      toast.error("Não foi possível buscar as instâncias da ViperConnect.");
+      console.error("Erro ao buscar sessões da ViperConnect:", error);
+      toast.error(error instanceof Error ? error.message : "Não foi possível buscar as sessões da ViperConnect.");
     } finally {
       setLoadingViperInstances(false);
     }
@@ -3022,6 +3162,196 @@ export function SettingsPanel() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vApiUrl, vToken]);
+
+  // Cartão de mensagem reutilizável (seção do reset + demais templates).
+  // Todo o estado é do painel (closure) — sem hooks aqui dentro.
+  const renderTemplateCard = (k: WaTemplateKey) => (
+    <div key={k} className="rounded-xl border border-border/40 p-3 space-y-2 bg-background/20">
+      <div className="flex items-center justify-between gap-2">
+        <div>
+          <p className="text-xs font-semibold">{WA_TEMPLATE_META[k].title}</p>
+          <p className="text-[11px] text-muted-foreground">{WA_TEMPLATE_META[k].description}</p>
+        </div>
+        {k !== "reset" && (
+          <Switch checked={waTpl[k].enabled} onCheckedChange={(v) => setWa(k, { enabled: v })} />
+        )}
+      </div>
+      {editingTpl === k ? (
+        <>
+          <Textarea
+            value={waTpl[k].message}
+            onChange={(e) => setWa(k, { message: e.target.value })}
+            rows={3}
+            placeholder="Vazio = mensagem padrão do sistema"
+            className="flex-1 text-xs"
+          />
+          {k !== "reset" && (
+            <Input
+              value={waTpl[k].media_url}
+              onChange={(e) => setWa(k, { media_url: e.target.value })}
+              placeholder="URL de imagem/figurinha (opcional)"
+              className="flex-1 text-xs"
+            />
+          )}
+        </>
+      ) : (
+        // Texto pré-definido do sistema (cinza, só leitura)
+        <div className="rounded-md bg-muted/40 border border-border/30 px-3 py-2 text-xs text-muted-foreground whitespace-pre-wrap">
+          {waTpl[k].message || WA_DEFAULT_MESSAGES[k]}
+        </div>
+      )}
+      <div className="flex justify-end">
+        <button
+          type="button"
+          onClick={() => setEditingTpl((cur) => (cur === k ? null : k))}
+          className="text-[11px] text-primary hover:underline cursor-pointer"
+        >
+          {editingTpl === k ? "Cancelar edição" : "✏️ Editar mensagem"}
+        </button>
+      </div>
+      {k === "abandoned" && (
+        <div className="flex items-center gap-2">
+          <Label className="text-xs font-semibold shrink-0">Cobrar após (horas)</Label>
+          <Input
+            type="number"
+            min={1}
+            value={waHours}
+            onChange={(e) => setWaHours(e.target.value)}
+            className="w-24 text-xs"
+          />
+          <p className="text-[11px] text-muted-foreground">Só contas recentes (até +48h do prazo). Conta antiga nunca recebe.</p>
+        </div>
+      )}
+      <SessionPicker
+        value={vInstance}
+        onChange={setVInstance}
+        sessions={viperInstances}
+        loading={loadingViperInstances}
+        onSearch={fetchViperInstances}
+        canSearch={!!vApiUrl && !!vToken}
+      />
+      <div className="flex justify-end gap-2 items-center">
+        {k === "reset" && (
+          <label className="flex items-center gap-2 text-xs font-semibold mr-auto cursor-pointer">
+            <Switch checked={waTpl.reset.enabled} onCheckedChange={(v) => setWa("reset", { enabled: v })} />
+            Envio ativo
+          </label>
+        )}
+        <Button size="sm" onClick={() => { setEditingTpl(null); saveTemplate(k); }} disabled={busy}>
+          {savingKey === `wa-${k}` ? <Loader2 className="h-3 w-3 animate-spin mr-1" /> : null}
+          Salvar mensagem
+        </Button>
+        <Button variant="outline" size="sm" onClick={() => handleTestWa(k)} disabled={testing}>
+          {testing ? <Loader2 className="h-3 w-3 animate-spin mr-1" /> : null}
+          Enviar teste
+        </Button>
+      </div>
+      {k === "reset" && (
+        <>
+          <div className="space-y-2 pt-1">
+            <Label className="text-xs font-semibold">Buscar aluno (e-mail, CPF, telefone ou nome)</Label>
+            <div className="relative">
+              <Input
+                value={manualQ}
+                onChange={(e) => { setManualQ(e.target.value); setManualSent(null); setManualSearchError(null); setManualError(null); }}
+                placeholder="Ex.: a aluna pediu reset — digite para buscar…"
+                className="flex-1 text-xs"
+              />
+              {manualSearching && (
+                <Loader2 className="h-4 w-4 animate-spin absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              )}
+              {manualResults.length > 0 && (
+                <div className="absolute z-20 mt-1 w-full rounded-xl border border-border/40 bg-card shadow-xl max-h-56 overflow-auto">
+                  {manualResults.map((r) => (
+                    <button
+                      key={r.id}
+                      type="button"
+                      onClick={() => {
+                        setManualSelected(r);
+                        setManualResults([]);
+                        setManualSent(null);
+                        setManualSearchError(null);
+                        setManualError(null);
+                        setManualQ("");
+                      }}
+                      className="w-full text-left px-3 py-2 hover:bg-accent/40 border-b border-border/20 last:border-0 cursor-pointer"
+                    >
+                      <p className="text-xs font-semibold">{r.display_name ?? "Sem nome"}</p>
+                      <p className="text-[11px] text-muted-foreground">
+                        {[r.email, r.cpf, r.phone].filter(Boolean).join(" • ") || "sem dados"}
+                      </p>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            {manualSearchError ? (
+              <p className="text-[11px] text-destructive">⚠️ {manualSearchError}</p>
+            ) : !manualSearching && manualQ.trim().length >= 2 && manualResults.length === 0 ? (
+              <p className="text-[11px] text-muted-foreground">Nenhum aluno encontrado para essa busca.</p>
+            ) : (
+              <p className="text-[11px] text-muted-foreground">Digite 2+ letras e <strong>clique no aluno</strong> para liberar o botão de envio.</p>
+            )}
+          </div>
+          {manualSelected && (
+            <div className="rounded-xl border border-primary/30 bg-primary/5 p-3 flex flex-col sm:flex-row sm:items-center gap-3">
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-semibold truncate">{manualSelected.display_name ?? manualSelected.email}</p>
+                <p className="text-[11px] text-muted-foreground truncate">
+                  E-mail: <strong className="text-foreground">{manualSelected.email ?? "—"}</strong>
+                </p>
+                <p className="text-[11px] text-muted-foreground">
+                  Vai receber em: <strong className="text-foreground">{manualSelected.phone ?? "sem WhatsApp cadastrado"}</strong>
+                </p>
+              </div>
+              <Button onClick={handleManualSend} disabled={manualSending || !manualSelected.phone} size="sm" className="shrink-0">
+                {manualSending ? <Loader2 className="h-3 w-3 animate-spin mr-1" /> : null}
+                Gerar e Enviar Senha
+              </Button>
+              <button
+                type="button"
+                onClick={() => setManualSelected(null)}
+                title="Trocar de aluno"
+                className="shrink-0 inline-flex items-center justify-center h-8 w-8 rounded-md text-muted-foreground hover:text-destructive hover:bg-background/80 cursor-pointer"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+          )}
+          {manualError && (
+            <div className="rounded-xl border border-destructive/40 bg-destructive/10 p-3 flex items-start gap-2">
+              <p className="text-xs flex-1">
+                ⚠️ <strong>Não foi enviado:</strong> {manualError}
+              </p>
+              <button
+                type="button"
+                onClick={() => setManualError(null)}
+                title="Dispensar"
+                className="shrink-0 inline-flex items-center justify-center h-6 w-6 rounded-md text-muted-foreground hover:text-foreground hover:bg-background/60 cursor-pointer"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          )}
+          {manualSent && (
+            <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3 flex items-start gap-2">
+              <p className="text-xs flex-1">
+                ✅ <strong>Enviado com sucesso!</strong> Senha temporária para <strong>{manualSent.name}</strong> via {manualSent.channel} às {manualSent.at}.
+              </p>
+              <button
+                type="button"
+                onClick={() => setManualSent(null)}
+                title="Dispensar"
+                className="shrink-0 inline-flex items-center justify-center h-6 w-6 rounded-md text-muted-foreground hover:text-foreground hover:bg-background/60 cursor-pointer"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
 
   useQuery({
     queryKey: ["admin", "settings"],
@@ -3113,6 +3443,68 @@ export function SettingsPanel() {
   const sendViperWelcomeFn = useServerFn(sendViperConnectWelcome);
   const sendWaTestFn = useServerFn(sendWaTest);
 
+  // Busca de cliente com debounce (e-mail, CPF, telefone ou nome)
+  useEffect(() => {
+    if (manualQ.trim().length < 2) {
+      setManualResults([]);
+      return;
+    }
+    setManualSearching(true);
+    const t = setTimeout(async () => {
+      try {
+        const ops = await import("@/lib/admin-operations.server");
+        const res = await ops.searchProfilesAdmin({ data: { q: manualQ.trim() } });
+        setManualResults(res ?? []);
+        setManualSearchError(null);
+      } catch (err) {
+        setManualResults([]);
+        setManualSearchError(err instanceof Error ? err.message : "Falha na busca.");
+      } finally {
+        setManualSearching(false);
+      }
+    }, 350);
+    return () => clearTimeout(t);
+  }, [manualQ]);
+
+  // Disparo manual: mesma lógica do reset automático, pelo número selecionado
+  async function handleManualSend() {
+    if (!manualSelected) return;
+    if (!manualSelected.phone) {
+      setManualError("Este aluno não tem WhatsApp cadastrado.");
+      return;
+    }
+    if (!vInstance) {
+      setManualError("Selecione acima o número que vai disparar.");
+      return;
+    }
+    setManualSending(true);
+    setManualError(null);
+    setManualSent(null);
+    try {
+      const ops = await import("@/lib/admin-operations.server");
+      const res = await ops.adminSendPasswordReset({
+        data: { userId: manualSelected.id, sessionPhone: vInstance },
+      });
+      const sentName = manualSelected.display_name ?? manualSelected.email ?? "aluno";
+      setManualSent({
+        name: sentName,
+        channel: res.channel === "whatsapp" ? "WhatsApp" : "e-mail",
+        at: new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }),
+      });
+      toast.success(
+        res.channel === "whatsapp"
+          ? `Senha temporária enviada no WhatsApp de ${sentName}.`
+          : `WhatsApp indisponível — senha enviada no e-mail de ${sentName}.`
+      );
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Falha ao enviar.";
+      setManualError(msg);
+      toast.error(msg);
+    } finally {
+      setManualSending(false);
+    }
+  }
+
   async function handleTestWa(template: WaTemplateKey) {
     if (!testPhone) {
       toast.error("Informe um número no campo de teste (seção Boas-Vindas).");
@@ -3145,10 +3537,78 @@ export function SettingsPanel() {
     }
   }
 
-  async function handleSave() {
-    setSaving(true);
+  // Salvamento POR BLOCO: conexão (URL+token+instância) é fixa e salva uma
+  // vez; cada mensagem é variável e tem seu próprio salvar.
+  type KV = { key: string; value: string };
+
+  async function upsertApp(pairs: KV[]) {
+    for (const s of pairs) {
+      const { error } = await supabase.from("app_settings").upsert(s, { onConflict: "key" });
+      if (error) throw error;
+    }
+  }
+
+  async function upsertSys(pairs: KV[]) {
+    for (const s of pairs) {
+      const { error } = await supabase.from("system_settings").upsert(s, { onConflict: "key" });
+      if (error) console.warn(`Falha ao salvar system_settings (${s.key}):`, error.message);
+    }
+  }
+
+  async function runSave(saveKey: string, fn: () => Promise<void>, okMsg: string) {
+    if (savingKey) return;
+    setSavingKey(saveKey);
     try {
-      const settings = [
+      await fn();
+      qc.invalidateQueries({ queryKey: ["admin", "settings"] });
+      toast.success(okMsg);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erro ao salvar");
+    } finally {
+      setSavingKey(null);
+    }
+  }
+
+  // FIXO — conexão (URL + token; o número vai junto em cada salvar de mensagem)
+  const saveConnection = () =>
+    runSave("conn", () => upsertSys([
+      { key: "viperconnect_api_url", value: vApiUrl },
+      { key: "viperconnect_token", value: vToken },
+    ]), "Conexão salva!");
+
+  // VARIÁVEL — boas-vindas (leva o número junto)
+  const saveWelcome = () =>
+    runSave("welcome", () => upsertSys([
+      { key: "viperconnect_instance_id", value: vInstance },
+      { key: "viperconnect_welcome_enabled", value: vWelcomeEnabled ? "true" : "false" },
+      { key: "viperconnect_welcome_message", value: vWelcomeMessage },
+      { key: "viperconnect_welcome_media_url", value: vWelcomeMedia },
+    ]), "Boas-vindas salvas!");
+
+  // VARIÁVEL — uma mensagem automática por vez (leva o número junto)
+  const saveTemplate = (k: WaTemplateKey) => {
+    const pairs: KV[] = [
+      { key: "viperconnect_instance_id", value: vInstance },
+      { key: `wa_${k}_enabled`, value: waTpl[k].enabled ? "true" : "false" },
+      { key: `wa_${k}_message`, value: waTpl[k].message },
+      { key: `wa_${k}_media_url`, value: waTpl[k].media_url },
+    ];
+    if (k === "abandoned") pairs.push({ key: "wa_abandoned_hours", value: waHours });
+    return runSave(`wa-${k}`, () => upsertSys(pairs), `"${WA_TEMPLATE_META[k].title}" salva!`);
+  };
+
+  const saveWebhook = () =>
+    runSave("webhook", () => upsertSys([
+      { key: "global_webhook_url", value: webhookUrl },
+      { key: "global_webhook_enabled", value: webhookEnabled ? "true" : "false" },
+    ]), "Webhook salvo!");
+
+  // Salva tudo (atalho no fim da página)
+  async function handleSave() {
+    if (savingKey) return;
+    setSavingKey("all");
+    try {
+      await upsertApp([
         { key: "whatsapp_support_link", value: supportLink },
         { key: "show_whatsapp_button", value: showButton ? "true" : "false" },
         { key: "whatsapp_group_link", value: groupLink },
@@ -3159,14 +3619,8 @@ export function SettingsPanel() {
         { key: "tiktok_group_cover", value: tiktokCover },
         { key: "free_trial_enabled", value: freeTrialEnabled ? "true" : "false" },
         { key: "free_trial_questions", value: String(freeTrialQuestions) },
-      ];
-      for (const s of settings) {
-        const { error } = await supabase.from("app_settings").upsert(s, { onConflict: "key" });
-        if (error) throw error;
-      }
-
-      // ViperConnect (system_settings — somente admin)
-      const vSettings = [
+      ]);
+      await upsertSys([
         { key: "viperconnect_api_url", value: vApiUrl },
         { key: "viperconnect_token", value: vToken },
         { key: "viperconnect_instance_id", value: vInstance },
@@ -3188,17 +3642,13 @@ export function SettingsPanel() {
         { key: "wa_abandoned_hours", value: waHours },
         { key: "global_webhook_url", value: webhookUrl },
         { key: "global_webhook_enabled", value: webhookEnabled ? "true" : "false" },
-      ];
-      for (const s of vSettings) {
-        const { error } = await supabase.from("system_settings").upsert(s, { onConflict: "key" });
-        if (error) console.warn(`Falha ao salvar system_settings (${s.key}):`, error.message);
-      }
+      ]);
       qc.invalidateQueries({ queryKey: ["admin", "settings"] });
       toast.success("Configurações salvas!");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Erro ao salvar");
     } finally {
-      setSaving(false);
+      setSavingKey(null);
     }
   }
 
@@ -3340,6 +3790,14 @@ export function SettingsPanel() {
       </div>
 
       <div className="space-y-4 border-t border-border/40 pt-6">
+        <h3 className="font-display font-bold text-sm">Reset de senha (uso diário)</h3>
+        <p className="text-xs text-muted-foreground">
+          Gera senha temporária, salva no banco e envia no WhatsApp do aluno (troca obrigatória no 1º acesso).
+        </p>
+        {renderTemplateCard("reset")}
+      </div>
+
+      <div className="space-y-4 border-t border-border/40 pt-6">
         <h3 className="font-display font-bold text-sm">WhatsApp de Boas-Vindas (ViperConnect / Uno API)</h3>
         <p className="text-xs text-muted-foreground">
           Envia uma mensagem automática via WhatsApp quando o pagamento (Pix) é confirmado. As credenciais ficam restritas a administradores.
@@ -3360,43 +3818,27 @@ export function SettingsPanel() {
 
         <div className="space-y-2">
           <Label className="text-xs font-semibold">Token da API</Label>
-          <Input type="password" value={vToken} onChange={(e) => setVToken(e.target.value)} placeholder="Token de acesso" className="flex-1" />
+          <div className="relative">
+            <Input type={showVToken ? "text" : "password"} value={vToken} onChange={(e) => setVToken(e.target.value)} placeholder="Token de acesso" className="flex-1 pr-10" />
+            <button
+              type="button"
+              onClick={() => setShowVToken((s) => !s)}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              aria-label={showVToken ? "Ocultar token" : "Mostrar token"}
+            >
+              {showVToken ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
         </div>
 
         <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <Label className="text-xs font-semibold">Sessão conectada (número do WhatsApp)</Label>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={fetchViperInstances}
-              disabled={loadingViperInstances || !vApiUrl || !vToken}
-            >
-              {loadingViperInstances && <Loader2 className="h-3 w-3 mr-1 animate-spin" />}
-              Buscar Instâncias
+          <p className="text-xs text-muted-foreground">URL + token ficam fixos. O número que dispara é escolhido em cada mensagem abaixo.</p>
+          <div className="flex justify-end">
+            <Button onClick={saveConnection} disabled={busy} size="sm">
+              {savingKey === "conn" ? <Loader2 className="h-3 w-3 animate-spin mr-1" /> : null}
+              Salvar conexão
             </Button>
           </div>
-          <Select value={vInstance} onValueChange={setVInstance}>
-            <SelectTrigger className="flex-1">
-              <SelectValue placeholder="Selecione a sessão (número conectado)" />
-            </SelectTrigger>
-            <SelectContent>
-              {viperInstances.length === 0 ? (
-                <SelectItem value="__none" disabled>
-                  Nenhuma instância encontrada
-                </SelectItem>
-              ) : (
-                viperInstances.map((inst) => (
-                  <SelectItem key={inst.id} value={inst.number || inst.id}>
-                    {inst.name}
-                    {inst.number ? ` (${inst.number})` : ""}
-                  </SelectItem>
-                ))
-              )}
-            </SelectContent>
-          </Select>
-          <p className="text-xs text-muted-foreground">É por este número que as mensagens saem (contrato oficial: /v15.0/{`{número}`}/messages).</p>
         </div>
 
         <div className="space-y-2">
@@ -3410,11 +3852,24 @@ export function SettingsPanel() {
           <Input value={vWelcomeMedia} onChange={(e) => setVWelcomeMedia(e.target.value)} placeholder="https://…/imagem-ou-arquivo.png" className="flex-1" />
         </div>
 
+        <SessionPicker
+          value={vInstance}
+          onChange={setVInstance}
+          sessions={viperInstances}
+          loading={loadingViperInstances}
+          onSearch={fetchViperInstances}
+          canSearch={!!vApiUrl && !!vToken}
+        />
+
         <div className="rounded-lg bg-secondary/30 border border-border/40 p-3 space-y-2">
           <p className="text-xs font-semibold">Testar envio</p>
           <div className="flex flex-col sm:flex-row gap-2">
             <Input value={testPhone} onChange={(e) => setTestPhone(e.target.value)} placeholder="DDD + número (ex: 11999999999)" className="flex-1" />
             <Input value={testName} onChange={(e) => setTestName(e.target.value)} placeholder="Nome de teste" className="flex-1" />
+            <Button onClick={saveWelcome} disabled={busy} className="shrink-0" size="sm">
+              {savingKey === "welcome" ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+              Salvar boas-vindas
+            </Button>
             <Button variant="outline" onClick={handleTestWelcome} disabled={testing} className="shrink-0">
               {testing ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
               Enviar teste
@@ -3426,52 +3881,10 @@ export function SettingsPanel() {
       <div className="space-y-4 border-t border-border/40 pt-6">
         <h3 className="font-display font-bold text-sm">Mensagens automáticas WhatsApp</h3>
         <p className="text-xs text-muted-foreground">
-          Cada mensagem tem liga/desliga e texto próprio (use <code className="text-primary">{"{nome}"}</code> para o nome do aluno, emojis liberados). Mídia opcional (imagem/figurinha por URL). O teste usa o número acima.
+          Lembrete, cobrança e abandono — cada uma já vem com texto padrão (em cinza); clique em <strong>Editar mensagem</strong> para personalizar (use <code className="text-primary">{"{nome}"}</code>; emojis liberados). Todas começam <strong>desligadas</strong>. O reset de senha fica na seção acima (uso diário).
         </p>
 
-        {(Object.keys(WA_TEMPLATE_META) as WaTemplateKey[]).map((k) => (
-          <div key={k} className="rounded-xl border border-border/40 p-3 space-y-2 bg-background/20">
-            <div className="flex items-center justify-between gap-2">
-              <div>
-                <p className="text-xs font-semibold">{WA_TEMPLATE_META[k].title}</p>
-                <p className="text-[11px] text-muted-foreground">{WA_TEMPLATE_META[k].description}</p>
-              </div>
-              <Switch checked={waTpl[k].enabled} onCheckedChange={(v) => setWa(k, { enabled: v })} />
-            </div>
-            <Textarea
-              value={waTpl[k].message}
-              onChange={(e) => setWa(k, { message: e.target.value })}
-              rows={3}
-              placeholder="Vazio = mensagem padrão do sistema"
-              className="flex-1 text-xs"
-            />
-            <Input
-              value={waTpl[k].media_url}
-              onChange={(e) => setWa(k, { media_url: e.target.value })}
-              placeholder="URL de imagem/figurinha (opcional)"
-              className="flex-1 text-xs"
-            />
-            {k === "abandoned" && (
-              <div className="flex items-center gap-2">
-                <Label className="text-xs font-semibold shrink-0">Cobrar após (horas)</Label>
-                <Input
-                  type="number"
-                  min={1}
-                  value={waHours}
-                  onChange={(e) => setWaHours(e.target.value)}
-                  className="w-24 text-xs"
-                />
-                <p className="text-[11px] text-muted-foreground">Só contas recentes (até +48h do prazo). Conta antiga nunca recebe.</p>
-              </div>
-            )}
-            <div className="flex justify-end">
-              <Button variant="outline" size="sm" onClick={() => handleTestWa(k)} disabled={testing}>
-                {testing ? <Loader2 className="h-3 w-3 animate-spin mr-1" /> : null}
-                Enviar teste
-              </Button>
-            </div>
-          </div>
-        ))}
+        {(["reminder", "billing", "abandoned"] as WaTemplateKey[]).map((k) => renderTemplateCard(k))}
       </div>
 
       <div className="space-y-4 border-t border-border/40 pt-6">
@@ -3504,13 +3917,19 @@ export function SettingsPanel() {
             ) : null}
           </div>
           <p className="text-xs text-muted-foreground">Se vazia ou desativada, o sistema ignora o envio sem causar lentidão.</p>
+          <div className="flex justify-end">
+            <Button onClick={saveWebhook} disabled={busy} size="sm">
+              {savingKey === "webhook" ? <Loader2 className="h-3 w-3 animate-spin mr-1" /> : null}
+              Salvar webhook
+            </Button>
+          </div>
         </div>
       </div>
 
       <div className="pt-2">
-        <Button onClick={handleSave} disabled={saving}>
-          {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-          Salvar Configurações
+        <Button onClick={handleSave} disabled={busy}>
+          {savingKey === "all" ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+          Salvar tudo
         </Button>
       </div>
     </div>

@@ -45,12 +45,10 @@ function AuthPage() {
   const [forgotOpen, setForgotOpen] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
   const [forgotLoading, setForgotLoading] = useState(false);
-  // Recuperação em 2 etapas: 1 = confere e-mail+CPF+telefone; 2 = nova senha
-  const [forgotStep, setForgotStep] = useState<1 | 2>(1);
+  // Recuperação: confere e-mail+CPF+telefone, gera temporária e envia no WhatsApp
   const [forgotCpf, setForgotCpf] = useState("");
   const [forgotPhone, setForgotPhone] = useState("");
-  const [forgotNewPw, setForgotNewPw] = useState("");
-  const [forgotConfirmPw, setForgotConfirmPw] = useState("");
+  const [forgotDone, setForgotDone] = useState<null | "whatsapp" | "email">(null);
   const [legacyUserModal, setLegacyUserModal] = useState(false);
   const [legacyEmail, setLegacyEmail] = useState("");
   const [legacyPassword, setLegacyPassword] = useState("");
@@ -269,63 +267,20 @@ function AuthPage() {
     }
   }
 
-  // Etapa 1: confere se e-mail + CPF + telefone pertencem à mesma conta
+  // Recuperação: se os 3 dados conferirem, o sistema gera uma senha
+  // temporária e manda no WhatsApp (ou e-mail, se o WhatsApp falhar).
+  // A pessoa entra com ela e troca no 1º acesso.
   async function onForgot(e: React.FormEvent) {
     e.preventDefault();
     setForgotLoading(true);
     try {
-      const { verifyRecoveryIdentitySecure } = await import("@/lib/admin-operations.server");
-      await verifyRecoveryIdentitySecure({ data: { email: forgotEmail, cpf: forgotCpf, phone: forgotPhone } });
-      toast.success("Identidade confirmada! Crie sua nova senha.");
-      setForgotNewPw("");
-      setForgotConfirmPw("");
-      setForgotStep(2);
+      const { requestPasswordResetWhatsApp } = await import("@/lib/admin-operations.server");
+      const res = await requestPasswordResetWhatsApp({
+        data: { email: forgotEmail, cpf: forgotCpf, phone: forgotPhone },
+      });
+      setForgotDone(res.channel);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Erro ao verificar dados.");
-    } finally {
-      setForgotLoading(false);
-    }
-  }
-
-  // Etapa 2: grava a nova senha (o servidor revalida os 3 dados) e já entra
-  async function onResetPassword(e: React.FormEvent) {
-    e.preventDefault();
-    if (!forgotNewPw || forgotNewPw.length < 6) {
-      toast.error("A senha deve ter pelo menos 6 caracteres.");
-      return;
-    }
-    if (forgotNewPw !== forgotConfirmPw) {
-      toast.error("As senhas não coincidem.");
-      return;
-    }
-    setForgotLoading(true);
-    try {
-      const { resetPasswordWithIdentitySecure } = await import("@/lib/admin-operations.server");
-      await resetPasswordWithIdentitySecure({
-        data: { email: forgotEmail, cpf: forgotCpf, phone: forgotPhone, newPassword: forgotNewPw },
-      });
-      triggerWebhook("PASSWORD_RESET_REQUESTED", { email: forgotEmail });
-      const { error: signInErr } = await supabase.auth.signInWithPassword({
-        email: forgotEmail,
-        password: forgotNewPw,
-      });
-      if (signInErr) throw signInErr;
-      // Aviso de reset no WhatsApp (silencioso — a senha já foi trocada)
-      try {
-        const { triggerWaNotification } = await import("@/lib/admin-operations.server");
-        await triggerWaNotification({ data: { template: "reset" } });
-      } catch {
-        /* sem WhatsApp vinculado ou template desligado */
-      }
-      toast.success("Senha atualizada! Bem-vinda(o) de volta!");
-      setForgotOpen(false);
-      setForgotStep(1);
-      setForgotEmail("");
-      setForgotCpf("");
-      setForgotPhone("");
-      navigate({ to: "/cadastro", replace: true });
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Erro ao redefinir senha.");
     } finally {
       setForgotLoading(false);
     }
@@ -410,7 +365,7 @@ function AuthPage() {
               </button>
             </div>
             {mode === "login" && (
-              <button type="button" onClick={() => { setForgotEmail(email); setForgotStep(1); setForgotOpen(true); }}
+              <button type="button" onClick={() => { setForgotEmail(email); setForgotDone(null); setForgotOpen(true); }}
                 className="mt-2 text-xs text-primary hover:underline">
                 Esqueceu sua senha?
               </button>
@@ -437,12 +392,38 @@ function AuthPage() {
           <DialogHeader>
             <DialogTitle>Recuperar senha</DialogTitle>
             <DialogDescription>
-              {forgotStep === 1
-                ? "Informe os dados do seu cadastro. Se os três conferirem, você cria uma nova senha na hora."
-                : "Identidade confirmada! Digite sua nova senha."}
+              {forgotDone
+                ? "Senha temporária gerada!"
+                : "Informe os dados do seu cadastro. Vamos mandar uma senha temporária no seu WhatsApp."}
             </DialogDescription>
           </DialogHeader>
-          {forgotStep === 1 ? (
+          {forgotDone ? (
+            <div className="space-y-4">
+              <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-sm">
+                {forgotDone === "whatsapp" ? (
+                  <>
+                    📲 <strong>Confira seu WhatsApp!</strong> Enviamos sua senha temporária para o número cadastrado. Entre com ela e crie uma nova senha em seguida.
+                  </>
+                ) : (
+                  <>
+                    📧 <strong>Confira seu e-mail!</strong> Não foi possível mandar no WhatsApp, então enviamos sua senha temporária para o e-mail do cadastro. Entre com ela e crie uma nova senha em seguida.
+                  </>
+                )}
+              </div>
+              <DialogFooter>
+                <Button
+                  type="button"
+                  className="w-full"
+                  onClick={() => {
+                    setForgotOpen(false);
+                    setForgotDone(null);
+                  }}
+                >
+                  Entendi, ir para o login
+                </Button>
+              </DialogFooter>
+            </div>
+          ) : (
             <form onSubmit={onForgot} className="space-y-4">
               <div>
                 <Label htmlFor="forgotEmail">E-mail do cadastro</Label>
@@ -455,35 +436,14 @@ function AuthPage() {
                   value={formatCpf(forgotCpf)} onChange={(e) => setForgotCpf(e.target.value)} />
               </div>
               <div>
-                <Label htmlFor="forgotPhone">Telefone do cadastro</Label>
+                <Label htmlFor="forgotPhone">WhatsApp do cadastro</Label>
                 <Input id="forgotPhone" required inputMode="tel" placeholder="(00) 00000-0000"
                   value={forgotPhone} onChange={(e) => setForgotPhone(e.target.value)} />
               </div>
               <DialogFooter>
                 <Button type="submit" disabled={forgotLoading} className="w-full">
                   {forgotLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-                  Verificar meus dados
-                </Button>
-              </DialogFooter>
-            </form>
-          ) : (
-            <form onSubmit={onResetPassword} className="space-y-4">
-              <div>
-                <Label htmlFor="forgotNewPw">Nova senha *</Label>
-                <Input id="forgotNewPw" type="password" required minLength={6}
-                  autoComplete="new-password" placeholder="Mínimo 6 caracteres"
-                  value={forgotNewPw} onChange={(e) => setForgotNewPw(e.target.value)} />
-              </div>
-              <div>
-                <Label htmlFor="forgotConfirmPw">Confirme a nova senha *</Label>
-                <Input id="forgotConfirmPw" type="password" required minLength={6}
-                  autoComplete="new-password"
-                  value={forgotConfirmPw} onChange={(e) => setForgotConfirmPw(e.target.value)} />
-              </div>
-              <DialogFooter>
-                <Button type="submit" disabled={forgotLoading} className="w-full">
-                  {forgotLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-                  Salvar nova senha e entrar
+                  Enviar senha no meu WhatsApp
                 </Button>
               </DialogFooter>
             </form>

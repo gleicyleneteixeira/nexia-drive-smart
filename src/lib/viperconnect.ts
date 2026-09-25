@@ -54,11 +54,19 @@ export interface DispatchResult {
   error?: string;
 }
 
+/** Primeiro nome com capitalização normal (o cadastro guarda em MAIÚSCULAS). */
+function primeiroNome(display: string | null | undefined): string {
+  const first = (display || "").trim().split(/\s+/)[0] || "";
+  if (!first) return "aluno(a)";
+  const low = first.toLowerCase();
+  return low.charAt(0).toUpperCase() + low.slice(1);
+}
+
 // Envio genérico no contrato OFICIAL ViperConnect (formato WhatsApp Cloud API):
 //   POST {api_url}/v15.0/{SESSAO}/messages
-//   Header: Authorization: <UNOAPI_AUTH_TOKEN> (token puro, sem "Bearer")
+//   Header: Authorization: Bearer <UNOAPI_AUTH_TOKEN>
 //   Body: { messaging_product, to, type, text/image }
-// Fonte: README + guia de desenvolvimento oficiais do ViperConnect.
+// Fonte: guia oficial de mensagens + solução de problemas do ViperConnect.
 export interface SendWhatsAppArgs {
   /** WhatsApp do destinatário (qualquer formato — normalizado p/ dígitos c/ DDI). */
   to: string;
@@ -66,26 +74,32 @@ export interface SendWhatsAppArgs {
   body: string;
   /** URL pública de imagem (opcional — envia como imagem com legenda). */
   imageUrl?: string;
+  /** Sessão remetente (número conectado). Padrão: a salva nas configurações. */
+  session?: string;
 }
 
-export async function sendWhatsAppMessage({ to, body, imageUrl }: SendWhatsAppArgs): Promise<DispatchResult> {
+export async function sendWhatsAppMessage({ to, body, imageUrl, session }: SendWhatsAppArgs): Promise<DispatchResult> {
   const s = await getViperConnectSettings();
 
   if (!s.api_url || !s.token) {
     return { ok: false, error: "ViperConnect não configurado (URL ou token ausente). Ajuste em Admin → Configurações → WhatsApp." };
   }
   // {SESSAO} = número do WhatsApp conectado (só dígitos, com DDI 55).
-  const session = normalizePhone(s.instance_id);
-  if (session.length < 10) {
+  const sessionDigits = normalizePhone(session ?? s.instance_id);
+  if (sessionDigits.length < 10) {
     return { ok: false, error: "Sessão do WhatsApp não configurada (número da sessão)." };
   }
   const dest = normalizePhone(to);
   if (dest.length < 10) return { ok: false, error: "Número de destino inválido." };
 
-  const endpoint = `${s.api_url.replace(/\/$/, "")}/v15.0/${session}/messages`;
+  const endpoint = `${s.api_url.replace(/\/$/, "")}/v15.0/${sessionDigits}/messages`;
+  // Guia oficial (solução de problemas): 401 se resolve com "Bearer TOKEN".
+  const auth = s.token.trim().toLowerCase().startsWith("bearer ")
+    ? s.token.trim()
+    : `Bearer ${s.token.trim()}`;
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
-    Authorization: s.token,
+    Authorization: auth,
   };
   const payload: Record<string, unknown> = imageUrl
     ? { messaging_product: "whatsapp", to: dest, type: "image", image: { link: imageUrl, caption: body } }
@@ -126,7 +140,7 @@ export interface WaTemplate {
 export const WA_TEMPLATE_META: Record<WaTemplateKey, { title: string; description: string }> = {
   reset: {
     title: "Reset de senha",
-    description: "Enviada logo após o aluno trocar a senha (confirmação).",
+    description: "Gera senha temporária e envia no WhatsApp (use {senha} no texto).",
   },
   reminder: {
     title: "Lembrete de estudo",
@@ -142,19 +156,18 @@ export const WA_TEMPLATE_META: Record<WaTemplateKey, { title: string; descriptio
   },
 };
 
+export const WA_DEFAULT_MESSAGES: Record<WaTemplateKey, string> = {
+  reset: "Olá {nome}! 🔑 Sua senha temporária do Nexia Drive é: *{senha}* Entre com ela e crie uma nova senha em seguida.",
+  reminder: "Olá {nome}! 📚 Sua meta de leitura de hoje no Nexia Drive está te esperando. Bora manter o ritmo? 💪",
+  billing: "Olá {nome}! ⚠️ Seu acesso ao Nexia Drive está pendente de pagamento ou expirado. Regularize para continuar estudando. Qualquer dúvida, chama aqui! 💳",
+  abandoned: "Olá {nome}! 👋 Vimos que você criou sua conta no Nexia Drive mas ainda não concluiu o pagamento. Sua vaga continua reservada! Precisa de ajuda? Chama aqui. 🚀",
+};
+
 const WA_DEFAULTS: Record<WaTemplateKey, { message: string }> = {
-  reset: {
-    message: "Olá {nome}! 🔐 Sua senha do Nexia Drive foi alterada com sucesso. Se não foi você, fale com o suporte agora mesmo.",
-  },
-  reminder: {
-    message: "Olá {nome}! 📚 Sua meta de leitura de hoje no Nexia Drive está te esperando. Bora manter o ritmo? 💪",
-  },
-  billing: {
-    message: "Olá {nome}! ⚠️ Seu acesso ao Nexia Drive está pendente de pagamento ou expirado. Regularize para continuar estudando. Qualquer dúvida, chama aqui! 💳",
-  },
-  abandoned: {
-    message: "Olá {nome}! 👋 Vimos que você criou sua conta no Nexia Drive mas ainda não concluiu o pagamento. Sua vaga continua reservada! Precisa de ajuda? Chama aqui. 🚀",
-  },
+  reset: { message: WA_DEFAULT_MESSAGES.reset },
+  reminder: { message: WA_DEFAULT_MESSAGES.reminder },
+  billing: { message: WA_DEFAULT_MESSAGES.billing },
+  abandoned: { message: WA_DEFAULT_MESSAGES.abandoned },
 };
 
 export const WA_TEMPLATE_KEYS = [
@@ -199,22 +212,26 @@ export async function getWaTemplates(): Promise<WaTemplates> {
 }
 
 /**
- * Envia um template para um número. Retorna {sent:false} (sem erro) quando o
- * template está desligado — o chamador decide se isso é esperado.
+ * Envia um template para um número. Placeholders: {nome} (primeiro nome) +
+ * vars extras (ex.: {senha} no reset). Retorna {sent:false} (sem erro) quando
+ * o template está desligado — o chamador decide se isso é esperado.
  */
 export async function sendWaTemplate(
   to: string,
   name: string,
   key: WaTemplateKey,
-  opts?: { force?: boolean }
+  opts?: { force?: boolean; vars?: Record<string, string>; session?: string }
 ): Promise<DispatchResult & { sent: boolean }> {
   const { templates } = await getWaTemplates();
   const t = templates[key];
   if (!t.enabled && !opts?.force) {
     return { ok: true, sent: false, error: "Template desativado no painel." };
   }
-  const body = (t.message || WA_DEFAULTS[key].message).replace(/\{nome\}/gi, name || "aluno(a)");
-  const res = await sendWhatsAppMessage({ to, body, imageUrl: t.media_url || undefined });
+  let body = (t.message || WA_DEFAULTS[key].message).replace(/\{nome\}/gi, primeiroNome(name));
+  for (const [vk, vv] of Object.entries(opts?.vars ?? {})) {
+    body = body.split(`{${vk}}`).join(vv);
+  }
+  const res = await sendWhatsAppMessage({ to, body, imageUrl: t.media_url || undefined, session: opts?.session });
   return { ...res, sent: res.ok };
 }
 export async function dispatchViperConnectWelcome(
@@ -227,7 +244,7 @@ export async function dispatchViperConnectWelcome(
     return { ok: false, error: "Envio de boas-vindas desativado nas configurações." };
   }
 
-  const message = (s.welcome_message || "Olá {nome}!").replace(/\{nome\}/gi, name || "aluno(a)");
+  const message = (s.welcome_message || "Olá {nome}!").replace(/\{nome\}/gi, primeiroNome(name));
   return sendWhatsAppMessage({
     to: phone,
     body: message,

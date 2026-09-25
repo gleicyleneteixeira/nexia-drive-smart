@@ -156,6 +156,8 @@ function CheckoutPage() {
   const pollingRef = useRef<NodeJS.Timeout | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const groupVisibleRef = useRef(false);
+  // Trava anti-duplo-clique: cada seleção gera uma cobrança Pix
+  const selectingRef = useRef(false);
 
   useEffect(() => {
     if (!isGiftOpened && user) {
@@ -264,6 +266,13 @@ function CheckoutPage() {
       toast.error(err instanceof Error ? err.message : "Erro ao gerar o Pix.");
       setModalOpen(false);
     } finally { setPixLoading(false); }
+  };
+
+  // Cartão inteiro clicável usa este wrapper (trava cobrança duplicada)
+  const selectPlanSafe = (planId: "1_month" | "3_months" | "6_months", price: number, planName: string) => {
+    if (selectingRef.current) return;
+    selectingRef.current = true;
+    void handleSelectPlan(planId, price, planName).finally(() => { selectingRef.current = false; });
   };
 
   const copyToClipboard = () => {
@@ -553,7 +562,17 @@ function CheckoutPage() {
           {plans.map((plan) => (
             <Card
               key={plan.id}
-              className={`glass relative overflow-hidden flex flex-col justify-between transition-all duration-300 ${
+              role="button"
+              tabIndex={0}
+              title="Clique para gerar o Pix deste plano"
+              onClick={() => selectPlanSafe(plan.id, plan.price, plan.name)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  selectPlanSafe(plan.id, plan.price, plan.name);
+                }
+              }}
+              className={`glass relative overflow-hidden flex flex-col justify-between transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-glow ${
                 flashCards ? "flash-card" : ""
               } ${
                 plan.id === "6_months"
@@ -675,7 +694,7 @@ function CheckoutPage() {
  
               <CardFooter className="pt-4">
                 <Button
-                  onClick={() => handleSelectPlan(plan.id, plan.price, plan.name)}
+                  onClick={(e) => { e.stopPropagation(); selectPlanSafe(plan.id, plan.price, plan.name); }}
                   className="w-full h-11 rounded-xl font-bold cursor-pointer gradient-primary text-primary-foreground shadow-glow"
                 >
                   {giftOfferActive && plan.id === "1_month" ? "Liberar 60 Dias por R$ 19,90" : giftOfferActive && plan.id === "6_months" ? "Liberar Combo Completo por R$ 29,90" : plan.buttonText}

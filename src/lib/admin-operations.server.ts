@@ -927,30 +927,121 @@ export const requestPasswordResetSecure = createServerFn({ method: "POST" })
       throw new Error("Esta conta não possui um e-mail cadastrado. Entre em contato com o suporte.");
     }
 
-    // Generate random temporary password
-    const chars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789";
-    let tempPassword = "nexia-";
-    for (let i = 0; i < 6; i++) {
-      tempPassword += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-
-    // Update Auth password
-    const { error: authErr } = await supabaseAdmin.auth.admin.updateUserById(profile.id, {
-      password: tempPassword,
-    });
-    if (authErr) throw new Error("Erro ao atualizar credenciais: " + authErr.message);
-
-    // Update profile: set needs_new_password: true
-    await supabaseAdmin
-      .from("profiles")
-      .update({
-        access_status: "active",
-        needs_new_password: true,
-      })
-      .eq("id", profile.id);
+    // Generate random temporary password (troca obrigatória no 1º acesso)
+    const tempPassword = generateTempPassword(8);
+    await applyTempPassword(
+      { id: profile.id, email: profile.email as string | null, display_name: (profile as any).display_name ?? null },
+      tempPassword
+    );
 
     // Send email with nodemailer
-    const htmlContent = `
+    await sendTempPasswordEmail(
+      { email: profile.email as string, display_name: (profile as any).display_name ?? null },
+      tempPassword
+    );
+
+    return { success: true };
+  });
+
+/** Gera senha temporária forte (padrão 8 caracteres alfanuméricos). */
+function generateTempPassword(len = 8): string {
+  const chars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789";
+  let s = "";
+  for (let i = 0; i < len; i++) s += chars.charAt(Math.floor(Math.random() * chars.length));
+  return s;
+}
+
+/** Grava a temporária como senha atual e marca troca obrigatória no 1º acesso. */
+async function applyTempPassword(
+  profile: { id: string; email: string | null; display_name: string | null; cpf?: string | null; phone?: string | null },
+  temp: string
+) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  // 1. Login existe? Só atualiza a senha.
+  try {
+    const { data: existing } = await supabaseAdmin.auth.admin.getUserById(profile.id);
+    if (existing?.user) {
+      const { error: authErr } = await supabaseAdmin.auth.admin.updateUserById(profile.id, {
+        password: temp,
+      });
+      if (authErr) throw new Error("Erro ao atualizar credenciais: " + authErr.message);
+    } else {
+      await createAuthForProfile(profile, temp);
+    }
+  } catch (err) {
+    // getUserById lança "User not found" quando não há login — cria o acesso.
+    if (err instanceof Error && /not found/i.test(err.message)) {
+      await createAuthForProfile(profile, temp);
+    } else {
+      throw err instanceof Error ? err : new Error("Erro ao atualizar credenciais.");
+    }
+  }
+  await supabaseAdmin
+    .from("profiles")
+    .update({ access_status: "active", needs_new_password: true })
+    .eq("id", profile.id);
+}
+
+/**
+ * Cria a conta de acesso (auth) para um perfil órfão (cadastro sem login —
+ * comum em migrados), com o MESMO id, já com a temporária. Se o e-mail já
+ * tiver outro login, usa esse login (a pessoa recadastrou).
+ */
+async function createAuthForProfile(
+  profile: { id: string; email: string | null; display_name: string | null; cpf?: string | null; phone?: string | null },
+  temp: string
+) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  if (!profile.email) {
+    throw new Error("Este cadastro não tem login nem e-mail — oriente a pessoa a criar a conta.");
+  }
+  const { error: createErr } = await supabaseAdmin.auth.admin.createUser({
+    id: profile.id,
+    email: profile.email.trim().toLowerCase(),
+    password: temp,
+    email_confirm: true,
+    user_metadata: {
+      display_name: profile.display_name,
+      cpf: profile.cpf ?? null,
+      phone: profile.phone ?? null,
+    },
+  });
+  if (!createErr) return;
+  // E-mail já tem outro login (pessoa recadastrou com outro id): usa ele.
+  if (/already|exists|registered|duplicate/i.test(createErr.message)) {
+    const other = await findAuthUserByEmail(profile.email.trim().toLowerCase());
+    if (other) {
+      const { error: updErr } = await supabaseAdmin.auth.admin.updateUserById(other, {
+        password: temp,
+      });
+      if (updErr) throw new Error("Erro ao atualizar credenciais: " + updErr.message);
+      return;
+    }
+  }
+  throw new Error("Erro ao criar acesso: " + createErr.message);
+}
+
+/** Localiza login pelo e-mail (a API admin só pagina — base pequena, ok). */
+async function findAuthUserByEmail(email: string): Promise<string | null> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const want = email.trim().toLowerCase();
+  for (let page = 1; page <= 5; page++) {
+    const { data, error } = await supabaseAdmin.auth.admin.listUsers({ page, perPage: 1000 });
+    if (error || !data?.users?.length) break;
+    const hit = data.users.find((u) => (u.email ?? "").toLowerCase() === want);
+    if (hit) return hit.id;
+    if (data.users.length < 1000) break;
+  }
+  return null;
+}
+
+/** E-mail com a senha temporária (mesmo layout do fluxo antigo). */
+async function sendTempPasswordEmail(
+  profile: { email: string; display_name: string | null },
+  tempPassword: string
+) {
+  const { sendEmail } = await import("@/lib/mail.server");
+  const htmlContent = `
       <div style="font-family: sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px; background: #ffffff;">
         <h2 style="color: #2563eb; margin-top: 0;">Recuperação de Senha — Nexia Drive</h2>
         <p>Olá, <strong>${profile.display_name || "Estudante"}</strong>!</p>
@@ -966,12 +1057,69 @@ export const requestPasswordResetSecure = createServerFn({ method: "POST" })
     `;
 
     await sendEmail({
-      to: email,
+      to: profile.email,
       subject: "Sua senha temporária — Nexia Drive",
       html: htmlContent,
     });
+}
 
-    return { success: true };
+/** WhatsApp com a temporária (template reset, com {senha}). Retorna se enviou. */
+async function sendTempPasswordWhatsApp(
+  profile: { phone: string | null; display_name: string | null },
+  temp: string,
+  force: boolean,
+  session?: string
+): Promise<boolean> {
+  if (!profile.phone) return false;
+  try {
+    const { sendWaTemplate } = await import("@/lib/viperconnect");
+    const r = await sendWaTemplate(profile.phone, profile.display_name || "aluno(a)", "reset", {
+      vars: { senha: temp },
+      force,
+      session,
+    });
+    return r.sent;
+  } catch (err) {
+    console.error("Falha ao enviar temporária no WhatsApp:", err instanceof Error ? err.message : err);
+    return false;
+  }
+}
+
+/**
+ * Admin: pesquisa usuários por e-mail, nome, telefone ou CPF (só admin).
+ * Busca parcial (contém), limitada aos 8 primeiros.
+ */
+export const searchProfilesAdmin = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { q: string }) => d)
+  .handler(async ({ data, context }) => {
+    await requireAdminUserId(context);
+    const q = (data.q || "").trim();
+    if (q.length < 2) return [];
+    const digits = q.replace(/\D/g, "");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const ors = [
+      `display_name.ilike.%${q}%`,
+      `email.ilike.%${q}%`,
+      `phone.ilike.%${q}%`,
+      `cpf.ilike.%${q}%`,
+    ];
+    if (digits.length >= 3) {
+      ors.push(`phone.ilike.%${digits}%`, `cpf.ilike.%${digits}%`);
+    }
+    const { data: rows, error } = await supabaseAdmin
+      .from("profiles")
+      .select("id, display_name, email, cpf, phone")
+      .or(ors.join(","))
+      .limit(8);
+    if (error) throw new Error(error.message);
+    return (rows ?? []).map((r: any) => ({
+      id: r.id as string,
+      display_name: (r.display_name ?? null) as string | null,
+      email: (r.email ?? null) as string | null,
+      cpf: (r.cpf ?? null) as string | null,
+      phone: (r.phone ?? null) as string | null,
+    }));
   });
 
 /** Só dígitos (CPF/telefone podem estar salvos com ou sem máscara). */
@@ -994,7 +1142,7 @@ async function findProfileForRecovery(email: string, cpf: string, phone: string)
   }
   const { data: profile } = await supabaseAdmin
     .from("profiles")
-    .select("id, email, cpf, phone")
+    .select("id, email, display_name, cpf, phone")
     .eq("email", emailClean)
     .maybeSingle();
   if (!profile || onlyDigits(profile.cpf) !== cpfD || onlyDigits(profile.phone) !== phoneD) {
@@ -1031,6 +1179,88 @@ export const resetPasswordWithIdentitySecure = createServerFn({ method: "POST" }
       .update({ access_status: "active", needs_new_password: false, is_first_access: false })
       .eq("id", profile.id);
     return { ok: true };
+  });
+
+/**
+ * Autoatendimento: confere e-mail+CPF+telefone, gera temporária, salva no
+ * banco e manda no WhatsApp (fallback: e-mail). A pessoa entra com a
+ * temporária e troca no 1º acesso.
+ */
+export const requestPasswordResetWhatsApp = createServerFn({ method: "POST" })
+  .inputValidator((d: { email: string; cpf: string; phone: string }) => d)
+  .handler(async ({ data }) => {
+    const profile = await findProfileForRecovery(data.email, data.cpf, data.phone);
+    const temp = generateTempPassword(8);
+    await applyTempPassword(
+      {
+        id: profile.id,
+        email: (profile as any).email as string | null,
+        display_name: (profile as any).display_name ?? null,
+        cpf: (profile as any).cpf ?? null,
+        phone: (profile as any).phone ?? null,
+      },
+      temp
+    );
+    const sentWa = await sendTempPasswordWhatsApp(
+      { phone: profile.phone, display_name: (profile as any).display_name ?? null },
+      temp,
+      false
+    );
+    if (sentWa) return { ok: true, channel: "whatsapp" as const };
+    const email = (profile as any).email as string | null;
+    if (email) {
+      await sendTempPasswordEmail(
+        { email, display_name: (profile as any).display_name ?? null },
+        temp
+      );
+      return { ok: true, channel: "email" as const };
+    }
+    throw new Error("Não foi possível enviar a nova senha. Fale com o suporte.");
+  });
+
+/**
+ * Admin: pesquisa o usuário e envia reset — gera temporária, salva no banco
+ * e manda no WhatsApp (ação explícita ignora o liga/desliga do template;
+ * fallback: e-mail). Troca obrigatória no 1º acesso.
+ */
+export const adminSendPasswordReset = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { userId: string; sessionPhone?: string }) => d)
+  .handler(async ({ data, context }) => {
+    await requireAdminUserId(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: profile } = await supabaseAdmin
+      .from("profiles")
+      .select("id, email, display_name, phone")
+      .eq("id", data.userId)
+      .maybeSingle();
+    if (!profile) throw new Error("Usuário não encontrado.");
+    const temp = generateTempPassword(8);
+    await applyTempPassword(
+      {
+        id: profile.id,
+        email: (profile as any).email as string | null,
+        display_name: (profile as any).display_name ?? null,
+        phone: (profile as any).phone ?? null,
+      },
+      temp
+    );
+    const sentWa = await sendTempPasswordWhatsApp(
+      { phone: (profile as any).phone ?? null, display_name: (profile as any).display_name ?? null },
+      temp,
+      true,
+      data.sessionPhone || undefined
+    );
+    if (sentWa) return { ok: true, channel: "whatsapp" as const };
+    const email = (profile as any).email as string | null;
+    if (email) {
+      await sendTempPasswordEmail(
+        { email, display_name: (profile as any).display_name ?? null },
+        temp
+      );
+      return { ok: true, channel: "email" as const };
+    }
+    throw new Error("Usuário sem WhatsApp nem e-mail para envio.");
   });
 
 function pagesPerReadingBlock(v: string | undefined): number {
@@ -1546,7 +1776,36 @@ async function requireAdminUserId(context: { supabase: any; userId: string }): P
   if (u?.user?.email !== SUPER_ADMIN_EMAIL) throw new Error("Acesso negado.");
 }
 
-/** Envio de teste de um template a partir do painel (somente admin). */
+/** Lista as sessões/números da API ViperConnect (oficial: GET /sessions). Somente admin. */
+export const listViperSessions = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { apiUrl: string; token: string }) => d)
+  .handler(async ({ data, context }) => {
+    await requireAdminUserId(context);
+    const base = (data.apiUrl || "").replace(/\/$/, "");
+    if (!base || !data.token) throw new Error("Informe a URL e o Token.");
+    let res: Response;
+    try {
+      res = await fetch(`${base}/sessions`, { headers: { Authorization: data.token } });
+    } catch {
+      throw new Error("Não foi possível alcançar a API (URL inválida ou fora do ar).");
+    }
+    const text = await res.text().catch(() => "");
+    if (!res.ok) throw new Error(`API respondeu ${res.status}: ${text.slice(0, 150)}`);
+    let json: any = null;
+    try {
+      json = JSON.parse(text);
+    } catch {
+      throw new Error("Resposta inválida da API.");
+    }
+    const arr: any[] = Array.isArray(json) ? json : Array.isArray(json?.data) ? json.data : [];
+    return arr
+      .map((s) => ({
+        number: String(s.display_phone_number ?? s.phone ?? s.number ?? "").replace(/\D/g, ""),
+        status: String(s.status ?? ""),
+      }))
+      .filter((s) => s.number);
+  });
 export const sendWaTest = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: { template: string; phone: string; name?: string }) => d)
