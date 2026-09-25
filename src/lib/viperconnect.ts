@@ -106,11 +106,20 @@ export async function sendWhatsAppMessage({ to, body, imageUrl, session }: SendW
     : { messaging_product: "whatsapp", to: dest, type: "text", text: { body } };
 
   try {
-    const res = await fetch(endpoint, {
-      method: "POST",
-      headers,
-      body: JSON.stringify(payload),
-    });
+    // Timeout: sem ele, uma API lenta trava a chamada e o painel nunca responde
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 25000);
+    let res: Response;
+    try {
+      res = await fetch(endpoint, {
+        method: "POST",
+        headers,
+        body: JSON.stringify(payload),
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timer);
+    }
     const text = await res.text().catch(() => "");
     if (!res.ok) {
       console.error("Erro ViperConnect:", res.status, text);
@@ -120,6 +129,9 @@ export async function sendWhatsAppMessage({ to, body, imageUrl, session }: SendW
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Erro de rede";
     console.error("Erro ao chamar ViperConnect:", msg);
+    if (err instanceof Error && err.name === "AbortError") {
+      return { ok: false, error: "Tempo esgotado na API (25s). Tente de novo." };
+    }
     return { ok: false, error: msg };
   }
 }
@@ -135,6 +147,8 @@ export interface WaTemplate {
   enabled: boolean;
   message: string;
   media_url: string;
+  /** Segundos entre cada parte (mensagem fragmentada). Padrão 3. */
+  delay_sec: number;
 }
 
 export const WA_TEMPLATE_META: Record<WaTemplateKey, { title: string; description: string }> = {
@@ -184,6 +198,10 @@ export const WA_TEMPLATE_KEYS = [
   "wa_abandoned_message",
   "wa_abandoned_media_url",
   "wa_abandoned_hours",
+  "wa_reset_delay_sec",
+  "wa_reminder_delay_sec",
+  "wa_billing_delay_sec",
+  "wa_abandoned_delay_sec",
 ] as const;
 
 export interface WaTemplates {
@@ -199,16 +217,127 @@ export async function getWaTemplates(): Promise<WaTemplates> {
     .select("key, value")
     .in("key", WA_TEMPLATE_KEYS as unknown as string[]);
   const map = Object.fromEntries((data ?? []).map((r) => [r.key, r.value ?? ""]));
-  const build = (k: WaTemplateKey): WaTemplate => ({
-    enabled: map[`wa_${k}_enabled`] === "true",
-    message: map[`wa_${k}_message`] || WA_DEFAULTS[k].message,
-    media_url: map[`wa_${k}_media_url`] ?? "",
-  });
+  const build = (k: WaTemplateKey): WaTemplate => {
+    const delay = parseInt(map[`wa_${k}_delay_sec`] ?? "", 10);
+    return {
+      enabled: map[`wa_${k}_enabled`] === "true",
+      message: map[`wa_${k}_message`] || WA_DEFAULTS[k].message,
+      media_url: map[`wa_${k}_media_url`] ?? "",
+      delay_sec: Number.isFinite(delay) && delay >= 0 ? delay : 3,
+    };
+  };
   const hours = parseInt(map.wa_abandoned_hours ?? "", 10);
   return {
     templates: { reset: build("reset"), reminder: build("reminder"), billing: build("billing"), abandoned: build("abandoned") },
     abandoned_hours: Number.isFinite(hours) && hours > 0 ? hours : 48,
   };
+}
+
+/** Saudação conforme o horário de Brasília (para o placeholder {saudacao}). */
+export function saudacaoBrasilia(now: Date = new Date()): string {
+  const hourStr = new Intl.DateTimeFormat("pt-BR", {
+    timeZone: "America/Sao_Paulo",
+    hour: "numeric",
+    hour12: false,
+  }).format(now);
+  const h = parseInt(hourStr, 10);
+  if (h >= 5 && h < 12) return "Bom dia";
+  if (h >= 12 && h < 18) return "Boa tarde";
+  return "Boa noite";
+}
+
+/** Quebra o texto em partes: cada parágrafo (linha em branco) = 1 mensagem. */
+export function splitMessageParts(body: string): string[] {
+  const parts = (body || "")
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter((p) => p.length > 0);
+  return parts.length > 0 ? parts : [body];
+}
+
+/**
+ * Formato salvo no banco: JSON com a lista de caixas (["msg1", "msg2"]).
+ * Textos antigos (texto corrido) caem no legado: divisão por linha em branco.
+ */
+export function parseStoredMessage(stored: string): string[] {
+  const s = (stored || "").trim();
+  if (!s) return [stored];
+  if (s.startsWith("[")) {
+    try {
+      const arr: unknown = JSON.parse(s);
+      if (Array.isArray(arr) && arr.every((x) => typeof x === "string")) {
+        const clean = (arr as string[]).map((p) => p.trim()).filter((p) => p.length > 0);
+        if (clean.length > 0) return clean;
+      }
+    } catch {
+      /* não é JSON — segue o legado */
+    }
+  }
+  return splitMessageParts(s);
+}
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * Envia o texto em sequência (mensagens fragmentadas), com intervalo entre
+ * cada parte. Resolve {nome}, {saudacao} e vars extras em todas as partes.
+ */
+export async function sendWhatsAppSequence({
+  to,
+  body,
+  name,
+  imageUrl,
+  session,
+  delaySec = 3,
+  vars,
+  parts,
+}: {
+  to: string;
+  body: string;
+  name: string;
+  imageUrl?: string;
+  session?: string;
+  delaySec?: number;
+  vars?: Record<string, string>;
+  /** Lista explícita de mensagens (das caixinhas) — quando presente, NÃO divide por linha em branco. */
+  parts?: string[];
+}): Promise<DispatchResult & { sent: boolean; parts: number }> {
+  const saudacao = saudacaoBrasilia();
+  const resolve = (text: string) => {
+    let out = text.replace(/\{nome\}/gi, primeiroNome(name)).replace(/\{saudacao\}/gi, saudacao);
+    for (const [vk, vv] of Object.entries(vars ?? {})) {
+      out = out.split(`{${vk}}`).join(vv);
+    }
+    return out;
+  };
+  const source = parts && parts.length ? parts : splitMessageParts(body);
+  const resolved = source.map((p) => resolve(p).trim()).filter((p) => p.length > 0);
+  if (resolved.length === 0) {
+    return { ok: false, sent: false, parts: 0, error: "Mensagem vazia." };
+  }
+  const waitMs = Math.max(0, Math.min(60, delaySec)) * 1000;
+  let sent = 0;
+  let lastError: string | undefined;
+  let lastStatus: number | undefined;
+  for (let i = 0; i < resolved.length; i++) {
+    if (i > 0 && waitMs > 0) await sleep(waitMs);
+    // Imagem (se houver) vai na primeira parte, como legenda
+    const res = await sendWhatsAppMessage({
+      to,
+      body: resolved[i],
+      imageUrl: i === 0 ? imageUrl : undefined,
+      session,
+    });
+    lastStatus = res.status;
+    if (res.ok) {
+      sent++;
+    } else {
+      lastError = res.error;
+      console.error(`ViperConnect parte ${i + 1}/${resolved.length}:`, res.status, res.error);
+    }
+  }
+  if (sent === 0) return { ok: false, sent: false, parts: resolved.length, status: lastStatus, error: lastError };
+  return { ok: true, sent: true, parts: resolved.length, status: lastStatus };
 }
 
 /**
@@ -221,18 +350,23 @@ export async function sendWaTemplate(
   name: string,
   key: WaTemplateKey,
   opts?: { force?: boolean; vars?: Record<string, string>; session?: string }
-): Promise<DispatchResult & { sent: boolean }> {
+): Promise<DispatchResult & { sent: boolean; parts: number }> {
   const { templates } = await getWaTemplates();
   const t = templates[key];
   if (!t.enabled && !opts?.force) {
-    return { ok: true, sent: false, error: "Template desativado no painel." };
+    return { ok: true, sent: false, parts: 0, error: "Template desativado no painel." };
   }
-  let body = (t.message || WA_DEFAULTS[key].message).replace(/\{nome\}/gi, primeiroNome(name));
-  for (const [vk, vv] of Object.entries(opts?.vars ?? {})) {
-    body = body.split(`{${vk}}`).join(vv);
-  }
-  const res = await sendWhatsAppMessage({ to, body, imageUrl: t.media_url || undefined, session: opts?.session });
-  return { ...res, sent: res.ok };
+  const res = await sendWhatsAppSequence({
+    to,
+    body: t.message || WA_DEFAULTS[key].message,
+    name,
+    imageUrl: t.media_url || undefined,
+    session: opts?.session,
+    delaySec: t.delay_sec,
+    vars: opts?.vars,
+    parts: parseStoredMessage(t.message || WA_DEFAULTS[key].message),
+  });
+  return res;
 }
 export async function dispatchViperConnectWelcome(
   phone: string,
@@ -244,10 +378,14 @@ export async function dispatchViperConnectWelcome(
     return { ok: false, error: "Envio de boas-vindas desativado nas configurações." };
   }
 
-  const message = (s.welcome_message || "Olá {nome}!").replace(/\{nome\}/gi, primeiroNome(name));
-  return sendWhatsAppMessage({
+  // Mesmo motor dos templates: fragmenta por linha em branco e resolve
+  // {nome} e {saudacao} em todas as partes.
+  const res = await sendWhatsAppSequence({
     to: phone,
-    body: message,
+    body: s.welcome_message || "Olá {nome}!",
+    name,
     imageUrl: s.welcome_media_url || undefined,
+    delaySec: 3,
   });
+  return res;
 }

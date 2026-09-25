@@ -29,7 +29,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { useServerFn } from "@tanstack/react-start";
 import { adminResetUserPassword, getSalesReport, type SalesReportProfile } from "@/lib/admin-users.functions";
 import { sendPasswordReset, deleteUser, deactivateUser, sendViperConnectWelcome, sendWaTest, listViperSessions } from "@/lib/admin-operations.server";
-import { WA_TEMPLATE_META, WA_DEFAULT_MESSAGES, type WaTemplateKey } from "@/lib/viperconnect";
+import { WA_TEMPLATE_META, WA_DEFAULT_MESSAGES, parseStoredMessage, type WaTemplateKey } from "@/lib/viperconnect";
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
 
@@ -3096,11 +3096,11 @@ export function SettingsPanel() {
   );
   const [vWelcomeMedia, setVWelcomeMedia] = useState("");
   // Templates de mensagens automáticas WhatsApp (liga/desliga + texto + mídia)
-  const [waTpl, setWaTpl] = useState<Record<WaTemplateKey, { enabled: boolean; message: string; media_url: string }>>({
-    reset: { enabled: false, message: "", media_url: "" },
-    reminder: { enabled: false, message: "", media_url: "" },
-    billing: { enabled: false, message: "", media_url: "" },
-    abandoned: { enabled: false, message: "", media_url: "" },
+  const [waTpl, setWaTpl] = useState<Record<WaTemplateKey, { enabled: boolean; message: string; media_url: string; delay_sec: number }>>({
+    reset: { enabled: false, message: "", media_url: "", delay_sec: 3 },
+    reminder: { enabled: false, message: "", media_url: "", delay_sec: 3 },
+    billing: { enabled: false, message: "", media_url: "", delay_sec: 3 },
+    abandoned: { enabled: false, message: "", media_url: "", delay_sec: 3 },
   });
   const [waHours, setWaHours] = useState("48");
   // Envio manual de senha (busca de cliente + disparo)
@@ -3116,7 +3116,24 @@ export function SettingsPanel() {
   const [manualError, setManualError] = useState<string | null>(null);
   // Cartão com mensagem em edição (só um por vez); demais exibem o texto fixo em cinza
   const [editingTpl, setEditingTpl] = useState<WaTemplateKey | null>(null);
-  const setWa = (k: WaTemplateKey, patch: Partial<{ enabled: boolean; message: string; media_url: string }>) =>
+  // Boas-vindas em edição (fecha qualquer cartão e vice-versa — mesma lista de caixas)
+  const [editingWelcome, setEditingWelcome] = useState(false);
+  // Caixas de mensagem do cartão em edição (uma caixa = um disparo)
+  const [editParts, setEditParts] = useState<string[]>([]);
+  const updateParts = (k: WaTemplateKey, parts: string[]) => {
+    const normalized = parts.length ? parts : [""];
+    setEditParts(normalized);
+    // Salva a lista explícita de caixas (quebra de linha NÃO divide mais nada)
+    setWa(k, { message: JSON.stringify(normalized) });
+  };
+  const WELCOME_DEFAULT =
+    "Olá {nome}! Seja muito bem-vindo(a) ao Nexia Drive. Seu acesso já está liberado! 🚀";
+  const updateWelcomeParts = (parts: string[]) => {
+    const normalized = parts.length ? parts : [""];
+    setEditParts(normalized);
+    setVWelcomeMessage(JSON.stringify(normalized));
+  };
+  const setWa = (k: WaTemplateKey, patch: Partial<{ enabled: boolean; message: string; media_url: string; delay_sec: number }>) =>
     setWaTpl((p) => ({ ...p, [k]: { ...p[k], ...patch } }));
   const [viperInstances, setViperInstances] = useState<Array<{ id: string; name: string; number: string; status?: string }>>([]);
   const [loadingViperInstances, setLoadingViperInstances] = useState(false);
@@ -3124,7 +3141,8 @@ export function SettingsPanel() {
   const [webhookEnabled, setWebhookEnabled] = useState(true);
   const [testPhone, setTestPhone] = useState("");
   const [testName, setTestName] = useState("");
-  const [testing, setTesting] = useState(false);
+  // Qual teste está em andamento ("welcome" ou `wa-<template>`) — spinner só no botão certo
+  const [testingKey, setTestingKey] = useState<string | null>(null);
 
   // Busca as sessões/números conectados na API oficial (GET /sessions).
   // Roda no servidor: o token nunca trafega no navegador além do que você digitou.
@@ -3178,18 +3196,42 @@ export function SettingsPanel() {
       </div>
       {editingTpl === k ? (
         <>
-          <Textarea
-            value={waTpl[k].message}
-            onChange={(e) => setWa(k, { message: e.target.value })}
-            rows={3}
-            placeholder="Vazio = mensagem padrão do sistema"
-            className="flex-1 text-xs"
-          />
+          {editParts.map((part, idx) => (
+            <div key={idx} className="space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-semibold text-muted-foreground">Mensagem {idx + 1}</span>
+                {editParts.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => updateParts(k, editParts.filter((_, i) => i !== idx))}
+                    title="Remover esta mensagem"
+                    className="inline-flex items-center justify-center h-6 w-6 rounded-md text-muted-foreground hover:text-destructive hover:bg-background/60 cursor-pointer"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                )}
+              </div>
+              <Textarea
+                value={part}
+                onChange={(e) => updateParts(k, editParts.map((p, i) => (i === idx ? e.target.value : p)))}
+                rows={2}
+                placeholder={idx === 0 ? "Ex.: Oi, tudo bem? 👋" : "Ex.: Boa tarde! ..."}
+                className="flex-1 text-xs"
+              />
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => updateParts(k, [...editParts, ""])}
+            className="text-[11px] text-primary hover:underline cursor-pointer self-start"
+          >
+            + Adicionar mensagem
+          </button>
           {k !== "reset" && (
             <Input
               value={waTpl[k].media_url}
               onChange={(e) => setWa(k, { media_url: e.target.value })}
-              placeholder="URL de imagem/figurinha (opcional)"
+              placeholder="URL de imagem/figurinha (opcional — vai na 1ª mensagem)"
               className="flex-1 text-xs"
             />
           )}
@@ -3197,13 +3239,21 @@ export function SettingsPanel() {
       ) : (
         // Texto pré-definido do sistema (cinza, só leitura)
         <div className="rounded-md bg-muted/40 border border-border/30 px-3 py-2 text-xs text-muted-foreground whitespace-pre-wrap">
-          {waTpl[k].message || WA_DEFAULT_MESSAGES[k]}
+          {parseStoredMessage(waTpl[k].message || WA_DEFAULT_MESSAGES[k]).join("\n\n")}
         </div>
       )}
       <div className="flex justify-end">
         <button
           type="button"
-          onClick={() => setEditingTpl((cur) => (cur === k ? null : k))}
+          onClick={() => {
+            if (editingTpl === k) {
+              setEditingTpl(null);
+            } else {
+              setEditingTpl(k);
+              setEditingWelcome(false);
+              setEditParts(parseStoredMessage(waTpl[k].message || WA_DEFAULT_MESSAGES[k]));
+            }
+          }}
           className="text-[11px] text-primary hover:underline cursor-pointer"
         >
           {editingTpl === k ? "Cancelar edição" : "✏️ Editar mensagem"}
@@ -3222,14 +3272,19 @@ export function SettingsPanel() {
           <p className="text-[11px] text-muted-foreground">Só contas recentes (até +48h do prazo). Conta antiga nunca recebe.</p>
         </div>
       )}
-      <SessionPicker
-        value={vInstance}
-        onChange={setVInstance}
-        sessions={viperInstances}
-        loading={loadingViperInstances}
-        onSearch={fetchViperInstances}
-        canSearch={!!vApiUrl && !!vToken}
-      />
+      <div className="flex items-center gap-2">
+        <Label className="text-xs font-semibold shrink-0">Intervalo entre partes (seg)</Label>
+        <Input
+          type="number"
+          min={0}
+          max={60}
+          value={waTpl[k].delay_sec}
+          onChange={(e) => setWa(k, { delay_sec: Math.max(0, parseInt(e.target.value || "0", 10) || 0) })}
+          className="w-20 text-xs"
+        />
+        <p className="text-[11px] text-muted-foreground">Cada caixa acima = uma mensagem enviada em sequência.</p>
+      </div>
+      {/* Número que dispara: o da Conexão acima (bloco separado) */}
       <div className="flex justify-end gap-2 items-center">
         {k === "reset" && (
           <label className="flex items-center gap-2 text-xs font-semibold mr-auto cursor-pointer">
@@ -3241,8 +3296,8 @@ export function SettingsPanel() {
           {savingKey === `wa-${k}` ? <Loader2 className="h-3 w-3 animate-spin mr-1" /> : null}
           Salvar mensagem
         </Button>
-        <Button variant="outline" size="sm" onClick={() => handleTestWa(k)} disabled={testing}>
-          {testing ? <Loader2 className="h-3 w-3 animate-spin mr-1" /> : null}
+        <Button variant="outline" size="sm" onClick={() => handleTestWa(k)} disabled={testingKey !== null}>
+          {testingKey === `wa-${k}` ? <Loader2 className="h-3 w-3 animate-spin mr-1" /> : null}
           Enviar teste
         </Button>
       </div>
@@ -3387,16 +3442,20 @@ export function SettingsPanel() {
           "wa_reset_enabled",
           "wa_reset_message",
           "wa_reset_media_url",
+          "wa_reset_delay_sec",
           "wa_reminder_enabled",
           "wa_reminder_message",
           "wa_reminder_media_url",
+          "wa_reminder_delay_sec",
           "wa_billing_enabled",
           "wa_billing_message",
           "wa_billing_media_url",
+          "wa_billing_delay_sec",
           "wa_abandoned_enabled",
           "wa_abandoned_message",
           "wa_abandoned_media_url",
           "wa_abandoned_hours",
+          "wa_abandoned_delay_sec",
           "global_webhook_url",
           "global_webhook_enabled",
         ]);
@@ -3421,10 +3480,12 @@ export function SettingsPanel() {
       setWaTpl((p) => {
         const next = { ...p };
         for (const k of waKeys) {
+          const delay = parseInt(vmap[`wa_${k}_delay_sec`] ?? "", 10);
           next[k] = {
             enabled: vmap[`wa_${k}_enabled`] === "true",
             message: vmap[`wa_${k}_message`] ?? "",
             media_url: vmap[`wa_${k}_media_url`] ?? "",
+            delay_sec: Number.isFinite(delay) && delay >= 0 ? delay : 3,
           };
         }
         return next;
@@ -3510,14 +3571,14 @@ export function SettingsPanel() {
       toast.error("Informe um número no campo de teste (seção Boas-Vindas).");
       return;
     }
-    setTesting(true);
+    setTestingKey(`wa-${template}`);
     try {
       await sendWaTestFn({ data: { template, phone: testPhone, name: testName || "Teste" } });
       toast.success("Teste enviado! Verifique o WhatsApp.");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Falha ao enviar teste");
     } finally {
-      setTesting(false);
+      setTestingKey(null);
     }
   }
 
@@ -3526,14 +3587,14 @@ export function SettingsPanel() {
       toast.error("Informe um número de telefone para o teste.");
       return;
     }
-    setTesting(true);
+    setTestingKey("welcome");
     try {
       await sendViperWelcomeFn({ data: { phone: testPhone, name: testName || "Teste" } });
       toast.success("Mensagem de teste enviada! Verifique o WhatsApp.");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Falha ao enviar teste");
     } finally {
-      setTesting(false);
+      setTestingKey(null);
     }
   }
 
@@ -3592,6 +3653,7 @@ export function SettingsPanel() {
       { key: `wa_${k}_enabled`, value: waTpl[k].enabled ? "true" : "false" },
       { key: `wa_${k}_message`, value: waTpl[k].message },
       { key: `wa_${k}_media_url`, value: waTpl[k].media_url },
+      { key: `wa_${k}_delay_sec`, value: String(waTpl[k].delay_sec) },
     ];
     if (k === "abandoned") pairs.push({ key: "wa_abandoned_hours", value: waHours });
     return runSave(`wa-${k}`, () => upsertSys(pairs), `"${WA_TEMPLATE_META[k].title}" salva!`);
@@ -3790,26 +3852,10 @@ export function SettingsPanel() {
       </div>
 
       <div className="space-y-4 border-t border-border/40 pt-6">
-        <h3 className="font-display font-bold text-sm">Reset de senha (uso diário)</h3>
+        <h3 className="font-display font-bold text-sm">Conexão WhatsApp (API)</h3>
         <p className="text-xs text-muted-foreground">
-          Gera senha temporária, salva no banco e envia no WhatsApp do aluno (troca obrigatória no 1º acesso).
+          Dados fixos do disparo — preencha uma vez. As mensagens abaixo usam este número.
         </p>
-        {renderTemplateCard("reset")}
-      </div>
-
-      <div className="space-y-4 border-t border-border/40 pt-6">
-        <h3 className="font-display font-bold text-sm">WhatsApp de Boas-Vindas (ViperConnect / Uno API)</h3>
-        <p className="text-xs text-muted-foreground">
-          Envia uma mensagem automática via WhatsApp quando o pagamento (Pix) é confirmado. As credenciais ficam restritas a administradores.
-        </p>
-
-        <div className="flex items-center justify-between">
-          <div>
-            <Label className="text-xs font-semibold">Ativar envio de boas-vindas</Label>
-            <p className="text-xs text-muted-foreground">Dispara a mensagem abaixo após a confirmação do Pix.</p>
-          </div>
-          <Switch checked={vWelcomeEnabled} onCheckedChange={setVWelcomeEnabled} />
-        </div>
 
         <div className="space-y-2">
           <Label className="text-xs font-semibold">URL da Instância (API)</Label>
@@ -3831,27 +3877,6 @@ export function SettingsPanel() {
           </div>
         </div>
 
-        <div className="space-y-2">
-          <p className="text-xs text-muted-foreground">URL + token ficam fixos. O número que dispara é escolhido em cada mensagem abaixo.</p>
-          <div className="flex justify-end">
-            <Button onClick={saveConnection} disabled={busy} size="sm">
-              {savingKey === "conn" ? <Loader2 className="h-3 w-3 animate-spin mr-1" /> : null}
-              Salvar conexão
-            </Button>
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <Label className="text-xs font-semibold">Mensagem de Boas-Vindas</Label>
-          <Textarea value={vWelcomeMessage} onChange={(e) => setVWelcomeMessage(e.target.value)} rows={3} className="flex-1" />
-          <p className="text-xs text-muted-foreground">Use <code className="text-primary">{"{nome}"}</code> para inserir o nome do aluno.</p>
-        </div>
-
-        <div className="space-y-2">
-          <Label className="text-xs font-semibold">URL de Mídia (opcional)</Label>
-          <Input value={vWelcomeMedia} onChange={(e) => setVWelcomeMedia(e.target.value)} placeholder="https://…/imagem-ou-arquivo.png" className="flex-1" />
-        </div>
-
         <SessionPicker
           value={vInstance}
           onChange={setVInstance}
@@ -3861,17 +3886,111 @@ export function SettingsPanel() {
           canSearch={!!vApiUrl && !!vToken}
         />
 
+        <div className="space-y-2">
+          <div className="flex justify-end">
+            <Button onClick={saveConnection} disabled={busy} size="sm">
+              {savingKey === "conn" ? <Loader2 className="h-3 w-3 animate-spin mr-1" /> : null}
+              Salvar conexão
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <div className="space-y-4 border-t border-border/40 pt-6">
+        <h3 className="font-display font-bold text-sm">Reset de senha (uso diário)</h3>
+        <p className="text-xs text-muted-foreground">
+          Gera senha temporária, salva no banco e envia no WhatsApp do aluno (troca obrigatória no 1º acesso).
+        </p>
+        {renderTemplateCard("reset")}
+      </div>
+
+      <div className="space-y-4 border-t border-border/40 pt-6">
+        <h3 className="font-display font-bold text-sm">WhatsApp de Boas-Vindas (ViperConnect / Uno API)</h3>
+        <p className="text-xs text-muted-foreground">
+          Envia uma mensagem automática via WhatsApp quando o pagamento (Pix) é confirmado. As credenciais ficam restritas a administradores.
+        </p>
+
+        <div className="flex items-center justify-between">
+          <div>
+            <Label className="text-xs font-semibold">Ativar envio de boas-vindas</Label>
+            <p className="text-xs text-muted-foreground">Liga/desliga o disparo após a confirmação do Pix.</p>
+          </div>
+          <Switch checked={vWelcomeEnabled} onCheckedChange={setVWelcomeEnabled} />
+        </div>
+
+        <div className="space-y-2">
+          <Label className="text-xs font-semibold">Mensagem de Boas-Vindas</Label>
+          {editingWelcome ? (
+            <>
+              {editParts.map((part, idx) => (
+                <div key={idx} className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-semibold text-muted-foreground">Mensagem {idx + 1}</span>
+                    {editParts.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => updateWelcomeParts(editParts.filter((_, i) => i !== idx))}
+                        title="Remover esta mensagem"
+                        className="inline-flex items-center justify-center h-6 w-6 rounded-md text-muted-foreground hover:text-destructive hover:bg-background/60 cursor-pointer"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    )}
+                  </div>
+                  <Textarea
+                    value={part}
+                    onChange={(e) => updateWelcomeParts(editParts.map((p, i) => (i === idx ? e.target.value : p)))}
+                    rows={2}
+                    placeholder={idx === 0 ? "Ex.: {saudacao}! Seja bem-vindo(a)! 🎉" : "Ex.: Aqui está seu acesso…"}
+                    className="flex-1 text-xs"
+                  />
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => updateWelcomeParts([...editParts, ""])}
+                className="text-[11px] text-primary hover:underline cursor-pointer self-start"
+              >
+                + Adicionar mensagem
+              </button>
+              <Input value={vWelcomeMedia} onChange={(e) => setVWelcomeMedia(e.target.value)} placeholder="URL de imagem/figurinha (opcional — vai na 1ª mensagem)" className="flex-1 text-xs" />
+            </>
+          ) : (
+            <div className="rounded-md bg-muted/40 border border-border/30 px-3 py-2 text-xs text-muted-foreground whitespace-pre-wrap">
+              {parseStoredMessage(vWelcomeMessage || WELCOME_DEFAULT).join("\n\n")}
+            </div>
+          )}
+          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={() => {
+                if (editingWelcome) {
+                  setEditingWelcome(false);
+                } else {
+                  setEditingTpl(null);
+                  setEditingWelcome(true);
+                  setEditParts(parseStoredMessage(vWelcomeMessage || WELCOME_DEFAULT));
+                }
+              }}
+              className="text-[11px] text-primary hover:underline cursor-pointer"
+            >
+              {editingWelcome ? "Cancelar edição" : "✏️ Editar mensagem"}
+            </button>
+          </div>
+          <p className="text-xs text-muted-foreground">Use <code className="text-primary">{"{nome}"}</code> e <code className="text-primary">{"{saudacao}"}</code> (Bom dia/Boa tarde/Boa noite por Brasília). Cada caixa = uma mensagem.</p>
+        </div>
+
         <div className="rounded-lg bg-secondary/30 border border-border/40 p-3 space-y-2">
           <p className="text-xs font-semibold">Testar envio</p>
           <div className="flex flex-col sm:flex-row gap-2">
-            <Input value={testPhone} onChange={(e) => setTestPhone(e.target.value)} placeholder="DDD + número (ex: 11999999999)" className="flex-1" />
+            <Input value={testPhone} onChange={(e) => setTestPhone(e.target.value)} placeholder="Ex.: 5531991777947 ou 31991777947" className="flex-1" />
             <Input value={testName} onChange={(e) => setTestName(e.target.value)} placeholder="Nome de teste" className="flex-1" />
-            <Button onClick={saveWelcome} disabled={busy} className="shrink-0" size="sm">
+            <Button onClick={() => { setEditingWelcome(false); saveWelcome(); }} disabled={busy} className="shrink-0" size="sm">
               {savingKey === "welcome" ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
               Salvar boas-vindas
             </Button>
-            <Button variant="outline" onClick={handleTestWelcome} disabled={testing} className="shrink-0">
-              {testing ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+            <Button variant="outline" onClick={handleTestWelcome} disabled={testingKey !== null} className="shrink-0">
+              {testingKey === "welcome" ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
               Enviar teste
             </Button>
           </div>
@@ -3881,7 +4000,7 @@ export function SettingsPanel() {
       <div className="space-y-4 border-t border-border/40 pt-6">
         <h3 className="font-display font-bold text-sm">Mensagens automáticas WhatsApp</h3>
         <p className="text-xs text-muted-foreground">
-          Lembrete, cobrança e abandono — cada uma já vem com texto padrão (em cinza); clique em <strong>Editar mensagem</strong> para personalizar (use <code className="text-primary">{"{nome}"}</code>; emojis liberados). Todas começam <strong>desligadas</strong>. O reset de senha fica na seção acima (uso diário).
+          Lembrete, cobrança e abandono — cada uma já vem com texto padrão (em cinza); clique em <strong>Editar mensagem</strong> para personalizar em caixas (cada caixa = uma mensagem) com <code className="text-primary">{"{nome}"}</code> e <code className="text-primary">{"{saudacao}"}</code>; emojis liberados. Todas começam <strong>desligadas</strong>. O reset de senha fica na seção acima (uso diário).
         </p>
 
         {(["reminder", "billing", "abandoned"] as WaTemplateKey[]).map((k) => renderTemplateCard(k))}
