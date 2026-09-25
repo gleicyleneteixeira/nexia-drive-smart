@@ -1843,6 +1843,12 @@ export const triggerWaNotification = createServerFn({ method: "POST" })
     // Elegibilidade por template (servidor — não confia só no cliente)
     if (key === "abandoned") {
       if (profile.status !== "pendente_pagamento") return { sent: false, reason: "not-pending" };
+      // Régua vale a partir de 25/09/2026 — contas mais antigas nunca entram
+      // (não notifica nada retroativo).
+      const createdAt = new Date(profile.created_at).getTime();
+      if (createdAt < new Date("2026-09-25T00:00:00-03:00").getTime()) {
+        return { sent: false, reason: "before-cutoff" };
+      }
       const { abandoned_hours } = await getWaTemplates();
       const ageH = (Date.now() - new Date(profile.created_at).getTime()) / 36e5;
       // Só contas recentes: a partir do prazo, com tolerância de +48h.
