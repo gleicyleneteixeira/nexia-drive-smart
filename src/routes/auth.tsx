@@ -316,12 +316,9 @@ function AuthPage() {
                 <Label htmlFor="phone">WhatsApp *</Label>
                 <Input id="phone" required inputMode="tel" placeholder="(00) 00000-0000"
                   value={formatPhone(phone)} onChange={(e) => setPhone(cleanPhone(e.target.value))} />
-                <p className="text-xs text-muted-foreground mt-1">
-                  📲 Cadastre seu WhatsApp com DDD — ele será usado para notificações e para recuperar sua senha.
-                </p>
                 <p className="text-xs text-amber-400 mt-1 flex items-center gap-1">
                   <TriangleAlert className="h-3.5 w-3.5 shrink-0" />
-                  Verifique se o número está correto, pois as notificações serão recebidas através dele.
+                  Cadastre seu WhatsApp com DDD — ele será usado para notificações e para recuperar sua senha. Verifique se o número está correto, pois as notificações serão recebidas através dele.
                 </p>
               </div>
               <div>
