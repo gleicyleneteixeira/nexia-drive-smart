@@ -85,7 +85,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "q2",
         category: "placas",
-        statement: "As sinalizações verticais exercem papel fundamental na regulamentação das vias públicas brasileiras. No que tange especificamente às placas de regulamentação, assinale a alternativa que define corretamente sua principal finalidade técnica, formato padrão predominante e cores obrigatórias:",
+        statement: "Na sinalização vertical, as placas de regulamentação impõem obrigações, limitações e proibições. Em via do perímetro urbano, o condutor observa placa circular com orla vermelha. Pela classificação do CTB, o padrão dessa classe é:",
         options: [
             "Advertir sobre perigos potenciais na via, possuindo formato de losango e cores amarela e preta.",
             "Impor obrigações, limitações, proibições ou restrições de uso da via, possuindo formato circular com orla vermelha, fundo branco e símbolo preto.",
@@ -1542,7 +1542,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp16",
         category: "placas",
-        statement: "Quanto à classificação geral da sinalização vertical do CTB, qual grupo tem por objetivo principal AUXILIAR/ORIENTAR o condutor com informações de serviços (hospital, posto, telefone)?",
+        statement: "O condutor procura posto de combustível, telefone de emergência e hospital em via rápida e depende da sinalização vertical para localizar esses serviços. Pela classificação do CTB, o grupo que cumpre essa função de orientação é:",
         options: [
             "Sinalização de Regulamentação, que tem por finalidade informar aos usuários as condições, proibições, obrigações ou restrições no uso das vias.",
             "Sinalização de Advertência, que tem por finalidade alertar os usuários das condições potencialmente perigosas ou obstáculos existentes na via.",
@@ -1613,7 +1613,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "q7",
         category: "placas",
-        statement: "A sinalização de trânsito é composta por diversas classes de dispositivos. Dentre elas, a placa de regulamentação 'PARADA OBRIGATÓRIA' (R-1) possui um formato singular em relação às demais placas regulamentares. Assinale a alternativa que explica corretamente seu formato e sua finalidade técnica:",
+        statement: "A placa R-1 (PARADA OBRIGATÓRIA) destaca-se de todas as demais placas de regulamentação pelo formato geométrico, concebido para reconhecimento mesmo com poeira ou parcialmente obstruída. Esse formato e a finalidade técnica são:",
         options: [
             "Formato octogonal, cuja finalidade é garantir a legibilidade da placa mesmo que vista pelo verso ou parcialmente coberta por poeira.",
             "Formato triangular invertido, para sinalizar a transição de vias urbanas de grande fluxo.",
@@ -1717,7 +1717,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "q13",
         category: "placas",
-        statement: "A sinalização vertical de advertência tem por objetivo alertar os usuários da via sobre perigos potenciais, indicando sua natureza adiante. As placas pertencentes a essa classe possuem, por padrão regulamentar estabelecido no CTB, o seguinte formato e paleta de cores:",
+        statement: "As placas de advertência alertam para condição de perigo potencial adiante na pista de rolamento, sem impor dever de conduta. Segundo o CTB, o formato padrão e a paleta de cores dessa classe de sinalização são:",
         options: [
             "Formato circular com fundo branco, orla vermelha e símbolos em preto.",
             "Formato quadrado ou losangular com fundo amarelo, orla interna preta e símbolos em preto.",
@@ -1856,7 +1856,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "q21",
         category: "placas",
-        statement: "No que diz respeito à sinalização vertical, as placas de identificação e orientação de destino, que fazem parte do grupo de sinalização de indicação, possuem cores de fundo padronizadas. Em rodovias federais e estaduais no Brasil, essas placas são predominantemente:",
+        statement: "As placas de identificação de via e de orientação de destino integram o grupo de sinalização de indicação. Em rodovias federais e estaduais brasileiras, a padronização de cores de fundo e caracteres dessas placas é:",
         options: [
             "Fundo amarelo com caracteres pretos, destacando o nome das cidades próximas da rodovia.",
             "Fundo vermelho com caracteres brancos, indicando a proibição de prosseguimento na via.",
@@ -1940,13 +1940,13 @@ export const QUESTIONS: Question[] = [
     {
         id: "p1",
         category: "placas",
-        statement: "Você está em via pública desconhecida e chega a uma interseção com a placa PARE (R-1) junto à sinalização horizontal de retenção. Pelas placas de regulamentação do CTB, o que você deve fazer ao ver essa placa de parada obrigatória?",
+        statement: "Em interseção do perímetro urbano sem semáforo, o condutor se aproxima da via transversal, onde a placa R-1 (PARADA OBRIGATÓRIA) acompanha a linha de retenção pintada na pista de rolamento. A conduta exigida pelo CTB é:",
         placa: "R-1",
         options: [
-            "Só reduzir e ceder a vez pra quem vem na transversal, sem precisar parar totalmente.",
-            "Parar totalmente antes da faixa de retenção, mesmo sem ninguém vindo, olhar o trânsito e só depois seguir.",
-            "Reduzir e só ficar pronto pra parar se aparecer algum veículo na interseção.",
-            "Acelerar pra cruzar logo antes dos outros veículos, pra manter o fluxo andando.",
+            "Reduzir a velocidade e ceder a passagem aos veículos da via transversal, sem necessidade de imobilizar o veículo.",
+            "Imobilizar o veículo integralmente antes da linha de retenção, mesmo sem veículos convergindo, avaliar a interseção e só então prosseguir.",
+            "Reduzir a velocidade e permanecer pronto para parar caso algum veículo se aproxime do ponto de conflito.",
+            "Prosseguir mantendo o fluxo, pois a imobilização só é exigida quando houver tráfego convergente na interseção."
         ],
         correctIndex: 1,
         explanation: 'Parar o carro totalmente na faixa de reten\u00E7\u00E3o. Essa placa manda parar, n\u00E3o importa se t\u00E1 vazio.',
@@ -1959,13 +1959,13 @@ export const QUESTIONS: Question[] = [
     {
         id: "p2",
         category: "placas",
-        statement: "Você chega para entrar numa via transversal e vê na interseção a placa de regulamentação R-2, do triângulo invertido. Sabendo a diferença dela para o PARE no CTB, qual é o comportamento certo ao se deparar com essa placa?",
+        statement: "O condutor se aproxima de interseção no perímetro urbano com via preferencial sinalizada e identifica a placa R-2 (DÊ A PREFERÊNCIA), de triângulo invertido, distinta da placa R-1. Diferente desta, a conduta exigida é:",
         placa: "R-2",
         options: [
-            "Parar totalmente antes de entrar, igualzinho ao PARE.",
-            "Diminuir com segurança e dar a vez a quem já vem na preferencial, seguindo quando der.",
-            "Manter a velocidade, pois a placa só informa como está a via.",
-            "Acelerar para entrar antes dos outros em qualquer brecha do fluxo.",
+            "Imobilizar o veículo completamente antes do ponto de conflito, como ocorreria diante da placa R-1.",
+            "Reduzir a velocidade com segurança, ceder a passagem aos veículos da via preferencial e prosseguir quando houver intervalo seguro.",
+            "Manter a velocidade constante, pois a placa apenas informa o traçado da via sem impor obrigação.",
+            "Acelerar para ingressar na via preferencial antes da chegada dos demais veículos, aproveitando qualquer intervalo do fluxo."
         ],
         correctIndex: 1,
         explanation: 'A placa R-2 manda voc\u00EA dar a prefer\u00EAncia aos carros que j\u00E1 est\u00E3o na via preferencial.',
@@ -1978,13 +1978,13 @@ export const QUESTIONS: Question[] = [
     {
         id: "p3",
         category: "placas",
-        statement: "Você procura vaga para estacionar em via urbana central de muito movimento e vê afixada em poste a placa de regulamentação R-6a. Pelo CTB, sobre restrição de estacionamento, o que essa placa determina para esse trecho?",
+        statement: "Em via urbana central de intenso movimento, o condutor procura vaga e identifica a placa de regulamentação R-6a afixada em um poste. Pelo CTB, a distinção entre parada e estacionamento determinada por essa placa é:",
         placa: "R-6a",
         options: [
-            "Proíbe qualquer parada, até a rapidinha para embarque de passageiro.",
-            "Proíbe estacionar, mas permite a parada rápida para embarque e desembarque.",
-            "Permite estacionar só nos horários da plaquinha extra embaixo do sinal.",
-            "Obriga a estacionar só do lado direito, seguindo a mão da via.",
+            "Proíbe qualquer parada no trecho, inclusive a imobilização breve para embarque de passageiros.",
+            "Proíbe o estacionamento, mas admite a parada breve para embarque e desembarque de passageiros.",
+            "Veda o estacionamento apenas nos horários indicados na placa auxiliar complementar instalada abaixo.",
+            "Determina o estacionamento exclusivamente pelo lado direito da via, no sentido da circulação."
         ],
         correctIndex: 1,
         explanation: 'Essa placa diz que n\u00E3o pode deixar o carro parado ali, mas d\u00E1 pra parar rapidinho pra pegar ou deixar algu\u00E9m.',
@@ -1998,13 +1998,13 @@ export const QUESTIONS: Question[] = [
     {
         id: "p4",
         category: "placas",
-        statement: "Rodando pelo centro você vê em trechos diferentes duas placas: uma com o E cortado por um risco e outra com um X vermelho (R-6b). Sabendo que uma só proíbe estacionar e a outra é mais pesada, o que a placa com o X vermelho realmente determina?",
+        statement: "O condutor percorre via urbana e observa dois trechos distintos: um com a placa R-6a (E riscado) e outro, alguns metros adiante, com a placa R-6b (X vermelho). Enquanto a primeira veda o estacionamento, a segunda impõe:",
         placa: "R-6b",
         options: [
-            "Tem o mesmo sentido da placa do E cortado, proibindo só estacionar por muito tempo.",
-            "É mais pesada e proíbe qualquer parada, até a rapidinha pra embarque, desembarque ou carga.",
-            "Proíbe só a parada de carros pesados e grandes, liberando os carros de passeio.",
-            "Libera estacionar só de noite, das 22h às 6h, nos trechos sinalizados.",
+            "Restrição idêntica à da placa R-6a, vedando apenas o estacionamento prolongado no trecho.",
+            "Vedação total de parada e estacionamento, alcançando também a imobilização breve para carga, desembarque ou embarque.",
+            "Proibição de parada exclusivamente para veículos de grande porte, liberando os veículos de passeio.",
+            "Vedação de estacionamento somente no período noturno, das 22h às 6h, nos trechos sinalizados."
         ],
         correctIndex: 1,
         explanation: 'A placa com o \'X\' vermelho pro\u00EDbe parar em qualquer situa\u00E7\u00E3o, at\u00E9 para embarque e desembarque.',
@@ -2016,13 +2016,13 @@ export const QUESTIONS: Question[] = [
     {
         id: "p5",
         category: "placas",
-        statement: "Você passa por uma via arterial e vê na pista de rolamento a placa R-19, aquela redonda com número que marca a velocidade máxima da via. Se o condutor exceder o valor indicado na placa, o que ocorre segundo as placas de regulamentação?",
+        statement: "Em via arterial, o condutor transpõe a linha divisória de fluxos e ultrapassa o limite fixado na placa R-19 (velocidade máxima). Segundo o CTB, a natureza da infração varia conforme o percentual de excesso:",
         placa: "R-19",
         options: [
-            "Leva só uma advertência falada do agente, sem multa em dinheiro na primeira vez.",
-            "Comete infração que muda com o excesso: média até 20%, grave de 20% a 50% e gravíssima acima de 50%.",
-            "Leva multa de valor único e fixo, não importa quanto passou do limite da via.",
-            "Tem o veículo apreendido na hora da blitz, sem chance de resolver depois.",
+            "Aplica-se apenas advertência verbal do agente, sem imposição de multa, na primeira ocorrência.",
+            "Média até 20% de excesso, grave de 20% a 50% e gravíssima acima de 50% do limite indicado na via.",
+            "Aplica-se multa de valor fixo e único, independentemente da magnitude do excesso sobre o limite.",
+            "Configura infração passível de apreensão imediata do veículo na ocasião da abordagem."
         ],
         correctIndex: 1,
         explanation: 'A placa R-19 mostra a velocidade que voc\u00EA N\u00C3O pode passar.',
@@ -2036,14 +2036,14 @@ export const QUESTIONS: Question[] = [
     {
         id: "p6",
         category: "placas",
-        statement: "Você dirige numa estrada serrana estreita e vê a placa de advertência A-1a, colocada metros antes de um trecho sinuoso com curva fechada à esquerda. Pelo CTB, o que você deve fazer com antecedência ao ver essa placa?",
+        statement: "Em estrada serrana de pista estreita, o condutor visualiza a placa de advertência A-1a instalada alguns metros antes de curva fechada à esquerda em declive. A conduta defensiva exigida com antecedência é:",
         placa: "A-1a",
         image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/placa-A-1a.png",
         options: [
-            "Acelerar para sair logo do trecho sinuoso e ficar menos tempo no risco.",
-            "Manter a mesma velocidade, pois a placa só informa como é a via.",
-            "Diminuir aos poucos antes da curva forte à esquerda, sem frear dentro dela.",
-            "Dar seta e jogar para a pista contrária na hora para abrir a curva.",
+            "Acelerar para transpor o trecho sinuoso no menor tempo possível, reduzindo a exposição ao risco.",
+            "Manter a velocidade constante, pois a placa de advertência limita-se a descrever o traçado da via.",
+            "Reduzir progressivamente antes da curva à esquerda, evitando frenagens bruscas no interior da curva.",
+            "Acionar a sinalização de conversão e transpor para a pista contrária de modo a abrir melhor a curva."
         ],
         correctIndex: 2,
         explanation: 'Curva acentuada \u00E0 esquerda (placa de advert\u00EAncia) pede aten\u00E7\u00E3o.',
@@ -2055,14 +2055,14 @@ export const QUESTIONS: Question[] = [
     {
         id: "p7",
         category: "placas",
-        statement: "Você se aproxima de um trecho com muito pedestre e vê no canteiro central a placa de advertência A-32b, que avisa algo adiante na via. Pelo CTB e pela proteção dos usuários mais vulneráveis, qual alerta essa placa passa e o que o motorista deve fazer?",
+        statement: "O condutor se aproxima de trecho com grande fluxo de pedestres e visualiza a placa de advertência A-32b instalada no canteiro central, anunciando instalação adiante na pista de rolamento. Essa placa indica:",
         image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/placa-passagem-sinalizada-de-pedestres-A32b.webp",
         placa: "A-32b",
         options: [
-            "Tem escola por perto, então reduza muito nos horários de entrada e saída de alunos.",
-            "Tem faixa de pedestres à frente, então prepare-se pra parar e dar a vez aos pedestres.",
-            "Pedestre não pode andar ali, então pode manter a velocidade de cruzeiro.",
-            "Tem passagem de bicho na pista, então redobre a atenção quando enxergar mal.",
+            "Escola nas proximidades, exigindo redução máxima apenas nos horários de entrada e saída de alunos.",
+            "Passagem sinalizada de pedestres à frente, exigindo preparação para imobilizar o veículo e ceder a travessia.",
+            "Ausência de travessia permitida a pedestres, permitindo manter a velocidade de cruzeiro.",
+            "Possível travessia de animais na pista, recomendando atenção redobrada em baixa visibilidade."
         ],
         correctIndex: 1,
         explanation: 'A placa A-32b avisa que tem uma faixa de pedestres na frente.',
@@ -2074,14 +2074,14 @@ export const QUESTIONS: Question[] = [
     {
         id: "p8",
         category: "placas",
-        statement: "Você conduz veículo automotor em via urbana junto a escola em horário de entrada dos alunos e vê a placa de advertência A-33a de área escolar. Pelo significado da placa e pela direção defensiva, como você deve agir ali?",
+        statement: "Em via urbana no entorno de escola, durante horário de entrada, o condutor trafega junto à calçada escolar e visualiza a placa de advertência A-33a (ÁREA ESCOLAR). Pelo significado dessa sinalização e pela direção defensiva, a conduta correta é:",
         image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/placa-area-escolar-A-33A.webp",
         placa: "A-33a",
         options: [
-            "Manter a mesma velocidade, pois a placa só informa que tem escola por perto.",
-            "Diminuir a velocidade, prestar muita atenção e ficar pronto para parar para as crianças entrando e saindo.",
-            "Achar que a via urbana está fechada para veículos em qualquer hora do dia.",
-            "Parar o veículo sempre, mesmo sem nenhuma criança atravessando.",
+            "Manter a velocidade, pois a placa de advertência meramente informa a existência de escola nas proximidades.",
+            "Reduzir a velocidade, redobrar a atenção e manter prontidão para imobilizar o veículo diante de crianças entrando ou saindo.",
+            "Considerar a via interditada para veículos durante todo o período letivo, buscando trajeto alternativo.",
+            "Imobilizar o veículo obrigatoriamente, mesmo ausentes pedestres na faixa de travessia."
         ],
         correctIndex: 1,
         explanation: 'A placa A-33a indica que voc\u00EA est\u00E1 perto de uma escola, onde podem aparecer crian\u00E7as. ',
@@ -2092,13 +2092,13 @@ export const QUESTIONS: Question[] = [
     {
         id: "p9",
         category: "placas",
-        statement: "Em interseção em via urbana você vê a placa de regulamentação R-25d, de fundo azul, que impõe seguir em frente e define a trajetória dos veículos automotores. Pelo CTB, ela permite virar à direita ou à esquerda ou obriga a ir reto?",
+        statement: "Na interseção de via urbana, o condutor identifica a placa de regulamentação R-25d, de fundo azul, que fixa a trajetória obrigatória dos veículos automotores naquele ponto. Diante dela, o condutor está obrigado a:",
         placa: "R-25d",
         options: [
-            "Não pode parar no trecho, mas pode virar tanto pra direita quanto pra esquerda.",
-            "Não pode virar nem pra direita nem pra esquerda, tem que seguir reto como manda a placa.",
-            "Não pode ultrapassar no trecho, mas pode realizar a transposição de faixa quando precisar.",
-            "Não pode estacionar, mas pode fazer qualquer conversão na interseção.",
+            "Imobilizar o veículo no trecho, admitindo conversões tanto à direita quanto à esquerda.",
+            "Seguir em frente, vedadas as conversões à direita e à esquerda na interseção.",
+            "Abster-se de ultrapassagens, admitindo a transposição de faixa quando necessário.",
+            "Abster-se de estacionamento, liberadas todas as conversões na interseção."
         ],
         correctIndex: 1,
         explanation: 'Placa azul manda seguir em frente, n\u00E3o pode virar nem pra direita nem pra esquerda.',
@@ -2110,13 +2110,13 @@ export const QUESTIONS: Question[] = [
     {
         id: "p10",
         category: "placas",
-        statement: "Você circula com veículo automotor em via urbana em bairro comercial e vê afixada a placa de sinalização I-Hospital. Pela classificação da sinalização vertical prevista no CTB, o que essa placa de serviço auxiliar está comunicando?",
+        statement: "Circulando em via urbana de bairro comercial, o condutor visualiza placa de sinalização com símbolo de hospital. Pela classificação da sinalização vertical prevista no CTB, essa placa de serviço auxiliar comunica:",
         placa: "I-Hospital",
         options: [
-            "Que tem posto de gasolina à frente, mostrando um serviço auxiliar da via.",
-            "Que há hospital por perto, sendo placa de indicação de serviço auxiliar só informativa, sem obrigação.",
-            "Que a via urbana está interditada por emergência do hospital e é preciso desviar.",
-            "Que você deve estacionar e esperar os funcionários do hospital liberar o trânsito.",
+            "Posto de combustível adiante, tratando-se de serviço auxiliar de natureza rodoviária.",
+            "Proximidade de hospital, tratando-se de placa de indicação meramente informativa, sem dever de conduta.",
+            "Interdição da via por emergência hospitalar, exigindo desvio obrigatório do trajeto.",
+            "Obrigação de estacionar e aguardar liberação pelos funcionários do estabelecimento de saúde."
         ],
         correctIndex: 1,
         explanation: 'Placa que mostra que tem um hospital por perto.',
@@ -3641,12 +3641,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp55",
         category: "placas",
-        statement: "Numa viagem você vê uma placa azul com desenho branco de telefone e, mais à frente, outra placa verde mostrando a distância até a próxima cidade. Pela classificação da sinalização do CTB, esses dois tipos de placa são o quê?",
+        statement: "Durante trajeto em rodovia, o condutor observa placa azul com símbolo de telefone e, logo adiante, placa verde com nome de cidade e distância. Pela classificação do CTB, os grupos de sinalização dessas duas placas são:",
         options: [
-            "As duas são de regulamentação, pois mostram regras que o motorista tem que cumprir.",
-            "A primeira é de aviso sobre telefone e a segunda é de destino.",
-            "A primeira é de serviços auxiliares e a segunda é de orientação de destino — as duas são de indicação.",
-            "A primeira é de educação (azul) e a segunda é de regulamentação (verde).",
+            "Ambas de regulamentação, pois constituem ordens que o condutor deve cumprir.",
+            "A primeira é de advertência sobre serviço auxiliar e a segunda é de regulamentação de destino.",
+            "A primeira identifica serviço auxiliar e a segunda orienta destino — ambas integram a sinalização de indicação.",
+            "A primeira é de advertência e a segunda de indicação turística de traçado rodoviário."
         ],
         correctIndex: 2,
         explanation: 'Placa azul com s\u00EDmbolo branco \u00E9 pra servi\u00E7os (como telefone). Placa verde mostra a dist\u00E2ncia at\u00E9 a pr\u00F3xima cidade. Ambas s\u00E3o sinaliza\u00E7\u00E3o de INDICA\u00C7\u00C3O.',
@@ -3660,12 +3660,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp56",
         category: "placas",
-        statement: "Numa via urbana você vê uma placa redonda branca com borda vermelha e buzina riscada, e adiante no mesmo trajeto outra quadrada amarela com desenho de criança. Pelo CTB, qual é a classificação correta dessas duas placas?",
+        statement: "No mesmo trajeto urbano, o condutor visualiza placa circular de fundo branco, orla vermelha e buzina riscada; adiante, placa quadrada losangular amarela com desenho de criança. A classificação dessas placas é:",
         options: [
-            "Primeira é Advertência (R-19 buzina) e segunda é Regulamentação (A-32b crianças).",
-            "Primeira é Regulamentação (R-19 buzina proibida) e segunda é Advertência (A-32b crianças/escola).",
-            "As duas são de Regulamentação, pois mandam ou proíbem algo.",
-            "Primeira é Regulamentação (sem buzina) e segunda é Indicação (avisa escola).",
+            "A primeira é de advertência sobre trânsito de veículos sonoros e a segunda de regulamentação que obriga o uso de buzina.",
+            "A primeira é de regulamentação, que proíbe o acionamento de sinal sonoro, e a segunda é de advertência, que alerta para área com crianças.",
+            "Ambas são de regulamentação, pois impõem condutas obrigatórias ao condutor.",
+            "A primeira é de regulamentação e a segunda é de indicação de serviço auxiliar de trânsito."
         ],
         correctIndex: 1,
         explanation: 'Placa redonda branca com borda vermelha \u00E9 de Regulamenta\u00E7\u00E3o (R-19: buzina proibida). Placa quadrada amarela \u00E9 de Advert\u00EAncia (A-32b: crian\u00E7as).',
@@ -3680,12 +3680,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qd01",
         category: "placas",
-        statement: "Você dirige numa rodovia e chega num trecho de obras onde a pista afunila, com a placa A-10 avisando que as faixas vão diminuir. Pelo CTB e pela direção defensiva, qual é a conduta certa ao se aproximar desse estreitamento?",
+        statement: "Em rodovia em obras, a pista de rolamento afunila e a placa de advertência A-10 anuncia redução do número de faixas adiante. Pelo CTB e pela direção defensiva, ao se aproximar desse estreitamento, o condutor deve:",
         options: [
-            "Acelerar para passar antes do afunilamento e garantir a vez.",
-            "Diminuir, observar as placas e revezar a passagem, dando vez a quem já está no trecho.",
-            "Parar no meio da pista e ligar o pisca-alerta até o trânsito andar.",
-            "Manter a velocidade e buzinar direto para avisar os outros do estreitamento.",
+            "Acelerar para transpor o trecho antes do afunilamento e assegurar a preferência de passagem.",
+            "Reduzir a velocidade, observar a sinalização e revezar a passagem, cedendo aos veículos já presentes no trecho.",
+            "Imobilizar o veículo no meio da pista com o pisca-alerta até que o trânsito seja retomado.",
+            "Manter a velocidade e acionar sucessivamente a buzina para alertar os demais usuários."
         ],
         correctIndex: 1,
         explanation: 'A placa A-10 avisa que a pista vai estreitar. O certo \u00E9 diminuir a velocidade e ajudar na passagem intercalada, dando a vez pra quem j\u00E1 t\u00E1 no trecho estreito.',
@@ -6771,12 +6771,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_alta_13",
         category: "placas",
-        statement: "Uma placa de sinalização de serviços auxiliares com fundo azul e símbolo de cruz vermelha indica ao condutor a proximidade de qual estabelecimento?",
+        statement: "Em rodovia, o condutor visualiza placa da sinalização de serviços auxiliares com fundo azul e símbolo de cruz vermelha, instalada com antecedência a um trecho urbano. Essa placa indica a proximidade de:",
         options: [
-            "Área de preservação ambiental restrita.",
-            "Pronto Socorro ou unidade hospitalar de emergência.",
-            "Oficina mecânica especializada em freios ABS.",
-            "Posto de fiscalização alfandegária rodoviária."
+            "Área de preservação ambiental de acesso restrito.",
+            "Pronto-socorro ou unidade hospitalar de atendimento de urgência.",
+            "Oficina mecânica credenciada especializada em sistemas de frenagem.",
+            "Posto de fiscalização rodoviária com balança para pesagem de veículos."
         ],
         correctIndex: 1,
         explanation: "A placa de fundo azul com cruz vermelha sinaliza a presença de Pronto Socorro nas proximidades.",
@@ -6893,12 +6893,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'q_new_03',
         category: 'placas',
-        statement: 'O que indica a placa de advertência em losango amarelo com símbolo preto?',
+        statement: "O condutor trafega por via não pavimentada com declive e visualiza placa de sinalização vertical em formato losangular, fundo amarelo e símbolo preto, instalada antes de um trecho sinuoso. Pela classificação do CTB, essa placa:",
         options: [
-            'Obrigação',
-            'Perigo/AVISO',
-            'Indicação',
-            'Preferência'
+            "Impõe obrigação ou proibição ao condutor, tratando-se de sinalização de regulamentação.",
+            "Alerta para condição de perigo adiante na via, tratando-se de sinalização de advertência.",
+            "Identifica destino ou serviço auxiliar, tratando-se de sinalização de indicação.",
+            "Determina preferência obrigatória na interseção subsequente, pela sinalização de regulamentação."
         ],
         correctIndex: 1,
         explanation: 'Losango amarelo = advertência/perigo.',
@@ -6956,12 +6956,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'q_new_06',
         category: 'placas',
-        statement: 'Qual a função da placa retangular azul com símbolo branco?',
+        statement: "Em via de trânsito rápido, o condutor visualiza placa retangular de fundo azul com símbolo branco, indicando localização de posto de combustível adiante. Pela classificação da sinalização vertical do CTB, a função dessa placa é:",
         options: [
-            'Proibir',
-            'Indicar informação de serviço',
-            'Advertir perigo',
-            'Regulamentar obrigação'
+            "Impor proibição ou obrigação de conduta ao condutor, caracterizando sinalização de regulamentação.",
+            "Identificar serviço auxiliar e orientar o condutor quanto à disponibilidade adiante na via.",
+            "Alertar para condição potencialmente perigosa na pista de rolamento.",
+            "Regulamentar a velocidade máxima admitida naquele trecho da via."
         ],
         correctIndex: 1,
         explanation: 'Retangular azul = indicação/de serviço.',
@@ -7019,12 +7019,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'q_new_09',
         category: 'placas',
-        statement: 'O que significa uma placa circular vermelha com faixa branca horizontal?',
+        statement: "Ao se aproximar de trecho com carga e descarga em via do perímetro urbano, o condutor identifica placa de regulamentação circular, com fundo branco, orla vermelha e faixa horizontal no centro. Essa placa significa:",
         options: [
-            'Pare obrigatório',
-            'Proibido estacionar',
-            'Proibido parar e estacionar',
-            'Velocidade máxima'
+            "Parada obrigatória com imobilização total antes da linha de retenção.",
+            "Vedação exclusiva de estacionamento, admitindo parada breve para embarque.",
+            "Proibição total de parada e estacionamento no trecho sinalizado.",
+            "Velocidade máxima permitida para o trecho da via."
         ],
         correctIndex: 2,
         explanation: 'Faixa branca horizontal em vermelho = proibido parar/estacionar.',
@@ -7372,11 +7372,11 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_20",
         category: "placas",
-        statement: "Para que serve a sinalização horizontal pintada na pista?",
+        statement: "A sinalização horizontal pintada na pista de rolamento integra o sistema de sinalização viária e cumpre múltiplas funções ao longo do traçado. Entre as funções atribuídas pelo CTB à sinalização horizontal estão:",
         options: [
-            "Organizar e orientar o fluxo nas faixas.",
-            "Avisar de risco e proibição de ultrapassagem.",
-            "Regular onde pode ou não estacionar no bordo.",
+            "Delimitar faixas de circulação e orientar o fluxo dos veículos na pista.",
+            "Alertar para riscos e sinalizar a vedação de ultrapassagem em determinados trechos.",
+            "Identificar locais de estacionamento e imobilização permitida no bordo da pista.",
             "Todas as alternativas acima estão corretas."
         ],
         correctIndex: 3,
@@ -8115,12 +8115,12 @@ export const REAL_EXAM_IDS = [
     {
         id: "q3206",
         category: "placas",
-        statement: "Faixa de pedestres elevada serve para:",
+        statement: "No perímetro urbano, a administração viária implantou faixa de pedestres elevada em frente à escola, alterando o nível da pista de rolamento em relação ao acostamento. A finalidade atribuída a essa instalação viária é:",
         options: [
-            "Forçar redução de velocidade dos veículos e dar prioridade segura ao pedestre.",
-            "Facilitar ultrapassagens em locais com grande fluxo de veículos.",
-            "Causar transtornos à circulação de veículos em frente às escolas",
-            "Servir de estacionamento temporário para embarque e desembarque na frente das escolas."
+            "Impor redução de velocidade aos veículos e assegurar travessia segura do pedestre.",
+            "Facilitar manobras de ultrapassagem em trechos de elevado fluxo de veículos.",
+            "Gerar impacto à circulação de veículos no entorno de estabelecimentos escolares.",
+            "Reservar área para embarque e desembarque temporário em frente às escolas."
         ],
         correctIndex: 0,
         explanation: "A faixa de pedestres elevada (zebra crossing elevada) serve para forçar redução de velocidade e dar prioridade segura ao pedestre.",
@@ -8130,12 +8130,12 @@ export const REAL_EXAM_IDS = [
     {
         id: "q3207",
         category: "placas",
-        statement: "Ao enxergar uma faixa de pedestres, o condutor deve:",
+        statement: "O condutor transita em via urbana com fluxo intenso e se aproxima de faixa de travessia de pedestres com pessoas aguardando no acostamento. Pelo CTB, ao enxergar a sinalização horizontal de travessia, a conduta exigida é:",
         options: [
-            "Acelerar para dar mais fluidez ao trânsito, deixando a via livre para o pedestre atravessar.",
-            "Parar sobre a faixa, obrigando o pedestre a dar a volta para atravessar a rua.",
-            "Reduzir a velocidade e parar dando preferência ao pedestre.",
-            "Tocar buzina para que o pedestre atravesse com mais rapidez."
+            "Acelerar para esvaziar a interseção e liberar a travessia com mais fluidez.",
+            "Imobilizar o veículo sobre a faixa, obstruindo a travessia do pedestre.",
+            "Reduzir a velocidade, imobilizar o veículo antes da faixa e conceder a travessia ao pedestre.",
+            "Acionar a buzina sucessivamente para apressar a travessia do pedestre."
         ],
         correctIndex: 2,
         explanation: "O condutor deve reduzir a velocidade e parar dando preferência ao pedestre ao enxergar uma faixa de pedestres.",
