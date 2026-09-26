@@ -844,7 +844,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe44",
         category: "meio-ambiente",
-        statement: "Os motores a combustão interna dos veículos automotores emitem gases nocivos pela queima de derivados de petróleo. Dentre as substâncias listadas, assinale o gás altamente tóxico, sem cheiro e incolor que interfere na oxigenação do sangue humano:",
+        statement: "Motoristas urbanos expostos ao tráfego intenso relatam tonturas em congestionamentos com veículos antigos. O gás emitido pela combustão incompleta, incolor e inodoro, que se liga à hemoglobina e compromete a oxigenação do sangue, é:",
         options: [
             "O Monóxido de Carbono (CO), gás liberado pela combustão incompleta que se liga à hemoglobina do sangue e impede a oxigenação adequada do corpo humano.",
             "O Dióxido de Carbono (CO2), gás naturalmente presente na atmosfera e principal responsável pela intensificação do efeito estufa global.",
@@ -860,7 +860,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe45",
         category: "meio-ambiente",
-        statement: "A prática da direção econômica e ecológica traz impactos ambientais positivos. Dentre as opções, assinale a conduta que contribui ativamente para a redução da emissão de poluentes atmosféricos e economia de combustível:",
+        statement: "Em trajeto urbano com congestionamentos, o condutor quer reduzir consumo e poluentes sem alterar a manutenção do veículo. Entre as condutas de direção, a que efetivamente contribui para a redução das emissões é:",
         options: [
             "Manter a aceleração constante, evitar frenagens ou arrancadas bruscas e planejar as trocas de marchas na faixa adequada de rotação do motor.",
             "Acelerar o motor vigorosamente em ponto morto antes de desligar o veículo para queimar resíduos.",
@@ -876,7 +876,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe46",
         category: "meio-ambiente",
-        statement: "Ao transitar por uma rodovia estadual, um passageiro arremessa uma lata de alumínio pela janela lateral do veículo em movimento. Conforme o regramento de posturas ambientais do CTB, essa conduta constitui:",
+        statement: "Em rodovia estadual de pista dupla, passageiro arremessa lata de alumínio pela janela lateral do veículo em movimento e o resíduo cai no acostamento. Pelo regramento de posturas ambientais do CTB, essa conduta constitui:",
         options: [
             "Infração de trânsito de natureza média, sujeita a multa administrativa de responsabilidade do condutor.",
             "Infração leve de responsabilidade exclusiva do passageiro que efetuou o arremesso físico.",
@@ -893,7 +893,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe47",
         category: "meio-ambiente",
-        statement: "O excesso de ruídos emitidos por buzinas desreguladas ou alarmes automotivos desordenados nas cidades configura poluição sonora prejudicial à saúde. De acordo com as leis brasileiras, a poluição sonora de trânsito enquadra-se como infração e afeta principalmente:",
+        statement: "Em via residencial à noite, buzinas desreguladas e alarmes automotivos disparados repetidamente perturbam o descanso da população. A norma de trânsito enquadra essa conduta como infração que afeta principalmente:",
         options: [
             "Infração de trânsito que gera estresse e perturbação do sossego público, enquadrando-se como poluição sonora e de convivência social.",
             "Crime ambiental com detenção incondicional do motorista em regime fechado.",
@@ -909,7 +909,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe48",
         category: "meio-ambiente",
-        statement: "A cidadania no trânsito fundamenta-se no respeito mútuo e na convivência pacífica entre os diversos usuários da via. Sobre as premissas de comportamento do condutor cidadão, assinale a afirmativa correta:",
+        statement: "Em via urbana com ciclistas trafegando pelo bordo da pista e pedestres na calçada, um condutor exige preferência absoluta sobre os usuários mais vulneráveis. Sobre as premissas de condutor cidadão do CTB, é correto:",
         options: [
             "Priorizar sempre a integridade física dos pedestres e dos veículos não motorizados, agindo com cortesia e tolerância perante erros alheios.",
             "Exigir preferência de passagem sobre veículos menores de carga devido ao maior porte nominal do seu carro de passeio.",
@@ -1259,7 +1259,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe69",
         category: "meio-ambiente",
-        statement: "A inspeção técnica veicular periódica é um procedimento regulamentado de segurança automotiva. O objetivo principal do programa oficial de inspeção técnica de segurança e de emissões de poluentes é:",
+        statement: "O programa oficial de inspeção técnica veicular convoca periodicamente o proprietário à estação de vistoria. O objetivo principal desse programa, tanto no âmbito da segurança ativa quanto do meio ambiente, é:",
         options: [
             "Garantir as condições mecânicas de segurança ativa/passiva do veículo e verificar o atendimento aos limites legais de emissão de gases e ruídos.",
             "Determinar o valor de mercado atualizado do veículo para tributação anual de impostos estaduais.",
@@ -1425,7 +1425,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe79",
         category: "meio-ambiente",
-        statement: "Um motociclista realiza modificações no escapamento original de sua motocicleta instalando um silenciador esportivo aberto que emite ruídos acima dos limites legais permitidos. Sob as normas administrativas de segurança viária do CTB, essa conduta configura:",
+        statement: "Motociclista instala silenciador esportivo aberto em substituição ao escapamento original, elevando o ruído acima dos limites legais; em fiscalização, a motocicleta é abordada em via urbana. Pelo CTB, essa conduta configura:",
         options: [
             "Infração de trânsito de natureza grave, sujeita a multa administrativa e medida administrativa de retenção da motocicleta para regularização.",
             "Infração de trânsito média, punida apenas com multa sem qualquer previsão de retenção física do veículo.",
@@ -1630,7 +1630,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "q8",
         category: "meio-ambiente",
-        statement: "No contexto da gestão ambiental e da circulação urbana de veículos automotores, emitir gases poluentes ou fumaça acima dos níveis regulamentados pelos órgãos de controle ambiental (como o CONAMA) sujeita o proprietário do veículo a qual sanção, nos termos do CTB?",
+        statement: "Com escapamento e catalisador alterados, fiscalização ambiental mede no veículo emissão de gases acima dos limites regulamentados pelo órgão de controle. Nos termos do CTB, a sanção aplicável ao proprietário é:",
         options: [
             "Apenas advertência por escrito expedida pelo órgão ambiental estadual competente.",
             "Infração de natureza grave, punida com multa e retenção do veículo para fins de regularização.",
@@ -1806,7 +1806,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "q18",
         category: "meio-ambiente",
-        statement: "A relação entre o modo de condução do veículo e os impactos ecológicos é direta e mensurável. Dentre as opções apresentadas, assinale a conduta que contribui ativamente para a redução da emissão de poluentes atmosféricos e eficiência energética:",
+        statement: "Em trajeto rodoviário com trechos de declive e aclive pronunciados, o condutor avalia hábitos de condução para reduzir emissões e consumo. A conduta que efetivamente contribui para a redução da emissão de poluentes é:",
         options: [
             "Acelerar o motor de forma vigorosa entre as trocas de marchas para manter o giro alto do motor.",
             "Transitar em marchas adequadas à velocidade, mantendo uma aceleração constante e evitando freadas ou arrancadas bruscas desnecessárias.",
@@ -2419,12 +2419,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q43",
         category: "meio-ambiente",
-        statement: "À noite em via urbana residencial, você observa um condutor acionando a buzina de forma prolongada e repetida só para chamar um morador. Pelas regras de conduta, cidadania e poluição sonora do CTB, quando é correto usar a buzina e quando é proibido?",
+        statement: "À noite, em via residencial do perímetro urbano, um condutor aciona a buzina de forma prolongada e repetida apenas para chamar um morador do prédio. Pela regra do CTB sobre uso do sinal sonoro, a conduta correta é:",
         options: [
-            "Pode buzinar à vontade em qualquer hora, pois é direito do motorista avisar os outros.",
-            "Só em toques curtos pra avisar de perigo na hora, sendo proibido buzinar longo ou perto de hospital e escola.",
-            "Pode buzinar pra cumprimentar amigo na calçada, pois é um costume social normal.",
-            "Pode buzinar na frente de hospital e escola, desde que esteja devagar.",
+            "O uso do sinal sonoro é livre a qualquer hora, pois constitui direito do condutor de avisar os demais usuários.",
+            "Usar em toques curtos apenas para alertar perigo imediato, vedado o uso prolongado, especialmente próximo a hospitais e escolas.",
+            "Buzinar para cumprimentar pedestres na calçada, por configurar costume social aceitável no convívio urbano.",
+            "Buzinar à frente de hospitais e escolas desde que o veículo transite em baixa velocidade."
         ],
         correctIndex: 1,
         explanation: 'Buzina longa \u00E9 polui\u00E7\u00E3o sonora e infra\u00E7\u00E3o leve.',
@@ -2436,12 +2436,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q44",
         category: "meio-ambiente",
-        statement: "Numa viagem por rodovia estadual, um passageiro joga pela janela uma embalagem vazia de lanche que cai na pista. Pelo CTB, que pune posturas contra o meio ambiente, como essa infração é classificada e quem responde por ela?",
+        statement: "Em rodovia estadual, passageiro arremessa embalagem de lanche pela janela durante o trajeto e o material cai na pista de rolamento. Pelo CTB, que pune posturas contra o meio ambiente, a classificação da infração e o responsável são:",
         options: [
-            "Leve: só advertência escrita, sem pontos e sem multa.",
-            "Média: multa e 4 pontos na CNH, com o condutor respondendo pelo passageiro.",
-            "Grave: multa e 5 pontos, mais suspensão do licenciamento do carro.",
-            "Gravíssima: multa vezes 3 e apreensão até catar o lixo jogado.",
+            "Infração leve, com mera advertência escrita e sem aplicação de pontos na CNH.",
+            "Infração média, com multa e 4 pontos na CNH, respondendo o condutor pela conduta do passageiro.",
+            "Infração grave, com multa, pontos e suspensão do licenciamento do veículo.",
+            "Infração gravíssima, com multa multiplicada por três e remoção imediata do veículo."
         ],
         correctIndex: 1,
         explanation: 'Infra\u00E7\u00E3o m\u00E9dia \u2014 4 pontos. Isso pode causar inc\u00EAndios e acidentes.',
@@ -2677,12 +2677,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp04",
         category: "meio-ambiente",
-        statement: "A principal consequência DIRETA para a SAÚDE HUMANA, decorrente da maior exposição aos raios ultravioleta (UV) provocada pelo buraco na camada de ozônio, é:",
+        statement: "O agravamento do buraco na camada de ozônio eleva a fração de radiação ultravioleta (UV) que atinge a superfície terrestre. A principal consequência DIRETA dessa maior exposição para a saúde humana é:",
         options: [
-            "Aumento da temperatura global e desconforto térmico",
-            "Maior incidência de doenças respiratórias, como asma e bronquite",
-            "Aumento nos casos de câncer de pele e problemas oculares, como a catarata",
-            "Aumento da quantidade de raios ultravioleta que chegam à Terra",
+            "Aumento da temperatura média global e desconforto térmico nas regiões urbanas.",
+            "Maior incidência de doenças respiratórias obstructivas, como asma e bronquite.",
+            "Aumento dos casos de câncer de pele e lesões oculares, como a catarata.",
+            "Aumento da quantidade de radiação UV-A e UV-B que atinge o solo terrestre."
         ],
         correctIndex: 2,
         explanation: 'O buraco na camada de oz\u00F4nio faz a gente pegar mais sol forte, e isso traz problemas como c\u00E2ncer de pele e catarata.',
@@ -3054,7 +3054,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp25",
         category: "meio-ambiente",
-        statement: "O condutor responsável deve saber como descartar corretamente os resíduos gerados pela manutenção do veículo. Assinale a alternativa que apresenta uma conduta ambientalmente correta com relação ao descarte de óleo lubrificante usado:",
+        statement: "Após a manutenção preventiva do veículo na garagem do condomínio, o condutor acumula o óleo lubrificante usado em um balde e precisa descartá-lo. Pela legislação ambiental brasileira, a conduta correta é:",
         options: [
             "Queimar o óleo usado em fornos industriais para aproveitamento energético, pois é uma forma de reciclagem",
             "Descartar o óleo usado na pia ou no ralo, pois a estação de tratamento de esgoto consegue separá-lo da água",
@@ -3074,7 +3074,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp26",
         category: "meio-ambiente",
-        statement: "Em relação à poluição atmosférica causada por veículos automotores, um dos principais problemas ambientais dos grandes centros urbanos, assinale a alternativa que indica corretamente uma atitude do condutor que contribui para a redução da emissão de poluentes:",
+        statement: "Em campanha de qualidade do ar no perímetro urbano, o condutor pergunta qual hábito de manutenção do veículo contribui para reduzir a emissão de poluentes por combustão incompleta. A conduta indicada é:",
         options: [
             "Manter o motor ligado durante paradas prolongadas para evitar o desgaste do motor de arranque ao religar",
             "Realizar a manutenção preventiva periódica, especialmente do sistema de ignição, alimentação e escapamento",
@@ -3093,7 +3093,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp27",
         category: "meio-ambiente",
-        statement: "Dirigindo em uma via movimentada, o condutor nota que o veículo à sua frente está soltando uma quantidade excessiva de fumaça escura pelo escapamento, prejudicando a visibilidade e causando mau cheiro. De acordo com o CTB e as resoluções do CONAMA, essa situação:",
+        statement: "Em via urbana movimentada, o condutor acompanha veículo cujo escapamento emite fumaça escura densa, reduzindo a visibilidade e causando mau cheiro. Pelo CTB e pelas resoluções do CONAMA, essa situação:",
         options: [
             "É considerada infração de trânsito GRAVE, pois o veículo está emitindo poluentes acima do permitido, sujeito a multa e retenção",
             "Não é infração de trânsito, mas sim uma contravenção ambiental de competência exclusiva da polícia ambiental",
@@ -3113,7 +3113,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp28",
         category: "meio-ambiente",
-        statement: "Em relação ao descarte de pneus usados e à responsabilidade ambiental do condutor e das empresas do setor, a destinação ambientalmente correta determinada pela legislação brasileira é:",
+        statement: "Após a substituição, oficina e condutor acumulam os pneus inservíveis junto às margens da pista de rolamento. Pela legislação brasileira e pela logística reversa obrigatória, a destinação correta desses pneus é:",
         options: [
             "Queimar os pneus em usinas de cimento para aproveitamento energético, pois a queima controlada não emite poluentes",
             "Descartar os pneus em aterros sanitários comuns junto com o lixo doméstico, já que a borracha é biodegradável",
@@ -3132,7 +3132,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp29",
         category: "meio-ambiente",
-        statement: "Próximo a uma reserva ambiental, o condutor percebe que a via está com vegetação alta e ressecada nas margens. Nessa situação, qual atitude é vedada ao condutor por representar risco de incêndio florestal e poluição?",
+        statement: "No período seco, o condutor trafega junto a reserva ambiental onde a vegetação das margens está alta e ressecada, em via estreita de pista única. Nessa situação, a conduta VEDADA, por representar risco de incêndio florestal, é:",
         options: [
             "Trafegar em baixa velocidade para evitar levantar poeira e prejudicar a visibilidade",
             "Manter o ar-condicionado ligado com a recirculação ativada para evitar entrada de fumaça externa",
@@ -3152,7 +3152,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp30",
         category: "meio-ambiente",
-        statement: "Com relação ao ciclo de vida das baterias automotivas (chumbo-ácido), a legislação ambiental brasileira estabelece que a destinação final das baterias inservíveis é de responsabilidade compartilhada. Sobre esse tema, assinale a alternativa correta:",
+        statement: "Sobre o ciclo de vida das baterias automotivas de chumbo-ácido, a legislação ambiental brasileira impõe responsabilidade compartilhada pelo descarte. No sistema de logística reversa, a destinação correta da bateria usada é:",
         options: [
             "Baterias usadas podem ser descartadas no lixo comum após serem descarregadas por completo, pois o chumbo não é mais nocivo",
             "O ácido da bateria pode ser neutralizado com soda cáustica e descartado na pia, enquanto a carcaça de plástico vai para reciclagem",
@@ -3841,12 +3841,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp62",
         category: "meio-ambiente",
-        statement: "Em fiscalização, foi flagrado um veículo automotor reprovado na inspeção de fumaça e ruído (PROCONVE), com escapamento e catalisador deficientes. O proprietário segue circulando sem reparar. Pelo CTB e normas ambientais, qual é a punição e a medida aplicada a esse veículo poluente?",
+        statement: "Em fiscalização, veículo automotor é reprovado na inspeção de fumaça e ruído (PROCONVE), com escapamento e catalisador deficientes, e o proprietário segue circulando sem regularizar. Pelo CTB e pelas normas ambientais, aplicam-se:",
         options: [
-            "Gravíssima, com multa, apreensão da CNH e guincho (remoção) direto pro pátio.",
-            "Grave, com multa e veículo retido até arrumar o escapamento e passar na inspeção.",
-            "Leve, só advertência escrita por ser a primeira vez, sem multa nem retenção.",
-            "Crime ambiental sem fiança, com cassação da CNH e perda do carro pro IBAMA.",
+            "Infração gravíssima, com multa, suspensão do direito de dirigir e remoção imediata do veículo.",
+            "Infração grave, com multa e retenção do veículo até a regularização do escapamento e nova inspeção.",
+            "Infração leve, com mera advertência escrita por se tratar da primeira ocorrência.",
+            "Configura crime ambiental, com cassação da CNH e apreensão do veículo pelo órgão ambiental."
         ],
         correctIndex: 1,
         explanation: 'Dirigir um carro que n\u00E3o t\u00E1 em dia com a emiss\u00E3o de poluentes \u00E9 infra\u00E7\u00E3o GRAVE, com multa e RETEN\u00C7\u00C3O do ve\u00EDculo at\u00E9 arrumar o problema.',
@@ -4170,12 +4170,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "nova_meio_ambiente_respiratorio_alta_04",
         category: "meio-ambiente",
-        statement: "Os carros soltam direto gases como monóxido de carbono (CO), óxidos de nitrogênio (NOx) e fuligem. Em cidade grande, respirar essa poluição por muito tempo causa principalmente qual tipo de doença para a população?",
+        statement: "Em grande centro urbano, a população fica exposta diariamente a monóxido de carbono, óxidos de nitrogênio e fuligem emitidos pela frota de veículos. A exposição prolongada a esses poluentes provoca principalmente:",
         options: [
-            "Doenças do estômago e úlceras por engolir fuligem sem querer.",
-            "Doenças de respiração, como asma, bronquite crônica e enfisema no pulmão.",
-            "Perda de audição permanente por causa da sujeira no ar.",
-            "Doenças contagiosas passadas só pela queima de combustível batizado."
+            "Distúrbios gastrointestinais crônicos decorrentes da ingestão involuntária de partículas.",
+            "Doenças do sistema respiratório, como asma, bronquite crônica e enfisema pulmonar.",
+            "Perda auditiva permanente em decorrência da contaminação das vias aéreas superiores.",
+            "Enfermidades contagiosas transmitidas exclusivamente pela queima de combustíveis."
         ],
         correctIndex: 1,
         explanation: 'A polui\u00E7\u00E3o do ar afeta diretamente os pulm\u00F5es, causando problemas como asma e bronquite.',
@@ -4370,7 +4370,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "nova_chuva_cida_meio_ambiente_alta_14",
         category: "meio-ambiente",
-        statement: "A queima de combustíveis fósseis lança dióxido de enxofre e óxidos de nitrogênio na atmosfera, os quais reagem com o vapor de água formando a chuva ácida. Além da contaminação do solo e recursos hídricos, qual é o impacto direto dessa precipitação sobre o patrimônio físico e veículos?",
+        statement: "A queima de combustíveis fósseis lança dióxido de enxofre e óxidos de nitrogênio, que reagem com a umidade atmosférica formando chuva ácida. Além da contaminação do solo e dos recursos hídricos, o impacto direto dessa precipitação sobre o patrimônio físico e os veículos é:",
         options: [
             "Corrosão e degradação de superfícies metálicas, pinturas veiculares e estruturas de concreto.",
             "Geração instantânea de neblina densa e precipitação de granizo tóxico nas rodovias.",
@@ -5250,12 +5250,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'ma_n1_002',
         category: 'meio-ambiente',
-        statement: 'Jogar lixo pela janela do ve\u00EDculo \u00E9 infra\u00E7\u00E3o:',
+        statement: "Durante trajeto em rodovia de pista simples, condutor e passageiros arremessam resíduos sólidos pela janela do veículo em movimento. Conforme o Art. 172 do CTB, essa postura no trânsito configura infração:",
         options: [
-            'M\u00E9dia (Art. 172 CTB).',
-            'Leve.',
-            'Grav\u00EDssima.',
-            'Grave.'
+            "Infração média de trânsito, prevista no Art. 172 do CTB, sujeita a multa e pontuação na CNH.",
+            "Infração leve de trânsito, punida apenas com advertência verbal do agente de trânsito.",
+            "Infração gravíssima de trânsito, punida com multa multiplicada e suspensão da CNH.",
+            "Infração grave de trânsito, punida com multa e cassação da permissão para dirigir."
         ],
         correctIndex: 0,
         explanation: 'Jogar lixo pela janela \u00E9 uma infra\u00E7\u00E3o m\u00E9dia.',
@@ -5271,12 +5271,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'ma_n2_001',
         category: 'meio-ambiente',
-        statement: 'Dentre os gases da combust\u00E3o em motores, qual \u00E9 o altamente t\u00F3xico, sem cheiro e incolor que interfere na oxigena\u00E7\u00E3o do sangue?',
+        statement: "Em garagem fechada, veículo com motor desregulado libera gás incolor e inodoro e os ocupantes apresentam dor de cabeça. O gás da combustão que se liga à hemoglobina e bloqueia a oxigenação do sangue é:",
         options: [
-            'Mon\u00F3xido de Carbono (CO), que se liga \u00E0 hemoglobina e bloqueia o oxig\u00EAnio.',
-            'Di\u00F3xido de Carbono (CO2), principal g\u00E1s do efeito estufa.',
-            'Di\u00F3xido de Enxofre (SO2), de odor forte.',
-            'CFC, que destr\u00F3i o oz\u00F4nio.'
+            "Monóxido de Carbono (CO), produto da combustão incompleta que se liga à hemoglobina.",
+            "Dióxido de Carbono (CO2), gás natural da atmosfera e principal do efeito estufa.",
+            "Dióxido de Enxofre (SO2), gás de odor forte e irritante para as vias respiratórias.",
+            "Clorofluorcarboneto (CFC), composto que destrói a camada de ozônio estratosférico."
         ],
         correctIndex: 0,
         explanation: 'O CO \u00E9 o g\u00E1s que faz mal e n\u00E3o d\u00E1 pra sentir.',
@@ -5313,12 +5313,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'ma_n1_001',
         category: 'meio-ambiente',
-        statement: 'O g\u00E1s incolor e inodoro que se liga \u00E0 hemoglobina e impede a oxigena\u00E7\u00E3o do sangue \u00E9 o:',
+        statement: "Com as janelas fechadas em congestionamento, sobe no habitáculo a concentração do gás incolor e inodoro proveniente do escapamento. Esse gás, que se liga à hemoglobina e impede a oxigenação do sangue, é:",
         options: [
-            'Mon\u00F3xido de Carbono (CO).',
-            'Di\u00F3xido de Carbono (CO2).',
-            'G\u00E1s Oz\u00F4nio.',
-            'Clorofluorcarboneto.'
+            "Monóxido de Carbono (CO), resultante da queima incompleta de combustível.",
+            "Dióxido de Carbono (CO2), produto da queima completa e gás do efeito estufa.",
+            "Gás Ozônio (O3), presente naturalmente na estratosfera e tóxico em baixa altitude.",
+            "Clorofluorcarboneto (CFC), usado em refrigeração e destruidor do ozônio."
         ],
         correctIndex: 0,
         explanation: 'O CO (mon\u00F3xido de carbono) bloqueia o oxig\u00EAnio no sangue.',
@@ -5355,12 +5355,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'ma_n2_002',
         category: 'meio-ambiente',
-        statement: 'Um passageiro arremessa uma lata pela janela em rodovia. Conforme o CTB, essa conduta configura:',
+        statement: "Durante fiscalização em rodovia de trânsito intenso, é flagrado passageiro arremessando lata de alumínio pelo vidro lateral do veículo em movimento, com o resíduo caindo na pista. Conforme o CTB, essa conduta configura:",
         options: [
-            'Infra\u00E7\u00E3o m\u00E9dia, com 4 pontos e multa, de responsabilidade do condutor.',
-            'Infra\u00E7\u00E3o leve, s\u00F3 do passageiro.',
-            'Infra\u00E7\u00E3o grave, com suspens\u00E3o da licen\u00E7a.',
-            'Conduta permitida em pista simples.'
+            "Infração média, com multa e 4 pontos na CNH, de responsabilidade do condutor.",
+            "Infração leve, de responsabilidade exclusiva do passageiro arremessante.",
+            "Infração grave, com multa e suspensão da licença de tráfego do veículo.",
+            "Conduta admitida em via de pista simples, desde que fora do acostamento."
         ],
         correctIndex: 0,
         explanation: 'Jogar lixo na estrada = infra\u00E7\u00E3o m\u00E9dia.',
@@ -5847,7 +5847,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_005",
         category: "meio-ambiente",
-        statement: "No âmbito do programa de Condução Ecológica (Eco-driving) e manutenção preventiva, qual das seguintes condutas do motorista possui maior impacto direto na redução do consumo de combustível e da emissão de gases poluentes?",
+        statement: "No programa de Condução Ecológica (Eco-driving), o condutor avalia hábitos de manutenção preventiva para reduzir consumo e emissões. Entre as opções, a que possui maior impacto direto na redução do consumo é:",
         options: [
             "Manter os pneus do veículo constantemente calibrados de acordo com a pressão recomendada pelo fabricante.",
             "Utilizar o veículo exclusivamente com o tanque de combustível na capacidade máxima em trajetos curtos.",
@@ -6147,12 +6147,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_020",
         category: "meio-ambiente",
-        statement: "No contexto da mobilidade urbana sustentável para trajetos de curta distância, qual modal de transporte apresenta custo financeiro zero, impacto ambiental nulo na emissão de poluentes e benefícios diretos à saúde do cidadão?",
+        statement: "Para trajeto de curta distância no perímetro urbano, o cidadão compara modais quanto a custo, emissão de poluentes e benefício à saúde. O modal que apresenta custo financeiro zero e impacto zero em emissões é:",
         options: [
-            "Deslocamento a pé (Caminhada).",
-            "Uso de ciclomotores elétricos de alta velocidade.",
-            "Automóveis movidos a biocombustíveis e carona paga.",
-            "Motocicletas de baixa cilindrada."
+            "Caminhada (deslocamento a pé), de custo financeiro zero e emissão nula de poluentes.",
+            "Ciclomotores elétricos de alta velocidade, com emissão zero porém custo de aquisição.",
+            "Automóveis movidos a biocombustíveis em carona compartilhada paga.",
+            "Motocicletas de baixa cilindrada com combustível flex."
         ],
         correctIndex: 0,
         explanation: "A caminhada a pé é a forma mais limpa, barata e sustentável de mobilidade ativa.",
