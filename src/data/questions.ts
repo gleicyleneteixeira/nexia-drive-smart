@@ -103,12 +103,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q3",
         category: "direcao-defensiva",
-        statement: "Você está dirigindo numa via urbana de pista dupla e vê um pedestre começando a atravessar fora da faixa. Pela direção defensiva e pela regra de preferência do CTB, o que você deve fazer na hora para evitar atropelar ele?",
+        statement: "Em via urbana de pista dupla, pedestre inicia travessia fora da faixa de sinalização enquanto o condutor se aproxima em velocidade regular. Pela direção defensiva e pela regra de preferência do Art. 29 do CTB, a conduta imediata do condutor é:",
         options: [
-            "Manter a velocidade e ficar buzinando sem parar para chamar a atenção do pedestre.",
-            "Acelerar para passar antes que o pedestre entre na frente do seu carro.",
-            "Diminuir com segurança, sinalizar para os outros carros e dar a vez para o pedestre passar.",
-            "Jogar o carro para a faixa do lado de repente, sem mudar a velocidade.",
+            "Manter a velocidade e utilizar a buzina de forma contínua para alertar o pedestre.",
+            "Acelerar para transpor a faixa antes da entrada do pedestre na pista de rolamento.",
+            "Reduzir a velocidade com segurança, sinalizar aos demais usuários e ceder a travessia ao pedestre.",
+            "Executar transposição brusca de faixa sem sinalização para desviar do pedestre."
         ],
         correctIndex: 2,
         explanation: 'O pedestre sempre tem prioridade, mesmo fora da faixa de seguran\u00E7a.',
@@ -1105,12 +1105,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe60",
         category: "direcao-defensiva",
-        statement: "Você conduz veículo automotor em declive forte e longo na rodovia e precisa segurar a velocidade para não superaquecer os freios pelo atrito. Pela direção defensiva e pelo CTB, qual é a conduta certa nesse declive acentuado?",
+        statement: "O condutor trafega em declive longo e acentuado de rodovia e precisa conter a velocidade sem provocar o superaquecimento do sistema de freios por atrito prolongado. Pela direção defensiva e pelo CTB, a conduta correta nesse declive é:",
         options: [
-            "Descer em ponto morto e pisar o freio de vez em quando para poupar o sistema.",
-            "Descer desengrenado para economizar combustível, freando forte só se passar do limite.",
-            "Descer engrenado em marcha reduzida, usando o freio-motor para segurar a velocidade.",
-            "Pisar o freio sem soltar no declive todo, com marcha alta para não girar muito o motor.",
+            "Descer com o câmbio em ponto morto, aplicando o freio de serviço esporadicamente para poupar o sistema.",
+            "Descer desengrenado para economizar combustível, freando de forma intensa somente ao exceder o limite.",
+            "Descer engrenado em marcha reduzida, valendo-se do freio-motor para conter a velocidade.",
+            "Manter o pedal de freio pressionado durante todo o declive com marcha alta engatada."
         ],
         correctIndex: 2,
         explanation: 'Em descidas longas, \u00E9 melhor usar o freio motor (ve\u00EDculo engrenado). Se descer em ponto morto ou s\u00F3 usar o freio, pode superaquecer e falhar.',
@@ -2284,12 +2284,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q35",
         category: "direcao-defensiva",
-        statement: "Na aula de direção defensiva, o instrutor mandou olhar por cima do ombro antes da transposição de faixa, mesmo com espelho bem ajustado. Ele citou um ângulo que o espelho não alcança. Pela direção defensiva, o que são esses pontos cegos do veículo automotor?",
+        statement: "Em aula de direção defensiva, o instrutor determina verificação por cima do ombro antes da transposição de faixa, mesmo com retrovisores regulados, citando um ângulo que os espelhos não cobrem. Essas áreas são os chamados:",
         options: [
-            "Cantos laterais e traseiros que o retrovisor não mostra, tapados pelas colunas, por isso tem que olhar direto antes de manobrar.",
-            "Cantinhos escuros dentro do veículo à noite, que escondem quem vai no banco de trás.",
-            "Pontos do pneu onde a borracha gasta mais rápido, pedindo rodízio e balanceamento.",
-            "Manchas no para-brisa que atrapalham a visão quando bate sol forte de frente.",
+            "Pontos cegos, delimitados pelas colunas do veículo, exigindo olhar direto antes de qualquer mudança de faixa.",
+            "Cantos internos escuros do habitáculo que escondem ocupantes do banco traseiro à noite.",
+            "Pontos de desgaste da banda de rodagem que pedem rodízio e balanceamento dos pneus.",
+            "Manchas do para-brisa que reduzem a visão sob incidência solar frontal intensa."
         ],
         correctIndex: 0,
         explanation: 'S\u00E3o \u00E1reas que n\u00E3o aparecem nos espelhos \u2014 sempre d\u00EA uma olhadinha por cima do ombro antes de trocar de faixa.',
@@ -2300,12 +2300,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q36",
         category: "direcao-defensiva",
-        statement: "Você está descendo uma serra longa e bem íngreme e precisa segurar a velocidade o tempo todo sem deixar o freio esquentar demais pelo atrito. Pela direção defensiva e pelas regras do CTB, qual é o jeito certo de descer com segurança?",
+        statement: "O condutor desce serra longa e íngreme e precisa conter a velocidade permanente sem sobrecarregar o sistema de freios pelo atrito. Pela direção defensiva e pelas regras do CTB, a forma segura de efetuar a descida é:",
         options: [
-            "Descer em ponto morto (neutro), deixando a gravidade levar e pisando no freio de vez em quando pra poupar o sistema.",
-            "Descer desengrenado pra economizar combustível, dando freadas bruscas só quando passar do limite da via.",
-            "Descer engrenado em marcha reduzida, usando o freio-motor pra segurar a velocidade, e pisar no freio só de vez em quando.",
-            "Segurar o pé no freio a descida inteira, com marcha alta engatada pra não forçar o giro do motor.",
+            "Descer em ponto morto (neutro), deixando a gravidade atuar e acionando o freio de serviço periodicamente.",
+            "Descer desengrenado para economizar combustível, freando de forma brusca apenas ao exceder o limite.",
+            "Descer engrenado em marcha reduzida, utilizando o freio-motor e acionando o freio de serviço só eventualmente.",
+            "Manter o pé no freio durante toda a descida com marcha alta engatada para não forçar o motor."
         ],
         correctIndex: 2,
         explanation: 'Usar marcha reduzida e freio motor evita que os freios esquentem demais.',
@@ -2320,12 +2320,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q37",
         category: "direcao-defensiva",
-        statement: "Você trafega em rodovia de pista dupla com tráfego intenso e o veículo precedente segue lento. Para ultrapassar com segurança, o CTB e a direção defensiva exigem verificações antes e durante. Antes de ultrapassar nessa situação, qual é o procedimento correto?",
+        statement: "Em rodovia de pista dupla com tráfego intenso, o veículo precedente mantém velocidade reduzida e o condutor decide ultrapassá-lo. Pelo CTB e pela direção defensiva, o procedimento correto ANTES de iniciar a ultrapassagem é:",
         options: [
-            "Acelerar de uma vez pra esquerda sem dar seta, confiando na rapidez pra não bater.",
-            "Ver se dá pra ver bem e se pode, dar seta pra esquerda, olhar espelhos e ponto cego e acelerar pra concluir.",
-            "Buzinar sem parar até o da frente acelerar ou ir para o bordo da pista (acostamento) liberar a faixa.",
-            "Ligar o pisca-alerta e esperar, pois só pode passar se o da frente parar no bordo da pista (acostamento).",
+            "Executar a transposição para a faixa da esquerda sem sinalização, confiando na aceleração para concluir a manobra.",
+            "Conferir visibilidade e espaço, sinalizar com a seta esquerda, verificar retrovisores e ponto cego e só então acelerar.",
+            "Buzinar de forma contínua até o veículo da frente se deslocar para o bordo da pista ou acostamento.",
+            "Acionar o pisca-alerta e aguardar, pois a ultrapassagem só se efetiva com o veículo precedente imobilizado."
         ],
         correctIndex: 1,
         explanation: 'Ultrapassagem segura = visibilidade + seta + espelhos + ponto cego.',
@@ -2336,12 +2336,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q38",
         category: "direcao-defensiva",
-        statement: "Você viaja sempre por rodovia simples e precisa passar um caminhão lento. Antes de ir, tem que ver se o CTB permite passar ali. Pelas regras de circulação e sinalização, em qual desses lugares a ultrapassagem é PROIBIDA de jeito nenhum?",
+        statement: "Em rodovia de pista única, condutor precisa ultrapassar caminhão lento e consulta as regras de circulação e sinalização vigentes. Pelo CTB, o local em que a ultrapassagem é terminantemente PROIBIDA é:",
         options: [
-            "Em reta com boa visão e faixa tracejada, onde dá pra passar com segurança.",
-            "Em ponte, viaduto, túnel, curva, aclive sem visibilidade e onde tem faixa contínua.",
-            "Em qualquer rodovia federal, não importa o que a sinalização horizontal diga.",
-            "De dia, quando o fluxo contrário atrapalha calcular a distância segura.",
+            "Reta com boa visibilidade e sinalização horizontal tracejada, onde a manobra é permitida com segurança.",
+            "Ponte, viaduto, túnel, curva, aclive sem visibilidade e trecho com faixa contínua.",
+            "Qualquer rodovia federal, independentemente do que dispuser a sinalização horizontal de solo.",
+            "Período diurno, quando o fluxo contrário dificulta o cálculo da distância segura."
         ],
         correctIndex: 1,
         explanation: 'Ultrapassagem \u00E9 proibida em pontes, viadutos, t\u00FAneis, curvas, aclives sem visibilidade e faixa cont\u00EDnua.',
@@ -2585,12 +2585,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q53",
         category: "direcao-defensiva",
-        statement: "Você vai viajar de dia numa rodovia simples fora da cidade, com sol e visão boa, e fica na dúvida se precisa andar de farol aceso. A lei do farol baixo mudou e o CTB tem regra pra isso. Nessa rodovia de pista simples durante o dia, com ou sem DRL, o que vale sobre o farol?",
+        statement: "Condutor trafega de dia em rodovia de pista única fora do perímetro urbano, com sol e boa visibilidade, e consulta a regra atual do uso do farol baixo prevista no CTB. Nesse cenário, a conduta legal é:",
         options: [
-            "É proibido de dia, pois gasta energia e confunde os outros motoristas.",
-            "É obrigatório fora da cidade em pista simples, podendo usar o DRL se o carro tiver.",
-            "É opcional de dia, cada um decide se quer andar com farol ligado.",
-            "Só é exigido em túnel com luz ou com chuva e neblina muito fortes.",
+            "É proibido o uso durante o dia, pois consome energia e pode ofuscar os demais condutores.",
+            "É obrigatório fora do perímetro urbano em pista simples, admitindo-se o uso do sistema DRL se o veículo possuir.",
+            "É opcional durante o dia, ficando a critério do condutor manter o farol aceso.",
+            "Só é exigido em túnel iluminado ou sob chuva e neblina de intensidade elevada."
         ],
         correctIndex: 1,
         explanation: '\u00C9 obrigat\u00F3rio usar farol baixo durante o dia em rodovias de pista simples. Se o carro tiver, pode usar a luz de condu\u00E7\u00E3o diurna (DRL).',
@@ -2695,7 +2695,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp05",
         category: "direcao-defensiva",
-        statement: "A respeito do uso das luzes e do sistema de iluminação do veículo, de acordo com o CTB, é correto afirmar:",
+        statement: "O uso dos dispositivos de iluminação do veículo é disciplinado pelo CTB e interfere diretamente na visibilidade e na segurança da condução noturna. Sobre o emprego das luzes durante a circulação, é correto afirmar:",
         options: [
             "O condutor deve manter o farol baixo ligado dia e noite em qualquer tipo de via urbana ou de bairro.",
             "A troca de luz baixa e alta de forma intermitente só é permitida para indicar a intenção de ultrapassar ou alertar sobre riscos à segurança à frente.",
@@ -2785,12 +2785,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp10",
         category: "direcao-defensiva",
-        statement: "Numa aula de direção defensiva, o instrutor pergunta o que realmente define essa técnica de pilotagem. Pelos conceitos de segurança do CTB, qual opção apresenta corretamente o verdadeiro conceito de direção defensiva?",
+        statement: "Em aula de direção defensiva, o instrutor solicita o conceito que efetivamente caracteriza essa técnica de condução. Pelos conceitos de segurança do CTB, o verdadeiro conceito e objetivo da direção defensiva é:",
         options: [
-            "Evitar acidentes, mortes e prejuízos a qualquer custo, sem depender de manutenção ou clima.",
-            "Um tipo de acidente estranho em que nada dá para fazer para evitar a batida.",
-            "O conjunto de técnicas que ensina a prevenir acidentes mesmo com pista ruim e erros dos outros.",
-            "A habilidade de correr com segurança confiando só nos próprios reflexos.",
+            "Evitar acidentes e prejuízos a qualquer custo, sem depender de manutenção do veículo ou das condições do clima.",
+            "Um tipo de acidente em que não há conduta possível para evitar a colisão.",
+            "O conjunto de técnicas que ensina a prevenir acidentes mesmo com pista adversa e erro dos demais usuários.",
+            "A habilidade de trafegar rapidamente confiando exclusivamente nos próprios reflexos."
         ],
         correctIndex: 2,
         explanation: 'Dire\u00E7\u00E3o defensiva \u00E9 dirigir de um jeito que evita acidentes, mesmo com problemas na estrada ou erros de outros.',
@@ -3505,12 +3505,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp48",
         category: "direcao-defensiva",
-        statement: "Em dia de chuva forte, seu veículo automotor passa sobre poça d'água na pista de rolamento, o volante fica leve e o veículo parece flutuar, perdendo a direção: é a aquaplanagem. Nessa hora, o que fazer para retomar o controle do veículo com segurança?",
+        statement: "Sob chuva forte, o veículo automotor passa sobre poça d'água na pista de rolamento; o volante fica leve e o veículo flutua, perdendo aderência — é a aquaplanagem. Nesse instante, a conduta para retomar o controle com segurança é:",
         options: [
-            "Frear forte e virar o volante contra a derrapagem para alinhar.",
-            "Desligar o motor na hora para diminuir e recuperar a aderência.",
-            "Tirar o pé do acelerador, segurar o volante reto e não frear, esperando o pneu grudar de novo.",
-            "Acelerar tudo para expulsar a água dos sulcos e grudar mais rápido.",
+            "Aplicar frenagem intensa e girar o volante contra a derrapagem para realinhar o veículo.",
+            "Desligar imediatamente o motor para reduzir a velocidade e recuperar a aderência.",
+            "Retirar o pé do acelerador, manter o volante reto e não frear, aguardando o recontato dos pneus.",
+            "Acelerar firmemente para expulsar a água dos sulcos e realçar a aderência dos pneus."
         ],
         correctIndex: 2,
         explanation: 'Na aquaplanagem, tire o p\u00E9 do acelerador, mantenha o volante reto e n\u00E3o freie. Espere os pneus voltarem a tocar o asfalto.',
@@ -3543,7 +3543,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp50",
         category: "direcao-defensiva",
-        statement: "Em relação ao uso de faróis durante a condução noturna em rodovias, analise as afirmativas e assinale a conduta correta segundo o CTB e os princípios de direção defensiva:",
+        statement: "Em relação ao uso de faróis durante a condução noturna em rodovias de pista dupla, analise as afirmativas apresentadas sobre o sistema de iluminação e assinale a conduta correta segundo o CTB e os princípios da direção defensiva:",
         options: [
             "O farol alto deve ser mantido aceso permanentemente em rodovias para melhorar a visibilidade, independentemente de outros veículos",
             "O farol baixo deve estar aceso em rodovias mesmo durante o dia (obrigatório), e à noite deve-se usar o farol alto, reduzindo para baixo ao cruzar com outro veículo ou ao seguir atrás de outro",
@@ -3562,12 +3562,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp51",
         category: "direcao-defensiva",
-        statement: "Um caminhão bitrem segue pela faixa da direita em rodovia de pista dupla e você pretende executar transposição de faixa para ultrapassá-lo pela esquerda. Pela direção defensiva e pelo CTB, quais cuidados deve ter para fazer essa ultrapassagem com segurança?",
+        statement: "Caminhão bitrem trafega pela faixa da direita em rodovia de pista dupla e o condutor pretende executar transposição de faixa para ultrapassá-lo pela esquerda. Pela direção defensiva e pelo CTB, os cuidados essenciais são:",
         options: [
-            "Buzinar sem parar ao chegar perto e acelerar tudo para ficar pouco tempo na outra faixa.",
-            "Ver se tem espaço, dar seta, passar pela esquerda com segurança e só voltar para a direita quando vir o caminhão no retrovisor de dentro.",
-            "Passar pela direita, pois caminhão usa a esquerda, usando até o acostamento se precisar.",
-            "Ligar o pisca-alerta antes para avisar todos os carros que vai ultrapassar.",
+            "Buzinar de forma contínua na aproximação e acelerar ao máximo para minimizar o tempo na faixa adjacente.",
+            "Conferir o espaço disponível, sinalizar com a seta, ultrapassar pela esquerda com segurança e retornar à faixa direita só após visualizar o caminhão inteiro no retrovisor interno.",
+            "Ultrapassar pela direita, pois os caminhões trafegam pela esquerda, usando o acostamento se necessário.",
+            "Acionar o pisca-alerta previamente para comunicar a todos que efetuará a ultrapassagem."
         ],
         correctIndex: 1,
         explanation: 'Na hora de ultrapassar, sempre pela esquerda, sinalize com a seta e fa\u00E7a tudo com seguran\u00E7a.',
@@ -3780,13 +3780,13 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp59",
         category: "direcao-defensiva",
-        statement: "Você conduz um veículo automotor no perímetro urbano na saída de escola e vê muitas crianças no bordo da pista, atravessando fora da faixa de pedestres. Em área escolar de alto risco com pedestres vulneráveis, o que deve fazer ao passar pelo trecho?",
+        statement: "No perímetro urbano, à saída de escola, o condutor encontra grande concentração de crianças no bordo da pista, atravessando fora da faixa de pedestres. Em área escolar de alto risco, a conduta defensiva ao passar pelo trecho é:",
         image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/placa-area-escolar-A-33A.webp",
         options: [
-            "Acelerar pra passar logo do bolo e buzinar direto pra criança sair da pista.",
-            "Tirar o pé e andar devagar pro local, bem atento e pronto pra frear e parar, mesmo se a placa deixa mais.",
-            "Manter a máxima da placa à risca, pois atravessar errado é culpa do pedestre e dos pais.",
-            "Ligar o pisca-alerta, manter a velocidade e dar farol alto pra garantir sua preferência.",
+            "Acelerar para atravessar o agrupamento rapidamente, utilizando a buzina para afastar as crianças.",
+            "Reduzir a velocidade de forma adequada ao trecho, mantendo atenção integral e prontidão para frear e parar.",
+            "Manter a velocidade máxima da sinalização, pois a travessia irregular é responsabilidade dos pedestres.",
+            "Acionar o pisca-alerta, manter a velocidade e usar o farol alto para assegurar a preferência do veículo."
         ],
         correctIndex: 1,
         explanation: 'Em \u00E1rea escolar cheia de crian\u00E7as e pedestres, a melhor atitude \u00E9 diminuir a velocidade e ficar bem atento, pronto pra parar.',
@@ -3801,12 +3801,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp60",
         category: "direcao-defensiva",
-        statement: "Você passou direto da saída pra cidade numa rodovia rápida de pista dupla. Bate aquela vontade de voltar de ré ou cortar caminho. Mas direção defensiva e CTB mandam o jeito seguro. Se você perdeu a alça de acesso na rodovia, qual é a conduta certa pra corrigir sem risco?",
+        statement: "Em rodovia de trânsito rápido de pista dupla, o condutor deixa de tomar a alça de acesso pretendida e pondera como corrigir o erro com segurança. Pela direção defensiva e pelo CTB, a conduta correta é:",
         options: [
-            "Jogar pro acostamento, ligar o pisca e dar ré devagar até alcançar a saída perdida.",
-            "Parar no acostamento, descer e pedir dica de atalho ou entrada clandestina pra quem passa.",
+            "Imobilizar no acostamento, acionar o pisca-alerta e efetuar marcha ré até alcançar a alça perdida.",
+            "Parar no acostamento, descer do veículo e buscar atalho ou entrada clandestina nas proximidades.",
             "Seguir na rodovia na velocidade da via até a próxima saída ou retorno sinalizado e liberado.",
-            "Andar bem devagar na direita de pisca ligado até achar brecha no canteiro pra cruzar.",
+            "Circulando lentamente pela faixa da direita com a seta ligada, aguardar brecha no canteiro central."
         ],
         correctIndex: 2,
         explanation: 'Perdeu a sa\u00EDda? Continue na rodovia e pegue a pr\u00F3xima sa\u00EDda, interse\u00E7\u00E3o ou retorno sinalizado \u2014 nunca fa\u00E7a marcha \u00E0 r\u00E9, n\u00E3o pare no acostamento nem tente voltar improvisando.',
@@ -3821,12 +3821,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp61",
         category: "direcao-defensiva",
-        statement: "Você conduz à noite em via urbana sem iluminação com a luz interna de teto do veículo automotor acesa. Parece inofensivo, mas afeta sua visão e a função das luzes. Sobre as luzes do veículo e essa luz interna, o que é correto afirmar sobre o risco de circular com ela ligada?",
+        statement: "O condutor circula à noite em via urbana desprovida de iluminação pública com a luz interna de teto do veículo acesa, prática aparentemente inofensiva. Sobre esse hábito, a avaliação correta pela direção defensiva é:",
         options: [
-            "Luz de dentro ajuda os outros a ver seu veículo, como item de segurança pra quem vem de frente.",
-            "Luz de teto é só pra usar parado; ligada andando, reflete no vidro e atrapalha sua visão à noite.",
-            "Luz de dentro substitui a lanterna se o farol queimar, liberando andar à noite assim.",
-            "Tem que andar de luz de teto ligada sem poste na rua, pra mostrar que tem gente no carro.",
+            "A luz interna auxilia os demais usuários a identificar o veículo, funcionando como item adicional de segurança.",
+            "A luz de teto destina-se ao veículo imobilizado; em movimento, reflete no para-brisa e compromete a visão noturna.",
+            "A luz interna substitui a lanterna traseira caso o farol queime, permitindo a circulação noturna.",
+            "O uso da luz de teto é recomendado em vias sem poste, para sinalizar a presença de ocupantes."
         ],
         correctIndex: 1,
         explanation: 'A luz interna do carro s\u00F3 serve pra iluminar o interior quando o ve\u00EDculo t\u00E1 parado; deix\u00E1-la acesa enquanto dirige atrapalha a vis\u00E3o por causa dos reflexos no para-brisa.',
@@ -4150,12 +4150,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "nova_psicoativas_reflexos_alta_03",
         category: "direcao-defensiva",
-        statement: "Beber álcool ou usar drogas mexe com o cérebro do motorista, piora o julgamento do risco e dá uma falsa sensação de segurança. Além disso, qual é o principal efeito na mente e no corpo de quem dirige bêbado?",
+        statement: "O condutor ingere bebida alcoólica ou substância psicoativa antes de dirigir: o julgamento do risco se deteriora e instala-se falsa sensação de segurança. Além disso, o principal efeito sobre mente e corpo de quem dirige sob influência é:",
         options: [
-            "O tempo de reação diminui e os reflexos ficam mais rápidos.",
-            "Os reflexos ficam lentos e a visão dos lados fecha (visão em túnel).",
-            "A visão fica melhor e a concentração em várias coisas aumenta muito.",
-            "A audição melhora por um tempo e os pontos cegos do carro diminuem."
+            "Redução do tempo de reação com aceleração paradoxal dos reflexos.",
+            "Retardamento dos reflexos e estreitamento da visão periférica (visão em túnel).",
+            "Aumento da acuidade visual e da concentração simultânea sobre múltiplos estímulos.",
+            "Melhora temporária da audição e redução das áreas cegas do veículo."
         ],
         correctIndex: 1,
         explanation: 'O \u00E1lcool deixa a pessoa mais lenta e com a vis\u00E3o emba\u00E7ada nas laterais.',
@@ -4610,12 +4610,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "nova_aquaplanagem_fatores_risco_02",
         category: "direcao-defensiva",
-        statement: "A aquaplanagem ocorre quando o pneu perde o contato com a pista de rolamento devido a uma lâmina d'água entre ele e o pavimento. Considerando a direção defensiva e a física do veículo automotor, em qual situação esse risco de perda de aderência aumenta muito?",
+        statement: "A aquaplanagem ocorre quando o pneu perde o contato com a pista de rolamento por conta da lâmina d'água interposta entre a banda de rodagem e o pavimento. Considerando a direção defensiva e a física do veículo, esse risco de perda de aderência aumenta significativamente quando:",
         options: [
-            "Com pneus novos e bons, andando em pista molhada.",
-            "Com pneus carecas, andando bem devagar em chuva fraca.",
-            "Andando rápido em pista molhada ou com muita água acumulada.",
-            "Andando devagar em pista molhada com marcha forte engatada."
+            "O veículo dispõe de pneus novos e trafega sobre pista molhada.",
+            "O veículo trafega lentamente com pneus desgastados sob chuva fraca.",
+            "O veículo desenvolve alta velocidade sobre pista molhada ou com acúmulo acentuado de água.",
+            "O veículo trafega devagar sobre pista molhada com marcha reduzida engatada."
         ],
         correctIndex: 2,
         explanation: 'Quando voc\u00EA t\u00E1 r\u00E1pido demais e tem \u00E1gua na pista, os pneus n\u00E3o conseguem segurar e deslizam.',
@@ -5103,12 +5103,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'dd_n1_001',
         category: 'direcao-defensiva',
-        statement: 'Na ordem PAS de primeiros socorros, as letras significam:',
+        statement: "Ao chegar ao local de um acidente de trânsito, o condutor deve seguir o protocolo de socorro conhecido pela sigla PAS antes de qualquer atendimento às vítimas. Nesse protocolo, as letras PAS significam:",
         options: [
-            'Proteger, Avisar, Socorrer.',
-            'Parar, Abrir, Socorrer.',
-            'Prevenir, Atender, Salvar.',
-            'Prestar, Acionar, Sinalizar.'
+            "Proteger, Avisar, Socorrer.",
+            "Parar, Abrir, Socorrer.",
+            "Prevenir, Atender, Salvar.",
+            "Prestar, Acionar, Sinalizar."
         ],
         correctIndex: 0,
         explanation: 'PAS \u00E9 Proteger, Avisar e Socorrer.',
@@ -5124,12 +5124,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'dd_n1_002',
         category: 'direcao-defensiva',
-        statement: 'Na aquaplanagem, a conduta correta \u00E9:',
+        statement: "Em rodovia sob chuva intensa, o condutor percebe que a direção fica leve e o veículo flutua sobre a lâmina d'água da pista de rolamento, caracterizando aquaplanagem. A conduta correta nesse instante é:",
         options: [
-            'Tirar o p\u00E9 do acelerador e segurar o volante firme, sem frear bruscamente.',
-            'Pisar forte no freio para recuperar ader\u00EAncia.',
-            'Virar o volante de um lado a outro.',
-            'Engatar marcha r\u00E9 imediatamente.'
+            "Retirar o pé do acelerador e manter o volante firme, sem frear bruscamente.",
+            "Aplicar frenagem forte para recuperar imediatamente a aderência dos pneus.",
+            "Girar o volante alternadamente para ambos os lados para expulsar a água.",
+            "Engatar marcha ré imediatamente para reduzir a velocidade do veículo."
         ],
         correctIndex: 0,
         explanation: 'Na aquaplanagem, voc\u00EA deve tirar o p\u00E9 do acelerador e segurar o volante firme.',
@@ -5145,12 +5145,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'dd_n2_001',
         category: 'direcao-defensiva',
-        statement: 'Ao chegar a um acidente, o condutor deve seguir o protocolo PAS antes de qualquer atendimento. Qual a sequ\u00EAncia correta?',
+        statement: "Ao presenciar acidente de trânsito, o condutor deve adotar o protocolo PAS antes de qualquer atendimento às vítimas. A sequência correta desse protocolo, segundo os princípios de primeiros socorros, é:",
         options: [
-            'Proteger o local (sinalizar), Avisar o socorro (192) e Socorrer com cautela.',
-            'Socorrer imediato, depois avisar e por fim proteger a via.',
-            'Parar na pista, retirar pertences e sinalizar ap\u00F3s remover v\u00EDtimas.',
-            'Avisar a fam\u00EDlia, proteger o ve\u00EDculo e socorrer sem treino.'
+            "Proteger o local (sinalizar), Avisar o socorro (192) e Socorrer com cautela.",
+            "Socorrer imediatamente, depois avisar o socorro e por fim proteger a via.",
+            "Parar sobre a pista, retirar pertences e sinalizar após remover as vítimas.",
+            "Avisar a família, proteger o veículo e socorrer sem treinamento prévio."
         ],
         correctIndex: 0,
         explanation: 'PAS = Proteger, Avisar e Socorrer.',
@@ -5166,12 +5166,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'dd_n2_002',
         category: 'direcao-defensiva',
-        statement: 'Durante chuva, o condutor sente a dire\u00E7\u00E3o ficar leve e percebe a aquaplanagem. Do ponto de vista da dire\u00E7\u00E3o defensiva, qual a atitude imediata?',
+        statement: "Durante chuva intensa, o condutor sente a direção ficar leve e identifica a ocorrência de aquaplanagem sobre a pista de rolamento. Do ponto de vista da direção defensiva, a atitude imediata do condutor deve ser:",
         options: [
-            'Retirar o p\u00E9 do acelerador, segurar o volante firme e n\u00E3o frear nem virar bruscamente.',
-            'Pisar com for\u00E7a no freio para travar as rodas e buscar atrito.',
-            'Girar o volante rapidamente para expulsar a \u00E1gua dos pneus.',
-            'Engatar marcha baixa em giro alto para for\u00E7ar tra\u00E7\u00E3o.'
+            "Retirar o pé do acelerador, segurar o volante firme e não frear nem virar bruscamente.",
+            "Pisar com força no freio para travar as rodas e buscar atrito com o pavimento.",
+            "Girar o volante rapidamente para expulsar a água acumulada sob os pneus.",
+            "Engatar marcha reduzida em giro alto para forçar a recuperação da tração."
         ],
         correctIndex: 0,
         explanation: 'Na aquaplanagem, tire o p\u00E9 do acelerador e mantenha a dire\u00E7\u00E3o reta.',
@@ -5627,7 +5627,7 @@ export const QUESTIONS: Question[] = [
     {
         id: 'detran_ilum_002_alta',
         category: 'direcao-defensiva',
-        statement: 'Ao conduzir à noite em via com iluminação pública, o motorista percebe a luz de teto interna acesa. Sob a Direção Defensiva, qual é o risco dessa prática?',
+        statement: "Ao conduzir à noite em via urbana dotada de iluminação pública, o condutor percebe que a luz interna de teto do veículo automotor permanece acesa durante a marcha. Sob a ótica da Direção Defensiva, o risco dessa prática é:",
         options: [
             'Aumenta o consumo de combustível por sobrecarga contínua no alternador.',
             'Gera reflexos no para-brisa e reduz a adaptação da visão ao escuro externo.',
@@ -6591,12 +6591,12 @@ export const QUESTIONS: Question[] = [
         id: "detran_q29_n1",
         category: "direcao-defensiva",
         difficulty: 1,
-        statement: "A fumaça de queimadas reduz a visibilidade na pista. O condutor deverá:",
+        statement: "Durante queimadas às margens da via, a fumaça densa reduz drasticamente a visibilidade sobre a pista de rolamento em rodovia. Diante dessa condição adversa, a conduta defensiva correta do condutor deve ser:",
         options: [
-            "Reduzir a velocidade e ligar a luz baixa do farol",
-            "Parar o veículo em local seguro e aguardar o fim da queimada",
-            "Parar o veículo em local seguro e ligar o pisca alerta",
-            "Manter sua velocidade e ligar a luz alta do farol"
+            "Reduzir a velocidade e manter acesa a luz baixa do farol.",
+            "Imobilizar o veículo em local seguro e aguardar o fim da queimada.",
+            "Imobilizar o veículo no bordo da pista e acionar o pisca-alerta.",
+            "Manter a velocidade e utilizar a luz alta do farol no trecho."
         ],
         correctIndex: 0,
         explanation: "Na fumaça, diminua a marcha e acenda a luz baixa do farol.",
@@ -6652,12 +6652,12 @@ export const QUESTIONS: Question[] = [
         id: "detran_q29_n2",
         category: "direcao-defensiva",
         difficulty: 2,
-        statement: "A fumaça produzida pelas queimadas nos terrenos à margem da via provoca drástica redução da visibilidade. Diante dessa situação de risco, qual o procedimento correto do condutor?",
+        statement: "A fumaça produzida por queimadas nos terrenos lindeiros à via provoca drástica redução da visibilidade em rodovia de pista simples. Diante dessa situação de risco, o procedimento correto do condutor é:",
         options: [
-            "Reduzir a velocidade e ligar a luz baixa do farol",
-            "Parar o veículo em local seguro e aguardar o fim da queimada",
-            "Parar o veículo em local seguro e ligar o pisca alerta",
-            "Manter sua velocidade e ligar a luz alta do farol"
+            "Reduzir a velocidade e manter acesa a luz baixa do farol.",
+            "Imobilizar o veículo em local seguro e aguardar o término da queimada.",
+            "Imobilizar o veículo no acostamento e acionar o pisca-alerta.",
+            "Manter a velocidade nominal e acionar a luz alta do farol."
         ],
         correctIndex: 0,
         explanation: "Diminua o ritmo e acione o farol baixo para não ofuscar a visão na fumaça.",
@@ -6872,12 +6872,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'q_new_02',
         category: 'direcao-defensiva',
-        statement: 'Em uma curva à esquerda em via molhada, qual a postura defensiva ideal?',
+        statement: "O condutor aproxima-se de curva à esquerda em pista de rolamento molhada, com redução acentuada da aderência entre os pneus e o pavimento. Pela direção defensiva e pela física da curva, a postura ideal é:",
         options: [
-            'Acelerar para sair rápido',
-            'Frear antes da curva e reduzir a velocidade',
-            'Manter velocidade constante',
-            'Usar apenas o freio traseiro'
+            "Acelerar durante a curva para sair rapidamente do trecho de baixa aderência.",
+            "Reduzir a velocidade antes da entrada da curva e manter o volante firme durante a trajetória.",
+            "Manter velocidade constante e acionar o freio no ápice da curva.",
+            "Aplicar apenas o freio traseiro durante toda a manobra de conversão."
         ],
         correctIndex: 1,
         explanation: 'Frear antes e reduzir velocidade evita perda de aderência.',
@@ -6935,12 +6935,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'q_new_05',
         category: 'direcao-defensiva',
-        statement: 'Ao ultrapassar um veículo em pista molhada, qual o cuidado essencial?',
+        statement: "Em rodovia com pista de rolamento molhada, o condutor pretende ultrapassar veículo que trafega à sua frente no mesmo sentido. Pela direção defensiva e pelo CTB, o cuidado essencial durante essa manobra é:",
         options: [
-            'Aproximar bastante para reduzir risco',
-            'Manter distância maior e evitar jatos de água',
-            'Usar buzina constantemente',
-            'Ignorar a condição da pista'
+            "Aproximar-se bastante do veículo ultrapassado para reduzir o tempo de exposição na contramão.",
+            "Aumentar a distância de segurança e evitar que os pneus arremessem jatos de água sobre o veículo.",
+            "Utilizar a buzina de forma constante durante toda a transposição de faixa.",
+            "Ignorar a condição da pista, pois a manobra não altera a aderência."
         ],
         correctIndex: 1,
         explanation: 'Distância maior reduz risco de aquaplanagem.',
@@ -6998,12 +6998,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'q_new_08',
         category: 'direcao-defensiva',
-        statement: 'Qual é a distância mínima de segurança ao seguir outro veículo em estrada?',
+        statement: "Em rodovia, condutor segue outro veículo em condições ideais de clima e pista e precisa estabelecer a distância de seguimento pela regra prática de tempo. A distância mínima de segurança recomendada é de:",
         options: [
-            '1 segundo',
-            '2 segundos',
-            '4 segundos',
-            '10 segundos'
+            "1 segundo de intervalo, medido entre a passagem dos veículos por um ponto fixo.",
+            "2 segundos de intervalo, contados entre a passagem do veículo precedente e a do próprio veículo.",
+            "4 segundos de intervalo, contados entre a passagem dos veículos por um ponto fixo.",
+            "10 segundos de intervalo, exigidos para qualquer velocidade praticada na via."
         ],
         correctIndex: 1,
         explanation: 'Recomenda-se pelo menos 2 segundos de distância.',
@@ -7061,12 +7061,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'q_new_11',
         category: 'direcao-defensiva',
-        statement: 'Ao dirigir à noite, qual o principal fator de risco aumentado?',
+        statement: "Durante a condução noturna, o condutor enfrenta condições de iluminação reduzida que alteram a percepção de profundidade e de dimensão dos objetos na via. Nesse período, o principal fator de risco aumentado é:",
         options: [
-            'Maior visibilidade',
-            'Menor percepção de distância e velocidade',
-            'Menos trânsito',
-            'Menor temperatura'
+            "O aumento generalizado da visibilidade do condutor sobre a pista de rolamento.",
+            "A menor percepção de distância e de velocidade dos demais veículos.",
+            "A redução do volume de tráfego, que gera excesso de confiança.",
+            "A queda de temperatura, que melhora a aderência dos pneus."
         ],
         correctIndex: 1,
         explanation: 'À noite reduz a percepção de distância e velocidade.',
@@ -7082,7 +7082,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_01",
         category: "direcao-defensiva",
-        statement: "Você trafega por via urbana de trânsito rápido com neblina ou cerração densa. Pela direção defensiva e pelo CTB, o que deve fazer para evitar acidente?",
+        statement: "Em via urbana de trânsito rápido com neblina ou cerração densa, a visibilidade do condutor fica severamente comprometida. Pela direção defensiva e pelo CTB, a conduta correta do condutor para evitar sinistro é:",
         options: [
             "Manter os faróis baixos acesos e aumentar a distância de seguimento.",
             "Reduzir a velocidade aos poucos, sem freadas bruscas.",
@@ -7112,7 +7112,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_03",
         category: "direcao-defensiva",
-        statement: "Você vai fazer transposição de faixa numa via arterial de fluxo intenso. O que é obrigatório?",
+        statement: "Condutor pretende executar transposição de faixa em via arterial de fluxo intenso, com veículos na faixa adjacente. O que é obrigatório antes e durante essa mudança de faixa pela direção defensiva e pelo CTB?",
         options: [
             "Sinalizar antes com a seta de direção.",
             "Checar retrovisores e o ponto cego do veículo.",
@@ -7280,7 +7280,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_14",
         category: "direcao-defensiva",
-        statement: "Com chuva forte ou cerração na rodovia, o que o condutor defensivo DEVE evitar?",
+        statement: "Sob chuva forte ou cerração densa na rodovia, o condutor defensivo deve evitar condutas que agraven a baixa visibilidade e a reduzida aderência dos pneus. Entre as condutas relacionadas abaixo, ele DEVE evitar:",
         options: [
             "Farol alto, que ofusca pelo reflexo na neblina.",
             "Freada brusca sobre a pista molhada.",
@@ -7312,7 +7312,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_16",
         category: "direcao-defensiva",
-        statement: "Em vias paralelas de fluxo único, o que exige a mudança de faixa para a direita ou esquerda?",
+        statement: "Em vias paralelas de fluxo único, o condutor deseja mudar de faixa para a direita ou para a esquerda e deve cumprir as exigências previstas no CTB e na direção defensiva. O que é obrigatório nessa mudança?",
         options: [
             "Sinalizar com a seta apropriada.",
             "Conferir se a faixa adjacente está livre antes de entrar.",
@@ -7327,7 +7327,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_17",
         category: "direcao-defensiva",
-        statement: "Em via de trânsito rápido chegando num aclive sem visibilidade, o que fazer?",
+        statement: "Em via de trânsito rápido, o condutor aproxima-se de aclive sem visibilidade, trecho em que a sinalização vertical e horizontal restringe a ultrapassagem. A conduta defensiva recomendada nesse trecho é:",
         options: [
             "Manter o veículo no centro da sua faixa.",
             "Reduzir para velocidade segura de frenagem.",
@@ -7402,7 +7402,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_22",
         category: "direcao-defensiva",
-        statement: "O que na via exige atenção redobrada e velocidade menor?",
+        statement: "Dentre os trechos e as condições de pista listados, qual exige do condutor atenção redobrada e velocidade inferior à praticada normalmente, segundo os princípios da direção defensiva e as regras do CTB vigentes?",
         options: [
             "Pista esburacada, ondulada ou escorregadia.",
             "Declive forte com curva fechada e sem acostamento.",
@@ -7701,7 +7701,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "rst_11",
         category: "direcao-defensiva",
-        statement: "Em trechos em aclive com visibilidade reduzida e pista simples, a ultrapassagem é permitida SOMENTE quando houver:",
+        statement: "Em trechos de aclive com visibilidade reduzida em rodovia de pista simples, a ultrapassagem é considerada manobra perigosa e só é permitida quando houver, na mão de direção do condutor, sinalização horizontal que a autorize. Essa sinalização é:",
         options: [
           "Espaço suficiente na pista de rolamento sem tráfego de pedestres",
           "Sinalização horizontal com linha amarela contínua na sua faixa",
@@ -7861,7 +7861,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "fr_06",
         category: "direcao-defensiva",
-        statement: "A aquaplanagem ocorre pela combinação de lâmina d'água na pista, velocidade alta e pneus desgastados. A prevenção desse fenômeno deve ocorrer SOMENTE por meio de:",
+        statement: "A aquaplanagem decorre da combinação de lâmina d'água sobre a pista de rolamento, velocidade elevada e pneus com banda de rodagem desgastada. A prevenção desse fenômeno deve ocorrer SOMENTE por meio de:",
         options: [
           "Aumento da velocidade para cruzar rapidamente o trecho alagado",
           "Manutenção de pneus em bom estado e redução da velocidade sob chuva",
@@ -7909,7 +7909,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "fr_09",
         category: "direcao-defensiva",
-        statement: "O freio motor é uma técnica de direção defensiva que consiste em reduzir a velocidade do veículo. O seu acionamento é realizado EXCLUSIVAMENTE:",
+        statement: "O freio motor é uma técnica de direção defensiva empregada para conter a velocidade do veículo sem acionar o pedal de freio de serviço, evitando o superaquecimento. Seu acionamento é realizado EXCLUSIVAMENTE:",
         options: [
           "Pressionando o pedal de embreagem junto com o freio de mão",
           "Tirando o pé do acelerador e engrenando marchas mais reduzidas no câmbio",
