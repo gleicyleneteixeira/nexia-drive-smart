@@ -796,7 +796,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe41",
         category: "primeiros-socorros",
-        statement: "Ao sinalizar o local de um sinistro em rodovia de pista simples em dia ensolarado, o condutor deve posicionar o triângulo de segurança. Sabendo que a via tem velocidade regulamentada de 80 km/h, qual a distância mínima exigida segundo normas de primeiros socorros e direção defensiva?",
+        statement: "O condutor sinaliza sinistro em rodovia de pista simples com velocidade regulamentar de 80 km/h, em dia claro e ensolarado, sem chuva ou neblina. Pela regra de distância do triângulo de segurança, a posição correta é:",
         options: [
             "No mínimo 80 passos longos de um adulto, contados a partir da traseira do veículo, dobrando o valor se houver chuva, neblina ou curva no trajeto.",
             "Exatos 30 metros de distância linear independente das condições climáticas locais.",
@@ -1243,12 +1243,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe68",
         category: "primeiros-socorros",
-        statement: "Você chega para ajudar uma vítima de batida que está apagada, sem mexer o peito (sem respirar) e sem pulso (parada cardíaca). Qual é a atitude de emergência que você deve começar na hora para tentar salvar ela?",
+        statement: "Após colisão na pista de rolamento, a vítima é encontrada inconsciente, sem movimentos respiratórios e sem pulso detectável, configurando parada cardiorrespiratória. O socorrista leigo deve iniciar imediatamente:",
         options: [
-            "Fazer RCP com compressões no peito sem parar, num ritmo de 100 a 120 por minuto.",
-            "Tentar reanimar dando líquidos mornos ou pano frio na testa dela.",
-            "Sentar a vítima com a cabeça para frente e massagear forte os ombros.",
-            "Fazer só boca a boca por 10 minutos antes de apertar o peito.",
+            "Compressões torácicas contínuas (RCP) em ritmo de 100 a 120 compressões por minuto até a chegada do resgate.",
+            "Reanimação com líquidos mornos administrados pela boca ou compressas frias sobre a testa.",
+            "Sentar a vítima com a cabeça estendida e massagear vigorosamente os ombros.",
+            "Respiração boca a boca exclusiva por dez minutos antes de iniciar as compressões torácicas."
         ],
         correctIndex: 0,
         explanation: 'Se a pessoa n\u00E3o respira e n\u00E3o tem pulso, \u00E9 hora de come\u00E7ar a RCP logo, fazendo compress\u00F5es fortes e r\u00E1pidas no peito.',
@@ -1558,12 +1558,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q4",
         category: "primeiros-socorros",
-        statement: "Numa batida traseira na rodovia, a vítima está acordada mas não consegue se mexer e reclama de muita dor no pescoço (região cervical). Antes do SAMU chegar, o que você deve fazer primeiro para manter ela segura?",
+        statement: "Em batida traseira em rodovia, a vítima permanece consciente, relata dor intensa na região cervical e refere incapacidade de movimentar os membros superiores e inferiores. Antes da chegada do SAMU, a primeira conduta é:",
         options: [
-            "Tirar ela logo de dentro do carro puxando pelos braços para evitar incêndio.",
-            "Dar água ou remédio para dor e massagear o pescoço para aliviar.",
-            "Deixar ela quieta como está, segurando pescoço e coluna alinhados sem mexer à toa.",
-            "Ajudar ela a sentar reta para melhorar a circulação do corpo.",
+            "Retirar imediatamente a vítima do veículo puxando-a pelos braços para evitar risco de incêndio.",
+            "Administrar água ou analgésico e massagear a região cervical para aliviar a dor.",
+            "Manter a vítima imóvel, com pescoço e coluna alinhados, sem promover qualquer movimentação desnecessária.",
+            "Ajudar a vítima a sentar-se ereta para melhorar a circulação sanguínea do corpo."
         ],
         correctIndex: 2,
         explanation: 'V\u00EDtimas com dor no pesco\u00E7o precisam ficar paradas e alinhadas pra n\u00E3o piorar a situa\u00E7\u00E3o.',
@@ -2353,12 +2353,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q39",
         category: "primeiros-socorros",
-        statement: "Depois de uma colisão em via urbana, você encontra uma vítima caída ao lado do veículo automotor com dor intensa no braço e antebraço visivelmente deformado, sugerindo fratura. Até o SAMU chegar, qual é a conduta correta de primeiros socorros para não agravar a lesão?",
+        statement: "Após colisão em via urbana, a vítima é encontrada caída ao lado do veículo com dor intensa e deformidade evidente no braço e antebraço, sugestiva de fratura. Até a chegada do socorro, a conduta correta é:",
         options: [
-            "Tentar colocar o osso de volta no lugar, puxando o braço com a mão pra aliviar a dor.",
-            "Imobilizar o braço do jeito que está, com talas improvisadas e ataduras sem apertar, esperando o socorro.",
-            "Mexer o braço e mandar a vítima testar os movimentos pra ver o tamanho da fratura.",
-            "Massagear forte em volta da dor pra ativar a circulação e diminuir o inchaço.",
+            "Tentar recolocar o osso na posição original, puxando o membro para aliviar a dor da vítima.",
+            "Imobilizar o membro na posição encontrada, com talas improvisadas e ataduras sem compressão excessiva, aguardando o socorro.",
+            "Movimentar o braço e solicitar que a vítima execute gestos para dimensionar a extensão da fratura.",
+            "Massagear vigorosamente a região lesionada para ativar a circulação e reduzir o edema."
         ],
         correctIndex: 1,
         explanation: 'Nunca tente colocar o osso no lugar. Imobilize o bra\u00E7o do jeito que est\u00E1 e chame o SAMU.',
@@ -2369,12 +2369,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q40",
         category: "primeiros-socorros",
-        statement: "Você presencia um acidente grave na cidade, com gente machucada precisando de médico urgente, e parou pra ajudar. Pelos números de emergência usados no Brasil, qual número você deve ligar e qual serviço atende o socorro médico de urgência?",
+        statement: "Presenciando acidente grave no perímetro urbano com vítimas feridas que necessitam de atendimento médico imediato, o condutor parou para ajudar. O número correto para acionar o socorro médico de urgência é:",
         options: [
-            "Ligar 190, da Polícia Militar, que faz o transporte das vítimas pro hospital.",
-            "Ligar 192, do SAMU, que faz o socorro médico de urgência.",
-            "Ligar 193, da Polícia Rodoviária Federal, que atende nas ruas da cidade.",
-            "Ligar 199, da Defesa Civil, que tira os carros batidos da via.",
+            "190 — Polícia Militar, responsável pelo transporte das vítimas ao hospital.",
+            "192 — SAMU (Serviço de Atendimento Móvel de Urgência), que presta o socorro médico de urgência.",
+            "193 — Corpo de Bombeiros Militar, que atende ocorrências nas vias urbanas.",
+            "199 — Defesa Civil, que remove os veículos sinistrados da pista."
         ],
         correctIndex: 1,
         explanation: 'Ligue 192 para chamar o SAMU, que cuida de emerg\u00EAncias m\u00E9dicas.',
@@ -2386,12 +2386,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q41",
         category: "primeiros-socorros",
-        statement: "Um mecânico encostou sem querer na mangueira quente do radiador e sofreu uma queimadura de segundo grau no antebraço. Você viu tudo e vai fazer os primeiros socorros. Pelas regras de atendimento a queimaduras, qual conduta abaixo você NÃO deve fazer?",
+        statement: "Mecânico encostou na mangueira quente do radiador e sofreu queimadura de segundo grau no antebraço, com bolhas formadas. Pelas regras de atendimento a queimaduras, a conduta que o socorrista NÃO deve executar é:",
         options: [
-            "Jogar água corrente limpa em temperatura ambiente por alguns minutos pra aliviar e parar a queimadura.",
-            "Cobrir a lesão com pano limpo ou gaze molhada, protegendo antes de levar ao médico.",
-            "Passar pasta de dente, manteiga ou pomada caseira achando que alivia e cicatriza mais rápido.",
-            "Buscar médico especializado o quanto antes pra avaliar e tratar a lesão.",
+            "Aplicar água corrente limpa em temperatura ambiente por vários minutos para resfriar a lesão.",
+            "Cobrir a lesão com pano limpo ou gaze umedecida, protegendo-a antes do atendimento médico.",
+            "Passar pasta de dentes, manteiga ou pomada caseira sob a alegação de cicatrizar mais rápido.",
+            "Encaminhar a vítima ao médico especializado o quanto antes para avaliação e tratamento."
         ],
         correctIndex: 2,
         explanation: 'Pasta de dente e manteiga s\u00F3 pioram a queimadura e podem causar infec\u00E7\u00E3o.',
@@ -2403,12 +2403,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q42",
         category: "primeiros-socorros",
-        statement: "Depois de uma batida de frente entre dois carros, você para pra ajudar e vê que um motorista está apagado, sem mexer o peito e sem respirar. Pelo suporte básico de vida e pelos primeiros socorros, o que você deve fazer na hora até o socorro chegar?",
+        statement: "Após colisão frontal entre dois veículos, o socorrista encontra o motorista inconsciente, sem movimentos torácicos e sem respiração espontânea. Pelo suporte básico de vida, a conduta imediata até o socorro chegar é:",
         options: [
-            "Só esperar o resgate chegar, deixando a vítima igual sem fazer nada.",
-            "Começar na hora as compressões da RCP, de 100 a 120 por minuto, até o socorro chegar.",
-            "Dar golinhos de água pra ver se ela ainda engole e tentar reanimar a respiração.",
-            "Sacudir forte pelos ombros e bater no rosto pra tentar acordar a vítima.",
+            "Aguardar passivamente a chegada do resgate, sem intervir na vítima.",
+            "Iniciar imediatamente as compressões torácicas da RCP, em ritmo de 100 a 120 por minuto, até a chegada do socorro.",
+            "Oferecer pequenos goles de água para verificar se a vítima engole e retomar a respiração.",
+            "Sacudir vigorosamente os ombros e percutir o rosto para tentar acordar a vítima."
         ],
         correctIndex: 1,
         explanation: 'Parada respirat\u00F3ria = iniciar RCP (100 a 120 compress\u00F5es/min no centro do peito).',
@@ -2768,12 +2768,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp09",
         category: "primeiros-socorros",
-        statement: "Num passeio pela rodovia você encontra uma batida entre dois carros e uma vítima acordada, com ralados leves, mas nenhum socorro profissional chegou ainda. Pelo conceito e pela finalidade dos primeiros socorros no trânsito, o que essa prática realmente significa?",
+        statement: "Em passeio por rodovia, encontra-se sinistro entre dois veículos com vítima acordada e lesões aparentes leves, sem socorro profissional no local. Pelo conceito e finalidade dos primeiros socorros no trânsito, essa prática significa:",
         options: [
-            "Aplicar técnica médica avançada e dar remédio pra vítima ali mesmo.",
-            "Fazer o atendimento inicial e temporário, dando o suporte básico até o socorro profissional chegar.",
-            "Levar a vítima correndo pro hospital mais próximo, mesmo sem imobilizar.",
-            "Fazer pequenas cirurgias de emergência pra segurar hemorragia interna grave.",
+            "Aplicar técnica médica avançada e administrar medicamentos à vítima no local do sinistro.",
+            "Prestar atendimento inicial e temporário, com suporte básico até a chegada do socorro profissional.",
+            "Transportar a vítima imediatamente ao hospital mais próximo, mesmo sem imobilização das lesões.",
+            "Realizar procedimentos cirúrgicos de emergência para conter hemorragia interna grave."
         ],
         correctIndex: 1,
         explanation: 'Primeiros socorros \u00E9 ajudar a v\u00EDtima de forma r\u00E1pida at\u00E9 o socorro profissional chegar.',
@@ -3291,12 +3291,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp37",
         category: "primeiros-socorros",
-        statement: "Um motociclista sofreu acidente, está apagado caído na via e ainda de capacete, que precisa sair para ele respirar melhor. Como deve ser feita a retirada do capacete nos primeiros socorros para não piorar a situação?",
+        statement: "Em sinistro, motociclista permanece inconsciente na pista de rolamento ainda com capacete, e sua remoção é necessária para garantir a permeabilidade das vias aéreas. A retirada técnica correta do capacete é:",
         options: [
-            "Puxar com força para cima do jeito que a cabeça está para ganhar tempo.",
-            "Com ajuda de 2 pessoas, mantendo o pescoço alinhado e parado o tempo todo.",
-            "Cortar o capacete no meio com canivete para não mexer na cabeça.",
-            "Só tirar se o motociclista acordar, ou deixar para o médico no hospital.",
+            "Puxar o capacete com força para cima, mantendo a posição atual da cabeça, para ganhar tempo.",
+            "Com auxílio de duas pessoas, mantendo a cabeça e o pescoço alinhados e imóveis durante toda a manobra.",
+            "Cortar o capacete ao meio com faca ou canivete sem estabilizar a cabeça da vítima.",
+            "Aguardar que o motociclista retorne à consciência ou deixar a remoção para a equipe hospitalar."
         ],
         correctIndex: 1,
         explanation: 'Tirar o capacete: com 2 pessoas, uma segura a cabe\u00E7a e a outra remove com cuidado.',
@@ -3310,12 +3310,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp38",
         category: "primeiros-socorros",
-        statement: "Num sinistro de trânsito, uma pessoa cortou fundo o braço e apresenta hemorragia forte. Você não tem material hospitalar, só itens comuns do veículo automotor. Para conter o sangramento até o socorro, o que você deve fazer de imediato?",
+        statement: "Em sinistro, vítima apresenta corte profundo no braço com hemorragia abundante; sem material hospitalar, utilizam-se apenas itens comuns disponíveis no veículo. Para conter o sangramento até o socorro, a conduta imediata é:",
         options: [
-            "Amarrar um garrote bem apertado acima do corte para travar todo o sangue.",
-            "Apertar direto em cima do corte com pano limpo, fazendo pressão firme sem soltar.",
-            "Levantar o braço para cima e esperar o sangue parar sozinho pela gravidade.",
-            "Limpar com álcool ou água oxigenada e depois colocar curativo fechado.",
+            "Amarrar um garrote improvisado bem apertado acima do corte para interromper o fluxo sanguíneo.",
+            "Aplicar pressão firme e contínua sobre o ferimento com pano limpo, sem soltar até o socorro chegar.",
+            "Erguer o membro para cima e aguardar que o sangramento cese espontaneamente pela ação da gravidade.",
+            "Limpar o corte com álcool ou água oxigenada e cobrir com curativo oclusivo fechado."
         ],
         correctIndex: 1,
         explanation: 'Se tem sangramento forte, \u00E9 hora de pressionar o ferimento com um pano limpo. O torniquete s\u00F3 deve ser usado em \u00FAltimo caso.',
@@ -3329,12 +3329,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp39",
         category: "primeiros-socorros",
-        statement: "Você encontra uma vítima de sinistro caída ao lado do veículo automotor, acordada mas confusa, com pele pálida, fria e suada, respiração rápida e curta, sem sangramento visível. O que ela provavelmente apresenta e qual conduta adotar?",
+        statement: "Vítima de sinistro é encontrada caída ao lado do veículo, acordada porém confusa, com pele pálida, fria e sudoréica, respiração rápida e superficial, sem sangramento visível. O quadro sugere e a conduta adotada é:",
         options: [
-            "Está em choque — deitar ela com as pernas para cima, agasalhar e esperar o socorro.",
-            "Está só tonta — colocar em pé e mandar andar para voltar a circulação.",
-            "Está com açúcar baixo — dar doce ou bebida com açúcar na hora.",
-            "Está dormindo após o susto — deixar descansar até acordar sozinha.",
+            "Estado de choque — deitar a vítima, elevar os membros inferiores em cerca de 30 cm e agasalhar até o socorro.",
+            "Vertigem simples — manter a vítima em pé e orientá-la a caminhar para retomar a circulação.",
+            "Hipoglicemia — administrar bebida ou alimento açucarado imediatamente por via oral.",
+            "Exaustão pós-trauma — deixar a vítima descansar até o retorno espontâneo da consciência plena."
         ],
         correctIndex: 0,
         explanation: 'Sinais como palidez, pele fria e respira\u00E7\u00E3o r\u00E1pida indicam choque. A v\u00EDtima deve ser deitada com as pernas elevadas e agasalhada.',
@@ -3348,7 +3348,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp40",
         category: "primeiros-socorros",
-        statement: "Uma vítima de atropelamento está caída no asfalto, consciente, queixando-se de forte dor nas costas e dizendo 'não consigo mexer as pernas'. Diante desse quadro, que sugere lesão na coluna vertebral, a conduta do socorrista deve ser:",
+        statement: "Após colisão na pista de rolamento, vítima é encontrada consciente, em decúbito dorsal, referindo dor intensa na coluna vertebral e relatando \"não consigo mexer as pernas\". Diante da suspeita de lesão medular, a conduta inicial correta do socorrista é:",
         options: [
             "Ajudar a vítima a sentar-se devagar para verificar se a dor diminui com a mudança de posição",
             "Virar a vítima de bruços (decúbito ventral) para aliviar a pressão sobre a coluna",
@@ -3367,7 +3367,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp41",
         category: "primeiros-socorros",
-        statement: "Ao presenciar uma vítima tendo uma crise convulsiva (epilepsia) após um acidente de trânsito, o socorrista deve adotar qual procedimento?",
+        statement: "Após acidente de trânsito, a vítima apresenta crise convulsiva com contrações musculares generalizadas e perda transitória da consciência. Diante desse quadro clínico, o socorrista deve adotar o procedimento:",
         options: [
             "Colocar a mão ou um objeto duro dentro da boca da vítima para evitar que ela morda a língua",
             "Segurar firmemente os braços e pernas da vítima para imobilizá-la durante a convulsão",
@@ -4550,7 +4550,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "nova_primeiros_socorros_seguranca_local_alta_29",
         category: "primeiros-socorros",
-        statement: "Ao deparar-se com um sinistro de trânsito em uma rodovia com vítimas presas às ferragens e derramamento de combustível na pista, a regra fundamental de Primeiros Socorros orienta que o socorrista deve 'prevenir-se ao prestar socorro'. O que significa concretamente este princípio?",
+        statement: "Ao deparar-se com sinistro em rodovia, com vítimas presas às ferragens e derramamento de combustível na pista, a regra fundamental dos primeiros socorros \"prevenir-se ao prestar socorro\" significa concretamente:",
         options: [
             "Garantir primeiro a segurança pessoal e a sinalização do local para evitar novos acidentes (acidentes secundários) antes de tocar nas vítimas.",
             "Prestar atendimento de saúde exclusivo se o socorrista estiver acompanhado de uma autoridade policial.",
@@ -4811,12 +4811,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "nova_primeiros_socorros_queimaduras_1grau_12",
         category: "primeiros-socorros",
-        statement: "Em um sinistro de trânsito com incêndio ou contato com peça aquecida do veículo automotor, a pele fica vermelha, inchada e dolorida, sem bolhas, atingindo apenas a epiderme. Como essa queimadura superficial é classificada?",
+        statement: "Em sinistro de trânsito com incêndio ou contato com peça aquecida do veículo automotor, a pele fica vermelha, inchada e dolorida, sem bolhas, atingindo apenas a epiderme. Como essa queimadura superficial é classificada?",
         options: [
-            "1° grau.",
-            "2° grau.",
-            "3° grau.",
-            "4° grau."
+            "Queimadura de 1° grau, atingindo apenas a camada superficial da pele (epiderme).",
+            "Queimadura de 2° grau, com formação de bolhas e acometimento da derme.",
+            "Queimadura de 3° grau, com destruição total da pele e perda de sensibilidade.",
+            "Queimadura de 4° grau, com acometimento de tecidos, músculos e ossos subadjacentes."
         ],
         correctIndex: 0,
         explanation: 'Queimaduras de 1\u00BA grau s\u00E3o aquelas que pegam s\u00F3 a camada de fora da pele, deixando vermelhid\u00E3o e dor, mas sem bolhas.',
@@ -5187,12 +5187,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'ps_n1_001',
         category: 'primeiros-socorros',
-        statement: 'O n\u00FAmero para acionar o SAMU (urg\u00EAncia m\u00E9dica) \u00E9:',
+        statement: "Em emergência médica com vítima grave no local do sinistro, o socorrista precisa acionar o serviço de atendimento móvel de urgência que desloca equipe médica especializada ao local. O número oficial do SAMU é:",
         options: [
-            '192.',
-            '193.',
-            '190.',
-            '191.'
+            "192 — número do Serviço de Atendimento Móvel de Urgência (SAMU).",
+            "193 — número do Corpo de Bombeiros Militar.",
+            "190 — número da Polícia Militar.",
+            "191 — número da Polícia Rodoviária Federal."
         ],
         correctIndex: 0,
         explanation: 'Se precisar de ajuda m\u00E9dica r\u00E1pida, ligue pro SAMU: 192.',
@@ -5208,12 +5208,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'ps_n2_001',
         category: 'primeiros-socorros',
-        statement: 'Em acidente com v\u00EDtimas presas nas ferragens, o socorrista deve acionar os \u00F3rg\u00E3os. Qual o n\u00FAmero e servi\u00E7o corretos para urg\u00EAncia m\u00E9dica?',
+        statement: "Em acidente de trânsito com vítimas presas nas ferragens e necessidade de atendimento médico imediato, o socorrista deve acionar os órgãos competentes. O número e o serviço corretos para urgência médica são:",
         options: [
-            '192 \u2014 SAMU (Atendimento M\u00F3vel de Urg\u00EAncia).',
-            '193 \u2014 Pol\u00EDcia Rodovi\u00E1ria Federal.',
-            '190 \u2014 Corpo de Bombeiros.',
-            '191 \u2014 Defesa Civil.'
+            "192 — SAMU (Serviço de Atendimento Móvel de Urgência).",
+            "193 — Corpo de Bombeiros Militar, para resgate e combate a incêndio.",
+            "190 — Polícia Militar, para policiamento ostensivo.",
+            "199 — Defesa Civil, para desabamentos e emergências civis."
         ],
         correctIndex: 0,
         explanation: 'Urg\u00EAncia m\u00E9dica = SAMU 192.',
@@ -5229,12 +5229,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'ps_n1_002',
         category: 'primeiros-socorros',
-        statement: 'Com suspeita de fratura de coluna, a v\u00EDtima deve ser:',
+        statement: "Após acidente de trânsito, a vítima relata dor intensa na coluna e apresenta parestesia nos membros, suspeitando-se de fratura vertebral. Enquanto a equipe de resgate médico não chega, a conduta correta é:",
         options: [
-            'Mantida im\u00F3vel, na posi\u00E7\u00E3o encontrada, sem moviment\u00E1-la.',
-            'Sentada rapidamente em cadeira r\u00EDgida.',
-            'Levada a p\u00E9 para o hospital.',
-            'Massageada nas costas.'
+            "Mantê-la imóvel e na posição encontrada, sem qualquer movimentação da coluna.",
+            "Sentá-la rapidamente em cadeira rígida para aliviar a pressão sobre a coluna.",
+            "Conduzi-la a pé até o hospital mais próximo para avaliação radiológica.",
+            "Massagear a região dorsal para relaxar a musculatura em contratura."
         ],
         correctIndex: 0,
         explanation: 'Se suspeitar de fratura na coluna, n\u00E3o mova a pessoa.',
@@ -5292,12 +5292,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'ps_n2_002',
         category: 'primeiros-socorros',
-        statement: 'Ap\u00F3s colis\u00E3o frontal, h\u00E1 suspeita de les\u00E3o medular em uma v\u00EDtima. Qual a conduta at\u00E9 a chegada do resgate?',
+        statement: "Após colisão frontal entre dois veículos, apresenta-se suspeita de lesão medular em uma das vítimas, com relato de perda de sensibilidade e de movimento nos membros. A conduta até a chegada do resgate é:",
         options: [
-            'Manter a v\u00EDtima im\u00F3vel e alinhada, sem mover cabe\u00E7a ou coluna.',
-            'Remover a v\u00EDtima do carro e sent\u00E1-la em cadeira r\u00EDgida.',
-            'Massagear a regi\u00E3o cervical para aliviar a contratura.',
-            'Girar o pesco\u00E7o para avaliar mobilidade.'
+            "Manter a vítima imóvel e alinhada, sem movimentar cabeça, pescoço ou coluna.",
+            "Remover a vítima do veículo e sentá-la em cadeira rígida até o socorro.",
+            "Massagear a região cervical para aliviar a contratura muscular pós-impacto.",
+            "Girar o pescoço da vítima para avaliar a amplitude de movimento articular."
         ],
         correctIndex: 0,
         explanation: 'Se a pessoa suspeita ter les\u00E3o na coluna, \u00E9 melhor n\u00E3o mexer. Mantenha ela parada.',
@@ -6309,12 +6309,12 @@ export const QUESTIONS: Question[] = [
         id: "detran_q21_n1",
         category: "primeiros-socorros",
         difficulty: 1,
-        statement: "Sempre que auxiliar vítimas que estejam sangrando, é aconselhável:",
+        statement: "Durante o atendimento a vítimas de acidente com sangramento visível, o socorrista fica exposto ao contato direto com fluidos sanguíneos e possíveis agentes infecciosos. É aconselhável, nesse contexto, que ele:",
         options: [
-            "Utilize uma luva de borracha ou similar.",
-            "Faça torniquete.",
-            "Faça compressa fria.",
-            "Faça garrote."
+            "Utilize proteção individual — luva de borracha ou material equivalente — antes do contato com a vítima.",
+            "Aplique torniquete de rotina em todos os membros com ferimento sanguíneo.",
+            "Aplique compressa fria sobre o ferimento para conter o fluxo sanguíneo.",
+            "Execute garrote improvisado com fio metálico acima da lesão."
         ],
         correctIndex: 0,
         explanation: "Use luvas de borracha para não pegar doenças pelo sangue da vítima.",
@@ -6349,12 +6349,12 @@ export const QUESTIONS: Question[] = [
         id: "detran_q24_n1",
         category: "primeiros-socorros",
         difficulty: 1,
-        statement: "No atendimento a vítima de acidente, a conduta sobre líquidos é:",
+        statement: "No atendimento inicial prestado a vítima de acidente de trânsito, que pode necessitar de procedimento cirúrgico ou sedação de urgência, a conduta correta em relação à ingestão de líquidos por via oral antes do atendimento é:",
         options: [
-            "Liberar líquidos apenas se a vítima estiver lúcida.",
-            "Manter a vítima em jejum até avaliação da equipe de saúde.",
-            "Oferecer água para acalmar a vítima.",
-            "Dar suco para evitar queda de pressão."
+            "Liberar a ingestão de líquidos desde que a vítima esteja lúcida e orientada.",
+            "Manter a vítima em jejum absoluto até a avaliação da equipe de saúde.",
+            "Oferecer água à vítima para acalmá-la durante a espera do resgate.",
+            "Administrá-la em suco para evitar queda de pressão arterial."
         ],
         correctIndex: 1,
         explanation: "Deixe o ferido sem comer e sem beber nada até o médico chegar.",
@@ -6450,12 +6450,12 @@ export const QUESTIONS: Question[] = [
         id: "detran_q21_n2",
         category: "primeiros-socorros",
         difficulty: 2,
-        statement: "Ao prestar o primeiro atendimento a uma vítima de acidente que apresenta ferimentos com sangramento abundante, é aconselhável que o socorrista:",
+        statement: "Ao prestar o primeiro atendimento a vítima de acidente com ferimentos abertos e sangramento abundante, o socorrista fica exposto ao contato com fluidos biológicos. A recomendação técnica correta é que ele:",
         options: [
-            "Utilize uma luva de borracha ou similar.",
-            "Faça torniquete.",
-            "Faça compressa fria.",
-            "Faça garrote."
+            "Utilize proteção individual — luva de borracha ou material equivalente — antes do contato com a ferida.",
+            "Aplique torniquete de rotina em todos os membros com ferimento sanguíneo.",
+            "Aplique compressa fria sobre o ferimento para conter o fluxo sanguíneo.",
+            "Execute garrote improvisado com fio metálico acima da lesão."
         ],
         correctIndex: 0,
         explanation: "Sempre coloque luvas antes de tocar em ferimentos sangrando para sua própria proteção.",
@@ -6490,12 +6490,12 @@ export const QUESTIONS: Question[] = [
         id: "detran_q24_n2",
         category: "primeiros-socorros",
         difficulty: 2,
-        statement: "No atendimento inicial a uma vítima de acidente de trânsito, qual é a conduta correta quanto à ingestão de líquidos?",
+        statement: "Em acidente de trânsito, vítima consciente e lúcida pede um copo de água enquanto aguarda o atendimento. Considerando a possibilidade de cirurgia de urgência, a conduta correta quanto à ingestão de líquidos é:",
         options: [
-            "Liberar líquidos apenas se a vítima estiver lúcida.",
-            "Manter a vítima em jejum até avaliação da equipe de saúde.",
-            "Oferecer água para acalmar a vítima.",
-            "Dar suco para evitar queda de pressão."
+            "Liberar a ingestão de líquidos desde que a vítima esteja lúcida e orientada.",
+            "Manter a vítima em jejum absoluto até a avaliação da equipe de saúde.",
+            "Oferecer água à vítima para acalmá-la durante a espera do resgate.",
+            "Administrá-la em suco para evitar queda de pressão arterial."
         ],
         correctIndex: 1,
         explanation: "Não ofereça água ou comida; mantenha o ferido em jejum total.",
@@ -7342,11 +7342,11 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_18",
         category: "primeiros-socorros",
-        statement: "Parou no bordo da pista por emergência. O que é obrigatório?",
+        statement: "Em situação de emergência, o condutor é obrigado a imobilizar o veículo junto ao bordo da pista, seja no perímetro urbano ou em rodovia. Nesse caso, o conjunto completo de providências obrigatórias abrange:",
         options: [
-            "Ligar o pisca-alerta na hora.",
-            "Triângulo a distância regulamentar da traseira.",
-            "Tirar os ocupantes para fora da pista, em local seguro.",
+            "Acionar imediatamente o pisca-alerta (luzes de advertência intermitentes).",
+            "Posicionar o triângulo de segurança na distância regulamentar da traseira do veículo.",
+            "Retirar os ocupantes do veículo e conduzi-los a local seguro fora da pista.",
             "Todas as alternativas acima estão corretas."
         ],
         correctIndex: 3,
@@ -7733,7 +7733,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "rst_13",
         category: "primeiros-socorros",
-        statement: "Ao socorrer uma vítima de acidente de trânsito na pista de rolamento, o prestador de socorro NUNCA deve:",
+        statement: "Durante o socorro a vítimas na pista de rolamento, com risco de novo impacto, o prestador de socorro deve sinalizar o local, acionar as emergências e preservar a estabilidade das vítimas. Ele NUNCA deve:",
         options: [
           "Sinalizar o local do acidente antes de iniciar o atendimento",
           "Movimentar a vítima ou retirar o capacete de um motociclista acidentado",
