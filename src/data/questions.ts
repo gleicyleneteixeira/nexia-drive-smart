@@ -1021,7 +1021,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe55",
         category: "prioridade",
-        statement: "Veículos de emergência, como ambulâncias, viaturas policiais e caminhões do Corpo de Bombeiros, gozam de prerrogativas de trânsito em vias públicas. De acordo com as diretrizes de prioridade de tráfego do CTB, para que gozem de livre circulação, parada e estacionamento, é necessário que:",
+        statement: "Ambulância, viatura policial e caminhão do Corpo de Bombeiros gozam de prerrogativas de trânsito nas vias públicas. Pela regra de prioridade do CTB, para utilizarem livre circulação, parada e estacionamento, é necessário que:",
         options: [
             "Estejam em efetiva prestação de serviço de urgência, devidamente identificados por dispositivos luminosos intermitentes vermelhos E sonoros (sirene) ligados.",
             "Trafeguem sempre pela faixa de trânsito rápido à esquerda desenvolvendo velocidade acima da média da via.",
@@ -1038,7 +1038,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe56",
         category: "prioridade",
-        statement: "Ao se deparar com a aproximação de uma via preferencial devidamente sinalizada por placa R-2 ('Dê a Preferência'), o condutor de um veículo que trafega por uma via secundária deve adotar a seguinte postura regulamentar:",
+        statement: "O condutor trafega por via coletora e se aproxima de interseção sinalizada com a placa R-2 'Dê a Preferência', que indica via arterial transversal preferencial, não havendo semáforo em funcionamento. A postura regulamentar exigida é:",
         options: [
             "Reduzir a velocidade de forma segura, avaliar o fluxo e conceder a preferência de passagem aos veículos que circulam pela via preferencial.",
             "Acelerar o veículo rapidamente para cruzar a interseção antes que os outros carros alcancem o cruzamento.",
@@ -1054,7 +1054,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe57",
         category: "prioridade",
-        statement: "Em um trecho de declive de via montanhosa estreita e sem pavimentação, aproximam-se simultaneamente dois veículos pesados em sentidos opostos, não sendo possível a passagem de ambos ao mesmo tempo. Conforme as regras de preferência do CTB, a preferência de passagem pertence ao veículo que:",
+        statement: "Em trecho não pavimentado de via estreita com declive acentuado, dois veículos pesados se aproximam em sentidos opostos e não há espaço para passagem simultânea. Pelo CTB, a preferência de passagem pertence ao veículo que:",
         options: [
             "Estiver em aclive (subindo) a ladeira, devendo o condutor do veículo que desce dar a preferência de passagem.",
             "Trafegar no sentido de descida da ladeira, por estar desenvolvendo maior energia cinética linear.",
@@ -1072,7 +1072,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe58",
         category: "prioridade",
-        statement: "Ao compartilhar a via pública com ciclistas e pedestres, o condutor de um automóvel deve seguir as regras de conduta estabelecidas no CTB. Sobre o respeito às bicicletas e pessoas a pé, constitui atitude tecnicamente correta:",
+        statement: "Ao transitar em via com fluxo misto de ciclistas e pedestres, o condutor pretende ultrapassar bicicleta que trafega rente ao bordo da pista, com pedestres nas adjacências. Pela regra de conduta do CTB, a atitude correta é:",
         options: [
             "Manter a distância lateral mínima de 1,5 metros ao ultrapassar uma bicicleta e reduzir a velocidade para garantir a segurança viária.",
             "Buzinar continuamente ao lado do ciclista para alertá-lo sobre a aproximação veloz do veículo automotor.",
@@ -1458,7 +1458,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe81",
         category: "prioridade",
-        statement: "Ao manobrar para retirar seu veículo de uma garagem de edifício residencial particular e ingressar na via pública urbana, o condutor deve dar preferência de passagem a:",
+        statement: "Ao manobrar para sair da garagem de edifício residencial e ingressar na via pública, o condutor cruza calçada com pedestres e acessa via urbana com fluxo ativo de veículos. A ordem de preferência exigida pelo CTB é:",
         options: [
             "Aos pedestres que circulam pela calçada (passeio público) e aos veículos que já estão transitando pela via pública.",
             "Exigir prioridade de passagem sobre os pedestres acionando a buzina e mudando a aceleração de forma rápida.",
@@ -1593,12 +1593,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q6",
         category: "prioridade",
-        statement: "Você chega a uma interseção em via urbana sem placa, sem sinalização horizontal e sem semáforo, junto com outro veículo automotor vindo da via transversal. Pela regra geral de preferência do CTB, quem tem a vez de passar primeiro?",
+        statement: "Dois veículos automotores chegam simultaneamente a interseção em perímetro urbano desprovida de semáforo, placas e sinalização horizontal, um pela via principal e outro pela via transversal. Pela regra geral do CTB, tem a vez de passar:",
         options: [
-            "Quem está na via urbana mais movimentada ou mais larga.",
-            "Quem está vindo pela direita do outro motorista.",
-            "Quem chega com mais velocidade na hora de cruzar.",
-            "Quem pisca primeiro avisando que vai virar à esquerda.",
+            "O veículo da via principal, pois a hierarquia viária de classificação prevalece sobre a regra geral.",
+            "O veículo que vier pela direita do outro, conforme a regra geral de preferência em interseções sem sinalização.",
+            "O veículo que estiver trafegando com maior velocidade, por demonstrar maior fluidez no cruzamento.",
+            "O veículo que acionar primeiro a sinalização de conversão, independentemente da posição relativa na interseção."
         ],
         correctIndex: 1,
         explanation: 'Em cruzamentos sem sinaliza\u00E7\u00E3o, quem vem pela direita tem a prefer\u00EAncia.',
@@ -1751,7 +1751,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "q15",
         category: "prioridade",
-        statement: "Ao se aproximar de uma rotatória desprovida de qualquer placa de regulamentação de trânsito (como a R-2 'Dê a Preferência'), qual veículo detém, por imposição legal do CTB, a preferência de passagem na interseção?",
+        statement: "O condutor se aproxima de rotatória em perímetro urbano sem semáforo e sem placas de regulamentação; outro veículo já trafega pela faixa interna da circunferência. Pelo CTB, a preferência de passagem pertence a:",
         options: [
             "O veículo que estiver circulando pela rotatória no momento da interseção.",
             "O veículo que se aproximar da rotatória vindo pela via de trânsito rápido ou arterial.",
@@ -1923,7 +1923,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "q25",
         category: "prioridade",
-        statement: "O Código de Trânsito Brasileiro (CTB) estabelece que determinados veículos gozam de livre circulação, estacionamento e parada, além de prioridade de trânsito em situações de emergência. Para que essa prerrogativa legal seja plenamente válida nas vias públicas, é necessário que:",
+        statement: "Uma ambulância particular estaciona em vaga de carga e descarga em via do perímetro urbano alegando prerrogativa legal. Para que a imunidade de circulação, parada e estacionamento seja válida, é necessário que:",
         options: [
             "Sejam veículos de grande porte, como caminhões de carga pesada e ônibus intermunicipais.",
             "Estejam em efetivo serviço de urgência, devidamente identificados por dispositivos regulamentares de alarme sonoro e iluminação intermitente vermelha acionados.",
@@ -2517,12 +2517,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q49",
         category: "prioridade",
-        statement: "Na via urbana circulam juntos um veículo automotor, uma bicicleta, um pedestre sobre a faixa de pedestres e aproxima-se ambulância em urgência com sirene ligada. Pela ordem de prioridade do CTB para proteção dos mais vulneráveis, qual é a sequência CORRETA de passagem?",
+        statement: "Na pista de rolamento de via urbana, cruzam-se ao mesmo tempo automóvel, ciclista em faixa própria e pedestre na faixa de travessia, enquanto se aproxima ambulância em serviço com sirene em funcionamento. A ordem de prioridade de passagem é:",
         options: [
-            "Primeiro os pesados, depois os veículos e por último o pedestre, pois tamanho manda.",
-            "Primeiro a emergência em serviço, depois o pedestre, depois a bicicleta e por último os veículos.",
-            "Vale quem chegou primeiro, sem ligar pra tipo de veículo ou se é pedestre.",
-            "Primeiro as motocicletas, depois os veículos e por último os ônibus, pelo que é mais ágil.",
+            "Primeiro os veículos de maior porte, depois o ciclista e, por último, o pedestre, pela hierarquia de massa viária.",
+            "Primeiro a ambulância em serviço de urgência, depois o pedestre, em seguida o ciclista e, por último, os demais veículos.",
+            "Prevalece a ordem cronológica de chegada à interseção, independentemente da classe de usuário da via.",
+            "Primeiro os veículos automotores mais ágeis, depois a bicicleta e, por último, a ambulância em urgência."
         ],
         correctIndex: 1,
         explanation: 'A prioridade \u00E9: emerg\u00EAncia > pedestre > n\u00E3o motorizado > motorizado.',
@@ -2714,7 +2714,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp06",
         category: "prioridade",
-        statement: "Em interseção sem sinalização, um veículo que se desloca sobre trilhos aproxima-se junto com outros veículos automotores. Pela norma de preferência de passagem do CTB para esse caso, qual é a preferência do veículo sobre trilhos diante dos demais veículos?",
+        statement: "Em interseção do perímetro urbano sem sinalização semafórica, um veículo sobre trilhos aproxima-se junto de automóveis pela pista de rolamento transversal. Sobre a preferência do veículo sobre trilhos diante dos demais, o CTB prescreve:",
         options: [
             "A preferência é relativa, aplicando-se apenas quando o veículo sobre trilhos for de porte maior que o veículo concorrente.",
             "A preferência é condicionada à existência de sinalização semafórica na interseção, prevalecendo a regra da direita na sua ausência.",
@@ -2803,7 +2803,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp11",
         category: "prioridade",
-        statement: "Em interseção sem sinalização, sem placas e sem semáforo, dois veículos automotores aproximam-se ao mesmo tempo pela pista de rolamento. Pela regra geral de preferência de passagem do CTB nessa interseção, quem tem a preferência?",
+        statement: "Dois veículos automotores chegam ao mesmo tempo a interseção sem placas, sem semáforo e sem sinalização horizontal, um situado à esquerda do outro no eixo da via. Pela regra geral de preferência do CTB, tem a preferência:",
         options: [
             "Do veículo que trafega pela via mais larga ou mais movimentada, prevalecendo a hierarquia viária sobre as demais regras.",
             "Do veículo que estiver desenvolvendo maior velocidade, pois demonstra maior pressa e fluidez no tráfego.",
@@ -3581,12 +3581,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp52",
         category: "prioridade",
-        statement: "Em uma rotatória (roundabout) sem sinalização semafórica, o condutor se aproxima para ingressar na rotatória enquanto outro veículo já está circulando dentro dela. Um terceiro veículo se aproxima pela direita do condutor. De acordo com o CTB, quem tem a preferência de passagem nessa situação?",
+        statement: "Em rotatória sem semáforo no perímetro urbano, o condutor aguarda para ingressar enquanto outro veículo já circula pela faixa interna; simultaneamente, um terceiro se aproxima pela sua direita. Pelo CTB, a preferência de passagem é:",
         options: [
-            "O condutor que está entrando na rotatória, pois a via é mais larga e ele está realizando manobra de conversão",
-            "O veículo que já está circulando dentro da rotatória tem a preferência. O condutor que vai entrar deve aguardar, mesmo que o veículo da direita esteja fora da rotatória",
-            "O veículo que se aproxima pela direita do condutor tem a preferência, pois a regra geral da direita prevalece sobre a regra da rotatória",
-            "Todos os veículos têm igual prioridade e devem parar e negociar visualmente quem passa primeiro",
+            "Do veículo em manobra de ingresso, pois a conversão na rotatória lhe assegura prioridade sobre o tráfego interno.",
+            "Do veículo que já trafega dentro da rotatória; o condutor que se aproxima deve aguardar, prevalecendo a circulação contínua.",
+            "Do veículo que se aproxima pela direita do condutor, pois a regra geral da direita supera a preferência da rotatória.",
+            "De todos simultaneamente, cabendo a cada um transpor o eixo da entrada na ordem de chegada ao ponto de conflito."
         ],
         correctIndex: 1,
         explanation: 'Na rotat\u00F3ria, quem j\u00E1 est\u00E1 circulando tem a prefer\u00EAncia. Quem vai entrar precisa esperar.',
@@ -3601,12 +3601,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp53",
         category: "prioridade",
-        statement: "Uma ambulância em urgência com sirene ligada e giroflex acionado aproxima-se de interseção com vermelho para seu sentido, com vários veículos parados na pista de rolamento. Nessa situação, o que os demais condutores devem fazer para dar passagem?",
+        statement: "Ambulância em serviço de urgência, com sirene e giroflex acionados, aproxima-se de interseção em vermelho para o seu sentido; veículos parados obstruem a pista de rolamento. A conduta dos demais condutores deve ser:",
         options: [
-            "Buzinar para avisar a ambulância que o sinal está fechado e ela deve esperar.",
-            "Ficar parado, pois o vermelho vale acima de qualquer veículo.",
-            "Jogar para a esquerda, abrir passagem pela direita e, se preciso, avançar o vermelho com cuidado.",
-            "Ligar o pisca-alerta e ficar parado, pois avançar o vermelho para dar passagem dá multa.",
+            "Manter a posição parada, pois o sinal vermelho prevalece sobre qualquer prioridade de trânsito.",
+            "Transpor o sinal vermelho imediatamente sem sinalizar, para não obstruir a passagem da ambulância.",
+            "Deslocar-se com segurança para a faixa da esquerda, abrir passagem pela direita e, se necessário, avançar o vermelho com cuidado.",
+            "Buzinar sucessivamente para indicar o sinal fechado e manter-se parado no eixo da via."
         ],
         correctIndex: 2,
         explanation: 'Quando a ambul\u00E2ncia t\u00E1 com sirene ligada, todo mundo deve liberar a passagem pela esquerda, mesmo que tenha que avan\u00E7ar o sinal vermelho com cuidado.',
@@ -3621,12 +3621,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp54",
         category: "prioridade",
-        statement: "Em uma faixa de pedestres sem semáforo, um pedestre com bengala branca (deficiente visual) está parado na calçada com a bengala estendida, aparentemente aguardando para atravessar. Um veículo se aproxima. De acordo com o CTB e o Estatuto da Pessoa com Deficiência, o condutor deve:",
+        statement: "Em faixa de travessia de pedestres sem semáforo, deficiente visual parado na calçada mantém a bengala branca estendida aguardando atravessar, enquanto veículo se aproxima pela pista de rolamento. Pelo CTB e pelo Estatuto da Pessoa com Deficiência, o condutor deve:",
         options: [
-            "Buzinar para alertar o pedestre de que o veículo está passando, pois ele pode não perceber a aproximação",
-            "Acelerar e passar rapidamente antes que o pedestre inicie a travessia, para evitar ter que parar",
-            "Parar o veículo e dar preferência total ao pedestre com deficiência visual, que tem prioridade absoluta sobre qualquer veículo, devendo o condutor aguardar a travessia completa",
-            "Reduzir a velocidade e passar lentamente atrás do pedestre, mantendo distância segura",
+            "Acionar a buzina para sinalizar a presença do veículo, pois o pedestre pode não perceber a aproximação.",
+            "Reduzir a velocidade e transpor a faixa lentamente, mantendo distância segura do pedestre parado.",
+            "Parar o veículo e aguardar a travessia completa, assegurando prioridade absoluta do pedestre com deficiência visual.",
+            "Prosseguir normalmente, pois ausência de semáforo significa igualdade de condições na interseção."
         ],
         correctIndex: 2,
         explanation: 'Pedestre com defici\u00EAncia visual (bengala branca) tem prioridade total. O motorista TEM que parar e esperar ele atravessar.',
@@ -7961,27 +7961,7 @@ export const REAL_EXAM_IDS = [
     "detran_q29_n2",
     "q6",
     "qp64",
-    {
-        "id": "placa_r20_proibido_buzina_alta",
-        "category": "legislacao",
-        "statement": "Ao trafegar por uma via urbana durante o período noturno nas proximidades de um hospital, o condutor visualiza a placa de sinalização R-20 instalada na via. Considerando os preceitos do Código de Trânsito Brasileiro (CTB) e as normas de sinalização do CONTRAN, assinale a alternativa que indica corretamente a classificação dessa placa, seu significado e a implicação do seu desrespeito:",
-        "options": [
-            "Trata-se de uma Placa de Regulamentação que proíbe o uso da buzina ou sinal sonoro no local indicado. O desrespeito a esta ordem imperativa constitui infração de trânsito de natureza leve, sujeita a penalidade de multa.",
-            "Trata-se de uma Placa de Advertência que apenas recomenda evitar o uso de sinal sonoro por cortesia urbana, não gerando autuação por infração de trânsito em caso de descumprimento.",
-            "Trata-se de uma Placa de Indicação destinada exclusivamente a veículos de emergência, permitindo o uso da buzina apenas quando estiverem em serviço de urgência com iluminação vermelha ligada.",
-            "Trata-se de uma Placa de Regulamentação que proíbe o uso de buzina no período das 22h às 6h, sendo o uso livre nos demais horários do dia."
-        ],
-        "correctIndex": 0,
-        "explanation": "A placa R-20 é de Regulamentação ('Proibido acionar buzina ou sinal sonoro'). O descumprimento é infração LEVE (Art. 227, V do CTB).",
-        "detailedExplanation": "As placas de Regulamentação possuem caráter imperativo e impositivo. A placa R-20 proíbe o acionamento de buzina ou qualquer sinal sonoro no trecho delimitado, independente do horário. Segundo o Art. 227, V do CTB, descumprir essa sinalização constitui infração de natureza LEVE, sujeita a penalidade de multa.",
-        "legalBase": "Art. 227, inciso V do CTB e Resolução CONTRAN nº 160/2004",
-        "commonMistake": "Achar que a proibição da buzina se aplica apenas no período noturno ou considerar que placas de proibição de som possuem mero caráter educativo/advertência.",
-        "tip": "Placa R-20 (Borda Vermelha) = Regulamentação. Desrespeitar proibição de buzina = Infração LEVE.",
-        "incidence": "alta",
-        "trap": true,
-        "difficulty": 3,
-        "image_url": "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/placa-R-20.jpg"
-    },
+    "placa_r20_proibido_buzina_alta",
     {
         id: "q3181",
         category: "legislacao",
