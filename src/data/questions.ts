@@ -925,7 +925,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe49",
         category: "mecanica",
-        statement: "O sistema de lubrificação do motor automotivo é essencial para evitar o atrito metálico direto entre as peças móveis internas. A circulação do motor sob níveis severamente baixos de óleo lubrificante provoca:",
+        statement: "Após longa viagem em rodovia, o condutor percebe a luz de pressão de óleo acender e apagar no painel, e a vareta acusa nível marcadamente abaixo do mínimo. A circulação do motor nesse estado severo provoca:",
         options: [
             "O superaquecimento excessivo das peças por atrito mecânico, podendo levar à fusão de componentes ('fundir o motor') e quebra estrutural do bloco.",
             "O aumento imediato do consumo de combustível sem qualquer risco de dano mecânico ao bloco do cabeçote.",
@@ -941,7 +941,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe50",
         category: "mecanica",
-        statement: "O tráfego de veículos com pneus cujos sulcos da banda de rodagem apresentam profundidade inferior ao limite legal regulamentado (pneus 'carecas') expõe a segurança viária a riscos graves. Dentre os perigos listados, assinale a opção correta:",
+        statement: "Em fiscalização durante chuva em rodovia, constata-se que os sulcos da banda de rodagem dos pneus estão abaixo do limite legal (pneus 'carecas'). Os riscos decorrentes dessa condição para a segurança viária incluem:",
         options: [
             "Perda de aderência em asfalto molhado facilitando a aquaplanagem, aumento drástico da distância de frenagem e risco de estouro do pneu por fadiga estrutural.",
             "Redução do consumo de combustível devido à maior aderência do composto de borracha em curvas fechadas.",
@@ -957,7 +957,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe51",
         category: "mecanica",
-        statement: "O sistema de arrefecimento desempenha papel vital no controle térmico de funcionamento do motor de combustão interna. A função técnica primária do fluido de arrefecimento (composto de água desmineralizada e aditivo específico) é:",
+        statement: "Durante o tráfego em via expressa, o fluido circula continuamente entre o bloco, o cabeçote e o radiador. A função técnica primária do líquido de arrefecimento, mistura de água desmineralizada e aditivo específico, é:",
         options: [
             "Trocar calor com o motor para manter a temperatura operacional ideal de trabalho do bloco e do cabeçote.",
             "Lubrificar os cilindros e pistões internos para reduzir o atrito gerado pelas bielas.",
@@ -973,7 +973,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe52",
         category: "mecanica",
-        statement: "Durante o tráfego regular por rodovia, o condutor observa que uma luz indicadora de advertência de cor amarela/laranja acendeu-se de forma contínua no painel de instrumentos do veículo. Sob a ótica da manutenção preventiva, essa sinalização indica:",
+        statement: "Durante tráfego em rodovia, o condutor percebe que luz indicadora amarela/laranja permanece acesa de modo contínuo no painel, sem perda imediata de desempenho. Pelas diretrizes de manutenção preventiva, essa sinalização indica:",
         options: [
             "Uma anomalia de funcionamento que necessita de verificação técnica no sistema de injeção ou motor, sem necessidade de parada imediata no acostamento, mas com inspeção breve recomendada.",
             "Um problema crítico e de perigo iminente que exige a parada imediata do veículo na pista de rolamento por falta de pressão de óleo do motor.",
@@ -989,7 +989,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe53",
         category: "mecanica",
-        statement: "O fluido de freio é o elemento hidráulico responsável por transmitir a força aplicada no pedal até as pinças e tambores de roda. Sob as diretrizes de manutenção preventiva do veículo automotor, o fluido de freio deve ser inspecionado e:",
+        statement: "O fluido de freio é o elemento hidráulico que transmite a força aplicada no pedal até as pinças e tambores de roda. Nos termos da manutenção preventiva do veículo, esse fluido deve ser inspecionado periodicamente e:",
         options: [
             "Substituído periodicamente conforme prazo do manual do proprietário (geralmente a cada 1 ou 2 anos ou quilometragem equivalente), devido à sua característica higroscópica (absorção de umidade).",
             "Completado semanalmente com água desmineralizada para manter o nível máximo do reservatório plástico.",
@@ -1005,7 +1005,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe54",
         category: "mecanica",
-        statement: "A calibragem adequada dos pneus é indispensável para a dirigibilidade, consumo energético e vida útil do composto de borracha. Conforme a engenharia de manutenção de veículos, o procedimento técnico correto de calibragem deve ocorrer:",
+        statement: "A calibragem adequada sustenta a dirigibilidade, o consumo energético e a vida útil da banda de rodagem. Pela técnica de manutenção de veículos, o procedimento correto de calibragem dos pneus automotores deve ocorrer:",
         options: [
             "Com os pneus frios (antes de rodar mais do que 3 km), utilizando os valores de pressão nominal recomendados pelo fabricante do veículo.",
             "Com os pneus quentes logo após longas viagens em rodovias, retirando o excesso de pressão gerado pelo calor de atrito.",
@@ -1275,7 +1275,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe70",
         category: "mecanica",
-        statement: "Antes de iniciar uma viagem de longa distância com o veículo automotor por rodovias estaduais, qual o procedimento preventivo de segurança mais adequado a ser adotado pelo condutor?",
+        statement: "O condutor pretende cruzar rodovias estaduais em viagem de longa distância com veículo particular carregado de bagagens. Sobre pneus, fluidos e equipamentos obrigatórios, o procedimento preventivo mais adequado é:",
         options: [
             "Verificar o nível de fluidos (óleo do motor, líquido de arrefecimento e freio), inspecionar o funcionamento das luzes, calibrar os pneus (inclusive o estepe) e checar os equipamentos obrigatórios (triângulo, macaco e chave de roda).",
             "Substituir de forma compulsória todo o fluido da direção hidráulica e os amortecedores dianteiros do veículo.",
@@ -1442,7 +1442,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe80",
         category: "mecanica",
-        statement: "Durante fiscalização visual prévia antes de iniciar o motor, o condutor constata a presença de manchas e odor forte de vazamento de combustível sob o compartimento do motor do veículo. Diante desse risco iminente, qual a conduta mecânica correta a ser adotada?",
+        statement: "Durante a verificação prévia antes de iniciar o motor, o condutor constata manchas e odor forte de vazamento de combustível sob o compartimento do motor. Diante desse risco iminente, a conduta mecânica correta é:",
         options: [
             "Não dar partida no motor, manter o veículo imobilizado em local ventilado e providenciar o reboque do veículo para uma oficina mecânica especializada.",
             "Funcionar o motor em alta rotação para queimar o combustível acumulado nas mangueiras e secar o vazamento por calor.",
@@ -1647,7 +1647,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "q9",
         category: "mecanica",
-        statement: "A manutenção preventiva do sistema de frenagem do veículo automotor é indispensável para a segurança viária. Sobre os princípios de funcionamento e componentes do sistema de freios de serviço de acionamento hidráulico convencional, assinale a afirmativa correta:",
+        statement: "Durante manutenção preventiva do sistema de frenagem, pergunta-se sobre princípios de funcionamento do freio de serviço hidráulico convencional — pedal, hidrovácuo, discos e tambores. A afirmativa correta é:",
         options: [
             "O sistema de freio de estacionamento (freio de mão) atua de forma hidráulica nas quatro rodas simultaneamente.",
             "A redução de velocidade ocorre pelo atrito das pastilhas contra os discos de freio ou das sapatas contra os tambores, impulsionados pela pressão do fluido de freio.",
@@ -1822,7 +1822,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "q19",
         category: "mecanica",
-        statement: "O sistema de suspensão do veículo automotor desempenha funções mecânicas críticas para a dirigibilidade e segurança ativa. Assinale a alternativa que descreve de forma correta e abrangente a função técnica primária dos componentes desse sistema (molas, amortecedores e braços oscilantes):",
+        statement: "Em via com superfície irregular, os ocupantes sentem impactos transmitidos pela carroceria e os pneus tendem a perder contato com o solo. A função técnica primária de molas, amortecedores e braços oscilantes é:",
         options: [
             "Reduzir o atrito interno do motor transmitindo a força motriz diretamente para o sistema de diferencial traseiro.",
             "Absorver os impactos gerados pelas irregularidades da pista de rolamento, garantindo o conforto dos ocupantes e mantendo os pneus em contato constante com o solo.",
@@ -2453,12 +2453,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q45",
         category: "mecanica",
-        statement: "Você usa o veículo automotor todo dia para o trabalho e quer pneu seguro, veículo estável e sem consumo excessivo de combustível. A calibragem correta influencia a dirigibilidade e o consumo. Pela manutenção preventiva, quando e como você deve verificar a pressão dos pneus?",
+        statement: "O condutor usa o veículo diariamente para o trabalho e quer pneu seguro, estabilidade e consumo controlado. Pela manutenção preventiva, o intervalo e o momento corretos para conferir a pressão dos pneus são:",
         options: [
-            "1 vez por ano, junto com a troca de óleo, pois a pressão segura por muito tempo.",
-            "A cada 15 dias e antes de viajar longe, com pneu frio (parado há 2h ou rodou pouquinho).",
-            "Só quando o veículo puxa para o lado na direção, sinal de que esvaziou muito.",
-            "Só antes de pegar estrada longa, sem precisar olhar no uso da cidade.",
+            "Uma vez por ano, junto com a troca de óleo, pois a pressão se mantém estável por longos períodos.",
+            "A cada 15 dias e antes de viagens longas, com os pneus frios (parados há pelo menos duas horas).",
+            "Somente quando o veículo puxa lateralmente na direção, sinal de despressão acentuada.",
+            "Apenas antes de iniciar trajeto rodoviário, sem necessidade de conferência no uso urbano."
         ],
         correctIndex: 1,
         explanation: 'Verifique a calibragem a cada 15 dias e antes de viagens. Pneu frio garante leitura certa.',
@@ -2469,12 +2469,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q46",
         category: "mecanica",
-        statement: "Na revisão, o mecânico mostra no fundo dos sulcos do pneu aqueles carocinhos de borracha da banda de rodagem e explica pra que servem. Pela segurança e pelo limite legal de desgaste, pra que serve o indicador TWI e quando o pneu tem que ser trocado?",
+        statement: "Durante revisão, o mecânico aponta os caroços de borracha posicionados no fundo dos sulcos da banda de rodagem (TWI). Pelo limite legal de desgaste, a função desse indicador e o critério de troca do pneu são:",
         options: [
-            "Mostra o nome e o modelo do pneu, pra comprar outro igual quando precisar.",
-            "Marca o limite mínimo legal dos sulcos (1,6 mm), avisando que o pneu tem que ser trocado ao chegar ali.",
-            "Mede a pressão do pneu na hora, sem precisar de calibrador nem manômetro.",
-            "Mostra a data de fabricação do pneu, dizendo até quando pode usar mesmo sem gasto.",
+            "Identifica marca e modelo do pneu para recompra do mesmo item quando necessário.",
+            "Marca o limite mínimo legal dos sulcos (1,6 mm), sinalizando a substituição obrigatória do pneu ao atingi-lo.",
+            "Mede a pressão de inflagem em tempo real, dispensando o uso de manômetro externo.",
+            "Indica a data de validade do pneu, prorrogável desde que sem danos na banda de rodagem."
         ],
         correctIndex: 1,
         explanation: 'TWI \u00E9 o indicador que mostra quando o pneu t\u00E1 no limite e precisa ser trocado.',
@@ -2485,12 +2485,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q47",
         category: "mecanica",
-        statement: "Você vai conferir o nível do óleo do motor com a vareta que fica sob o capô. Para a leitura ser precisa e evitar estrago por falta de lubrificação, qual é o jeito e o momento corretos de verificar o óleo do motor?",
+        statement: "Para conferir o nível do óleo lubrificante pela vareta instalada sob o capô, a leitura precisa refletir o volume real existente no cárter do motor. O momento técnico correto e as condições ideais para essa verificação são:",
         options: [
-            "Com o motor quente e ligado, com o óleo circulando por todo o sistema.",
-            "Com o carro no plano e o motor frio ou desligado há minutos, para o óleo baixar ao cárter.",
-            "Só em oficina na troca, pois o dono não tem acesso seguro à vareta.",
-            "Uma vez por ano na revisão geral, sem ligar para a quilometragem rodada.",
+            "Com o motor quente e em funcionamento, com o óleo distribuído por todo o sistema.",
+            "Com o veículo em superfície plana e o motor frio ou desligado há alguns minutos, permitindo o retorno do óleo ao cárter.",
+            "Somente em oficina, durante a troca programada, pois o condutor não domina a leitura.",
+            "Uma vez por ano, na revisão geral, independentemente da quilometragem acumulada."
         ],
         correctIndex: 1,
         explanation: 'Estacionar em terreno plano + motor frio = leitura certa da vareta.',
@@ -2501,12 +2501,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q48",
         category: "mecanica",
-        statement: "No meio da rodovia acende direto no painel aquela luz vermelha com desenho de bateria e não apaga mais. Pelo significado das luzes de advertência do painel, qual problema essa luz indica e o que o motorista deve fazer pra se manter seguro?",
+        statement: "No meio de uma rodovia, acende e permanece acesa, sem apagar, a luz vermelha com desenho de bateria no painel de instrumentos. Pelo significado dessa sinalização, o problema indicado e a conduta segura são:",
         options: [
-            "Falha na carga do carro (alternador, correia ou bateria): pare num lugar seguro assim que der e chame ajuda.",
-            "Tanque na reserva: procure o posto mais próximo pra abastecer.",
-            "Freio com pastilhas gastas: leve o carro direto pra oficina mecânica.",
-            "Pneu com pressão errada: confira a calibragem de todos os pneus na hora.",
+            "Falha no sistema de carga (alternador, correia ou bateria): imobilizar em local seguro e acionar assistência.",
+            "Nível de combustível na reserva: prosseguir até o posto de abastecimento mais próximo.",
+            "Desgaste de pastilhas de freio: encaminhar o veículo diretamente à oficina mecânica.",
+            "Pressão irregular de pneus: conferir a calibragem do conjunto em posto conveniente."
         ],
         correctIndex: 0,
         explanation: 'Luz vermelha acesa = problema na bateria. Se continuar, o carro pode parar de funcionar.',
@@ -2898,7 +2898,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp17",
         category: "mecanica",
-        statement: "Durante uma viagem em rodovia, o condutor percebe que a luz indicadora de temperatura do motor acende no painel e uma nuvem de vapor começa a sair sob o capô. Diante dessa situação, a conduta correta e mais segura a ser adotada pelo condutor é:",
+        statement: "Durante viagem em rodovia, o condutor percebe que a luz indicadora de temperatura acende no painel e nuvem de vapor começa a escapar sob o capô. Diante desse quadro de superaquecimento, a conduta correta e mais segura é:",
         options: [
             "Estacionar imediatamente e abrir o radiador para aliviar a pressão com o motor ainda quente",
             "Desligar o motor imediatamente, abrir o capô e jogar água fria sobre o motor para resfriá-lo rapidamente",
@@ -2918,7 +2918,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp18",
         category: "mecanica",
-        statement: "Ao girar a chave de ignição e perceber que o motor não dá partida, mas o painel acende normalmente, o condutor ouve apenas um clique seco. Nessa situação, a causa mais provável do problema está relacionada a:",
+        statement: "Ao girar a chave de partida, o painel acende normalmente e as luzes funcionam, porém o motor não dá partida e ouve-se apenas um clique seco. Diante desse quadro, a causa mais provável está relacionada a:",
         options: [
             "Falta absoluta de óleo no motor, que travou o virabrequim",
             "Bateria descarregada ou com carga insuficiente para acionar o motor de arranque",
@@ -2937,7 +2937,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp19",
         category: "mecanica",
-        statement: "Considerando a manutenção preventiva e a segurança veicular, analise as afirmativas sobre os pneus e assinale a alternativa correta quanto à obrigação legal do condutor:",
+        statement: "Durante inspeção veicular, constata-se desgaste acentuado na banda de rodagem e o condutor pergunta qual a obrigação legal quanto à profundidade dos sulcos. A afirmativa correta, considerando o indicador TWI, é:",
         options: [
             "O TWI serve para medir a pressão interna do pneu e deve ser verificado semanalmente",
             "Os pneus podem ter sulcos de qualquer profundidade, desde que não haja deformações na banda de rodagem",
@@ -2957,12 +2957,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp20",
         category: "mecanica",
-        statement: "Você conduz um veículo automotor em declive longo e sente cheiro de queimado, enquanto o pedal do freio endurece e o veículo freia cada vez menos. Pela mecânica e direção segura, qual é a causa mais provável e a conduta correta nessa situação?",
+        statement: "Durante descida longa em declive de rodovia, o condutor sente cheiro de queimado, o pedal de freio endurece e o veículo perde progressivamente a capacidade de frenagem. A causa mais provável e a conduta correta são:",
         options: [
-            "Fluido de freio vencido — bombear o pedal rápido para recuperar a pressão.",
-            "Fluido fervendo com bolhas de vapor (fading) — reduzir a marcha e usar o freio motor para poupar os freios.",
-            "Pastilha gasta — puxar o freio de mão para ajudar a frear.",
-            "Rolamento travando — parar na hora e jogar água nas rodas para esfriar.",
+            "Fluido de freio vencido — bombar o pedal com frequência para recuperar a pressão hidráulica.",
+            "Aquecimento do fluido com formação de bolhas de vapor (fading) — reduzir a marcha e usar o freio motor para preservar os freios.",
+            "Desgaste de pastilhas — acionar o freio de estacionamento como apoio à frenagem.",
+            "Rolamento de roda travando — imobilizar na hora e resfriar as rodas com água."
         ],
         correctIndex: 1,
         explanation: 'Fading \u00E9 quando o fluido de freio esquenta demais. A solu\u00E7\u00E3o \u00E9 usar o freio motor (marcha reduzida) pra n\u00E3o sobrecarregar os freios.',
@@ -2977,7 +2977,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp21",
         category: "mecanica",
-        statement: "Logo após abastecer, seu veículo automotor começa a vibrar no volante e perde força ao acelerar em velocidade de cruzeiro, quando antes estava normal. Como o defeito surgiu após o abastecimento, qual é a causa mais provável desse problema no veículo?",
+        statement: "Logo após abastecer em posto, o veículo começa a vibrar no volante e perde força na velocidade de cruzeiro, estado que antes era normal. Como o defeito surgiu após o abastecimento, a causa mais provável é:",
         options: [
             "Combustível adulterado ou com água no tanque, sujando a alimentação.",
             "Tampa do tanque aberta, deixando entrar ar no sistema.",
@@ -2996,7 +2996,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp22",
         category: "mecanica",
-        statement: "O sistema de arrefecimento do motor é essencial para manter a temperatura de funcionamento adequada. Sobre os cuidados com esse sistema, assinale a alternativa INCORRETA:",
+        statement: "O sistema de arrefecimento mantém a temperatura de operação do motor dentro da faixa ideal prevista pelo fabricante. Sobre os cuidados de manutenção preventiva desse sistema, assinale a alternativa INCORRETA:",
         options: [
             "O líquido de arrefecimento deve ser uma mistura de água desmineralizada com aditivo próprio, na proporção recomendada pelo fabricante",
             "A ventoinha do radiador é acionada automaticamente por um sensor de temperatura quando o líquido atinge determinada temperatura",
@@ -3015,7 +3015,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp23",
         category: "mecanica",
-        statement: "Em relação aos sistemas de iluminação e sinalização do veículo previstos no CTB, analise as afirmações e assinale a alternativa que apresenta uma conduta correta do condutor:",
+        statement: "Em relação aos sistemas de iluminação e sinalização do veículo previstos no CTB — faróis, luz de neblina, pisca-alerta e lanternas de posição —, analise as afirmações e assinale a conduta correta do condutor:",
         options: [
             "O uso do farol alto é permitido em qualquer via durante a noite, devendo ser mantido aceso mesmo quando houver veículos trafegando no sentido contrário",
             "A luz de neblina dianteira pode ser utilizada em substituição ao farol baixo em condições normais de visibilidade durante o dia",
@@ -3035,7 +3035,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp24",
         category: "mecanica",
-        statement: "Em veículo automotor com câmbio manual, a alavanca vibra muito e está difícil engatar as marchas, principalmente ré e primeira, com piora ao longo de dias. Nesse quadro de defeito progressivo no veículo, qual componente deve estar gasto ou com defeito?",
+        statement: "Em veículo automotor com câmbio manual, a alavanca vibra fortemente e o engate das marchas, sobretudo ré e primeira, está cada vez mais difícil, com piora progressiva. Nesse quadro, o componente gasto ou defeituoso é:",
         options: [
             "A embreagem, patinando por desgaste do disco.",
             "O freio, travando as rodas da frente.",
@@ -3760,12 +3760,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp58",
         category: "mecanica",
-        statement: "Você conduz um veículo automotor em tráfego intenso e o fluxo para de repente à frente. Ao acionar errado os comandos, as rodas traseiras travam, o veículo perde aderência e a traseira derrapa para o lado. Pela mecânica e condução segura, o que causa esse travamento e derrapagem traseira?",
+        statement: "Em tráfego intenso, o fluxo à frente para de repente e o condutor aciona os comandos de forma equivocada: as rodas traseiras travam, o veículo perde aderência e a traseira derrapa para o lado. A causa desse travamento é:",
         options: [
-            "Pisar o freio aos poucos junto com a embreagem antes de o veículo parar total.",
-            "Puxar o freio de mão com o veículo em movimento ou reduzir marcha à força em alta, travando o eixo.",
-            "O ABS, que trava tambor e sapata de trás tudo de uma vez pra parar.",
-            "Faltar fluido no cilindro mestre, que iguala a pressão e trava só o freio traseiro.",
+            "Pisar no freio progressivamente, acompanhado do acionamento da embreagem antes da imobilização total.",
+            "Puxar o freio de mão com o veículo em movimento ou forçar redução de marcha em alta rotação, travando o eixo traseiro.",
+            "Atuação do ABS, que imobiliza simultaneamente tambor e sapata traseiros para máxima desaceleração.",
+            "Falha de fluido no cilindro mestre, que equaliza a pressão e trava apenas o freio traseiro."
         ],
         correctIndex: 1,
         explanation: 'Puxar o freio de m\u00E3o com o carro em movimento ou reduzir marcha r\u00E1pido demais trava as rodas traseiras e faz o carro derrapar.',
@@ -4270,7 +4270,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "nova_balanceamento_rodas_sintomas_alta_09",
         category: "mecanica",
-        statement: "Um condutor percebe que, ao atingir velocidades superiores a 80 km/h em uma rodovia plana, o volante do seu veículo começa a tremer e vibrar intensamente de forma anormal. Considerando a manutenção preventiva do sistema de rodagem, esse sintoma indica a necessidade imediata de:",
+        statement: "Em rodovia plana, ao ultrapassar 80 km/h o volante do veículo começa a tremer e vibrar intensamente de forma anormal. Considerando a manutenção preventiva do sistema de rodagem, esse sintoma indica a necessidade de:",
         options: [
             "Substituição das pastilhas de freio dianteiras e sangria do fluido de freio.",
             "Execução do balanceamento das rodas para alinhar as massas do conjunto pneu e roda.",
@@ -4350,7 +4350,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "nova_painel_instrumentos_mecanica_alta_13",
         category: "mecanica",
-        statement: "Os instrumentos do painel do veículo fornecem informações essenciais sobre a saúde mecânica e elétrica do automóvel. Assinale a alternativa que estabelece a correspondência TÉCNICA E LEGALMENTE CORRETA entre o instrumento e sua função:",
+        statement: "Os instrumentos do painel fornecem informações essenciais sobre a saúde mecânica e elétrica do veículo em operação. Assinale a correspondência TÉCNICA E LEGALMENTE CORRETA entre cada instrumento e sua função:",
         options: [
             "Termômetro: mede a pressão do óleo lubrificante no cárter do motor.",
             "Voltímetro: indica a taxa de rotação por minuto (RPM) das rodas.",
@@ -4771,7 +4771,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "nova_mecanica_falta_balanceamento_rodas_10",
         category: "mecanica",
-        statement: "Durante a rodagem em velocidades médias e elevadas, a falta de balanceamento correto do conjunto de rodas e pneus de um automóvel provoca desequilíbrio de massa em rotação. Qual é a principal consequência direta sentida pelo condutor ao dirigir o veículo?",
+        statement: "Durante rodagem em velocidades médias e elevadas, a falta de balanceamento correto do conjunto de rodas e pneus provoca desequilíbrio de massa em rotação. A principal consequência direta sentida pelo condutor é:",
         options: [
             "Direção excessivamente dura e travamento do sistema hidráulico/elétrico.",
             "Trepidações e vibrações anormais transmitidas ao volante de direção.",
@@ -5607,12 +5607,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'detran_ilum_001_alta',
         category: 'mecanica',
-        statement: 'Qual é o sistema do veículo responsável por garantir a visibilidade da via e por sinalizar as manobras aos demais condutores?',
+        statement: "Durante a circulação noturna, o condutor depende de um conjunto de equipamentos para garantir a visibilidade da pista de rolamento e sinalizar suas manobras aos demais condutores. Esse conjunto corresponde ao sistema:",
         options: [
-            'Sistema de Transmissão e Rodagem do veículo.',
-            'Sistema de Iluminação e Sinalização do veículo.',
-            'Sistema de Suspensão e Arrefecimento do motor.',
-            'Sistema Elétrico de Partida e Ignição do motor.'
+            "Sistema de Transmissão e Rodagem do veículo.",
+            "Sistema de Iluminação e Sinalização do veículo.",
+            "Sistema de Suspensão e Arrefecimento do motor.",
+            "Sistema Elétrico de Partida e Ignição do motor."
         ],
         correctIndex: 1,
         explanation: 'O sistema de iluminação e sinalização ilumina a via e avisa sobre manobras aos outros motoristas.',
@@ -5747,7 +5747,7 @@ export const QUESTIONS: Question[] = [
     {
         id: 'detran_ilum_008_alta',
         category: 'mecanica',
-        statement: 'Ao acionar a seta para a esquerda, o condutor nota no painel que a luz indicadora pisca em ritmo muito mais rápido que o habitual. Esse sintoma indica:',
+        statement: "Ao acionar a seta para a esquerda, o condutor percebe que a luz indicadora no painel pisca em ritmo muito mais acelerado que o habitual, sem qualquer alteração de comando na alavanca. Esse sintoma indica:",
         options: [
             'Sobrecarga no alternador devido ao uso contínuo do sistema de ar-condicionado.',
             'Que uma das lâmpadas de seta do lado esquerdo está queimada ou com mau contato.',
@@ -6007,7 +6007,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_013",
         category: "mecanica",
-        statement: "O sistema de Airbag (bolsa inflável de segurança) é um equipamento de segurança passiva obrigatório nos veículos modernos. Para que o airbag cumpra sua função sem causar lesões graves ao ocupante, é indispensável o uso concomitante do:",
+        statement: "O sistema de airbag (bolsa inflável) é equipamento de segurança passiva obrigatório nos veículos modernos. Para que cumpra sua função sem causar lesões graves ao ocupante em colisão, é indispensável o uso concomitante do:",
         options: [
             "Cinto de segurança, que retém o corpo e evita que o ocupante seja projetado contra a bolsa em expansão.",
             "Freio ABS, que impede o travamento das rodas durante o acionamento do airbag.",
@@ -6369,12 +6369,12 @@ export const QUESTIONS: Question[] = [
         id: "detran_q25_n1",
         category: "mecanica",
         difficulty: 1,
-        statement: "Quando o painel acusar problema no arrefecimento, o correto é:",
+        statement: "No meio do trajeto urbano, o painel acende e mantém acesa a luz indicadora de falha no sistema de arrefecimento do motor, sem vapor sob o capô. O procedimento correto do condutor diante desse alerta é:",
         options: [
-            "Parar o veículo e verificar o nível de óleo.",
-            "Desligar o manômetro.",
-            "Parar o veículo e verificar o nível de água.",
-            "Continuar a viagem."
+            "Imobilizar o veículo e verificar o nível do óleo lubrificante do motor.",
+            "Desligar o instrumento de medição de pressão para silenciar o alerta do painel.",
+            "Imobilizar o veículo em local seguro e verificar o nível de líquido de arrefecimento.",
+            "Prosseguir a viagem normalmente, pois o alerta dispensa atenção imediata."
         ],
         correctIndex: 2,
         explanation: "Luz de temperatura acendeu? Pare o carro e olhe a água do motor.",
@@ -6510,12 +6510,12 @@ export const QUESTIONS: Question[] = [
         id: "detran_q25_n2",
         category: "mecanica",
         difficulty: 2,
-        statement: "Quando o painel do seu veículo acusar problema no sistema de arrefecimento, o procedimento correto é:",
+        statement: "Durante tráfego em via expressa, com a temperatura do motor acima da faixa normal, o painel acusa problema no sistema de arrefecimento. Considerando os riscos de dano ao motor, o procedimento correto é:",
         options: [
-            "Parar o veículo e verificar o nível de óleo.",
-            "Desligar o manômetro.",
-            "Parar o veículo e verificar o nível de água.",
-            "Continuar a viagem."
+            "Imobilizar o veículo e verificar o nível do óleo lubrificante no cárter.",
+            "Desligar o manômetro de pressão para eliminar o alerta persistente do painel.",
+            "Imobilizar o veículo em local seguro e verificar o nível de líquido de arrefecimento.",
+            "Prosseguir a viagem em velocidade reduzida até o próximo posto de serviço."
         ],
         correctIndex: 2,
         explanation: "Esquentou no painel? Pare o carro em local seguro e verifique o nível da água.",
@@ -7495,11 +7495,11 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_28",
         category: "mecanica",
-        statement: "Antes de rodar no perímetro urbano ou rodovia, o que checar obrigatoriamente?",
+        statement: "Antes de circular no perímetro urbano ou ingressar em rodovia, o condutor deve checar o conjunto de itens de segurança do veículo: equipamentos obrigatórios, freios, luzes, pneus e combustível. Essa verificação abrange:",
         options: [
-            "Todos os equipamentos obrigatórios funcionando.",
-            "Combustível suficiente até o destino.",
-            "Freios, luzes e pneus em ordem.",
+            "Todos os equipamentos obrigatórios em perfeito estado de funcionamento.",
+            "Combustível suficiente para concluir todo o trajeto planejado.",
+            "Sistemas de freagem, iluminação e pneus em condições adequadas de uso.",
             "Todas as alternativas acima estão corretas."
         ],
         correctIndex: 3,
@@ -7749,7 +7749,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "rst_14",
         category: "mecanica",
-        statement: "A verificação da pressão de calibragem dos pneus do veículo deve ser realizada EXCLUSIVAMENTE quando os pneus estiverem:",
+        statement: "A conferência da pressão de calibragem dos pneus exige condições específicas de temperatura, pois o calor de rotação altera a leitura. Essa verificação deve ser realizada EXCLUSIVAMENTE quando os pneus estiverem:",
         options: [
           "Aquececidos após trafegar em alta velocidade na rodovia",
           "Frios, preferencialmente antes de colocar o veículo em circulação",
@@ -7781,7 +7781,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "fr_01",
         category: "mecanica",
-        statement: "O sistema de freios é fundamental para a segurança viária. Sobre a atuação do freio de pé (serviço) e do freio de mão (estacionamento), é correto afirmar que:",
+        statement: "Na inspeção do sistema de frenagem, analisa-se a atuação do freio de pé (serviço) e do freio de mão (estacionamento) sobre o conjunto de rodas do veículo. Sobre a distribuição de atuação entre ambos, é correto afirmar que:",
         options: [
           "O freio de mão atua nas quatro rodas e deve ser usado para reduzir a velocidade em movimento",
           "O freio de pé atua exclusivamente nas rodas dianteiras para imobilizar o veículo",
@@ -7813,7 +7813,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "fr_03",
         category: "mecanica",
-        statement: "O freio de estacionamento (freio de mão) destina-se EXCLUSIVAMENTE a qual das seguintes finalidades no trânsito urbano e rodoviário?",
+        statement: "O freio de estacionamento (freio de mão) possui finalidade técnica específica, distinta da do freio de serviço de acionamento hidráulico. No trânsito urbano e rodoviário brasileiro, essa finalidade EXCLUSIVA é:",
         options: [
           "Auxiliar a parada de emergência quando o veículo estiver em alta velocidade",
           "Manter o veículo imobilizado na posição de estacionamento ou parada no declive/aclive",
@@ -7845,7 +7845,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "fr_05",
         category: "mecanica",
-        statement: "Em veículos desprovidos de sistema ABS, a frenagem de emergência em pista molhada exige cuidado. O travamento total das rodas provoca a seguinte consequência direta:",
+        statement: "Em veículo desprovido de sistema antitravamento (ABS), a frenagem de emergência sobre pista de rolamento molhada pode levar ao travamento total das rodas. A consequência direta imediata desse travamento é:",
         options: [
           "Aumento imediato do atrito e parada instantaneous do veículo na pista",
           "Perda do controle da direção e arrastamento dos pneus sobre a pista de rolamento",
@@ -7877,7 +7877,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "fr_07",
         category: "mecanica",
-        statement: "O sistema de freio antitravamento (ABS) difere do sistema convencional porque atua no veículo da seguinte forma:",
+        statement: "O sistema de freio antitravamento (ABS) difere do sistema convencional pela atuação específica do módulo eletrônico-hidráulico durante a frenagem de emergência em pista com baixa aderência. Essa atuação é:",
         options: [
           "Bloqueia permanentemente as rodas traseiras para evitar a derrapagem lateral",
           "Impede o travamento das rodas durante a frenagem, mantendo a dirigibilidade do veículo",
@@ -7925,7 +7925,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "fr_10",
         category: "mecanica",
-        statement: "Ao acionar o pedal do freio de pé (serviço) e notar que ele 'afunda' até o assoalho sem oferecer resistência, a falha do sistema pode estar associada APENAS a:",
+        statement: "Ao acionar com força o pedal do freio de serviço, o condutor constata que ele afunda até o assoalho sem oferecer resistência significativa, sem retorno hidráulico. Essa falha do sistema de frenagem associa-se APENAS a:",
         options: [
           "Vazamento do fluido de freio ou presença de ar nas tubulações hidráulicas",
           "Travamento mecânico exclusivo da alavanca do freio de mão",
