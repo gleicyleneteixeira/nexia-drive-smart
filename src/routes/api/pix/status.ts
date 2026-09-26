@@ -63,6 +63,11 @@ export const Route = createFileRoute("/api/pix/status")({
                           updated_at: new Date().toISOString(),
                         })
                         .eq("id", tx.user_id);
+
+                      // Boas-vindas: este é o caminho que quase sempre confirma
+                      // antes do webhook da EFI. O envio nunca bloqueia a resposta.
+                      const { sendPixWelcomeForUser } = await import("@/lib/viperconnect");
+                      await sendPixWelcomeForUser(tx.user_id);
                     }
                   } catch (efiErr) {
                     console.error("Erro ao verificar status na EFI Pay:", efiErr);

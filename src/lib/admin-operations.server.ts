@@ -556,7 +556,7 @@ export const receivePixConfirmation = createServerFn({ method: "POST" })
     // "agora". Assim, uma cobrança antiga já vencida (ex.: plano pago há 60
     // dias, depois gerou outra cobrança sem pagar) NÃO reativa o acesso de
     // graça. Somente cobranças pagas cuja vigência ainda esteja válida contam.
-    let activatedTx: { txid: string; plan_type?: string | null; amount?: number | null; created_at?: string | null } | null = null;
+    let activatedTx: { txid: string; status?: string | null; plan_type?: string | null; amount?: number | null; created_at?: string | null } | null = null;
     let activatesAt: string | null = null;
     const now = Date.now();
     for (const tx of txList) {
@@ -612,6 +612,13 @@ export const receivePixConfirmation = createServerFn({ method: "POST" })
       .eq("id", data.userId);
     if (error) throw new Error(error.message);
 
+    // Boas-vindas: só quando esta reconciliação fez a transição real para
+    // CONCLUIDA (se a cobrança já estava concluída, a mensagem já saiu).
+    if (activatedTx.status !== "CONCLUIDA") {
+      const { sendPixWelcomeForUser } = await import("@/lib/viperconnect");
+      await sendPixWelcomeForUser(data.userId);
+    }
+
     return { ok: true, activated: true, expiresAt: activatesAt };
   });
 
@@ -655,6 +662,10 @@ export const registerPixPayment = createServerFn({ method: "POST" })
       .eq("id", data.userId);
 
     if (profErr) throw new Error("Erro ao ativar usuário: " + profErr.message);
+
+    // Boas-vindas: baixa manual também é confirmação de pagamento.
+    const { sendPixWelcomeForUser } = await import("@/lib/viperconnect");
+    await sendPixWelcomeForUser(data.userId);
 
     return { ok: true, txid, expiresAt };
   });

@@ -75,6 +75,10 @@ export async function handlePixWebhook(request: Request): Promise<Response> {
             continue;
           }
 
+          // Se o polling do checkout / reconciliação já tinha confirmado esta
+          // cobrança, a boas-vindas já foi enviada por lá — não repete.
+          const alreadyPaid = tx.status === "CONCLUIDA";
+
           // 2. Update transaction status
           await supabaseAdmin
             .from("pix_transactions")
@@ -108,19 +112,9 @@ export async function handlePixWebhook(request: Request): Promise<Response> {
           });
 
           // Disparo automático da mensagem de boas-vindas via ViperConnect (não bloqueia o webhook)
-          try {
-            if (profile?.phone) {
-              const { dispatchViperConnectWelcome } = await import("@/lib/viperconnect");
-              const welcomeName = profile.display_name || profile.email || "aluno(a)";
-              const res = await dispatchViperConnectWelcome(profile.phone, welcomeName);
-              if (!res.ok) {
-                console.warn(`Boas-vindas ViperConnect não enviada para ${tx.user_id}: ${res.error}`);
-              } else {
-                console.log(`Boas-vindas ViperConnect enviada para ${tx.user_id}.`);
-              }
-            }
-          } catch (wErr) {
-            console.error("Erro ao disparar boas-vindas ViperConnect:", wErr);
+          if (!alreadyPaid) {
+            const { sendPixWelcomeForUser } = await import("@/lib/viperconnect");
+            await sendPixWelcomeForUser(tx.user_id);
           }
         } else {
           console.warn(`Transação com txid ${txid} não encontrada no banco.`);

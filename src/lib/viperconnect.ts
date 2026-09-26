@@ -391,3 +391,33 @@ export async function dispatchViperConnectWelcome(
   });
   return res;
 }
+
+// Dispara a boas-vindas para um comprador a partir do userId.
+// Chamado por TODOS os caminhos que confirmam pagamento Pix (webhook EFI,
+// polling do checkout e reconciliação), para que a mensagem não dependa de
+// um único caminho de confirmação. Nunca lança: falha vira log.
+export async function sendPixWelcomeForUser(userId: string): Promise<void> {
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: profile } = await supabaseAdmin
+      .from("profiles")
+      .select("phone, display_name, email")
+      .eq("id", userId)
+      .maybeSingle();
+
+    if (!profile?.phone) {
+      console.warn(`Boas-vindas não enviada para ${userId}: telefone ausente no perfil.`);
+      return;
+    }
+
+    const name = profile.display_name || profile.email || "aluno(a)";
+    const res = await dispatchViperConnectWelcome(profile.phone, name);
+    if (!res.ok) {
+      console.warn(`Boas-vindas ViperConnect não enviada para ${userId}: ${res.error}`);
+    } else {
+      console.log(`Boas-vindas ViperConnect enviada para ${userId}.`);
+    }
+  } catch (err) {
+    console.error("Erro ao disparar boas-vindas ViperConnect:", err);
+  }
+}
