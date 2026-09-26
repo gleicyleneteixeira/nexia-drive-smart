@@ -242,7 +242,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe08",
         category: "legislacao",
-        statement: "O Código de Trânsito Brasileiro prevê a aplicação de penalidades administrativas aos condutores infratores. Dentre elas, a submissão obrigatória a curso de reciclagem será imposta ao condutor quando:",
+        statement: "O Código de Trânsito Brasileiro prevê a aplicação de penalidades administrativas aos condutores infratores. Dentre elas, a submissão obrigatória ao curso de reciclagem, com posterior retorno do direito de dirigir, será imposta ao condutor quando:",
         options: [
             "Tiver seu direito de dirigir suspenso, se envolver em acidente grave para o qual haja contribuído ou for condenado judicialmente por delito de trânsito.",
             "Cometer qualquer infração de natureza média ou leve no período probatório da PPD.",
@@ -601,7 +601,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe29",
         category: "direcao-defensiva",
-        statement: "Para realizar uma manobra segura de ultrapassagem em via de mão única e pista dupla de circulação rápida, o condutor defensivo deve prioritariamente adotar o seguinte procedimento técnico sequencial:",
+        statement: "Para realizar uma manobra segura de ultrapassagem em via de mão única e pista dupla de circulação rápida, o condutor defensivo deve, segundo a direção defensiva e o CTB, prioritariamente adotar o seguinte procedimento técnico sequencial:",
         options: [
             "Verificar os retrovisores e ponto cego, sinalizar com antecedência a intenção de mudança de faixa, acelerar de forma segura e retornar à faixa de origem após ver o veículo ultrapassado no retrovisor interno.",
             "Acionar a luz alta de alerta e efetuar a manobra o mais rápido possível rente ao para-choque traseiro do veículo da frente.",
@@ -812,7 +812,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe42",
         category: "primeiros-socorros",
-        statement: "Ao prestar socorro a uma vítima com queimaduras de segundo grau nos braços provocadas por explosão de radiador, qual o procedimento imediato de primeiros socorros adequado a ser executado no local?",
+        statement: "Ao prestar socorro a uma vítima com queimaduras de segundo grau nos braços provocadas por explosão de radiador, qual o procedimento imediato de primeiros socorros adequado a ser executado no local antes da chegada do SAMU?",
         options: [
             "Resfriar o local afetado com água limpa corrente em temperatura ambiente e cobrir suavemente com um pano úmido e limpo.",
             "Aplicar pomada de uso dermatológico ou manteiga caseira sobre a ferida para aliviar a ardência local.",
@@ -1342,7 +1342,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe74",
         category: "direcao-defensiva",
-        statement: "Sob neblina ou cerração densa que compromete severamente a visibilidade em rodovias, qual o procedimento técnico correto de iluminação e conduta defensiva a ser adotado pelo motorista?",
+        statement: "Sob neblina ou cerração densa que compromete severamente a visibilidade em rodovia de pista dupla com tráfego intenso, qual o procedimento técnico correto de iluminação e de conduta defensiva deve ser adotado pelo condutor?",
         options: [
             "Acender os faróis baixos (luz baixa) ou faróis de neblina se houver, reduzir a velocidade de forma progressiva e manter distância segura do veículo à frente.",
             "Ligar o farol alto de forma fixa para tentar furar a barreira de gotículas suspensas no ar.",
@@ -2619,7 +2619,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp01",
         category: "direcao-defensiva",
-        statement: "Sob condições adversas de tempo, como chuva forte, neblina ou cerração, a respeito do uso das luzes do veículo, é correto afirmar que o condutor deve:",
+        statement: "Em condições adversas de tempo, como chuva forte, neblina ou cerração densa, a visibilidade sobre a pista de rolamento fica severamente reduzida. A respeito do uso das luzes do veículo nessas situações, é correto afirmar que o condutor deve:",
         options: [
             "Manter as luzes de posição apagadas e ligar o pisca-alerta com o veículo em movimento.",
             "Ligar o farol alto para aumentar o feixe de luz e melhorar a visibilidade através da neblina.",
@@ -2752,7 +2752,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp08",
         category: "primeiros-socorros",
-        statement: "Em situações excepcionais, quando houver necessidade absoluta de movimentar uma vítima com suspeita de lesão na coluna antes da chegada do socorro especializado, o procedimento correto é:",
+        statement: "Em situações excepcionais, quando houver necessidade absoluta de movimentar uma vítima com suspeita de lesão na coluna cervical antes da chegada da equipe de resgate especializada à cena, o procedimento técnico correto a ser executado é:",
         options: [
             "Puxar a vítima pelos braços ou pelas pernas o mais rápido possível para retirá-la do local",
             "Levantar a vítima individualmente, colocando-a sentada no banco de trás de um veículo particular",
@@ -2821,7 +2821,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp12",
         category: "legislacao",
-        statement: "O condutor, com o braço esquerdo na posição HORIZONTAL para fora do veículo (estendido para o lado), está sinalizando que vai:",
+        statement: "Na sinalização de braço prevista no CTB quando o veículo se aproxima de local sem semáforo ou agente de trânsito, o condutor estende o braço esquerdo para fora do veículo na posição HORIZONTAL (estendido para o lado). Esse gesto sinaliza que ele vai:",
         options: [
             "Diminuir a marcha do veículo, avisando aos condutores que vêm atrás a intenção de reduzir a velocidade.",
             "Parar o veículo imediatamente, indicando parada total no leito da via aos demais condutores.",
@@ -2841,7 +2841,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp13",
         category: "legislacao",
-        statement: "O condutor com o braço esquerdo para fora do veículo, dobrado no cotovelo com a mão apontando para CIMA, está sinalizando que vai:",
+        statement: "Na sinalização de braço do CTB, utilizada quando o veículo não dispõe de equipamento eletrônico de sinalização, o condutor mantém o braço esquerdo para fora, dobrado no cotovelo com a mão apontando para CIMA. Esse gesto convencional sinaliza que o condutor vai:",
         options: [
             "Virar à esquerda, indicando a intenção de realizar a conversão para o lado esquerdo da via.",
             "Virar à direita, comunicando aos condutores de trás a intenção de realizar a conversão para o lado direito da via.",
@@ -2879,7 +2879,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp15",
         category: "legislacao",
-        statement: "Antes de efetuar qualquer manobra que implique deslocamento lateral (mudança de faixa, conversão, ultrapassagem), o condutor é OBRIGADO a:",
+        statement: "Antes de efetuar qualquer manobra que implique deslocamento lateral na pista de rolamento, como mudança de faixa, conversão à esquerda ou ultrapassagem de veículo, o condutor é OBRIGADO, pelas normas gerais do CTB, a:",
         options: [
             "Apenas observar o trânsito pelo retrovisor interno e iniciar a manobra imediatamente, sem qualquer sinalização prévia.",
             "Buzinar três vezes consecutivas para alertar os demais condutores e seguir em frente realizando a manobra normalmente.",
@@ -3922,7 +3922,7 @@ export const QUESTIONS: Question[] = [
         "id": "placa_a32a_alta",
         "category": "legislacao",
         "image_url": "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/placa-transito-de-pedestre-A32a.webp",
-        "statement": "Ao trafegar por uma via urbana, um condutor observa a placa de advertência A-32a. Diante dessa sinalização, de acordo com o Manual Brasileiro de Sinalização de Trânsito do CONTRAN e o Código de Trânsito Brasileiro (CTB), qual é o significado correto da placa e qual a conduta esperada do condutor ao se aproximar do local?",
+        "statement": "Ao trafegar por via urbana, o condutor observa a placa de advertência A-32a. Pelo Manual Brasileiro de Sinalização de Trânsito do CONTRAN e pelo CTB, qual é o significado correto dessa placa e qual a conduta esperada do condutor ao se aproximar do local?",
         "options": [
             "A placa significa 'Trânsito de Pedestres'. Advertindo sobre a travessia habitual ou a presença de pedestres na via, o condutor deve redobrar a atenção e diminuir a velocidade, não sendo este local obrigatoriamente marcado com faixa delimitada.",
             "A placa significa 'Passagem Sinalizada de Pedestres'. O condutor deve parar obrigatoriamente o veículo antes do local indicado, pois a sinalização indica obrigatoriedade de preferência devido à faixa pintada na pista.",
@@ -3943,7 +3943,7 @@ export const QUESTIONS: Question[] = [
         "id": "placa_regulamentacao_advertencia_alta",
         "category": "legislacao",
         "image_url": "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/placa-area-escolar-A-33A.webp",
-        "statement": "Ao conduzir um veículo por uma via urbana, o motorista observa duas placas de sinalização vertical: a primeira proíbe o acionamento de buzina ou sinal sonoro (R-20) e a segunda alerta para a proximidade de uma área escolar (A-33a). De acordo com o Código de Trânsito Brasileiro (CTB) e o Manual de Sinalização do CONTRAN, como são classificadas essas placas e qual a natureza de suas ordens?",
+        "statement": "Ao conduzir por via urbana, o motorista observa duas placas: a primeira proíbe o acionamento de buzina ou sinal sonoro (R-20) e a segunda alerta para a proximidade de área escolar (A-33a). Pelo CTB e pelo Manual do CONTRAN, como classificar essas placas quanto à sua natureza e ordem?",
         "options": [
             "A primeira é uma Placa de Regulamentação (R-20), de caráter imperativo e punitivo; a segunda é uma Placa de Advertência (A-33a), de caráter informativo e de alerta, que indica a proximidade de área escolar.",
             "A primeira é uma Placa de Advertência (R-20), que apenas sugere a não utilização de sinais sonoros; a segunda é uma Placa de Regulamentação (A-33a), que impõe o limite obrigatório de parada.",
@@ -3964,7 +3964,7 @@ export const QUESTIONS: Question[] = [
         "id": "placa_r20_proibido_buzina_alta",
         "category": "legislacao",
         "image_url": "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/placa-R-20.jpg",
-        "statement": "Ao trafegar por uma via urbana durante o período noturno nas proximidades de um hospital, o condutor visualiza a placa de sinalização R-20 instalada na via. Considerando os preceitos do Código de Trânsito Brasileiro (CTB) e as normas de sinalização do CONTRAN, assinale a alternativa que indica corretamente a classificação dessa placa, seu significado e a implicação do seu desrespeito:",
+        "statement": "Ao trafegar por via urbana durante o período noturno nas proximidades de hospital, o condutor visualiza a placa R-20. Pelo CTB e pelas normas de sinalização do CONTRAN, assinale a alternativa que indica corretamente a classificação dessa placa, seu significado e a implicação de seu desrespeito:",
         "options": [
             "Trata-se de uma Placa de Regulamentação que proíbe o uso da buzina ou sinal sonoro no local indicado. O desrespeito a esta ordem imperativa constitui infração de trânsito de natureza leve, sujeita a penalidade de multa.",
             "Trata-se de uma Placa de Advertência que apenas recomenda evitar o uso de sinal sonoro por cortesia urbana, não gerando autuação por infração de trânsito em caso de descumprimento.",
@@ -4069,7 +4069,7 @@ export const QUESTIONS: Question[] = [
         id: "placa_a42a_inicio_pista_dupla_alta_01",
         category: "legislacao",
         image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/54.png",
-        statement: "Enquanto trafega por uma rodovia de pista simples, o condutor observa a placa de advertência A-42a. Qual é a correta interpretação desta sinalização quanto às condições da via adiante?",
+        statement: "Enquanto trafega por uma rodovia de pista simples, o condutor observa a placa de advertência A-42a sinalizando mudança nas condições da via. Qual é a correta interpretação dessa sinalização quanto às condições da via adiante?",
         options: [
             "Adverte que a pista simples passará a ter sentidos opostos separados por um canteiro central ou barreira física (Início de pista dupla).",
             "Adverte sobre o fim do canteiro central, voltando a pista a operar com fluxo em pista simples.",
@@ -4090,7 +4090,7 @@ export const QUESTIONS: Question[] = [
         id: "placa_a14_semaforo_frente_alta_01",
         category: "legislacao",
         image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/50.jpg",
-        statement: "Em um trecho periurbano de velocidade elevada, o condutor visualiza a placa de advertência A-14. Qual é a finalidade dessa sinalização e a ação preventiva adequada a ser adotada?",
+        statement: "Em trecho periurbano de velocidade elevada, o condutor visualiza a placa de advertência A-14 sinalizando controle semafórico à frente. Qual é a finalidade dessa sinalização e a ação preventiva adequada a ser adotada pelo condutor?",
         options: [
             "Advertir sobre a existência de controle semafórico adiante; o condutor deve reduzir a velocidade e preparar-se para eventual parada.",
             "Indicar a obrigatoriedade de parada imediata no local onde a placa está instalada.",
@@ -4530,7 +4530,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "nova_vias_coletoras_conceito_alta_28",
         category: "legislacao",
-        statement: "O Código de Trânsito Brasileiro classifica as vias urbanas segundo a sua função operacional. De acordo com a definição do CTB, como são caracterizadas e conceituadas as VIAS COLETORAS?",
+        statement: "O Código de Trânsito Brasileiro classifica as vias abertas à circulação segundo a sua função operacional no perímetro urbano. De acordo com a definição expressa do CTB, como são caracterizadas e conceituadas as VIAS COLETORAS?",
         options: [
             "Vias destinadas apenas ao acesso a áreas restritas ou estabelecimentos específicos.",
             "Vias caracterizadas por interseções em nível, destinadas a coletar e distribuir o trânsito que entra ou sai das vias de trânsito rápido ou arteriais.",
@@ -4691,7 +4691,7 @@ export const QUESTIONS: Question[] = [
         id: "nova_placa_a28_pista_escorregadia_06",
         category: "legislacao",
         image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/Placas-de-transito-estudacnh-pista-escorregadia-A-28.png",
-        statement: "Ao aproximar-se de um trecho rodoviário, o condutor observa a placa de advertência A-28. Qual é o significado regulamentar correto dessa sinalização e a atitude preventiva exigida?",
+        statement: "Ao aproximar-se de um trecho rodoviário com pavimento potencialmente escorregadio, o condutor observa a placa de advertência A-28. Qual é o significado correto dessa sinalização, segundo o Manual do CONTRAN, e a atitude preventiva exigida?",
         options: [
             "Atravessando pista alagada, alertando para o risco de calço hidráulico no motor.",
             "Pista com aquaplanagem, indicando a obrigatoriedade do uso de correntes nos pneus.",
@@ -4731,7 +4731,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "nova_transito_condicoes_seguras_direito_08",
         category: "legislacao",
-        statement: "O Código de Trânsito Brasileiro institui normas fundamentais voltadas à preservação da vida e do meio ambiente. Segundo o texto expresso do Art. 1º do CTB, o trânsito em condições seguras é:",
+        statement: "O Código de Trânsito Brasileiro institui normas fundamentais voltadas à preservação da vida e do meio ambiente no uso das vias. Segundo o texto expresso do Art. 1º do CTB, o trânsito em condições seguras é considerado:",
         options: [
             "Um direito de todos e dever dos órgãos e entidades componentes do Sistema Nacional de Trânsito.",
             "Um privilégio exclusivo dos motoristas devidamente habilitados nas categorias profissionais.",
@@ -5647,7 +5647,7 @@ export const QUESTIONS: Question[] = [
     {
         id: 'detran_ilum_003_alta',
         category: 'legislacao',
-        statement: 'À noite em via não iluminada, ao avistar veículo em sentido oposto ou trafegando logo à frente no mesmo sentido, o condutor deve utilizar:',
+        statement: "Durante a condução noturna em via não iluminada, ao avistar veículo em sentido oposto ou trafegando logo à frente no mesmo sentido, a fim de não ofuscar os demais usuários, o condutor deve, pelas regras do CTB, utilizar:",
         options: [
             'Luz alta contínua, fazendo apenas o piscar momentâneo ao aproximar a menos de 50m.',
             'Luz baixa, devendo alternar da luz alta para a baixa para não ofuscar os demais condutores.',
@@ -5887,7 +5887,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_007",
         category: "legislacao",
-        statement: "As placas de sinalização vertical de Indicação que possuem fundo na cor predominantemente VERDE têm por objetivo principal:",
+        statement: "No Manual Brasileiro de Sinalização de Trânsito do CONTRAN, as placas de sinalização vertical de Indicação de fundo predominantemente VERDE, aplicadas sobretudo em rodovias e vias expressas, têm por objetivo principal:",
         options: [
             "Orientar os condutores quanto às direções, destinos, distâncias e rotas, sendo amplamente aplicadas em rodovias e vias expressas.",
             "Alertar sobre áreas de preservação ambiental e parques ecológicos nacionais.",
@@ -5907,7 +5907,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_008",
         category: "direcao-defensiva",
-        statement: "A afirmação 'No trânsito, o equilíbrio emocional é tão importante quanto o sistema de freios do veículo' expressa um princípio fundamental da Direção Defensiva. Isso significa que:",
+        statement: "A afirmação de que no trânsito o equilíbrio emocional é tão importante quanto o sistema de freios do veículo expressa um princípio fundamental da Direção Defensiva. Segundo os conceitos do CTB, isso significa que:",
         options: [
             "A estabilidade psíquica e o autocontrole do condutor são fatores essenciais de segurança passiva e ativa para a prevenção de sinistros.",
             "Condutores sob forte estresse emocional estão isentos de responsabilidade jurídica em caso de colisão.",
@@ -6027,7 +6027,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_014",
         category: "direcao-defensiva",
-        statement: "Ao entrar em uma via de trânsito rápido ou rodovia através de uma alça de acesso, o condutor se depara com a 'faixa de aceleração'. Qual é a função técnica dessa faixa e a postura correta a adotar?",
+        statement: "Ao entrar em uma via de trânsito rápido ou rodovia através de uma alça de acesso, o condutor se depara com a faixa de aceleração. Qual é a função técnica dessa faixa e a postura correta a ser adotada pelo condutor?",
         options: [
             "Aumentar a velocidade do veículo na faixa suplementar para equipará-la ao fluxo da via principal antes de efetuar a fusão (incorporação).",
             "Imobilizar o veículo no início da faixa e aguardar até que a via principal esteja totalmente deserta.",
@@ -6067,7 +6067,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_016",
         category: "direcao-defensiva",
-        statement: "Sob o conceito técnico de Cidadania e Direção Defensiva, qual das seguintes opções expressa o verdadeiro perfil de um 'bom condutor'?",
+        statement: "No contexto dos conceitos de cidadania e de direção defensiva previstos na segurança do trânsito, qual das opções a seguir expressa o verdadeiro perfil de um bom condutor, aquele que efetivamente preserva vidas?",
         options: [
             "Aquele que cumpre rigorosamente as normas de trânsito, antecipa perigos e age com cortesia, abrindo mão de seu direito para preservar vidas.",
             "Aquele que trafega sempre no limite máximo de velocidade para não atrasar os demais condutores.",
@@ -6127,7 +6127,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_019",
         category: "legislacao",
-        statement: "Ao trafegar por uma via urbana, o condutor observa elementos de sinalização vertical e dispositivos temporários com fundo na cor LARANJA. Essa coloração específica indica:",
+        statement: "Ao trafegar por via urbana, o condutor observa elementos de sinalização vertical e dispositivos temporários de obras com fundo na cor LARANJA, previstos no Manual do CONTRAN. Essa coloração específica indica:",
         options: [
             "Sinalização de Obras e situações temporárias na via, exigindo maior atenção e redução de velocidade.",
             "Pontos turísticos de interesse histórico e cultural na região.",
@@ -6247,7 +6247,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_025",
         category: "direcao-defensiva",
-        statement: "A sinalização antecedente de manobras mediante uso de seta (luz indicadora de direção) é um dever de todo condutor. O objetivo fundamental dessa exigência legal e defensiva é:",
+        statement: "A sinalização antecedente de manobras mediante uso de seta (luz indicadora de direção) é um dever de todo condutor previsto no CTB. O objetivo fundamental dessa exigência legal e dessa direção defensiva é:",
         options: [
             "Garantir a previsibilidade das ações do motorista, permitindo que os demais usuários da via reajam com segurança.",
             "Evitar a descarga excessiva da bateria do veículo durante deslocamentos noturnos.",
@@ -7541,7 +7541,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "rst_01",
         category: "legislacao",
-        statement: "O uso do cinto de segurança é obrigatório para condutor e passageiros em todas as vias do território nacional. A exceção a essa regra aplica-se APENAS em qual situação?",
+        statement: "O uso do cinto de segurança é obrigatório para condutor e passageiros em todas as vias terrestres abertas à circulação do território nacional, sob pena de multa. A exceção a essa regra aplica-se APENAS em qual situação?",
         options: [
           "Em trajetos curtos dentro do perímetro urbano",
           "Para passageiros no banco traseiro em vias coletoras",
@@ -7557,7 +7557,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "rst_02",
         category: "legislacao",
-        statement: "A ultrapassagem de outro veículo em movimento na pista de rolamento deve ser realizada SOMENTE pela esquerda. Em qual hipótese é permitida a ultrapassagem pela direita?",
+        statement: "Pelo CTB, a ultrapassagem de outro veículo em movimento na pista de rolamento deve ser realizada SOMENTE pela esquerda. Em qual hipótese excepcional essa ultrapassagem pela direita é permitida pela legislação?",
         options: [
           "Quando o veículo da frente estiver na faixa da esquerda e em baixa velocidade",
           "Quando o veículo a ser ultrapassado estiver sinalizando que vai dobrar à esquerda",
@@ -7573,7 +7573,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "rst_03",
         category: "direcao-defensiva",
-        statement: "O condutor NUNCA deve acionar o pisca-alerta do veículo em movimento na pista de rolamento, EXCETO quando:",
+        statement: "Pelas normas gerais de circulação e conduta do CTB, o condutor NUNCA deve manter o pisca-alerta do veículo acionado durante a circulação normal na pista de rolamento, EXCETO nas seguintes hipóteses legalmente previstas:",
         options: [
           "Estiver trafegando em velocidade reduzida sob cerração ou neblina intensa",
           "A sinalização da via assim o determinar ou em imobilizações de emergência",
@@ -7589,7 +7589,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "rst_04",
         category: "legislacao",
-        statement: "A preferência de passagem em interseção não sinalizada pertence EXCLUSIVAMENTE ao veículo que se aproxima pela direita do condutor. Essa regra NUNCA se aplica quando:",
+        statement: "A preferência de passagem em interseção não sinalizada pertence EXCLUSIVAMENTE ao veículo que se aproxima pela direita do condutor, nos termos do Art. 29 do CTB. Essa regra geral NUNCA se aplica quando:",
         options: [
           "Um dos veículos estiver circulando por uma rotatória ou ingressando de rodovia",
           "Ambos os veículos transitarem por vias urbanas coletoras perpendiculares",
@@ -7605,7 +7605,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "rst_05",
         category: "legislacao",
-        statement: "A circulação de veículos automotores sobre passeios, calçadas e canteiros centrais é expressamente proibida. O tráfego nesses locais é permitido APENAS para:",
+        statement: "Pelo CTB, a circulação de veículos automotores sobre passeios, calçadas e canteiros centrais é expressamente proibida. A transposição desses locais pelo veículo é admitida APENAS nas seguintes finalidades:",
         options: [
           "Evitar congestionamentos em vias arteriais de fluxo intenso",
           "Entrar ou sair de imóveis ou de áreas ladeadas de estacionamento",
@@ -7621,7 +7621,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "rst_06",
         category: "direcao-defensiva",
-        statement: "Ao transitar por uma via em declive acentuado, o condutor NUNCA deve colocar o câmbio em marcha neutra (ponto morto). Qual é o risco técnico dessa prática?",
+        statement: "Pela direção defensiva, ao transitar por via urbana ou rodovia em declive acentuado, o condutor NUNCA deve colocar o câmbio em marcha neutra (ponto morto). Qual é o risco técnico dessa prática perigosa?",
         options: [
           "Acelerar o desgaste do motor pela falta de lubrificação",
           "Perder a ação do freio motor e sobrecarregar o sistema de freios de serviço",
@@ -7637,7 +7637,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "rst_07",
         category: "legislacao",
-        statement: "A luz de buzina deve ser utilizada em toques breves. O uso da buzina é terminantemente proibido e NUNCA deve ocorrer em qual situação?",
+        statement: "Pela legislação de trânsito, a luz de buzina deve ser utilizada apenas em toques breves, como advertência destinada a prevenir acidentes. Seu uso é terminantemente proibido e NUNCA deve ocorrer em qual situação?",
         options: [
           "Fora do perímetro urbano para advertir sobre intenção de ultrapassar",
           "Entre as vinte e duas e as seis horas ou em locais sinalizados com proibição",
@@ -7653,7 +7653,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "rst_08",
         category: "legislacao",
-        statement: "Os veículos de emergência (ambulâncias e polícia) têm prioridade de trânsito e gozam de livre circulação SOMENTE quando:",
+        statement: "Conforme as normas do CTB, os veículos de emergência (ambulâncias e viaturas policiais) têm prioridade de trânsito e gozam das prerrogativas de livre circulação e de estacionamento em qualquer via SOMENTE quando:",
         options: [
           "Estiverem transitando por vias de trânsito rápido no perímetro urbano",
           "Estiverem em serviço de urgência e devidamente identificados por alarme e luzes",
@@ -7669,7 +7669,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "rst_09",
         category: "legislacao",
-        statement: "A parada de um veículo no bordo da pista para embarque ou desembarque de passageiros deve ocorrer EXCLUSIVAMENTE sob qual condição legal?",
+        statement: "Pelo CTB, a parada de um veículo junto ao bordo da pista no perímetro urbano, para embarque ou desembarque de passageiros, deve ocorrer EXCLUSIVAMENTE sob qual condição legal prevista nas normas de trânsito?",
         options: [
           "Pelo tempo estritamente necessário e sem interromper a fluidez do trânsito",
           "Com o pisca-alerta ligado em qualquer trecho da via arterial",
@@ -7685,7 +7685,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "rst_10",
         category: "legislacao",
-        statement: "Em vias urbanas sem sinalização regulamentadora, a velocidade máxima de 80 km/h é permitida EXCLUSIVAMENTE em quais vias?",
+        statement: "Em análise das regras de velocidade do Art. 61 do CTB, o condutor pergunta: quando não existir sinalização regulamentadora de velocidade, o limite de 80 km/h é admitido nas vias urbanas EXCLUSIVAMENTE em qual classe de via?",
         options: [
           "Nas vias arteriais que cruzam o perímetro urbano",
           "Nas vias coletoras adjacentes a áreas residenciais",
@@ -7717,7 +7717,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "rst_12",
         category: "legislacao",
-        statement: "O tráfego de bicicletas deve ocorrer nos bordos da pista de rolamento no mesmo sentido dos veículos. A circulação em calçadas é permitida APENAS quando:",
+        statement: "Pelo CTB, o tráfego de bicicletas deve ocorrer nos bordos da pista de rolamento, no mesmo sentido dos veículos automotores. A circulação de bicicletas sobre calçadas e passeios é permitida APENAS quando:",
         options: [
           "O trânsito na pista de rolamento estiver muito congestionado",
           "Houver autorização expressa do órgão com jurisdição e sinalização adequada",
@@ -7765,7 +7765,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "rst_15",
         category: "legislacao",
-        statement: "A conversão à esquerda em vias urbanas de sentido duplo de circulação deve ser executada APENAS após o condutor:",
+        statement: "Em via urbana de pista simples de sentido duplo de circulação, a conversão à esquerda é manobra sujeita às regras de posicionamento e de preferência do CTB e só deve ser executada APENAS após o condutor:",
         options: [
           "Aproximar o veículo do bordo esquerdo da pista de rolamento",
           "Aproximar o veículo da linha divisória do fluxo e ceder preferência ao sentido oposto",
@@ -7797,7 +7797,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "fr_02",
         category: "direcao-defensiva",
-        statement: "Ao transitar sob chuva intensa em uma rodovia, o veículo perde a aderência dos pneus com a pista e começa a flutuar sobre a água (aquaplanagem). O condutor NUNCA deve:",
+        statement: "Ao transitar sob chuva intensa em rodovia de pista simples, o veículo perde a aderência dos pneus com a pista de rolamento e começa a flutuar sobre a água (aquaplanagem). Pela direção defensiva, o condutor NUNCA deve:",
         options: [
           "Pisar bruscamente no pedal de freio nem virar o volante de forma repentina",
           "Tirar suavemente o pé do acelerador para reduzir a velocidade",
@@ -7829,7 +7829,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "fr_04",
         category: "direcao-defensiva",
-        statement: "Durante um trecho longo em declive acentuado, a utilização contínua APENAS do freio de pé pode provocar o superaquecimento do sistema. Para evitar a perda de eficiência, o condutor deve utilizar:",
+        statement: "Durante um trecho longo em declive acentuado de rodovia, a utilização contínua APENAS do freio de pé pode provocar o superaquecimento do sistema de frenagem. Para evitar a perda de eficiência e o fade do freio, o condutor deve utilizar:",
         options: [
           "O freio de mão em pequenos toques simultâneos com o freio de pé",
           "O freio motor, engatando uma marcha reduzida compatível com a descida",
@@ -7893,7 +7893,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "fr_08",
         category: "direcao-defensiva",
-        statement: "Em uma curva em pista de rolamento escorregadia, o condutor NUNCA deve acionar o freio de pé com violência porque essa atitude poderá provocar:",
+        statement: "Pela física do veículo e pela direção defensiva, ao transpor uma curva em pista de rolamento escorregadia, o condutor NUNCA deve acionar o freio de pé com violência, porque essa atitude poderá provocar:",
         options: [
           "O desengate automático do câmbio e aumento de velocidade do motor",
           "A derrapagem do veículo por travamento das rodas e perda de aderência",
