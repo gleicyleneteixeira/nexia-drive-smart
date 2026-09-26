@@ -448,12 +448,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe20",
         category: "infracoes",
-        statement: "Um pedestre atravessa na faixa de pedestres, sem semáforo, e o condutor de veículo automotor se aproxima, não para e passa com o veículo sobre a faixa, obrigando o pedestre a se esquivar. Pelo CTB, o que essa conduta representa?",
+        statement: "Em via urbana sem semáforo, pedestre atravessa pela faixa sinalizada; o condutor se aproxima, não reduz e passa de veículo sobre a pista de rolamento, obrigando o pedestre a se esquivar. Pelo CTB, essa conduta representa:",
         options: [
-            "Infração gravíssima, com multa e risco de ter o veículo removido (guinchado).",
-            "Infração grave, que vira só advertência se o pedestre conseguir sair ileso.",
-            "Infração média, com multa e apreensão temporária da carteira.",
-            "Só infração leve, sem punição se não bater em ninguém.",
+            "Infração gravíssima de trânsito, com multa e medida administrativa de remoção do veículo.",
+            "Infração grave, convertível em advertência por escrito caso o pedestre saia ileso.",
+            "Infração média, com multa e suspensão preventiva do direito de dirigir.",
+            "Infração leve, aplicável apenas quando houver colisão com o pedestre."
         ],
         correctIndex: 0,
         explanation: 'N\u00E3o parar para o pedestre na faixa \u00E9 infra\u00E7\u00E3o grav\u00EDssima.',
@@ -465,7 +465,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe21",
         category: "infracoes",
-        statement: "Ao planejar uma viagem familiar em veículo de passeio de passeio, o condutor deve acomodar uma criança de 9 anos de idade e 1,35 metros de altura. Conforme as normas atualizadas do CTB, a forma de transporte legalmente exigida para essa criança é:",
+        statement: "Em viagem familiar com veículo de passeio, a família pretende transportar criança de 9 anos e 1,35 m de altura no banco dianteiro. Conforme as normas atualizadas do CTB, a forma de transporte legalmente exigida é:",
         options: [
             "No banco traseiro, utilizando obrigatoriamente o cinto de segurança de três pontos ou dispositivo de retenção equivalente.",
             "No banco dianteiro, desde que o cinto de segurança seja regulado na altura máxima do ombro.",
@@ -482,7 +482,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe22",
         category: "infracoes",
-        statement: "Ao transitar por uma via urbana de fluxo intenso com múltiplas faixas no mesmo sentido, um condutor depara-se com um veículo lento na faixa da esquerda e decide realizar a ultrapassagem utilizando a faixa da direita. Sob as regras gerais de circulação do CTB, tal manobra é:",
+        statement: "Em via urbana com duas faixas no mesmo sentido, o condutor encontra um veículo mais lento na faixa da esquerda e transpõe para a faixa da direita a fim de ultrapassá-lo, sem que o outro veículo sinalize conversão à esquerda. Pela regra geral do Art. 29 do CTB, essa conduta é:",
         options: [
             "Infração de trânsito de natureza média, exceto se o veículo da esquerda estiver sinalizando a intenção de entrar à esquerda.",
             "Infração de natureza grave, sem qualquer hipótese de excludente de ilicitude por fluxo intenso.",
@@ -1226,12 +1226,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe67",
         category: "infracoes",
-        statement: "Um motorista se envolve num acidente com gente machucada precisando de socorro na hora. Ele poderia ajudar com segurança, mas prefere fugir sem ajudar e sem chamar o resgate. Pelo CTB, como essa fuga é classificada?",
+        statement: "Motorista envolve-se em acidente com vítimas feridas que precisam de socorro imediato; havia condições de prestar auxílio, opta por fugir sem socorrer e sem acionar o resgate. Pelo CTB e pelo Código Penal, essa conduta é classificada como:",
         options: [
-            "Infração gravíssima e também crime de trânsito (Art. 304 do CTB e Art. 135 do Código Penal).",
-            "Só infração grave, com conta financeira cobrada do dono do carro.",
-            "Infração média, punida só com multa simples se ele nunca foi multado antes.",
-            "Nada de multa se outras pessoas socorrerem as vítimas depois.",
+            "Infração gravíssima de trânsito e também crime de trânsito (Art. 304 do CTB e Art. 135 do Código Penal).",
+            "Apenas infração grave de trânsito, com responsabilização exclusiva do proprietário do veículo.",
+            "Infração média, punida com multa simples apenas na primeira ocorrência do condutor.",
+            "Conduta atípica, se posteriormente outras pessoas prestarem socorro às vítimas."
         ],
         correctIndex: 0,
         explanation: 'Fugir do local do acidente sem ajudar as v\u00EDtimas \u00E9 uma infra\u00E7\u00E3o grav\u00EDssima e um crime de tr\u00E2nsito.',
@@ -1576,7 +1576,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "q5",
         category: "infracoes",
-        statement: "Um condutor é submetido ao teste do etilômetro durante fiscalização ordinária da Lei Seca. O aparelho acusa teor alcoólico superior ao limite de tolerância estabelecido na legislação. De acordo com o Art. 165 do CTB, a infração praticada e sua respectiva penalidade pecuniária administrativa são:",
+        statement: "Condutor é submetido ao teste do etilômetro em fiscalização da Lei Seca e o aparelho acusa teor alcoólico superior ao limite de tolerância. Pelo Art. 165 do CTB, a infração praticada e sua penalidade são:",
         options: [
             "Infração de natureza grave, punida com multa no valor de cinco vezes o valor base.",
             "Infração de natureza gravíssima, punida com multa administrativa multiplicada por dez vezes e suspensão do direito de dirigir por 12 meses.",
@@ -2214,12 +2214,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q31",
         category: "infracoes",
-        statement: "Você parou em estacionamento e deixou o veículo automotor em vaga reservada a PCD sem exibir a credencial no painel. O CTB tipifica a conduta por infração e penalidade. Se você usa vaga de pessoa com deficiência sem credencial do órgão de trânsito, qual é a infração e a consequência?",
+        statement: "Em estacionamento privado de uso coletivo, o condutor estaciona o veículo em vaga reservada a Pessoas com Deficiência sem expor no painel a credencial emitida pelo órgão de trânsito. Pelo CTB, essa conduta tipifica:",
         options: [
-            "Leve, só advertência verbal ou escrita, sem pontos na CNH e sem remover o veículo.",
-            "Média, com multa e 4 pontos na CNH, mas sem remover o veículo.",
-            "Grave, com multa e 5 pontos, podendo virar advertência se a vaga estava vazia há tempo.",
-            "Gravíssima, com multa e 7 pontos na CNH, mais remoção do veículo.",
+            "Infração leve, com advertência oral do agente e sem pontuação na CNH.",
+            "Infração média, com multa e pontuação de 4 pontos, sem medida administrativa.",
+            "Infração grave, com multa e pontuação de 5 pontos, convertível em advertência.",
+            "Infração gravíssima, com multa, pontuação de 7 pontos na CNH e remoção do veículo."
         ],
         correctIndex: 3,
         explanation: 'Infra\u00E7\u00E3o grav\u00EDssima \u2014 7 pontos e multa. O mesmo vale para vaga de idoso (grave).',
@@ -2231,12 +2231,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q32",
         category: "infracoes",
-        statement: "Em fiscalização em via urbana, constataram que você conduz sem nunca ter obtido CNH nem PPD. O CTB trata isso com multa agravada e retenção do veículo automotor. Para quem é flagrado conduzindo sem nenhuma habilitação, qual é a infração e a medida prevista?",
+        statement: "Em fiscalização em via urbana do perímetro, o agente constata que o condutor está dirigindo sem possuir CNH nem Permissão para Dirigir (PPD). Pelo CTB, a infração aplicável e a medida administrativa previstas são:",
         options: [
-            "Leve, só advertência escrita na primeira vez, sem multa e sem reter o veículo.",
-            "Média, com multa e 4 pontos, podendo seguir viagem se assinar um termo.",
-            "Grave, com multa e 5 pontos, sem reter o veículo por ser só papelada.",
-            "Gravíssima, com multa vezes 3 e veículo retido até chegar motorista habilitado, podendo até virar crime.",
+            "Infração leve, com advertência escrita na primeira ocorrência e sem retenção do veículo.",
+            "Infração média, com multa e pontuação de 4 pontos, permitindo o seguimento da viagem.",
+            "Infração grave, com multa e pontuação de 5 pontos, sem retenção do veículo.",
+            "Infração gravíssima, com multa multiplicada por 3 e retenção do veículo até a chegada de condutor habilitado, podendo configurar crime."
         ],
         correctIndex: 3,
         explanation: 'Infra\u00E7\u00E3o grav\u00EDssima \u2014 multa tripla e o carro fica retido at\u00E9 aparecer um motorista habilitado.',
@@ -2248,12 +2248,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q33",
         category: "infracoes",
-        statement: "Você quer levar sua filha de 6 anos no banco da frente porque ela enxerga melhor a viagem. Mas o CTB e a norma do CONTRAN têm regra dura pra levar criança com segurança. Se você leva criança menor de 10 anos no banco dianteiro, sem cadeirinha certa, como fica a infração?",
+        statement: "Pais pretendem transportar filha de 6 anos no banco dianteiro do veículo de passeio, sem cadeira ou dispositivo de retenção adequado à idade. Pelo CTB e pelas normas do CONTRAN, essa conduta configura infração de natureza:",
         options: [
-            "Leve, com multa e 3 pontos, sem segurar o carro.",
-            "Média, com multa e 4 pontos, podendo seguir com a criança na frente.",
-            "Grave, com multa e 5 pontos, sem reter nem remover o carro.",
-            "Gravíssima, com multa e 7 pontos, pois menor de 10 anos vai atrás em cadeirinha certa pra idade.",
+            "Infração leve, com multa e pontuação de 3 pontos na CNH do condutor.",
+            "Infração média, com multa e pontuação de 4 pontos, permitindo o transporte na frente.",
+            "Infração grave, com multa e pontuação de 5 pontos, sem retenção ou remoção do veículo.",
+            "Infração gravíssima, com multa e pontuação de 7 pontos, pois crianças menores de 10 anos viajam no banco traseiro com dispositivo adequado."
         ],
         correctIndex: 3,
         explanation: 'Grav\u00EDssima \u2014 crian\u00E7as at\u00E9 10 anos v\u00E3o atr\u00E1s, em dispositivo adequado \u00E0 idade.',
@@ -2267,12 +2267,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q34",
         category: "infracoes",
-        statement: "Dois motoristas são flagrados pela Polícia Rodoviária tirando racha, com arrancadas e disputa de velocidade em via pública aberta, botando em risco todo mundo na via. Pelo CTB, como essa conduta é classificada e o que acontece com quem faz isso?",
+        statement: "Dois motoristas são flagrados pela Polícia Rodoviária em disputa de velocidade e arrancadas (\"racha\") em via pública aberta, colocando em risco os demais usuários. Pelo CTB, a classificação e as consequências dessa conduta são:",
         options: [
-            "Infração média, com multa, 4 pontos na CNH e sem recolher documento nem remover o carro.",
-            "Infração grave, com multa, 5 pontos e chance de virar advertência se não houver dano material.",
-            "Infração gravíssima com multa de dez vezes, suspensão da CNH, recolhimento da habilitação, remoção do carro e ainda crime de trânsito.",
-            "Só advertência verbal do agente, se a disputa parar na hora e ninguém se machucar.",
+            "Infração média, com multa, 4 pontos na CNH e nenhuma medida administrativa.",
+            "Infração grave, com multa, 5 pontos e conversão em advertência na primeira vez.",
+            "Infração gravíssima com multa de 10 vezes, suspensão da CNH, recolhimento da habilitação, remoção do veículo e ainda crime de trânsito.",
+            "Advertência verbal do agente, se a disputa cessar imediatamente e ninguém se lesione."
         ],
         correctIndex: 2,
         explanation: 'Racha \u00E9 infra\u00E7\u00E3o grav\u00EDssima com multa multiplicada por dez, suspens\u00E3o da CNH e o carro pode ser guinchado.',
@@ -2568,12 +2568,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q52",
         category: "infracoes",
-        statement: "Em via arterial no perímetro urbano com máxima de 60 km/h, o radar flagra um veículo automotor a 95 km/h. Pelo CTB, que classifica o excesso por faixas percentuais, qual é a natureza dessa infração e suas consequências?",
+        statement: "Em via arterial do perímetro urbano com velocidade máxima de 60 km/h, radar fixo registra veículo a 95 km/h — excesso superior a 50% do limite. Pelo CTB, a natureza da infração e suas consequências são:",
         options: [
-            "Média: só multa e 4 pontos na CNH, sem outra medida.",
-            "Grave: multa e 5 pontos, podendo virar advertência na primeira vez.",
-            "Gravíssima: multa vezes 3, 7 pontos e suspensão direta do direito de dirigir.",
-            "Só irregularidade leve com conversa, se não bater nem danificar nada.",
+            "Média — multa simples e pontuação de 4 pontos na CNH, sem outras medidas.",
+            "Grave — multa e pontuação de 5 pontos, com possibilidade de advertência por escrito.",
+            "Gravíssima — multa multiplicada por 3, 7 pontos e suspensão imediata do direito de dirigir.",
+            "Leve — simples advertência verbal, se não houver dano material."
         ],
         correctIndex: 2,
         explanation: 'Infra\u00E7\u00E3o grav\u00EDssima, multa tripla, 7 pontos e suspens\u00E3o da CNH na hora.',
@@ -3171,7 +3171,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp31",
         category: "infracoes",
-        statement: "O condutor que avança o sinal vermelho do semáforo comete uma infração classificada como GRAVÍSSIMA, com 7 pontos e multa. No entanto, existe uma circunstância em que essa penalidade é agravada. Assinale a alternativa que indica corretamente essa circunstância:",
+        statement: "Avançar o sinal vermelho do semáforo configura infração gravíssima com 7 pontos e multa. Existe, porém, circunstância em que a penalidade é agravada pela colocação em risco de usuários vulneráveis. Essa circunstância é:",
         options: [
             "Avançar o sinal vermelho durante a madrugada, quando há menos movimento",
             "Avançar o sinal vermelho em rodovia, independentemente de haver ou não fiscalização eletrônica",
@@ -3271,7 +3271,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp36",
         category: "infracoes",
-        statement: "O art. 162 do CTB lista várias situações relacionadas à habilitação do condutor que configuram infrações de trânsito. Sobre esse tema, assinale a alternativa correta:",
+        statement: "O Art. 162 do CTB tipifica diversas infrações de trânsito ligadas à habilitação do condutor: ausência de CNH ou PPD, vencimento do exame de aptidão física e categoria divergente. Sobre esse tema, assinale a alternativa correta:",
         options: [
             "Dirigir com a CNH vencida há mais de 30 dias é infração GRAVÍSSIMA com multa multiplicada por 3",
             "Dirigir com a CNH de outra categoria (ex: categoria B dirigindo veículo da categoria C) é infração LEVE com advertência",
@@ -4130,12 +4130,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "nova_advertencia_escrito_alta_02",
         category: "infracoes",
-        statement: "Um motorista cometeu infração leve por andar sem os documentos de porte obrigatório e não tem nenhuma outra multa nos últimos 12 meses. Pelo CTB atualizado, qual medida deve ser aplicada de forma obrigatória e automática nesse caso?",
+        statement: "Condutor comete infração leve por portar documentos de obrigatória guarda sem os apresentar e não registra nenhuma outra multa nos últimos 12 meses. Pelo CTB, a medida obrigatória e automática nesse caso é:",
         options: [
-            "Multa com 50% de desconto mais os pontos na CNH.",
-            "Troca da multa por Advertência por Escrito, de caráter educativo.",
-            "Envio obrigatório pra curso de reciclagem no DETRAN.",
-            "Suspensão da CNH por até 30 dias.",
+            "Multa com 50% de desconto e pontuação na CNH.",
+            "Conversão obrigatória em Advertência por Escrito, de caráter educativo.",
+            "Aplicação de medida administrativa de reciclagem obrigatória no DETRAN.",
+            "Suspensão do direito de dirigir por até 30 dias."
         ],
         correctIndex: 1,
         explanation: 'Se o motorista n\u00E3o tem outras multas nos \u00FAltimos 12 meses, ele vai receber uma Advert\u00EAncia por Escrito por causa da infra\u00E7\u00E3o leve.',
@@ -4670,12 +4670,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "nova_infracao_deixar_sinalizar_obstaculo_05",
         category: "infracoes",
-        statement: "Uma empresa faz obra na pista e deixa sem sinalizar um buraco fundo que bloqueia carros e pedestres. Pelo CTB, essa falta de sinalização de obstáculo, com multa multiplicada por 3 vezes, é infração de qual natureza?",
+        statement: "Empresa executa obra na pista de rolamento e deixa buraco profundo bloqueando veículos e pedestres sem qualquer sinalização. Pelo CTB, a falta de sinalização de obstáculo, com multa multiplicada por 3, é infração:",
         options: [
-            "Grave, com multa simples para o motorista envolvido.",
-            "Gravíssima, com multa multiplicada por três vezes.",
-            "Leve, virando advertência escrita para o dono da obra.",
-            "Média, com retenção dos equipamentos de sinalização da empresa."
+            "Infração grave, com aplicação de multa simples ao responsável pela obra.",
+            "Infração gravíssima, com multa multiplicada por três vezes.",
+            "Infração leve, sujeita à conversão imediata em advertência por escrito.",
+            "Infração média, com retenção dos equipamentos de sinalização da empresa."
         ],
         correctIndex: 1,
         explanation: 'N\u00E3o sinalizar buracos e obst\u00E1culos \u00E9 infra\u00E7\u00E3o GRAV\u00CDSSIMA, com multa multiplicada por tr\u00EAs vezes.',
@@ -4935,12 +4935,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'inf_n1_001',
         category: 'infracoes',
-        statement: 'Segurar ou manusear o celular enquanto dirige \u00E9 infra\u00E7\u00E3o de que natureza?',
+        statement: "Em fiscalização no período noturno, o condutor é flagrado segurando o telefone celular com uma mão para ler mensagens durante a condução na pista. Pelo art. 252 do CTB, essa conduta constitui infração de natureza:",
         options: [
-            'Grav\u00EDssima (7 pontos e multa).',
-            'Grave (5 pontos).',
-            'M\u00E9dia (4 pontos).',
-            'Leve (3 pontos).'
+            "Gravíssima, com multa e pontuação de 7 pontos na CNH.",
+            "Grave, com multa e pontuação de 5 pontos na CNH.",
+            "Média, com multa e pontuação de 4 pontos na CNH.",
+            "Leve, com multa e pontuação de 3 pontos na CNH."
         ],
         correctIndex: 0,
         explanation: 'Celular na m\u00E3o enquanto dirige = grav\u00EDssima.',
@@ -4977,12 +4977,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'inf_n2_001',
         category: 'infracoes',
-        statement: 'Em fiscaliza\u00E7\u00E3o com radar, o motorista \u00E9 flagrado segurando o celular para ler mensagens. Segundo a legisla\u00E7\u00E3o atualizada, essa conduta \u00E9 enquadrada como:',
+        statement: "Durante fiscalização com radar e agente no acostamento, motorista é flagrado manipulando celular para ler mensagens em via de trânsito rápido. Segundo a legislação atualizada, essa conduta é enquadrada como:",
         options: [
-            'Infra\u00E7\u00E3o grav\u00EDssima, com 7 pontos na CNH e multa.',
-            'Infra\u00E7\u00E3o grave, com 5 pontos e advert\u00EAncia.',
-            'Infra\u00E7\u00E3o m\u00E9dia, com 4 pontos e reciclagem.',
-            'Infra\u00E7\u00E3o leve, com 3 pontos e convers\u00E3o em advert\u00EAncia.'
+            "Infração gravíssima, com 7 pontos na CNH e multa.",
+            "Infração grave, com 5 pontos e advertência por escrito.",
+            "Infração média, com 4 pontos e reciclagem obrigatória.",
+            "Infração leve, com 3 pontos e conversão em advertência."
         ],
         correctIndex: 0,
         explanation: 'Segurar o celular enquanto dirige \u00E9 uma infra\u00E7\u00E3o grav\u00EDssima.',
@@ -5019,12 +5019,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'inf_n1_002',
         category: 'infracoes',
-        statement: 'Estacionar em vaga de PCD sem a credencial \u00E9 infra\u00E7\u00E3o:',
+        statement: "Em estacionamento de uso coletivo no perímetro urbano, o condutor ocupa vaga reservada a Pessoa com Deficiência sem expor a credencial de identificação emitida pelo órgão de trânsito. Pelo CTB, essa conduta constitui infração:",
         options: [
-            'Grav\u00EDssima.',
-            'M\u00E9dia.',
-            'Leve.',
-            'Grave.'
+            "Gravíssima, com multa, 7 pontos na CNH e remoção do veículo.",
+            "Média, com multa e pontuação de 4 pontos na CNH.",
+            "Leve, com advertência por escrito e sem pontuação.",
+            "Grave, com multa e pontuação de 5 pontos na CNH."
         ],
         correctIndex: 0,
         explanation: 'Estacionar em vaga de PCD sem a credencial \u00E9 grav\u00EDssima; j\u00E1 a vaga de idoso \u00E9 m\u00E9dia.',
@@ -5040,12 +5040,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'inf_n2_002',
         category: 'infracoes',
-        statement: 'Condutor estaciona em vaga reservada a Pessoas com Defici\u00EAncia sem possuir a credencial, em estacionamento privado de uso coletivo. Qual a natureza da infra\u00E7\u00E3o?',
+        statement: "O condutor de veículo de passeio estaciona em vaga reservada a Pessoas com Deficiência, em estacionamento privado de uso coletivo, sem possuir a credencial autorizativa. Pelo CTB, a natureza dessa infração é:",
         options: [
-            'Grav\u00EDssima, com 7 pontos e remo\u00E7\u00E3o do ve\u00EDculo.',
-            'M\u00E9dia, com 4 pontos e apenas multa.',
-            'Leve, com 3 pontos e advert\u00EAncia.',
-            'Grave, com 5 pontos e reten\u00E7\u00E3o da CNH.'
+            "Gravíssima, com 7 pontos na CNH e remoção do veículo.",
+            "Média, com 4 pontos e apenas multa administrativa.",
+            "Leve, com 3 pontos e advertência por escrito.",
+            "Grave, com 5 pontos e retenção da CNH."
         ],
         correctIndex: 0,
         explanation: 'Estacionar em vaga PCD sem a credencial \u00E9 uma infra\u00E7\u00E3o grav\u00EDssima, mesmo em estacionamento privado.',
@@ -5061,12 +5061,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'inf_n1_003',
         category: 'infracoes',
-        statement: 'Transitar acima de 50% do limite de velocidade \u00E9 infra\u00E7\u00E3o:',
+        statement: "Em rodovia de pista dupla com velocidade máxima de 110 km/h, veículo é registrado trafegando a 170 km/h — acima de 50% do limite. Pelo CTB, transitar acima de 50% do limite regulamentado configura infração:",
         options: [
-            'Grav\u00EDssima, com multa x3 e suspens\u00E3o.',
-            'Grave.',
-            'M\u00E9dia.',
-            'Leve.'
+            "Gravíssima, com multa multiplicada por 3 e suspensão do direito de dirigir.",
+            "Grave, com multa simples e pontuação de 5 pontos na CNH.",
+            "Média, com multa e pontuação de 4 pontos na CNH.",
+            "Leve, com advertência por escrito sem pontuação."
         ],
         correctIndex: 0,
         explanation: 'Se passar de 50% do limite, \u00E9 grav\u00EDssima (multinha x3 e suspens\u00E3o).',
@@ -5082,12 +5082,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'inf_n2_003',
         category: 'infracoes',
-        statement: 'Em rodovia com limite de 110 km/h, um ve\u00EDculo \u00E9 registrado a 170 km/h. Segundo o CTB, essa conduta resulta em:',
+        statement: "A fiscalização eletrônica em rodovia de pista dupla registra veículo trafegando a 170 km/h, onde o limite regulamentar é 110 km/h, configurando excesso superior a 50%. Segundo o CTB, essa conduta resulta em:",
         options: [
-            'Infra\u00E7\u00E3o grav\u00EDssima, multa multiplicada por 3 e suspens\u00E3o imediata.',
-            'Infra\u00E7\u00E3o grave, multa simples e reten\u00E7\u00E3o do ve\u00EDculo.',
-            'Infra\u00E7\u00E3o m\u00E9dia, multa e pontua\u00E7\u00E3o no prontu\u00E1rio.',
-            'Crime inafian\u00E7\u00E1vel com pris\u00E3o imediata.'
+            "Infração gravíssima, com multa multiplicada por 3 e suspensão imediata do direito de dirigir.",
+            "Infração grave, com multa simples e retenção do veículo para vistoria.",
+            "Infração média, com multa e pontuação no prontuário do condutor.",
+            "Crime de trânsito inafiançável, com prisão imediata do condutor."
         ],
         correctIndex: 0,
         explanation: 'Passar de 110 km/h pra 170 km/h \u00E9 muito mais que 50% do limite, ent\u00E3o \u00E9 grav\u00EDssima e multa tripla.',
@@ -5707,12 +5707,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'detran_ilum_006_alta',
         category: 'infracoes',
-        statement: 'Deixar de indicar com antecedência, mediante o uso da seta, a realização de conversão ou mudança de faixa constitui infração de qual natureza?',
+        statement: "O condutor pretende converter à esquerda em interseção e não aciona o pisca-pisca (seta) nem faz sinal regulamentar de braço com antecedência. Pelo CTB, deixar de indicar a conversão ou a mudança de faixa constitui infração:",
         options: [
-            'Infração Leve sujeita a penalidade de advertência por escrito do órgão autuador.',
-            'Infração Média sujeita a penalidade de multa.',
-            'Infração Grave sujeita a multa e retenção do veículo para regularização.',
-            'Infração Gravíssima sujeita a recolhimento imediato da CNH.'
+            "Infração Leve, sujeita à penalidade de advertência por escrito do órgão autuador.",
+            "Infração Média, sujeita à penalidade de multa.",
+            "Infração Grave, sujeita a multa e retenção do veículo para regularização.",
+            "Infração Gravíssima, sujeita a recolhimento imediato da CNH."
         ],
         correctIndex: 1,
         explanation: 'Esquecer de dar a seta antes de virar ou trocar de faixa é infração de natureza MÉDIA (4 pontos).',
@@ -6289,12 +6289,12 @@ export const QUESTIONS: Question[] = [
         id: "detran_q20_n1",
         category: "infracoes",
         difficulty: 1,
-        statement: "Molhar pedestres na calçada passando por poça d'água após chuva é:",
+        statement: "Após chuva, o condutor trafega por via urbana no perímetro e atravessa poça d'água na pista de rolamento, arremessando água sobre pedestres na calçada. Pelo CTB, essa conduta é classificada como infração:",
         options: [
-            "Infração média e multa.",
-            "Uma brincadeira de mau gosto.",
-            "Um grande desrespeito pelos pedestres.",
-            "Infração leve com advertência verbal."
+            "Infração média, punida com multa administrativa.",
+            "Mera contravenção de mau gosto, sem enquadramento no CTB.",
+            "Conduta apenas antiética, sem previsão de sanção de trânsito.",
+            "Infração leve, punida exclusivamente com advertência verbal do agente."
         ],
         correctIndex: 0,
         explanation: "Jogar água de poça nos pedestres na calçada é infração média com multa.",
@@ -6329,12 +6329,12 @@ export const QUESTIONS: Question[] = [
         id: "detran_q23_n1",
         category: "infracoes",
         difficulty: 1,
-        statement: "Ultrapassar pela contramão outro veículo sobre faixa de pedestre é:",
+        statement: "Em rodovia de pista simples, o condutor realiza ultrapassagem invadindo a contramão de direção exatamente sobre a faixa de travessia de pedestres e é flagrado pelo agente. Pelo CTB, essa conduta é infração de natureza:",
         options: [
-            "Infração Leve",
-            "Infração Média",
-            "Infração Gravíssima",
-            "Infração Grave"
+            "Infração Leve, sujeita apenas a advertência por escrito.",
+            "Infração Média, sujeita a multa com pontuação de 4 pontos.",
+            "Infração Gravíssima, sujeita a multa com pontuação de 7 pontos na CNH.",
+            "Infração Grave, sujeita a multa e retenção do veículo."
         ],
         correctIndex: 2,
         explanation: "Ultrapassar pela contramão em cima da faixa de pedestre é infração gravíssima.",
@@ -6430,12 +6430,12 @@ export const QUESTIONS: Question[] = [
         id: "detran_q20_n2",
         category: "infracoes",
         difficulty: 2,
-        statement: "Após forte chuva, você trafega com veículo automotor por uma via urbana e passa sobre poça d'água na pista de rolamento, arremessando água sobre pedestres na calçada. Pelas autoridades, essa conduta é considerada como:",
+        statement: "Após forte chuva, o condutor trafega por via urbana e atravessa poça d'água na pista de rolamento, arremessando água sobre pedestres na calçada com impacto. Pela regulamentação, essa conduta é considerada:",
         options: [
-            "Uma infração média e penalidade de multa.",
-            "Uma brincadeira de mau gosto.",
-            "Um grande desrespeito pelos pedestres.",
-            "Uma infração leve sujeita somente a uma advertência verbal."
+            "Infração de trânsito média, sujeita a penalidade de multa.",
+            "Mera brincadeira de mau gosto, sem sanção de trânsito.",
+            "Desrespeito moral aos pedestres, sem enquadramento legal.",
+            "Infração leve, sujeita somente a advertência verbal do agente."
         ],
         correctIndex: 0,
         explanation: "Arremessar água em pedestres é infração média punida com multa de trânsito.",
@@ -6470,12 +6470,12 @@ export const QUESTIONS: Question[] = [
         id: "detran_q23_n2",
         category: "infracoes",
         difficulty: 2,
-        statement: "O condutor que realiza a ultrapassagem de outro veículo invadindo a contramão de direção exatamente sobre a faixa destinada a pedestres comete uma infração:",
+        statement: "O condutor realiza a ultrapassagem de outro veículo invadindo a contramão de direção exatamente sobre a faixa destinada à travessia de pedestres, em via de trânsito. Pelo CTB, essa conduta é classificada como infração de natureza:",
         options: [
-            "Leve",
-            "Média",
-            "Gravíssima",
-            "Grave"
+            "Infração Leve, com advertência por escrito.",
+            "Infração Média, com multa e 4 pontos na CNH.",
+            "Infração Gravíssima, com multa e 7 pontos na CNH.",
+            "Infração Grave, com multa e retenção do veículo."
         ],
         correctIndex: 2,
         explanation: "Ultrapassar invadindo a pista contrária na faixa de pedestre é infração gravíssima.",
@@ -6571,12 +6571,12 @@ export const QUESTIONS: Question[] = [
         id: "detran_q28_n1",
         category: "infracoes",
         difficulty: 1,
-        statement: "Em locais de trânsito de pedestres, não reduzir a velocidade é considerada uma infração:",
+        statement: "Em trecho urbano com grande concentração e movimentação de pedestres, o condutor mantém velocidade incompatível com a segurança do trânsito, sem reduzir na aproximação da travessia. Pelo CTB, essa conduta é infração de natureza:",
         options: [
-            "Gravíssima.",
-            "Leve.",
-            "Grave.",
-            "Não é infração."
+            "Infração Gravíssima, com multa multiplicada por 3.",
+            "Infração Leve, com advertência por escrito.",
+            "Infração Grave, com multa e pontuação na CNH.",
+            "Não configura infração, apenas recomendação de direção defensiva."
         ],
         correctIndex: 2,
         explanation: "Não desacelerar o carro onde há muitos pedestres é infração grave.",
@@ -6634,10 +6634,10 @@ export const QUESTIONS: Question[] = [
         difficulty: 2,
         statement: "Ao circular por trechos urbanos ou rurais com grande concentração e movimentação de pedestres, não reduzir a velocidade do veículo de forma compatível com a segurança do trânsito é considerada uma infração de natureza:",
         options: [
-            "Gravíssima.",
-            "Leve.",
-            "Grave.",
-            "Não é infração."
+            "Infração de natureza gravíssima, com multa multiplicada por 3.",
+            "Infração de natureza leve, com advertência por escrito.",
+            "Infração de natureza grave, com multa e pontuação na CNH.",
+            "Não constitui infração, mas mera recomendação de segurança."
         ],
         correctIndex: 2,
         explanation: "Diminua a velocidade na presença de pedestres; não fazer isso gera infração grave.",
@@ -6711,7 +6711,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_compacto_03",
         category: "infracoes",
-        statement: "Conduzir veículo automotor sem portar o documento de licenciamento obrigatório (CRLV-e) no momento da abordagem configura qual medida administrativa e penalidade?",
+        statement: "Durante abordagem em fiscalização, o condutor é solicitado a apresentar o CRLV-e (licenciamento) e declara não portar documento algum, digital ou impresso. Pelo CTB, a conduta gera qual medida administrativa e penalidade?",
         options: [
             "Apenas advertência por escrito, sem retenção do veículo.",
             "Multa por infração leve e retenção do veículo até a apresentação do documento.",
@@ -7157,7 +7157,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_06",
         category: "infracoes",
-        statement: "Na descida de um declive acentuado, qual atitude comete infração e põe a segurança em risco?",
+        statement: "Em descida longa de declive acentuado em rodovia, o condutor pretende economizar combustível durante o trajeto de descida. Entre as condutas listadas, a que comete infração e compromete a segurança é:",
         options: [
             "Descer em ponto morto (banguela) para economizar combustível.",
             "Desligar o motor na descida, ficando sem freio e direção assistidos.",
@@ -7265,7 +7265,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_13",
         category: "infracoes",
-        statement: "O que na pista configura infração gravíssima pelo CTB?",
+        statement: "Na circulação pela pista de rolamento, diversas condutas do condutor são tipificadas pelo CTB como infrações de natureza gravíssima, sujeitas a multa e pontuação. Sobre essas condutas, assinale a alternativa correta:",
         options: [
             "Andar com o veículo em calçadas, passeios e canteiros.",
             "Avançar o vermelho do semáforo ou a parada obrigatória.",
@@ -7357,7 +7357,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_19",
         category: "infracoes",
-        statement: "Em vias arteriais e coletoras, o que é expressamente proibido ao condutor?",
+        statement: "Nas vias coletoras e arteriais do perímetro urbano, o CTB veda condutas específicas ao condutor, inclusive manobras de ultrapassagem e uso de equipamentos. Sobre essas vedações, assinale a alternativa correta:",
         options: [
             "Ultrapassar pelo acostamento ou pela direita, salvo exceção.",
             "Converter onde a sinalização proíbe.",
@@ -7525,11 +7525,11 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_30",
         category: "infracoes",
-        statement: "A mais de 20% acima da máxima em coletora ou arterial dá o quê?",
+        statement: "Em via coletora ou arterial do perímetro urbano, radar de fiscalização registra veículo trafegando acima de 20% da velocidade máxima permitida. Pelo CTB, esse excesso configura infração acompanhada de:",
         options: [
-            "Infração de natureza média.",
-            "Multa para o dono/condutor.",
-            "4 pontos na CNH.",
+            "Natureza média, sujeita a multa administrativa.",
+            "Pontuação de 4 pontos no prontuário do condutor.",
+            "Multa aplicável ao condutor ou proprietário responsável.",
             "Todas as alternativas acima estão corretas."
         ],
         correctIndex: 3,
@@ -8010,7 +8010,7 @@ export const REAL_EXAM_IDS = [
     {
         id: "q3184",
         category: "infracoes",
-        statement: "O que o novo condutor NÃO pode fazer durante o período de Permissão para Dirigir?",
+        statement: "Durante o período de Permissão para Dirigir (PPD), o condutor recém-habilitado fica sujeito a restrições legais de conduta previstas no CTB. Enquanto perdurar essa fase probatória de um ano, ele NÃO pode:",
         options: [
             "Não pode dirigir nas avenidas movimentadas de grandes metrópoles, como São Paulo ou Rio de Janeiro.",
             "Não pode cometer infração grave ou gravíssima nem ser reincidente em infrações médias.",
