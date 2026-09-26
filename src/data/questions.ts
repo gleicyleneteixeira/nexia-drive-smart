@@ -122,12 +122,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe01",
         category: "legislacao",
-        statement: "Um jovem de 18 anos quer tirar a primeira CNH e precisa abrir o RENACH, que é o cadastro nacional de motoristas. Segundo o CTB e as regras do CONTRAN, onde ele é obrigado a fazer esse cadastro inicial?",
+        statement: "Um jovem de 18 anos pretende iniciar o processo de habilitação e precisa abrir o RENACH, cadastro nacional que identifica os condutores. Segundo o CTB e as resoluções do CONTRAN, o cadastro inicial deve ser realizado:",
         options: [
-            "No DETRAN do estado ou do DF onde ele mora.",
-            "Direto no CONTRAN, que é o órgão máximo que cria as regras de trânsito.",
-            "No CFC (autoescola), que teria poder sozinho para abrir o registro.",
-            "No Ministério dos Transportes, pela SENATRAN, de forma centralizada no país.",
+            "No DETRAN do estado ou do Distrito Federal onde o candidato tem residência.",
+            "Direto no CONTRAN, órgão máximo normativo que edita as resoluções de trânsito.",
+            "No CFC (centro de formação de condutores), que possui competência exclusiva para abri-lo.",
+            "No Ministério dos Transportes, por meio da SENATRAN, de forma centralizada."
         ],
         correctIndex: 0,
         explanation: 'Pra conseguir a CNH, o jovem precisa ir ao DETRAN do lugar onde mora.',
@@ -156,12 +156,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe03",
         category: "legislacao",
-        statement: "Um motorista ficou 12 meses sem cometer nenhuma infração gravíssima, só juntou pontos de outras multas. Pela mudança que a Lei 14.071/2020 fez no CTB, com quantos pontos ele sofre processo de suspensão da carteira?",
+        statement: "Condutor passa 12 meses sem cometer nenhuma infração gravíssima, acumulando apenas pontuação de infrações leves e médias. Pela sistemática de pontos introduzida pela Lei 14.071/2020 no CTB, a suspensão do direito de dirigir ocorre:",
         options: [
-            "40 pontos, se não tiver nenhuma gravíssima nos últimos 12 meses.",
-            "30 pontos, se tiver só uma grave e nenhuma gravíssima no período.",
-            "20 pontos, valendo para qualquer tipo de infração junta.",
-            "14 pontos, se ele trabalha como motorista (EAR) e repetiu infração média.",
+            "Aos 40 pontos acumulados, desde que não haja nenhuma infração gravíssima no período.",
+            "Aos 30 pontos, caso haja uma única infração grave no prontuário do condutor.",
+            "Aos 20 pontos, independentemente da natureza das infrações apuradas no período.",
+            "Aos 14 pontos, para condutores com exercício de atividade remunerada (EAR)."
         ],
         correctIndex: 0,
         explanation: 'Sem infra\u00E7\u00F5es grav\u00EDssimas, a suspens\u00E3o do direito de dirigir acontece quando o motorista chega a 40 pontos.',
@@ -2127,12 +2127,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q26",
         category: "legislacao",
-        statement: "Você fez 18 anos e quer obter CNH para motocicleta (A) e veículo automotor (B) em autoescola. O instrutor explica o que o CTB exige para iniciar o processo nessas categorias. Pelo Código de Trânsito, quais são a idade mínima e os demais requisitos para habilitação nas categorias A e B?",
+        statement: "Candidato pretendendo obter habilitação nas categorias A (motocicletas) e B (veículos de passeio) consulta os requisitos exigidos pelo CTB. A idade mínima e as demais exigências para a habilitação nessas categorias são:",
         options: [
-            "16 anos, se for emancipado e tiver autorização dos pais em cartório.",
-            "17 anos, se passar numa avaliação psicológica de maturidade do DETRAN.",
-            "18 anos, ser imputável, saber ler e escrever, ter RG e CPF e passar nos exames físico, mental, teórico e prático.",
-            "21 anos, idade exigida igual pra todas as categorias, até motocicleta e veículo automotor.",
+            "16 anos, desde que emancipado e com autorização dos genitores outorgada em cartório.",
+            "17 anos, mediante aprovação em avaliação psicológica de maturidade conduzida pelo DETRAN.",
+            "18 anos, ser imputável, saber ler e escrever, possuir documentos pessoais e ser aprovado nos exames físico, mental, teórico e prático.",
+            "21 anos, idade mínima uniforme exigida para todas as categorias de habilitação."
         ],
         correctIndex: 2,
         explanation: 'Tem que ter 18 anos, saber ler e escrever, e ter CPF.',
@@ -2144,12 +2144,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q27",
         category: "legislacao",
-        statement: "Você tem CNH B e quer virar motorista de ônibus e van escolar, tirando a categoria D. O CTB e a norma do CONTRAN pedem idade certa, tempo de habilitação e ficha limpa. Pra conseguir a categoria D e dirigir transporte coletivo de passageiros, o que a lei exige de você?",
+        statement: "Condutor habilitado na categoria B deseja obter a categoria D para conduzir ônibus e vans escolares de transporte coletivo. Os requisitos de idade, tempo de habilitação e ausência de infrações exigidos pelo CTB são:",
         options: [
-            "Ter 18 anos e 1 ano de B, sem se importar com multas desse período.",
-            "Ter 21 anos, ter 2 anos de B (ou 1 ano de C) e não ter infração grave ou gravíssima nos últimos 12 meses.",
-            "Só pagar as taxas e mostrar comprovante de casa, sem fazer mais exame por já ser habilitado.",
-            "Ter 25 anos e curso superior em qualquer área pra dirigir ônibus.",
+            "18 anos e 1 ano de categoria B, sem qualquer verificação de histórico de infrações.",
+            "21 anos, 2 anos de categoria B (ou 1 ano de categoria C) e nenhuma infração grave ou gravíssima nos últimos 12 meses.",
+            "Apenas o pagamento das taxas e comprovante de residência, sem exames adicionais.",
+            "25 anos e curso superior em qualquer área, exigência específica para o transporte coletivo."
         ],
         correctIndex: 1,
         explanation: 'Pra ter a categoria D, precisa ter 21 anos, estar com a B h\u00E1 2 anos (ou 1 ano na C) e n\u00E3o ter feito falta grave nos \u00FAltimos 12 meses.',
@@ -2161,12 +2161,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q28",
         category: "legislacao",
-        statement: "O DETRAN olhou seu prontuário e viu várias multas repetidas. Pra saber se cabe multa em dobro, precisa aplicar a regra de reincidência do CTB, que pesa mais no bolso. Seguindo o Código de Trânsito, quando é que o motorista é considerado reincidente e paga a nova multa em dobro?",
+        statement: "O DETRAN analisa o prontuário do condutor e verifica a repetição de uma mesma infração dentro do período de 12 meses. Pela regra de reincidência do CTB, a nova infração é punida com multa em dobro quando:",
         options: [
-            "Quando comete 2 ou mais infrações diferentes em datas diferentes, mesmo sendo de tipos distintos.",
-            "Quando repete a mesma infração em 12 meses, aí a nova multa vem em dobro.",
-            "Quando soma pontos na CNH até bater o limite de pontos que a lei prevê.",
-            "Quando toma a primeira multa em outro estado, diferente de onde tirou a CNH.",
+            "O condutor cometer duas ou mais infrações distintas em datas distintas, mesmo que de tipos diferentes.",
+            "A mesma infração for cometida novamente no prontuário do condutor dentro do período de 12 meses.",
+            "A pontuação na CNH atingir o limite que a lei prevê para a abertura de processo.",
+            "A primeira multa for aplicada em estado diverso daquele em que a habilitação foi emitida."
         ],
         correctIndex: 1,
         explanation: 'Reincid\u00EAncia = mesma infra\u00E7\u00E3o dentro de 12 meses, com multa em dobro.',
@@ -2178,12 +2178,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q29",
         category: "legislacao",
-        statement: "Um motorista quer saber com quantos pontos na CNH em 12 meses ele pode ter a carteira suspensa, já com as mudanças da Lei 14.071/2021 no CTB. Qual é o sistema atual de limites de pontos pra abrir o processo de suspensão do direito de dirigir?",
+        statement: "Condutor consulta o sistema vigente de limites de pontos para abertura do processo de suspensão do direito de dirigir, alterado pela Lei 14.071/2021. Pela sistemática atual do CTB, a suspensão ocorre:",
         options: [
-            "Limite fixo de 20 pontos em 12 meses, não importa o tipo nem a gravidade das multas.",
-            "Limite muda com as multas: 40 pontos sem gravíssima, 30 com uma gravíssima e 20 com duas ou mais.",
-            "Sempre 14 pontos pra todo motorista, não importa a categoria nem o tipo de infração.",
-            "Suspensão por pontos só rola se tiver pelo menos uma gravíssima, sem limite nos outros casos.",
+            "Limite fixo de 20 pontos em 12 meses, independentemente da natureza e da gravidade das infrações.",
+            "40 pontos sem gravíssima, 30 pontos com uma gravíssima e 20 pontos com duas ou mais gravíssimas no período.",
+            "14 pontos para qualquer condutor, sem distinção de categoria ou tipo de infração.",
+            "Apenas em caso de existência de infração gravíssima, sem limite nos demais casos."
         ],
         correctIndex: 1,
         explanation: 'Hoje: 40 pontos sem infra\u00E7\u00E3o grav\u00EDssima; 30 pontos com 1 grav\u00EDssima; 20 pontos com 2 ou mais grav\u00EDssimas.',
@@ -2197,12 +2197,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q30",
         category: "legislacao",
-        statement: "Você foi parado em fiscalização na rodovia federal e o agente pediu seus documentos pessoais e os do veículo automotor. O CTB e as normas do CONTRAN definem o porte obrigatório para circular. Nessa fiscalização, quais documentos você deve apresentar para circular regular?",
+        statement: "Condutor é parado em fiscalização na rodovia federal e o agente solicita os documentos de porte obrigatório. Pelo CTB e pelas resoluções do CONTRAN, para circular regularmente é necessário apresentar:",
         options: [
-            "CNH ou PPD mais o CRLV do veículo, valendo tanto no papel quanto no digital (CDT e CRLV-e).",
-            "Só o CRLV, porque sua habilitação o agente já confere sozinho no sistema.",
-            "Só a CNH, porque o licenciamento o agente consulta na hora sem precisar do papel.",
-            "CRLV mais o comprovante de IPVA impresso, sem precisar mostrar a CNH.",
+            "CNH ou PPD e CRLV-e, admitindo-se a apresentação em formato digital.",
+            "Somente o CRLV-e, pois a habilitação é consultada automaticamente pelo agente.",
+            "Somente a CNH, pois o licenciamento é consultado no sistema sem necessidade do documento.",
+            "CRLV-e e comprovante de pagamento do IPVA impresso, sem exibição da CNH."
         ],
         correctIndex: 0,
         explanation: 'Tem que ter a CNH ou PPD e o CRLV em dia. As vers\u00F5es digitais (CDT/CRLV-e) valem igual aos pap\u00E9is.',
@@ -2534,12 +2534,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q50",
         category: "legislacao",
-        statement: "Você conduz em via urbana residencial sem sinalização de velocidade, com muitos pedestres e crianças próximas ao bordo da pista. Pelo limite padrão do CTB para via urbana sem sinalização, qual é a velocidade máxima permitida nessa via local?",
+        statement: "O condutor circula em via urbana local de acesso residencial, sem sinalização regulamentadora de velocidade e com grande movimentação de pedestres. Pelo limite padrão do CTB (Art. 61) para essa classe de via, a velocidade máxima é de:",
         options: [
-            "20 km/h, limite só pra via de trânsito rápido com várias pistas.",
-            "30 km/h, limite das vias locais, vias urbanas calmas de bairro e trajeto curto.",
-            "40 km/h, limite das coletoras que ligam o trânsito entre os bairros.",
-            "60 km/h, limite das vias arteriais, vias de fluxo grande e com semáforo.",
+            "20 km/h, limite restrito às vias exclusivas de pedestres e ciclistas.",
+            "30 km/h, padrão das vias locais de trânsito calmo e acesso restrito.",
+            "40 km/h, padrão das vias coletoras urbanas sem sinalização.",
+            "60 km/h, padrão das vias arteriais urbanas com interseções em nível."
         ],
         correctIndex: 1,
         explanation: 'Em rua residencial sem placa, a velocidade m\u00E1xima \u00E9 30 km/h.',
@@ -2551,12 +2551,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q51",
         category: "legislacao",
-        statement: "Você conduz um veículo automotor de passeio em rodovia de pista dupla em trecho rural, sem sinalização de velocidade. Pelo CTB, sem sinalização, qual é a velocidade máxima permitida para automóveis, camionetas e motocicletas nessa pista de rolamento?",
+        statement: "O condutor trafega com automóvel de passeio em rodovia de pista dupla em trecho rural, onde não há sinalização regulamentadora de velocidade. Pelo CTB, o limite máximo para automóveis, camionetas e motocicletas nessa pista de rolamento é de:",
         options: [
-            "80 km/h, limite dos demais veículos na pista dupla, como caminhões e reboques.",
-            "100 km/h, máxima das estradas sem asfalto em bom estado de conservação.",
+            "80 km/h, limite dos demais veículos na pista dupla, como caminhões e conjuntos articulados.",
+            "100 km/h, máxima aplicável às estradas rurais não pavimentadas.",
             "110 km/h, limite do CTB para automóveis, camionetas e motocicletas em rodovia de pista dupla.",
-            "120 km/h, liberada em toda rodovia federal concedida, com ou sem placa.",
+            "120 km/h, admitida em rodovias federais concedidas, independentemente de sinalização."
         ],
         correctIndex: 2,
         explanation: 'Rodovia: carro 110, \u00F4nibus 90 e outros 80. Estrada n\u00E3o pavimentada: 60.',
@@ -2602,12 +2602,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "q54",
         category: "legislacao",
-        statement: "Você passou em tudo na autoescola, na teoria e na prática, e o DETRAN te deu a Permissão para Dirigir (PPD), aquele documento provisório antes da CNH definitiva. Pelo CTB, qual é o prazo de validade dessa PPD no período probatório?",
+        statement: "Candidato aprovado nos exames teórico e prático recebe a Permissão para Dirigir (PPD) do DETRAN, documento provisório anterior à CNH definitiva. Pelo CTB, o prazo de vigência desse documento em estágio probatório é de:",
         options: [
-            "3 meses, prazo só pra fazer o exame prático de direção.",
-            "6 meses, tempo máximo pra concluir as etapas iniciais da habilitação.",
-            "1 ano, validade da PPD no estágio probatório antes da CNH definitiva.",
-            "2 anos, mesmo prazo das avaliações psicológicas da habilitação.",
+            "3 meses, prazo destinado exclusivamente à realização do exame prático de direção.",
+            "6 meses, tempo máximo para concluir as etapas iniciais do processo de habilitação.",
+            "1 ano, vigência da PPD no estágio probatório anterior à expedição da CNH definitiva.",
+            "2 anos, idêntico ao prazo de validade das avaliações psicológicas do processo."
         ],
         correctIndex: 2,
         explanation: 'A PPD vale por 1 ano. Se n\u00E3o rolar infra\u00E7\u00E3o grave ou grav\u00EDssima, vira CNH definitiva.',
@@ -2659,12 +2659,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp03",
         category: "legislacao",
-        statement: "Na Lei Seca, um motorista abordado fala enrolado, está com olho vermelho e reação lenta, e faz o teste do bafômetro. Pelos efeitos fisiológicos do álcool no corpo, como a bebida mexe com a capacidade de dirigir?",
+        statement: "Na fiscalização da Lei Seca, condutor apresenta fala arrastada, olhos vermelhos e lentidão de reações ao ser submetido ao etilômetro. Sobre a influência do álcool na capacidade de dirigir, é correto afirmar que ele:",
         options: [
-            "Causa perda total e permanente da visão, impedindo de dirigir para sempre.",
-            "Deixa a visão turva mas aumenta a agilidade para reagir aos imprevistos.",
-            "Tira a atenção, dá sono e reduz reflexos e coordenação, aumentando o risco de acidente.",
-            "Aumenta os reflexos e a coordenação, deixando o motorista mais seguro mesmo bebido.",
+            "Causa perda total e permanente da visão, impedindo definitivamente a condução.",
+            "Turva a visão, mas aumenta a agilidade de reação diante dos imprevistos.",
+            "Reduz a atenção, provoca sonolência e diminui reflexos e coordenação, elevando o risco de sinistro.",
+            "Aumenta reflexos e coordenação, tornando o condutor mais seguro mesmo sob influência."
         ],
         correctIndex: 2,
         explanation: '\u00C1lcool atrapalha a aten\u00E7\u00E3o, deixa voc\u00EA sonolento e diminui os reflexos. \'Vis\u00E3o turva\' t\u00E1 certo, mas \'agilidade\' estraga a resposta.',
@@ -3720,12 +3720,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qd03",
         category: "legislacao",
-        statement: "Em interseção com semáforo em funcionamento, um agente de trânsito determina com gestos deter os veículos de uma via urbana e liberar os da via transversal. Pela hierarquia dos sinais do CTB, a qual sinal você deve obedecer nessa situação?",
+        statement: "Em interseção com semáforo funcionando, agente de trânsito determina com gestos que os veículos de uma via urbana avancem e os da via transversal parem. Pela hierarquia dos sinais prevista no Art. 89 do CTB, a conduta correta do condutor é:",
         options: [
-            "Os gestos do agente valem mais que tudo, então obedeça ele mesmo se for contra o semáforo.",
-            "O semáforo vale mais que os gestos do agente, pois tem prioridade máxima.",
-            "As placas valem mais que o agente, pois são fixas e permanentes.",
-            "O agente só orienta, mas você deve seguir o semáforo para não levar multa.",
+            "Obedecer aos gestos do agente, pois suas ordens prevalecem sobre o semáforo e demais sinais.",
+            "Obedecer ao semáforo, pois os equipamentos eletrônicos possuem prioridade sobre ordens humanas.",
+            "Obedecer às placas, por serem elementos fixos e permanentes da sinalização.",
+            "Considerar o agente apenas como orientador, seguindo o semáforo para evitar autuação."
         ],
         correctIndex: 0,
         explanation: 'Os gestos do agente s\u00E3o mais importantes que o sem\u00E1foro, ent\u00E3o os motoristas devem seguir o que ele manda.',
@@ -3740,12 +3740,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp57",
         category: "legislacao",
-        statement: "Você conduz em via urbana de mão dupla e vai converter à esquerda na interseção. O CTB exige posicionamento correto na pista de rolamento antes e durante a conversão. Para convergir à esquerda com segurança em via de pista simples e duplo sentido, como se posicionar e agir?",
+        statement: "Em via urbana de mão dupla sem canteiro central, o condutor pretende converter à esquerda na interseção e deve cumprir a regra de posicionamento do CTB. A conduta correta antes e durante a conversão é:",
         options: [
-            "Ir pra perto do canto esquerdo, parar o carro e esperar o fluxo contrário antes de cruzar.",
-            "Ir pra perto da linha do meio sem invadir a outra faixa e virar só depois de dar vez a quem vem de frente.",
-            "Ir pro canto direito ou acostamento, parar e esperar zerar os dois sentidos pra virar.",
-            "Ficar no meio da faixa, ligar o pisca-alerta e virar rápido, pois quem sinaliza tem preferência.",
+            "Aproximar-se do ângulo esquerdo da via, imobilizar o veículo e cruzar assim que possível.",
+            "Aproximar-se da linha divisória central sem invadir a pista contrária e só converter após ceder o fluxo oposto.",
+            "Aproximar-se do bordo direito ou do acostamento, parar e aguardar a via totalmente livre.",
+            "Permanecer ao centro da faixa, acionar o pisca-alerta e converter rapidamente, pois a sinalização dá preferência."
         ],
         correctIndex: 1,
         explanation: 'Pra convergir \u00E0 esquerda, o motorista deve ficar bem perto da linha do meio da pista, sem entrar na faixa dos carros que v\u00EAm na dire\u00E7\u00E3o contr\u00E1ria, e esperar a vez deles passarem.',
@@ -3861,12 +3861,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp63",
         category: "legislacao",
-        statement: "Você circula em via urbana coletora que distribui o trânsito das vias arteriais maiores, atendendo bairro e comércio. Não há placa R-19 de velocidade na via pública. Pelo limite padrão do CTB por tipo de via sem sinalização, qual é a máxima permitida nessa via coletora?",
+        statement: "O condutor trafega por via urbana coletora que distribui o fluxo das arteriais e atende bairro e comércio, sem placa R-19 de velocidade. Pelo limite padrão do CTB por classe de via, a velocidade máxima nessa coletora é de:",
         options: [
-            "30 km/h, pois é via local de quarteirão pequeno e acesso a casa.",
-            "40 km/h, pois é via coletora e esse é o limite sem placa própria.",
-            "60 km/h, pois é via arterial de ligação contínua entre bairros.",
-            "80 km/h, pois sem placa vale a máxima urbana de trânsito rápido.",
+            "30 km/h, por ser via local de acesso restrito a edificações.",
+            "40 km/h, padrão das vias coletoras sem sinalização regulamentadora.",
+            "60 km/h, padrão das vias arteriais de ligação contínua entre regiões.",
+            "80 km/h, padrão das vias de trânsito rápido do perímetro urbano."
         ],
         correctIndex: 1,
         explanation: 'Via coletora sem sinaliza\u00E7\u00E3o = 40 km/h. As vias coletoras ajudam a distribuir o tr\u00E2nsito na cidade.',
@@ -3881,12 +3881,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "sinistro-sinalizacao-001",
         category: "legislacao",
-        statement: "Após um sinistro, seu veículo automotor ficou imobilizado sobre a pista de rolamento, com outros veículos circulando pelo trecho e sendo possível sinalizar. Pelas regras de segurança e sinalização do CTB, qual é o modo correto de sinalizar o local antes do atendimento?",
+        statement: "Após sinistro, o veículo ficou imobilizado sobre a pista de rolamento, com o trânsito circulando pelo trecho e havendo condições de sinalização. Pelas regras do CTB, o modo correto de sinalizar o local antes do atendimento é:",
         options: [
-            "Ligar na hora o pisca-alerta e colocar o triângulo a pelo menos 30 metros atrás do veículo, perpendicular ao eixo da via e bem visível.",
-            "Ligar o pisca-alerta e colocar o triângulo a exatos 30 metros na frente do veículo, paralelo ao eixo da via pra quem vem vendo.",
-            "Colocar o triângulo a uns 30 metros no meio da faixa, sem ligar o pisca-alerta se o carro já estiver visível.",
-            "Colocar o triângulo a menos de 30 metros, atravessado na via, pois o mínimo só vale se tiver vítima.",
+            "Acionar o pisca-alerta e posicionar o triângulo a pelo menos 30 metros atrás do veículo, perpendicular ao eixo da via e bem visível.",
+            "Acionar o pisca-alerta e posicionar o triângulo a exatos 30 metros à frente do veículo, paralelo ao eixo da via.",
+            "Posicionar o triângulo a cerca de 30 metros ao centro da faixa, sem acionar o pisca-alerta se o veículo estiver visível.",
+            "Posicionar o triângulo a menos de 30 metros, atravessado na via, pois a distância mínima só se aplica com vítima."
         ],
         correctIndex: 0,
         explanation: 'A alternativa A t\u00E1 certa porque pede pra ligar as luzes de alerta e colocar o tri\u00E2ngulo a pelo menos 30 metros atr\u00E1s do carro, em um lugar que todo mundo veja.',
@@ -3901,7 +3901,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp64",
         category: "legislacao",
-        statement: "De acordo com as regras gerais de circulação e conduta estabelecidas pelo Código de Trânsito Brasileiro (CTB), em uma via aberta à circulação, o trânsito de veículos deve ser feito pelo seguinte lado da pista:",
+        statement: "Em uma via terrestre aberta à circulação, o condutor deve posicionar o veículo lateralmente conforme a regra geral do CTB, que admite exceções apenas quando devidamente sinalizadas pelo órgão competente. Pela norma geral, o trânsito de veículos deve ser feito pelo lado:",
         options: [
             "Pelo lado esquerdo, seguindo o padrão internacional de trânsito rápido (mão inglesa), facilitando ultrapassagens seguras em vias urbanas.",
             "Pelo lado direito da via, admitindo-se as exceções devidamente sinalizadas pelo órgão competente ou em manobras de ultrapassagem.",
@@ -3986,12 +3986,12 @@ export const QUESTIONS: Question[] = [
         category: "legislacao",
         image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/51.jpg",
         placa: "R-2",
-        statement: "Você aproxima-se com veículo automotor de interseção no perímetro urbano e vê à direita placa triangular de borda vermelha e fundo branco (R-2), sem semáforo nem agente. Pelo CTB, qual é seu dever diante da placa R-2 e a consequência por descumpri-la?",
+        statement: "O condutor aproxima-se de interseção no perímetro urbano sem semáforo e sem agente e visualiza placa triangular de borda vermelha e fundo branco (R-2) à direita. Pelo CTB, seu dever diante dessa sinalização e a sanção pelo descumprimento são:",
         options: [
-            "Parar sempre antes do cruzamento, mesmo sem ninguém, ou leva gravíssima.",
-            "Dar a vez a quem vem na preferencial, reduzindo ou parando se preciso; descumprir dá infração grave.",
-            "É só advertência pedindo cautela, sem multa por não parar.",
-            "Manter a velocidade da via, pois o triângulo dá prioridade a quem vira à esquerda."
+            "Parar sempre antes do cruzamento, mesmo sem outros veículos, sob pena de infração gravíssima.",
+            "Ceder a passagem a quem circula na via preferencial, reduzindo ou parando se necessário; descumprir configura infração grave.",
+            "Observar mera recomendação de cautela, sem qualquer multa por não parar no local.",
+            "Manter a velocidade da via, pois o triângulo assegura preferência a quem converte à esquerda."
         ],
         correctIndex: 1,
         explanation: 'A placa R-2 (D\u00EA a Prefer\u00EAncia) pede pra voc\u00EA ceder a passagem. Ignorar isso \u00E9 infra\u00E7\u00E3o GRAVE.',
@@ -4006,12 +4006,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "validade_cnh_renovacao_alta_01",
         category: "legislacao",
-        statement: "Você tem 42 anos, CNH B, e foi renovar a carteira no DETRAN. A Lei 14.071 mudou o prazo do exame de saúde, que vale mais pra gente mais nova. Se o médico não ver doença que piora com o tempo, por quantos anos vai valer seu exame físico e mental nessa renovação?",
+        statement: "Condutor de 42 anos, habilitado na categoria B, comparece ao DETRAN para renovação da CNH. Pela Lei 14.071, caso o exame de aptidão física e mental não identifique doença que progrida com a idade, a validade do exame será de:",
         options: [
-            "5 anos, caindo pra 3 anos só quando fizer 50 anos.",
-            "10 anos, pois tem menos de 50 anos de idade.",
-            "5 anos, com 10 anos só pra motorista profissional de C, D e E.",
-            "3 anos, prazo único pra todo mundo depois da lei nova.",
+            "5 anos, reduzindo-se a 3 anos ao atingir a idade de 50 anos.",
+            "10 anos, pois o condutor possui menos de 50 anos de idade.",
+            "5 anos, prevalecendo 10 anos apenas para profissionais das categorias C, D e E.",
+            "3 anos, prazo único aplicável a todos os condutores após a alteração legal."
         ],
         correctIndex: 1,
         explanation: 'Quem tem menos de 50 anos pode ter a CNH v\u00E1lida por at\u00E9 10 anos.',
@@ -4110,12 +4110,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "nova_velocidade_vias_locais_alta_01",
         category: "legislacao",
-        statement: "Você conduz um veículo automotor por uma via urbana local, em área residencial, sem sinalização regulamentadora de velocidade R-19. Pelas normas gerais de circulação do CTB para vias abertas em perímetro urbano, qual é a velocidade máxima a respeitar para não ser autuado por excesso?",
+        statement: "O condutor trafega por via urbana local em área residencial, onde não existe placa R-19 de regulamentação de velocidade. Pelo limite padrão do CTB para vias abertas no perímetro urbano, a velocidade máxima a ser respeitada é de:",
         options: [
-            "30 km/h, por ser via local sem placa regulamentadora.",
-            "40 km/h, padrão das vias coletoras sem sinalização.",
-            "50 km/h, limite geral das vias urbanas sem placa.",
-            "20 km/h, por ser área residencial só de pedestre.",
+            "30 km/h, por se tratar de via local sem sinalização regulamentadora.",
+            "40 km/h, limite padrão das vias coletoras urbanas.",
+            "50 km/h, limite geral das vias urbanas de circulação.",
+            "20 km/h, por ser área residencial exclusiva de pedestres."
         ],
         correctIndex: 0,
         explanation: 'Se n\u00E3o tem placa, a velocidade m\u00E1xima na rua \u00E9 de 30 km/h (via local).',
@@ -4650,12 +4650,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "nova_exame_pratico_velocidade_inadequada_04",
         category: "legislacao",
-        statement: "Na prova prática da CNH, está chovendo forte e a pista está escorregadia, mas o candidato dirige em velocidade errada e perigosa para aquele clima e local. Pela regra do CONTRAN que avalia os candidatos, como essa atitude é classificada?",
+        statement: "Na prova prática de direção veicular, chove intensamente e a pista apresenta baixa aderência, mas o candidato conduz em velocidade inadequada às condições do local e do clima. Pela tabela de faltas do CONTRAN, essa atitude é classificada como:",
         options: [
-            "Falta eliminatória, reprovando o candidato na hora na prova prática.",
-            "Falta grave, fazendo perder 3 pontos na ficha do examinador.",
-            "Falta média, fazendo perder 2 pontos na nota do candidato.",
-            "Falta leve, fazendo perder só 1 ponto na tabela do DETRAN."
+            "Falta eliminatória, reprovando o candidato imediatamente na prova prática.",
+            "Falta grave, com perda de 3 pontos na ficha de avaliação do examinador.",
+            "Falta média, com perda de 2 pontos na nota atribuída ao candidato.",
+            "Falta leve, com perda de 1 ponto na pontuação registrada pelo DETRAN."
         ],
         correctIndex: 1,
         explanation: 'Dirigir r\u00E1pido demais em condi\u00E7\u00F5es ruins \u00E9 falta GRAVE no exame (perde 3 pontos).',
@@ -4791,12 +4791,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "nova_exame_pratico_preferencia_pedestre_11",
         category: "legislacao",
-        statement: "Na prova prática da CNH, o candidato vai converter à direita em uma interseção com sinalização semafórica. O sinal está verde para ele, mas há pedestre terminando a travessia na via urbana transversal que ele vai ingressar. Se avançar sem ceder a preferência, quantos pontos ele perde?",
+        statement: "Na prova prática da CNH, o candidato vai converter à direita em interseção semafórica com sinal verde em seu favor, mas pedestre termina a travessia na via transversal de ingresso. Avançar sem ceder a preferência gera perda de quantos pontos?",
         options: [
-            "Falta eliminatória, reprovando na hora na prova prática.",
-            "Falta grave, perdendo 3 pontos na ficha de avaliação.",
-            "Falta média, perdendo 2 pontos na ficha de avaliação.",
-            "Falta leve, perdendo só 1 ponto na ficha do candidato."
+            "Falta eliminatória, reprovando o candidato imediatamente na prova prática.",
+            "Falta grave, com perda de 3 pontos na ficha de avaliação.",
+            "Falta média, com perda de 2 pontos na ficha de avaliação.",
+            "Falta leve, com perda de 1 ponto na ficha de avaliação."
         ],
         correctIndex: 1,
         explanation: 'N\u00E3o dar prefer\u00EAncia ao pedestre que est\u00E1 atravessando \u00E9 falta GRAVE no exame (perde 3 pontos).',
@@ -4831,12 +4831,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "nova_classificacao_vias_arterial_13",
         category: "legislacao",
-        statement: "O CTB divide as vias públicas abertas à circulação em urbanas e rurais. A via arterial, que possui interseções em mesmo nível geralmente com sinalização semafórica e interliga uma região do perímetro urbano à outra, é exemplo clássico de que tipo de via?",
+        statement: "O CTB classifica as vias abertas à circulação em urbanas e rurais. A via com interseções em nível, geralmente sinalizadas por semáforo, que interliga regiões distintas do perímetro urbano, é tipificada como via:",
         options: [
-            "Urbana.",
-            "Privada de acesso restrito.",
-            "Rural sem asfalto.",
-            "Expressa usada só para trânsito internacional."
+            "Urbana, com fluxo canalizado por interseções em mesmo nível.",
+            "Privada de acesso restrito, com circulação limitada aos moradores.",
+            "Rural não pavimentada, destinada à circulação intermunicipal.",
+            "Expressa internacional, exclusiva de trânsito entre países fronteiriços."
         ],
         correctIndex: 0,
         explanation: 'A via arterial \u00E9 uma via URBANA.',
@@ -4851,12 +4851,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'leg_n1_002',
         category: 'legislacao',
-        statement: 'A Permiss\u00E3o para Dirigir (PPD) vale, antes da CNH definitiva:',
+        statement: "Candidato aprovado nos exames teórico e prático recebe a Permissão para Dirigir (PPD) e pretende saber o prazo do estágio probatório até a expedição da CNH definitiva. Pelo CTB e pelas resoluções do CONTRAN, esse prazo de estágio probatório é de:",
         options: [
-            '12 meses (um ano).',
-            '6 meses, prorrog\u00E1veis.',
-            '24 meses.',
-            'Indefinidamente at\u00E9 a 1\u00AA infra\u00E7\u00E3o.'
+            "12 meses (um ano), contados a partir da expedição do documento.",
+            "6 meses, prorrogáveis uma única vez mediante requerimento.",
+            "24 meses, coincidentes com o período mínimo das avaliações psicológicas.",
+            "Indefinidamente, até a ocorrência da primeira infração de trânsito."
         ],
         correctIndex: 0,
         explanation: 'A PPD vale por 1 ano.',
@@ -4872,12 +4872,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'leg_n2_001',
         category: 'legislacao',
-        statement: 'Candidato aprovado na categoria B quer saber os exatos limites de massa e lota\u00E7\u00E3o do ve\u00EDculo que pode conduzir. Segundo o Art. 143 do CTB, quais s\u00E3o esses limites?',
+        statement: "Candidato aprovado e habilitado na categoria B precisa conhecer os limites de massa bruta total e de lotação que essa categoria autoriza, conforme o Art. 143 do CTB. Esses limites legais estabelecidos pela lei são:",
         options: [
-            'PBT at\u00E9 3.500 kg e lota\u00E7\u00E3o de at\u00E9 8 passageiros, exclu\u00EDdo o condutor (8+1).',
-            'PBT at\u00E9 6.000 kg e lota\u00E7\u00E3o de at\u00E9 10 passageiros, incluindo o motorista.',
-            'PBT ilimitado para carga e at\u00E9 8 passageiros no total.',
-            'Somente ve\u00EDculos de passeio com at\u00E9 5 lugares, contando o condutor.'
+            "PBT de até 3.500 kg e lotação de até 8 passageiros, excluído o condutor (regra 8+1).",
+            "PBT de até 6.000 kg e lotação de até 10 passageiros, incluindo o motorista.",
+            "PBT ilimitado para carga e lotação de até 8 ocupantes no total.",
+            "Somente veículos de passeio com até 5 lugares, contando o condutor."
         ],
         correctIndex: 0,
         explanation: 'Na categoria B, voc\u00EA pode dirigir ve\u00EDculos com PBT at\u00E9 3.500 kg e lota\u00E7\u00E3o de at\u00E9 8 passageiros, sem contar o motorista.',
@@ -4893,12 +4893,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'leg_n1_001',
         category: 'legislacao',
-        statement: 'Categoria B habilita ve\u00EDculos de at\u00E9 3.500 kg de PBT. Qual o limite de passageiros, fora o motorista?',
+        statement: "A categoria B habilita veículos motorizados com peso bruto total de até 3.500 kg. Segundo o Art. 143 do CTB e as normas do CONTRAN, o limite legal de transporte de passageiros nesses veículos, excluído o condutor, é de:",
         options: [
-            'At\u00E9 8 passageiros, n\u00E3o contando o condutor (regra do 8+1).',
-            'At\u00E9 8 passageiros, incluindo o motorista.',
-            'At\u00E9 15 passageiros, al\u00E9m do condutor.',
-            'At\u00E9 5 passageiros, n\u00E3o contando o condutor.'
+            "Até 8 passageiros, não contando o condutor (regra do 8+1).",
+            "Até 8 passageiros, contando obrigatoriamente o motorista.",
+            "Até 15 passageiros, além do condutor.",
+            "Até 5 passageiros, não contando o condutor."
         ],
         correctIndex: 0,
         explanation: 'Na categoria B, voc\u00EA pode levar at\u00E9 8 passageiros, sem contar o motorista.',
@@ -4914,12 +4914,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'leg_n2_003',
         category: 'legislacao',
-        statement: 'Condutor comum acumula pontos e n\u00E3o cometeu infra\u00E7\u00E3o grav\u00EDssima em 12 meses. Considerando a Lei 14.071/2020, em que pontua\u00E7\u00E3o ocorre a suspens\u00E3o?',
+        statement: "Condutor comum acumula pontos no prontuário sem cometer nenhuma infração gravíssima em 12 meses. Considerando a sistemática de contagem de pontos da Lei 14.071/2020 no CTB, a suspensão do direito de dirigir ocorre:",
         options: [
-            '40 pontos, limite aplic\u00E1vel quando n\u00E3o h\u00E1 infra\u00E7\u00E3o grav\u00EDssima.',
-            '20 pontos, regra fixa independente da gravidade.',
-            '30 pontos, pela exist\u00EAncia de uma infra\u00E7\u00E3o grave.',
-            '14 pontos, por ser condutor com atividade remunerada.'
+            "Aos 40 pontos, limite aplicável quando não há infração gravíssima no período.",
+            "Aos 20 pontos, regra fixa independente da gravidade das infrações.",
+            "Aos 30 pontos, pela existência de ao menos uma infração grave.",
+            "Aos 14 pontos, por tratar-se de condutor com atividade remunerada (EAR)."
         ],
         correctIndex: 0,
         explanation: 'Se n\u00E3o teve infra\u00E7\u00E3o grav\u00EDssima, o limite \u00E9 40 pontos.',
@@ -4956,12 +4956,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'leg_n2_002',
         category: 'legislacao',
-        statement: 'Jo\u00E3o recebe a Permiss\u00E3o para Dirigir ap\u00F3s ser aprovado nos exames. Sobre o per\u00EDodo probat\u00F3rio e as consequ\u00EAncias de infra\u00E7\u00F5es nesse intervalo, assinale a alternativa correta:',
+        statement: "Candidato recebe a Permissão para Dirigir após aprovação nos exames teórico e prático. Sobre o período probatório e as consequências das infrações cometidas nesse intervalo no prontuário, a alternativa correta é:",
         options: [
-            'A PPD vale 12 meses; infra\u00E7\u00E3o grave, grav\u00EDssima ou reincidir em m\u00E9dia impede a CNH definitiva.',
-            'A PPD vale 6 meses e qualquer infra\u00E7\u00E3o leve j\u00E1 anula a habilita\u00E7\u00E3o.',
-            'A PPD n\u00E3o tem prazo e s\u00F3 \u00E9 cancelada por crime de tr\u00E2nsito.',
-            'A PPD vale 24 meses e permite at\u00E9 20 pontos sem puni\u00E7\u00E3o.'
+            "A PPD vale 12 meses; infração grave, gravíssima ou reincidência em média impede a CNH definitiva.",
+            "A PPD vale 6 meses e qualquer infração leve já anula a habilitação.",
+            "A PPD não possui prazo e só é cancelada por crime de trânsito.",
+            "A PPD vale 24 meses e admite até 20 pontos sem consequência."
         ],
         correctIndex: 0,
         explanation: 'A PPD \u00E9 por 1 ano; infra\u00E7\u00F5es graves, grav\u00EDssimas ou reincid\u00EAncias em m\u00E9dias barram a CNH definitiva.',
@@ -4998,12 +4998,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'leg_n1_003',
         category: 'legislacao',
-        statement: 'Pela Lei 14.071/2020, sem nenhuma infra\u00E7\u00E3o grav\u00EDssima, a suspens\u00E3o ocorre aos:',
+        statement: "Pela sistemática de contagem de pontos introduzida pela Lei 14.071/2020 no CTB, o condutor que não cometeu nenhuma infração gravíssima no período de 12 meses sofre suspensão do direito de dirigir ao atingir:",
         options: [
-            '40 pontos.',
-            '20 pontos fixos.',
-            '30 pontos.',
-            '14 pontos.'
+            "40 pontos acumulados no prontuário.",
+            "20 pontos fixos, independentemente da natureza das infrações.",
+            "30 pontos, exigida a existência de infração grave.",
+            "14 pontos, para condutor com EAR (exercício de atividade remunerada)."
         ],
         correctIndex: 0,
         explanation: 'Sem infra\u00E7\u00F5es grav\u00EDssimas, a suspens\u00E3o acontece aos 40 pontos.',
@@ -5334,12 +5334,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'me_n1_001',
         category: 'legislacao',
-        statement: 'Circular com n\u00EDvel de \u00F3leo muito baixo pode causar:',
+        statement: "O condutor mantém o veículo em circulação com nível de óleo lubrificante muito abaixo do mínimo indicado na vareta de medição. Considerando o sistema de lubrificação do motor, essa situação pode provocar:",
         options: [
-            'Fundo do motor por atrito excessivo.',
-            'Menor consumo, sem risco.',
-            'Travamento dos freios.',
-            'Desgaste apenas das velas.'
+            "Fundição do motor (fundo do motor) por atrito excessivo entre as peças.",
+            "Menor consumo de combustível, sem qualquer risco mecânico.",
+            "Travamento do sistema de freios por contaminação do fluido.",
+            "Desgaste exclusivo das velas de ignição do motor."
         ],
         correctIndex: 0,
         explanation: 'Falta de \u00F3leo pode fazer o motor travar.',
@@ -5376,12 +5376,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'me_n2_001',
         category: 'legislacao',
-        statement: 'O sistema de lubrifica\u00E7\u00E3o evita o atrito direto entre as pe\u00E7as do motor. O que provoca a circula\u00E7\u00E3o com n\u00EDvel severamente baixo de \u00F3leo?',
+        statement: "O sistema de lubrificação do motor evita o atrito direto entre as peças móveis em movimento. A circulação do veículo com nível de óleo severamente baixo, sem reposição imediata, provoca, como principal consequência mecânica:",
         options: [
-            'Superaquecimento por atrito, podendo fundir o motor e danificar o bloco.',
-            'Aumento do consumo, sem risco mec\u00E2nico.',
-            'Redu\u00E7\u00E3o do desgaste das velas.',
-            'Travamento das pastilhas traseiras.'
+            "Superaquecimento por atrito, podendo fundir o motor e danificar o bloco.",
+            "Aumento do consumo, sem risco mecânico para o conjunto.",
+            "Redução do desgaste das velas de ignição.",
+            "Travamento das pastilhas de freio traseiras."
         ],
         correctIndex: 0,
         explanation: '\u00D3leo baixo causa atrito e pode fundir o motor.',
@@ -5397,12 +5397,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'pr_n1_001',
         category: 'legislacao',
-        statement: 'Ve\u00EDculo de emerg\u00EAncia com sirene e giroflex ligados tem prioridade:',
+        statement: "Veículo de emergência aproxima-se com sirene e dispositivos luminosos vermelhos intermitentes acionados em serviço de urgência. Segundo as normas de circulação do CTB, essa condição confere ao veículo de emergência prioridade:",
         options: [
-            'Absoluta; os demais devem abrir caminho \u00E0 direita.',
-            'Apenas se for da Pol\u00EDcia.',
-            'Somente \u00E0 noite.',
-            'Nenhuma, deve obedecer aos sinais.'
+            "Absoluta de passagem, devendo os demais veículos abrir caminho pela direita.",
+            "Apenas quando se tratar de viatura da Polícia Militar.",
+            "Somente durante o período noturno, das 22h às 6h.",
+            "Nenhuma, devendo o veículo de emergência obedecer estritamente aos sinais."
         ],
         correctIndex: 0,
         explanation: 'Ve\u00EDculo de emerg\u00EAncia com sirene e giroflex tem prioridade total.',
@@ -5418,12 +5418,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'me_n2_002',
         category: 'legislacao',
-        statement: 'Rodar com pneus \'carecas\' (profundidade abaixo do limite legal de 1,6 mm) exp\u00F5e a seguran\u00E7a a riscos. Qual o perigo correto?',
+        statement: "O condutor trafega com pneus cuja profundidade de sulcos está abaixo do limite legal de 1,6 mm. Considerando a segurança da circulação e a física do veículo automotor, esse desgaste expõe o condutor principalmente ao risco de:",
         options: [
-            'Perda de ader\u00EAncia em pista molhada, aquaplanagem e aumento da dist\u00E2ncia de frenagem.',
-            'Redu\u00E7\u00E3o do consumo por maior ader\u00EAncia.',
-            'Desalinhamento instant\u00E2neo da dire\u00E7\u00E3o.',
-            'Bloqueio das rodas por fadiga da suspens\u00E3o.'
+            "Perda de aderência em pista molhada, aquaplanagem e aumento da distância de frenagem.",
+            "Redução do consumo de combustível por maior aderência.",
+            "Desalinhamento imediato da direção em pista seca.",
+            "Bloqueio das rodas por fadiga do sistema de suspensão."
         ],
         correctIndex: 0,
         explanation: 'Pneu careca faz voc\u00EA escorregar na chuva e demora mais pra parar.',
@@ -5439,12 +5439,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'pr_n1_002',
         category: 'legislacao',
-        statement: 'Em aclive/declive estreito da pista de rolamento onde não cabem dois veículos, quem tem a preferência de passagem?',
+        statement: "Em trecho de aclive ou declive com pista de rolamento estreita, onde não há espaço para a passagem simultânea de dois veículos em sentidos opostos, a preferência de passagem prevista no CTB é do veículo:",
         options: [
-            'Quem sobe; quem desce deve dar passagem.',
-            'Quem desce, por ter maior velocidade.',
-            'O maior ve\u00EDculo.',
-            'Quem buzinar primeiro.'
+            "Que está subindo, devendo o que desce dar passagem.",
+            "Que está descendo, por possuir maior velocidade natural.",
+            "De maior porte e maior peso bruto total.",
+            "Que primeiro acionar a buzina para sinalizar a intenção."
         ],
         correctIndex: 0,
         explanation: 'Quem sobe tem prioridade na ladeira.',
@@ -5460,12 +5460,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'me_n1_002',
         category: 'legislacao',
-        statement: 'Pneu com sulcos abaixo de 1,6 mm (careca) aumenta principalmente o risco de:',
+        statement: "O condutor mantém em circulação pneus com profundidade de sulcos abaixo de 1,6 mm, valor que caracteriza a banda de rodagem careca segundo a regulamentação. Essa condição aumenta principalmente o risco de:",
         options: [
-            'Aquaplanagem e maior dist\u00E2ncia de frenagem.',
-            'Menor consumo de combust\u00EDvel.',
-            'Melhor ader\u00EAncia em curvas.',
-            'Travamento das rodas dianteiras.'
+            "Aquaplanagem e aumento da distância de frenagem em pista molhada.",
+            "Redução do consumo de combustível em vias planas.",
+            "Melhora da aderência em curvas de raio fechado.",
+            "Travamento mecânico das rodas dianteiras em frenagens leves."
         ],
         correctIndex: 0,
         explanation: 'Pneu careca aumenta o risco de aquaplanagem e faz voc\u00EA precisar frear mais longe.',
@@ -5481,12 +5481,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'pl_n1_001',
         category: 'legislacao',
-        statement: 'A placa de PARE (R-1) tem formato:',
+        statement: "A placa de regulamentação R-1, de parada obrigatória, é reconhecida pelos condutores por seu formato característico definido no Manual Brasileiro de Sinalização de Trânsito. Esse formato preconizado pelas normas do CONTRAN é:",
         options: [
-            'Octogonal (oito lados), de parada obrigat\u00F3ria.',
-            'Circular vermelha.',
-            'Losango amarelo.',
-            'Retangular azul.'
+            "Octogonal (oito lados), de fundo vermelho com a inscrição PARE.",
+            "Circular, de fundo branco com orla vermelha.",
+            "Losangular, de fundo amarelo com símbolo preto.",
+            "Retangular, de fundo azul com símbolo branco."
         ],
         correctIndex: 0,
         explanation: 'A placa PARE (R-1) tem oito lados.',
@@ -5502,12 +5502,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'pr_n2_001',
         category: 'legislacao',
-        statement: 'Ambul\u00E2ncia em servi\u00E7o de urg\u00EAncia, com sirene e luzes vermelhas ligadas, aproxima-se. Segundo o CTB, ela goza de:',
+        statement: "Ambulância em serviço de urgência aproxima-se em via urbana de fluxo intenso com sirene e luzes vermelhas intermitentes acionadas. Conforme as normas do CTB, esse veículo de socorro e salvamento goza de:",
         options: [
-            'Prioridade absoluta; os demais devem facilitar a passagem encostando \u00E0 direita.',
-            'Prioridade apenas se for da Pol\u00EDcia Militar.',
-            'Nenhuma prioridade fora de rodovias.',
-            'Prioridade s\u00F3 nos finais de semana.'
+            "Prioridade absoluta de passagem, devendo os demais condutores encostar à direita.",
+            "Prioridade exclusivamente quando se tratar de viatura da Polícia Militar.",
+            "Nenhuma prioridade fora dos trechos de rodovia.",
+            "Prioridade restrita aos finais de semana e feriados."
         ],
         correctIndex: 0,
         explanation: 'Ambul\u00E2ncia com sirene e luzes vermelhas = prioridade absoluta.',
@@ -5523,12 +5523,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'pr_n2_002',
         category: 'legislacao',
-        statement: 'Dois veículos pesados se aproximam em aclive/declive estreito da pista de rolamento sem pavimento, em sentidos opostos. Conforme o CTB, a preferência é do veículo que:',
+        statement: "Dois veículos pesados aproximam-se em sentidos opostos de trecho estreito em aclive ou declive, sem pavimento e sem sinalização. Conforme as regras gerais de preferência do CTB, a passagem nesse trecho pertence ao veículo que:",
         options: [
-            'Est\u00E1 subindo; o que desce deve recuar e dar passagem.',
-            'Est\u00E1 descendo, pela maior energia cin\u00E9tica.',
-            'Sinalizou primeiro com buzina.',
-            'Tem menor peso bruto.'
+            "Está subindo, devendo o que desce recuar e dar passagem.",
+            "Está descendo, por desenvolver maior energia cinética.",
+            "Sinalizou primeiro com toques de buzina.",
+            "Possui menor peso bruto total."
         ],
         correctIndex: 0,
         explanation: 'Quem t\u00E1 subindo tem a prefer\u00EAncia na ladeira estreita.',
@@ -5544,12 +5544,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'pl_n2_001',
         category: 'legislacao',
-        statement: 'Sobre a sinaliza\u00E7\u00E3o de regulamenta\u00E7\u00E3o, qual a caracter\u00EDstica da placa PARE (R-1)?',
+        statement: "O condutor, ao avaliar a sinalização vertical de regulamentação prevista no Manual Brasileiro de Sinalização de Trânsito do CONTRAN, deve reconhecer que a placa PARE (R-1) possui as seguintes características:",
         options: [
-            'Formato octogonal; exige parada total obrigat\u00F3ria antes de prosseguir.',
-            'Circular com orla vermelha; apenas recomenda reduzir.',
-            'Losango amarelo; avisa perigo.',
-            'Retangular azul; indica servi\u00E7o.'
+            "Formato octogonal; exige parada total obrigatória antes de prosseguir.",
+            "Formato circular com orla vermelha; apenas recomenda redução da velocidade.",
+            "Formato losangular amarelo; alerta para perigo iminente na via.",
+            "Formato retangular azul; indica serviço público nas proximidades."
         ],
         correctIndex: 0,
         explanation: 'A placa PARE (R-1) \u00E9 de formato octogonal e manda parar totalmente antes de seguir.',
@@ -5565,12 +5565,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'pl_n2_002',
         category: 'legislacao',
-        statement: 'As placas de regulamenta\u00E7\u00E3o, em sua maioria, apresentam qual padr\u00E3o de formato e cores?',
+        statement: "Na sinalização vertical prevista no Manual Brasileiro de Sinalização de Trânsito do CONTRAN, as placas de regulamentação, em sua maioria, apresentam padrão cromático e geométrico uniforme. Esse padrão é:",
         options: [
-            'Circulares, fundo branco, orla e tarja vermelhas e s\u00EDmbolo preto (imp\u00F5em obriga\u00E7\u00F5es/proibi\u00E7\u00F5es).',
-            'Losango amarelo com s\u00EDmbolo preto (aviso de perigo).',
-            'Ret\u00E2ngulo azul com s\u00EDmbolo branco (indica\u00E7\u00E3o).',
-            'Tri\u00E2ngulo invertido vermelho (prefer\u00EAncia).'
+            "Circulares, fundo branco, orla e tarja vermelhas e símbolo preto (impõem obrigações e proibições).",
+            "Losangulares, fundo amarelo e símbolo preto (alertam para perigos).",
+            "Retangulares, fundo azul e símbolo branco (indicam serviços e destinos).",
+            "Triangulares invertidas, fundo vermelho e símbolo branco (indicam preferência)."
         ],
         correctIndex: 0,
         explanation: 'As placas de regulamenta\u00E7\u00E3o s\u00E3o redondas, com fundo branco e borda vermelha.',
@@ -5586,12 +5586,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'pl_n1_002',
         category: 'legislacao',
-        statement: 'Placas circulares com fundo branco e orla vermelha s\u00E3o de:',
+        statement: "O condutor, ao consultar o Manual Brasileiro de Sinalização de Trânsito do CONTRAN, identifica que as placas de formato circular, fundo branco e orla vermelha pertencem à classe de sinalização vertical:",
         options: [
-            'Regulamenta\u00E7\u00E3o (obrigam/pro\u00EDbem).',
-            'Advert\u00EAncia.',
-            'Indica\u00E7\u00E3o.',
-            'Educa\u00E7\u00E3o.'
+            "Regulamentação, que impõem obrigações e proibições.",
+            "Advertência, que alertam sobre perigos potenciais na via.",
+            "Indicação, que informam serviços e destinos aos condutores.",
+            "Educação, que orientam o comportamento dos usuários."
         ],
         correctIndex: 0,
         explanation: 'C\u00EDrculo vermelho significa que tem regra pra seguir.',
@@ -5667,12 +5667,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'detran_ilum_004_alta',
         category: 'legislacao',
-        statement: 'Segundo o CTB, qual luz é de uso OBRIGATÓRIO durante o dia em rodovias de pista simples fora dos perímetros urbanos para veículos sem DRL?',
+        statement: "Segundo o CTB e a regulamentação vigente, o condutor de veículo que não dispõe do sistema de luz de condução diurna (DRL) deve manter aceso, durante o período diurno, em rodovia de pista simples fora do perímetro urbano:",
         options: [
-            'Apenas as luzes de posição (farolete).',
-            'Farol baixo (ou luz de rodagem diurna - DRL).',
-            'Farol alto em ritmo de intermitência.',
-            'Luzes de advertência do pisca-alerta.'
+            "Apenas as luzes de posição (faroletes) dianteiras.",
+            "O farol baixo (ou a luz de condução diurna - DRL).",
+            "O farol alto em ritmo de intermitência.",
+            "As luzes de advertência do pisca-alerta."
         ],
         correctIndex: 1,
         explanation: 'Na rodovia de pista simples de dia, é obrigatório acender o farol baixo ou ter o DRL nativo.',
@@ -5687,12 +5687,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'detran_ilum_005_alta',
         category: 'legislacao',
-        statement: 'Para qual finalidade específica o condutor deve utilizar as luzes indicadoras de direção (setas) do seu veículo?',
+        statement: "As luzes indicadoras de direção (setas) do veículo integram a sinalização luminosa prevista no CTB e na sinalização do CONTRAN. Para qual finalidade específica o condutor deve acioná-las durante a circulação?",
         options: [
-            'Sinalizar a intenção de realizar conversão, mudança de faixa ou ultrapassagem.',
-            'Garantir a preferência de passagem ao cruzar interseções não sinalizadas.',
-            'Alertar os veículos de trás que o trânsito adiante está parando no congestionamento.',
-            'Substituir o uso do farol baixo ao trafegar em túneis providos de iluminação.'
+            "Sinalizar a intenção de realizar conversão, mudança de faixa ou ultrapassagem.",
+            "Garantir a preferência de passagem ao cruzar interseções não sinalizadas.",
+            "Alertar os veículos seguintes que o trânsito adiante está parado em congestionamento.",
+            "Substituir o farol baixo do veículo durante a circulação em túneis iluminados."
         ],
         correctIndex: 0,
         explanation: 'A seta serve para avisar antes de virar, mudar de faixa ou realizar ultrapassagens.',
@@ -5727,12 +5727,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'detran_ilum_007_alta',
         category: 'legislacao',
-        statement: 'Para realizar uma ultrapassagem completa e segura em pista simples de duplo sentido, o condutor deve acionar as luzes indicadoras de direção:',
+        statement: "Para executar uma ultrapassagem completa e segura em rodovia de pista simples com duplo sentido de circulação, o condutor deve acionar as luzes indicadoras de direção (setas) durante as etapas da manobra da seguinte forma:",
         options: [
-            'Para a esquerda durante todo o percurso até finalizar completamente a ultrapassagem.',
-            'Para a esquerda ao sair da faixa e para a direita antes de retornar à faixa de origem.',
-            'Em conjunto com o pisca-alerta enquanto ocupar a faixa da contramão de direção.',
-            'Apenas piscando o farol alto, dispensando o uso das setas nas vias rurais.'
+            "Para a esquerda durante todo o percurso, até concluir integralmente a ultrapassagem.",
+            "Para a esquerda ao transpor a faixa de origem e para a direita antes de retornar à faixa original.",
+            "Em conjunto com o pisca-alerta enquanto permanecer na faixa da contramão de direção.",
+            "Apenas piscando o farol alto, dispensando as setas nas vias rurais."
         ],
         correctIndex: 1,
         explanation: 'Ultrapassagem exige duas setas: para a esquerda na saída e para a direita ao voltar para a sua pista.',
@@ -5969,10 +5969,10 @@ export const QUESTIONS: Question[] = [
         category: "legislacao",
         statement: "Ao trafegar com veículo automotor por via urbana classificada como LOCAL (via urbana residencial ou de acesso restrito) onde NÃO exista sinalização regulamentadora de velocidade, qual é a velocidade máxima permitida pelo CTB (Art. 61)?",
         options: [
-            "30 km/h.",
-            "40 km/h.",
-            "60 km/h.",
-            "80 km/h."
+            "30 km/h, limite padrão das vias locais sem sinalização (Art. 61).",
+            "40 km/h, limite padrão das vias coletoras urbanas.",
+            "60 km/h, limite padrão das vias arteriais urbanas.",
+            "80 km/h, limite padrão das vias de trânsito rápido."
         ],
         correctIndex: 0,
         explanation: "A velocidade máxima padrão para via local não sinalizada é 30 km/h.",
@@ -6389,12 +6389,12 @@ export const QUESTIONS: Question[] = [
         id: "detran_q26_n1",
         category: "legislacao",
         difficulty: 1,
-        statement: "Diante do sinal semafórico SS-08 para pedestre, a atitude é:",
+        statement: "O pedestre aproxima-se de travessia sinalizada com o semáforo para pedestres de código SS-08, cujo sinal encontra-se aceso naquele instante. Diante dessa indicação semafórica, a atitude correta a ser adotada é:",
         options: [
-            "Pode seguir.",
-            "Não pode ultrapassar.",
-            "Atenção.",
-            "Pare o veículo."
+            "Iniciar a travessia, pois o sinal verde autoriza o pedestre a seguir.",
+            "Não ultrapassar a linha de retenção, permanecendo na calçada até a troca do sinal.",
+            "Atenção apenas, cruzando com cautela independentemente da indicação.",
+            "Parar o veículo em movimento para facilitar a travessia imediata."
         ],
         correctIndex: 1,
         explanation: "Sinaleiro vermelho para pedestre (SS-08) significa que você não pode atravessar.",
@@ -6409,10 +6409,10 @@ export const QUESTIONS: Question[] = [
         id: "detran_q27_n1",
         category: "legislacao",
         difficulty: 1,
-        statement: "Assinale a alternativa correta sobre as regras do trânsito:",
+        statement: "Dentre as normas gerais de circulação e conduta previstas no CTB, assinale a alternativa que exprime corretamente uma das regras de conduta impostas pelo Código de Trânsito ao condutor e aos ocupantes do veículo:",
         options: [
             "Os animais isolados ou em grupos não poderão circular nas vias urbanas ou rurais.",
-            "A parada 'embarque de passageiros' não poderá ser feita quando proibido o estacionamento.",
+            "A parada para embarque de passageiros não poderá ser efetuada onde o estacionamento é proibido.",
             "O condutor e o passageiro não deverão abrir a porta sem certificar-se de que não há perigo.",
             "Em nenhuma hipótese será permitida a circulação de bicicletas nos passeios."
         ],
@@ -6530,12 +6530,12 @@ export const QUESTIONS: Question[] = [
         id: "detran_q26_n2",
         category: "legislacao",
         difficulty: 2,
-        statement: "O procedimento do pedestre diante da sinalização semafórica identificada na cartela pelo código SS-08 é:",
+        statement: "No cumprimento da sinalização semafórica para pedestres prevista no Manual Brasileiro do CONTRAN, o procedimento regulamentar a ser adotado diante do sinal identificado na cartela pelo código SS-08 é:",
         options: [
-            "Pode seguir.",
-            "Não pode ultrapassar.",
-            "Atenção.",
-            "Pare o veículo."
+            "Pode seguir, atravessando a via livremente.",
+            "Não pode ultrapassar a linha de retenção enquanto o sinal estiver assim.",
+            "Atenção, travessia facultativa com cautela redobrada.",
+            "Pare o veículo, imobilizando o trânsito na interseção."
         ],
         correctIndex: 1,
         explanation: "Sinal SS-08 é o semáforo vermelho do pedestre; ele proíbe o pedestre de iniciar a travessia.",
@@ -6550,11 +6550,11 @@ export const QUESTIONS: Question[] = [
         id: "detran_q27_n2",
         category: "legislacao",
         difficulty: 2,
-        statement: "Analisando as normas gerais de circulação e conduta previstas no CTB, assinale a alternativa correta:",
+        statement: "Analisando as normas gerais de circulação e conduta previstas no CTB, e considerando os deveres do condutor e dos ocupantes quanto à segurança da via e à fluidez do trânsito, assinale a alternativa juridicamente correta:",
         options: [
             "Os animais isolados ou em grupos não poderão circular nas vias urbanas ou rurais.",
-            "A parada 'embarque de passageiros' não poderá ser feita quando proibido o estacionamento na via.",
-            "O condutor e o passageiro não deverão abrir a porta do veículo, sem antes certificar-se que isso não constitui perigo para eles e outros usuários da via.",
+            "A parada para embarque de passageiros não poderá ser efetuada onde o estacionamento é proibido na via.",
+            "O condutor e o passageiro não deverão abrir a porta do veículo sem antes certificar-se de que não constituem perigo para eles e demais usuários.",
             "Em nenhuma hipótese será permitida a circulação de bicicletas nos passeios."
         ],
         correctIndex: 2,
@@ -6611,12 +6611,12 @@ export const QUESTIONS: Question[] = [
         id: "detran_q30_n1",
         category: "legislacao",
         difficulty: 1,
-        statement: "Não obstruir a marcha normal dos veículos, sem causa justificada. Estamos falando sobre:",
+        statement: "O dever de não obstruir a marcha normal dos veículos, sem causa justificada, integra o conjunto de normas gerais de circulação e conduta impostas pelo CTB. Esse preceito do condutor enquadra-se no conceito jurídico de:",
         options: [
-            "Normas de circulação.",
-            "Procedimentos adotados somente nas estradas.",
-            "Procedimentos adotados.",
-            "Direção Defensiva."
+            "Normas gerais de circulação e conduta.",
+            "Procedimentos adotados exclusivamente nas estradas rurais.",
+            "Regras de procedimento adotadas pelo condutor por opção própria.",
+            "Princípios exclusivos da direção defensiva."
         ],
         correctIndex: 0,
         explanation: "Não atrapalhar o fluxo do trânsito sem motivo é uma regra das normas de circulação.",
@@ -6674,10 +6674,10 @@ export const QUESTIONS: Question[] = [
         difficulty: 2,
         statement: "O preceito que estabelece que o condutor não deve obstruir a marcha normal dos demais veículos, abstendo-se de trafegar em velocidade anormalmente reduzida sem causa justificada, enquadra-se no conceito de:",
         options: [
-            "Normas de circulação.",
-            "Procedimentos adotados somente nas estradas.",
-            "Procedimentos adotados.",
-            "Direção Defensiva."
+            "Normas gerais de circulação e conduta.",
+            "Procedimentos adotados somente nas estradas rurais.",
+            "Regras de procedimento adotadas livremente pelo condutor.",
+            "Princípios exclusivos da direção defensiva."
         ],
         correctIndex: 0,
         explanation: "Faz parte das Normas Gerais de Circulação e Conduta impostas pelo CTB.",
@@ -6811,7 +6811,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_alta_17",
         category: "legislacao",
-        statement: "Por que órgãos de trânsito e normas técnicas substituíram gradualmente o termo 'acidente' por 'sinistro de trânsito' em estatísticas e legislações?",
+        statement: "Os órgãos de trânsito e as normas técnicas brasileiras passaram a substituir gradualmente o termo acidente por sinistro de trânsito em estatísticas e legislações. A razão fundamental dessa mudança conceitual é:",
         options: [
             "Para evidenciar que a grande maioria dos eventos na via é previsível e evitável por falha humana.",
             "Para isentar os fabricantes de veículos de responsabilidade civil em colisões frontais.",
@@ -6831,12 +6831,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_alta_30",
         category: "legislacao",
-        statement: "Permitir que uma pessoa não habilitada ou com a CNH cassada/suspensa tome a posse e conduza veículo automotor na via pública configura infração e responsabilidade de quem?",
+        statement: "O proprietário permite que pessoa não habilitada, ou com CNH cassada ou suspensa, tome a posse e conduza veículo automotor na via pública. Pelo CTB, a infração aplicável e a responsabilidade administrativa recaem:",
         options: [
-            "Apenas do condutor flagrado ao volante, ficando o proprietário isento de penalidades.",
-            "Do proprietário do veículo, que comete infração gravíssima com penalidade de multa multiplicada.",
-            "Apenas de advertência verbal para ambos caso seja a primeira infração no ano.",
-            "Crime de trânsito imputado exclusivamente ao fabricante do automóvel."
+            "Apenas sobre o condutor flagrado ao volante, ficando o proprietário isento.",
+            "Sobre o proprietário do veículo, que comete infração gravíssima com multa multiplicada.",
+            "Sobre ambos, aplicando-se apenas advertência verbal na primeira ocorrência do ano.",
+            "Sobre crime de trânsito imputado exclusivamente ao fabricante do automóvel."
         ],
         correctIndex: 1,
         explanation: "Permitir posse a não habilitado ou cassado gera infração gravíssima com multa multiplicada para o proprietário (Art. 164 do CTB).",
@@ -6851,12 +6851,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'q_new_01',
         category: 'legislacao',
-        statement: 'Qual é a idade mínima para obter a CNH nas categorias A e B?',
+        statement: "O candidato pretende iniciar o processo de habilitação nas categorias A (motocicletas) e B (automóveis de passeio) e consulta o requisito de idade mínimo previsto no CTB para esse processo. A idade mínima legalmente exigida é de:",
         options: [
-            '16 anos',
-            '18 anos',
-            '21 anos',
-            '25 anos'
+            "16 anos, mediante emancipação e autorização dos genitores.",
+            "18 anos, exigida a condição de penalmente imputável.",
+            "21 anos, exigência uniforme para todas as categorias.",
+            "25 anos, para habilitação com exercício de atividade remunerada."
         ],
         correctIndex: 1,
         explanation: 'A idade mínima é 18 anos para categorias A e B.',
@@ -6914,12 +6914,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'q_new_04',
         category: 'legislacao',
-        statement: 'Qual a penalidade para dirigir sem CNH válida?',
+        statement: "Condutor é flagrado conduzindo veículo automotor sem possuir CNH válida durante fiscalização em via urbana. Pelo CTB, a penalidade administrativa aplicável ao condutor e a medida cabível sobre o veículo são:",
         options: [
-            'Advertência',
-            'Multa de 3 a 10 pontos + retenção do veículo',
-            'Suspensão de 6 meses',
-            'Nenhuma'
+            "Advertência por escrito, sem qualquer multa ou medida sobre o veículo.",
+            "Multa multiplicada por três (gravíssima) e retenção do veículo até a apresentação de condutor habilitado.",
+            "Suspensão imediata do direito de dirigir por seis meses.",
+            "Nenhuma penalidade, caso o veículo esteja licenciado e quitado."
         ],
         correctIndex: 1,
         explanation: 'Infração gravíssima com multa e retenção.',
@@ -6977,12 +6977,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'q_new_07',
         category: 'legislacao',
-        statement: 'O que caracteriza uma infração de trânsito de natureza grave?',
+        statement: "O condutor consulta a classificação das infrações de trânsito prevista no CTB para saber o conjunto de sanções aplicável a cada natureza. A infração de natureza GRAVE, segundo a classificação legal, é caracterizada por:",
         options: [
-            'Somente multa',
-            'Multa + 5 pontos + possibilidade de suspensão',
-            'Somente advertência',
-            'Nenhuma penalidade'
+            "Aplicação exclusivamente de multa, sem pontuação nem outras medidas.",
+            "Multa, pontuação de 5 pontos na CNH e possibilidade de suspensão do direito de dirigir.",
+            "Aplicação exclusivamente de advertência por escrito.",
+            "Ausência de qualquer penalidade administrativa prevista em lei."
         ],
         correctIndex: 1,
         explanation: 'Grave: multa, 5 pontos e pode levar à suspensão.',
@@ -7040,12 +7040,12 @@ export const QUESTIONS: Question[] = [
     {
         id: 'q_new_10',
         category: 'legislacao',
-        statement: 'Qual documento é obrigatório para circular com veículo de motor?',
+        statement: "Condutor pretende circular com veículo automotor nas vias terrestres e consulta a legislação sobre documentos obrigatórios. Pelo CTB e pelas resoluções do CONTRAN, o conjunto documental exigido para a circulação regular é:",
         options: [
-            'Apenas CNH',
-            'CNH + CRLV + pagamento de IPVA',
-            'Somente comprovante de seguro',
-            'Nenhum'
+            "Somente a CNH, pois o licenciamento é consultado eletronicamente.",
+            "CNH (ou PPD) e CRLV-e, além da regularidade do licenciamento e do recolhimento do IPVA.",
+            "Somente o comprovante de seguro obrigatório vigente.",
+            "Nenhum documento, desde que o veículo esteja em perfeitas condições."
         ],
         correctIndex: 1,
         explanation: 'Devem-se portar CNH, CRLV e estar em dia com impostos.',
@@ -7097,11 +7097,11 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_02",
         category: "legislacao",
-        statement: "Numa interseção sem sinalização dentro do perímetro urbano, a preferência é de quem?",
+        statement: "Em interseção sem sinalização dentro do perímetro urbano, aplicam-se as regras gerais de preferência do CTB, incluindo a exceção das rotatórias e a regra das vias com rodovia. A respeito da preferência de passagem, é correto afirmar:",
         options: [
-            "De quem vem pela direita do condutor no cruzamento.",
-            "De quem circula pela rodovia, quando ela cruza a via.",
-            "De quem já circula pela rotatória antes de entrar na interseção.",
+            "A preferência pertence ao veículo que se aproxima pela direita do condutor no cruzamento.",
+            "Na interseção entre rodovia e outra via, a preferência é de quem trafega pela rodovia.",
+            "Na rotatória, a preferência é de quem já circula pelo anel viário.",
             "Todas as alternativas acima estão corretas."
         ],
         correctIndex: 3,
@@ -7127,11 +7127,11 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_04",
         category: "legislacao",
-        statement: "Numa via de pista dupla sem sinalização específica, como deve ser a ultrapassagem de outro veículo em movimento?",
+        statement: "Em rodovia de pista dupla sem sinalização específica que regule a manobra, o condutor pretende ultrapassar veículo em movimento na pista de rolamento. Pelo CTB, a respeito dessa ultrapassagem, é correto afirmar:",
         options: [
-            "Sempre pela esquerda da pista de rolamento.",
-            "Voltar à faixa de origem só com distância segura.",
-            "Sinalizar antes para o condutor que vem atrás.",
+            "A ultrapassagem deve ser efetuada sempre pela esquerda da pista de rolamento.",
+            "O retorno à faixa de origem só pode ocorrer com distância segura do veículo ultrapassado.",
+            "O condutor deve sinalizar a intenção com antecedência aos demais usuários da via.",
             "Todas as alternativas acima estão corretas."
         ],
         correctIndex: 3,
@@ -7142,11 +7142,11 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_05",
         category: "legislacao",
-        statement: "Para estacionar junto ao bordo da pista em vias coletoras urbanas, o que o CTB exige?",
+        statement: "Para estacionar o veículo junto ao bordo da pista em vias coletoras urbanas, o condutor deve observar as normas gerais de estacionamento previstas no CTB. A respeito dessas exigências, é correto afirmar:",
         options: [
-            "Respeitar 5 metros do bordo da via transversal.",
-            "Não travar a pista nem a visibilidade.",
-            "Manobrar no sentido do fluxo, paralelo ao meio-fio.",
+            "Manter no mínimo 5 metros de distância do bordo da via transversal.",
+            "Não obstruir a pista nem comprometer a visibilidade em cruzamentos.",
+            "Manobrar no sentido do fluxo, paralelo ao meio-fio, e sempre na marcha à frente.",
             "Todas as alternativas acima estão corretas."
         ],
         correctIndex: 3,
@@ -7172,11 +7172,11 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_07",
         category: "legislacao",
-        statement: "Num aclive de via rural de pista simples, quando a ultrapassagem é permitida?",
+        statement: "Em trecho de aclive em rodovia de pista simples com duplo sentido, o condutor avalia as condições que autorizam a ultrapassagem segundo o CTB. A respeito das condições que autorizam essa manobra de ultrapassagem, é correto afirmar:",
         options: [
-            "Com faixa amarela seccionada na sua mão de direção.",
-            "Com visibilidade total à frente e nada em sentido oposto.",
-            "Com terceira faixa para veículos lentos.",
+            "A sinalização horizontal com linha amarela seccionada na sua mão de direção autoriza a manobra.",
+            "A ultrapassagem exige visibilidade total à frente e ausência de veículos em sentido oposto.",
+            "É permitida em trechos com faixa adicional exclusiva para veículos lentos.",
             "Todas as alternativas acima estão corretas."
         ],
         correctIndex: 3,
@@ -7187,11 +7187,11 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_08",
         category: "legislacao",
-        statement: "Sem faixa de pedestres por perto no perímetro urbano, como o pedestre deve cruzar a pista?",
+        statement: "Sem faixa de pedestres nas proximidades, no perímetro urbano, o pedestre precisa atravessar a pista de rolamento em trajeto livre. Pelo CTB, a respeito dessa travessia livre de pedestres pela pista, é correto afirmar que:",
         options: [
-            "Em sentido perpendicular ao eixo da via.",
-            "Pelo caminho mais curto, sem parar sobre a pista.",
-            "Dando prioridade aos veículos quando estiverem próximos.",
+            "A travessia deve ocorrer em sentido perpendicular ao eixo da via.",
+            "O pedestre deve escolher o caminho mais curto, sem permanecer sobre a pista.",
+            "O pedestre deve dar prioridade aos veículos que se aproximem do local.",
             "Todas as alternativas acima estão corretas."
         ],
         correctIndex: 3,
@@ -7203,11 +7203,11 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_09",
         category: "legislacao",
-        statement: "Quando é proibido parar ou estacionar perto de cruzamentos e vias transversais?",
+        statement: "O condutor pretende parar ou estacionar nas proximidades de cruzamentos e vias transversais no perímetro urbano. Pelo CTB, é correto afirmar o seguinte a respeito das vedações aplicáveis a esses locais:",
         options: [
-            "A menos de 5 metros do bordo da via transversal.",
-            "Prejudicando a visibilidade na interseção.",
-            "Sobre a área de cruzamento das vias.",
+            "É proibido parar ou estacionar a menos de 5 metros do bordo da via transversal.",
+            "É proibido quando a manobra comprometer a visibilidade na interseção.",
+            "É proibido sobre a área de cruzamento das vias.",
             "Todas as alternativas acima estão corretas."
         ],
         correctIndex: 3,
@@ -7218,11 +7218,11 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_10",
         category: "legislacao",
-        statement: "Quem tem prioridade e livre circulação/estacionamento em serviço de urgência?",
+        statement: "Em serviço de urgência e de operação de trânsito, certos veículos gozam de livre circulação e de estacionamento nos termos do CTB. A respeito dos veículos abrangidos por essa prerrogativa, é correto afirmar:",
         options: [
-            "Veículos de socorro de incêndio e salvamento.",
-            "Ambulâncias e viaturas policiais identificadas.",
-            "Veículos de fiscalização e operação de trânsito em serviço.",
+            "Os veículos de socorro de incêndio e salvamento.",
+            "As ambulâncias e as viaturas policiais devidamente identificadas.",
+            "Os veículos de fiscalização e operação de trânsito em serviço.",
             "Todas as alternativas acima estão corretas."
         ],
         correctIndex: 3,
@@ -7234,11 +7234,11 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_11",
         category: "legislacao",
-        statement: "Para conversar à esquerda em via urbana de mão dupla sem canteiro central, o que fazer?",
+        statement: "O condutor pretende converter à esquerda em via urbana de mão dupla sem canteiro central, em interseção sem semáforo. Pelo CTB, a respeito da conduta correta antes e durante a manobra, é correto afirmar:",
         options: [
-            "Chegar o máximo possível na linha divisória do fluxo.",
-            "Ligar a seta com antecedência.",
-            "Ceder a vez a quem vem em sentido contrário.",
+            "Aproximar o veículo o máximo possível da linha divisória do fluxo oposto.",
+            "Acionar a luz indicadora de direção com antecedência regulamentar.",
+            "Ceder a passagem aos veículos que circulem em sentido contrário.",
             "Todas as alternativas acima estão corretas."
         ],
         correctIndex: 3,
@@ -7249,11 +7249,11 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_12",
         category: "legislacao",
-        statement: "Sem placa de velocidade na via urbana, qual é a máxima permitida?",
+        statement: "Na ausência de placa R-19 de regulamentação de velocidade, o CTB estabelece limites máximos padrão para cada classe de via urbana. A respeito desses limites legais estabelecidos pelo Art. 61, é correto afirmar:",
         options: [
-            "80 km/h nas vias de trânsito rápido.",
-            "60 km/h nas vias arteriais.",
-            "40 km/h nas vias coletoras.",
+            "80 km/h é o limite das vias de trânsito rápido do perímetro urbano.",
+            "60 km/h é o limite das vias arteriais urbanas.",
+            "40 km/h é o limite das vias coletoras urbanas.",
             "Todas as alternativas acima estão corretas."
         ],
         correctIndex: 3,
@@ -7296,11 +7296,11 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_15",
         category: "legislacao",
-        statement: "Quando a buzina é permitida no perímetro urbano?",
+        statement: "O uso da buzina é disciplinado pelo CTB e pelas normas gerais de conduta, inclusive no perímetro urbano. A respeito das hipóteses em que o uso da buzina é admitido pela legislação de trânsito, é correto afirmar:",
         options: [
-            "Em toques breves como advertência para evitar acidente.",
-            "Fora da cidade, para avisar que vai ultrapassar.",
-            "Nunca entre 22h e 6h.",
+            "É permitida em toques breves como advertência destinada a prevenir acidentes.",
+            "Fora do perímetro urbano, serve para advertir sobre a intenção de ultrapassar.",
+            "Entre 22h e 6h seu uso é terminantemente vedado no período noturno.",
             "Todas as alternativas acima estão corretas."
         ],
         correctIndex: 3,
@@ -7387,11 +7387,11 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_21",
         category: "legislacao",
-        statement: "Em via de trânsito rápido no perímetro urbano, quem tem prioridade nos acessos de entrada?",
+        statement: "Em via de trânsito rápido no perímetro urbano, os acessos de entrada e de saída subordinam-se à regra geral de preferência prevista no CTB. A respeito da prioridade de passagem nesses acessos, é correto afirmar:",
         options: [
-            "Quem já circula na pista da via principal.",
-            "Quem vem pela aceleração já na velocidade da via.",
-            "Quem segue sem semáforo nem cruzamento na principal.",
+            "A preferência pertence a quem já circula na pista da via principal.",
+            "O veículo que ingresa deve fazê-lo já na velocidade do fluxo da via principal.",
+            "Os acessos sem semáforo e sem cruzamento em nível seguem a mesma regra geral.",
             "Todas as alternativas acima estão corretas."
         ],
         correctIndex: 3,
@@ -7417,11 +7417,11 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_23",
         category: "legislacao",
-        statement: "Na arterial, para conversar à direita, qual é a conduta?",
+        statement: "Em via arterial do perímetro urbano, o condutor pretende converter à direita em interseção e deve observar o posicionamento e a sinalização exigidos pelo CTB. A respeito dessa conversão, é correto afirmar:",
         options: [
-            "Colar o máximo possível no bordo direito da pista.",
-            "Ligar a seta com antecedência regulamentar.",
-            "Fazer devagar e com segurança.",
+            "Aproximar o veículo o máximo possível do bordo direito da pista de rolamento.",
+            "Acionar a luz indicadora de direção com antecedência regulamentar.",
+            "Efetuar a manobra com redução de velocidade e atenção aos pedestres.",
             "Todas as alternativas acima estão corretas."
         ],
         correctIndex: 3,
@@ -7432,11 +7432,11 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_24",
         category: "legislacao",
-        statement: "Quando a luz baixa é obrigatória na pista?",
+        statement: "O uso da luz baixa (farol baixo) é obrigatório em determinadas condições de circulação previstas no CTB, independentemente da sinalização local. A respeito dessas situações previstas em lei, é correto afirmar:",
         options: [
-            "À noite em qualquer via, com ou sem luz.",
-            "De dia em rodovia simples fora do perímetro urbano.",
-            "Em túneis com iluminação, de dia ou de noite.",
+            "À noite, em qualquer via, com ou sem iluminação pública.",
+            "Durante o dia, em rodovia de pista simples fora do perímetro urbano (sem DRL).",
+            "Em túneis providos de iluminação, de dia ou de noite.",
             "Todas as alternativas acima estão corretas."
         ],
         correctIndex: 3,
@@ -7448,11 +7448,11 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_25",
         category: "legislacao",
-        statement: "Para embarcar ou desembarcar passageiros no perímetro urbano, o que seguir?",
+        statement: "O embarque e o desembarque de passageiros no perímetro urbano subordinam-se às regras gerais de parada e conduta previstas no CTB. A respeito do modo correto de embarcar e desembarcar, é correto afirmar:",
         options: [
-            "Sempre pelo lado da calçada, menos o condutor.",
-            "Com o veículo parado junto ao bordo.",
-            "Sem travar o trânsito da pista.",
+            "O embarque deve ser feito sempre pelo lado da calçada, com exceção do condutor.",
+            "A parada deve ocorrer com o veículo junto ao bordo da via.",
+            "A manobra não pode obstruir a marcha normal dos demais veículos.",
             "Todas as alternativas acima estão corretas."
         ],
         correctIndex: 3,
@@ -7464,11 +7464,11 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_26",
         category: "legislacao",
-        statement: "Na transversal com placa R-1 de PARADA OBRIGATÓRIA, o que fazer?",
+        statement: "O condutor aproxima-se de via transversal sinalizada com a placa R-1 (PARADA OBRIGATÓRIA), em interseção do perímetro urbano. A respeito da conduta obrigatória exigida nesse local pela sinalização, é correto afirmar:",
         options: [
-            "Parar totalmente antes de entrar na interseção.",
-            "Dar vez a todos da via preferencial.",
-            "Dar vez aos pedestres atravessando.",
+            "É obrigatória a parada total antes da entrada na interseção.",
+            "Deve-se ceder a passagem a todos os veículos da via preferencial.",
+            "Deve-se ceder a passagem aos pedestres em travessia na interseção.",
             "Todas as alternativas acima estão corretas."
         ],
         correctIndex: 3,
@@ -7479,11 +7479,11 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_27",
         category: "legislacao",
-        statement: "Sem ciclovia ou ciclofaixa, o que vale para bicicletas nas vias urbanas?",
+        statement: "Na ausência de ciclovia ou ciclofaixa, as bicicletas trafegam pelas vias urbanas de perímetro, observando as regras gerais do CTB. A respeito das regras que disciplinam essa circulação de bicicletas, é correto afirmar:",
         options: [
-            "Andar nos bordos da pista, no sentido dos veículos.",
-            "Ter preferência sobre os automotores.",
-            "Ser ultrapassada com 1,5 m de distância lateral.",
+            "Devem circular pelos bordos da pista de rolamento, no mesmo sentido dos veículos.",
+            "Têm preferência sobre os veículos automotores nas interseções.",
+            "Devem ser ultrapassadas com distância lateral mínima de 1,5 metro.",
             "Todas as alternativas acima estão corretas."
         ],
         correctIndex: 3,
@@ -7510,11 +7510,11 @@ export const QUESTIONS: Question[] = [
     {
         id: "td_29",
         category: "legislacao",
-        statement: "Duas vias perpendiculares se cruzam sem placa de preferência. Qual é a regra?",
+        statement: "Duas vias perpendiculares se cruzam no perímetro urbano sem placa de preferência, sem semáforo e sem agente. Pela regra geral de preferência do CTB aplicável a essa interseção não sinalizada, é correto afirmar:",
         options: [
-            "Passa primeiro quem vem pela direita.",
-            "Todos reduzem antes de entrar na interseção.",
-            "Pedestre na travessia tem prioridade sobre quem vai virar.",
+            "A preferência pertence ao veículo que se aproxima pela direita do condutor.",
+            "Todos os veículos devem reduzir a velocidade antes de ingressar na interseção.",
+            "O pedestre em travessia tem prioridade sobre o veículo que vai converter.",
             "Todas as alternativas acima estão corretas."
         ],
         correctIndex: 3,
@@ -7965,12 +7965,12 @@ export const REAL_EXAM_IDS = [
     {
         id: "q3181",
         category: "legislacao",
-        statement: "Em uma interseção sem sinalização entre rodovia e estrada, qual veículo automotor tem a preferência de passagem?",
+        statement: "Em interseção entre rodovia e estrada, ambas abertas à circulação e sem sinalização de preferência, o condutor precisa definir quem deve passar primeiro. Pela regra geral do CTB, a preferência pertence a:",
         options: [
-            "Quem trafega pela estrada.",
-            "Quem se aproximar pela direita do outro condutor.",
-            "Quem trafega pela rodovia.",
-            "Quem chegar primeiro e alertar o outro, dando breves toques na buzina."
+            "Ao veículo que trafega pela estrada, por se tratar de via de menor porte.",
+            "Ao veículo que se aproxima pela direita do outro condutor.",
+            "Ao veículo que trafega pela rodovia, nos termos da regra específica do CTB.",
+            "Ao veículo que chegar primeiro e alertar o outro com toques de buzina."
         ],
         correctIndex: 2,
         explanation: "O CTB estabelece que em cruzamentos sem sinalização entre rodovias e estradas, o veículo que trafega pela rodovia tem preferência.",
@@ -7980,12 +7980,12 @@ export const REAL_EXAM_IDS = [
     {
         id: "q3182",
         category: "legislacao",
-        statement: "Dentro da rotatória, qual é o comportamento correto?",
+        statement: "Dentro de rotatória no perímetro urbano, o condutor deve manter conduta compatível com a preferência legal e a fluidez do fluxo. A respeito do comportamento correto e obrigatório no anel viário, é correto afirmar:",
         options: [
-            "Se perceber o trânsito muito lento, buzinar para apressar os veículos da frente.",
-            "Mudar de faixa várias vezes, sempre garantindo um deslocamento mais rápido a fim de não prejudicar o fluxo.",
-            "Manter-se na faixa adequada, em velocidade moderada, e atento ao fluxo de veículos e pedestres.",
-            "Dirigir sem se preocupar com os outros veículos, pois você está na preferencial da rotatória."
+            "Se o trânsito estiver lento, buzinar de forma contínua para apressar os veículos à frente.",
+            "Mudar de faixa repetidamente para alcançar o destino no menor tempo possível.",
+            "Manter-se na faixa adequada, em velocidade moderada, atento ao fluxo de veículos e pedestres.",
+            "Dirigir sem considerar os demais veículos, pois o condutor já detém a preferência."
         ],
         correctIndex: 2,
         explanation: "Dentro da rotatória, o condutor deve manter-se na faixa adequada, em velocidade moderada, e atento ao fluxo de veículos e pedestres.",
@@ -7995,12 +7995,12 @@ export const REAL_EXAM_IDS = [
     {
         id: "q3183",
         category: "legislacao",
-        statement: "O fluxo de duas vias sem sinalização se cruzam, mas nenhuma delas é uma rodovia. Quem tem a preferência da passagem, nesse caso?",
+        statement: "O fluxo de duas vias urbanas sem sinalização se cruza e nenhuma delas se classifica como rodovia ou possui rotatória. Pela regra geral de preferência de passagem prevista no Art. 29 do CTB, a prioridade pertence:",
         options: [
-            "A ambulância terá sempre a preferência de passagem, pois trata-se de veículo de salvamento.",
-            "Pela regra de prioridade, o veículo mais pesado, por não ter como parar fácil, deve passar primeiro.",
-            "Os veículos de transporte coletivo de passageiros, têm preferência de passagem sobre os outros.",
-            "Se não houver rodovia ou rotatória, o CTB estabelece a preferência ao veículo que se aproximar pela direita do outro."
+            "À ambulância, por se tratar de veículo de salvamento em qualquer hipótese.",
+            "Ao veículo de maior peso, que não consegue parar com facilidade.",
+            "Aos veículos de transporte coletivo de passageiros, em detrimento dos demais.",
+            "Ao veículo que se aproxima pela direita do outro condutor, na ausência de rodovia ou rotatória."
         ],
         correctIndex: 3,
         explanation: "O CTB estabelece a preferência ao veículo que se aproximar pela direita do outro em cruzamentos sem sinalização, rodovias ou rotatórias.",
@@ -8025,11 +8025,11 @@ export const REAL_EXAM_IDS = [
     {
         id: "q3185",
         category: "legislacao",
-        statement: "Durante uma ultrapassagem, o condutor:",
+        statement: "Durante a execução de uma ultrapassagem em pista de rolamento de duplo sentido, o condutor deve observar as regras gerais de circulação e conduta do CTB. A respeito dessa manobra, a conduta correta é:",
         options: [
             "Pode exceder o limite de velocidade, lembrando que essa exceção é só durante a ultrapassagem.",
             "Deve realizar a manobra pela esquerda, respeitando a sinalização e a distância segura.",
-            "Pode realizar a manobra pela direita, sempre que entender ser essa a forma melhor para o trânsito.",
+            "Pode realizar a manobra pela direita sempre que julgar mais conveniente.",
             "Deve utilizar a buzina de forma obrigatória antes de toda ultrapassagem."
         ],
         correctIndex: 1,
@@ -8040,12 +8040,12 @@ export const REAL_EXAM_IDS = [
     {
         id: "q3201",
         category: "legislacao",
-        statement: "Você está dentro de uma rotatória e percebe uma viatura policial se aproximando com os dispositivos luminosos e sonoros desligados. Como agir nesse caso?",
+        statement: "O condutor circula dentro de rotatória quando percebe viatura policial se aproximando com os dispositivos luminoso e sonoro desligados. Conforme as regras gerais de preferência do CTB, a conduta correta do condutor é:",
         options: [
-            "Parar e deixar que a viatura policial entrar na sua frente. Pois, viaturas têm prioridade independentemente de estar com os dispositivos, sonoro e luminoso, ligados.",
-            "Parar para deixar a viatura entrar, desde que isso não seja prejudicial ao fluxo de veículos.",
-            "Seguir o fluxo dentro da rotatória. Pois, nesse caso, a viatura policial não tem prerrogativa de passagem.",
-            "Parar ou seguir, ficando a cargo do motorista decidir, na hora, o que fazer."
+            "Parar e permitir a entrada da viatura, pois os veículos policiais têm prioridade mesmo com os dispositivos desligados.",
+            "Parar para permitir a entrada da viatura, desde que isso não prejudique o fluxo de veículos.",
+            "Seguir o fluxo normalmente, pois sem alarme e luzes a viatura não goza de prerrogativa de passagem.",
+            "Parar ou seguir, conforme o motorista decidir no momento, sem regra aplicável."
         ],
         correctIndex: 2,
         explanation: "Viaturas policiais só têm prerrogativa de passagem com os dispositivos luminosos e sonoros LIGADOS. Desligados, não têm prioridade.",
@@ -8055,12 +8055,12 @@ export const REAL_EXAM_IDS = [
     {
         id: "q3202",
         category: "legislacao",
-        statement: "Em uma via com várias faixas de trânsito na mesma direção, onde as motocicletas devem circular?",
+        statement: "Em via urbana com várias faixas de trânsito no mesmo sentido de circulação, sem faixa exclusiva regulamentada para motocicletas, o CTB determina onde esses veículos devem trafegar. A conduta correta é:",
         options: [
-            "Qualquer faixa, desde que evitem se posicionar dentro dos pontos cegos de outros condutores.",
-            "Somente na faixa da esquerda, por serem veículos mais velozes que os outros.",
-            "Sobre a linha que divide as faixas de trânsito, os chamados 'corredores' entre veículos.",
-            "Somente no corredor, em alta velocidade, aproveitando sua potência e perícia do condutor."
+            "Em qualquer faixa, evitando posicionar-se nos pontos cegos dos demais condutores.",
+            "Somente na faixa da esquerda, por serem veículos de maior velocidade.",
+            "Sobre a linha divisória entre as faixas, nos chamados corredores entre veículos.",
+            "Somente no corredor entre veículos, em alta velocidade, aproveitando a potência."
         ],
         correctIndex: 0,
         explanation: "Motocicletas podem circular em qualquer faixa, desde que evitem os pontos cegos de outros condutores.",
@@ -8070,12 +8070,12 @@ export const REAL_EXAM_IDS = [
     {
         id: "q3203",
         category: "legislacao",
-        statement: "Por regra geral, em qual lado da pista o veículo deve trafegar?",
+        statement: "Pelas normas gerais de circulação e conduta do CTB, aplicáveis a toda via terrestre aberta à circulação pública no território nacional, o veículo automotor deve trafegar obrigatoriamente pelo lado da via:",
         options: [
-            "Pelo lado esquerdo, pois é mais rápido.",
-            "Em qualquer lado da via, desde que obedeça à velocidade máxima permitida.",
-            "Pelo lado direito da via, salvo sinalização dizendo o contrário.",
-            "Pelo meio da pista, para ter melhor visibilidade."
+            "Esquerdo, por corresponder ao sentido de trânsito mais rápido.",
+            "Qualquer da via, desde que respeitada a velocidade máxima permitida.",
+            "Direito da via, salvo sinalização diversa do órgão competente.",
+            "Meio da pista, para garantir maior visibilidade aos demais usuários."
         ],
         correctIndex: 2,
         explanation: "O CTB estabelece que o veículo deve trafegar pelo lado direito da via, salvo sinalização em contrário.",
@@ -8085,12 +8085,12 @@ export const REAL_EXAM_IDS = [
     {
         id: "q3204",
         category: "legislacao",
-        statement: "Nas vias com várias faixas de trânsito na mesma direção, os veículos grandes e lentos devem...",
+        statement: "Em via com várias faixas de trânsito no mesmo sentido, sem faixa exclusiva determinada, o CTB determina a posição dos veículos grandes e de baixa velocidade. De acordo com essa regra de posicionamento, esses veículos devem:",
         options: [
-            "circular na faixa da esquerda.",
-            "seguir pelo acostamento para ter maior fluidez.",
-            "ficar trocando de faixa durante o trajeto, para chegar logo ao destino.",
-            "circular na faixa da direita."
+            "Circular preferencialmente pela faixa da esquerda.",
+            "Transitar pelo acostamento para aumentar a fluidez do fluxo.",
+            "Alternar-se de faixa continuamente durante o trajeto.",
+            "Circular pela faixa da direita, reservando-se a esquerda à ultrapassagem."
         ],
         correctIndex: 3,
         explanation: "Veículos grandes e lentos devem circular na faixa da direita para não impedir o fluxo mais rápido.",
@@ -8100,12 +8100,12 @@ export const REAL_EXAM_IDS = [
     {
         id: "q3205",
         category: "legislacao",
-        statement: "Conforme o Código de Trânsito Brasileiro, quando um veículo permanece imobilizado por tempo superior ao necessário para embarque e desembarque de passageiros, podemos dizer que ele está:",
+        statement: "Conforme o CTB, a imobilização do veículo por tempo superior ao necessário para o embarque e o desembarque de passageiros submete-se a classificação específica. Nessa hipótese, conforme a definição legal, o veículo está:",
         options: [
-            "Em imobilização de emergência.",
-            "Parado.",
-            "Parado ou Estacionado.",
-            "Estacionado."
+            "Em imobilização de emergência, admitida por motivo de força maior.",
+            "Apenas parado, sem qualquer responsabilidade do condutor.",
+            "Parado ou estacionado, conforme a opção do condutor no momento.",
+            "Estacionado, nos termos da definição legal do CTB."
         ],
         correctIndex: 3,
         explanation: "O CTB diferencia parado (temporariamente, para embarque/desembarque) de estacionado (tempo superior ao necessário).",
@@ -8145,12 +8145,12 @@ export const REAL_EXAM_IDS = [
     {
         id: "q3208",
         category: "legislacao",
-        statement: "Sobre as faixas exclusivas da pista de rolamento para o transporte público coletivo (ônibus):",
+        statement: "A pista de rolamento possui faixa exclusiva destinada ao transporte público coletivo (ônibus), sinalizada no perímetro urbano. Pelo CTB, a respeito do uso dessa faixa por outros veículos, é correto afirmar:",
         options: [
-            "Não podem ser utilizadas por outros veículos, nos dias e horários estabelecidos pela sinalização.",
-            "Podem ser usadas para adiantar a viagem e ultrapassar os veículos mais lentos.",
-            "Nunca podem ser utilizadas por outros veículos, mesmo fora dos dias e horários estabelecidos na sinalizacao",
-            "Servem apenas para ônibus de transporte escolar."
+            "Não podem ser utilizadas por outros veículos nos dias e horários fixados pela sinalização.",
+            "Podem ser usadas para ultrapassar veículos mais lentos em horários de pico.",
+            "Nunca podem ser utilizadas por outros veículos, mesmo fora dos horários da sinalização.",
+            "Destinam-se exclusivamente ao transporte escolar."
         ],
         correctIndex: 0,
         explanation: "As faixas exclusivas de ônibus só podem ser utilizadas por veículos de transporte público nos dias e horários estabelecidos.",
@@ -8160,12 +8160,12 @@ export const REAL_EXAM_IDS = [
     {
         id: "q3209",
         category: "legislacao",
-        statement: "Parar o veículo em fila dupla para embarcar alunos em frente à escola, é...",
+        statement: "Em frente a escola municipal, no período de entrada e saída de alunos, o condutor permanece imobilizado em fila dupla na pista de rolamento para embarque. Pelo CTB, essa conduta de trânsito é classificada como:",
         options: [
-            "Perigoso, prejudica a fluidez do trânsito e constitui infração de trânsito de natureza média.",
-            "Permitido em horários de pico, para dar mais agilidade à saída nas escolas.",
-            "Atrapalha o trânsito, mas não é perigoso nem infração de trânsito.",
-            "Permitido se o pisca-alerta estiver ligado e não demorar mais que dois minutos."
+            "Perigosa, prejudica a fluidez do trânsito e constitui infração de natureza média.",
+            "Permitida em horários de pico, para dar agilidade à saída dos alunos.",
+            "Obstrutiva, mas sem configuração de infração nem risco à segurança.",
+            "Permitida com o pisca-alerta aceso, desde que não exceda dois minutos."
         ],
         correctIndex: 0,
         explanation: "Filha dupla para embarcar alunos é perigosa, prejudica a fluidez e constitui infração média.",
@@ -8175,12 +8175,12 @@ export const REAL_EXAM_IDS = [
     {
         id: "q3210",
         category: "legislacao",
-        statement: "Fabiana conduz sua motocicleta pela pista de rolamento de via urbana quando se depara com um ônibus parado à frente. Nessa situação, o que ela deve fazer?",
+        statement: "A condutora de motocicleta trafega pela pista de rolamento de via urbana e encontra ônibus imobilizado à frente, ocupando a faixa. Pela direção defensiva e pelas normas gerais do CTB, a conduta correta da condutora é:",
         options: [
-            "Passar pela direita, bem colada ao ônibus, para não atrapalhar o trânsito.",
-            "Ziguezaguear entre os veículos, mas com cuidado para não cair.",
-            "Subir na calçada, desviando com cuidado dos pedestres que esteja circulando.",
-            "Esperar o ônibus sair ou ultrapassar pela esquerda com cuidado."
+            "Passar pela direita, rente ao ônibus, para não obstruir o fluxo.",
+            "Ziguezaguear entre os veículos, mantendo equilíbrio e cautela.",
+            "Transitar sobre a calçada, desviando dos pedestres com atenção.",
+            "Aguardar a saída do ônibus ou ultrapassá-lo pela esquerda com segurança."
         ],
         correctIndex: 3,
         explanation: "Ao encontrar um ônibus parado, o motociclista deve esperar o ônibus sair ou ultrapassar pela esquerda com cuidado.",
