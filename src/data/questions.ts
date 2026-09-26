@@ -7540,197 +7540,402 @@ export const QUESTIONS: Question[] = [
     },
     {
         id: "rst_01",
-        categoria: "Legislação de Trânsito",
-        enunciado: "O uso do cinto de segurança é obrigatório para condutor e passageiros em todas as vias do território nacional. A exceção a essa regra aplica-se APENAS em qual situação?",
-        alternativas: [
+        category: "legislacao",
+        statement: "O uso do cinto de segurança é obrigatório para condutor e passageiros em todas as vias do território nacional. A exceção a essa regra aplica-se APENAS em qual situação?",
+        options: [
           "Em trajetos curtos dentro do perímetro urbano",
           "Para passageiros no banco traseiro em vias coletoras",
           "Não existe exceção legal, sendo o uso obrigatório para todos os ocupantes",
           "Apenas para condutores de veículos de transporte de carga"
         ],
-        correta: 2,
+        correctIndex: 2,
+        explanation: "Não existe exceção: o cinto é obrigatório para o condutor e todos os passageiros, em qualquer via.",
+        incidence: "media",
+        difficulty: 2,
         image_url: ""
     },
     {
         id: "rst_02",
-        categoria: "Legislação de Trânsito",
-        enunciado: "A ultrapassagem de outro veículo em movimento na pista de rolamento deve ser realizada SOMENTE pela esquerda. Em qual hipótese é permitida a ultrapassagem pela direita?",
-        alternativas: [
+        category: "legislacao",
+        statement: "A ultrapassagem de outro veículo em movimento na pista de rolamento deve ser realizada SOMENTE pela esquerda. Em qual hipótese é permitida a ultrapassagem pela direita?",
+        options: [
           "Quando o veículo da frente estiver na faixa da esquerda e em baixa velocidade",
           "Quando o veículo a ser ultrapassado estiver sinalizando que vai dobrar à esquerda",
           "Em vias de trânsito rápido durante períodos de cerração ou neblina",
           "Quando a via for de pista simples em aclive acentuado"
         ],
-        correta: 1,
+        correctIndex: 1,
+        explanation: "Pela direita só quando o veículo da frente sinalizou que vai virar à esquerda.",
+        incidence: "alta",
+        difficulty: 2,
         image_url: ""
     },
     {
         id: "rst_03",
-        categoria: "Direção Defensiva",
-        enunciado: "O condutor NUNCA deve acionar o pisca-alerta do veículo em movimento na pista de rolamento, EXCETO quando:",
-        alternativas: [
+        category: "direcao-defensiva",
+        statement: "O condutor NUNCA deve acionar o pisca-alerta do veículo em movimento na pista de rolamento, EXCETO quando:",
+        options: [
           "Estiver trafegando em velocidade reduzida sob cerração ou neblina intensa",
           "A sinalização da via assim o determinar ou em imobilizações de emergência",
           "Estiver realizando uma transposição de faixa em via arterial",
           "Desejar estacionar o veículo no bordo da pista em local proibido"
         ],
-        correta: 1,
+        correctIndex: 1,
+        explanation: "Pisca-alerta andando só quando a sinalização determina ou em imobilização de emergência.",
+        incidence: "media",
+        difficulty: 2,
         image_url: ""
     },
     {
         id: "rst_04",
-        categoria: "Legislação de Trânsito",
-        enunciado: "A preferência de passagem em interseção não sinalizada pertence EXCLUSIVAMENTE ao veículo que se aproxima pela direita do condutor. Essa regra NUNCA se aplica quando:",
-        alternativas: [
+        category: "legislacao",
+        statement: "A preferência de passagem em interseção não sinalizada pertence EXCLUSIVAMENTE ao veículo que se aproxima pela direita do condutor. Essa regra NUNCA se aplica quando:",
+        options: [
           "Um dos veículos estiver circulando por uma rotatória ou ingressando de rodovia",
           "Ambos os veículos transitarem por vias urbanas coletoras perpendiculares",
           "A interseção for composta por vias paralelas de fluxo único",
           "O cruzamento ocorrer dentro do perímetro urbano em trecho plano"
         ],
-        correta: 0,
+        correctIndex: 0,
+        explanation: "A regra da direita não vale quando há rotatória ou acesso de rodovia — esses têm preferência própria.",
+        incidence: "media",
+        difficulty: 2,
         image_url: ""
     },
     {
         id: "rst_05",
-        categoria: "Legislação de Trânsito",
-        enunciado: "A circulação de veículos automotores sobre passeios, calçadas e canteiros centrais é expressamente proibida. O tráfego nesses locais é permitido APENAS para:",
-        alternativas: [
+        category: "legislacao",
+        statement: "A circulação de veículos automotores sobre passeios, calçadas e canteiros centrais é expressamente proibida. O tráfego nesses locais é permitido APENAS para:",
+        options: [
           "Evitar congestionamentos em vias arteriais de fluxo intenso",
           "Entrar ou sair de imóveis ou de áreas ladeadas de estacionamento",
           "Realizar embarque ou desembarque rápido no bordo da pista",
           "Fazer conversão à esquerda quando a via estiver deserta"
         ],
-        correta: 1,
+        correctIndex: 1,
+        explanation: "Sobre calçada e passeio só se permite entrar ou sair de imóveis e estacionamentos.",
+        incidence: "media",
+        difficulty: 2,
         image_url: ""
     },
     {
         id: "rst_06",
-        categoria: "Direção Defensiva",
-        enunciado: "Ao transitar por uma via em declive acentuado, o condutor NUNCA deve colocar o câmbio em marcha neutra (ponto morto). Qual é o risco técnico dessa prática?",
-        alternativas: [
+        category: "direcao-defensiva",
+        statement: "Ao transitar por uma via em declive acentuado, o condutor NUNCA deve colocar o câmbio em marcha neutra (ponto morto). Qual é o risco técnico dessa prática?",
+        options: [
           "Acelerar o desgaste do motor pela falta de lubrificação",
           "Perder a ação do freio motor e sobrecarregar o sistema de freios de serviço",
           "Travar as rodas traseiras impedindo a conversão na pista de rolamento",
           "Provocar o desligamento automático dos faróis em alta velocidade"
         ],
-        correta: 1,
+        correctIndex: 1,
+        explanation: "Em neutro você perde o freio motor e sobrecarrega os freios de serviço, que superaquecem.",
+        incidence: "alta",
+        difficulty: 2,
         image_url: ""
     },
     {
         id: "rst_07",
-        categoria: "Legislação de Trânsito",
-        enunciado: "A luz de buzina deve ser utilizada em toques breves. O uso da buzina é terminantemente proibido e NUNCA deve ocorrer em qual situação?",
-        alternativas: [
+        category: "legislacao",
+        statement: "A luz de buzina deve ser utilizada em toques breves. O uso da buzina é terminantemente proibido e NUNCA deve ocorrer em qual situação?",
+        options: [
           "Fora do perímetro urbano para advertir sobre intenção de ultrapassar",
           "Entre as vinte e duas e as seis horas ou em locais sinalizados com proibição",
           "Como advertência preventiva para evitar acidentes na interseção",
           "Ao aproximar-se de pedestres que estejam no bordo da pista"
         ],
-        correta: 1,
+        correctIndex: 1,
+        explanation: "Buzina proibida das 22h às 6h e em qualquer local sinalizado com proibição.",
+        incidence: "alta",
+        difficulty: 2,
         image_url: ""
     },
     {
         id: "rst_08",
-        categoria: "Legislação de Trânsito",
-        enunciado: "Os veículos de emergência (ambulâncias e polícia) têm prioridade de trânsito e gozam de livre circulação SOMENTE quando:",
-        alternativas: [
+        category: "legislacao",
+        statement: "Os veículos de emergência (ambulâncias e polícia) têm prioridade de trânsito e gozam de livre circulação SOMENTE quando:",
+        options: [
           "Estiverem transitando por vias de trânsito rápido no perímetro urbano",
           "Estiverem em serviço de urgência e devidamente identificados por alarme e luzes",
           "Retornarem de uma ocorrência para o pátio do órgão responsável",
           "Estiverem circulando em trechos em aclive ou declive de rodovias"
         ],
-        correta: 1,
+        correctIndex: 1,
+        explanation: "A prioridade vale somente em serviço de urgência, com alarme e luzes ligados.",
+        incidence: "media",
+        difficulty: 1,
         image_url: ""
     },
     {
         id: "rst_09",
-        categoria: "Legislação de Trânsito",
-        enunciado: "A parada de um veículo no bordo da pista para embarque ou desembarque de passageiros deve ocorrer EXCLUSIVAMENTE sob qual condição legal?",
-        alternativas: [
+        category: "legislacao",
+        statement: "A parada de um veículo no bordo da pista para embarque ou desembarque de passageiros deve ocorrer EXCLUSIVAMENTE sob qual condição legal?",
+        options: [
           "Pelo tempo estritamente necessário e sem interromper a fluidez do trânsito",
           "Com o pisca-alerta ligado em qualquer trecho da via arterial",
           "Sempre no sentido oposto ao fluxo para facilitar a visibilidade do pedestre",
           "Apenas quando houver recuo específico no canteiro central da pista"
         ],
-        correta: 0,
+        correctIndex: 0,
+        explanation: "Parada para embarque e desembarque só pelo tempo necessário e sem interromper a fluidez.",
+        incidence: "media",
+        difficulty: 2,
         image_url: ""
     },
     {
         id: "rst_10",
-        categoria: "Legislação de Trânsito",
-        enunciado: "Em vias urbanas sem sinalização regulamentadora, a velocidade máxima de 80 km/h é permitida EXCLUSIVAMENTE em quais vias?",
-        alternativas: [
+        category: "legislacao",
+        statement: "Em vias urbanas sem sinalização regulamentadora, a velocidade máxima de 80 km/h é permitida EXCLUSIVAMENTE em quais vias?",
+        options: [
           "Nas vias arteriais que cruzam o perímetro urbano",
           "Nas vias coletoras adjacentes a áreas residenciais",
           "Nas vias de trânsito rápido",
           "Em qualquer via urbana com pistas duplas e paralelas"
         ],
-        correta: 2,
+        correctIndex: 2,
+        explanation: "Sem placa, 80 km/h vale apenas nas vias de trânsito rápido (Art. 61 do CTB).",
+        incidence: "altissima",
+        difficulty: 2,
         image_url: ""
     },
     {
         id: "rst_11",
-        categoria: "Direção Defensiva",
-        enunciado: "Em trechos em aclive com visibilidade reduzida e pista simples, a ultrapassagem é permitida SOMENTE quando houver:",
-        alternativas: [
+        category: "direcao-defensiva",
+        statement: "Em trechos em aclive com visibilidade reduzida e pista simples, a ultrapassagem é permitida SOMENTE quando houver:",
+        options: [
           "Espaço suficiente na pista de rolamento sem tráfego de pedestres",
           "Sinalização horizontal com linha amarela contínua na sua faixa",
           "Sinalização horizontal com linha amarela seccionada na sua mão de direção",
           "Cerração leve que permita enxergar as luzes dos veículos opostos"
         ],
-        correta: 2,
+        correctIndex: 2,
+        explanation: "No aclive só ultrapassa com linha amarela seccionada na sua mão de direção.",
+        incidence: "media",
+        difficulty: 2,
         image_url: ""
     },
     {
         id: "rst_12",
-        categoria: "Legislação de Trânsito",
-        enunciado: "O tráfego de bicicletas deve ocorrer nos bordos da pista de rolamento no mesmo sentido dos veículos. A circulação em calçadas é permitida APENAS quando:",
-        alternativas: [
+        category: "legislacao",
+        statement: "O tráfego de bicicletas deve ocorrer nos bordos da pista de rolamento no mesmo sentido dos veículos. A circulação em calçadas é permitida APENAS quando:",
+        options: [
           "O trânsito na pista de rolamento estiver muito congestionado",
           "Houver autorização expressa do órgão com jurisdição e sinalização adequada",
           "O ciclista estiver conduzindo a bicicleta em velocidade reduzida",
           "A via transversal for classificada como de trânsito rápido"
         ],
-        correta: 1,
+        correctIndex: 1,
+        explanation: "Bicicleta na calçada só com autorização expressa do órgão com jurisdição e sinalização adequada.",
+        incidence: "media",
+        difficulty: 2,
         image_url: ""
     },
     {
         id: "rst_13",
-        categoria: "Primeiros Socorros",
-        enunciado: "Ao socorrer uma vítima de acidente de trânsito na pista de rolamento, o prestador de socorro NUNCA deve:",
-        alternativas: [
+        category: "primeiros-socorros",
+        statement: "Ao socorrer uma vítima de acidente de trânsito na pista de rolamento, o prestador de socorro NUNCA deve:",
+        options: [
           "Sinalizar o local do acidente antes de iniciar o atendimento",
           "Movimentar a vítima ou retirar o capacete de um motociclista acidentado",
           "Chamar o serviço especializado de emergência (192 ou 193)",
           "Desligar a ignição do veículo acidentado para evitar incêndio"
         ],
-        correta: 1,
+        correctIndex: 1,
+        explanation: "Nunca movimente a vítima nem retire o capacete: aguarde o socorro especializado (192/193).",
+        incidence: "alta",
+        difficulty: 2,
         image_url: ""
     },
     {
         id: "rst_14",
-        categoria: "Mecânica Básica",
-        enunciado: "A verificação da pressão de calibragem dos pneus do veículo deve ser realizada EXCLUSIVAMENTE quando os pneus estiverem:",
-        alternativas: [
+        category: "mecanica",
+        statement: "A verificação da pressão de calibragem dos pneus do veículo deve ser realizada EXCLUSIVAMENTE quando os pneus estiverem:",
+        options: [
           "Aquececidos após trafegar em alta velocidade na rodovia",
           "Frios, preferencialmente antes de colocar o veículo em circulação",
           "Totalmente descalibrados para ajuste do sistema de suspensão",
           "Molhados após rodar sob chuva forte ou pista escorregadia"
         ],
-        correta: 1,
+        correctIndex: 1,
+        explanation: "Mede a calibragem com o pneu frio, de preferência antes de sair, pra leitura fiel.",
+        incidence: "media",
+        difficulty: 1,
         image_url: ""
     },
     {
         id: "rst_15",
-        categoria: "Legislação de Trânsito",
-        enunciado: "A conversão à esquerda em vias urbanas de sentido duplo de circulação deve ser executada APENAS após o condutor:",
-        alternativas: [
+        category: "legislacao",
+        statement: "A conversão à esquerda em vias urbanas de sentido duplo de circulação deve ser executada APENAS após o condutor:",
+        options: [
           "Aproximar o veículo do bordo esquerdo da pista de rolamento",
           "Aproximar o veículo da linha divisória do fluxo e ceder preferência ao sentido oposto",
           "Acionar o pisca-alerta e avançar sobre a linha de retenção",
           "Aumentar a velocidade para concluir a manobra antes do cruzamento"
         ],
-        correta: 1,
+        correctIndex: 1,
+        explanation: "Só vire depois de encostar na linha divisória e ceder a vez ao sentido contrário.",
+        incidence: "media",
+        difficulty: 2,
+        image_url: ""
+    },
+    {
+        id: "fr_01",
+        category: "mecanica",
+        statement: "O sistema de freios é fundamental para a segurança viária. Sobre a atuação do freio de pé (serviço) e do freio de mão (estacionamento), é correto afirmar que:",
+        options: [
+          "O freio de mão atua nas quatro rodas e deve ser usado para reduzir a velocidade em movimento",
+          "O freio de pé atua exclusivamente nas rodas dianteiras para imobilizar o veículo",
+          "O freio de pé atua nas quatro rodas simultaneamente e o de mão atua apenas nas rodas traseiras",
+          "Ambos os sistemas atuam somente nas rodas traseiras para evitar o capotamento"
+        ],
+        correctIndex: 2,
+        explanation: "O freio de pé atua nas quatro rodas; o freio de mão atua apenas nas rodas traseiras.",
+        incidence: "media",
+        difficulty: 2,
+        image_url: ""
+    },
+    {
+        id: "fr_02",
+        category: "direcao-defensiva",
+        statement: "Ao transitar sob chuva intensa em uma rodovia, o veículo perde a aderência dos pneus com a pista e começa a flutuar sobre a água (aquaplanagem). O condutor NUNCA deve:",
+        options: [
+          "Pisar bruscamente no pedal de freio nem virar o volante de forma repentina",
+          "Tirar suavemente o pé do acelerador para reduzir a velocidade",
+          "Manter o volante reto segurando-o firmemente com as duas mãos",
+          "Aguardar que os pneus retomem o contato direto com a pista de rolamento"
+        ],
+        correctIndex: 0,
+        explanation: "Na aquaplanagem não freia nem vira: só tire o pé do acelerador e mantenha o volante reto.",
+        incidence: "alta",
+        difficulty: 2,
+        image_url: ""
+    },
+    {
+        id: "fr_03",
+        category: "mecanica",
+        statement: "O freio de estacionamento (freio de mão) destina-se EXCLUSIVAMENTE a qual das seguintes finalidades no trânsito urbano e rodoviário?",
+        options: [
+          "Auxiliar a parada de emergência quando o veículo estiver em alta velocidade",
+          "Manter o veículo imobilizado na posição de estacionamento ou parada no declive/aclive",
+          "Substituir o freio de pé caso a pista de rolamento esteja muito escorregadia",
+          "Reduzir a velocidade das rodas dianteiras durante manobras de conversão"
+        ],
+        correctIndex: 1,
+        explanation: "O freio de mão serve exclusivamente para imobilizar o veículo parado, em aclive ou declive.",
+        incidence: "media",
+        difficulty: 1,
+        image_url: ""
+    },
+    {
+        id: "fr_04",
+        category: "direcao-defensiva",
+        statement: "Durante um trecho longo em declive acentuado, a utilização contínua APENAS do freio de pé pode provocar o superaquecimento do sistema. Para evitar a perda de eficiência, o condutor deve utilizar:",
+        options: [
+          "O freio de mão em pequenos toques simultâneos com o freio de pé",
+          "O freio motor, engatando uma marcha reduzida compatível com a descida",
+          "Apenas a marcha neutra (ponto morto) para economizar o sistema de freios",
+          "O pisca-alerta enquanto mantém o pedal de freio pressionado continuamente"
+        ],
+        correctIndex: 1,
+        explanation: "Na descida longa use freio motor com marcha reduzida pra não superaquecer os freios.",
+        incidence: "alta",
+        difficulty: 2,
+        image_url: ""
+    },
+    {
+        id: "fr_05",
+        category: "mecanica",
+        statement: "Em veículos desprovidos de sistema ABS, a frenagem de emergência em pista molhada exige cuidado. O travamento total das rodas provoca a seguinte consequência direta:",
+        options: [
+          "Aumento imediato do atrito e parada instantaneous do veículo na pista",
+          "Perda do controle da direção e arrastamento dos pneus sobre a pista de rolamento",
+          "Acionamento automático e imediato do freio de estacionamento traseiro",
+          "Transferência do peso do veículo exclusivamente para as rodas traseiras"
+        ],
+        correctIndex: 1,
+        explanation: "Sem ABS, rodas travadas = perda da direção e pneus arrastando na pista.",
+        incidence: "media",
+        difficulty: 2,
+        image_url: ""
+    },
+    {
+        id: "fr_06",
+        category: "direcao-defensiva",
+        statement: "A aquaplanagem ocorre pela combinação de lâmina d'água na pista, velocidade alta e pneus desgastados. A prevenção desse fenômeno deve ocorrer SOMENTE por meio de:",
+        options: [
+          "Aumento da velocidade para cruzar rapidamente o trecho alagado",
+          "Manutenção de pneus em bom estado e redução da velocidade sob chuva",
+          "Acionamento do freio de mão ao avistar poças na pista de rolamento",
+          "Uso de luz alta para evaporar a água acumulada na pista de rolamento"
+        ],
+        correctIndex: 1,
+        explanation: "Prevenção da aquaplanagem: pneus em bom estado e velocidade menor sob chuva.",
+        incidence: "media",
+        difficulty: 2,
+        image_url: ""
+    },
+    {
+        id: "fr_07",
+        category: "mecanica",
+        statement: "O sistema de freio antitravamento (ABS) difere do sistema convencional porque atua no veículo da seguinte forma:",
+        options: [
+          "Bloqueia permanentemente as rodas traseiras para evitar a derrapagem lateral",
+          "Impede o travamento das rodas durante a frenagem, mantendo a dirigibilidade do veículo",
+          "Funciona APENAS quando o freio de estacionamento (mão) está acionado",
+          "Atua exclusivamente no freio motor durante aclives e declives acentuados"
+        ],
+        correctIndex: 1,
+        explanation: "O ABS impede o travamento das rodas, mantendo a dirigibilidade durante a frenagem.",
+        incidence: "alta",
+        difficulty: 1,
+        image_url: ""
+    },
+    {
+        id: "fr_08",
+        category: "direcao-defensiva",
+        statement: "Em uma curva em pista de rolamento escorregadia, o condutor NUNCA deve acionar o freio de pé com violência porque essa atitude poderá provocar:",
+        options: [
+          "O desengate automático do câmbio e aumento de velocidade do motor",
+          "A derrapagem do veículo por travamento das rodas e perda de aderência",
+          "A perda imediata de pressão de ar em todos os pneus simultaneamente",
+          "A ativação do sistema de iluminação de emergência e pisca-alerta"
+        ],
+        correctIndex: 1,
+        explanation: "Freio brusco na curva escorregadia trava as rodas e provoca derrapagem.",
+        incidence: "media",
+        difficulty: 2,
+        image_url: ""
+    },
+    {
+        id: "fr_09",
+        category: "direcao-defensiva",
+        statement: "O freio motor é uma técnica de direção defensiva que consiste em reduzir a velocidade do veículo. O seu acionamento é realizado EXCLUSIVAMENTE:",
+        options: [
+          "Pressionando o pedal de embreagem junto com o freio de mão",
+          "Tirando o pé do acelerador e engrenando marchas mais reduzidas no câmbio",
+          "Desligando a chave de ignição durante o percurso em declive",
+          "Puxando alavanca do freio de estacionamento em pequenos intervalos"
+        ],
+        correctIndex: 1,
+        explanation: "Freio motor: tire o pé do acelerador e engate marchas mais reduzidas.",
+        incidence: "alta",
+        difficulty: 2,
+        image_url: ""
+    },
+    {
+        id: "fr_10",
+        category: "mecanica",
+        statement: "Ao acionar o pedal do freio de pé (serviço) e notar que ele 'afunda' até o assoalho sem oferecer resistência, a falha do sistema pode estar associada APENAS a:",
+        options: [
+          "Vazamento do fluido de freio ou presença de ar nas tubulações hidráulicas",
+          "Travamento mecânico exclusivo da alavanca do freio de mão",
+          "Pressão excessiva de ar no interior dos pneus do eito traseiro",
+          "Desgaste das lâmpadas das luzes de freio na traseira do veículo"
+        ],
+        correctIndex: 0,
+        explanation: "Pedal que afunda = vazamento de fluido de freio ou ar no sistema hidráulico.",
+        incidence: "media",
+        difficulty: 2,
         image_url: ""
     }
 ];
