@@ -7937,6 +7937,65 @@ export const QUESTIONS: Question[] = [
         incidence: "media",
         difficulty: 2,
         image_url: ""
+    },
+    {
+        id: "plc_a6_01",
+        category: "legislacao",
+        statement: "Ao avistar a placa de advertência A-6 posicionada em rótula ou lateral da pista de rolamento antes de uma interseção, o condutor é alertado pela sinalização de advertência sobre a proximidade iminente de um:",
+        options: [
+            "Entroncamento oblíquo de via arterial com via coletora",
+            "Cruzamento de vias no mesmo nível com visibilidade ou não",
+            "Cruzamento com linha férrea em nível sem barreira",
+            "Acesso a uma via paralela de sentido único"
+        ],
+        correctIndex: 1,
+        explanation: "A placa A-6 é de advertência e avisa que existe um cruzamento de vias no mesmo nível, com ou sem visibilidade.",
+        detailedExplanation: "A sinalização de advertência tem a função de alertar o condutor sobre uma situação de risco à frente, exigindo que ele adote conduta preventiva. A placa A-6 indica Cruzamento de vias, ou seja, uma interseção em que as vias se encontram no mesmo nível. Não se confunde com a A-8 (linha férrea), que trata de passagem de trem, nem com indicação de via coletora ou acesso paralelo, que são situações distintas de geometria viária.",
+        commonMistake: "Muita gente confunde a A-6 (cruzamento de vias) com a A-8 (passagem de linha férrea em nível), que é a placa do trem.",
+        legalBase: "CTB - Anexo II, Sinalização Vertical de Advertência",
+        incidence: "alta",
+        difficulty: 2,
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-Cruzamento-de%20vias-A-6.png"
+    },
+    {
+        id: "plc_a6_02",
+        category: "direcao-defensiva",
+        statement: "Diante da placa de advertência A-6 (Cruzamento de vias) instalada em via urbana sem semáforo, qual a conduta adequada e exigida do condutor ao se aproximar da interseção indicada por essa sinalização?",
+        options: [
+            "Aumentar a velocidade para cruzar a interseção antes do veículo à direita",
+            "Reduzir a velocidade, observar o tráfego nas vias transversais e dar preferência conforme a regra",
+            "Acionar a buzina continuamente e prosseguir sem parar na pista de rolamento",
+            "Realizar a transposição de faixa exclusivamente para a esquerda antes do cruzamento"
+        ],
+        correctIndex: 1,
+        explanation: "A A-6 avisa sobre risco iminente: reduza, observe as vias transversais e aplique a regra geral de preferência pela direita.",
+        detailedExplanation: "Em direção defensiva, a sinalização de advertência funciona como antecipação de risco: o condutor deve chegar à interseção com velocidade reduzida e pronta para parar. Como a placa não indica preferência própria, vale a regra geral do art. 29 do CTB: em cruzamento não sinalizado, cede passagem ao veículo que se aproxima pela direita. Acelerar para \"passar primeiro\", usar a buzina de forma contínua ou mudar de faixa em cima da interseção são condutas agressivas e contrárias à direção defensiva.",
+        commonMistake: "Achar que, por ser placa de advertência, basta apenas passar sem parar; a A-6 exige redução e observação ativa.",
+        legalBase: "Art. 29 do CTB",
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-Cruzamento-de%20vias-A-6.png"
+    },
+    {
+        id: "plc_a6_03",
+        category: "legislacao",
+        statement: "A sinalização de advertência A-6 indica a existência de um cruzamento de vias no mesmo nível. Em uma interseção não sinalizada indicada exclusivamente por esta placa, a preferência de passagem pertence:",
+        options: [
+            "Ao veículo que trafega em maior velocidade na pista de rolamento",
+            "Ao veículo que se aproxima pela direita do condutor",
+            "Exclusivamente ao veículo que realiza conversão à esquerda",
+            "Ao veículo de maior porte, independentemente da via"
+        ],
+        correctIndex: 1,
+        explanation: "Não havendo semáforo nem agente, vale a regra geral: cede passagem quem se aproxima pela direita do condutor.",
+        detailedExplanation: "A placa A-6 apenas sinaliza a existência do cruzamento; ela não estabelece qual via tem preferência. Nesses casos aplica-se a regra geral da preferência: em interseção não sinalizada, o veículo que se aproxima pela direita tem passagem garantida. O porte do veículo, a velocidade e a intenção de virar à esquerda não alteram essa prioridade — inclusive a conversão à esquerda é a manobra que mais exige cautela, pois o condutor precisa cruzar a corrente contrária.",
+        commonMistake: "Achar que quem vai virar à esquerda tem prioridade, ou que o veículo maior manda na interseção.",
+        legalBase: "Art. 29, II e §3º do CTB",
+        incidence: "altissima",
+        trap: true,
+        difficulty: 2,
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-Cruzamento-de%20vias-A-6.png"
     }
 ];
 // Questões que realmente caíram na prova do DETRAN.
