@@ -51,6 +51,10 @@ export function PdfReader({ url, title, initialPage, autoStart, className = "" }
   const [pageInput, setPageInput] = useState("");
   const [isReading, setIsReading] = useState(false);
   const [speechRate, setSpeechRate] = useState<number>(1.0);
+  // Espelho da velocidade: speakChunk roda dentro do closure antigo da
+  // página (recursão onend), então lê daqui para valer a troca em tempo real.
+  const speechRateRef = useRef(1.0);
+  speechRateRef.current = speechRate;
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const layoutCache = useRef<{ [key: string]: CachedLayout }>({});
 
@@ -71,6 +75,17 @@ export function PdfReader({ url, title, initialPage, autoStart, className = "" }
   const didInitRef = useRef(false);
   const autoStartRef = useRef(false);
   const startReadingRef = useRef<() => void>(() => {});
+  // --- iOS/Safari: fala em blocos curtos + vigilância de eventos perdidos ---
+  // O iPhone corta utterances longos e às vezes "engole" o onend/onerror.
+  const chunksRef = useRef<string[]>([]);
+  const chunkIdxRef = useRef(0);
+  const watchdogRef = useRef<number | null>(null);
+  const startTimerRef = useRef<number | null>(null);
+  const keepAliveRef = useRef<number | null>(null);
+  const voiceRef = useRef<SpeechSynthesisVoice | null>(null);
+  // true = leitura iniciada por um toque do usuário (gesto válido no iOS);
+  // false = retomada automática entre páginas (pode ser bloqueada pelo Safari).
+  const gestoRef = useRef(true);
 
   const highlightCurrentElement = (activeSpan: HTMLElement | null) => {
     // 1. Limpa o destaque de TODOS os spans da camada de texto
@@ -86,6 +101,89 @@ export function PdfReader({ url, title, initialPage, autoStart, className = "" }
     }
   };
 
+  // ====== Suporte a iPhone/iOS (Safari) =====================================
+  // Limpa todos os timers de fala (vigias de início/fim e keep-alive).
+  const clearSpeechTimers = () => {
+    if (watchdogRef.current !== null) {
+      window.clearTimeout(watchdogRef.current);
+      watchdogRef.current = null;
+    }
+    if (startTimerRef.current !== null) {
+      window.clearTimeout(startTimerRef.current);
+      startTimerRef.current = null;
+    }
+    if (keepAliveRef.current !== null) {
+      window.clearInterval(keepAliveRef.current);
+      keepAliveRef.current = null;
+    }
+  };
+
+  // Escolhe uma voz pt-BR (o iPhone só tem vozes instaladas do sistema).
+  const pickVoice = (): SpeechSynthesisVoice | null => {
+    const synth = typeof window !== "undefined" ? window.speechSynthesis : undefined;
+    if (!synth) return null;
+    const voices = synth.getVoices() || [];
+    if (!voices.length) return voiceRef.current;
+    const pt = voices.filter((v) => /^pt/i.test(v.lang || ""));
+    const br =
+      pt.find((v) => /^pt[-_]BR$/i.test(v.lang || "")) ||
+      pt.find((v) => /brasil|brazil/i.test(v.name || "")) ||
+      pt[0] ||
+      voices.find((v) => v.default) ||
+      voices[0];
+    voiceRef.current = br;
+    return br;
+  };
+
+  // O Safari iOS corta utterances longos: quebra em blocos de ~180 chars,
+  // preferindo cortar em fim de frase/palavra.
+  const splitForSpeech = (texto: string): string[] => {
+    const limpo = texto.replace(/\s+/g, " ").trim();
+    if (!limpo) return [];
+    const frases = limpo.match(/[^.!?;:]+[.!?;:]?/g) || [limpo];
+    const blocos: string[] = [];
+    let atual = "";
+    const guardar = (v: string) => {
+      const t = v.trim();
+      if (t) blocos.push(t);
+    };
+    for (const f of frases) {
+      const p = f.trim();
+      if (!p) continue;
+      if (!atual) atual = p;
+      else if (atual.length + p.length + 1 <= 180) atual += " " + p;
+      else {
+        guardar(atual);
+        atual = p;
+      }
+      // Frase gigante: quebra por palavra
+      while (atual.length > 180) {
+        const corte = atual.lastIndexOf(" ", 180);
+        const i = corte > 40 ? corte : 180;
+        guardar(atual.slice(0, i));
+        atual = atual.slice(i).trim();
+      }
+    }
+    guardar(atual);
+    return blocos;
+  };
+
+  // Evita que o SafariiOS suspenda a fala longa (chamado em intervalo).
+  const startKeepAlive = () => {
+    if (keepAliveRef.current !== null) window.clearInterval(keepAliveRef.current);
+    keepAliveRef.current = window.setInterval(() => {
+      const s = typeof window !== "undefined" ? window.speechSynthesis : undefined;
+      if (s && s.speaking && !s.paused) {
+        try {
+          s.resume();
+        } catch {
+          /* ignora */
+        }
+      }
+    }, 9000);
+  };
+  // ===========================================================================
+
   const cancelSpeech = useCallback(() => {
     // Invalida a sessão ANTES de cancelar: o cancel pode disparar
     // onend/onerror residual — já chega morto e não avança a página.
@@ -93,6 +191,7 @@ export function PdfReader({ url, title, initialPage, autoStart, className = "" }
     // Parada total também cancela retomada pendente e auto-início.
     autoReadRef.current = false;
     autoStartRef.current = false;
+    clearSpeechTimers();
     window.speechSynthesis.cancel();
     utteranceRef.current = null;
     setIsReading(false);
@@ -169,9 +268,133 @@ export function PdfReader({ url, title, initialPage, autoStart, className = "" }
     return { fullText, orderedSpans };
   };
 
+  // Fim NATURAL da página (mesma sessão): vira a página sozinho e a
+  // retomada acontece ao concluir a renderização (ver renderPage).
+  const endOfPage = (sessao: number) => {
+    if (sessaoLeituraRef.current !== sessao) return;
+    clearSpeechTimers();
+    utteranceRef.current = null;
+    // A virada da página é automática: não há gesto novo do usuário.
+    gestoRef.current = false;
+    if (currentPage < numPages) {
+      autoReadRef.current = true;
+      setPageInput("");
+      setCurrentPage(currentPage + 1);
+    } else {
+      stopReading();
+    }
+  };
+
+  // Fala UM bloco curto e encadeia o próximo no onend. No iPhone o onend
+  // às vezes não chega — daí o vigia, que também mantém a fala desperta.
+  const speakChunk = (sessao: number) => {
+    if (sessaoLeituraRef.current !== sessao) return;
+    const blocos = chunksRef.current;
+    const i = chunkIdxRef.current;
+    if (i >= blocos.length) {
+      endOfPage(sessao);
+      return;
+    }
+    const texto = blocos[i];
+
+    const utterance = new SpeechSynthesisUtterance(texto);
+    const voz = pickVoice();
+    if (voz) utterance.voice = voz;
+    utterance.lang = 'pt-BR';
+    utterance.rate = speechRateRef.current;
+
+    let concluido = false;
+    const concluir = () => {
+      if (concluido) return false;
+      concluido = true;
+      if (watchdogRef.current !== null) {
+        window.clearTimeout(watchdogRef.current);
+        watchdogRef.current = null;
+      }
+      if (startTimerRef.current !== null) {
+        window.clearTimeout(startTimerRef.current);
+        startTimerRef.current = null;
+      }
+      return true;
+    };
+    const avancar = () => {
+      if (!concluir()) return;
+      if (sessaoLeituraRef.current !== sessao) return;
+      chunkIdxRef.current = i + 1;
+      speakChunk(sessao);
+    };
+
+    utterance.onend = () => avancar();
+    utterance.onerror = (ev) => {
+      if (!concluir()) return;
+      if (sessaoLeituraRef.current !== sessao) return;
+      const err = (ev as SpeechSynthesisErrorEvent)?.error;
+      // Cancelamento nosso (Parar/troca de página) — não é erro.
+      if (err === 'interrupted' || err === 'canceled') return;
+      console.warn('[narração] onerror:', err);
+      stopReading();
+      toast.error(
+        err === 'not-allowed'
+          ? 'O navegador bloqueou a voz. Toque em "Ouvir" para liberar.'
+          : 'A narração foi interrompida pelo navegador.'
+      );
+    };
+
+    utteranceRef.current = utterance;
+    try {
+      window.speechSynthesis.speak(utterance);
+    } catch (e) {
+      console.warn('[narração] speak() falhou:', e);
+      stopReading();
+      toast.error('Não foi possível iniciar a narração neste navegador.');
+      return;
+    }
+
+    // Vigia 1 — início: fora de um toque do usuário o Safari iOS ignora a
+    // fala em silêncio. Avisamos em vez de deixar o botão "preso" em Parar.
+    startTimerRef.current = window.setTimeout(() => {
+      if (concluido || sessaoLeituraRef.current !== sessao) return;
+      const s = window.speechSynthesis;
+      if (!s.speaking && !s.pending && !s.paused) {
+        concluir();
+        stopReading();
+        toast.info(
+          gestoRef.current
+            ? 'O iPhone não iniciou a voz. Toque em "Ouvir" novamente.'
+            : 'Toque em "Ouvir" para continuar a leitura.'
+        );
+      }
+    }, 2500);
+
+    // Vigia 2 — fim: se o onend nunca chegar, retoma ou avança sozinho.
+    const previsao = Math.max(
+      6000,
+      (texto.length / (12 * Math.max(0.5, speechRateRef.current))) * 1000 + 8000
+    );
+    const vigia = () => {
+      watchdogRef.current = window.setTimeout(() => {
+        if (concluido || sessaoLeituraRef.current !== sessao) return;
+        const s = window.speechSynthesis;
+        if (s.speaking || s.pending) {
+          try {
+            s.resume();
+          } catch {
+            /* ignora */
+          }
+          vigia(); // ainda falando: só renova a vigilância
+          return;
+        }
+        avancar(); // parou sem onend → presume fim do bloco
+      }, previsao);
+    };
+    vigia();
+  };
+
   const startReading = (readingDirection: 'TOP_TO_BOTTOM' | 'BOTTOM_TO_TOP' = 'TOP_TO_BOTTOM') => {
     // Nova sessão de leitura: invalida eventos de falas anteriores.
     const sessao = ++sessaoLeituraRef.current;
+    // Zera vigias/keep-alive da página anterior (o iOS não perdoa timer órfão).
+    clearSpeechTimers();
 
     const textLayerEl = textLayerRef.current;
     if (!textLayerEl) return;
@@ -220,9 +443,13 @@ export function PdfReader({ url, title, initialPage, autoStart, className = "" }
       // Página com conteúdo: zera o contador de pulos em sequência.
       paginasVaziasRef.current = 0;
 
-    // Cancela áudios anteriores
-    window.speechSynthesis.cancel();
+    // Cancela áudios anteriores (só se algo estiver ativo: um cancel()
+    // desnecessário logo antes do speak() derruba a fala no iPhone)
+    if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+      window.speechSynthesis.cancel();
+    }
     setIsReading(true);
+    pickVoice(); // pré-carrega a voz pt-BR (no iOS as vozes chegam atrasadas)
 
     // Destaca APENAS o span inicial (frase atual em leitura)
     if (layout.orderedSpans[0]) {
@@ -234,35 +461,13 @@ export function PdfReader({ url, title, initialPage, autoStart, className = "" }
       layout.orderedSpans[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
-    const utterance = new SpeechSynthesisUtterance(layout.fullText);
-    utterance.lang = 'pt-BR';
-    utterance.rate = speechRate;
-
-    // Fim NATURAL da página (mesma sessão): vira a página sozinho e a
-    // retomada acontece ao concluir a renderização (ver renderPage).
-    // Eventos de sessões antigas (canceladas/substituídas) são ignorados.
-    utterance.onend = () => {
-      if (sessaoLeituraRef.current !== sessao) return;
-      if (currentPage < numPages) {
-        autoReadRef.current = true;
-        setPageInput("");
-        setCurrentPage(currentPage + 1);
-      } else {
-        stopReading();
-      }
-    };
-    utterance.onerror = () => {
-      if (sessaoLeituraRef.current !== sessao) return;
-      stopReading();
-    };
-
-    setTimeout(() => {
-      // Só fala se esta sessão continuar válida (o usuário pode ter
-      // apertado Parar ou trocado de página durante a espera).
-      if (sessaoLeituraRef.current === sessao) {
-        window.speechSynthesis.speak(utterance);
-      }
-    }, 100);
+    // Blocos curtos em vez de um utterance gigante (limite do Safari iOS).
+    chunksRef.current = splitForSpeech(layout.fullText);
+    chunkIdxRef.current = 0;
+    startKeepAlive();
+    // Fala o primeiro bloco SINCRONIZADAMENTE com o toque do usuário —
+    // é exigência do iOS (o setTimeout de 100ms que existia aqui quebrava).
+    speakChunk(sessao);
   };
 
 const stopReading = () => {
@@ -271,6 +476,7 @@ const stopReading = () => {
     sessaoLeituraRef.current += 1;
     // Parada total também cancela retomada pendente (pulo de página vazia).
     autoReadRef.current = false;
+    clearSpeechTimers();
     if (typeof window !== "undefined" && window.speechSynthesis) {
       window.speechSynthesis.cancel();
     }
@@ -287,6 +493,8 @@ const stopReading = () => {
     if (isReading) {
       stopReading();
     } else if (pdfDoc) {
+      // Toque do usuário = gesto válido para o Safari iOS permitir a fala.
+      gestoRef.current = true;
       startReading();
     }
   }, [isReading, startReading, pdfDoc]);
@@ -422,6 +630,26 @@ const stopReading = () => {
       loadFromUrl(url);
     }
   }, [url]);
+
+  // iPhone/iOS: as vozes do sistema chegam DEPOIS do carregamento da página.
+  // Aquecemos aqui para que a primeira narração já encontre uma voz pt-BR.
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.speechSynthesis) {
+      toast.error("Este navegador não suporta narração em voz alta.");
+      return;
+    }
+    const synth = window.speechSynthesis;
+    const carregar = () => pickVoice();
+    carregar();
+    const t = window.setTimeout(carregar, 600);
+    const t2 = window.setTimeout(carregar, 2000);
+    synth.addEventListener?.("voiceschanged", carregar);
+    return () => {
+      synth.removeEventListener?.("voiceschanged", carregar);
+      window.clearTimeout(t);
+      window.clearTimeout(t2);
+    };
+  }, []);
 
   // Zoom inicial: encaixa a PÁGINA INTEIRA na tela (menor entre ajuste
   // à largura e à altura) — quase sem barra de rolagem. Reajusta sozinho
@@ -694,10 +922,9 @@ const stopReading = () => {
                 onChange={(e) => {
                   const newRate = parseFloat(e.target.value);
                   setSpeechRate(newRate);
-                  if (isReading) {
-                    stopReading();
-                    setTimeout(() => startReading(), 100);
-                  }
+                  // No iPhone, parar e recomeçar fora de um toque do usuário
+                  // bloqueia a fala — então só trocamos a velocidade e os
+                  // PRÓXIMOS blocos já saem na nova velocidade.
                 }}
                 className="h-8 px-1.5 rounded-md bg-white/10 border border-white/15 text-xs font-semibold text-white outline-none focus:border-white/40 cursor-pointer max-sm:h-7"
                 aria-label="Velocidade da voz"
