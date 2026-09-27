@@ -26,11 +26,38 @@ function TurboPage() {
   const [seed, setSeed] = useState(0);
   const cards = useMemo(() => getRandomizedQuestions(15), [seed]);
   const [i, setI] = useState(0);
-  const [showAnswer, setShowAnswer] = useState(false);
+  // Tentativa do cartão atual (índice) + revelar sem pontuar
+  const [picked, setPicked] = useState<number | null>(null);
+  const [revealed, setRevealed] = useState(false);
+  const [hits, setHits] = useState(0);
+  const [misses, setMisses] = useState(0);
+
+  const resetCard = () => {
+    setPicked(null);
+    setRevealed(false);
+  };
 
   function advance(dir: 1 | -1) {
-    setShowAnswer(false);
+    resetCard();
     setI((prev) => Math.max(0, Math.min(cards.length - 1, prev + dir)));
+  }
+
+  function reshuffle() {
+    setSeed((s) => s + 1);
+    setI(0);
+    resetCard();
+    setHits(0);
+    setMisses(0);
+  }
+
+  function pick(idx: number) {
+    if (picked !== null || revealed) return;
+    setPicked(idx);
+    if (idx === q.correctIndex) {
+      setHits((h) => h + 1);
+    } else {
+      setMisses((m) => m + 1);
+    }
   }
 
   function onDragEnd(_: unknown, info: PanInfo) {
@@ -41,7 +68,9 @@ function TurboPage() {
 
   const q = cards[i];
   const m = INCIDENCE_META[q.incidence];
-  const done = i >= cards.length - 1 && showAnswer;
+  const answered = picked !== null || revealed;
+  const done = i >= cards.length - 1 && answered;
+  const LETTERS = ["A", "B", "C", "D"];
 
   return (
     <div className="mx-auto max-w-md px-4 py-6 md:py-10">
@@ -53,13 +82,16 @@ function TurboPage() {
           <h1 className="text-xl font-display font-bold">
             Card {i + 1} / {cards.length}
           </h1>
+          {(hits > 0 || misses > 0) && (
+            <p className="text-xs font-semibold mt-0.5">
+              <span className="text-success">✅ {hits}</span>
+              <span className="text-muted-foreground"> · </span>
+              <span className="text-destructive">❌ {misses}</span>
+            </p>
+          )}
         </div>
         <button
-          onClick={() => {
-            setSeed((s) => s + 1);
-            setI(0);
-            setShowAnswer(false);
-          }}
+          onClick={reshuffle}
           className="p-2 rounded-xl glass hover:bg-accent/30"
           aria-label="Reembaralhar"
         >
@@ -100,8 +132,37 @@ function TurboPage() {
               {q.statement}
             </p>
 
+            {/* Opções para tentar responder */}
+            <div className="mt-4 space-y-2">
+              {q.options.map((opt, idx) => {
+                const isCorrect = idx === q.correctIndex;
+                const isPicked = picked === idx;
+                const locked = answered;
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    disabled={locked}
+                    onClick={() => pick(idx)}
+                    className={`w-full text-left px-3 py-2.5 rounded-xl border text-sm transition-colors ${
+                      locked && isCorrect
+                        ? "border-success/50 bg-success/10 text-foreground font-semibold"
+                        : locked && isPicked
+                          ? "border-destructive/50 bg-destructive/10 text-foreground"
+                          : locked
+                            ? "border-border/40 bg-background/30 text-muted-foreground"
+                            : "border-border/40 bg-background/40 hover:border-primary/40 hover:bg-primary/5 cursor-pointer"
+                    }`}
+                  >
+                    <span className="font-bold mr-2">{LETTERS[idx] ?? idx + 1}</span>
+                    {opt}
+                  </button>
+                );
+              })}
+            </div>
+
             <AnimatePresence>
-              {showAnswer && (
+              {answered && (
                 <motion.div
                   initial={{ opacity: 0, y: 12, height: 0 }}
                   animate={{ opacity: 1, y: 0, height: "auto" }}
@@ -110,7 +171,11 @@ function TurboPage() {
                 >
                   <div className="p-4 rounded-2xl border border-success/30 bg-success/10">
                     <p className="text-xs uppercase tracking-wide text-success font-semibold mb-1">
-                      Resposta
+                      {revealed && picked === null
+                        ? "Resposta"
+                        : picked === q.correctIndex
+                          ? "Acertou! 🎉"
+                          : "Não foi dessa vez"}
                     </p>
                     <p className="font-semibold text-sm">
                       {q.options[q.correctIndex]}
@@ -123,20 +188,14 @@ function TurboPage() {
               )}
             </AnimatePresence>
 
-            <button
-              onClick={() => setShowAnswer((v) => !v)}
-              className="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl glass font-medium text-sm hover:bg-accent/30"
-            >
-              {showAnswer ? (
-                <>
-                  <EyeOff className="h-4 w-4" /> Ocultar
-                </>
-              ) : (
-                <>
-                  <Eye className="h-4 w-4" /> Ver resposta
-                </>
-              )}
-            </button>
+            {!answered && (
+              <button
+                onClick={() => setRevealed(true)}
+                className="mt-3 w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-xs text-muted-foreground hover:text-foreground"
+              >
+                <Eye className="h-3.5 w-3.5" /> Não sei, ver resposta
+              </button>
+            )}
           </motion.div>
         </AnimatePresence>
       </div>
@@ -152,9 +211,7 @@ function TurboPage() {
         <button
           onClick={() => {
             if (done) {
-              setSeed((s) => s + 1);
-              setI(0);
-              setShowAnswer(false);
+              reshuffle();
             } else {
               advance(1);
             }
