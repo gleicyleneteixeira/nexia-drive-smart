@@ -31,6 +31,7 @@ type NavItem = {
   label: string; 
   icon: any; 
   module?: "teorico" | "psicotecnico" | "direcao";
+  soon?: boolean;
   adminSection?: string;
 };
 
@@ -38,7 +39,7 @@ const NAV_ITEMS: NavItem[] = [
   { to: "/app", label: "Inicio", icon: Home },
   { to: "/app", label: "Psicotecnico", icon: Brain, module: "psicotecnico" },
   { to: "/app", label: "Teorico", icon: BookOpen, module: "teorico" },
-  { to: "/app", label: "Pratico", icon: Car, module: "direcao" },
+  { to: "/app", label: "Pratico", icon: Car, module: "direcao", soon: true },
   { to: "/biblioteca", label: "Biblioteca", icon: Library },
   { to: "/simulado", label: "Simulado", icon: Target },
   { to: "/conquistas", label: "Conquistas", icon: Trophy },
@@ -295,6 +296,7 @@ export function AppShell() {
                     <button
                       key={item.label}
                       onClick={() => {
+                        if (item.soon) return;
                         setActiveAdminSection(null);
                         setMenuOpen(false);
                         if (item.module) {
@@ -313,12 +315,19 @@ export function AppShell() {
                         active
                           ? 'bg-primary/15 text-primary border border-primary/30'
                           : 'text-muted-foreground hover:bg-accent hover:text-foreground'
-                      }`}
-                      title={expanded ? undefined : item.label}
+                      } ${item.soon ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      title={expanded ? undefined : item.label + (item.soon ? " (Em breve)" : "")}
                     >
                       <Icon className="h-[18px] w-[18px] shrink-0" />
                       {expanded && (
-                        <span className="text-[13px] font-medium truncate">{item.label}</span>
+                        <span className="text-[13px] font-medium truncate flex items-center gap-2">
+                          {item.label}
+                          {item.soon && (
+                            <span className="rounded-full bg-yellow-400 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-yellow-950">
+                              Em Breve
+                            </span>
+                          )}
+                        </span>
                       )}
                     </button>
                   );

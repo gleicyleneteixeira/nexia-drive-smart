@@ -5,9 +5,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   getRandomizedQuestions,
   getRealExamQuestions,
+  getOfficialSimuladoQuestions,
+  OFFICIAL_EXAM_PASS_SCORE,
   INCIDENCE_META,
   CATEGORY_LABELS,
-  REAL_EXAM_IDS,
   type Question,
   type Category,
   QUESTIONS,
@@ -104,30 +105,9 @@ function buildFresh(mode?: Category | "prova-real"): Question[] {
 
   let fresh: Question[];
   if (!mode) {
-    // Para simulados completos, garante a inclusão das perguntas reais da prova
-    const fixedQuestions = QUESTIONS.filter((q) => REAL_EXAM_IDS.includes(q.id));
-    const fixedIds = fixedQuestions.map((q) => q.id);
-
-    // Quantidade de questões restantes para fechar exatamente 30 (sem ultrapassar)
-    const remaining = Math.max(0, TOTAL - fixedQuestions.length);
-
-    // Pega as questões randomizadas restantes (excluindo as fixas para não duplicar)
-    const otherQuestions = getRandomizedQuestions(remaining, {
-      exclude: [...allExcluded, ...fixedIds],
-      placasCount: 3,
-    });
-
-    // Une as fixas com as randomizadas
-    const merged = [...fixedQuestions, ...otherQuestions];
-
-    // Embaralha todas juntas para que fiquem misturadas de forma randômica
-    for (let i = merged.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [merged[i], merged[j]] = [merged[j], merged[i]];
-    }
-
-    // TRAVA OBRIGATÓRIA: garante que NUNCA passe de 30 questões
-    fresh = merged.slice(0, TOTAL);
+    // Simulado oficial DETRAN: 30 questões na distribuição 7/7/7/5/4 por
+    // categoria, com 5 a 8 questões do lote oficial (detran_*).
+    fresh = getOfficialSimuladoQuestions({ exclude: allExcluded });
   } else if (mode === "prova-real") {
     // Pool validado (bônus "caiu na prova"): só validadas, sem repetir.
     // Como o pool é limitado, ao esgotar permite repetir SÓ reais da sessão
@@ -881,7 +861,7 @@ function ResultScreen({
   const accuracy = Math.round((score / total) * 100);
 
   const errorPct = 100 - accuracy;
-  const approved = accuracy >= 70;
+  const approved = score >= OFFICIAL_EXAM_PASS_SCORE;
 
   // Desempenho por categoria
   const byCategory = useMemo(() => {
@@ -934,7 +914,7 @@ function ResultScreen({
               : "bg-destructive/15 text-destructive border border-destructive/40"
           }`}
         >
-          {approved ? "Aprovado" : "Não aprovado"} · Mínimo 70%
+          {approved ? "Aprovado" : "Não aprovado"} · Mínimo {OFFICIAL_EXAM_PASS_SCORE} acertos (66,7%)
         </span>
         <h2 className="text-3xl font-display font-bold">
           {score}/{total}{" "}
@@ -948,7 +928,7 @@ function ResultScreen({
         <p className="text-muted-foreground mt-1">
           {approved
             ? "Você atingiu a nota mínima para a prova teórica. Siga praticando para garantir!"
-            : "Você ficou abaixo dos 70% exigidos. Revise as erradas abaixo e tente de novo."}
+            : "Você ficou abaixo dos 20 acertos exigidos (66,7%). Revise as erradas abaixo e tente de novo."}
         </p>
       </div>
 

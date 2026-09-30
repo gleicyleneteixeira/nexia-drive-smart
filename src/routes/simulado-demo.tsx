@@ -9,6 +9,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   getRandomizedQuestions,
   getBalancedQuestions,
+  OFFICIAL_EXAM_PASS_SCORE,
   INCIDENCE_META,
   CATEGORY_LABELS,
   type Question,
@@ -784,7 +785,7 @@ function ResultScreen({
   const accuracy = Math.round((score / total) * 100);
 
   const errorPct = 100 - accuracy;
-  const approved = accuracy >= 70;
+  const approved = score >= OFFICIAL_EXAM_PASS_SCORE;
 
   // Desempenho por categoria
   const byCategory = useMemo(() => {
@@ -837,7 +838,7 @@ function ResultScreen({
               : "bg-destructive/15 text-destructive border border-destructive/40"
           }`}
         >
-          {approved ? "Aprovado" : "Não aprovado"} · Mínimo 70%
+          {approved ? "Aprovado" : "Não aprovado"} · Mínimo {OFFICIAL_EXAM_PASS_SCORE} acertos (66,7%)
         </span>
         <h2 className="text-3xl font-display font-bold">
           {score}/{total}{" "}
@@ -846,7 +847,7 @@ function ResultScreen({
         <p className="text-muted-foreground mt-1">
           {approved
             ? "Você atingiu a nota mínima para a prova teórica. Siga praticando para garantir!"
-            : "Você ficou abaixo dos 70% exigidos. Revise as erradas abaixo e tente de novo."}
+            : "Você ficou abaixo dos 20 acertos exigidos (66,7%). Revise as erradas abaixo e tente de novo."}
         </p>
       </div>
 

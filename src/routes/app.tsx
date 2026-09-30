@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";
 import { isProfileExpired } from "@/lib/subscription";
 import { fetchLibraryItems } from "@/lib/library";
+import { CATEGORY_LABELS, getRealExamQuestions, type Category } from "@/data/questions";
 import { fetchVideoTutorials, type VideoTutorial } from "@/lib/video-tutorials";
 import { GroupPopups } from "@/components/WhatsAppGroupPopup";
 import { NativePdfModal } from "@/components/NativePdfModal";
@@ -399,14 +400,18 @@ function ModuleHub({ onSelect }: { onSelect: (mod: "teorico" | "psicotecnico" | 
           </div>
         </motion.div>
 
-        {/* Module 3: Direcao */}
+        {/* Module 3: Direcao (em breve - acesso desabilitado temporariamente) */}
         <motion.div
           initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          onClick={() => onSelect("direcao")}
-          className="group text-left glass rounded-3xl p-8 border-border/40 hover:border-primary/50 shadow-card hover:shadow-glow cursor-pointer transition-all hover:scale-[1.02] flex flex-col justify-between"
+          aria-disabled="true"
+          title="Módulo prático em breve"
+          className="group relative text-left glass rounded-3xl p-8 border-border/40 shadow-card transition-all flex flex-col justify-between opacity-70 cursor-not-allowed"
         >
+          <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-yellow-400 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-yellow-950 shadow">
+            Em Breve
+          </span>
           <div className="space-y-5">
             <div className="w-14 h-14 rounded-2xl bg-warning/10 border border-warning/25 flex items-center justify-center text-warning group-hover:scale-110 transition-transform">
               <TrafficCone className="h-7 w-7" />
@@ -426,9 +431,8 @@ function ModuleHub({ onSelect }: { onSelect: (mod: "teorico" | "psicotecnico" | 
             </ul>
           </div>
           <div className="pt-6">
-            <div className="w-full py-3.5 px-5 rounded-xl font-bold gradient-primary text-primary-foreground flex items-center justify-center gap-2 shadow-glow group-hover:gap-3 transition-all pointer-events-none">
-              Acessar Dicas Práticas
-              <ChevronRight className="h-4 w-4" />
+            <div className="w-full py-3.5 px-5 rounded-xl font-bold bg-secondary text-muted-foreground flex items-center justify-center gap-2 pointer-events-none">
+              Em Breve
             </div>
           </div>
         </motion.div>
@@ -443,38 +447,20 @@ function ModuleHub({ onSelect }: { onSelect: (mod: "teorico" | "psicotecnico" | 
 }
 
 // ==========================================
-// 2. TEORICO DASHBOARD
+// 2. TEORICO DASHBOARD — página principal do Teórico (é a tela de seleção):
+// topo = banner do cronograma (DailyCheckinBanner global do AppShell),
+// centro = escolha do tipo de simulado, abaixo = biblioteca.
 // ==========================================
-const TEORICO_QUICK = [
-  {
-    to: "/simulado",
-    label: "Simulado Rápido",
-    desc: "30 questões inteligentes",
-    icon: Sparkles,
-    accent: "from-primary to-primary-glow",
-  },
-  {
-    to: "/mais-caem",
-    label: "Mais Caem",
-    desc: "Foco no que importa",
-    icon: Flame,
-    accent: "from-destructive to-warning",
-  },
-  {
-    to: "/placas",
-    label: "Placas Mais Caem",
-    desc: "Treino de sinalização",
-    icon: TrafficCone,
-    accent: "from-warning to-destructive",
-  },
-  {
-    to: "/turbo",
-    label: "Revisão Turbo",
-    desc: "Memorize no swipe",
-    icon: Zap,
-    accent: "from-warning to-warning",
-  },
-] as const;
+const TEORICO_CATS: { id: Category; icon: string }[] = [
+  { id: "legislacao", icon: "📘" },
+  { id: "placas", icon: "🚸" },
+  { id: "direcao-defensiva", icon: "🛡️" },
+  { id: "primeiros-socorros", icon: "🚑" },
+  { id: "infracoes", icon: "⚠️" },
+  { id: "meio-ambiente", icon: "🌱" },
+  { id: "mecanica", icon: "🔧" },
+  { id: "prioridade", icon: "🔀" },
+];
 
 function TeoricoDashboard() {
   const { data: libraryItems = [], isLoading: libLoading } = useQuery({
@@ -483,6 +469,11 @@ function TeoricoDashboard() {
   });
   const teoricoItems = libraryItems.filter((i) => i.module_type === "teorico" && !i.is_paid);
   const [pdfModal, setPdfModal] = useState<{ url: string; title: string } | null>(null);
+  const realCount = getRealExamQuestions().length;
+
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   return (
     <motion.div
@@ -491,41 +482,98 @@ function TeoricoDashboard() {
       exit={{ opacity: 0 }}
       className="mx-auto max-w-6xl px-4 py-6 md:py-8 space-y-6"
     >
-      {/* Hero */}
-      <section className="glass rounded-3xl p-6 md:p-8 shadow-card relative overflow-hidden">
-        <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-primary/20 blur-3xl" />
-        <div className="relative">
-          <p className="text-xs uppercase tracking-widest text-primary-glow font-semibold">
-            Módulo Teórico DETRAN
-          </p>
-          <h1 className="text-2xl md:text-4xl font-display font-bold mt-2 leading-tight">
-            Comece sua jornada rumo à <span className="gradient-text">aprovação</span>.
-          </h1>
-          <p className="text-xs md:text-sm text-muted-foreground mt-3 max-w-lg">
-            Estude legislação, direção defensiva, primeiros socorros e faça simulados como na prova real para passar de primeira!
-          </p>
-          <div className="mt-6 flex flex-wrap gap-2">
-            <Link
-              to="/simulado"
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl gradient-primary text-primary-foreground text-xs font-bold shadow-glow hover:scale-[1.02] active:scale-95 transition-transform"
-            >
-              <Sparkles className="h-4 w-4" />
-              Iniciar Primeiro Simulado
-            </Link>
+      {/* Pílulas de navegação rápida */}
+      <div className="flex justify-center gap-2">
+        <button
+          type="button"
+          onClick={() => scrollToSection("secao-simulados")}
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-primary/40 bg-primary/10 text-xs font-bold text-primary-glow hover:bg-primary/20 transition-colors"
+        >
+          📝 Simulados
+        </button>
+        <button
+          type="button"
+          onClick={() => scrollToSection("secao-biblioteca")}
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-border bg-secondary/50 text-xs font-semibold text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors"
+        >
+          📚 Biblioteca
+        </button>
+      </div>
 
+      {/* CENTRO (foco principal): escolha o tipo de simulado */}
+      <section id="secao-simulados" className="scroll-mt-24">
+        <p className="text-xs uppercase tracking-widest text-primary-glow font-semibold text-center">
+          Foco principal
+        </p>
+        <h2 className="text-xl md:text-2xl font-display font-bold text-center mt-1">
+          Escolha o tipo de simulado
+        </h2>
+        <p className="text-xs md:text-sm text-muted-foreground text-center mt-1 mb-4">
+          Treine no formato oficial de 30 questões ou foque em uma matéria específica.
+        </p>
+
+        <div className="grid gap-3">
+          <Link
+            to="/simulado"
+            search={{ modo: "completo", categoria: undefined }}
+            className="w-full text-left rounded-2xl border border-primary/40 bg-primary/10 p-5 shadow-glow hover:bg-primary/15 transition-colors flex items-start gap-3"
+          >
+            <div className="w-11 h-11 rounded-xl bg-primary/20 flex items-center justify-center shrink-0">
+              <Sparkles className="h-5 w-5 text-primary-glow" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-[10px] uppercase tracking-widest text-primary-glow font-bold">
+                Recomendado · 30 questões
+              </p>
+              <p className="font-display font-bold text-lg">Simulado Completo</p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Distribuição oficial por blocos, com questões da prova real. Mínimo 20 acertos.
+              </p>
+            </div>
+            <ChevronRight className="h-5 w-5 text-primary-glow mt-2 shrink-0" />
+          </Link>
+
+          <Link
+            to="/simulado"
+            search={{ modo: "prova-real", categoria: undefined }}
+            className="w-full text-left rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-5 hover:bg-emerald-500/15 transition-colors flex items-start gap-3"
+          >
+            <div className="w-11 h-11 rounded-xl bg-emerald-500/20 flex items-center justify-center shrink-0">
+              <ShieldCheck className="h-5 w-5 text-emerald-400" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-[10px] uppercase tracking-widest text-emerald-400 font-bold">
+                Bônus validado · {realCount} questões
+              </p>
+              <p className="font-display font-bold text-lg">Prova Real</p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Só perguntas que já caíram na prova.
+              </p>
+            </div>
+            <ChevronRight className="h-5 w-5 text-emerald-400 mt-2 shrink-0" />
+          </Link>
+        </div>
+
+        <p className="text-xs uppercase tracking-widest text-muted-foreground font-semibold mt-5 mb-2">
+          Ou treine por categoria
+        </p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          {TEORICO_CATS.map((c) => (
             <Link
-              to="/turbo"
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl glass text-xs font-semibold hover:bg-accent/30 transition-colors"
+              key={c.id}
+              to="/simulado"
+              search={{ categoria: c.id, modo: undefined }}
+              className="text-left rounded-2xl border border-border bg-background/40 p-4 hover:border-primary/40 hover:bg-primary/5 transition-colors"
             >
-              <Zap className="h-4 w-4 text-warning" />
-              Revisão Turbo
+              <div className="text-2xl mb-1">{c.icon}</div>
+              <p className="text-sm font-semibold leading-tight">{CATEGORY_LABELS[c.id]}</p>
             </Link>
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* Livros e Materiais - BIBLIOTECA em destaque */}
-      <section>
+      {/* ABAIXO DOS SIMULADOS: Biblioteca e Livros Virtuais */}
+      <section id="secao-biblioteca" className="scroll-mt-24">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-base font-display font-bold flex items-center gap-1.5">
             <Library className="h-4.5 w-4.5 text-primary" />
@@ -559,27 +607,6 @@ function TeoricoDashboard() {
         )}
       </section>
 
-      {/* Dicas */}
-      <section className="glass rounded-3xl p-5 shadow-card">
-        <h2 className="text-base font-display font-bold flex items-center gap-1.5 mb-3">
-          <ShieldCheck className="h-4.5 w-4.5 text-success" />
-          Dicas para sua aprovação
-        </h2>
-        <div className="grid sm:grid-cols-3 gap-4 text-xs text-muted-foreground">
-          <div className="space-y-1">
-            <p className="font-semibold text-foreground">📋 Legislação</p>
-            <p>Foque em velocidade máxima, distância de segurança e sinalização.</p>
-          </div>
-          <div className="space-y-1">
-            <p className="font-semibold text-foreground">🚑 Primeiros Socorros</p>
-            <p>Estude acidente vascular cerebral, parada cardíaca e noções básicas de resgate.</p>
-          </div>
-          <div className="space-y-1">
-            <p className="font-semibold text-foreground">🚗 Direção Defensiva</p>
-            <p>Atenção a ultrapassagens, prioridade e condições da via.</p>
-          </div>
-        </div>
-      </section>
       {pdfModal && (
         <NativePdfModal
           pdfUrl={pdfModal.url}
