@@ -3417,7 +3417,7 @@ export const QUESTIONS: Question[] = [
         category: "legislacao",
         statement: "O que significa a placa de advertência A-28 e qual a atitude preventiva exigida ao condutor que a visualiza?",
         options: ["Pista alagada, exigindo parada total do veículo.", "Pista com aquaplanagem, indicando obrigatoriedade de correntes nos pneus.", "Pista escorregadia, advertindo sobre redução de aderência do pavimento.", "Projeção de cascalho, alertando para pedras soltas na pista."],
-        correctIndex: 3,
+        correctIndex: 2,
         explanation: "A placa A-28 adverte sobre pista escorregadia à frente.",
         detailedExplanation: "Essa placa (Pista Escorregadia) mostra que, mais à frente, a pista pode estar escorregadia por causa de água, óleo ou areia. Por isso, é bom diminuir a velocidade pra evitar acidentes.",
         legalBase: "Anexo II do CTB - Sinalização Vertical de Advertência",
@@ -3433,7 +3433,7 @@ export const QUESTIONS: Question[] = [
         category: "direcao-defensiva",
         statement: "Para transpor uma interseção não semaforizada com segurança, qual postura o condutor deve adotar ao se aproximar?",
         options: ["Buzinar prolongadamente e manter a velocidade para forçar pedestres a aguardar.", "Ligar faróis altos e pisca-alerta para indicar que pretende passar primeiro.", "Acelerar e transpor a interseção rapidamente para desobstruir o fluxo.", "Reduzir a velocidade, checar ambos os lados e respeitar a sinalização de preferência."],
-        correctIndex: 2,
+        correctIndex: 3,
         explanation: "Reduzir velocidade, olhar os lados e respeitar a preferência é a conduta correta.",
         detailedExplanation: "Chegar devagar no cruzamento é crucial pra evitar acidentes. Prestar atenção nos pedestres e em outros veículos que têm prioridade é fundamental pra passar com segurança.",
         legalBase: "Art. 44 do CTB",
@@ -3448,7 +3448,7 @@ export const QUESTIONS: Question[] = [
         category: "legislacao",
         statement: "Segundo o texto expresso do Art. 1º do CTB, o trânsito em condições seguras é considerado um direito:",
         options: ["Privilégio exclusivo de motoristas habilitados em categorias profissionais.", "Direito restrito a pedestres e ciclistas em passeios e ciclovias.", "Responsabilidade facultativa de motoristas de transporte coletivo.", "Direito de todos e dever dos órgãos do Sistema Nacional de Trânsito."],
-        correctIndex: 0,
+        correctIndex: 3,
         explanation: "Trânsito seguro é direito de todos e dever dos órgãos do SNT.",
         detailedExplanation: "Isso quer dizer que todos têm o direito de transitar em segurança, e os órgãos responsáveis devem fazer a parte deles pra garantir isso. Eles precisam tomar medidas que protejam a vida e o meio ambiente no trânsito.",
         legalBase: "Art. 1º, § 2º do CTB",
@@ -3478,7 +3478,7 @@ export const QUESTIONS: Question[] = [
         category: "mecanica",
         statement: "A falta de balanceamento do conjunto de rodas e pneus provoca principalmente qual consequência ao condutor?",
         options: ["Direção excessivamente dura e travamento do sistema hidráulico.", "Rangido contínuo dos pneus durante curvas fechadas.", "Deformação imediata das longarinas do chassi.", "Trepidações e vibrações anormais transmitidas ao volante de direção."],
-        correctIndex: 1,
+        correctIndex: 3,
         explanation: "Desbalanceamento causa trepidação e vibração no volante em alta velocidade.",
         detailedExplanation: "O balanceamento é pra deixar as rodas e pneus em harmonia. Se não estiver certo, as vibrações no volante aumentam com a velocidade e podem até desgastar os pneus e a suspensão.",
         legalBase: "Manual de Manutenção Veicular e Direção Defensiva",
@@ -3523,7 +3523,7 @@ export const QUESTIONS: Question[] = [
         category: "legislacao",
         statement: "Via com interseções em nível, geralmente semaforizada, que interliga regiões do perímetro urbano é classificada como qual tipo?",
         options: ["Privada de acesso restrito, com circulação limitada a moradores.", "Rural não pavimentada, destinada à circulação intermunicipal.", "Expressa internacional, exclusiva de trânsito entre países.", "Urbana arterial, com fluxo canalizado por interseções em nível."],
-        correctIndex: 0,
+        correctIndex: 3,
         explanation: "Via arterial é uma via urbana que interliga regiões do perímetro urbano.",
         detailedExplanation: "As vias são divididas em urbanas e rurais. A via arterial faz parte das urbanas, que incluem também as vias de trânsito rápido, coletoras e locais.",
         legalBase: "Art. 60, inciso I, alínea b do CTB",
@@ -3538,7 +3538,7 @@ export const QUESTIONS: Question[] = [
         category: "legislacao",
         statement: "Qual o prazo do estágio probatório da Permissão para Dirigir (PPD) até a expedição da CNH definitiva, segundo o CTB?",
         options: ["6 meses, prorrogáveis uma única vez mediante requerimento.", "12 meses, contados a partir da expedição do documento.", "24 meses, coincidentes com o período das avaliações psicológicas.", "Indefinidamente, até a ocorrência da primeira infração."],
-        correctIndex: 0,
+        correctIndex: 1,
         explanation: "A PPD tem prazo de 12 meses (um ano) de estágio probatório.",
         detailedExplanation: "A Permissão para Dirigir (PPD) é válida por 12 meses. Se o motorista não tiver infrações graves ou gravíssimas e não repetir médias, ele ganha a CNH definitiva; se não, tem que começar tudo de novo.",
         legalBase: "Art. 29 do CTB",
@@ -3746,7 +3746,7 @@ export const QUESTIONS: Question[] = [
         category: "direcao-defensiva",
         statement: "Em situação de aquaplanagem, a conduta correta do condutor é qual, segundo a direção defensiva e a legislação de trânsito?",
         options: ["Aplicar frenagem forte para recuperar a aderência dos pneus.", "Girar o volante alternadamente para expulsar a água.", "Engatar marcha ré imediatamente para reduzir a velocidade.", "Retirar o pé do acelerador e manter o volante firme, sem frear bruscamente."],
-        correctIndex: 0,
+        correctIndex: 3,
         explanation: "Na aquaplanagem, tire o pé do acelerador e segure o volante firme.",
         detailedExplanation: "Quando o carro aquaplana, os pneus não tocam o chão. O certo é tirar o pé do acelerador, manter o volante firme na direção e evitar frear ou virar de uma vez.",
         legalBase: "Art. 180 do CTB",
@@ -3778,7 +3778,7 @@ export const QUESTIONS: Question[] = [
         category: "direcao-defensiva",
         statement: "Durante uma aquaplanagem, a atitude imediata do condutor deve ser qual, segundo a direção defensiva?",
         options: ["Pisar com força no freio para travar as rodas e buscar atrito.", "Girar o volante rapidamente para expulsar a água sob os pneus.", "Engatar marcha reduzida em giro alto para forçar a tração.", "Retirar o pé do acelerador, segurar o volante firme e não frear nem virar bruscamente."],
-        correctIndex: 0,
+        correctIndex: 3,
         explanation: "Na aquaplanagem, tire o pé do acelerador e mantenha a direção reta.",
         detailedExplanation: "Se você frear ou virar rápido, pode fazer o carro rodar. É melhor segurar o volante firme e esperar os pneus voltarem a tocar o chão.",
         legalBase: "Art. 180 do CTB",
@@ -3794,7 +3794,7 @@ export const QUESTIONS: Question[] = [
         category: "primeiros-socorros",
         statement: "Qual o número telefônico oficial do SAMU para atendimento médico de urgência no Brasil, segundo o CTB?",
         options: ["193 — Corpo de Bombeiros Militar.", "190 — Polícia Militar.", "192 — Serviço de Atendimento Móvel de Urgência (SAMU).", "191 — Polícia Rodoviária Federal."],
-        correctIndex: 0,
+        correctIndex: 2,
         explanation: "O SAMU atende emergências médicas pelo número 192.",
         detailedExplanation: "O SAMU (Serviço de Atendimento Móvel de Urgência) atende emergências médicas. Lembre-se que os Bombeiros são pelo 193, a Polícia Militar pelo 190 e a PRF pelo 191.",
         legalBase: "Art. 134 do CTB",
@@ -3810,7 +3810,7 @@ export const QUESTIONS: Question[] = [
         category: "primeiros-socorros",
         statement: "Em acidente com vítimas presas nas ferragens, o número e serviço corretos para urgência médica são quais, segundo o CTB?",
         options: ["193 — Corpo de Bombeiros Militar, para resgate e combate a incêndio.", "190 — Polícia Militar, para policiamento ostensivo.", "199 — Defesa Civil, para desabamentos e emergências civis.", "192 — SAMU (Serviço de Atendimento Móvel de Urgência)."],
-        correctIndex: 0,
+        correctIndex: 3,
         explanation: "Urgência médica em acidente = SAMU 192.",
         detailedExplanation: "Quando tem acidente e alguém tá preso nas ferragens, você liga pro SAMU no 192 pra pedir ajuda médica. Os Bombeiros (193) ajudam em incêndios e a Polícia (190) cuida de brigas, enquanto a PRF (191) é pra rodovias federais.",
         legalBase: "Art. 134 do CTB",
@@ -3826,7 +3826,7 @@ export const QUESTIONS: Question[] = [
         category: "primeiros-socorros",
         statement: "Vítima com suspeita de fratura vertebral e parestesia nos membros. A conduta correta até a chegada do resgate é qual?",
         options: ["Sentá-la rapidamente em cadeira rígida para aliviar a pressão.", "Conduzi-la a pé até o hospital mais próximo.", "Massagear a região dorsal para relaxar a musculatura.", "Mantê-la imóvel e na posição encontrada, sem movimentar a coluna."],
-        correctIndex: 0,
+        correctIndex: 3,
         explanation: "Suspeita de fratura na coluna = manter a vítima imóvel até o socorro.",
         detailedExplanation: "Movimentar quem tem suspeita de lesão na coluna pode piorar a situação e causar paralisia. O ideal é deixar a vítima na posição que está até a chegada do socorro.",
         legalBase: "Art. 134 do CTB",
@@ -3858,7 +3858,7 @@ export const QUESTIONS: Question[] = [
         category: "meio-ambiente",
         statement: "Gás incolor e inodoro da combustão que se liga à hemoglobina e bloqueia a oxigenação do sangue é qual, segundo o CTB?",
         options: ["Dióxido de Carbono (CO2), gás natural da atmosfera.", "Dióxido de Enxofre (SO2), gás de odor forte e irritante.", "Clorofluorcarboneto (CFC), composto que destrói a camada de ozônio.", "Monóxido de Carbono (CO), produto da combustão incompleta."],
-        correctIndex: 0,
+        correctIndex: 3,
         explanation: "O CO (monóxido de carbono) é o gás tóxico da combustão incompleta.",
         detailedExplanation: "Ele vem da queima que não tá completa e é super perigoso porque não tem cor nem cheiro. Já o CO2 é o gás que esquenta o planeta, o SO2 tem cheiro forte e o CFC estraga a camada de ozônio.",
         legalBase: "Art. 190 do CTB",
@@ -3874,7 +3874,7 @@ export const QUESTIONS: Question[] = [
         category: "primeiros-socorros",
         statement: "Após colisão, vítima com suspeita de lesão medular e perda de sensibilidade. A conduta até o resgate é qual?",
         options: ["Remover a vítima do veículo e sentá-la em cadeira rígida.", "Massagear a região cervical para aliviar a contratura muscular.", "Girar o pescoço da vítima para avaliar a amplitude de movimento.", "Manter a vítima imóvel e alinhada, sem movimentar cabeça, pescoço ou coluna."],
-        correctIndex: 0,
+        correctIndex: 3,
         explanation: "Suspeita de lesão medular = manter a vítima imóvel até o socorro.",
         detailedExplanation: "Qualquer movimento pode piorar a situação e causar paralisia. É importante que a vítima fique na mesma posição até o socorro chegar com o material certo para imobilizar.",
         legalBase: "Art. 134 do CTB",
@@ -3906,7 +3906,7 @@ export const QUESTIONS: Question[] = [
         category: "legislacao",
         statement: "Circular com nível de óleo lubrificante muito abaixo do mínimo indicado na vareta de medição pode provocar:",
         options: ["Menor consumo de combustível, sem risco mecânico.", "Travamento do sistema de freios por contaminação do fluido.", "Desgaste exclusivo das velas de ignição.", "Fundição do motor por atrito excessivo entre as peças."],
-        correctIndex: 0,
+        correctIndex: 3,
         explanation: "Óleo baixo pode fundir o motor por atrito excessivo.",
         detailedExplanation: "O óleo é o que mantém as peças do motor funcionando direitinho. Se o nível tá muito baixo, as peças esfregam umas nas outras, esquentam demais e podem derreter.",
         legalBase: "Art. 29 do CTB",
@@ -3938,7 +3938,7 @@ export const QUESTIONS: Question[] = [
         category: "legislacao",
         statement: "Circular com nível de óleo severamente baixo provoca, como principal consequência mecânica, qual problema?",
         options: ["Aumento do consumo, sem risco mecânico para o conjunto.", "Redução do desgaste das velas de ignição.", "Travamento das pastilhas de freio traseiras.", "Superaquecimento por atrito, podendo fundir o motor e danificar o bloco."],
-        correctIndex: 0,
+        correctIndex: 3,
         explanation: "Óleo baixo causa atrito e pode fundir o motor.",
         detailedExplanation: "Quando o nível de óleo tá baixo, as peças do motor se esfregam e esquentam demais. Isso pode acabar fundindo o motor e causando um estrago enorme. Checar o nível de óleo sempre é uma boa prática pra evitar problemas.",
         legalBase: "Art. 29 do CTB",
@@ -3954,7 +3954,7 @@ export const QUESTIONS: Question[] = [
         category: "legislacao",
         statement: "Veículo de emergência com sirene e luzes vermelhas intermitentes em serviço de urgência tem qual prioridade, segundo o CTB?",
         options: ["Prioridade apenas quando se tratar de viatura da Polícia Militar.", "Prioridade somente durante o período noturno, das 22h às 6h.", "Nenhuma prioridade, devendo obedecer estritamente aos sinais.", "Prioridade absoluta de passagem, devendo os demais veículos abrir caminho."],
-        correctIndex: 0,
+        correctIndex: 3,
         explanation: "Veículo de emergência com sinais ligados tem prioridade absoluta.",
         detailedExplanation: "Quando uma ambulância, viatura ou caminhão de bombeiros está com os sinais ligados, eles têm que passar primeiro. Todo mundo deve encostar à direita pra deixar o caminho livre.",
         legalBase: "Art. 29 do CTB",
@@ -3970,7 +3970,7 @@ export const QUESTIONS: Question[] = [
         category: "legislacao",
         statement: "Pneus com sulcos abaixo de 1,6 mm expõem o condutor principalmente ao risco de quê na pista molhada?",
         options: ["Redução do consumo de combustível por maior aderência.", "Desalinhamento imediato da direção em pista seca.", "Bloqueio das rodas por fadiga do sistema de suspensão.", "Perda de aderência em pista molhada, aquaplanagem e aumento da distância de frenagem."],
-        correctIndex: 0,
+        correctIndex: 3,
         explanation: "Pneu careca aumenta risco de aquaplanagem e distância de frenagem.",
         detailedExplanation: "Os sulcos dos pneus ajudam a drenar a água. Sem eles, o pneu perde contato com o chão, o que pode causar aquaplanagem. Por isso, andar com pneu careca é uma infração grave.",
         legalBase: "Art. 29 do CTB",
@@ -3986,7 +3986,7 @@ export const QUESTIONS: Question[] = [
         category: "legislacao",
         statement: "Em aclive ou declive estreito sem espaço para dois veículos, a preferência de passagem é do veículo que está:",
         options: ["Que está descendo, por possuir maior velocidade natural.", "De maior porte e maior peso bruto total.", "Que primeiro acionar a buzina para sinalizar a intenção.", "Que está subindo, devendo o que desce dar passagem."],
-        correctIndex: 0,
+        correctIndex: 3,
         explanation: "Na ladeira estreita, quem sobe tem preferência de passagem.",
         detailedExplanation: "Quando a ladeira é estreita e não dá pra passar dois carros, quem tá subindo tem a vez. O carro que desce precisa recuar porque é mais complicado pra quem sobe fazer isso.",
         legalBase: "Art. 29 do CTB",
@@ -4002,7 +4002,7 @@ export const QUESTIONS: Question[] = [
         category: "legislacao",
         statement: "Pneus com sulcos abaixo de 1,6 mm aumentam principalmente o risco de quê na pista molhada, segundo a legislação de trânsito?",
         options: ["Redução do consumo de combustível em vias planas.", "Melhora da aderência em curvas de raio fechado.", "Travamento mecânico das rodas dianteiras em frenagens leves.", "Aquaplanagem e aumento da distância de frenagem em pista molhada."],
-        correctIndex: 0,
+        correctIndex: 3,
         explanation: "Pneu careca aumenta risco de aquaplanagem e distância de frenagem.",
         detailedExplanation: "Quando os sulcos do pneu ficam abaixo de 1,6 mm, ele não consegue drenar a água da pista, o que pode levar à aquaplanagem. Além disso, a distância que você precisa para parar aumenta, o que é perigoso. Rodar com pneu careca é uma infração grave.",
         legalBase: "Art. 29 do CTB",
@@ -4018,7 +4018,7 @@ export const QUESTIONS: Question[] = [
         category: "legislacao",
         statement: "Qual o formato característico da placa de regulamentação R-1 (PARE) segundo o Manual Brasileiro de Sinalização?",
         options: ["Circular, de fundo branco com orla vermelha.", "Losangular, de fundo amarelo com símbolo preto.", "Retangular, de fundo azul com símbolo branco.", "Octogonal (oito lados), de fundo vermelho com a inscrição PARE."],
-        correctIndex: 0,
+        correctIndex: 3,
         explanation: "A placa PARE (R-1) tem formato octogonal único.",
         detailedExplanation: "Ela pede que o motorista pare completamente antes de seguir. É a única placa de trânsito que é octogonal, diferente da placa 'Dê a Preferência', que tem formato triangular.",
         legalBase: "Art. 29 do CTB",
@@ -4034,7 +4034,7 @@ export const QUESTIONS: Question[] = [
         category: "legislacao",
         statement: "Ambulância em serviço de urgência com sirene e luzes vermelhas acionadas goza de qual prioridade de passagem, segundo o CTB?",
         options: ["Prioridade exclusivamente quando se tratar de viatura da Polícia Militar.", "Nenhuma prioridade fora dos trechos de rodovia.", "Prioridade restrita aos finais de semana e feriados.", "Prioridade absoluta de passagem, devendo os demais condutores encostar à direita."],
-        correctIndex: 0,
+        correctIndex: 3,
         explanation: "Ambulância com sinais ligados tem prioridade absoluta de passagem.",
         detailedExplanation: "Quando a ambulância está com os sinais ligados, ela tem que passar na frente de todo mundo. Se não tiver os sinais, já era, ela não tem mais essa prioridade.",
         legalBase: "Art. 29 do CTB",
@@ -4050,7 +4050,7 @@ export const QUESTIONS: Question[] = [
         category: "legislacao",
         statement: "Dois veículos pesados em trecho estreito de aclive ou declive. A passagem pertence ao veículo que está em qual situação?",
         options: ["Está descendo, por desenvolver maior energia cinética.", "Sinalizou primeiro com toques de buzina.", "Possui menor peso bruto total.", "Está subindo, devendo o que desce recuar e dar passagem."],
-        correctIndex: 0,
+        correctIndex: 3,
         explanation: "Quem está subindo tem preferência na ladeira estreita.",
         detailedExplanation: "O CTB diz que quem sobe leva vantagem porque é complicado e arriscado voltar na subida. Então, quem desce precisa dar ré até um lugar seguro.",
         legalBase: "Art. 29 do CTB",
@@ -4066,7 +4066,7 @@ export const QUESTIONS: Question[] = [
         category: "legislacao",
         statement: "Quais as características visuais da placa de regulamentação PARE (R-1) do Manual Brasileiro de Sinalização?",
         options: ["Circular com orla vermelha; apenas recomenda redução da velocidade.", "Losangular amarelo; alerta para perigo iminente na via.", "Retangular azul; indica serviço público nas proximidades.", "Octogonal; exige parada total obrigatória antes de prosseguir."],
-        correctIndex: 0,
+        correctIndex: 3,
         explanation: "A placa PARE (R-1) é octogonal e exige parada total.",
         detailedExplanation: "Essa placa é bem clara: você precisa parar antes da faixa de retenção, olhar se tá tudo tranquilo e só depois seguir. Ignorar essa placa é uma infração gravíssima.",
         legalBase: "Art. 29 do CTB",
@@ -4098,7 +4098,7 @@ export const QUESTIONS: Question[] = [
         category: "legislacao",
         statement: "Placas circulares, fundo branco e orla vermelha pertencem à classe de sinalização vertical de qual tipo, segundo o CONTRAN?",
         options: ["Advertência, que alertam sobre perigos potenciais na via.", "Indicação, que informam serviços e destinos aos condutores.", "Educação, que orientam o comportamento dos usuários.", "Regulamentação, que impõem obrigações e proibições."],
-        correctIndex: 0,
+        correctIndex: 3,
         explanation: "Círculo vermelho = regulamentação (ordens e proibições).",
         detailedExplanation: "As placas de regulamentação (série R) são redondas, com fundo branco e borda vermelha, e elas mandam você fazer ou não fazer algo. Já as placas em losango amarelo avisam e as retangulares azuis indicam informações.",
         legalBase: "Art. 29 do CTB",
@@ -4924,7 +4924,7 @@ export const QUESTIONS: Question[] = [
         category: "primeiros-socorros",
         statement: "Sem triângulo de segurança disponível, qual procedimento é aceito emergencialmente para sinalizar o local do sinistro, segundo o CTB?",
         options: ["Abandonar o veículo sem sinalização até a chegada da polícia.", "Utilizar exclusivamente os faróis altos dos carros que pararem.", "Utilizar galhos, folhagens ou outros materiais visíveis a distância segura.", "Todas as alternativas anteriores estão corretas."],
-        correctIndex: 0,
+        correctIndex: 2,
         explanation: "Na ausência do triângulo, improvise com materiais visíveis a distância segura.",
         detailedExplanation: "Quando o triângulo não está disponível (ou não é suficiente), o condutor deve improvisar uma sinalização com materiais visíveis (galhos, folhagens, panos) posicionados a uma distância segura, para que os demais motoristas reduzam a velocidade e desviem. Sinalizar o local reduz o risco de novas colisões enquanto o atendimento não chega.",
         legalBase: "CTB, art. 225; Manual de Primeiros Socorros do DETRAN",
@@ -5044,7 +5044,7 @@ export const QUESTIONS: Question[] = [
         category: "legislacao",
         statement: "Qual a idade mínima legalmente exigida para iniciar o processo de habilitação nas categorias A e B do CTB, segundo a legislação?",
         options: ["16 anos, mediante emancipação e autorização dos genitores.", "21 anos, exigência uniforme para todas as categorias.", "25 anos, para habilitação com exercício de atividade remunerada.", "18 anos, exigida a condição de penalmente imputável."],
-        correctIndex: 1,
+        correctIndex: 3,
         explanation: "A idade mínima é 18 anos para categorias A e B.",
         detailedExplanation: "O CTB estabelece 18 anos para A/B, 21 para C, D e E.",
         legalBase: "Art. 147 do CTB",
@@ -5076,7 +5076,7 @@ export const QUESTIONS: Question[] = [
         category: "placas",
         statement: "Placa losangular, fundo amarelo e símbolo preto antes de trecho sinuoso é sinalização de qual tipo do Manual Brasileiro de Sinalização?",
         options: ["Regulamentação, que impõe obrigações ou proibições.", "Indicação, que identifica destino ou serviço auxiliar.", "Advertência, que alerta para condição de perigo adiante.", "Regulamentação, que determina preferência na interseção."],
-        correctIndex: 1,
+        correctIndex: 2,
         explanation: "Losango amarelo = advertência de perigo à frente.",
         detailedExplanation: "Placas de advertência têm formato losangular, fundo amarelo e símbolo preto.",
         legalBase: "Art. 29 do CTB",
@@ -5108,7 +5108,7 @@ export const QUESTIONS: Question[] = [
         category: "direcao-defensiva",
         statement: "Ao ultrapassar em pista molhada, o cuidado essencial durante a manobra de ultrapassagem é qual, segundo a direção defensiva?",
         options: ["Aproximar-se bastante do veículo ultrapassado para reduzir o tempo de exposição.", "Utilizar a buzina constantemente durante toda a transposição de faixa.", "Ignorar a condição da pista, pois a manobra não altera a aderência.", "Aumentar a distância de segurança e evitar jatos de água sobre o veículo."],
-        correctIndex: 1,
+        correctIndex: 3,
         explanation: "Aumentar distância de segurança e evitar jatos de água é essencial na ultrapassagem em pista molhada.",
         detailedExplanation: "Ultrapassar em pista molhada exige mais espaço e cuidado com jatos de água.",
         legalBase: "Art. 218 do CTB",
@@ -5124,7 +5124,7 @@ export const QUESTIONS: Question[] = [
         category: "placas",
         statement: "Placa retangular de fundo azul com símbolo branco indicando posto de combustível é sinalização de qual tipo?",
         options: ["Regulamentação, que impõe proibição ou obrigação de conduta.", "Advertência, que alerta para condição potencialmente perigosa.", "Indicação, que identifica serviço auxiliar e orienta o condutor.", "Regulamentação, que determina velocidade máxima admitida."],
-        correctIndex: 1,
+        correctIndex: 2,
         explanation: "Retangular azul = indicação de serviço auxiliar.",
         detailedExplanation: "Placas de indicação são retangulares, de fundo azul, com símbolo branco, informando serviços.",
         legalBase: "Art. 29 do CTB",
@@ -5140,7 +5140,7 @@ export const QUESTIONS: Question[] = [
         category: "legislacao",
         statement: "A infração de natureza GRAVE, segundo a classificação legal do CTB, é caracterizada por qual sanção administrativa?",
         options: ["Aplicação exclusivamente de multa, sem pontuação nem outras medidas.", "Aplicação exclusivamente de advertência por escrito.", "Multa, pontuação de 5 pontos na CNH e possibilidade de suspensão do direito de dirigir.", "Ausência de qualquer penalidade administrativa prevista em lei."],
-        correctIndex: 1,
+        correctIndex: 2,
         explanation: "Grave: multa, 5 pontos e pode levar à suspensão do direito de dirigir.",
         detailedExplanation: "Infrações graves acumulam pontos e podem resultar em suspensão da CNH.",
         legalBase: "Art. 259 do CTB",
@@ -5172,7 +5172,7 @@ export const QUESTIONS: Question[] = [
         category: "placas",
         statement: "Placa circular, fundo branco, orla vermelha e faixa horizontal no centro significa o quê no CTB, segundo a sinalização?",
         options: ["Parada obrigatória com imobilização total antes da linha de retenção.", "Vedação exclusiva de estacionamento, admitindo parada breve para embarque.", "Velocidade máxima permitida para o trecho da via.", "Proibição total de parada e estacionamento no trecho sinalizado."],
-        correctIndex: 2,
+        correctIndex: 3,
         explanation: "Faixa branca horizontal em vermelho = proibido parar e estacionar.",
         detailedExplanation: "Placa circular vermelha com faixa branca horizontal proíbe parar e estacionar.",
         legalBase: "Art. 29 do CTB",
@@ -5188,7 +5188,7 @@ export const QUESTIONS: Question[] = [
         category: "legislacao",
         statement: "Qual o conjunto documental exigido para a circulação regular de veículo automotor nas vias públicas abertas à circulação?",
         options: ["Somente a CNH, pois o licenciamento é consultado eletronicamente.", "Somente o comprovante de seguro obrigatório vigente.", "CNH (ou PPD) e CRLV-e, além da regularidade do licenciamento e do IPVA.", "Nenhum documento, desde que o veículo esteja em perfeitas condições."],
-        correctIndex: 1,
+        correctIndex: 2,
         explanation: "Devem-se portar CNH, CRLV e estar em dia com impostos.",
         detailedExplanation: "É obrigatório portar CNH, Certificado de Registro e Licenciamento e cumprir obrigações tributárias.",
         legalBase: "Art. 120 do CTB",
@@ -6179,13 +6179,27 @@ export function getRandomizedQuestions(count: number, opts?: {
     return picked.map(shuffleOptions);
 }
 function shuffleOptions(q: Question): Question {
-    const indices = q.options.map((_, i) => i);
-    for (let i = indices.length - 1; i > 0; i--) {
+    // GABARITO POR IDENTIFICADOR (nunca por posição/letra):
+    // cada alternativa tem um id interno permanente (questão + posição
+    // original no banco). A resposta correta é o ID da alternativa certa;
+    // após embaralhar, o correctIndex é recalculado para a nova posição
+    // desse ID. A randomização muda só a ordem visual (A/B/C/D).
+    const ids = q.options.map((_, i) => `${q.id}#${i}`);
+    const correctId = `${q.id}#${q.correctIndex}`;
+    const order = ids.map((_, i) => i);
+    for (let i = order.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [indices[i], indices[j]] = [indices[j], indices[i]];
+        [order[i], order[j]] = [order[j], order[i]];
     }
-    const newOptions = indices.map((i) => q.options[i]);
-    const newCorrect = indices.indexOf(q.correctIndex);
+    const newOptions = order.map((i) => q.options[i]);
+    const newIds = order.map((i) => ids[i]);
+    const newCorrect = newIds.indexOf(correctId);
+    // Validação automática antes de finalizar: o gabarito deve apontar para
+    // o conteúdo correto original, em qualquer posição que ele tenha caído.
+    if (newCorrect < 0 || newOptions[newCorrect] !== q.options[q.correctIndex]) {
+        console.error(`[gabarito] dessincronia em ${q.id}: mantida a ordem original.`);
+        return { ...q };
+    }
     return { ...q, options: newOptions, correctIndex: newCorrect };
 }
 

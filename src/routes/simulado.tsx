@@ -521,13 +521,6 @@ function SimuladoPage() {
         <div className="px-2 py-1 rounded-lg border border-success/30 bg-success/10 text-xs font-bold text-success shrink-0">
           ✅ {score} · ❌ {wrongCount}
         </div>
-        <button
-          type="button"
-          onClick={handleFinishEarly}
-          className="text-[11px] font-semibold text-red-400/90 hover:text-red-400 shrink-0 px-1"
-        >
-          Encerrar
-        </button>
       </div>
 
       {/* Banner de retomada */}
@@ -572,6 +565,8 @@ function SimuladoPage() {
             transition={{ duration: 0.25 }}
             className="glass rounded-2xl md:rounded-3xl p-4 md:p-8 shadow-card mt-2 flex-1 min-h-0 flex flex-col overflow-hidden"
           >
+            {/* ÁREA DE CONTEÚDO (enunciado + imagem + alternativas): rola só se exceder */}
+            <div className="flex-1 min-h-0 overflow-y-auto pr-0.5 pb-4">
             {/* Badges */}
             <div className="flex flex-wrap gap-2 mb-2 md:mb-4 shrink-0">
               <span className={`text-xs px-2.5 py-1 rounded-full border ${incMeta.className}`}>
@@ -659,38 +654,38 @@ function SimuladoPage() {
             <AnimatePresence>
               {selected !== null && <DetailedFeedback q={q} selected={selected} />}
             </AnimatePresence>
+            </div>
+
+            {/* Ações da questão — logo abaixo da opção D */}
+            <div className="flex flex-col gap-2 mt-3 pt-2 border-t border-border shrink-0">
+              <button
+                type="button"
+                onClick={next}
+                disabled={selected === null}
+                className="w-full py-2.5 gradient-primary text-primary-foreground font-bold rounded-xl text-sm flex items-center justify-center gap-2 shadow-glow transition disabled:opacity-40"
+              >
+                {index + 1 >= questions.length ? "Ver resultado" : "Próxima ➔"}
+              </button>
+              <div className="flex items-center justify-between gap-2">
+                <button
+                  type="button"
+                  onClick={goPrev}
+                  disabled={index <= 0}
+                  className="px-3 py-2 bg-secondary/50 hover:bg-accent/30 text-muted-foreground hover:text-foreground rounded-lg text-xs font-medium border border-border disabled:opacity-40 transition"
+                >
+                  ⬅️ Questão Anterior
+                </button>
+                <button
+                  type="button"
+                  onClick={handleFinishEarly}
+                  className="px-3 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg text-xs font-medium transition"
+                >
+                  ⏹️ Finalizar
+                </button>
+              </div>
+            </div>
           </motion.div>
         </AnimatePresence>
-      )}
-
-      {/* Barra inferior fixa: Voltar, Anterior, Próxima */}
-      {!showResult && (
-        <div className="pt-2 grid grid-cols-[auto_auto_1fr] gap-2 shrink-0">
-          <button
-            type="button"
-            onClick={() => navigate({ to: "/app" })}
-            className="inline-flex items-center justify-center gap-1 px-3 py-2.5 rounded-xl border border-border bg-secondary/50 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" /> Voltar
-          </button>
-          <button
-            type="button"
-            onClick={goPrev}
-            disabled={index <= 0}
-            className="inline-flex items-center justify-center gap-1 px-3 py-2.5 rounded-xl border border-border bg-secondary/50 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors disabled:opacity-40"
-          >
-            Anterior
-          </button>
-          <button
-            type="button"
-            onClick={next}
-            disabled={selected === null}
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl gradient-primary text-primary-foreground text-sm font-semibold shadow-glow disabled:opacity-40"
-          >
-            {index + 1 >= questions.length ? "Ver resultado" : "Próxima"}
-            <ArrowRight className="h-4 w-4" />
-          </button>
-        </div>
       )}
 
       {/* Tela de Resultado + Revisão */}
@@ -721,7 +716,7 @@ function DetailedFeedback({
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`mt-3 md:mt-5 p-3 md:p-5 rounded-2xl border max-h-[30dvh] md:max-h-none overflow-y-auto md:overflow-visible ${
+      className={`mt-3 md:mt-5 p-3 md:p-5 rounded-2xl border ${
         correct
           ? "border-success/30 bg-success/5"
           : "border-destructive/30 bg-destructive/5"
