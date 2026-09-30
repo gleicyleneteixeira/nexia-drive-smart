@@ -380,14 +380,16 @@ export async function dispatchViperConnectWelcome(
     return { ok: false, error: "Envio de boas-vindas desativado nas configurações." };
   }
 
-  // Mesmo motor dos templates: fragmenta por linha em branco e resolve
-  // {nome} e {saudacao} em todas as partes.
+  // Mesmo motor dos templates: a mensagem salva no banco é a lista de caixas
+  // em JSON (["msg1", "msg2"]) — cada item sai como mensagem individual
+  // separada pelo loop interno (for...of), com pequeno intervalo entre elas.
   const res = await sendWhatsAppSequence({
     to: phone,
     body: s.welcome_message || "Olá {nome}!",
     name,
     imageUrl: s.welcome_media_url || undefined,
-    delaySec: 3,
+    delaySec: 1,
+    parts: parseStoredMessage(s.welcome_message || "Olá {nome}!"),
   });
   return res;
 }
