@@ -354,22 +354,6 @@ export function DailyCheckinBanner() {
     setPdfModal({ url: livro.url, title: livro.title, page: startPage });
   };
 
-  const handleGoSimulado = () => {
-    // Cronograma INTENSIVO (poucos dias de estudo): vai para o Simulado Geral (30 questões).
-    // Cronograma REGULAR: vai para o Simulado por categoria do capítulo da meta pendente.
-    const isIntensivo = (plano?.studyDaysNeeded ?? 999) <= 3;
-    if (isIntensivo) {
-      navigate({ to: "/simulado", search: { modo: "completo", categoria: undefined } });
-      return;
-    }
-    const category = pending ? mapChapterToCategory(pending.capituloId) : null;
-    if (category) {
-      navigate({ to: "/simulado", search: { modo: undefined, categoria: category } });
-    } else {
-      navigate({ to: "/simulado", search: { modo: "completo", categoria: undefined } });
-    }
-  };
-
   const handleQuizOfferGo = () => {
     if (!quizOffer) return;
     // Destino guardado na hora da conclusão (categoria da lição concluída).
@@ -407,13 +391,6 @@ export function DailyCheckinBanner() {
               Você completou todas as metas de hoje. Parabéns!
             </p>
           </div>
-          <Button
-            type="button"
-            onClick={handleGoSimulado}
-            className="bg-emerald-600 hover:bg-emerald-500 text-white shrink-0"
-          >
-            <FileText className="h-4 w-4 mr-1.5" /> Ir p/ Simulado
-          </Button>
         </div>
       </div>
     );
@@ -477,14 +454,6 @@ export function DailyCheckinBanner() {
               <Headphones className="h-4 w-4 mr-1.5" /> Ouvir
             </Button>
           )}
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleGoSimulado}
-            className="border-border text-foreground hover:bg-accent"
-          >
-            <FileText className="h-4 w-4 mr-1.5" /> Ir p/ Simulado
-          </Button>
           <Button
             type="button"
             onClick={() => {

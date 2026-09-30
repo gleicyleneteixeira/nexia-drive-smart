@@ -248,6 +248,12 @@ function getMemoryHook(q: Question): string {
   return CATEGORY_HOOKS[q.category];
 }
 
+function fmtTime(s: number): string {
+  const m = Math.floor(s / 60);
+  const r = s % 60;
+  return `${String(m).padStart(2, "0")}:${String(r).padStart(2, "0")}`;
+}
+
 function SimuladoPage() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
@@ -260,6 +266,8 @@ function SimuladoPage() {
   const [resumed, setResumed] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
   const [mode, setMode] = useState<SimMode | null>(null);
+  // Cronômetro do simulado (segundos desde o início)
+  const [elapsed, setElapsed] = useState(0);
   // Total de simulados finalizados (exibido no resultado)
   const [concluidos, setConcluidos] = useState(0);
 
@@ -290,6 +298,7 @@ function SimuladoPage() {
       setIndex(persisted.index);
       setSelected(persisted.selected);
       setAnswers(persisted.answers);
+      setElapsed(persisted.startedAt ? Math.max(0, Math.floor((Date.now() - persisted.startedAt) / 1000)) : 0);
       setResumed(true);
       setMode(persisted.mode ?? null);
       if (persisted.index >= persisted.questions.length) {
@@ -300,6 +309,13 @@ function SimuladoPage() {
     }
     setHydrated(true);
   }, []);
+
+  // Cronômetro: conta enquanto a prova está ativa, pausa no resultado
+  useEffect(() => {
+    if (!hydrated || !questions.length || showResult) return;
+    const t = setInterval(() => setElapsed((e) => e + 1), 1000);
+    return () => clearInterval(t);
+  }, [hydrated, questions.length, showResult]);
 
   // Persiste a cada mudança relevante
   useEffect(() => {
@@ -348,6 +364,7 @@ function SimuladoPage() {
     setResumed(false);
     setShowPicker(false);
     setMode(mode);
+    setElapsed(0);
     savePersisted({
       questions: fresh,
       index: 0,
@@ -435,6 +452,18 @@ function SimuladoPage() {
     }
   }
 
+  function goPrev() {
+    if (index <= 0) return;
+    // Salva a resposta atual (se houver) e volta exibindo a resposta
+    // já registrada em modo de revisão (travada, sem alterar o gabarito).
+    const newAnswers = [...answers];
+    if (selected !== null) newAnswers[index] = selected;
+    const ni = index - 1;
+    setAnswers(newAnswers);
+    setIndex(ni);
+    setSelected(newAnswers[ni] ?? null);
+  }
+
   const score = answers.reduce<number>(
     (acc, a, i) => acc + (a !== null && a !== undefined && a === questions[i]?.correctIndex ? 1 : 0),
     0,
@@ -463,41 +492,42 @@ function SimuladoPage() {
     100;
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-6 md:py-10">
-      {/* Header */}
-        <div className="flex items-center justify-between mb-4 gap-3">
+    <div
+      className={`mx-auto max-w-3xl px-3 md:px-4 pt-2 pb-3 md:py-10 flex flex-col ${
+        showResult ? "min-h-dvh overflow-y-auto" : "h-[100dvh] md:h-auto overflow-hidden md:overflow-visible"
+      }`}
+    >
+      {/* Header compacto em uma linha: voltar, título/contador, timer, placar, encerrar */}
+      <div className="flex items-center gap-2 py-1.5 shrink-0">
         <button
           onClick={() => navigate({ to: "/app" })}
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors shrink-0 cursor-pointer"
+          aria-label="Voltar"
+          className="inline-flex items-center justify-center h-8 w-8 rounded-lg border border-border bg-secondary/50 text-muted-foreground hover:text-foreground transition-colors shrink-0"
         >
           <ArrowLeft className="h-4 w-4" />
-          <span className="hidden sm:inline">Voltar</span>
         </button>
-        <div className="text-right">
-          <p className="text-xs uppercase tracking-widest text-primary-glow font-semibold">
-            Simulado Inteligente{modeLabel ? ` — ${modeLabel}` : ""}
+        <div className="min-w-0 flex-1 leading-tight">
+          <p className="text-[10px] uppercase tracking-widest text-primary-glow font-semibold truncate">
+            Simulado{modeLabel ? ` — ${modeLabel}` : ""}
           </p>
-          <h1 className="text-xl md:text-2xl font-display font-bold">
+          <h1 className="text-sm font-display font-bold truncate">
             Questão {Math.min(index + 1, questions.length)}{" "}
-            <span className="text-muted-foreground text-base font-normal">
-              / {questions.length}
-            </span>
+            <span className="text-muted-foreground font-normal">/ {questions.length}</span>
           </h1>
         </div>
-        <div className="flex items-center gap-2 shrink-0">
-          <div className="px-3 py-1.5 rounded-xl border border-success/30 bg-success/10 text-center min-w-[78px]">
-            <p className="text-[10px] uppercase tracking-wide text-success/80">Acertos</p>
-            <p className="text-sm font-display font-bold text-success leading-tight">
-              {score} <span className="text-[10px] opacity-80">({accPct}%)</span>
-            </p>
-          </div>
-          <div className="px-3 py-1.5 rounded-xl border border-destructive/30 bg-destructive/10 text-center min-w-[78px]">
-            <p className="text-[10px] uppercase tracking-wide text-destructive/80">Erros</p>
-            <p className="text-sm font-display font-bold text-destructive leading-tight">
-              {wrongCount} <span className="text-[10px] opacity-80">({errPct}%)</span>
-            </p>
-          </div>
+        <div className="px-2 py-1 rounded-lg border border-border bg-secondary/50 text-xs font-semibold tabular-nums shrink-0">
+          ⏱ {fmtTime(elapsed)}
         </div>
+        <div className="px-2 py-1 rounded-lg border border-success/30 bg-success/10 text-xs font-bold text-success shrink-0">
+          ✅ {score} · ❌ {wrongCount}
+        </div>
+        <button
+          type="button"
+          onClick={handleFinishEarly}
+          className="text-[11px] font-semibold text-red-400/90 hover:text-red-400 shrink-0 px-1"
+        >
+          Encerrar
+        </button>
       </div>
 
       {/* Banner de retomada */}
@@ -523,8 +553,8 @@ function SimuladoPage() {
         )}
       </AnimatePresence>
 
-      {/* Progress */}
-      <div className="h-2 rounded-full bg-secondary overflow-hidden mb-6">
+      {/* Progress slim */}
+      <div className="h-1 md:h-2 rounded-full bg-secondary overflow-hidden mb-2 md:mb-6 shrink-0">
         <motion.div
           className="h-full gradient-primary"
           animate={{ width: `${progress}%` }}
@@ -540,10 +570,10 @@ function SimuladoPage() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -30 }}
             transition={{ duration: 0.25 }}
-            className="glass rounded-3xl p-6 md:p-8 shadow-card"
+            className="glass rounded-2xl md:rounded-3xl p-4 md:p-8 shadow-card mt-2 flex-1 min-h-0 flex flex-col overflow-hidden"
           >
             {/* Badges */}
-            <div className="flex flex-wrap gap-2 mb-4">
+            <div className="flex flex-wrap gap-2 mb-2 md:mb-4 shrink-0">
               <span className={`text-xs px-2.5 py-1 rounded-full border ${incMeta.className}`}>
                 {incMeta.emoji} {incMeta.label}
               </span>
@@ -558,23 +588,23 @@ function SimuladoPage() {
             </div>
 
             {/* Statement */}
-            <h2 className="text-lg md:text-xl font-medium leading-relaxed">
+            <h2 className="text-[15px] leading-snug md:text-xl font-medium md:leading-relaxed shrink-0">
               {q.statement}
             </h2>
 
             {/* Placa visual oficial */}
             {q.image_url ? (
-              <div className="mt-5 flex justify-center">
-                <img src={q.image_url} alt="placa de advertência" className="max-w-[170px]" />
+              <div className="mt-3 md:mt-5 flex justify-center shrink-0">
+                <img src={q.image_url} alt="placa de advertência" className="max-w-[120px] md:max-w-[170px]" />
               </div>
             ) : q.placa ? (
-              <div className="mt-5 flex justify-center">
+              <div className="mt-3 md:mt-5 flex justify-center shrink-0">
                 <Placa id={q.placa} size={170} />
               </div>
             ) : null}
 
 {/* Options */}
-            <div className="mt-6 space-y-2.5">
+            <div className="mt-3 md:mt-6 space-y-2 md:space-y-2.5">
               {q.options.map((opt, i) => {
                 const isSel = selected === i;
                 const isCorrect = i === q.correctIndex;
@@ -592,7 +622,7 @@ function SimuladoPage() {
                     key={i}
                     onClick={() => pick(i)}
                     disabled={selected !== null}
-                    className={`w-full text-left p-4 rounded-2xl border transition-all flex items-start gap-3 ${
+                    className={`w-full text-left p-2.5 md:p-4 rounded-2xl border transition-all flex items-start gap-2.5 md:gap-3 ${
                       state === "correct"
                         ? "border-success/50 bg-success/10"
                         : state === "wrong"
@@ -603,7 +633,7 @@ function SimuladoPage() {
                     } ${selected === null ? "cursor-pointer" : "cursor-default"}`}
                   >
                     <div
-                      className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center font-semibold text-sm border ${
+                      className={`shrink-0 w-7 h-7 md:w-8 md:h-8 rounded-lg flex items-center justify-center font-semibold text-sm border ${
                         state === "correct"
                           ? "bg-success text-success-foreground border-success"
                           : state === "wrong"
@@ -619,7 +649,7 @@ function SimuladoPage() {
                         LETTERS[i]
                       )}
                     </div>
-                    <span className="text-sm md:text-base pt-1">{opt}</span>
+                    <span className="text-[13px] md:text-base pt-0.5 md:pt-1">{opt}</span>
                   </button>
                 );
               })}
@@ -629,35 +659,36 @@ function SimuladoPage() {
             <AnimatePresence>
               {selected !== null && <DetailedFeedback q={q} selected={selected} />}
             </AnimatePresence>
-
-            {selected !== null && (
-              <button
-                onClick={next}
-                className="mt-5 w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl gradient-primary text-primary-foreground font-semibold shadow-glow"
-              >
-                {index + 1 >= questions.length ? "Ver resultado" : "Próxima"}
-                <ArrowRight className="h-4 w-4" />
-              </button>
-            )}
           </motion.div>
         </AnimatePresence>
       )}
 
+      {/* Barra inferior fixa: Voltar, Anterior, Próxima */}
       {!showResult && (
-        <div className="mt-4 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3">
+        <div className="pt-2 grid grid-cols-[auto_auto_1fr] gap-2 shrink-0">
           <button
             type="button"
             onClick={() => navigate({ to: "/app" })}
-            className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border border-border bg-secondary/50 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+            className="inline-flex items-center justify-center gap-1 px-3 py-2.5 rounded-xl border border-border bg-secondary/50 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="h-4 w-4" /> Voltar
           </button>
           <button
             type="button"
-            onClick={handleFinishEarly}
-            className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-sm font-semibold transition"
+            onClick={goPrev}
+            disabled={index <= 0}
+            className="inline-flex items-center justify-center gap-1 px-3 py-2.5 rounded-xl border border-border bg-secondary/50 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors disabled:opacity-40"
           >
-            Finalizar Simulado
+            Anterior
+          </button>
+          <button
+            type="button"
+            onClick={next}
+            disabled={selected === null}
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl gradient-primary text-primary-foreground text-sm font-semibold shadow-glow disabled:opacity-40"
+          >
+            {index + 1 >= questions.length ? "Ver resultado" : "Próxima"}
+            <ArrowRight className="h-4 w-4" />
           </button>
         </div>
       )}
@@ -690,7 +721,7 @@ function DetailedFeedback({
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`mt-5 p-5 rounded-2xl border ${
+      className={`mt-3 md:mt-5 p-3 md:p-5 rounded-2xl border max-h-[30dvh] md:max-h-none overflow-y-auto md:overflow-visible ${
         correct
           ? "border-success/30 bg-success/5"
           : "border-destructive/30 bg-destructive/5"
