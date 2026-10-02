@@ -1965,16 +1965,17 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp07",
         category: "legislacao",
-        statement: "Morador questiona se o CTB vale em praia aberta ao público e nas ruas internas de condomínio fechado. Além das vias urbanas e rurais, são vias terrestres:",
-        options: ["Áreas privadas e estacionamentos exclusivos de comércios e shoppings.", "Praias abertas à circulação pública e vias internas de condomínios constituídos.", "Vias particulares e condomínios fechados, sem qualquer fiscalização de trânsito.", "Zonas de preservação ambiental e calçadões de uso exclusivo de pedestres."],
-        correctIndex: 1,
-        explanation: "Correta a alternativa B, pois o art. 2º do CTB inclui praias abertas e vias internas de condomínios.",
+        statement: "São consideradas vias terrestres, de acordo com o CTB:",
+        options: ["Vias particulares e condomínios fechados, sem qualquer fiscalização de trânsito.", "Áreas privadas e estacionamentos exclusivos de comércios e shoppings.", "Zonas de preservação ambiental e calçadões de uso exclusivo de pedestres.", "Praias abertas à circulação pública e vias internas de condomínios constituídos."],
+        correctIndex: 3,
+        explanation: "Correta a alternativa D, pois o art. 2º do CTB inclui praias abertas e vias internas de condomínios.",
         legalBase: "Art. 2º, parágrafo único do CTB",
         commonMistake: "Muita gente acha que as ruas de condomínio não contam como públicas, mas isso tá errado — o CTB se aplica lá também.",
         tip: "Praia + condomínio = via terrestre. CTB é pra todo mundo!",
         incidence: "alta",
         trap: true,
-        difficulty: 3
+        difficulty: 3,
+        origin: "real"
     },
     {
         id: "qp08",
@@ -2692,7 +2693,9 @@ export const QUESTIONS: Question[] = [
         tip: "1 pio = vai; 2 pios = para; 1 pio longo = devagar.",
         incidence: "altissima",
         trap: true,
-        difficulty: 2
+        difficulty: 2,
+        group: "silvos-apito",
+        origin: "real"
     },
     {
         id: "qd03",
@@ -6018,6 +6021,57 @@ export const QUESTIONS: Question[] = [
         incidence: "media",
         difficulty: 2,
         group: "ciclomotor-circulacao",
+        origin: "real"
+    },
+    {
+        id: "leg_silvo_breve_01",
+        category: "legislacao",
+        statement: "Quando o agente de trânsito emite um silvo breve com o apito, esse comando significa que o condutor deve:",
+        options: ["Prosseguir, pois um silvo breve libera a passagem.", "Parar o veículo imediatamente onde estiver.", "Diminuir a marcha e seguir em velocidade reduzida.", "Retornar no sentido contrário da via."],
+        correctIndex: 0,
+        explanation: "Correta A: um silvo breve do apito significa siga, com a passagem liberada, conforme art. 90 do CTB.",
+        detailedExplanation: "O apito do agente tem três comandos: um silvo breve libera (siga); dois silvos breves mandam parar; um silvo longo manda diminuir a marcha.",
+        legalBase: "Art. 90 do CTB",
+        commonMistake: "Confundir com os dois silvos breves, que mandam parar o veículo.",
+        tip: "1 pio = vai.",
+        memoryHook: "Um pio rapidinho, pode ir todinho.",
+        incidence: "alta",
+        difficulty: 1,
+        group: "silvos-apito",
+        origin: "real"
+    },
+    {
+        id: "leg_silvo_parar_02",
+        category: "legislacao",
+        statement: "Quando o agente de trânsito emite dois silvos breves com o apito, esse comando significa que o condutor deve:",
+        options: ["Seguir em frente sem alterar a marcha do veículo.", "Parar o veículo imediatamente.", "Diminuir a marcha e seguir devagar pelo trecho.", "Estacionar no acostamento mais próximo da via."],
+        correctIndex: 1,
+        explanation: "Correta B: dois silvos breves do apito significam pare, com detenção obrigatória, conforme art. 90 do CTB.",
+        detailedExplanation: "Dois silvos breves é ordem de parada obrigatória. Não confunda: um breve libera, dois breves param, um longo reduz a marcha.",
+        legalBase: "Art. 90 do CTB",
+        commonMistake: "Achar que dois silvos liberam a passagem — é o contrário: mandam parar.",
+        tip: "2 pios = para.",
+        memoryHook: "Pio-pio, parou o carro no meio do fio.",
+        incidence: "alta",
+        difficulty: 1,
+        group: "silvos-apito",
+        origin: "real"
+    },
+    {
+        id: "leg_silvo_longo_03",
+        category: "legislacao",
+        statement: "Quando o agente de trânsito emite um silvo longo com o apito, esse comando significa que o condutor deve:",
+        options: ["Parar o veículo imediatamente onde estiver.", "Seguir em frente mantendo a velocidade da via.", "Retornar e buscar uma rota alternativa.", "Diminuir a marcha do veículo no trecho."],
+        correctIndex: 3,
+        explanation: "Correta D: um silvo longo do apito significa diminuam a marcha, conforme art. 90 do CTB.",
+        detailedExplanation: "O silvo longo é o comando de redução: o condutor deve diminuir a marcha ao se aproximar do ponto controlado pelo agente.",
+        legalBase: "Art. 90 do CTB",
+        commonMistake: "Achar que o silvo longo manda parar — parar são os dois silvos breves.",
+        tip: "Pio longo = devagar.",
+        memoryHook: "Pio comprido, pé contido.",
+        incidence: "alta",
+        difficulty: 1,
+        group: "silvos-apito",
         origin: "real"
     }
 ];
