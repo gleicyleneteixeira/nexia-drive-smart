@@ -1951,7 +1951,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp06",
         category: "prioridade",
-        statement: "Em cruzamento sem semáforo, bonde sobre trilhos aproxima-se ao mesmo tempo que carros e motos. Nesse caso, a preferência do veículo sobre trilhos é:",
+        statement: "Em cruzamento sem semáforo, veículo sobre trilhos aproxima-se ao mesmo tempo que carros e motos. Nesse caso, a preferência do veículo sobre trilhos é:",
         options: ["Relativa, aplicando-se apenas quando o veículo sobre trilhos for de maior porte.", "Condicionada à existência de sinalização semafórica no cruzamento.", "Absoluta, devendo os demais veículos aguardar a sua passagem.", "Compartilhada, aplicando-se a regra geral da preferência pela direita."],
         correctIndex: 2,
         explanation: "Correta a alternativa C, pois o art. 29 do CTB dá preferência absoluta aos veículos sobre trilhos.",
