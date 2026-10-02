@@ -12,11 +12,77 @@ function getAdminAuthHeader(): string | null {
   }
 }
 
+async function eraseUserEverywhere(supabaseAdmin: any, userId: string) {
+  // A lista do admin lê a tabela `profiles`, mas a exclusão antiga apagava
+  // só o login (auth) — por isso o toast dizia sucesso e o usuário seguia
+  // aparecendo. Aqui apagamos os dados dependentes + perfil + login.
+  await supabaseAdmin.from("user_roles").delete().eq("user_id", userId);
+  await supabaseAdmin.from("user_progress").delete().eq("user_id", userId);
+  await supabaseAdmin.from("estudo_config").delete().eq("user_id", userId);
+  await supabaseAdmin.from("cronograma_dias").delete().eq("user_id", userId);
+  await supabaseAdmin.from("app_ratings").delete().eq("user_id", userId);
+  const { error: profileError } = await supabaseAdmin.from("profiles").delete().eq("id", userId);
+  if (profileError) throw new Error(profileError.message);
+  const { error: authError } = await supabaseAdmin.auth.admin.deleteUser(userId);
+  // Se o login já não existia, a limpeza do perfil já resolveu — não é erro.
+  if (authError && !/not found|no user|does not exist/i.test(authError.message)) {
+    throw new Error(authError.message);
+  }
+}
+
 export const deleteUser = createServerFn({ method: "POST" })
   .inputValidator((d: { userId: string }) => d)
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin.auth.admin.deleteUser(data.userId);
+    await eraseUserEverywhere(supabaseAdmin, data.userId);
+    return { ok: true };
+  });
+
+export const updateUserProfile = createServerFn({ method: "POST" })
+  .inputValidator((d: {
+    userId: string;
+    display_name?: string | null;
+    email?: string | null;
+    cpf?: string | null;
+    phone?: string | null;
+    employment_status?: string | null;
+    employment_other?: string | null;
+    expires_at?: string | null;
+  }) => d)
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const userId = data.userId;
+
+    const emailClean = (data.email ?? "").trim().toLowerCase() || null;
+    if (emailClean && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailClean)) {
+      throw new Error("E-mail inválido.");
+    }
+    const cpfRaw = (data.cpf ?? "").trim();
+    const cpfDigits = cpfRaw.replace(/\D/g, "");
+    const cpfClean = cpfDigits.length === 11 ? cpfDigits : cpfRaw || null;
+    const patch = {
+      display_name: (data.display_name ?? "").trim() || null,
+      cpf: cpfClean,
+      email: emailClean,
+      phone: (data.phone ?? "").trim() || null,
+      employment_status: data.employment_status || null,
+      employment_other: data.employment_status === "outro" ? ((data.employment_other ?? "").trim() || null) : null,
+      expires_at: data.expires_at ? new Date(data.expires_at).toISOString() : null,
+      updated_at: new Date().toISOString(),
+    };
+
+    if (emailClean) {
+      const { data: current } = await supabaseAdmin.from("profiles").select("email").eq("id", userId).maybeSingle();
+      if (current && current.email?.toLowerCase() !== emailClean) {
+        const { error: authErr } = await supabaseAdmin.auth.admin.updateUserById(userId, {
+          email: emailClean,
+          email_confirm: true,
+        });
+        if (authErr) throw new Error(authErr.message.includes("already") ? "Este e-mail já está em uso por outra conta." : authErr.message);
+      }
+    }
+
+    const { error } = await supabaseAdmin.from("profiles").update(patch).eq("id", userId);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
@@ -905,11 +971,11 @@ export const bulkDeleteUsers = createServerFn({ method: "POST" })
     let deleted = 0;
     let lastError: string | null = null;
     for (const id of data.userIds) {
-      const { error } = await supabaseAdmin.auth.admin.deleteUser(id);
-      if (error) {
-        lastError = error.message;
-      } else {
+      try {
+        await eraseUserEverywhere(supabaseAdmin, id);
         deleted++;
+      } catch (err) {
+        lastError = err instanceof Error ? err.message : "Erro desconhecido";
       }
     }
     if (lastError) throw new Error("Alguns usuários falharam: " + lastError);

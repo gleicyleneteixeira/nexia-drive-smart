@@ -4,6 +4,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchLibraryItems, checkIsAdmin, SUPER_ADMIN_EMAIL, CRONOGRAMA_BOOK_KEY, fetchCronogramaBookId, type LibraryItem, type LibraryItemType } from "@/lib/library";
 import { QUESTIONS, CATEGORY_LABELS, getQuestionBank, setQuestionOverrides, type Question, type Category } from "@/data/questions";
+import { Placa, type PlacaId } from "@/components/Placa";
+
+const PLACA_IDS: PlacaId[] = ["R-1", "R-2", "R-6a", "R-6b", "R-19", "R-25a", "R-25d", "A-1a", "A-2b", "A-13a", "A-32b", "A-33a", "I-Hospital", "I-Posto"];
 import { 
   fetchVideoTutorials, 
   addVideoTutorial, 
@@ -784,6 +787,101 @@ function BlockStatusSelect({ user, onRefresh }: { user: ProfileRow; onRefresh: (
   );
 }
 
+function EditUserModal({ user, onClose, onSaved }: { user: ProfileRow; onClose: () => void; onSaved: () => void }) {
+  const [name, setName] = useState(user.display_name ?? "");
+  const [email, setEmail] = useState(user.email ?? "");
+  const [cpf, setCpf] = useState(user.cpf ?? "");
+  const [phone, setPhone] = useState(user.phone ?? "");
+  const [employment, setEmployment] = useState(user.employment_status ?? "");
+  const [employmentOther, setEmploymentOther] = useState(user.employment_other ?? "");
+  const [expires, setExpires] = useState(user.expires_at ? new Date(user.expires_at).toISOString().slice(0, 10) : "");
+  const [saving, setSaving] = useState(false);
+
+  async function handleSave() {
+    if (!name.trim()) return toast.error("Preencha o nome.");
+    if (!email.trim()) return toast.error("Preencha o e-mail.");
+    setSaving(true);
+    try {
+      const ops = await import("@/lib/admin-operations.server");
+      await ops.updateUserProfile({
+        data: {
+          userId: user.id,
+          display_name: name.trim(),
+          email: email.trim(),
+          cpf: cpf.trim() || null,
+          phone: phone.trim() || null,
+          employment_status: employment || null,
+          employment_other: employmentOther.trim() || null,
+          expires_at: expires ? `${expires}T23:59:59` : null,
+        },
+      });
+      toast.success("Dados atualizados");
+      onSaved();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erro ao salvar");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
+      <div className="bg-card rounded-2xl p-6 max-w-md w-full shadow-xl border max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+        <h3 className="font-display font-bold text-lg mb-4">Editar usuário</h3>
+        <div className="space-y-3">
+          <div className="space-y-1">
+            <Label className="text-xs">Nome</Label>
+            <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nome completo" />
+          </div>
+          <div className="space-y-1">
+            <Label className="text-xs">E-mail (login)</Label>
+            <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="email@exemplo.com" />
+            <p className="text-[11px] text-muted-foreground">Trocar aqui atualiza também o login.</p>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <Label className="text-xs">CPF</Label>
+              <Input value={cpf} onChange={(e) => setCpf(e.target.value)} placeholder="00000000000" />
+            </div>
+            <div className="space-y-1">
+              <Label className="text-xs">Telefone</Label>
+              <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="(00) 90000-0000" />
+            </div>
+          </div>
+          <div className="space-y-1">
+            <Label className="text-xs">Ocupação</Label>
+            <Select value={employment || "none"} onValueChange={(v) => setEmployment(v === "none" ? "" : v)}>
+              <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">Não informada</SelectItem>
+                {Object.entries(EMPLOYMENT_LABELS).filter(([k]) => k !== "carteira_assinada").map(([k, v]) => (
+                  <SelectItem key={k} value={k}>{v}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          {employment === "outro" && (
+            <div className="space-y-1">
+              <Label className="text-xs">Qual ocupação?</Label>
+              <Input value={employmentOther} onChange={(e) => setEmploymentOther(e.target.value)} placeholder="Descreva" />
+            </div>
+          )}
+          <div className="space-y-1">
+            <Label className="text-xs">Expiração do acesso</Label>
+            <Input type="date" value={expires} onChange={(e) => setExpires(e.target.value)} />
+          </div>
+        </div>
+        <div className="flex gap-3 mt-5">
+          <Button variant="outline" className="flex-1" onClick={onClose} disabled={saving}>Cancelar</Button>
+          <Button className="flex-1" onClick={handleSave} disabled={saving}>
+            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Salvar"}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ==========================================
 // QUESTÕES DO SIMULADO (super admin)
 // Banco estático (QUESTIONS) + exceções da tabela `question_overrides`:
@@ -1190,6 +1288,7 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
   const [tip, setTip] = useState(initial?.tip ?? "");
   const [memoryHook, setMemoryHook] = useState(initial?.memoryHook ?? "");
   const [imageUrl, setImageUrl] = useState(initial?.image_url ?? "");
+  const [placa, setPlaca] = useState<string>(initial?.placa ?? "");
   const [incidence, setIncidence] = useState<string>(initial?.incidence ?? "media");
   const [difficulty, setDifficulty] = useState<number>(initial?.difficulty ?? 2);
   const [origin, setOrigin] = useState<"ia" | "real">(initial?.origin ?? (initial?.id.startsWith("detran_") ? "real" : "ia"));
@@ -1210,7 +1309,7 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
         explanation: explanation.trim(), detailedExplanation: detailed.trim() || undefined,
         legalBase: legalBase.trim() || undefined, commonMistake: commonMistake.trim() || undefined,
         tip: tip.trim() || undefined, memoryHook: memoryHook.trim() || undefined,
-        image_url: imageUrl.trim() || undefined, incidence, difficulty, trap: trap || undefined, origin,
+        image_url: imageUrl.trim() || undefined, placa: (placa as PlacaId) || undefined, incidence, difficulty, trap: trap || undefined, origin,
       };
       if (isNew) {
         const id = `custom-${Date.now().toString(36)}`;
@@ -1297,6 +1396,16 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
           <Label className="text-xs">Imagem (URL opcional)</Label>
           <Input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="https://..." />
         </div>
+        <div className="space-y-1">
+          <Label className="text-xs">Placa oficial (opcional)</Label>
+          <Select value={placa || "none"} onValueChange={(v) => setPlaca(v === "none" ? "" : v)}>
+            <SelectTrigger><SelectValue placeholder="Nenhuma" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">Nenhuma</SelectItem>
+              {PLACA_IDS.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
       <div className="grid sm:grid-cols-3 gap-2">
         <div className="space-y-1">
@@ -1326,6 +1435,33 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
         <div className="flex items-end gap-2 pb-1">
           <Switch checked={trap} onCheckedChange={setTrap} id="q-trap" />
           <Label htmlFor="q-trap" className="text-xs">Pegadinha clássica</Label>
+        </div>
+      </div>
+      <div className="rounded-2xl border border-primary/30 bg-primary/5 p-4 space-y-3">
+        <p className="text-[10px] uppercase tracking-widest text-primary-glow font-bold">Prévia no simulado</p>
+        <div className="flex flex-wrap gap-2">
+          <span className="text-xs px-2.5 py-1 rounded-full border border-border bg-secondary/50">{CATEGORY_LABELS[category]}</span>
+          <span className="text-xs px-2.5 py-1 rounded-full border border-success/30 bg-success/10 text-success font-semibold">Correta: {LETTERS[correctIndex]}</span>
+        </div>
+        <p className="text-sm font-medium leading-relaxed">{statement.trim() || "Enunciado da questão..."}</p>
+        {imageUrl.trim() ? (
+          <div className="flex justify-center">
+            <img src={imageUrl.trim()} alt="imagem da questão" className="max-w-[170px]" />
+          </div>
+        ) : placa ? (
+          <div className="flex justify-center">
+            <Placa id={placa as PlacaId} size={120} />
+          </div>
+        ) : null}
+        <div className="space-y-2">
+          {options.map((op, i) => (
+            <div key={i} className={`w-full text-left p-3 rounded-2xl border flex items-start gap-2.5 ${i === correctIndex ? "border-success/50 bg-success/10" : "border-border bg-secondary/50"}`}>
+              <div className={`shrink-0 w-7 h-7 rounded-lg flex items-center justify-center font-semibold text-xs border ${i === correctIndex ? "bg-success text-success-foreground border-success" : "bg-background/40 border-border"}`}>
+                {LETTERS[i]}
+              </div>
+              <span className="text-[13px] pt-0.5">{op.trim() || `Alternativa ${LETTERS[i]}...`}</span>
+            </div>
+          ))}
         </div>
       </div>
       <div className="flex gap-2 justify-end">
@@ -1406,6 +1542,7 @@ export function UsersPanel() {
 
   const [deleteTarget, setDeleteTarget] = useState<ProfileRow | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [editTarget, setEditTarget] = useState<ProfileRow | null>(null);
 
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [bulkModal, setBulkModal] = useState<null | "release" | "expiry" | "expire" | "block" | "unblock" | "delete">(null);
@@ -1798,6 +1935,16 @@ export function UsersPanel() {
         </div>
       )}
 
+      {editTarget && (
+        <EditUserModal
+          user={editTarget}
+          onClose={() => setEditTarget(null)}
+          onSaved={() => {
+            setEditTarget(null);
+            qc.invalidateQueries({ queryKey: ["admin", "profiles"] });
+          }}
+        />
+      )}
       {deleteTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" onClick={() => setDeleteTarget(null)}>
           <div className="bg-card rounded-2xl p-6 max-w-sm w-full mx-4 shadow-xl border" onClick={(e) => e.stopPropagation()}>
@@ -1980,6 +2127,13 @@ export function UsersPanel() {
                     }`}
                   >
                     <Gift className="h-4 w-4" />
+                  </button>
+                  <button
+                    title="Editar dados (nome, e-mail, CPF, telefone, ocupação, expiração)"
+                    onClick={() => setEditTarget(u)}
+                    className="inline-flex items-center justify-center h-8 w-8 rounded-md text-muted-foreground hover:text-foreground hover:bg-background/80"
+                  >
+                    <Pencil className="h-4 w-4" />
                   </button>
                   <button
                     title="Redefinir senha"
