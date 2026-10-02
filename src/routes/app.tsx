@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";
 import { isProfileExpired } from "@/lib/subscription";
 import { fetchLibraryItems } from "@/lib/library";
-import { CATEGORY_LABELS, getRealExamQuestions, type Category } from "@/data/questions";
+import { CATEGORY_LABELS, type Category } from "@/data/questions";
 import { fetchVideoTutorials, type VideoTutorial } from "@/lib/video-tutorials";
 import { GroupPopups } from "@/components/WhatsAppGroupPopup";
 import { NativePdfModal } from "@/components/NativePdfModal";
@@ -469,7 +469,6 @@ function TeoricoDashboard() {
   });
   const teoricoItems = libraryItems.filter((i) => i.module_type === "teorico" && !i.is_paid);
   const [pdfModal, setPdfModal] = useState<{ url: string; title: string } | null>(null);
-  const realCount = getRealExamQuestions().length;
 
   const scrollToSection = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -543,11 +542,11 @@ function TeoricoDashboard() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-[10px] uppercase tracking-widest text-emerald-400 font-bold">
-                Bônus validado · {realCount} questões
+                Bônus validado
               </p>
               <p className="font-display font-bold text-lg">Prova Real</p>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Só perguntas que já caíram na prova.
+                Só perguntas que já caíram na prova, completando com o banco geral se preciso.
               </p>
             </div>
             <ChevronRight className="h-5 w-5 text-emerald-400 mt-2 shrink-0" />

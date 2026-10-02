@@ -6,7 +6,7 @@ import {
   Flame, Home, Brain, Library, Trophy, Target, Settings,
   ChevronLeft, ChevronRight, Shield, Star, Car, Calendar,
   BookOpen, Upload, Video, BarChart3, Users, ShoppingBag,
-  LogOut, UserCircle, Palette, Menu, RefreshCw
+  LogOut, UserCircle, Palette, Menu, RefreshCw, ListChecks
 } from "lucide-react";
 import { CronogramaModal } from "./CronogramaModal";
 import { DailyCheckinBanner } from "./DailyCheckinBanner";
@@ -15,6 +15,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useTheme } from "@/hooks/use-theme";
 import { themes } from "@/lib/themes";
 import { supabase } from "@/integrations/supabase/client";
+import { loadQuestionOverrides } from "@/data/questions";
 import { isProfileExpired } from "@/lib/subscription";
 import { APP_VERSION } from "@/lib/app-version";
 import { toast } from "sonner";
@@ -50,6 +51,7 @@ const ADMIN_ITEMS: NavItem[] = [
   { to: "/admin", label: "Usuarios", icon: Users, adminSection: "users" },
   { to: "/admin", label: "Biblioteca Admin", icon: Upload, adminSection: "library" },
   { to: "/admin", label: "Videos", icon: Video, adminSection: "videos" },
+  { to: "/admin", label: "Questões", icon: ListChecks, adminSection: "questoes" },
   { to: "/admin", label: "Avaliacoes", icon: Star, adminSection: "ratings" },
   { to: "/admin", label: "Configuracoes", icon: Settings, adminSection: "settings" },
 ];
@@ -125,6 +127,10 @@ export function AppShell() {
     }
     return true;
   });
+
+  useEffect(() => {
+    loadQuestionOverrides().catch(() => {});
+  }, []);
 
   useEffect(() => {
     supabase

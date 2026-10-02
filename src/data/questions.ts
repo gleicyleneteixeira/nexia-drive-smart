@@ -2365,11 +2365,11 @@ export const QUESTIONS: Question[] = [
         statement: "Em blitz, o agente aborda três casos: sem CNH, com CNH vencida há 40 dias e com categoria divergente. Sobre habilitação, é correto afirmar:",
         options: ["Dirigir com CNH vencida há mais de 30 dias é gravíssima com multa multiplicada por 3.", "Dirigir com CNH de categoria divergente é leve, punida com advertência escrita.", "Dirigir sem CNH ou PPD é gravíssima com multa vezes 3, podendo configurar crime.", "Dirigir com CNH de categoria diferente é média, com retenção do veículo."],
         correctIndex: 2,
-        explanation: "Correta a alternativa C, pois o art. 162 do CTB prevê gravíssima vezes 3 para sem CNH; vencida há 30 dias é grave.",
-        detailedExplanation: "O art. 162 do CTB fala sobre as infrações de habilitação: (I) dirigir sem CNH ou PPD é GRAVÍSSIMA com multa triplicada e pode ser crime se causar perigo; (II) dirigir com CNH vencida há mais de 30 dias é uma infração GRAVE; (III) dirigir com CNH de categoria diferente também é GRAVÍSSIMA, mas sem multiplicador. A alternativa A confunde as classificações, pois a CNH vencida é apenas grave.",
-        legalBase: "Art. 162, I, II e III do CTB",
-        commonMistake: "A banca costuma confundir: sem CNH é gravíssima x3, mas CNH vencida há +30 dias é só grave.",
-        tip: "Sem CNH = GRAVÍSSIMA x3. CNH vencida +30 dias = GRAVE.",
+        explanation: "Correta a alternativa C, pois o art. 162 do CTB prevê gravíssima vezes 3 para sem CNH; vencida há +30 dias e categoria diferente também são gravíssimas.",
+        detailedExplanation: "O art. 162 do CTB fala sobre as infrações de habilitação: (I) dirigir sem CNH ou PPD é GRAVÍSSIMA com multa triplicada e pode ser crime se gerar perigo; (V) dirigir com CNH vencida há mais de 30 dias também é GRAVÍSSIMA; (III) dirigir com CNH de categoria diferente é GRAVÍSSIMA com multa em dobro. A alternativa C é a única totalmente correta.",
+        legalBase: "Art. 162, I, III e V do CTB",
+        commonMistake: "A banca costuma confundir os multiplicadores: sem CNH é x3, categoria diferente é x2, vencida +30 dias é multa simples.",
+        tip: "Sem CNH = GRAVÍSSIMA x3. Vencida +30 dias e categoria errada = GRAVÍSSIMAS.",
         incidence: "alta",
         trap: true,
         difficulty: 3
@@ -3565,7 +3565,7 @@ export const QUESTIONS: Question[] = [
         category: "legislacao",
         statement: "Candidato à habilitação questiona os limites da categoria B. Quais são o Peso Bruto Total e a lotação autorizados, conforme o art. 143 do CTB?",
         options: ["PBT de até 6.000 kg e lotação de até 10 passageiros, incluindo o motorista do veículo.", "PBT sem limite de carga e lotação de até 8 ocupantes no total do veículo.", "Veículos de passeio com até 5 lugares no total, incluindo o condutor do veículo.", "PBT de até 3.500 kg e lotação de até 8 passageiros, excluído o condutor do veículo."],
-        correctIndex: 0,
+        correctIndex: 3,
         explanation: "Correta: categoria B admite PBT até 3.500 kg e 8 passageiros mais o condutor, conforme art. 143 do CTB.",
         detailedExplanation: "Isso significa que, além do motorista, você pode levar mais 8 pessoas no carro. Se o veículo passar desse peso ou número de passageiros, precisa de outra categoria, como C ou D.",
         legalBase: "Art. 29 do CTB",
@@ -3581,7 +3581,7 @@ export const QUESTIONS: Question[] = [
         category: "legislacao",
         statement: "Condutor habilitado na categoria B pretende transportar passageiros no veículo. Qual é o limite legal de passageiros, excluído o condutor?",
         options: ["Até 8 passageiros no veículo, incluindo obrigatoriamente o motorista na contagem.", "Até 15 passageiros no veículo, além do condutor responsável pela condução.", "Até 5 passageiros no veículo, sem contar o condutor na lotação autorizada.", "Até 8 passageiros no veículo, sem contar o condutor, na regra conhecida como 8+1."],
-        correctIndex: 0,
+        correctIndex: 3,
         explanation: "Correta: categoria B permite até 8 passageiros mais o condutor, conforme art. 143 do CTB.",
         detailedExplanation: "A categoria B permite dirigir carros com até 3.500 kg de PBT e até 8 pessoas a bordo, além do motorista. Se precisar levar mais de 8 passageiros, precisa da categoria D; se o veículo passar de 3.500 kg, precisa da categoria C.",
         legalBase: "Art. 29 do CTB",
@@ -3629,7 +3629,7 @@ export const QUESTIONS: Question[] = [
         category: "legislacao",
         statement: "Permissionário cumpre o período probatório e deseja obter a CNH definitiva. Qual regra vale para a Permissão e suas infrações impeditivas?",
         options: ["Permissão de 6 meses, em que qualquer infração leve já impede a habilitação definitiva.", "Permissão sem prazo definido, cancelada somente em caso de crime de trânsito.", "Permissão de 12 meses, em que grave, gravíssima ou reincidência em média impede a definitiva.", "Permissão de 24 meses, com tolerância de até 20 pontos sem nenhuma consequência."],
-        correctIndex: 0,
+        correctIndex: 2,
         explanation: "Correta: permissão de 12 meses impede a definitiva em caso de grave, gravíssima ou reincidência em média, conforme art. 148 do CTB.",
         detailedExplanation: "Durante a PPD (12 meses), o motorista está sendo observado. Se ele cometer infração grave, gravíssima ou repetir uma média, não consegue a CNH definitiva e precisa começar tudo de novo.",
         legalBase: "Art. 29 do CTB",
@@ -3741,7 +3741,7 @@ export const QUESTIONS: Question[] = [
         category: "direcao-defensiva",
         statement: "Primeiro no local de acidente com vítimas, o motorista deve aplicar o protocolo PAS. O que cada letra dessa sigla significa, em ordem?",
         options: ["Parar o veículo, Abrir o capô e Socorrer as vítimas com urgência.", "Prevenir novos riscos, Atender as vítimas e Salvar os ocupantes.", "Prestar os primeiros cuidados, Acionar o freio e Sinalizar a pista.", "Proteger o local, Avisar o socorro e Socorrer as vítimas com cautela."],
-        correctIndex: 0,
+        correctIndex: 3,
         explanation: "Correta: PAS significa Proteger, Avisar e Socorrer, nessa ordem, conforme manual de primeiros socorros.",
         detailedExplanation: "Primeiro, você protege o lugar (sinaliza), depois avisa o socorro (liga pro SAMU 192) e, por último, socorre as vítimas com cuidado. Assim, você evita que quem ajuda também se machuque.",
         legalBase: "Art. 180 do CTB",
@@ -3901,7 +3901,7 @@ export const QUESTIONS: Question[] = [
         category: "meio-ambiente",
         statement: "Escapamento libera gás sem cor nem cheiro que se liga à hemoglobina e impede a oxigenação do sangue. Qual é esse gás, segundo o manual?",
         options: ["Dióxido de carbono, produto natural da queima completa do combustível.", "Gás ozônio, presente naturalmente na estratosfera e sem ação no sangue.", "Clorofluorcarbono, fluido usado em refrigeração e ar-condicionado.", "Monóxido de carbono, resultante da queima incompleta do combustível."],
-        correctIndex: 0,
+        correctIndex: 3,
         explanation: "Correta: monóxido de carbono se liga à hemoglobina e impede o transporte de oxigênio no sangue.",
         detailedExplanation: "Esse gás é perigoso, não tem cor nem cheiro, e se gruda na hemoglobina mais fácil que o oxigênio, causando asfixia. Por isso, nunca ligue o carro em lugar fechado.",
         legalBase: "Art. 190 do CTB",
@@ -5110,7 +5110,7 @@ export const QUESTIONS: Question[] = [
         category: "direcao-defensiva",
         statement: "Em curva à esquerda com pista molhada e baixa aderência, qual postura o condutor deve adotar para manter a estabilidade e evitar derrapagem?",
         options: ["Acelerar durante a curva para sair rapidamente do trecho de baixa aderência.", "Manter velocidade constante e frear no ápice da curva para corrigir a trajetória.", "Aplicar apenas o freio traseiro durante toda a manobra em pista molhada.", "Reduzir a velocidade antes da curva e manter o volante firme sem freadas bruscas."],
-        correctIndex: 1,
+        correctIndex: 3,
         explanation: "Correta: reduzir antes da curva e conduzir com suavidade evita perda de aderência em piso molhado.",
         detailedExplanation: "Curvas molhadas exigem redução de velocidade antecipada para não derrapar.",
         legalBase: "Art. 218 do CTB",
@@ -6206,7 +6206,7 @@ export function getRealExamQuestions(): Question[] {
     // Pool validado "Prova Real": resolve os ids string para QUESTIONS e
     // inclui os objetos inline, sem duplicar. Usado no modo Prova Real
     // (e na inclusão forçada do completo).
-    const byId = new Map(QUESTIONS.map((q) => [q.id, q]));
+    const byId = new Map(getQuestionBank().map((q) => [q.id, q]));
     const out: Question[] = [];
     const seen = new Set<string>();
     for (const entry of REAL_EXAM_IDS) {
@@ -6219,6 +6219,59 @@ export function getRealExamQuestions(): Question[] {
     return out;
 }
 
+// ---------------------------------------------------------------------------
+// Banco mesclado (super admin): edições/criações/exclusões feitas no painel
+// vivem na tabela `question_overrides` e são aplicadas sobre QUESTIONS em
+// tempo de execução. Sem linhas carregadas, vale o banco estático.
+// Linha customizada = id com prefixo "custom-" + objeto completo em `data`.
+// Linha de questão estática = patch parcial em `data` e/ou `disabled`.
+// ---------------------------------------------------------------------------
+export interface QuestionOverrideRow {
+    id: string;
+    data: Partial<Question>;
+    disabled: boolean;
+}
+
+let overridePatch = new Map<string, Partial<Question>>();
+let overrideDisabled = new Set<string>();
+let overrideCustoms: Question[] = [];
+
+export function setQuestionOverrides(rows: QuestionOverrideRow[]): void {
+    overridePatch = new Map();
+    overrideDisabled = new Set();
+    overrideCustoms = [];
+    for (const r of rows || []) {
+        if (!r || typeof r.id !== "string") continue;
+        if (r.disabled) overrideDisabled.add(r.id);
+        if (r.id.startsWith("custom-") && r.data && typeof r.data.statement === "string" && Array.isArray((r.data as Question).options)) {
+            overrideCustoms.push({ ...(r.data as Question), id: r.id });
+        } else if (r.data && typeof r.data === "object") {
+            overridePatch.set(r.id, r.data);
+        }
+    }
+}
+
+export async function loadQuestionOverrides(): Promise<void> {
+    try {
+        const { data } = await (supabase as any)
+            .from("question_overrides")
+            .select("id, data, disabled");
+        if (Array.isArray(data)) setQuestionOverrides(data as QuestionOverrideRow[]);
+    } catch {
+        // Sem acesso (tabela ausente/offline): mantém o banco estático.
+    }
+}
+
+/** Banco efetivo usado por todos os sorteios: estático + overrides do admin. */
+export function getQuestionBank(): Question[] {
+    return QUESTIONS.filter((q) => !overrideDisabled.has(q.id))
+        .map((q) => {
+            const p = overridePatch.get(q.id);
+            return p ? { ...q, ...p, id: q.id } : q;
+        })
+        .concat(overrideCustoms.filter((c) => !overrideDisabled.has(c.id)));
+}
+
 export function getRandomizedQuestions(count: number, opts?: {
     categories?: Category[];
     seed?: number;
@@ -6226,7 +6279,7 @@ export function getRandomizedQuestions(count: number, opts?: {
     placasCount?: number;
     questionsList?: Question[];
 }): Question[] {
-    let pool = opts?.questionsList || [...QUESTIONS];
+    let pool = opts?.questionsList || getQuestionBank();
     if (opts?.categories?.length) {
         pool = pool.filter((q) => opts.categories!.includes(q.category));
     }
@@ -6315,7 +6368,7 @@ export interface BalancedOptions {
 
 export function getBalancedQuestions(opts?: BalancedOptions): Question[] {
     const total = opts?.total ?? 30;
-    let pool = opts?.questionsList ? [...opts.questionsList] : [...QUESTIONS];
+    let pool = opts?.questionsList ? [...opts.questionsList] : getQuestionBank();
 
     if (opts?.categories?.length) {
         pool = pool.filter((q) => opts.categories!.includes(q.category));
@@ -6414,9 +6467,9 @@ export function getGeneralSimuladoQuestions(opts?: GeneralSimuladoOptions): Ques
             .slice(0, Math.min(n, arr.length))
             .map((x) => x.q);
 
-    const level3Pool = QUESTIONS.filter((q) => q.difficulty === 3);
-    const level2TrapPool = QUESTIONS.filter((q) => q.difficulty === 2 && q.trap);
-    const restPool = QUESTIONS.filter((q) => q.difficulty === 1 || q.difficulty === 2);
+    const level3Pool = getQuestionBank().filter((q) => q.difficulty === 3);
+    const level2TrapPool = getQuestionBank().filter((q) => q.difficulty === 2 && q.trap);
+    const restPool = getQuestionBank().filter((q) => q.difficulty === 1 || q.difficulty === 2);
 
     // 1) 15% mais difíceis (nível 3, com ou sem pegadinha)
     const level3Picked = draw(level3Pool, nLevel3, false);
@@ -6433,7 +6486,7 @@ export function getGeneralSimuladoQuestions(opts?: GeneralSimuladoOptions): Ques
     // Se alguma cota secou (sem inéditas suficientes), abandona a cota e completa
     // com qualquer questão ainda não vista do banco inteiro.
     if (selected.length < total) {
-        const fallback = QUESTIONS.filter((q) => !used.has(q.id));
+        const fallback = getQuestionBank().filter((q) => !used.has(q.id));
         let extra = draw(fallback, total - selected.length, false);
         // Último recurso: banco inteiro de inéditas esgotado -> reusa vistas.
         if (extra.length + selected.length < total) {
@@ -6472,6 +6525,8 @@ export const OFFICIAL_EXAM_TOTAL = 30;
 export const OFFICIAL_EXAM_PASS_SCORE = 20;
 export const OFFICIAL_EXAM_DETRAN_MIN = 5;
 export const OFFICIAL_EXAM_DETRAN_MAX = 8;
+// Mínimo de questões de nível difícil (difficulty 3) por prova: 11 de 30.
+export const OFFICIAL_EXAM_HARD_MIN = 11;
 export const DISTRIBUICAO_SIMULADO: Record<string, number> = {
     // Bloco: Cuidar, Agir e Preservar (6 questões)
     'Primeiros Socorros': 4,
@@ -6508,7 +6563,7 @@ export interface OfficialSimuladoOptions {
 export function getOfficialSimuladoQuestions(opts?: OfficialSimuladoOptions): Question[] {
     const total = OFFICIAL_EXAM_DISTRIBUTION.reduce((acc, d) => acc + d.count, 0);
     const ex = new Set(opts?.exclude ?? []);
-    const base = opts?.questionsList ? [...opts.questionsList] : [...QUESTIONS];
+    const base = opts?.questionsList ? [...opts.questionsList] : getQuestionBank();
     const detranMin = opts?.detranMin ?? OFFICIAL_EXAM_DETRAN_MIN;
     const detranMax = opts?.detranMax ?? OFFICIAL_EXAM_DETRAN_MAX;
     const detranTarget = detranMin + Math.floor(Math.random() * (detranMax - detranMin + 1));
@@ -6564,6 +6619,31 @@ export function getOfficialSimuladoQuestions(opts?: OfficialSimuladoOptions): Qu
                 need--;
             }
             if (need <= 0) break;
+        }
+    }
+
+    // 2b) Mínimo de 11 em nível difícil (difficulty 3): troca não-difíceis
+    // por difíceis da MESMA categoria, protegendo a mescla detran_* (5-8).
+    const hardMin = Math.min(OFFICIAL_EXAM_HARD_MIN, total);
+    const isHard = (q: Question): boolean => q.difficulty === 3;
+    let hardCount = selected.filter(isHard).length;
+    if (hardCount < hardMin) {
+        for (const out of [...selected]) {
+            if (hardCount >= hardMin) break;
+            if (isHard(out) || out.id.startsWith("detran_")) continue;
+            const rep = ordered(
+                base.filter(
+                    (q) =>
+                        q.category === out.category &&
+                        isHard(q) &&
+                        eligible(q, false) &&
+                        (q.id.startsWith("detran_") ? detranPicked < detranMax : true),
+                ),
+            )[0];
+            if (!rep) continue;
+            selected.splice(selected.indexOf(out), 1);
+            take(rep);
+            hardCount++;
         }
     }
 

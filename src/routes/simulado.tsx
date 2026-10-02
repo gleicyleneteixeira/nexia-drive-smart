@@ -6,12 +6,12 @@ import {
   getRandomizedQuestions,
   getRealExamQuestions,
   getOfficialSimuladoQuestions,
+  getQuestionBank,
   OFFICIAL_EXAM_PASS_SCORE,
   INCIDENCE_META,
   CATEGORY_LABELS,
   type Question,
   type Category,
-  QUESTIONS,
 } from "@/data/questions";
 import {
   Check,
@@ -150,7 +150,7 @@ function buildFresh(mode?: Category | "prova-real"): Question[] {
       // Se a categoria tem poucas questões, completa com outras categorias
       if (fullExam.length < 30) {
         const needed = 30 - fullExam.length;
-        const allQuestions = [...QUESTIONS];
+        const allQuestions = getQuestionBank();
         const otherCategories = allQuestions.filter(q => q.category !== mode);
         const extraQuestions = getRandomizedQuestions(needed, { 
           exclude: [...allExcluded, ...fullExam.map(q => q.id)], 
@@ -170,16 +170,26 @@ function buildFresh(mode?: Category | "prova-real"): Question[] {
     }
   }
 
-  // GARANTIA FINAL: preencher com questões de todas as categorias se ainda faltar
-  // (NÃO vale p/ prova-real — lá o pool é só de validadas, por promessa do modo)
-  if (mode !== "prova-real" && fresh.length < TOTAL) {
+  // GARANTIA FINAL: preencher com questões de todas as categorias se ainda faltar,
+  // inclusive na prova-real (quando o pool de validadas esgota nas vistas,
+  // completa com as demais para sempre fechar 30; por fim, reusa vistas
+  // sem repetir dentro da prova).
+  if (fresh.length < TOTAL) {
     const needed = TOTAL - fresh.length;
     const freshIds = new Set(fresh.map(q => q.id));
-    const remainingPool = QUESTIONS.filter(q => !freshIds.has(q.id) && !allExcluded.includes(q.id));
+    const remainingPool = getQuestionBank().filter(q => !freshIds.has(q.id) && !allExcluded.includes(q.id));
     const fillQuestions = getRandomizedQuestions(needed, {
       questionsList: remainingPool,
     });
     fresh = [...fresh, ...fillQuestions].slice(0, TOTAL);
+  }
+  if (fresh.length < TOTAL) {
+    const freshIds = new Set(fresh.map(q => q.id));
+    const anyPool = getQuestionBank().filter(q => !freshIds.has(q.id));
+    const fillSeen = getRandomizedQuestions(TOTAL - fresh.length, {
+      questionsList: anyPool,
+    });
+    fresh = [...fresh, ...fillSeen].slice(0, TOTAL);
   }
 
   // Salva IDs na memória global e na sessão
@@ -769,7 +779,6 @@ function DetailedFeedback({
 }
 
 function ModePicker({ onPick }: { onPick: (m: SimMode) => void }) {
-  const realCount = getRealExamQuestions().length;
   const cats: { id: Category; icon: string }[] = [
     { id: "legislacao", icon: "📘" },
     { id: "placas", icon: "🚸" },
@@ -830,11 +839,11 @@ function ModePicker({ onPick }: { onPick: (m: SimMode) => void }) {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-[10px] uppercase tracking-widest text-emerald-400 font-bold">
-              Bônus validado · {realCount} questões
+              Bônus validado
             </p>
             <p className="font-display font-bold text-lg">Prova Real</p>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Só perguntas que já caíram na prova — estude junto com o geral.
+              Só perguntas que já caíram na prova, completando com o banco geral se preciso.
             </p>
           </div>
           <ArrowRight className="h-5 w-5 text-emerald-400 mt-2 shrink-0" />

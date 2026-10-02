@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchLibraryItems, checkIsAdmin, SUPER_ADMIN_EMAIL, CRONOGRAMA_BOOK_KEY, fetchCronogramaBookId, type LibraryItem, type LibraryItemType } from "@/lib/library";
+import { QUESTIONS, CATEGORY_LABELS, getQuestionBank, setQuestionOverrides, type Question, type Category } from "@/data/questions";
 import { 
   fetchVideoTutorials, 
   addVideoTutorial, 
@@ -22,7 +23,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, X, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen, Video, BadgeDollarSign, Gift, CheckCheck, CalendarClock, Lock, ChevronUp, ChevronDown, GripVertical, BarChart3, Brain, Play, Eye, EyeOff } from "lucide-react";
+import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, X, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen, Video, BadgeDollarSign, Gift, CheckCheck, CalendarClock, Lock, ChevronUp, ChevronDown, GripVertical, BarChart3, Brain, Play, Eye, EyeOff, ListChecks } from "lucide-react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import * as XLSX from "xlsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
@@ -167,6 +168,7 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
     { id: "users", label: "Usuários", icon: Users },
     { id: "library", label: "Biblioteca", icon: Upload },
     { id: "videos", label: "Vídeos", icon: Video },
+    { id: "questoes", label: "Questões", icon: ListChecks },
     { id: "ratings", label: "Avaliações", icon: Star },
     { id: "settings", label: "Configurações", icon: Settings },
   ];
@@ -195,6 +197,7 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
           {tab === "ratings" && <RatingsPanel />}
           {tab === "settings" && <SettingsPanel />}
           {tab === "videos" && <VideoTutorialsPanel />}
+          {tab === "questoes" && <QuestionsPanel />}
           {tab === "detran" && <AdminDetranStats />}
           {tab === "mig" && <AdminMigPreview />}
           {tab === "library" && (
@@ -777,6 +780,531 @@ function BlockStatusSelect({ user, onRefresh }: { user: ProfileRow; onRefresh: (
         <option value="expired">Trial expirado</option>
         <option value="blocked">Bloqueado</option>
       </select>
+    </div>
+  );
+}
+
+// ==========================================
+// QUESTÕES DO SIMULADO (super admin)
+// Banco estático (QUESTIONS) + exceções da tabela `question_overrides`:
+// editar estática = patch; apagar estática = disabled; nova = linha custom-*.
+// ==========================================
+type OverrideRow = { id: string; data: Record<string, unknown>; disabled: boolean };
+
+const QCATS: Category[] = ["legislacao", "placas", "direcao-defensiva", "primeiros-socorros", "infracoes", "meio-ambiente", "mecanica", "prioridade"];
+const QINC = ["altissima", "alta", "media", "baixa"] as const;
+const LETTERS = ["A", "B", "C", "D"];
+
+// Modelo oficial de importação (sem id: o sistema gera sozinho).
+const IMPORT_TEMPLATE = [
+  {
+    category: "legislacao",
+    statement: "Enunciado objetivo da questão (100 a 200 caracteres).",
+    options: ["Alternativa A plausível.", "Alternativa B plausível.", "Alternativa C correta.", "Alternativa D plausível."],
+    correctIndex: 2,
+    explanation: "Por que a correta é a certa (curta, com base no CTB).",
+    detailedExplanation: "Explicação longa opcional.",
+    legalBase: "Art. 29 do CTB",
+    commonMistake: "Pegadinha comum (opcional).",
+    tip: "Dica curta (opcional).",
+    memoryHook: "Gancho de memória (opcional).",
+    image_url: "https://... (opcional)",
+    incidence: "alta",
+    difficulty: 2,
+    trap: false,
+  },
+];
+
+function downloadJson(filename: string, data: unknown) {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function toTemplateShape(q: Question): Record<string, unknown> {
+  const out: Record<string, unknown> = {
+    category: q.category,
+    statement: q.statement,
+    options: q.options,
+    correctIndex: q.correctIndex,
+    explanation: q.explanation,
+  };
+  if (q.detailedExplanation) out.detailedExplanation = q.detailedExplanation;
+  if (q.legalBase) out.legalBase = q.legalBase;
+  if (q.commonMistake) out.commonMistake = q.commonMistake;
+  if (q.tip) out.tip = q.tip;
+  if (q.memoryHook) out.memoryHook = q.memoryHook;
+  if (q.image_url) out.image_url = q.image_url;
+  if (q.incidence) out.incidence = q.incidence;
+  if (typeof q.difficulty === "number") out.difficulty = q.difficulty;
+  if (q.trap) out.trap = true;
+  return out;
+}
+
+function validateImportItem(it: any, idx: number): string | null {
+  if (!it || typeof it !== "object") return `Item ${idx + 1}: objeto inválido.`;
+  if (!QCATS.includes(it.category)) return `Item ${idx + 1}: categoria inválida (use: ${QCATS.join(", ")}).`;
+  if (typeof it.statement !== "string" || !it.statement.trim()) return `Item ${idx + 1}: enunciado vazio.`;
+  if (!Array.isArray(it.options) || it.options.length !== 4 || it.options.some((o: any) => typeof o !== "string" || !o.trim())) return `Item ${idx + 1}: precisa de 4 alternativas preenchidas.`;
+  if (!Number.isInteger(it.correctIndex) || it.correctIndex < 0 || it.correctIndex > 3) return `Item ${idx + 1}: correctIndex deve ser 0, 1, 2 ou 3.`;
+  if (typeof it.explanation !== "string" || !it.explanation.trim()) return `Item ${idx + 1}: explicação vazia.`;
+  if (it.incidence !== undefined && !(QINC as readonly string[]).includes(it.incidence)) return `Item ${idx + 1}: incidence inválida (altissima/alta/media/baixa).`;
+  if (it.difficulty !== undefined && ![1, 2, 3].includes(it.difficulty)) return `Item ${idx + 1}: difficulty inválida (1, 2 ou 3).`;
+  return null;
+}
+
+function originOf(q: Question): "oficial" | "ia" | "custom" {
+  if (q.id.startsWith("custom-")) return "custom";
+  if (q.id.startsWith("detran_")) return "oficial";
+  return "ia";
+}
+
+export function QuestionsPanel() {
+  const qc = useQueryClient();
+  const [search, setSearch] = useState("");
+  const [cat, setCat] = useState<Category | "all">("all");
+  const [orig, setOrig] = useState<"all" | "ia" | "oficial" | "custom" | "off">("all");
+  const [idx, setIdx] = useState(0);
+  const [editing, setEditing] = useState<Question | null>(null);
+  const [creating, setCreating] = useState(false);
+  const [showImport, setShowImport] = useState(false);
+  const [showModel, setShowModel] = useState(false);
+  const [importText, setImportText] = useState("");
+  const [importing, setImporting] = useState(false);
+  const [qty, setQty] = useState<string>("");
+  const [idList, setIdList] = useState<string>("");
+
+  const { data: rows = [], refetch } = useQuery({
+    queryKey: ["admin", "question-overrides"],
+    queryFn: async (): Promise<OverrideRow[]> => {
+      const { data, error } = await (supabase as any).from("question_overrides").select("id, data, disabled");
+      if (error) throw error;
+      setQuestionOverrides((data ?? []) as OverrideRow[]);
+      return (data ?? []) as OverrideRow[];
+    },
+  });
+  const disabledIds = new Set(rows.filter((r) => r.disabled).map((r) => r.id));
+  const bank = getQuestionBank();
+
+  const filtered = bank.filter((q) => {
+    if (cat !== "all" && q.category !== cat) return false;
+    const o = originOf(q);
+    if (orig === "off" && !disabledIds.has(q.id)) return false;
+    if (orig !== "all" && orig !== "off" && o !== orig) return false;
+    const s = search.trim().toLowerCase();
+    if (!s) return true;
+    return (
+      q.id.toLowerCase().includes(s) ||
+      q.statement.toLowerCase().includes(s) ||
+      q.options.some((op) => op.toLowerCase().includes(s))
+    );
+  });
+
+  useEffect(() => { setIdx(0); }, [search, cat, orig]);
+  const cur = filtered.length ? filtered[Math.min(idx, filtered.length - 1)] : null;
+  const go = (d: number) => {
+    if (!filtered.length) return;
+    setIdx((i) => (i + d + filtered.length) % filtered.length);
+  };
+
+  async function reload() {
+    await refetch();
+    qc.invalidateQueries({ queryKey: ["admin", "question-overrides"] });
+  }
+
+  async function handleExport() {
+    const wanted = idList.split(/[\s,;]+/).map((s) => s.trim()).filter(Boolean);
+    let list: Question[];
+    if (wanted.length) {
+      const byId = new Map(bank.map((q) => [q.id, q]));
+      const missing = wanted.filter((id) => !byId.has(id));
+      if (missing.length) return toast.error(`IDs não encontrados: ${missing.slice(0, 5).join(", ")}${missing.length > 5 ? "..." : ""}`);
+      list = wanted.map((id) => byId.get(id)!);
+    } else {
+      list = filtered;
+    }
+    const n = Math.max(0, parseInt(qty, 10) || list.length);
+    list = list.slice(0, n);
+    if (!list.length) return toast.error("Nada para exportar com esses filtros.");
+    downloadJson(`questoes-${cat}-${list.length}.json`, list.map(toTemplateShape));
+    toast.success(`${list.length} questões exportadas`);
+  }
+
+  async function handleCopyModel() {
+    const txt = JSON.stringify(IMPORT_TEMPLATE, null, 2);
+    try {
+      await navigator.clipboard.writeText(txt);
+    } catch {
+      const ta = document.createElement("textarea");
+      ta.value = txt;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      ta.remove();
+    }
+    toast.success("Modelo copiado — cole na IA ou preencha e importe");
+  }
+
+  async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    setImportText(await f.text());
+    e.target.value = "";
+  }
+
+  function nextCustomId(taken: Set<string>): string {
+    let id = "";
+    do {
+      id = `custom-${Date.now().toString(36)}${Math.floor(Math.random() * 1296).toString(36)}`;
+    } while (taken.has(id));
+    taken.add(id);
+    return id;
+  }
+
+  async function handleImport() {
+    let parsed: any;
+    try {
+      parsed = JSON.parse(importText);
+    } catch {
+      return toast.error("JSON inválido. Confira o modelo.");
+    }
+    const items = Array.isArray(parsed) ? parsed : [parsed];
+    if (!items.length) return toast.error("Nenhum item no JSON.");
+    const problems: string[] = [];
+    items.forEach((it, i) => {
+      const err = validateImportItem(it, i);
+      if (err) problems.push(err);
+    });
+    if (problems.length) return toast.error(problems.slice(0, 3).join(" | ") + (problems.length > 3 ? ` (+${problems.length - 3})` : ""));
+    setImporting(true);
+    try {
+      const taken = new Set(bank.map((q) => q.id));
+      const rows = items.map((it: any) => ({
+        id: nextCustomId(taken),
+        data: {
+          category: it.category,
+          statement: String(it.statement).trim(),
+          options: it.options.map((o: any) => String(o).trim()),
+          correctIndex: it.correctIndex,
+          explanation: String(it.explanation).trim(),
+          ...(it.detailedExplanation ? { detailedExplanation: String(it.detailedExplanation) } : {}),
+          ...(it.legalBase ? { legalBase: String(it.legalBase) } : {}),
+          ...(it.commonMistake ? { commonMistake: String(it.commonMistake) } : {}),
+          ...(it.tip ? { tip: String(it.tip) } : {}),
+          ...(it.memoryHook ? { memoryHook: String(it.memoryHook) } : {}),
+          ...(it.image_url ? { image_url: String(it.image_url) } : {}),
+          incidence: it.incidence ?? "media",
+          difficulty: it.difficulty ?? 2,
+          ...(it.trap ? { trap: true } : {}),
+        },
+        disabled: false,
+      }));
+      const { error } = await (supabase as any).from("question_overrides").insert(rows);
+      if (error) throw error;
+      setImportText("");
+      setShowImport(false);
+      toast.success(`${rows.length} questões importadas com IDs automáticos`);
+      reload();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Falha ao importar");
+    } finally {
+      setImporting(false);
+    }
+  }
+
+  async function handleDelete(q: Question) {
+    const isCustom = q.id.startsWith("custom-");
+    if (!confirm(isCustom ? `Apagar definitivamente "${q.id}"?` : `Desativar "${q.id}" nos sorteios? (a original continua no código)`)) return;
+    if (isCustom) {
+      const { error } = await (supabase as any).from("question_overrides").delete().eq("id", q.id);
+      if (error) return toast.error(error.message);
+    } else {
+      const { error } = await (supabase as any).from("question_overrides").upsert({ id: q.id, data: {}, disabled: true }, { onConflict: "id" });
+      if (error) return toast.error(error.message);
+    }
+    toast.success(isCustom ? "Apagada" : "Desativada nos sorteios");
+    setEditing(null);
+    reload();
+  }
+
+  async function handleRestore(q: Question) {
+    const { error } = await (supabase as any).from("question_overrides").update({ disabled: false }).eq("id", q.id);
+    if (error) return toast.error(error.message);
+    toast.success("Reativada");
+    reload();
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between gap-2 flex-wrap">
+        <h2 className="font-display font-bold text-lg">Questões do simulado ({filtered.length}/{bank.length})</h2>
+        <div className="flex gap-2 flex-wrap">
+          <Button size="sm" variant="outline" onClick={() => { setShowImport(false); setShowModel((v) => !v); }}>Modelo</Button>
+          <Button size="sm" variant="outline" onClick={handleExport}>Exportar</Button>
+          <Button size="sm" variant="outline" onClick={() => { setShowModel(false); setShowImport((v) => !v); }}>Importar</Button>
+          <Button size="sm" onClick={() => { setEditing(null); setCreating(true); }}>+ Nova questão</Button>
+        </div>
+      </div>
+
+      {showModel && (
+        <div className="glass rounded-2xl p-4 space-y-2">
+          <p className="text-xs text-muted-foreground">Preencha manual ou peça para uma IA preencher neste padrão <strong>sem o campo id</strong> (o sistema gera sozinho). Depois importe por arquivo ou colando abaixo.</p>
+          <pre className="text-[11px] bg-background/60 border border-border/40 rounded-xl p-3 overflow-x-auto max-h-64 overflow-y-auto">{JSON.stringify(IMPORT_TEMPLATE, null, 2)}</pre>
+          <div className="flex gap-2">
+            <Button size="sm" variant="outline" onClick={handleCopyModel}>Copiar modelo</Button>
+            <Button size="sm" variant="outline" onClick={() => downloadJson("modelo-questoes.json", IMPORT_TEMPLATE)}>Baixar modelo</Button>
+          </div>
+        </div>
+      )}
+
+      <div className="glass rounded-2xl p-4 space-y-2">
+        <div className="grid sm:grid-cols-2 gap-2">
+          <div className="space-y-1">
+            <Label className="text-xs">Quantidade p/ exportar (vazio = todas filtradas)</Label>
+            <Input value={qty} onChange={(e) => setQty(e.target.value.replace(/\D/g, ""))} placeholder={`Ex.: 20 (filtradas: ${filtered.length})`} inputMode="numeric" />
+          </div>
+          <div className="space-y-1">
+            <Label className="text-xs">IDs específicos p/ exportar (um por linha ou separados por vírgula)</Label>
+            <Input value={idList} onChange={(e) => setIdList(e.target.value)} placeholder="Ex.: qe60, qp01, detran_30q_004" />
+          </div>
+        </div>
+      </div>
+
+      {showImport && (
+        <div className="glass rounded-2xl p-4 space-y-2">
+          <p className="text-xs text-muted-foreground">Cole o JSON no padrão do modelo ou carregue um arquivo <strong>.json</strong>. Os IDs são gerados automaticamente (sem colisão).</p>
+          <Textarea value={importText} onChange={(e) => setImportText(e.target.value)} rows={6} placeholder='[{"category": "legislacao", "statement": "...", "options": ["...", "...", "...", "..."], "correctIndex": 0, "explanation": "..."}]' className="font-mono text-xs" />
+          <div className="flex gap-2 items-center">
+            <label className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-secondary/50 text-xs font-medium cursor-pointer hover:bg-accent/30 transition-colors">
+              Escolher arquivo
+              <input type="file" accept=".json,application/json" onChange={handleFile} className="hidden" />
+            </label>
+            <Button size="sm" onClick={handleImport} disabled={importing || !importText.trim()}>{importing ? "Importando..." : "Importar questões"}</Button>
+          </div>
+        </div>
+      )}
+
+      <div className="glass rounded-2xl p-4 space-y-3">
+        <div className="relative">
+          <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+          <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar por ID, categoria, palavra da pergunta ou resposta..." className="pl-9" />
+        </div>
+        <div className="flex gap-2 flex-wrap">
+          <Select value={cat} onValueChange={(v) => setCat(v as Category | "all")}>
+            <SelectTrigger className="w-[200px]"><SelectValue placeholder="Categoria" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todas as categorias</SelectItem>
+              {QCATS.map((c) => <SelectItem key={c} value={c}>{CATEGORY_LABELS[c]}</SelectItem>)}
+            </SelectContent>
+          </Select>
+          <Select value={orig} onValueChange={(v) => setOrig(v as typeof orig)}>
+            <SelectTrigger className="w-[200px]"><SelectValue placeholder="Origem" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todas as origens</SelectItem>
+              <SelectItem value="ia">Geradas por IA</SelectItem>
+              <SelectItem value="oficial">Prova real (detran_*)</SelectItem>
+              <SelectItem value="custom">Personalizadas</SelectItem>
+              <SelectItem value="off">Desativadas</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      {(editing || creating) && (
+        <QuestionForm
+          initial={editing}
+          onCancel={() => { setEditing(null); setCreating(false); }}
+          onSaved={() => { setEditing(null); setCreating(false); reload(); }}
+        />
+      )}
+
+      {cur ? (
+        <div className="glass rounded-2xl p-4 space-y-3">
+          <div className="flex items-center justify-between gap-2">
+            <Button size="sm" variant="outline" onClick={() => go(-1)}>‹ Anterior</Button>
+            <p className="text-xs text-muted-foreground">{Math.min(idx, filtered.length - 1) + 1} / {filtered.length}</p>
+            <Button size="sm" variant="outline" onClick={() => go(1)}>Próxima ›</Button>
+          </div>
+          <div className="rounded-xl border border-border/40 bg-background/40 p-4 space-y-2">
+            <div className="flex items-center gap-2 flex-wrap">
+              <Badge variant="secondary" className="text-xs font-mono">{cur.id}</Badge>
+              <Badge variant="secondary" className="text-xs">{CATEGORY_LABELS[cur.category]}</Badge>
+              <Badge variant="secondary" className="text-xs">{originOf(cur) === "oficial" ? "Prova real" : originOf(cur) === "custom" ? "Personalizada" : "IA"}</Badge>
+              {disabledIds.has(cur.id) && <Badge className="text-xs bg-destructive/15 text-destructive border border-destructive/40">Desativada</Badge>}
+              {cur.id.startsWith("detran_") && <Badge className="text-xs bg-warning/15 text-warning border border-warning/40">Oficial — edite com cautela</Badge>}
+            </div>
+            <p className="text-sm font-medium leading-relaxed">{cur.statement}</p>
+            <div className="space-y-1.5">
+              {cur.options.map((op, i) => (
+                <p key={i} className={`text-xs rounded-lg px-3 py-2 border ${i === cur.correctIndex ? "border-success/50 bg-success/10 font-semibold" : "border-border/40 text-muted-foreground"}`}>
+                  <span className="font-bold mr-1.5">{LETTERS[i]})</span>{op}
+                </p>
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground"><span className="font-semibold text-foreground">Explicação: </span>{cur.explanation}</p>
+            <div className="flex gap-2 pt-1 flex-wrap">
+              <Button size="sm" variant="outline" onClick={() => { setCreating(false); setEditing(cur); }}><Pencil className="h-3.5 w-3.5 mr-1" /> Editar</Button>
+              {disabledIds.has(cur.id)
+                ? <Button size="sm" variant="outline" onClick={() => handleRestore(cur)}>Reativar</Button>
+                : <Button size="sm" variant="ghost" className="text-destructive" onClick={() => handleDelete(cur)}><Trash2 className="h-3.5 w-3.5 mr-1" /> Apagar</Button>}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <p className="text-sm text-muted-foreground text-center py-6">Nenhuma questão encontrada. Ajuste a busca ou os filtros.</p>
+      )}
+    </div>
+  );
+}
+
+function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null; onCancel: () => void; onSaved: () => void }) {
+  const isNew = !initial;
+  const [category, setCategory] = useState<Category>(initial?.category ?? "legislacao");
+  const [statement, setStatement] = useState(initial?.statement ?? "");
+  const [options, setOptions] = useState<string[]>(initial ? [...initial.options, "", "", "", ""].slice(0, 4) : ["", "", "", ""]);
+  const [correctIndex, setCorrectIndex] = useState<number>(initial?.correctIndex ?? 0);
+  const [explanation, setExplanation] = useState(initial?.explanation ?? "");
+  const [detailed, setDetailed] = useState(initial?.detailedExplanation ?? "");
+  const [legalBase, setLegalBase] = useState(initial?.legalBase ?? "");
+  const [commonMistake, setCommonMistake] = useState(initial?.commonMistake ?? "");
+  const [tip, setTip] = useState(initial?.tip ?? "");
+  const [memoryHook, setMemoryHook] = useState(initial?.memoryHook ?? "");
+  const [imageUrl, setImageUrl] = useState(initial?.image_url ?? "");
+  const [incidence, setIncidence] = useState<string>(initial?.incidence ?? "media");
+  const [difficulty, setDifficulty] = useState<number>(initial?.difficulty ?? 2);
+  const [trap, setTrap] = useState<boolean>(!!initial?.trap);
+  const [saving, setSaving] = useState(false);
+
+  async function handleSave() {
+    if (!statement.trim()) return toast.error("Preencha o enunciado.");
+    if (options.some((o) => !o.trim())) return toast.error("Preencha as 4 alternativas.");
+    if (!explanation.trim()) return toast.error("Preencha a explicação.");
+    if (!isNew && initial.id.startsWith("detran_")) {
+      if (!confirm(`"${initial.id}" é questão OFICIAL de prova real. Salvar cria uma exceção local só neste app. Continuar?`)) return;
+    }
+    setSaving(true);
+    try {
+      const patch: Record<string, unknown> = {
+        category, statement: statement.trim(), options: options.map((o) => o.trim()), correctIndex,
+        explanation: explanation.trim(), detailedExplanation: detailed.trim() || undefined,
+        legalBase: legalBase.trim() || undefined, commonMistake: commonMistake.trim() || undefined,
+        tip: tip.trim() || undefined, memoryHook: memoryHook.trim() || undefined,
+        image_url: imageUrl.trim() || undefined, incidence, difficulty, trap: trap || undefined,
+      };
+      if (isNew) {
+        const id = `custom-${Date.now().toString(36)}`;
+        const { error } = await (supabase as any).from("question_overrides").insert({ id, data: patch, disabled: false });
+        if (error) throw error;
+      } else {
+        const { error } = await (supabase as any).from("question_overrides").upsert({ id: initial.id, data: patch, disabled: false }, { onConflict: "id" });
+        if (error) throw error;
+      }
+      toast.success(isNew ? "Questão criada" : "Questão atualizada");
+      onSaved();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Falha ao salvar");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="glass rounded-2xl p-4 space-y-3">
+      <h3 className="font-display font-bold">{isNew ? "Nova questão" : `Editar ${initial.id}`}</h3>
+      <div className="grid sm:grid-cols-3 gap-2">
+        <div className="space-y-1">
+          <Label className="text-xs">Categoria</Label>
+          <Select value={category} onValueChange={(v) => setCategory(v as Category)}>
+            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectContent>
+              {QCATS.map((c) => <SelectItem key={c} value={c}>{CATEGORY_LABELS[c]}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-1">
+          <Label className="text-xs">Incidência</Label>
+          <Select value={incidence} onValueChange={setIncidence}>
+            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="altissima">Altíssima</SelectItem>
+              <SelectItem value="alta">Alta</SelectItem>
+              <SelectItem value="media">Média</SelectItem>
+              <SelectItem value="baixa">Baixa</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-1">
+          <Label className="text-xs">Dificuldade</Label>
+          <Select value={String(difficulty)} onValueChange={(v) => setDifficulty(Number(v))}>
+            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="1">1 — Fácil</SelectItem>
+              <SelectItem value="2">2 — Média</SelectItem>
+              <SelectItem value="3">3 — Difícil</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+      <div className="space-y-1">
+        <Label className="text-xs">Enunciado</Label>
+        <Textarea value={statement} onChange={(e) => setStatement(e.target.value)} rows={3} />
+      </div>
+      <div className="space-y-2">
+        <Label className="text-xs">Alternativas (marque a correta)</Label>
+        {options.map((op, i) => (
+          <div key={i} className="flex items-center gap-2">
+            <input type="radio" name="qcorrect" checked={correctIndex === i} onChange={() => setCorrectIndex(i)} className="accent-primary h-4 w-4 shrink-0" aria-label={`Alternativa ${LETTERS[i]} correta`} />
+            <span className="text-xs font-bold w-4 shrink-0">{LETTERS[i]}</span>
+            <Textarea value={op} onChange={(e) => setOptions((arr) => arr.map((v, j) => (j === i ? e.target.value : v)))} rows={2} className="flex-1" />
+          </div>
+        ))}
+      </div>
+      <div className="space-y-1">
+        <Label className="text-xs">Explicação (curta)</Label>
+        <Textarea value={explanation} onChange={(e) => setExplanation(e.target.value)} rows={2} />
+      </div>
+      <div className="space-y-1">
+        <Label className="text-xs">Explicação detalhada (opcional)</Label>
+        <Textarea value={detailed} onChange={(e) => setDetailed(e.target.value)} rows={3} />
+      </div>
+      <div className="grid sm:grid-cols-2 gap-2">
+        <div className="space-y-1">
+          <Label className="text-xs">Base legal (opcional)</Label>
+          <Input value={legalBase} onChange={(e) => setLegalBase(e.target.value)} placeholder="Art. 29 do CTB" />
+        </div>
+        <div className="space-y-1">
+          <Label className="text-xs">Imagem (URL opcional)</Label>
+          <Input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="https://..." />
+        </div>
+      </div>
+      <div className="grid sm:grid-cols-3 gap-2">
+        <div className="space-y-1">
+          <Label className="text-xs">Pegadinha comum (opcional)</Label>
+          <Input value={commonMistake} onChange={(e) => setCommonMistake(e.target.value)} />
+        </div>
+        <div className="space-y-1">
+          <Label className="text-xs">Dica (opcional)</Label>
+          <Input value={tip} onChange={(e) => setTip(e.target.value)} />
+        </div>
+        <div className="space-y-1">
+          <Label className="text-xs">Gancho de memória (opcional)</Label>
+          <Input value={memoryHook} onChange={(e) => setMemoryHook(e.target.value)} />
+        </div>
+      </div>
+      <div className="flex items-center gap-2">
+        <Switch checked={trap} onCheckedChange={setTrap} id="q-trap" />
+        <Label htmlFor="q-trap" className="text-xs">Pegadinha clássica</Label>
+      </div>
+      <div className="flex gap-2 justify-end">
+        <Button variant="outline" onClick={onCancel}>Cancelar</Button>
+        <Button onClick={handleSave} disabled={saving}>{saving ? "Salvando..." : isNew ? "Criar questão" : "Salvar alterações"}</Button>
+      </div>
     </div>
   );
 }

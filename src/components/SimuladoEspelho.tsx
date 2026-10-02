@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  QUESTIONS,
+  getQuestionBank,
   CATEGORY_LABELS,
   INCIDENCE_META,
   REAL_EXAM_IDS,
@@ -46,7 +46,7 @@ function getMemoryHook(q: Question): string {
 
 export function SimuladoEspelho({ onExit }: { onExit: () => void }) {
   const questions = useMemo(
-    () => QUESTIONS.filter((q) => REAL_EXAM_IDS.includes(q.id)),
+    () => getQuestionBank().filter((q) => REAL_EXAM_IDS.includes(q.id)),
     [],
   );
   const [index, setIndex] = useState(0);
