@@ -865,6 +865,16 @@ function originOf(q: Question): "oficial" | "ia" | "custom" {
   return "ia";
 }
 
+function originLabel(q: Question): string {
+  if (q.origin === "real") return "Prova real";
+  if (q.origin === "ia") return "Gerada por IA";
+  return originOf(q) === "oficial" ? "Prova real" : originOf(q) === "custom" ? "Personalizada" : "Gerada por IA";
+}
+
+function isOfficial(q: Question): boolean {
+  return q.id.startsWith("detran_") || q.origin === "real";
+}
+
 export function QuestionsPanel() {
   const qc = useQueryClient();
   const [search, setSearch] = useState("");
@@ -896,7 +906,8 @@ export function QuestionsPanel() {
     if (cat !== "all" && q.category !== cat) return false;
     const o = originOf(q);
     if (orig === "off" && !disabledIds.has(q.id)) return false;
-    if (orig !== "all" && orig !== "off" && o !== orig) return false;
+    if (orig === "oficial" && !isOfficial(q)) return false;
+    if (orig !== "all" && orig !== "off" && orig !== "oficial" && o !== orig) return false;
     const s = search.trim().toLowerCase();
     if (!s) return true;
     return (
@@ -1135,7 +1146,10 @@ export function QuestionsPanel() {
             <div className="flex items-center gap-2 flex-wrap">
               <Badge variant="secondary" className="text-xs font-mono">{cur.id}</Badge>
               <Badge variant="secondary" className="text-xs">{CATEGORY_LABELS[cur.category]}</Badge>
-              <Badge variant="secondary" className="text-xs">{originOf(cur) === "oficial" ? "Prova real" : originOf(cur) === "custom" ? "Personalizada" : "IA"}</Badge>
+              <Badge variant="secondary" className="text-xs">{originLabel(cur)}</Badge>
+              <Badge variant="secondary" className="text-xs">Nível {cur.difficulty} — {cur.difficulty === 1 ? "Fácil" : cur.difficulty === 2 ? "Média" : "Difícil"}</Badge>
+              <Badge variant="secondary" className="text-xs">Incidência: {cur.incidence}</Badge>
+              {cur.trap && <Badge className="text-xs bg-destructive/15 text-destructive border border-destructive/40">Pegadinha</Badge>}
               {disabledIds.has(cur.id) && <Badge className="text-xs bg-destructive/15 text-destructive border border-destructive/40">Desativada</Badge>}
               {cur.id.startsWith("detran_") && <Badge className="text-xs bg-warning/15 text-warning border border-warning/40">Oficial — edite com cautela</Badge>}
             </div>
@@ -1178,6 +1192,7 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
   const [imageUrl, setImageUrl] = useState(initial?.image_url ?? "");
   const [incidence, setIncidence] = useState<string>(initial?.incidence ?? "media");
   const [difficulty, setDifficulty] = useState<number>(initial?.difficulty ?? 2);
+  const [origin, setOrigin] = useState<"ia" | "real">(initial?.origin ?? (initial?.id.startsWith("detran_") ? "real" : "ia"));
   const [trap, setTrap] = useState<boolean>(!!initial?.trap);
   const [saving, setSaving] = useState(false);
 
@@ -1195,7 +1210,7 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
         explanation: explanation.trim(), detailedExplanation: detailed.trim() || undefined,
         legalBase: legalBase.trim() || undefined, commonMistake: commonMistake.trim() || undefined,
         tip: tip.trim() || undefined, memoryHook: memoryHook.trim() || undefined,
-        image_url: imageUrl.trim() || undefined, incidence, difficulty, trap: trap || undefined,
+        image_url: imageUrl.trim() || undefined, incidence, difficulty, trap: trap || undefined, origin,
       };
       if (isNew) {
         const id = `custom-${Date.now().toString(36)}`;
@@ -1297,9 +1312,21 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
           <Input value={memoryHook} onChange={(e) => setMemoryHook(e.target.value)} />
         </div>
       </div>
-      <div className="flex items-center gap-2">
-        <Switch checked={trap} onCheckedChange={setTrap} id="q-trap" />
-        <Label htmlFor="q-trap" className="text-xs">Pegadinha clássica</Label>
+      <div className="grid sm:grid-cols-2 gap-2">
+        <div className="space-y-1">
+          <Label className="text-xs">Origem do conteúdo</Label>
+          <Select value={origin} onValueChange={(v) => setOrigin(v as "ia" | "real")}>
+            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ia">Gerada por IA</SelectItem>
+              <SelectItem value="real">Prova real (DETRAN)</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex items-end gap-2 pb-1">
+          <Switch checked={trap} onCheckedChange={setTrap} id="q-trap" />
+          <Label htmlFor="q-trap" className="text-xs">Pegadinha clássica</Label>
+        </div>
       </div>
       <div className="flex gap-2 justify-end">
         <Button variant="outline" onClick={onCancel}>Cancelar</Button>

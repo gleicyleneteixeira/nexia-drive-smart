@@ -20,6 +20,7 @@ export interface Question {
     group?: string; // chave do tema: variações da MESMA pergunta em níveis diferentes compartilham o group; o simulador nunca sorteia duas do mesmo group juntas
     placa?: PlacaId; // placa visual oficial para questões de identificação
     image_url?: string; // URL da imagem da placa (para renderização via img tag)
+    origin?: "ia" | "real"; // origem do conteúdo (admin exibe/filtra; detran_* equivale a prova real)
 }
 export const CATEGORY_LABELS: Record<Category, string> = {
     legislacao: "Legislação",
