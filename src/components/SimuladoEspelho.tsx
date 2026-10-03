@@ -262,6 +262,7 @@ export function SimuladoEspelho({ onExit }: { onExit: () => void }) {
                   <ArrowRight className="h-4 w-4" />
                 </button>
               )}
+              <p className="mt-3 text-center text-[10px] text-muted-foreground/60 select-none">cód. {q.id}</p>
             </motion.div>
           </AnimatePresence>
         </>

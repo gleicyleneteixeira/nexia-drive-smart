@@ -7313,6 +7313,39 @@ export const QUESTIONS: Question[] = [
         group: "perfil-condutor",
         origin: "ia"
     },
+    {
+        id: "ext_placa_excecao_01",
+        category: "placas",
+        statement: "As placas de formato octogonal e de formato triangular invertido são exceções quanto à forma dentro de qual família de sinalização:",
+        options: ["Placas de sinalização temporária, de fundo laranja e formato retangular.", "Placas de indicação, de fundo azul, verde ou marrom e formato retangular.", "Placas de regulamentação, cuja regra é o formato circular com borda vermelha.", "Placas de advertência, cujo padrão é o quadrado apoiado na ponta, em losango."],
+        correctIndex: 2,
+        explanation: "Correta C: R-1 (PARE, octogonal) e R-2 (Dê a Preferência, triângulo invertido) são as duas exceções da regulamentação, cujo padrão é circular.",
+        detailedExplanation: "O octógono da R-1 e o triângulo invertido da R-2 permitem reconhecê-las até pelo verso. Advertência usa losango (não triângulo invertido); temporárias e indicação usam retângulo.",
+        legalBase: "Anexo II do CTB",
+        commonMistake: "Marcar advertência lembrando do triângulo — mas o padrão da advertência é o losango, não o triângulo invertido.",
+        tip: "Octógono + triângulo invertido = regulamentação.",
+        memoryHook: "Regra circular, exceção: PARE de 8 e preferência de ponta-cabeça.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ext_cond_adv_via_01",
+        category: "direcao-defensiva",
+        statement: "Na doutrina de direção defensiva, aclives e declives íngremes são classificados como condições adversas:",
+        options: ["Do veículo, como falhas mecânicas e falta de manutenção preventiva.", "Da via, como características do relevo e do traçado da pista.", "Do trânsito, como congestionamentos e comportamento de outros condutores.", "Do tempo, como chuva, neblina e ventos fortes sobre a pista."],
+        correctIndex: 1,
+        explanation: "Correta B: relevo (aclives, declives, curvas) é condição adversa da via; veículo é mecânica, tempo é clima.",
+        detailedExplanation: "As condições adversas se dividem em: condutor, via (relevo, traçado, pavimento), veículo (mecânica), trânsito (fluxo, outros usuários), tempo (clima) e luz. Aclive e declive são do relevo, logo da via.",
+        commonMistake: "Marcar tempo, lembrando de chuva em serra — mas o relevo em si é característica permanente da via, não do clima.",
+        tip: "Relevo = via.",
+        memoryHook: "Subiu e desceu, é da via que padeceu.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    }
 ];
 
 // Questões que realmente caíram na prova do DETRAN.
