@@ -693,7 +693,7 @@ function SimuladoPage() {
                   ⏹️ Finalizar
                 </button>
               </div>
-              <p className="text-center text-[10px] text-muted-foreground/60 select-none">cód. {q.id}</p>
+              <p className="text-center text-[10px] text-muted-foreground/60">cód. <span className="select-all font-mono">{q.id}</span></p>
             </div>
           </motion.div>
         </AnimatePresence>
@@ -1178,7 +1178,7 @@ function ReviewCard({
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-xs text-muted-foreground mb-1">
-            Questão {index + 1} · {CATEGORY_LABELS[q.category]} · cód. {q.id}
+            Questão {index + 1} · {CATEGORY_LABELS[q.category]} · cód. <span className="select-all font-mono">{q.id}</span>
           </p>
           <p className="text-sm font-medium line-clamp-2">{q.statement}</p>
         </div>
