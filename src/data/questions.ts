@@ -1932,7 +1932,8 @@ export const QUESTIONS: Question[] = [
         tip: "Buraco na camada = Mais radiação = Mais problemas na pele e olhos.",
         incidence: "alta",
         trap: true,
-        difficulty: 3
+        difficulty: 3,
+        origin: "real"
     },
     {
         id: "qp05",

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchLibraryItems, checkIsAdmin, SUPER_ADMIN_EMAIL, CRONOGRAMA_BOOK_KEY, fetchCronogramaBookId, type LibraryItem, type LibraryItemType } from "@/lib/library";
-import { QUESTIONS, CATEGORY_LABELS, getQuestionBank, setQuestionOverrides, type Question, type Category } from "@/data/questions";
+import { QUESTIONS, CATEGORY_LABELS, INCIDENCE_META, getQuestionBank, setQuestionOverrides, type Question, type Category } from "@/data/questions";
 import { Placa, type PlacaId } from "@/components/Placa";
 
 const PLACA_IDS: PlacaId[] = ["R-1", "R-2", "R-6a", "R-6b", "R-19", "R-25a", "R-25d", "A-1a", "A-2b", "A-13a", "A-32b", "A-33a", "I-Hospital", "I-Posto"];
@@ -26,7 +26,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, X, XCircle, Star, Heart, Volume2, CheckCircle2, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen, Video, BadgeDollarSign, Gift, CheckCheck, CalendarClock, Lock, ChevronUp, ChevronDown, GripVertical, BarChart3, Brain, Play, Eye, EyeOff, ListChecks } from "lucide-react";
+import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, X, XCircle, Star, Heart, Volume2, CheckCircle2, Check, AlertTriangle, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen, Video, BadgeDollarSign, Gift, CheckCheck, CalendarClock, Lock, ChevronUp, ChevronDown, GripVertical, BarChart3, Brain, Play, Eye, EyeOff, ListChecks } from "lucide-react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import * as XLSX from "xlsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
@@ -981,6 +981,7 @@ export function QuestionsPanel() {
   const [idx, setIdx] = useState(0);
   const [editing, setEditing] = useState<Question | null>(null);
   const [creating, setCreating] = useState(false);
+  const [preview, setPreview] = useState<Question | null>(null);
   const [showImport, setShowImport] = useState(false);
   const [showModel, setShowModel] = useState(false);
   const [importText, setImportText] = useState("");
@@ -1230,6 +1231,10 @@ export function QuestionsPanel() {
         </div>
       </div>
 
+      {preview && (
+        <SimuladoPreviewModal q={preview} onClose={() => setPreview(null)} />
+      )}
+
       {(editing || creating) && (
         <QuestionForm
           initial={editing}
@@ -1245,6 +1250,7 @@ export function QuestionsPanel() {
             <p className="text-xs text-muted-foreground">{Math.min(idx, filtered.length - 1) + 1} / {filtered.length}</p>
             <Button size="sm" variant="outline" onClick={() => go(1)}>Próxima ›</Button>
           </div>
+          <Button size="sm" variant="secondary" className="w-full" onClick={() => cur && setPreview(cur)}><Eye className="h-3.5 w-3.5 mr-1" /> Pré-visualizar no simulado</Button>
           <div className="rounded-xl border border-border/40 bg-background/40 p-4 space-y-2">
             <div className="flex items-center gap-2 flex-wrap">
               <Badge variant="secondary" className="text-xs font-mono">{cur.id}</Badge>
@@ -1276,6 +1282,100 @@ export function QuestionsPanel() {
       ) : (
         <p className="text-sm text-muted-foreground text-center py-6">Nenhuma questão encontrada. Ajuste a busca ou os filtros.</p>
       )}
+    </div>
+  );
+}
+
+// Prévia idêntica ao simulado do aluno: sem a correta marcada; o admin
+// clica numa opção, confere o acerto/erro e lê a explicação, como o usuário final.
+function SimuladoPreviewModal({ q, onClose }: { q: Question; onClose: () => void }) {
+  const [selected, setSelected] = useState<number | null>(null);
+  const incMeta = INCIDENCE_META[q.incidence];
+
+  return (
+    <div className="fixed inset-0 z-50 flex bg-background p-4 overflow-y-auto" onClick={onClose}>
+      <div className="bg-card rounded-2xl md:rounded-3xl p-4 md:p-5 max-w-2xl w-full shadow-xl border max-h-fit md:max-h-[92vh] md:overflow-y-auto relative m-auto" onClick={(e) => e.stopPropagation()}>
+        <button onClick={onClose} aria-label="Fechar" className="absolute top-3 right-3 inline-flex items-center justify-center h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors">
+          <X className="h-4 w-4" />
+        </button>
+        <p className="text-[10px] uppercase tracking-widest text-primary-glow font-bold mb-2 text-center">Prévia no simulado — clique numa opção</p>
+        <div className="flex flex-wrap gap-1.5 mb-2">
+          <span className={`text-xs px-2.5 py-1 rounded-full border ${incMeta.className}`}>
+            {incMeta.emoji} {incMeta.label}
+          </span>
+          <span className="text-xs px-2.5 py-1 rounded-full border border-border bg-secondary/50">
+            {CATEGORY_LABELS[q.category]}
+          </span>
+          {q.trap && (
+            <span className="text-xs px-2.5 py-1 rounded-full border border-destructive/30 bg-destructive/10 text-destructive flex items-center gap-1">
+              <AlertTriangle className="h-3 w-3" /> Pegadinha clássica
+            </span>
+          )}
+        </div>
+        <h2 className="text-[15px] leading-snug md:text-xl font-medium md:leading-relaxed">
+          {q.statement}
+        </h2>
+        {q.image_url ? (
+          <div className="mt-2 flex justify-center">
+            <img src={q.image_url} alt="imagem da questão" className="max-w-[140px] max-h-[140px] object-contain" />
+          </div>
+        ) : q.placa ? (
+          <div className="mt-2 flex justify-center">
+            <Placa id={q.placa} size={130} />
+          </div>
+        ) : null}
+        <div className="mt-2 space-y-1.5">
+          {q.options.map((opt, i) => {
+            const isSel = selected === i;
+            const isCorrect = i === q.correctIndex;
+            const reveal = selected !== null;
+            const state = !reveal ? "idle" : isCorrect ? "correct" : isSel ? "wrong" : "muted";
+            return (
+              <button
+                key={i}
+                onClick={() => setSelected(i)}
+                disabled={selected !== null}
+                className={`w-full text-left p-2 md:p-3 rounded-2xl border transition-all flex items-start gap-2.5 ${
+                  state === "correct"
+                    ? "border-success/50 bg-success/10"
+                    : state === "wrong"
+                      ? "border-destructive/50 bg-destructive/10"
+                      : state === "muted"
+                        ? "border-border bg-secondary/30 opacity-60"
+                        : "border-border bg-secondary/50 hover:border-primary/40 hover:bg-secondary"
+                } ${selected === null ? "cursor-pointer" : "cursor-default"}`}
+              >
+                <div className={`shrink-0 w-7 h-7 rounded-lg flex items-center justify-center font-semibold text-sm border ${
+                  state === "correct"
+                    ? "bg-success text-success-foreground border-success"
+                    : state === "wrong"
+                      ? "bg-destructive text-destructive-foreground border-destructive"
+                      : "bg-background/40 border-border"
+                }`}>
+                  {state === "correct" ? <Check className="h-4 w-4" /> : state === "wrong" ? <X className="h-4 w-4" /> : LETTERS[i]}
+                </div>
+                <span className="text-[13px] md:text-base pt-0.5">{opt}</span>
+              </button>
+            );
+          })}
+        </div>
+        {selected !== null && (
+          <div className="mt-2 rounded-xl border border-border/60 bg-background/40 p-2.5 space-y-1.5">
+            {selected === q.correctIndex ? (
+              <p className="text-sm font-semibold text-success">Você acertou! 🎉</p>
+            ) : (
+              <p className="text-sm font-semibold text-destructive">Não foi dessa vez. A correta é a {LETTERS[q.correctIndex]}.</p>
+            )}
+            <p className="text-xs uppercase tracking-wide text-primary-glow font-semibold">Explicação</p>
+            <p className="text-sm text-foreground/90 leading-relaxed">{q.detailedExplanation ?? q.explanation}</p>
+            {q.legalBase && <p className="text-xs text-muted-foreground">Base: {q.legalBase}</p>}
+          </div>
+        )}
+        <div className="flex gap-3 mt-3">
+          <Button variant="outline" className="flex-1" onClick={() => setSelected(null)} disabled={selected === null}>Responder de novo</Button>
+          <Button className="flex-1" onClick={onClose}>Fechar</Button>
+        </div>
+      </div>
     </div>
   );
 }
