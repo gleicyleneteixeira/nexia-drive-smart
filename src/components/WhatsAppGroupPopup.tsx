@@ -15,11 +15,37 @@ type GroupConfig = {
 
 const GROUP_KEYS: GroupKey[] = ["whatsapp", "tiktok"];
 
-// Depois que a pessoa clica "Lembrar mais tarde", o popup só reaparece após este intervalo
+// Cooldown do popup do TikTok (não tem regra de recusas; só some por 3 dias após dispensar)
 const DISMISS_COOLDOWN_MS = 3 * 24 * 60 * 60 * 1000;
-const REMIND_LATER_COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24h
 
-const REMIND_LATER_KEY = "nexia_whatsapp_reminder_time";
+// Regra do convite do grupo de WhatsApp:
+// - "Já sou membro" (joined)     -> nunca mais exibe
+// - "Lembrar mais tarde" (later) -> exibe de novo no próximo acesso (1x por sessão)
+// - "Não quero participar"       -> relembra após 3 dias, no máximo 3 vezes, depois nunca mais
+const DECLINE_COOLDOWN_MS = 3 * 24 * 60 * 60 * 1000; // 3 dias
+const MAX_DECLINES = 3;
+
+// Guarda de sessão: o popup aparece no máximo 1x por sessão (aba). No próximo
+// acesso (nova sessão) ele pode aparecer de novo, conforme a regra acima.
+const SESSION_SHOWN_KEY = "nexia:whatsapp_popup_shown_session";
+
+function shownThisSession(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    return sessionStorage.getItem(SESSION_SHOWN_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function markShownThisSession() {
+  if (typeof window === "undefined") return;
+  try {
+    sessionStorage.setItem(SESSION_SHOWN_KEY, "1");
+  } catch {
+    // ignora
+  }
+}
 
 function getDismissedAt(key: GroupKey): number | null {
   if (typeof window === "undefined") return null;
@@ -54,30 +80,25 @@ const GROUP_CONFIG: Record<GroupKey, GroupConfig> = {
 
 type WhatsappInviteStatus = "pending" | "joined" | "dismissed" | "later";
 
-// Status persistido no banco (whatsapp_invite_status):
-//  - 'pending'   -> ainda não respondeu, o modal pode ser exibido
-//  - 'joined'    -> entrou no grupo, nunca mais exibir
-//  - 'dismissed' -> recusou permanentemente, nunca mais exibir
-//  - 'later'     -> adiou; só reaparece após o cooldown (whatsapp_invite_later_at)
+// Status persistido no banco (whatsapp_invite_status + whatsapp_invite_declines):
+//  - 'pending'   -> ainda não respondeu; exibe 1x por sessão (próximo acesso mostra de novo)
+//  - 'joined'    -> entrou ou já era membro; nunca mais exibe
+//  - 'later'     -> adiou; exibe de novo no próximo acesso (1x por sessão)
+//  - 'dismissed' -> recusou; relembra após 3 dias (whatsapp_invite_later_at),
+//                   no máximo 3 recusas (whatsapp_invite_declines); depois nunca mais
 function getWhatsappShouldShow(
   status: string | null,
   laterAt: string | null,
+  declines: number | null,
   legacyGroupStatus: string | null,
 ): boolean {
   if (legacyGroupStatus === "joined") return false;
-  if (status === "joined" || status === "dismissed") return false;
+  if (status === "joined") return false;
 
-  // Check localStorage first (for immediate persistence)
-  const localDismissed = getDismissedAt("whatsapp");
-  if (localDismissed && Date.now() - localDismissed < DISMISS_COOLDOWN_MS) return false;
-
-  // Check database status
-  const dbDismissed = getDismissedAt("whatsapp");
-  if (dbDismissed && Date.now() - dbDismissed < DISMISS_COOLDOWN_MS) return false;
-
-  if (status === "later") {
+  if (status === "dismissed") {
+    if ((declines ?? 0) >= MAX_DECLINES) return false;
     const at = laterAt ? new Date(laterAt).getTime() : 0;
-    return at > 0 ? Date.now() - at >= DISMISS_COOLDOWN_MS : false;
+    return Date.now() - at >= DECLINE_COOLDOWN_MS;
   }
 
   return true;
@@ -87,6 +108,7 @@ export function GroupPopups({
   userId,
   whatsappInviteStatus,
   laterAt,
+  declines,
   groupStatus,
   onDone,
   onVisibleChange,
@@ -94,6 +116,7 @@ export function GroupPopups({
   userId: string;
   whatsappInviteStatus: string | null;
   laterAt: string | null;
+  declines: number | null;
   groupStatus: string | null;
   onDone?: () => void;
   onVisibleChange?: (visible: boolean) => void;
@@ -127,16 +150,16 @@ export function GroupPopups({
     if (settings[cfg.showKey] === "false" || settings[cfg.showKey] === undefined) return false;
     if (!settings[cfg.linkKey]) return false;
     if (key === "whatsapp") {
-      // Check 24h "Lembrar mais tarde" cooldown from localStorage
-      const remindAt = localStorage.getItem(REMIND_LATER_KEY);
-      if (remindAt && Date.now() < Number(remindAt)) return false;
-      return getWhatsappShouldShow(whatsappInviteStatus, laterAt, groupStatus);
+      // No máximo 1 exibição por sessão: no próximo acesso (nova sessão) pode aparecer de novo
+      if (shownThisSession()) return false;
+      return getWhatsappShouldShow(whatsappInviteStatus, laterAt, declines, groupStatus);
     }
     if (tiktokJoined) return false;
     return true;
   });
 
   useEffect(() => {
+    if (pendingGroup === "whatsapp") markShownThisSession();
     onVisibleChange?.(!!pendingGroup);
   }, [pendingGroup, onVisibleChange]);
 
@@ -146,16 +169,16 @@ export function GroupPopups({
   const cfg = GROUP_CONFIG[activeGroup];
   const link = settings[cfg.linkKey];
 
-  async function setWhatsappInviteStatus(status: WhatsappInviteStatus) {
+  async function setWhatsappInviteStatus(
+    status: WhatsappInviteStatus,
+    extra?: { whatsapp_invite_later_at?: string; whatsapp_invite_declines?: number },
+  ) {
     const patch: {
       whatsapp_invite_status: WhatsappInviteStatus;
       whatsapp_invite_later_at?: string;
-    } = { whatsapp_invite_status: status };
-    if (status === "later") {
-      patch.whatsapp_invite_later_at = new Date().toISOString();
-    }
-    localStorage.removeItem("nexia:group_dismissed_at:whatsapp");
-    await supabase.from("profiles").update(patch).eq("id", userId);
+      whatsapp_invite_declines?: number;
+    } = { whatsapp_invite_status: status, ...extra };
+    await (supabase.from("profiles") as any).update(patch).eq("id", userId);
   }
 
   function handleJoinClick() {
@@ -171,8 +194,8 @@ export function GroupPopups({
 
   async function markJoined() {
     if (activeGroup === "whatsapp") {
+      // "Já sou membro": nunca mais convida
       await setWhatsappInviteStatus("joined");
-      localStorage.setItem("nexia:group_dismissed_at:whatsapp", String(Date.now()));
       setDismissed((d) => ({ ...d, whatsapp: true }));
     } else {
       localStorage.setItem("nexia:tiktok_group_joined", "true");
@@ -183,9 +206,8 @@ export function GroupPopups({
 
   async function remindLater() {
     if (activeGroup === "whatsapp") {
-      await setWhatsappInviteStatus("later");
-      localStorage.setItem(REMIND_LATER_KEY, String(Date.now() + REMIND_LATER_COOLDOWN_MS));
-      localStorage.setItem("nexia:group_dismissed_at:whatsapp", String(Date.now()));
+      // "Lembrar mais tarde": mostra de novo no próximo acesso
+      await setWhatsappInviteStatus("later", { whatsapp_invite_later_at: new Date().toISOString() });
       setDismissed((d) => ({ ...d, whatsapp: true }));
     } else {
       setDismissedAt(activeGroup);
@@ -194,10 +216,14 @@ export function GroupPopups({
     onDone?.();
   }
 
-  async function refusePermanently() {
+  async function refuseTemporarily() {
     if (activeGroup === "whatsapp") {
-      await setWhatsappInviteStatus("dismissed");
-      localStorage.setItem("nexia:group_dismissed_at:whatsapp", String(Date.now()));
+      // "Não quero participar": relembra após 3 dias, no máximo 3 vezes
+      const next = (declines ?? 0) + 1;
+      await setWhatsappInviteStatus("dismissed", {
+        whatsapp_invite_later_at: new Date().toISOString(),
+        whatsapp_invite_declines: next,
+      });
       setDismissed((d) => ({ ...d, whatsapp: true }));
     } else {
       setDismissedAt(activeGroup);
@@ -268,7 +294,7 @@ export function GroupPopups({
                   Lembrar mais tarde
                 </button>
                 <button
-                  onClick={refusePermanently}
+                  onClick={refuseTemporarily}
                   className="w-full text-xs text-destructive/80 hover:text-destructive py-2"
                 >
                   Não quero participar

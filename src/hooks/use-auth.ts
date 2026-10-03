@@ -18,6 +18,7 @@ export interface Profile {
   group_status: string | null;
   whatsapp_invite_status: string;
   whatsapp_invite_later_at: string | null;
+  whatsapp_invite_declines: number | null;
   free_trial_enabled: boolean | null;
 }
 

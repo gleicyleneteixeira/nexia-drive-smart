@@ -782,6 +782,7 @@ function CheckoutPage() {
           userId={user?.id ?? ""}
           whatsappInviteStatus={profile?.whatsapp_invite_status ?? null}
           laterAt={profile?.whatsapp_invite_later_at ?? null}
+          declines={(profile as any)?.whatsapp_invite_declines ?? null}
           groupStatus={profile?.group_status ?? null}
           onVisibleChange={(v) => { groupVisibleRef.current = v; }}
           onDone={() => navigate({ to: "/app", replace: true })}

@@ -6194,8 +6194,1127 @@ export const QUESTIONS: Question[] = [
         trap: true,
         difficulty: 2,
         origin: "ia"
-    }
+    },
+    {
+        id: "cid_boa_01",
+        category: "legislacao",
+        statement: "Ao aproximar-se de faixa de pedestres com pessoa iniciando a travessia em via urbana, qual deve ser a atitude correta do condutor do veículo?",
+        options: ["Buzinar brevemente para avisar o pedestre e seguir sem reduzir a velocidade na faixa.", "Reduzir um pouco e passar devagar ao lado do pedestre, sem precisar parar totalmente.", "Parar o veículo antes da faixa e aguardar o pedestre concluir a travessia com segurança.", "Acelerar para passar antes do pedestre e assim evitar reter o fluxo de veículos atrás."],
+        correctIndex: 2,
+        explanation: "A correta exige parada para o pedestre concluir a travessia; os distratores confundem porque buzinar ou passar devagar parecem agilizar sem desrespeitar.",
+        legalBase: "Art. 214 do CTB",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "conduta-pedestres",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_02",
+        category: "legislacao",
+        statement: "Em dia de chuva forte, ao passar por calçada com pedestres próximos à pista, o que o condutor deve fazer para demonstrar cidadania no trânsito?",
+        options: ["Reduzir a velocidade e desviar de poças para não molhar os pedestres na calçada.", "Manter a mesma velocidade para sair logo do trecho alagado e liberar a via.", "Buzinar para alertar os pedestres e passar rápido pela água acumulada.", "Acelerar sobre a poça para testar a aderência dos pneus na pista molhada."],
+        correctIndex: 0,
+        explanation: "Reduzir e evitar molhar pedestres é a conduta cidadã; manter ou acelerar parece eficiente, mas molha pessoas e gera risco.",
+        legalBase: "Art. 171 do CTB",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "conduta-pedestres",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_03",
+        category: "legislacao",
+        statement: "Diante de idoso com dificuldade de locomoção tentando atravessar fora da faixa em via de baixo movimento, como o motorista deve agir corretamente?",
+        options: ["Seguir sem parar, pois fora da faixa o pedestre não tem prioridade sobre os veículos.", "Buzinar de forma insistente para apressar o idoso e liberar rapidamente a pista.", "Mandar o idoso voltar e atravessar apenas na faixa distante, sem oferecer ajuda.", "Reduzir, parar com paciência e facilitar a travessia segura do idoso mesmo fora da faixa."],
+        correctIndex: 3,
+        explanation: "A paciência e a parada protegem o idoso vulnerável; a pegadinha é achar que a ausência de faixa dispensa a solidariedade e a prudência.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        group: "conduta-pedestres",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_04",
+        category: "legislacao",
+        statement: "Ao trafegar por rua estreita com crianças brincando na calçada e correndo risco de invadir a pista, qual conduta defensiva o condutor deve adotar?",
+        options: ["Manter a velocidade regulamentar, pois a responsabilidade é dos pais que supervisionam as crianças.", "Reduzir bastante a velocidade, redobrar a atenção e estar pronto para frear imediatamente.", "Buzinar continuamente para assustar as crianças e mantê-las longe da pista.", "Acelerar para passar rápido pelo trecho e diminuir o tempo de exposição ao risco."],
+        correctIndex: 1,
+        explanation: "Reduzir e ficar pronto para frear previne atropelamentos; buzinar ou acelerar parecem afastar o risco, mas aumentam o perigo.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "conduta-pedestres",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_05",
+        category: "legislacao",
+        statement: "Ao identificar pessoa com deficiência visual com bengala aguardando para atravessar a via, qual é a atitude mais respeitosa e segura do condutor?",
+        options: ["Buzinar para avisar que está passando e seguir, pois o som orienta a pessoa.", "Passar devagar ao lado dela sem parar, para não interromper o fluxo dos veículos.", "Parar o veículo, sinalizar e permitir que a pessoa atravesse com tranquilidade e segurança.", "Seguir normalmente, pois a preferência só vale depois que o pedestre iniciou a travessia."],
+        correctIndex: 2,
+        explanation: "Parar e ceder a passagem garante segurança à pessoa com deficiência; buzinar ou passar devagar parecem ajudar, mas assustam e pressionam.",
+        legalBase: "Art. 214 do CTB",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "conduta-pedestres",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_06",
+        category: "legislacao",
+        statement: "Em parada de ônibus com passageiros embarcando pela pista por falta de recuo, qual deve ser o comportamento do motorista que se aproxima do local?",
+        options: ["Ultrapassar pela esquerda com velocidade para não reter o trânsito atrás do ônibus.", "Reduzir a velocidade ou parar e aguardar o embarque seguro dos passageiros na pista.", "Buzinar e passar com cuidado entre os passageiros para manter o ritmo da via.", "Manter a velocidade e desviar por pouco dos pedestres para não perder tempo."],
+        correctIndex: 1,
+        explanation: "Reduzir ou parar protege quem embarca pela pista; ultrapassar ou buzinar parecem manter a fluidez, mas expõem pedestres a atropelamento.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "conduta-pedestres",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_07",
+        category: "legislacao",
+        statement: "Ao avistar pedestre já efetuando a travessia em cruzamento sem semáforo, mesmo fora da faixa demarcada, qual decisão o condutor deve tomar?",
+        options: ["Frear e aguardar o pedestre concluir a travessia, pois a segurança prevalece sobre a faixa.", "Buzinar para advertir o pedestre do erro e passar devagar ao seu lado.", "Acelerar, pois fora da faixa o pedestre perdeu o direito à preferência na travessia.", "Desviar sem reduzir a velocidade, confiando apenas na habilidade de direção."],
+        correctIndex: 0,
+        explanation: "Com travessia iniciada, o condutor deve frear e aguardar; a pegadinha é crer que a falta de faixa autoriza seguir ou pressionar com buzina.",
+        legalBase: "Art. 214 do CTB",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        group: "conduta-pedestres",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_08",
+        category: "legislacao",
+        statement: "Em frente a escola no horário de saída dos alunos, com grande movimentação de crianças na calçada, o que se espera de um condutor consciente?",
+        options: ["Manter a velocidade da via, pois as crianças devem permanecer sobre a calçada.", "Buzinar para dispersar os grupos e conseguir passar sem precisar reduzir.", "Acelerar para deixar o local congestionado o mais rápido possível.", "Reduzir muito a velocidade, redobrar a atenção e estar pronto para parar de imediato."],
+        correctIndex: 3,
+        explanation: "Perto de escola exige velocidade mínima e atenção máxima; manter ou buzinar parecem normais, mas ignoram a imprevisibilidade das crianças.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 1,
+        group: "conduta-pedestres",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_09",
+        category: "legislacao",
+        statement: "Quando o semáforo abre para os veículos mas ainda há pedestres terminando a travessia na faixa, qual deve ser a reação correta do motorista?",
+        options: ["Arrancar devagar forçando a passagem, pois o sinal verde já autoriza os veículos.", "Buzinar para apressar os pedestres e dividir o espaço da faixa com eles.", "Aguardar parado até os pedestres concluírem a travessia e liberarem totalmente a faixa.", "Avançar com cuidado pelo canto da faixa enquanto os pedestres passam pelo outro lado."],
+        correctIndex: 2,
+        explanation: "O verde não autoriza atropelar quem ainda atravessa; arrancar devagar ou buzinar parecem aproveitar o sinal, mas violam a preferência.",
+        legalBase: "Art. 214 do CTB",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "conduta-pedestres",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_10",
+        category: "legislacao",
+        statement: "Ao estacionar o veículo em área urbana movimentada, por que o motorista deve evitar bloquear calçadas, rampas de acesso e guias rebaixadas?",
+        options: ["Porque parar sobre a calçada melhora a visibilidade do veículo para outros motoristas.", "Porque calçada livre garante passagem de pedestres, carrinhos e cadeirantes com segurança.", "Porque bloquear a calçada só é problema quando há fiscalização com guincho por perto.", "Porque subir na calçada protege os pneus do desgaste causado pelo asfalto irregular."],
+        correctIndex: 1,
+        explanation: "Calçada livre preserva mobilidade e segurança; os distratores confundem ao tratar calçada como extensão da vaga ou proteção do carro.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 1,
+        group: "conduta-pedestres",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_11",
+        category: "legislacao",
+        statement: "Em via com poça d'água junto ao ponto de ônibus onde pedestres aguardam, qual atitude revela boa conduta e respeito por parte do motorista?",
+        options: ["Reduzir a velocidade e afastar-se da borda para não jogar água nos pedestres.", "Passar na mesma velocidade, pois desviar pode atrapalhar os veículos ao lado.", "Buzinar para os pedestres se afastarem e passar rápido sobre a poça.", "Acelerar para atravessar a poça antes que mais pedestres cheguem ao ponto."],
+        correctIndex: 0,
+        explanation: "Reduzir e desviar evita molhar quem espera; buzinar ou manter a velocidade parecem práticos, mas demonstram desrespeito e podem gerar sanção.",
+        legalBase: "Art. 171 do CTB",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "conduta-pedestres",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_12",
+        category: "legislacao",
+        statement: "Ao conduzir à noite em rua residencial e perceber pedestre caminhando pelo bordo da pista por falta de calçada, o que o condutor deve fazer?",
+        options: ["Buzinar forte e manter a velocidade para alertar o pedestre da aproximação do carro.", "Manter farol alto sobre o pedestre e passar na mesma velocidade para enxergar melhor.", "Ultrapassar bem próximo ao pedestre para não invadir a faixa contrária da rua.", "Reduzir a velocidade, dar espaço lateral e ultrapassar o pedestre com segurança."],
+        correctIndex: 3,
+        explanation: "Reduzir e dar espaço protege quem anda no bordo; farol alto, buzina forte ou passar colado parecem alertar, mas ofuscam e assustam.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "conduta-pedestres",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_13",
+        category: "legislacao",
+        statement: "Diante de gestante com criança no colo aguardando oportunidade para atravessar rua movimentada, qual conduta expressa cidadania no trânsito?",
+        options: ["Seguir adiante, pois sem faixa próxima não há obrigação de parar para pedestres.", "Parar com segurança e ceder a passagem, facilitando a travessia da gestante.", "Buzinar e sinalizar com a mão para ela atravessar rápido entre os carros.", "Passar devagar sem parar, para que ela aguarde uma brecha maior no fluxo."],
+        correctIndex: 1,
+        explanation: "Parar e ceder protege quem tem mobilidade reduzida; buzinar ou passar devagar parecem gentis, mas transferem o risco para a gestante.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "conduta-pedestres",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_14",
+        category: "legislacao",
+        statement: "Em cruzamento com grande fluxo de pedestres saindo de evento, mesmo com sinal verde para veículos, como deve proceder o condutor prudente?",
+        options: ["Avançar devagar abrindo caminho entre os pedestres para não perder o verde.", "Buzinar e avançar, pois o sinal verde garante a passagem imediata dos veículos.", "Aguardar os pedestres liberarem a pista, avançando só quando houver segurança total.", "Acelerar com cuidado pelo espaço livre, dividindo a via com os pedestres."],
+        correctIndex: 2,
+        explanation: "Mesmo no verde, a segurança dos pedestres prevalece; avançar devagar ou buzinar parecem exercer o direito, mas forçam passagem perigosa.",
+        legalBase: "Art. 214 do CTB",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        group: "conduta-pedestres",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_15",
+        category: "legislacao",
+        statement: "Ao presenciar outro motorista avançando sobre a faixa e assustando pedestres, qual atitude cidadã o condutor consciente deve adotar na sequência?",
+        options: ["Dar o bom exemplo, mantendo distância e parando para os pedestres atravessarem tranquilos.", "Buzinar e fazer gestos para repreender o outro motorista no meio do trânsito.", "Acelerar e agir da mesma forma para não ficar para trás no fluxo de veículos.", "Perseguir o veículo infrator para adverti-lo pessoalmente sobre a conduta errada."],
+        correctIndex: 0,
+        explanation: "O exemplo de parar acalma e protege; repreender com buzina ou imitar parecem justiça, mas geram conflito e novo risco.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        group: "conduta-pedestres",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_16",
+        category: "legislacao",
+        statement: "Trafegando em avenida com calçada estreita e pedestres disputando espaço com ambulantes, qual cuidado extra o motorista deve ter ao passar?",
+        options: ["Manter a velocidade normal, pois os pedestres estão fora da pista de rolamento.", "Buzinar para os pedestres se apertarem contra as bancas e liberarem a via.", "Acelerar para deixar rapidamente o trecho de calçada congestionada para trás.", "Reduzir a velocidade e manter distância lateral, prevendo que alguém pise na pista."],
+        correctIndex: 3,
+        explanation: "Reduzir e dar espaço previne atropelamento se alguém cair na pista; buzinar ou manter a velocidade parecem suficientes, mas ignoram o risco.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "conduta-pedestres",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_17",
+        category: "legislacao",
+        statement: "Ao aproximar-se de travessia de pedestres em frente a hospital com pessoas em cadeira de rodas, qual é a conduta mais adequada e solidária?",
+        options: ["Passar devagar sem parar totalmente, para não reter o trânsito atrás do veículo.", "Parar totalmente antes da faixa e aguardar a travessia completa com paciência.", "Buzinar levemente para apressar o acompanhante e liberar logo a faixa.", "Acenar para passarem e seguir adiante antes que iniciem a travessia."],
+        correctIndex: 1,
+        explanation: "A parada total respeita o tempo maior de quem usa cadeira de rodas; passar devagar ou buzinar parecem ágeis, mas pressionam e ameaçam.",
+        legalBase: "Art. 214 do CTB",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "conduta-pedestres",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_18",
+        category: "legislacao",
+        statement: "Em fila de veículos parados sobre faixa de pedestres em congestionamento urbano, o que o motorista deve fazer para respeitar quem atravessa a via?",
+        options: ["Permanecer sobre a faixa se já entrou nela, pois voltar poderia causar colisão traseira.", "Avançar colado no carro da frente para liberar espaço para os veículos de trás.", "Evitar bloquear a faixa, parando antes dela e mantendo a passagem livre aos pedestres.", "Buzinar para os pedestres aguardarem, pois a fila já ocupou a faixa primeiro."],
+        correctIndex: 2,
+        explanation: "Não bloquear a faixa preserva a travessia; a pegadinha é achar que, uma vez sobre ela, permanecer é inevitável ou aceitável.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        group: "conduta-pedestres",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_19",
+        category: "legislacao",
+        statement: "Ao dar marcha à ré em estacionamento com pedestres circulando atrás do veículo, qual procedimento garante segurança e demonstra boa conduta?",
+        options: ["Olhar retrovisores, olhar para trás e manobrar devagar somente com o caminho livre.", "Buzinar e dar ré imediatamente para avisar que o carro tem prioridade na manobra.", "Acelerar a ré para concluir rápido a manobra antes que cheguem mais pedestres.", "Confiar apenas na câmera de ré e continuar a manobra sem olhar ao redor."],
+        correctIndex: 0,
+        explanation: "Olhar, usar espelhos e ir devagar evitam atropelar; confiar só na câmera ou buzinar e ir parecem práticos, mas deixam pontos cegos.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 1,
+        group: "conduta-pedestres",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_20",
+        category: "legislacao",
+        statement: "Quando criança desacompanhada demonstra intenção incerta de atravessar a rua correndo entre carros estacionados, qual deve ser a reação do condutor?",
+        options: ["Buzinar para avisar presença e seguir, pois a criança deve aguardar na calçada.", "Passar devagar confiando que a criança vai parar ao ver o carro se aproximando.", "Acelerar para passar antes da criança e evitar freada brusca no meio da rua.", "Reduzir ou parar, redobrar a atenção e só avançar com total segurança sobre a ação dela."],
+        correctIndex: 3,
+        explanation: "Frear e observar cobre a imprevisibilidade infantil; buzinar ou passar devagar parecem suficientes, mas apostam no comportamento da criança.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "conduta-pedestres",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_21",
+        category: "legislacao",
+        statement: "Em congestionamento intenso, o condutor educado que percebe o cruzamento bloqueado à frente deve adotar qual comportamento seguro?",
+        options: ["Avançar mesmo com cruzamento fechado para não perder a vez no fluxo de veículos.", "Parar sobre a faixa de pedestres para garantir visibilidade e pressionar os demais.", "Aguardar antes do cruzamento, só avançando quando houver espaço para atravessá-lo.", "Buzinar continuamente e forçar passagem entre os veículos parados à frente."],
+        correctIndex: 2,
+        explanation: "O correto é não obstruir o cruzamento, aguardando espaço total para atravessar. Os distratores confundem ao sugerir ganhar tempo avançando ou pressionando.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "conduta-condutores",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_22",
+        category: "legislacao",
+        statement: "Ao dirigir à noite e cruzar com outro veículo em sentido contrário, qual deve ser o procedimento correto quanto ao uso dos faróis?",
+        options: ["Manter o farol alto ligado para enxergar melhor a pista escura à frente.", "Comutar para farol baixo ao cruzar, evitando ofuscar a visão do outro condutor.", "Apagar todos os faróis momentaneamente para sinalizar cordialidade no cruzamento.", "Alternar farol alto e baixo repetidamente para advertir o veículo contrário."],
+        correctIndex: 1,
+        explanation: "Deve-se usar farol baixo ao cruzar para não ofuscar. Manter alto para enxergar melhor é a pegadinha clássica que causa cegueira momentânea.",
+        legalBase: "Art. 40 do CTB",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "conduta-condutores",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_23",
+        category: "legislacao",
+        statement: "Em fila lenta de veículos, um condutor gentil que deseja mudar de faixa para acessar uma saída deve agir de que maneira adequada?",
+        options: ["Ligar a seta com antecedência, aguardar brecha segura e agradecer ao cederem passagem.", "Mudar bruscamente de faixa confiando que os outros frearão para evitar colisão.", "Buzinar insistentemente até que algum motorista assustado abra espaço na fila.", "Acelerar pelo acostamento e entrar no final da fila cortando a frente de todos."],
+        correctIndex: 0,
+        explanation: "Sinalizar cedo e aguardar brecha com cortesia é seguro. Os distratores parecem agilizar, mas geram risco e desrespeito à fila.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "conduta-condutores",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_24",
+        category: "legislacao",
+        statement: "Durante chuva leve à noite, com outro carro se aproximando, manter o farol alto ligado pode causar qual consequência perigosa direta?",
+        options: ["Melhora da própria visibilidade sem qualquer risco para o condutor contrário.", "Economia de bateria e maior durabilidade do sistema de iluminação do veículo.", "Redução da chuva sobre o para-brisa devido ao calor emitido pelos faróis altos.", "Ofuscamento da visão do outro motorista, aumentando o risco de colisão frontal."],
+        correctIndex: 3,
+        explanation: "Farol alto reflete na chuva e cega quem vem contra. A ideia de enxergar melhor confunde, mas o efeito real é ofuscamento perigoso.",
+        legalBase: "Art. 40 do CTB",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "conduta-condutores",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_25",
+        category: "legislacao",
+        statement: "No trânsito parado, ouvir música em volume muito alto com janelas abertas demonstra qual tipo de comportamento inadequado evidente?",
+        options: ["Uso eficiente do tempo livre sem interferir na atenção dos outros motoristas.", "Desrespeito à coletividade, pois o som excessivo perturba e irrita quem está por perto.", "Demonstração de cordialidade, pois anima os condutores estressados no congestionamento.", "Estratégia defensiva válida para manter-se acordado e atento ao fluxo parado."],
+        correctIndex: 1,
+        explanation: "Som abusivo perturba a convivência e tira a atenção. Parece inofensivo por ser lazer, mas configura falta de cordialidade e empatia.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 1,
+        group: "conduta-condutores",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_26",
+        category: "legislacao",
+        statement: "Quando um motorista percebe que outro condutor sinalizou a intenção de ultrapassar, a atitude mais cordial e segura a adotar será qual?",
+        options: ["Manter-se na faixa, reduzir levemente e facilitar a manobra com segurança.", "Acelerar para impedir a ultrapassagem e preservar a própria posição na via.", "Deslocar-se para a esquerda a fim de bloquear a passagem do veículo mais rápido.", "Buzinar longamente para intimidar quem tenta ultrapassar naquele trecho."],
+        correctIndex: 0,
+        explanation: "Facilitar a ultrapassagem mantendo trajetória e velocidade é cooperativo. Acelerar ou bloquear parecem defender posição, mas criam perigo.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "conduta-condutores",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_27",
+        category: "legislacao",
+        statement: "Ao ser ultrapassado em rodovia de pista simples, o condutor que deseja colaborar com a segurança deve executar qual ação prudente?",
+        options: ["Aumentar a velocidade para encurtar o tempo em que o outro fica na contramão.", "Manter-se à direita, sem acelerar, permitindo que o outro complete a manobra.", "Aproximar-se do veículo da frente para impedir que o outro retorne à faixa.", "Acionar o farol alto continuamente para alertar o condutor que ultrapassa."],
+        correctIndex: 1,
+        explanation: "Deve-se conservar posição à direita sem acelerar. A pegadinha é acelerar para ajudar, o que na verdade prolonga a exposição ao risco.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "conduta-condutores",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_28",
+        category: "legislacao",
+        statement: "Em via urbana movimentada, buzinar de forma prolongada e repetida para apressar o veículo da frente indica qual conduta reprovável?",
+        options: ["Uso correto da buzina como advertência preventiva para evitar colisão iminente.", "Comunicação cordial para despertar o condutor distraído diante do semáforo verde.", "Sinalização regulamentar para indicar preferência em cruzamento sem sinalização.", "Impaciência e desrespeito, pois a buzina não deve ser usada para pressionar ou punir."],
+        correctIndex: 3,
+        explanation: "Buzina prolongada para apressar é abuso e gera irritação. Confunde porque toque breve de advertência é permitido, mas pressão contínua não.",
+        legalBase: "Art. 227 do CTB",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "conduta-condutores",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_29",
+        category: "legislacao",
+        statement: "Diante de um motociclista que trafega corretamente entre as faixas em baixa velocidade, a convivência harmoniosa exige qual atitude do motorista?",
+        options: ["Fechar o espaço lateral para disciplinar o motociclista e mantê-lo atrás do fluxo.", "Manter distância lateral segura, sem jogar o carro para cima dele ou assustá-lo.", "Buzinar forte e continuamente para adverti-lo de que moto deve andar atrás.", "Abrir a porta ou deslocar-se bruscamente para impedir a passagem da motocicleta."],
+        correctIndex: 1,
+        explanation: "Respeitar o espaço do motociclista vulnerável é dever de convivência. Fechar ou buzinar para corrigir parecem defesa, mas são agressão e risco.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        group: "conduta-condutores",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_30",
+        category: "legislacao",
+        statement: "Ao avistar um ciclista circulando pelo bordo da pista em via sem ciclovia, o condutor prudente e respeitoso deve tomar qual cuidado?",
+        options: ["Reduzir a velocidade, guardar distância lateral segura e só ultrapassar com segurança.", "Aproximar-se bem perto para passar rápido e evitar invadir a faixa contrária.", "Buzinar alto em cima do ciclista para avisá-lo e fazê-lo sair da pista.", "Ultrapassar colado e acelerar logo após para não atrasar o fluxo de veículos."],
+        correctIndex: 0,
+        explanation: "Proteger o ciclista com espaço e paciência é o certo. Passar colado para não invadir a contramão confunde, mas ameaça o mais vulnerável.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "conduta-condutores",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_31",
+        category: "legislacao",
+        statement: "Em situação de retenção longa, com veículos parados em fila dupla, furar a fila pelo acostamento ou calçada caracteriza qual comportamento?",
+        options: ["Habilidade esperta de condução que alivia o próprio atraso sem prejudicar ninguém.", "Manobra preventiva aceitável quando o motorista está atrasado para compromisso urgente.", "Falta de cidadania e desrespeito, pois leva vantagem injusta e põe outros em risco.", "Direito do condutor experiente que conhece atalhos e domina bem o veículo."],
+        correctIndex: 2,
+        explanation: "Furar fila pelo acostamento é egoísmo e infração que gera revolta. Parece esperteza para ganhar tempo, mas quebra a convivência e a segurança.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "conduta-condutores",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_32",
+        category: "legislacao",
+        statement: "À noite, trafegando atrás de outro veículo a curta distância, o uso inadequado do farol alto provoca qual efeito negativo imediato?",
+        options: ["Melhora a sinalização traseira do veículo da frente, facilitando sua condução.", "Aumenta o campo visual do motorista de trás sem afetar quem vai à frente.", "Permite que o veículo da frente economize bateria apagando suas lanternas.", "Ofusca pelo retrovisor o motorista da frente, reduzindo sua visibilidade e atenção."],
+        correctIndex: 3,
+        explanation: "Farol alto atrás reflete nos retrovisores e cega quem vai à frente. Parece que ilumina melhor, mas na prática tira a visão do outro condutor.",
+        legalBase: "Art. 40 do CTB",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        group: "conduta-condutores",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_33",
+        category: "legislacao",
+        statement: "Quando dois veículos chegam juntos a um estreitamento onde só passa um, a postura mais educada e segura para resolver o impasse é qual?",
+        options: ["Reduzir, sinalizar e ceder a vez alternadamente, com gesto cordial ao outro.", "Avançar primeiro para garantir a vez, confiando na freada brusca do outro.", "Buzinar e piscar farol alto para impor preferência pela antiguidade na via.", "Enfileirar lado a lado e forçar passagem espremendo o outro contra o obstáculo."],
+        correctIndex: 0,
+        explanation: "Ceder alternadamente com comunicação cordial resolve sem conflito. Impor-se com buzina ou avanço confunde com firmeza, mas é agressividade.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        group: "conduta-condutores",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_34",
+        category: "legislacao",
+        statement: "Em estacionamento lotado, aguardar pacientemente a manobra de outro motorista sem pressioná-lo com buzina demonstra qual virtude essencial?",
+        options: ["Falta de iniciativa, pois o condutor ágil deve buzinar para acelerar a liberação.", "Paciência e cortesia, evitando estresse e risco de colisão durante a manobra.", "Desatenção ao tempo, pois o trânsito exige pressionar para manter a fluidez.", "Excesso de passividade que incentiva a lentidão e o abuso dos demais motoristas."],
+        correctIndex: 1,
+        explanation: "Esperar sem pressionar evita erro e mostra respeito. Buzinar para agilizar parece eficiência, mas aumenta a tensão e o risco de batida.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 1,
+        group: "conduta-condutores",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_35",
+        category: "legislacao",
+        statement: "Ao presenciar uma discussão agressiva entre condutores por causa de uma fechada involuntária, o terceiro condutor prudente deve agir como?",
+        options: ["Parar no meio da via para filmar e incentivar a briga a fim de fazer justiça.", "Entrar na discussão tomando partido e revidando ofensas com xingamentos e buzina.", "Manter a calma, evitar envolvimento, seguir viagem e acionar ajuda se necessário.", "Fechar o agressor com o carro para ensinar-lhe uma lição de boas maneiras."],
+        correctIndex: 2,
+        explanation: "Não alimentar a agressividade e preservar a segurança é o certo. Intervir com revide parece justiça, mas amplia a violência no trânsito.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "conduta-condutores",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_36",
+        category: "legislacao",
+        statement: "Trafegando em via de várias faixas, ocupar a faixa da esquerda em velocidade reduzida e ignorar os sinais de luz de outros indica qual falha?",
+        options: ["Prudência exemplar, pois andar devagar na esquerda aumenta a segurança de todos.", "Direito absoluto de escolha de faixa, independentemente da velocidade ou do fluxo.", "Economia de combustível, pois a faixa esquerda é mais plana e exige menos esforço.", "Falta de cooperação, pois a esquerda deve ser liberada para quem vai mais rápido."],
+        correctIndex: 3,
+        explanation: "Trancar a esquerda lenta desrespeita o fluxo e provoca ultrapassagens arriscadas. Parece prudência andar devagar, mas é egoísmo que gera perigo.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        group: "conduta-condutores",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_37",
+        category: "legislacao",
+        statement: "Em cruzamento com pedestres e ciclistas aguardando, avançar fechando a passagem para garantir a própria vez revela qual atitude condenável?",
+        options: ["Falta de cordialidade e egoísmo, pois impõe a própria passagem sobre o direito alheio.", "Direção defensiva correta, pois garantir a frente evita ser fechado pelos demais.", "Agilidade necessária para manter a fluidez em cruzamentos muito movimentados.", "Demonstração de habilidade, pois quem chega primeiro tem sempre a preferência."],
+        correctIndex: 0,
+        explanation: "Fechar o cruzamento é egoísmo que bloqueia todos. Avançar para garantir vez parece esperteza, mas viola convivência e trava o fluxo.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "conduta-condutores",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_38",
+        category: "legislacao",
+        statement: "Durante uma ultrapassagem educada em rodovia, sinalizar com antecedência e retornar à faixa sem cortar o outro veículo demonstra qual valor?",
+        options: ["Medo excessivo de dirigir, pois o bom motorista ultrapassa rápido sem avisar.", "Respeito e previsibilidade, permitindo que os demais ajustem velocidade e posição.", "Lentidão desnecessária, pois seta e distância apenas atrasam a manobra concluída.", "Exibicionismo ao volante, pois sinalizar demais confunde os outros condutores."],
+        correctIndex: 1,
+        explanation: "Sinalizar e dar espaço tornam a manobra previsível e gentil. Cortar para ser rápido confunde com perícia, mas é grosseria perigosa.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "conduta-condutores",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_39",
+        category: "legislacao",
+        statement: "Ao ouvir a buzina breve de outro condutor como advertência em ponto cego, a reação mais adequada e cordial do motorista alertado será qual?",
+        options: ["Responder com buzina longa e gestos para mostrar que percebeu o aviso recebido.", "Acelerar e mudar de faixa imediatamente para sair da frente do veículo que buzinou.", "Ignorar o aviso e manter a manobra, pois quem buzinou deve frear e aguardar.", "Verificar retrovisores, agradecer e ajustar posição mantendo a segurança da manobra."],
+        correctIndex: 2,
+        explanation: "Acertado é checar, agradecer e corrigir com calma. Revidar com buzina longa ou ignorar parecem firmeza, mas quebram a comunicação cordial.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        group: "conduta-condutores",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_40",
+        category: "legislacao",
+        statement: "Em bairro residencial à noite, acelerar com escapamento barulhento e usar buzina sem necessidade caracteriza qual tipo de conduta nociva?",
+        options: ["Demonstração de potência do veículo que anima a vizinhança e alivia o estresse.", "Forma válida de alertar moradores sobre a presença do carro em rua escura.", "Comportamento de exibição que perturba o sossego e gera conflito na convivência.", "Estratégia de segurança para afastar pedestres e animais da pista de rolamento."],
+        correctIndex: 2,
+        explanation: "Barulho desnecessário à noite perturba o descanso e irrita. Parece alerta de segurança, mas é exibicionismo que fere a boa convivência.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 1,
+        group: "conduta-condutores",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_41",
+        category: "legislacao",
+        statement: "Em rodovia movimentada, o condutor vê embalagens lançadas pela janela do carro à frente sujando a pista. Qual deve ser a sua conduta?",
+        options: ["Jogar embalagens pela janela somente em rodovias vazias, pois em alta velocidade os resíduos se dispersam sem atingir outros veículos.", "Permitir o descarte de papéis biodegradáveis pela janela, porque esse material se decompõe rápido e não causa prejuízo ao ambiente.", "Guardar embalagens e garrafas dentro do veículo e descartá-las em lixeira apropriada, preservando limpeza, segurança e cidadania.", "Lançar objetos pela janela somente quando não houver pedestres por perto, já que o perigo existiria somente para quem caminha."],
+        correctIndex: 2,
+        explanation: "A conduta correta é guardar o lixo e descartar em local próprio, pois jogar objetos na via polui e cria risco. Os distratores confundem ao relativizar o ato pelo tipo de material ou pela ausência de pedestres.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "cidadania-etica",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_42",
+        category: "legislacao",
+        statement: "Em shopping lotado, há livre só a vaga de idoso e o motorista pensa em ocupá-la por ser rapidinho. Qual a conduta cidadã correta?",
+        options: ["Respeitar a vaga reservada e procurar outra vaga comum, compreendendo que a reserva garante dignidade e acessibilidade aos idosos.", "Ocupar a vaga reservada por poucos minutos, pois a rapidez da compra justificaria o uso emergencial sem credencial.", "Utilizar a vaga de idoso quando estiver livre, pois vaga vazia significaria ausência de prejuízo para qualquer pessoa.", "Estacionar na vaga reservada desde que deixe o pisca-alerta ligado, sinalizando aos demais que retornará rapidamente ao local."],
+        correctIndex: 0,
+        explanation: "O certo é não usar vaga reservada sem credencial, mesmo por pouco tempo, por respeito e inclusão. Os distratores usam a pegadinha do rapidinho e da vaga vazia para parecerem aceitáveis.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "cidadania-etica",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_43",
+        category: "legislacao",
+        statement: "No semáforo fechado, o condutor responde mensagens no celular achando que parado não há risco. Qual a avaliação correta dessa conduta?",
+        options: ["Responder mensagens no semáforo fechado, pois com o carro parado não haveria risco de colisão ou atropelamento.", "Manter o celular guardado e a atenção ao trânsito mesmo parado, pois a distração atrasa a partida e reduz a percepção de riscos.", "Usar o celular no semáforo se for resposta rápida, já que olhar por dois segundos não comprometeria a segurança de outras pessoas.", "Manusear o celular no sinal vermelho para adiantar o trabalho, pois a fiscalização só atuaria contra quem usa o aparelho em movimento."],
+        correctIndex: 1,
+        explanation: "Mesmo parado, usar o celular dispersa a atenção e prejudica a reação ao trânsito. Os distratores passam a ideia falsa de que parado não há risco ou de que resposta rápida é inofensiva.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "cidadania-etica",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_44",
+        category: "legislacao",
+        statement: "Em fiscalização, o agente sinaliza para o motorista encostar, mas ele hesita em obedecer. Qual a conduta cidadã nesse caso?",
+        options: ["Ignorar a ordem de parada se estiver com pressa, pois o agente compreenderia o atraso e liberaria o motorista sem abordagem.", "Hesitar e só encostar se houver viatura policial junto, porque a autoridade do agente sozinho seria insuficiente para exigir obediência.", "Seguir viagem e depois retornar se quiser, já que desobedecer à sinalização do agente seria falta sem consequência ética.", "Encostar o veículo prontamente e acatar as determinações do agente, reconhecendo sua autoridade para organizar e proteger o trânsito."],
+        correctIndex: 3,
+        explanation: "A atitude cidadã é obedecer prontamente ao agente, que tem autoridade para garantir a segurança. Os distratores sugerem que pressa ou dúvida sobre autoridade justificariam desobedecer.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "cidadania-etica",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_45",
+        category: "legislacao",
+        statement: "Após arranhar o para-choque de outro carro na garagem do prédio, o condutor pensa em ir embora sem avisar. O que a cidadania exige?",
+        options: ["Ir embora sem avisar, pois arranhões em garagem seriam normais e o dono do outro carro dificilmente perceberia o pequeno dano.", "Deixar bilhete com contato ou aguardar o proprietário para assumir o reparo, pois honestidade sustenta a convivência e a cidadania.", "Aguardar alguns minutos e sair se ninguém aparecer, porque a obrigação de reparar existiria somente quando houvesse testemunhas no local.", "Pagar o conserto somente se for cobrado depois, já que assumir espontaneamente traria prejuízo financeiro desnecessário ao causador."],
+        correctIndex: 1,
+        explanation: "O correto é identificar-se e assumir o dano, mesmo sem testemunhas. Os distratores confundem ao condicionar a honestidade à presença de testemunhas ou à cobrança posterior.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "cidadania-etica",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_46",
+        category: "legislacao",
+        statement: "Em estacionamento de supermercado, um motorista encosta em outro veículo vazio e pensa em sair sem deixar recado. Qual a conduta ética?",
+        options: ["Sair do local sem deixar contato, pois sem vítimas não haveria dever ético ou legal de identificar-se aos envolvidos.", "Deixar o carro como está e ir embora, alegando que o dono ausente deveria ter contratado seguro para cobrir esse tipo de prejuízo.", "Deixar bilhete com nome e telefone para ressarcir o dano, pois a ausência de testemunhas não autoriza conduta desonesta e omissa.", "Assumir o dano somente se câmeras registrarem a manobra, pois a responsabilidade dependeria da possibilidade de ser identificado."],
+        correctIndex: 2,
+        explanation: "A cidadania exige deixar contato e reparar o dano ainda que ninguém tenha visto. Os distratores exploram a ideia de que sem testemunhas, câmeras ou vítimas não há dever moral.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        group: "cidadania-etica",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_47",
+        category: "legislacao",
+        statement: "Ao se aproximar de blitz à noite, o condutor se irrita e reluta em apresentar documentos. Qual comportamento demonstra cidadania?",
+        options: ["Manter a calma, tratar os fiscais com cordialidade e apresentar os documentos solicitados, colaborando para uma fiscalização rápida e segura.", "Reclamar da abordagem e demorar a entregar documentos, pois demonstrar irritação faria os fiscais liberarem o carro mais depressa.", "Negar-se a apresentar documentos até que expliquem o motivo da blitz, porque o condutor teria direito de escolher se colabora ou não.", "Buzinar e pressionar a fila a andar, pois blitz em horário de movimento seria abuso de autoridade que dispensaria respeito."],
+        correctIndex: 0,
+        explanation: "Respeitar a blitz e colaborar com educação agiliza a fiscalização e protege todos. Os distratores fazem parecer que reclamar ou pressionar seria um direito legítimo do cidadão.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "cidadania-etica",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_48",
+        category: "legislacao",
+        statement: "Após uma cerveja no churrasco, o motorista se sente bem e quer dirigir com cuidado redobrado. Qual a decisão segura e cidadã?",
+        options: ["Dirigir após beber se sentir-se bem, pois conhecer o próprio corpo permitiria compensar os efeitos do álcool com atenção redobrada.", "Assumir a direção após uma cerveja porque doses pequenas seriam eliminadas rapidamente e não afetariam reflexos e julgamento.", "Conduzir com cuidado após beber, desde que em trajeto curto e conhecido, pois o risco existiria somente em viagens longas e desconhecidas.", "Não dirigir após qualquer consumo de álcool e buscar carona ou transporte alternativo, pois o álcool compromete reflexos mesmo sem embriaguez aparente."],
+        correctIndex: 3,
+        explanation: "O comportamento seguro é não dirigir após beber, pois a sensação de bem-estar não garante reflexos intactos. Os distratores usam a falsa confiança no corpo e no trajeto curto.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "cidadania-etica",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_49",
+        category: "legislacao",
+        statement: "Com crianças no banco traseiro, o pai fura o sinal vermelho e usa o celular, sem notar o exemplo negativo. Qual a conduta correta?",
+        options: ["Aproveitar que crianças aprendem na escola e desrespeitar regras quando elas estão no carro, pois a teoria escolar compensaria o mau exemplo.", "Respeitar sinalização e não usar o celular ao volante, pois crianças tendem a imitar o comportamento dos pais no trânsito.", "Justificar a infração dizendo que foi por pressa, pois explicar o motivo ensinaria as crianças a ponderar quando descumprir a norma.", "Manter a infração se as crianças estiverem distraídas, pois o exemplo negativo só influenciaria quando elas estivessem prestando atenção."],
+        correctIndex: 1,
+        explanation: "Pais são referência e crianças repetem o que veem, por isso o exemplo deve ser de respeito. Os distratores minimizam o impacto alegando distração das crianças ou justificativa pela pressa.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        group: "cidadania-etica",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_50",
+        category: "legislacao",
+        statement: "Em conversão fechada, o motorista sobe no canteiro, danifica plantas e placas e vai embora sem comunicar. Qual o dever de cidadania?",
+        options: ["Ir embora sem avisar, pois danos a canteiros e placas seriam de responsabilidade da prefeitura, sem dever moral para o motorista.", "Arcar com o prejuízo somente se houver punição, porque a ética no trânsito se resumiria a evitar penalidades previstas em lei.", "Sinalizar o local se possível e comunicar o dano às autoridades, assumindo a responsabilidade pela preservação do bem público.", "Considerar o fato sem importância por não haver vítimas, já que a cidadania no trânsito se aplicaria somente à proteção de pessoas."],
+        correctIndex: 2,
+        explanation: "Danos ao patrimônio público devem ser comunicados e assumidos pelo causador. Os distratores confundem ao dizer que só há dever ético com vítimas ou punição.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "cidadania-etica",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_51",
+        category: "legislacao",
+        statement: "O passageiro quer jogar lata pela janela e o condutor permite, dizendo que a limpeza pública recolhe depois. Qual a orientação correta?",
+        options: ["Orientar o passageiro a guardar a lata e descartá-la depois, pois permitir o ato torna o condutor corresponsável pela sujeira e pelo risco.", "Permitir o descarte porque a limpeza urbana recolheria depois, transferindo ao poder público um dever que é de cada cidadão.", "Autorizar jogar a lata em vias urbanas, pois em baixa velocidade o objeto não teria força para causar danos a outros usuários.", "Concordar com o passageiro para evitar discussão, já que a harmonia dentro do carro teria prioridade sobre a limpeza da via."],
+        correctIndex: 0,
+        explanation: "O condutor deve impedir o descarte e orientar o passageiro, pois cidadania é dever de todos. Os distratores terceirizam a responsabilidade para a limpeza pública ou para o conforto interno.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "cidadania-etica",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_52",
+        category: "legislacao",
+        statement: "Sem credencial, a condutora usa vaga de PCD porque está vazia e perto da entrada. Qual a avaliação cidadã dessa conduta?",
+        options: ["Usar a vaga de pessoa com deficiência quando estiver vazia, pois a ausência de usuários no momento eliminaria o desrespeito.", "Ocupar a vaga por ser perto da entrada, alegando necessidade momentânea que se equipararia às dificuldades enfrentadas por pessoas com deficiência.", "Estacionar na vaga reservada deixando um bilhete no painel, pois avisar sobre o retorno rápido legitimaria o uso sem credencial.", "Não utilizar a vaga reservada sem credencial e buscar vaga comum, respeitando o direito à acessibilidade e à cidadania inclusiva."],
+        correctIndex: 3,
+        explanation: "Vaga reservada exige credencial e não pode ser usada por conveniência, mesmo vazia. Os distratores usam proximidade, bilhete e vaga livre para legitimar o desrespeito.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "cidadania-etica",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_53",
+        category: "legislacao",
+        statement: "No congestionamento, o motociclista pilota com uma mão e digita com a outra, confiante na habilidade. Qual a conduta segura?",
+        options: ["Pilotar digitando mensagens se for habilidoso, pois a experiência na moto compensaria a falta de atenção momentânea ao trajeto.", "Parar em local seguro para usar o celular, pois pilotar com uma mão reduz o controle e impede reação rápida a imprevistos.", "Digitar no congestionamento porque em baixa velocidade haveria tempo suficiente para frear mesmo com atenção dividida.", "Usar o celular preso ao guidão para responder rápido, pois olhar por instantes não tiraria a visão geral do fluxo ao redor."],
+        correctIndex: 1,
+        explanation: "O correto é parar para usar o celular, pois a moto exige controle total e reação imediata. Os distratores vendem a falsa segurança da habilidade e da baixa velocidade.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "cidadania-etica",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_54",
+        category: "legislacao",
+        statement: "Diante da ordem do agente para reduzir em trecho com obras, o motorista ignora por julgar exagerada. Qual a conduta cidadã?",
+        options: ["Manter a velocidade por julgar a ordem exagerada, pois o motorista teria autonomia para avaliar o risco melhor que o agente no local.", "Obedecer somente se houver cones e operários visíveis, porque a palavra do agente sem evidência concreta poderia ser ignorada.", "Reduzir a velocidade conforme determinado, pois o agente possui visão do risco e sua ordem visa proteger trabalhadores e condutores.", "Acelerar para sair logo do trecho em obras, alegando que permanecer menos tempo sob risco seria mais seguro para todos."],
+        correctIndex: 2,
+        explanation: "A ordem do agente deve ser cumprida porque ele avalia riscos não visíveis ao condutor. Os distratores induzem a julgar a ordem como exagerada ou a condicioná-la a evidências.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        group: "cidadania-etica",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_55",
+        category: "legislacao",
+        statement: "Ao bater no retrovisor de carro parado no semáforo, o causador prefere fugir temendo custo e discussão. Qual o dever ético?",
+        options: ["Parar em local seguro, identificar-se e assumir o reparo, pois fugir agrava a falta ética e demonstra desrespeito pelo patrimônio alheio.", "Fugir para evitar custo e discussão, já que pequenos danos no espelho seriam irrelevantes diante da pressa do dia a dia.", "Acelerar porque o outro carro estava parado, transferindo ao condutor parado a responsabilidade por estar no ponto de colisão.", "Ir embora se o trânsito estiver fluindo, pois interromper o fluxo para resolver dano leve causaria mais prejuízo coletivo."],
+        correctIndex: 0,
+        explanation: "Assumir o dano e identificar-se é dever ético, mesmo em prejuízo pequeno. Os distratores usam pressa, fluxo e custo para justificar a fuga como se fosse razoável.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "cidadania-etica",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_56",
+        category: "legislacao",
+        statement: "Após colisão leve sem vítimas, o condutor combina mentir no relato à seguradora para levar vantagem. Qual a conduta honesta?",
+        options: ["Combinar versão falsa para obter vantagem, pois sem vítimas a mentira não prejudicaria ninguém e beneficiaria ambos os envolvidos.", "Aceitar a fraude porque todos fariam o mesmo, alegando que honestidade só valeria quando houvesse fiscalização direta.", "Omitir detalhes no relato para aumentar a indenização, já que a seguradora teria recursos suficientes para absorver o prejuízo.", "Relatar os fatos com verdade e honestidade, pois fraudar o seguro é desonesto e corrompe a confiança necessária à convivência."],
+        correctIndex: 3,
+        explanation: "A honestidade exige relato verdadeiro mesmo sem vítimas, pois a fraude corrói a confiança coletiva. Os distratores normalizam a mentira por ausência de vítimas ou de fiscalização.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        group: "cidadania-etica",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_57",
+        category: "legislacao",
+        statement: "Em blitz da Lei Seca, o motorista se recusa a colaborar e ironiza os policiais. Qual comportamento demonstra cidadania?",
+        options: ["Ironizar os agentes para descontrair, pois o humor durante a blitz demonstraria cidadania e facilitaria a abordagem policial.", "Recusar colaboração e incentivar outros a fazer o mesmo, porque resistir à fiscalização seria forma legítima de exercer cidadania.", "Colaborar com respeito, seguir as orientações e entender a blitz como proteção coletiva, não como perseguição ao motorista.", "Discutir e filmar para intimidar os fiscais, acreditando que pressioná-los garantiria tratamento privilegiado na fiscalização."],
+        correctIndex: 2,
+        explanation: "Respeitar e colaborar na blitz é cidadania, pois a fiscalização protege vidas. Os distratores disfarçam deboche e resistência como humor ou exercício de direitos.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "cidadania-etica",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_58",
+        category: "legislacao",
+        statement: "Após vinho no jantar, a motorista diz que dose pequena não altera reflexos e quer dirigir. Qual a decisão segura?",
+        options: ["Dirigir confiando na própria sensação, pois cada organismo reagiria de forma diferente e a autopercepção bastaria para garantir segurança.", "Evitar dirigir após beber vinho e optar por outro meio, pois mesmo pequenas doses afetam julgamento, atenção e tempo de reação.", "Assumir a direção se alimentar-se bem junto, porque comida neutralizaria totalmente os efeitos do álcool sobre a capacidade de dirigir.", "Conduzir devagar após dose pequena, pois velocidade reduzida eliminaria por completo a influência do álcool no organismo."],
+        correctIndex: 1,
+        explanation: "Mesmo doses pequenas prejudicam julgamento e reação, por isso não se deve dirigir. Os distratores criam mitos de que comida, lentidão ou sensação corporal anulariam o álcool.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        group: "cidadania-etica",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_59",
+        category: "legislacao",
+        statement: "Na saída da escola, a mãe estaciona na calçada e buzina sem parar, sem notar o exemplo às crianças. Qual a conduta exemplar?",
+        options: ["Estacionar em local permitido sem bloquear a calçada e evitar buzina excessiva, dando às crianças exemplo de respeito e paciência.", "Parar sobre a calçada por rapidez, pois as crianças precisariam aprender que a pressa justificaria adaptar as regras às necessidades.", "Buzinar insistentemente para apressar alunos, já que demonstrar autoridade ensinaria as crianças a impor sua vontade no trânsito.", "Bloquear a passagem se for por pouco tempo, pois o transtorno momentâneo seria compensado pela agilidade no embarque dos estudantes."],
+        correctIndex: 0,
+        explanation: "O exemplo aos filhos exige estacionar certo e ser paciente, pois crianças imitam adultos. Os distratores tentam justificar calçada e buzina pela pressa ou brevidade.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "cidadania-etica",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_60",
+        category: "legislacao",
+        statement: "Para encurtar caminho, o condutor derruba placa de sinalização e abandona o local. Qual o dever de cidadania após o dano?",
+        options: ["Abandonar o local por ser bem público, transferindo ao Estado uma responsabilidade que também é do cidadão que causou o dano.", "Ignorar a placa caída por não haver vítimas, pois a ética no trânsito exigiria reparação somente quando pessoas fossem atingidas.", "Considerar o dano aceitável para encurtar caminho, já que a praticidade do trajeto teria mais valor que a sinalização danificada.", "Comunicar o ocorrido ao órgão responsável e assumir o reparo, pois preservar placas e sinalização é dever de cidadania e segurança."],
+        correctIndex: 3,
+        explanation: "Quem danifica bem público deve comunicar e reparar, pois placas garantem segurança de todos. Os distratores minimizam o fato por não haver vítimas ou por ser dever do Estado.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "cidadania-etica",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_61",
+        category: "legislacao",
+        statement: "Um condutor acelera no amarelo para ganhar tempo mesmo vendo pedestres na faixa. Essa conduta caracteriza:",
+        options: ["Imprudência, pois assume risco desnecessário por ação precipitada mesmo percebendo o perigo.", "Imperícia, pois demonstra falta de habilidade técnica para operar corretamente os comandos do veículo.", "Negligência, pois caracteriza omissão na manutenção preventiva obrigatória do veículo automotor.", "Prudência, pois aproveitar o amarelo evita parada brusca e mantém a fluidez do tráfego urbano."],
+        correctIndex: 0,
+        explanation: "É imprudência por agir com pressa assumindo risco consciente. Os distratores confundem ao trocar ação arriscada por falta técnica ou omissão.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "perfil-condutor",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_62",
+        category: "legislacao",
+        statement: "Na descida íngreme de serra, o motorista desce em ponto morto e queima os freios por não usar o freio-motor. Isso caracteriza:",
+        options: ["Imprudência, pois o motorista agiu com pressa e desrespeitou deliberadamente as normas de circulação.", "Imperícia, pois revela falta de conhecimento técnico para usar a marcha reduzida e o freio-motor.", "Negligência, pois indica descuido por não lavar o veículo e não portar os documentos obrigatórios.", "Prudência, pois descer em ponto morto economiza combustível e reduz o desgaste do motor."],
+        correctIndex: 1,
+        explanation: "É imperícia por falta de técnica e conhecimento no uso do freio-motor. A pegadinha é confundir inabilidade com pressa intencional ou economia de combustível.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "perfil-condutor",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_63",
+        category: "legislacao",
+        statement: "O dono adia por meses a troca das pastilhas de freio gastas, mesmo ouvindo ruídos, e causa colisão traseira. Isso caracteriza:",
+        options: ["Imprudência, pois freou bruscamente por excesso de velocidade em trecho com fiscalização eletrônica.", "Imperícia, pois não possui destreza para acionar o pedal de freio com a pressão adequada.", "Negligência, pois omitiu-se no dever de manutenção preventiva mesmo diante de sinais claros de desgaste.", "Habilidade defensiva, pois adiar a troca preserva peças originais e evita gastos desnecessários."],
+        correctIndex: 2,
+        explanation: "É negligência por omissão no dever de conservar o veículo. Os distratores confundem ao trocar omissão por excesso de velocidade ou falta de destreza.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "perfil-condutor",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_64",
+        category: "legislacao",
+        statement: "Fechado no corredor, o motociclista irritado acelera para revidar e amplia o risco de conflito. Qual a atitude correta?",
+        options: ["Ultrapassar imediatamente para impor respeito e ensinar o infrator a dividir corretamente a via.", "Buzinar insistentemente e colar no para-choque para pressionar o outro condutor a sair da frente.", "Acelerar para alcançar o veículo e gesticular, pois revidar intimida e evita novas fechadas.", "Manter a calma, reduzir a velocidade e afastar-se, evitando revidar a provocação sofrida."],
+        correctIndex: 3,
+        explanation: "O bom condutor não revida e se afasta para reduzir o conflito. Os distratores parecem certos por sugerir impor respeito, mas aumentam a violência.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 1,
+        group: "perfil-condutor",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_65",
+        category: "legislacao",
+        statement: "Antes de viagem longa, o condutor verifica pneus, documentos, rota alternativa e prevê paradas. Essa atitude demonstra:",
+        options: ["Planejamento prudente, pois inclui verificação do veículo, da rota e de pausas para descanso.", "Excesso de preocupação, pois planejar demais gera ansiedade e tira a atenção durante o trajeto.", "Confiança na experiência, pois em viagens longas basta resolver os imprevistos na hora.", "Descuido disfarçado, pois revisar pneus e documentos revela falta de confiança na própria capacidade."],
+        correctIndex: 0,
+        explanation: "Planejar rota, revisão e paradas é prudência e previsão. Os distratores confundem ao tratar prevenção como ansiedade ou improviso confiante.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 1,
+        group: "perfil-condutor",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_66",
+        category: "legislacao",
+        statement: "Após noite mal dormida e horas ao volante sem pausa, o caminhoneiro boceja e mal abre os olhos. Esses sinais indicam:",
+        options: ["Atenção plena, indicando que o condutor está alerta e apto a prolongar a viagem com segurança.", "Fadiga e sonolência, exigindo parada imediata em local seguro para descanso e recuperação.", "Reação ao ar-condicionado, que deve ser combatida apenas abrindo os vidros e aumentando o rádio.", "Efeitos passageiros que desaparecem sozinhos e dispensam qualquer pausa ou revezamento na direção."],
+        correctIndex: 1,
+        explanation: "Bocejos e olhos pesados são fadiga e exigem parar para descansar. Os distratores minimizam o risco ao sugerir rádio alto ou seguir viagem.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "perfil-condutor",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_67",
+        category: "legislacao",
+        statement: "Em via urbana, o motorista observa retrovisores, pedestres nas calçadas e freadas à frente. Esse comportamento demonstra:",
+        options: ["Atenção concentrada em ponto único, como fixar o olhar apenas no para-choque do carro à frente.", "Desatenção inevitável, pois é impossível acompanhar vários estímulos ao mesmo tempo no trânsito.", "Atenção difusa e preventiva, distribuindo o olhar entre retrovisores, pedestres e frenagens à frente.", "Imprudência por dispersão, pois observar retrovisores e calçadas aumenta o risco de colisão."],
+        correctIndex: 2,
+        explanation: "É atenção difusa, essencial para antecipar riscos simultâneos. Os distratores confundem ao dizer que observar tudo dispersa ou que é impossível.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        group: "perfil-condutor",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_68",
+        category: "legislacao",
+        statement: "Antes do trajeto diário, o condutor confere óleo, pneus, luzes e limpadores. Essa conferência demonstra:",
+        options: ["Manutenção apenas após pane total, para economizar tempo e evitar revisões consideradas supérfluas.", "Conferência só do combustível, pois óleo, pneus e luzes exigem verificação apenas anual obrigatória.", "Espera pela luz do painel, pois checagens diárias desgastam peças e geram custo inútil e excessivo.", "Revisão preventiva como atitude, pois inspecionar antes de sair previne falhas mecânicas evitáveis."],
+        correctIndex: 3,
+        explanation: "Checar itens básicos antes de sair é revisão preventiva. Os distratores parecem econômicos, mas pregam só agir após a pane.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "perfil-condutor",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_69",
+        category: "legislacao",
+        statement: "Com neblina intensa na rodovia, o motorista reduz, amplia a distância e liga o farol baixo. Essa atitude está:",
+        options: ["Correta: reduzir a velocidade, ampliar a distância e usar farol baixo aumenta a segurança e a visibilidade.", "Errada: deve manter a velocidade e usar farol alto, pois a luz forte atravessa a neblina e afasta o sono.", "Errada: deve acelerar para sair logo da neblina e trafegar com pisca-alerta ligado em deslocamento.", "Errada: deve colar no veículo da frente e usar suas lanternas como guia, sem reduzir a velocidade."],
+        correctIndex: 0,
+        explanation: "Com neblina o correto é reduzir, espaçar e usar farol baixo. Farol alto e colar no outro parecem soluções, mas ofuscam e causam colisão.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "perfil-condutor",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_70",
+        category: "legislacao",
+        statement: "Recém-habilitado assume caminhão carregado sem treinamento e mal controla o veículo. Essa conduta caracteriza:",
+        options: ["Imprudência, pois conduziu à noite sem ligar os faróis para economizar a bateria do caminhão.", "Imperícia, pois assume veículo incompatível com sua prática e sem habilidade técnica necessária.", "Negligência, pois deixou de calibrar os pneus antes de iniciar uma viagem de curta distância.", "Prudência, pois aceitar novos desafios no trânsito acelera o aprendizado e mostra autoconfiança."],
+        correctIndex: 1,
+        explanation: "É imperícia por falta de habilitação técnica para aquele veículo. A pegadinha troca inaptidão por ousadia ou sugere que desafio gera aprendizado seguro.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        group: "perfil-condutor",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_71",
+        category: "legislacao",
+        statement: "Ao ver criança jogando bola na calçada próxima à pista, o condutor defensivo reduz preventivamente. Qual a atitude correta?",
+        options: ["Acelerar para passar rápido pela criança, pois buzinar forte é suficiente para afastá-la da pista.", "Manter a velocidade, pois a criança está na calçada e a preferência é sempre do veículo automotor.", "Reduzir a velocidade e redobrar a atenção, prevendo que a bola ou a criança invada a pista.", "Desviar para a contramão sem olhar, pois qualquer manobra brusca evita o atropelamento iminente."],
+        correctIndex: 2,
+        explanation: "Prever que a criança corra para a rua é antecipação de risco. Os distratores confundem ao priorizar velocidade ou manobra brusca sem olhar.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "perfil-condutor",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_72",
+        category: "legislacao",
+        statement: "Em engarrafamento longo sob calor, o condutor paciente mantém a calma e a distância segura. Essa atitude demonstra:",
+        options: ["Reação rápida ao usar o acostamento para não se atrasar para o compromisso assumido.", "Habilidade ao colar no para-choque e trocar de faixa a todo instante para avançar no fluxo.", "Firmeza ao descer do veículo e discutir, pois exigir direitos alivia o estresse e organiza o trânsito.", "Paciência e controle emocional, mantendo a calma e evitando buzinas e manobras agressivas."],
+        correctIndex: 3,
+        explanation: "Manter distância e calma revela paciência do bom condutor. Os distratores parecem vantagem, mas acostamento e discussão elevam o risco.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "perfil-condutor",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_73",
+        category: "legislacao",
+        statement: "Sob chuva forte à noite, o motorista avalia a pista e adia a ultrapassagem sem visibilidade. Qual a decisão correta?",
+        options: ["Adiar a ultrapassagem até ter visibilidade e pista segura, priorizando a segurança sobre a pressa.", "Ultrapassar mesmo sem visibilidade, pois motorista experiente orienta-se apenas pelas faixas pintadas.", "Aumentar a velocidade na chuva para reduzir o tempo de exposição ao risco da pista molhada.", "Ultrapassar pelo acostamento, pois fora da pista há menos água e melhor aderência dos pneus."],
+        correctIndex: 0,
+        explanation: "Adiar a manobra sem visibilidade é decisão segura. Os distratores usam a falsa experiência e a pressa para justificar ultrapassagem perigosa.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        group: "perfil-condutor",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_74",
+        category: "legislacao",
+        statement: "O condutor entende que sua prudência protege ocupantes, pedestres, ciclistas e demais usuários. Esse entendimento revela:",
+        options: ["Que a segurança depende só da fiscalização, cabendo obedecer apenas quando se é observado.", "Responsabilidade coletiva, pois sua prudência protege todos que compartilham a via pública.", "Que proteger pedestres é dever exclusivo do poder público, não dos condutores individuais.", "Que o cinto dispensa atenção aos demais, pois ocupantes do carro estão sempre totalmente seguros."],
+        correctIndex: 1,
+        explanation: "Bom condutor responde pela segurança de todos, não só dos ocupantes. Os distratores transferem o dever à fiscalização ou ao cinto.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "perfil-condutor",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_75",
+        category: "legislacao",
+        statement: "Após dia estressante, o motorista irritado respira fundo antes de sair, sem levar a raiva para a direção. Isso demonstra:",
+        options: ["Descarga necessária ao sair em alta velocidade para aliviar rapidamente a tensão do trabalho.", "Autoridade ao discutir no trânsito, pois revidar provocações preserva a autoestima do condutor.", "Controle emocional, pois irritação reduz a atenção e favorece decisões impulsivas e agressivas.", "Distração útil ao responder mensagens, pois ocupar a mente elimina rapidamente a raiva sentida."],
+        correctIndex: 2,
+        explanation: "Acalmar-se antes de dirigir evita que a raiva vire agressividade. Os distratores confundem ao tratar velocidade ou revide como alívio.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "perfil-condutor",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_76",
+        category: "legislacao",
+        statement: "Motorista experiente diz dispensar revisão, ignorando pneus gastos e falhas nos freios. Essa afirmação revela:",
+        options: ["Negligência e falsa confiança, pois experiência não substitui manutenção nem elimina o desgaste natural.", "Prudência avançada, pois motoristas experientes percebem falhas sem precisar de revisão periódica.", "Economia segura, pois evitar revisões frequentes preserva peças originais e reduz custos gerais.", "Simples imperícia, pois demonstra apenas falta de prática em manobras de estacionamento do veículo."],
+        correctIndex: 0,
+        explanation: "É negligência acreditar que experiência dispensa revisão. A pegadinha troca omissão por economia e confunde negligência com imperícia.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        group: "perfil-condutor",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_77",
+        category: "legislacao",
+        statement: "Com o semáforo verde há muito tempo, o condutor preventivo alivia o acelerador e cobre o freio. Essa atitude demonstra:",
+        options: ["Pressa útil ao acelerar no verde, pois frear preventivamente provoca colisão traseira inevitável.", "Previsão e antecipação, aliviando o acelerador para evitar frenagem brusca na mudança de fase.", "Desatenção ao manter velocidade e olhar o celular, pois semáforos antigos demoram a mudar.", "Direito absoluto, pois o verde garante passagem livre e sem riscos para quem acelera forte."],
+        correctIndex: 1,
+        explanation: "Cobrir o freio antecipa o amarelo e evita parada brusca. Acelerar no verde tardio parece ganho de tempo, mas causa avanço de sinal.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        group: "perfil-condutor",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_78",
+        category: "legislacao",
+        statement: "Em viagem noturna monótona em estrada reta, o condutor alterna o olhar e faz pausas curtas. Essa atitude demonstra:",
+        options: ["Foco único ao fixar o olhar em ponto fixo e seguir, pois pausas noturnas aumentam o perigo.", "Superação ao tomar só café forte e seguir sem parar, pois descanso é preciso apenas ao amanhecer.", "Combate à fadiga, alternando o foco visual e pausando para manter a concentração e o alerta.", "Estímulo pela velocidade, pois dirigir mais rápido mantém o cérebro sempre alerta e desperto."],
+        correctIndex: 2,
+        explanation: "Alternar o olhar e pausar combate monotonia e fadiga noturna. Café e velocidade parecem soluções, mas não substituem o descanso.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "perfil-condutor",
+        origin: "ia"
+    },
+    {
+        id: "cid_boa_79",
+        category: "legislacao",
+        statement: "Em rua estreita com carros parados dos dois lados, o condutor reduz e observa frestas entre veículos. Isso demonstra:",
+        options: ["Agilidade ao acelerar entre carros parados, pois velocidade maior reduz o tempo de exposição.", "Confiança ao dirigir pelo centro sem olhar laterais, pois pedestres devem aguardar fora da pista.", "Alerta sonoro ao buzinar sem reduzir, pois pedestres ouvem o som e evitam sair de repente.", "Antecipação de risco, observando frestas para prever a travessia repentina de pedestres ocultos."],
+        correctIndex: 3,
+        explanation: "Observar frestas e reduzir antecipa pedestres ocultos. Acelerar ou só buzinar parecem eficazes, mas impedem parar a tempo.",
+
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "perfil-condutor",
+        origin: "ia"
+    },
 ];
+
 // Questões que realmente caíram na prova do DETRAN.
 // São forçadas em todo simulado completo e usadas no espelho de divulgação do super admin.
 export const REAL_EXAM_IDS = [

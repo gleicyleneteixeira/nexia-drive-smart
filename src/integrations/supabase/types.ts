@@ -136,6 +136,7 @@ profiles: {
              access_reason: string | null
              group_status: string | null
              whatsapp_invite_later_at: string | null
+             whatsapp_invite_declines: number | null
              whatsapp_invite_status: string
          }
           Insert: {
@@ -160,6 +161,7 @@ profiles: {
             access_reason?: string | null
             group_status?: string | null
             whatsapp_invite_later_at?: string | null
+            whatsapp_invite_declines?: number | null
             whatsapp_invite_status?: string
            }
            Update: {
@@ -184,6 +186,7 @@ profiles: {
             access_reason?: string | null
             group_status?: string | null
             whatsapp_invite_later_at?: string | null
+            whatsapp_invite_declines?: number | null
             whatsapp_invite_status?: string
           }
           Relationships: []

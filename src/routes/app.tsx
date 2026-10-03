@@ -98,6 +98,7 @@ function DashboardGate() {
             userId={user.id}
             whatsappInviteStatus={profile.whatsapp_invite_status}
             laterAt={profile.whatsapp_invite_later_at}
+            declines={profile.whatsapp_invite_declines}
             groupStatus={profile.group_status}
           />
         </>
