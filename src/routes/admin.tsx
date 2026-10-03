@@ -1006,7 +1006,9 @@ export function QuestionsPanel() {
     if (orig === "off" && !disabledIds.has(q.id)) return false;
     if (orig === "oficial" && !isOfficial(q)) return false;
     if (orig !== "all" && orig !== "off" && orig !== "oficial" && o !== orig) return false;
-    const s = search.trim().toLowerCase();
+    const raw = search.trim().toLowerCase();
+    // Aceita colar direto do simulado ("cód. qe16") removendo o prefixo
+    const s = raw.replace(/^(c[oó]d\.?|código)\s+/, "");
     if (!s) return true;
     return (
       q.id.toLowerCase().includes(s) ||
@@ -1200,10 +1202,13 @@ export function QuestionsPanel() {
       )}
 
       <div className="glass rounded-2xl p-4 space-y-3">
-        <div className="relative">
-          <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-          <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar por ID, categoria, palavra da pergunta ou resposta..." className="pl-9" />
-        </div>
+        <form className="relative flex gap-2" onSubmit={(e) => e.preventDefault()}>
+          <div className="relative flex-1">
+            <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar por ID, categoria, palavra da pergunta ou resposta..." className="pl-9" />
+          </div>
+          <Button type="submit" size="default">Buscar</Button>
+        </form>
         <div className="flex gap-2 flex-wrap">
           <Select value={cat} onValueChange={(v) => setCat(v as Category | "all")}>
             <SelectTrigger className="w-[200px]"><SelectValue placeholder="Categoria" /></SelectTrigger>
