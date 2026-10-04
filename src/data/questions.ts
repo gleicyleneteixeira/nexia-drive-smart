@@ -1168,7 +1168,8 @@ export const QUESTIONS: Question[] = [
         detailedExplanation: "A placa de Parada Obrigatória (R-1) possui formato octogonal (8 lados), o que permite seu reconhecimento imediato por condutores de todas as direções, mesmo vista de costas.",
         commonMistake: "Muita gente confunde com placas de aviso por causa do formato. Lembre-se: PARE é REGULAMENTAÇÃO.",
         incidence: "alta",
-        difficulty: 3
+        difficulty: 3,
+        group: "placa-r1-octogonal"
     },
     {
         id: "q8",
@@ -3126,7 +3127,8 @@ export const QUESTIONS: Question[] = [
         tip: "Volante Tremendo = Balanceamento | Carro Puxando = Alinhamento.",
         incidence: "alta",
         trap: true,
-        difficulty: 2
+        difficulty: 2,
+        group: "balanceamento-rodas"
     },
     {
         id: "nova_sinalizacao_horizontal_cores_alta_10",
@@ -3503,7 +3505,8 @@ export const QUESTIONS: Question[] = [
         tip: "Desbalanceamento = Trepidação/Vibração no volante em alta velocidade.",
         incidence: "alta",
         trap: false,
-        difficulty: 2
+        difficulty: 2,
+        group: "balanceamento-rodas"
     },
     {
         id: "nova_exame_pratico_preferencia_pedestre_11",
@@ -4044,7 +4047,8 @@ export const QUESTIONS: Question[] = [
         memoryHook: "Placa octogonal = Parada obrigatória.",
         incidence: "alta",
         trap: true,
-        difficulty: 1
+        difficulty: 1,
+        group: "placa-r1-octogonal"
     },
     {
         id: "pr_n2_001",
@@ -4092,7 +4096,8 @@ export const QUESTIONS: Question[] = [
         memoryHook: "Parar = Olhar = Prosseguir!",
         incidence: "alta",
         trap: true,
-        difficulty: 2
+        difficulty: 2,
+        group: "placa-r1-octogonal"
     },
     {
         id: "pl_n2_002",
@@ -6091,6 +6096,7 @@ export const QUESTIONS: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 2,
+        group: "balanceamento-rodas",
         origin: "ia"
     },
     {
@@ -7329,6 +7335,7 @@ export const QUESTIONS: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 2,
+        group: "placa-r1-octogonal",
         origin: "ia"
     },
     {

@@ -2679,13 +2679,18 @@ export function Logico({
 
   const q = LOG_QUESTIONS[i];
 
-  const shuffledOptions = useMemo(() => {
+  // Embaralha as figuras mas re-etiqueta A-B-C-D pela posição na tela
+  // e recalcula o gabarito — letra sempre em ordem, correção segue a figura.
+  const { opts: shuffledOptions, correctKey } = useMemo(() => {
     const arr = [...q.options];
     for (let j = arr.length - 1; j > 0; j--) {
       const k = Math.floor(Math.random() * (j + 1));
       [arr[j], arr[k]] = [arr[k], arr[j]];
     }
-    return arr;
+    const LETTERS = ["A", "B", "C", "D"];
+    const correctIdx = arr.findIndex((o) => o.key === q.correct);
+    const opts = arr.map((o, idx) => ({ key: LETTERS[idx], render: o.render }));
+    return { opts, correctKey: LETTERS[correctIdx] };
   }, [i]);
 
   function next() {
@@ -2752,7 +2757,7 @@ export function Logico({
                   onClick={() => {
                     if (picked !== null) return;
                     setPicked(opt.key);
-                    if (opt.key === q.correct) setCorrect((c) => c + 1);
+                    if (opt.key === correctKey) setCorrect((c) => c + 1);
                   }}
                   className={`rounded-2xl border-2 p-4 flex flex-col items-center gap-2 transition-all bg-white ${
                     isPicked

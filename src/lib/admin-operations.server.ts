@@ -1126,11 +1126,12 @@ async function sendTempPasswordEmail(
   const htmlContent = `
       <div style="font-family: sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px; background: #ffffff;">
         <h2 style="color: #2563eb; margin-top: 0;">Recuperação de Senha — Nexia Drive</h2>
-        <p>Olá, <strong>${profile.display_name || "Estudante"}</strong>!</p>
+        <p>Olá, <strong>${profile.display_name || "Estudante"}</strong>! Tudo bem?</p>
         <p>Recebemos uma solicitação de redefinição de senha para sua conta.</p>
-        <p>Geramos uma senha temporária segura para você acessar a plataforma:</p>
-        <div style="background: #f1f5f9; padding: 12px; font-size: 18px; font-family: monospace; font-weight: bold; letter-spacing: 1px; text-align: center; border-radius: 6px; margin: 18px 0; border: 1px dashed #cbd5e1; color: #0f172a;">
-          ${tempPassword}
+        <p>Segue seus dados de acesso temporário:</p>
+        <div style="background: #f1f5f9; padding: 12px; font-size: 14px; border-radius: 6px; margin: 18px 0; border: 1px dashed #cbd5e1; color: #0f172a;">
+          <p style="margin: 4px 0;">👤 <strong>Usuário / Acesso:</strong> ${profile.email}</p>
+          <p style="margin: 4px 0; font-size: 18px; font-family: monospace; font-weight: bold; letter-spacing: 1px;">🔒 Senha: ${tempPassword}</p>
         </div>
         <p style="color: #64748b; font-size: 12px;">💡 Por segurança, você deverá cadastrar uma nova senha de sua escolha assim que fizer login.</p>
         <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
@@ -1145,9 +1146,9 @@ async function sendTempPasswordEmail(
     });
 }
 
-/** WhatsApp com a temporária (template reset, com {senha}). Retorna se enviou. */
+/** WhatsApp com a temporária (template reset, com {senha} e {email}). Retorna se enviou. */
 async function sendTempPasswordWhatsApp(
-  profile: { phone: string | null; display_name: string | null },
+  profile: { phone: string | null; display_name: string | null; email?: string | null },
   temp: string,
   force: boolean,
   session?: string
@@ -1156,7 +1157,7 @@ async function sendTempPasswordWhatsApp(
   try {
     const { sendWaTemplate } = await import("@/lib/viperconnect");
     const r = await sendWaTemplate(profile.phone, profile.display_name || "aluno(a)", "reset", {
-      vars: { senha: temp },
+      vars: { senha: temp, email: profile.email ?? "" },
       force,
       session,
     });
@@ -1307,7 +1308,7 @@ export const requestPasswordResetWhatsApp = createServerFn({ method: "POST" })
     const phoneDigits = ((profile as any).phone ?? "").replace(/\D/g, "");
     const phoneTail = phoneDigits.slice(-4);
     const sentWa = await sendTempPasswordWhatsApp(
-      { phone: profile.phone, display_name: (profile as any).display_name ?? null },
+      { phone: profile.phone, display_name: (profile as any).display_name ?? null, email: (profile as any).email ?? null },
       temp,
       false
     );
@@ -1351,7 +1352,7 @@ export const adminSendPasswordReset = createServerFn({ method: "POST" })
       temp
     );
     const sentWa = await sendTempPasswordWhatsApp(
-      { phone: (profile as any).phone ?? null, display_name: (profile as any).display_name ?? null },
+      { phone: (profile as any).phone ?? null, display_name: (profile as any).display_name ?? null, email: (profile as any).email ?? null },
       temp,
       true,
       data.sessionPhone || undefined

@@ -154,7 +154,7 @@ export interface WaTemplate {
 export const WA_TEMPLATE_META: Record<WaTemplateKey, { title: string; description: string }> = {
   reset: {
     title: "Reset de senha",
-    description: "Gera senha temporária e envia no WhatsApp (use {senha} no texto).",
+    description: "Gera senha temporária e envia no WhatsApp (use {senha} e {email} no texto).",
   },
   reminder: {
     title: "Lembrete de estudo",
@@ -171,7 +171,7 @@ export const WA_TEMPLATE_META: Record<WaTemplateKey, { title: string; descriptio
 };
 
 export const WA_DEFAULT_MESSAGES: Record<WaTemplateKey, string> = {
-  reset: "Olá {nome}! 🔑 Sua senha temporária do Nexia Drive é: *{senha}* Entre com ela e crie uma nova senha em seguida.",
+  reset: "Olá {nome}! Tudo bem? 🔑\n\nSegue sua senha temporária do Nexia Drive:\n\n👤 Usuário / Acesso: {email}\n🔒 Senha: *{senha}*\n\nEntre com ela + seu e-mail de login e crie uma nova senha em seguida.",
   reminder: "Olá {nome}! 📚 Sua meta de leitura de hoje no Nexia Drive está te esperando. Bora manter o ritmo? 💪",
   billing: "Olá {nome}! ⚠️ Seu acesso ao Nexia Drive está pendente de pagamento ou expirado. Regularize para continuar estudando. Qualquer dúvida, chama aqui! 💳",
   abandoned: "Olá {nome}! 👋 Vimos que você criou sua conta no Nexia Drive mas ainda não concluiu o pagamento. Sua vaga continua reservada! Precisa de ajuda? Chama aqui. 🚀",
