@@ -2656,6 +2656,7 @@ export function Logico({
   const [phase, setPhase] = useState<"intro" | "running" | "done">("intro");
   const [i, setI] = useState(0);
   const [picked, setPicked] = useState<string | null>(null);
+  const [validated, setValidated] = useState(false);
   const [correct, setCorrect] = useState(0);
   const [time, setTime] = useState(timeLimit);
 
@@ -2695,6 +2696,7 @@ export function Logico({
 
   function next() {
     setPicked(null);
+    setValidated(false);
     if (i + 1 >= LOG_QUESTIONS.length) {
       setPhase("done");
     } else {
@@ -2721,6 +2723,7 @@ export function Logico({
             setI(0);
             setCorrect(0);
             setPicked(null);
+            setValidated(false);
             setTime(timeLimit);
             setPhase("running");
           }}
@@ -2751,19 +2754,26 @@ export function Logico({
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {shuffledOptions.map((opt) => {
               const isPicked = picked === opt.key;
+              const isCorrectOpt = opt.key === correctKey;
+              let cls = "border-border hover:border-indigo-400";
+              if (!validated && isPicked) {
+                cls = "border-indigo-500 bg-indigo-500/10 shadow-[0_0_12px_rgba(99,102,241,0.35)]";
+              } else if (validated) {
+                if (isCorrectOpt) cls = "border-green-500 bg-green-500/10 shadow-[0_0_12px_rgba(34,197,94,0.30)]";
+                else if (isPicked) cls = "border-red-500 bg-red-500/10 shadow-[0_0_12px_rgba(239,68,68,0.30)]";
+                else cls = "border-border opacity-60";
+              }
               return (
                 <button
                   key={opt.key}
+                  disabled={validated}
                   onClick={() => {
-                    if (picked !== null) return;
+                    if (validated) return;
                     setPicked(opt.key);
                     if (opt.key === correctKey) setCorrect((c) => c + 1);
+                    setValidated(true);
                   }}
-                  className={`rounded-2xl border-2 p-4 flex flex-col items-center gap-2 transition-all bg-white ${
-                    isPicked
-                      ? "border-primary shadow-[0_0_12px_rgba(168,85,247,0.25)]"
-                      : "border-border hover:border-primary/50"
-                  }`}
+                  className={`rounded-2xl border-2 p-4 flex flex-col items-center gap-2 transition-all bg-white ${cls} disabled:cursor-default`}
                 >
                   <span className="self-start text-xs font-bold text-zinc-700">{opt.key}</span>
                   {opt.render()}
@@ -2772,15 +2782,26 @@ export function Logico({
             })}
           </div>
           <AnimatePresence>
-            {picked !== null && (
+            {validated && (
               <motion.div
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mt-4 p-4 rounded-2xl border border-primary/30 bg-primary/5"
+                className={`mt-4 p-4 rounded-2xl border ${
+                  picked === correctKey
+                    ? "border-green-500/40 bg-green-500/5"
+                    : "border-red-500/40 bg-red-500/5"
+                }`}
               >
-                <p className="text-sm font-semibold text-primary">
-                  Resposta selecionada: {picked}
+                <p
+                  className={`text-sm font-semibold ${
+                    picked === correctKey ? "text-green-600" : "text-red-600"
+                  }`}
+                >
+                  {picked === correctKey
+                    ? "✓ Resposta correta!"
+                    : `✗ Resposta incorreta. A alternativa correta era a ${correctKey}.`}
                 </p>
+                <p className="mt-1 text-sm text-muted-foreground">{q.explain}</p>
                 <button
                   onClick={next}
                   className="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-xl gradient-primary text-primary-foreground text-sm font-semibold"
