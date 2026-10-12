@@ -12,6 +12,49 @@ function getAdminAuthHeader(): string | null {
   }
 }
 
+/**
+ * E-mail pode ter sido salvo com prefixo https:// colado (cola do navegador
+ * ou digitação no admin). Sem limpeza, a mensagem de reset sai com o prefixo
+ * e o login/consulta não encontram a conta. Centraliza: trim + remove
+ * protocolo/barras + minúsculas.
+ */
+function cleanEmail(raw: string | null | undefined): string {
+  return (raw ?? "")
+    .trim()
+    .replace(/^https?:\/\//i, "")
+    .replace(/^\/+|\/+$/g, "")
+    .trim()
+    .toLowerCase();
+}
+
+/**
+ * Busca o perfil pelo e-mail limpo. Se a linha estiver salva com o prefixo
+ * (dado sujo antigo), encontra pela variação e autocorrige a linha + o login
+ * para o e-mail limpo, para a pessoa entrar com o endereço certo.
+ */
+async function findProfileByEmailClean(
+  supabaseAdmin: any,
+  columns: string,
+  emailClean: string
+): Promise<{ data: any; error: any }> {
+  const direct = await supabaseAdmin.from("profiles").select(columns).eq("email", emailClean).maybeSingle();
+  if (direct.data || direct.error) return direct;
+  for (const variant of [`https://${emailClean}`, `http://${emailClean}`]) {
+    const r = await supabaseAdmin.from("profiles").select(columns).eq("email", variant).maybeSingle();
+    if (r.error) return r;
+    if (r.data) {
+      await supabaseAdmin.from("profiles").update({ email: emailClean }).eq("id", r.data.id);
+      try {
+        await supabaseAdmin.auth.admin.updateUserById(r.data.id, { email: emailClean, email_confirm: true });
+      } catch {
+        /* login pode não existir ainda — applyTempPassword cria */
+      }
+      return { data: { ...r.data, email: emailClean }, error: null };
+    }
+  }
+  return direct;
+}
+
 async function eraseUserEverywhere(supabaseAdmin: any, userId: string) {
   // A lista do admin lê a tabela `profiles`, mas a exclusão antiga apagava
   // só o login (auth) — por isso o toast dizia sucesso e o usuário seguia
@@ -53,7 +96,7 @@ export const updateUserProfile = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const userId = data.userId;
 
-    const emailClean = (data.email ?? "").trim().toLowerCase() || null;
+    const emailClean = cleanEmail(data.email ?? "") || null;
     if (emailClean && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailClean)) {
       throw new Error("E-mail inválido.");
     }
@@ -73,7 +116,7 @@ export const updateUserProfile = createServerFn({ method: "POST" })
 
     if (emailClean) {
       const { data: current } = await supabaseAdmin.from("profiles").select("email").eq("id", userId).maybeSingle();
-      if (current && current.email?.toLowerCase() !== emailClean) {
+      if (current && cleanEmail(current.email ?? "") !== emailClean) {
         const { error: authErr } = await supabaseAdmin.auth.admin.updateUserById(userId, {
           email: emailClean,
           email_confirm: true,
@@ -93,7 +136,7 @@ export const sendPasswordReset = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error } = await supabaseAdmin.auth.admin.generateLink({
       type: "recovery",
-      email: data.email,
+      email: cleanEmail(data.email),
     });
     if (error) throw new Error(error.message);
     return { ok: true };
@@ -106,7 +149,7 @@ export const checkIfEmailExists = createServerFn({ method: "POST" })
     const { data: profile, error } = await supabaseAdmin
       .from("profiles")
       .select("id, email")
-      .eq("email", data.email.trim().toLowerCase())
+      .eq("email", cleanEmail(data.email))
       .maybeSingle();
 
     if (error) {
@@ -988,7 +1031,7 @@ export const requestPasswordResetSecure = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { sendEmail } = await import("@/lib/mail.server");
 
-    const inputClean = data.input.trim().toLowerCase();
+    const inputClean = cleanEmail(data.input);
     const cpfDigits = inputClean.replace(/\D/g, "");
 
     let query = supabaseAdmin.from("profiles").select("id, email, display_name");
@@ -1000,11 +1043,16 @@ export const requestPasswordResetSecure = createServerFn({ method: "POST" })
     }
 
     const { data: profile, error } = await query.maybeSingle();
-    if (error || !profile) {
+    let prof = profile;
+    if ((error || !prof) && inputClean.includes("@")) {
+      const fb = await findProfileByEmailClean(supabaseAdmin, "id, email, display_name", inputClean);
+      if (fb.data) prof = fb.data;
+    }
+    if (!prof) {
       throw new Error("Não encontramos nenhuma conta com o e-mail ou CPF informado.");
     }
 
-    const email = profile.email;
+    const email = prof.email;
     if (!email) {
       throw new Error("Esta conta não possui um e-mail cadastrado. Entre em contato com o suporte.");
     }
@@ -1012,13 +1060,13 @@ export const requestPasswordResetSecure = createServerFn({ method: "POST" })
     // Generate random temporary password (troca obrigatória no 1º acesso)
     const tempPassword = generateTempPassword(8);
     await applyTempPassword(
-      { id: profile.id, email: profile.email as string | null, display_name: (profile as any).display_name ?? null },
+      { id: prof.id, email: prof.email as string | null, display_name: (prof as any).display_name ?? null },
       tempPassword
     );
 
     // Send email with nodemailer
     await sendTempPasswordEmail(
-      { email: profile.email as string, display_name: (profile as any).display_name ?? null },
+      { email: prof.email as string, display_name: (prof as any).display_name ?? null },
       tempPassword
     );
 
@@ -1074,12 +1122,13 @@ async function createAuthForProfile(
   temp: string
 ) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  if (!profile.email) {
+  const loginEmail = cleanEmail(profile.email ?? "");
+  if (!loginEmail) {
     throw new Error("Este cadastro não tem login nem e-mail — oriente a pessoa a criar a conta.");
   }
   const { error: createErr } = await supabaseAdmin.auth.admin.createUser({
     id: profile.id,
-    email: profile.email.trim().toLowerCase(),
+    email: loginEmail,
     password: temp,
     email_confirm: true,
     user_metadata: {
@@ -1091,7 +1140,7 @@ async function createAuthForProfile(
   if (!createErr) return;
   // E-mail já tem outro login (pessoa recadastrou com outro id): usa ele.
   if (/already|exists|registered|duplicate/i.test(createErr.message)) {
-    const other = await findAuthUserByEmail(profile.email.trim().toLowerCase());
+    const other = await findAuthUserByEmail(loginEmail);
     if (other) {
       const { error: updErr } = await supabaseAdmin.auth.admin.updateUserById(other, {
         password: temp,
@@ -1106,11 +1155,11 @@ async function createAuthForProfile(
 /** Localiza login pelo e-mail (a API admin só pagina — base pequena, ok). */
 async function findAuthUserByEmail(email: string): Promise<string | null> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const want = email.trim().toLowerCase();
+  const want = cleanEmail(email);
   for (let page = 1; page <= 5; page++) {
     const { data, error } = await supabaseAdmin.auth.admin.listUsers({ page, perPage: 1000 });
     if (error || !data?.users?.length) break;
-    const hit = data.users.find((u) => (u.email ?? "").toLowerCase() === want);
+    const hit = data.users.find((u) => cleanEmail(u.email ?? "") === want);
     if (hit) return hit.id;
     if (data.users.length < 1000) break;
   }
@@ -1123,6 +1172,7 @@ async function sendTempPasswordEmail(
   tempPassword: string
 ) {
   const { sendEmail } = await import("@/lib/mail.server");
+  const loginEmail = cleanEmail(profile.email);
   const htmlContent = `
       <div style="font-family: sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px; background: #ffffff;">
         <h2 style="color: #2563eb; margin-top: 0;">Recuperação de Senha — Nexia Drive</h2>
@@ -1130,7 +1180,7 @@ async function sendTempPasswordEmail(
         <p>Recebemos uma solicitação de redefinição de senha para sua conta.</p>
         <p>Segue seus dados de acesso temporário:</p>
         <div style="background: #f1f5f9; padding: 12px; font-size: 14px; border-radius: 6px; margin: 18px 0; border: 1px dashed #cbd5e1; color: #0f172a;">
-          <p style="margin: 4px 0;">👤 <strong>Usuário / Acesso:</strong> ${profile.email}</p>
+          <p style="margin: 4px 0;">👤 <strong>Usuário / Acesso:</strong> ${loginEmail}</p>
           <p style="margin: 4px 0; font-size: 18px; font-family: monospace; font-weight: bold; letter-spacing: 1px;">🔒 Senha: ${tempPassword}</p>
         </div>
         <p style="color: #64748b; font-size: 12px;">💡 Por segurança, você deverá cadastrar uma nova senha de sua escolha assim que fizer login.</p>
@@ -1140,7 +1190,7 @@ async function sendTempPasswordEmail(
     `;
 
     await sendEmail({
-      to: profile.email,
+      to: loginEmail,
       subject: "Sua senha temporária — Nexia Drive",
       html: htmlContent,
     });
@@ -1157,7 +1207,7 @@ async function sendTempPasswordWhatsApp(
   try {
     const { sendWaTemplate } = await import("@/lib/viperconnect");
     const r = await sendWaTemplate(profile.phone, profile.display_name || "aluno(a)", "reset", {
-      vars: { senha: temp, email: profile.email ?? "" },
+      vars: { senha: temp, email: cleanEmail(profile.email ?? "") },
       force,
       session,
     });
@@ -1284,13 +1334,13 @@ export const requestPasswordResetWhatsApp = createServerFn({ method: "POST" })
   .inputValidator((d: { email: string }) => d)
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const emailClean = data.email.trim().toLowerCase();
+    const emailClean = cleanEmail(data.email);
     if (!emailClean) throw new Error("Informe seu e-mail.");
-    const { data: profile } = await supabaseAdmin
-      .from("profiles")
-      .select("id, email, display_name, cpf, phone")
-      .eq("email", emailClean)
-      .maybeSingle();
+    const { data: profile } = await findProfileByEmailClean(
+      supabaseAdmin,
+      "id, email, display_name, cpf, phone",
+      emailClean
+    );
     if (!profile) {
       throw new Error("Não encontramos nenhuma conta com este e-mail.");
     }
@@ -1341,27 +1391,37 @@ export const adminSendPasswordReset = createServerFn({ method: "POST" })
       .eq("id", data.userId)
       .maybeSingle();
     if (!profile) throw new Error("Usuário não encontrado.");
+    // Autocorrige linha salva com prefixo https:// (dado sujo antigo)
+    const storedEmail = (profile as any).email as string | null;
+    const loginEmail = storedEmail ? cleanEmail(storedEmail) : null;
+    if (storedEmail && loginEmail && storedEmail !== loginEmail) {
+      await supabaseAdmin.from("profiles").update({ email: loginEmail }).eq("id", profile.id);
+      try {
+        await supabaseAdmin.auth.admin.updateUserById(profile.id, { email: loginEmail, email_confirm: true });
+      } catch {
+        /* login pode não existir ainda — applyTempPassword cria */
+      }
+    }
     const temp = generateTempPassword(8);
     await applyTempPassword(
       {
         id: profile.id,
-        email: (profile as any).email as string | null,
+        email: loginEmail,
         display_name: (profile as any).display_name ?? null,
         phone: (profile as any).phone ?? null,
       },
       temp
     );
     const sentWa = await sendTempPasswordWhatsApp(
-      { phone: (profile as any).phone ?? null, display_name: (profile as any).display_name ?? null, email: (profile as any).email ?? null },
+      { phone: (profile as any).phone ?? null, display_name: (profile as any).display_name ?? null, email: loginEmail },
       temp,
       true,
       data.sessionPhone || undefined
     );
     if (sentWa) return { ok: true, channel: "whatsapp" as const };
-    const email = (profile as any).email as string | null;
-    if (email) {
+    if (loginEmail) {
       await sendTempPasswordEmail(
-        { email, display_name: (profile as any).display_name ?? null },
+        { email: loginEmail, display_name: (profile as any).display_name ?? null },
         temp
       );
       return { ok: true, channel: "email" as const };
