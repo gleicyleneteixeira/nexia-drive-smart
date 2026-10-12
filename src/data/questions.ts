@@ -76,7 +76,8 @@ export const QUESTIONS: Question[] = [
         commonMistake: "Cuidado: não confunda 8 passageiros no total com 8 passageiros mais o motorista — são 8 + 1!",
         tip: "B = Até 3.500 kg e 8 + 1.",
         incidence: "altissima",
-        difficulty: 3
+        difficulty: 3,
+        group: "cat-b-limites"
     },
     {
         id: "q2",
@@ -177,7 +178,8 @@ export const QUESTIONS: Question[] = [
         detailedExplanation: "A Categoria A engloba motocicletas, motonetas, triciclos e ciclomotores.",
         legalBase: "Art. 143, I do CTB",
         incidence: "alta",
-        difficulty: 3
+        difficulty: 3,
+        group: "cat-a-moto"
     },
     {
         id: "qe07",
@@ -1540,7 +1542,8 @@ export const QUESTIONS: Question[] = [
         detailedExplanation: "Para a obtenção da Permissão para Dirigir (PPD), o art. 140 do CTB exige que o candidato seja penalmente imputável (ter 18 anos completos), saiba ler e escrever e possua Carteira de Identidade (RG) e CPF.",
         legalBase: "Art. 140 do CTB",
         incidence: "alta",
-        difficulty: 1
+        difficulty: 1,
+        group: "req-primeira-habilitacao"
     },
     {
         id: "q27",
@@ -3583,7 +3586,8 @@ export const QUESTIONS: Question[] = [
         memoryHook: "B = 3.500 kg e 8+1.",
         incidence: "alta",
         trap: true,
-        difficulty: 2
+        difficulty: 2,
+        group: "cat-b-limites"
     },
     {
         id: "leg_n1_001",
@@ -3599,7 +3603,8 @@ export const QUESTIONS: Question[] = [
         memoryHook: "B = 3.500 kg e 8+1.",
         incidence: "alta",
         trap: true,
-        difficulty: 1
+        difficulty: 1,
+        group: "cat-b-limites"
     },
     {
         id: "leg_n2_003",
@@ -3647,7 +3652,8 @@ export const QUESTIONS: Question[] = [
         memoryHook: "PPD = sem infração grave/gravíssima e sem reincidência em média.",
         incidence: "alta",
         trap: true,
-        difficulty: 2
+        difficulty: 2,
+        group: "ppd-regras"
     },
     {
         id: "inf_n2_001",
@@ -7431,6 +7437,7 @@ export const QUESTIONS: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 2,
+        group: "cat-d-passageiros",
         origin: "ia"
     },
     {
@@ -7463,6 +7470,7 @@ export const QUESTIONS: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 1,
+        group: "docs-porte-obrigatorio",
         origin: "ia"
     },
     {
@@ -7833,6 +7841,230 @@ export const QUESTIONS: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "bnc_lei_9503",
+        category: "legislacao",
+        statement: "Qual é a principal lei que rege e disciplina o trânsito nas vias terrestres no Brasil?",
+        options: ["Lei nº 9.503/1997, que institui o CTB (Código de Trânsito Brasileiro).", "Lei nº 11.705/2008, a Lei Seca da alcoolemia.", "Lei nº 12.009/2009, do mototáxi e motofrete.", "Lei nº 13.146/2015, Estatuto da Pessoa com Deficiência."],
+        correctIndex: 0,
+        explanation: "Correta A: a Lei 9.503/97 institui o CTB; as demais tratam de temas específicos.",
+        detailedExplanation: "A 11.705 trata de álcool, a 12.009 de mototáxi e a 13.146 de acessibilidade — todas orbitam o CTB, que é a lei-mãe do trânsito desde 1997.",
+        legalBase: "Lei nº 9.503/1997",
+        commonMistake: "Marcar a Lei Seca por ser a mais falada na mídia.",
+        tip: "Trânsito = 9.503/97.",
+        incidence: "alta",
+        trap: false,
+        difficulty: 1,
+        origin: "ia"
+    },
+    {
+        id: "bnc_normas_complementares",
+        category: "legislacao",
+        statement: "Além do CTB, quais outras regulamentações complementam a legislação de trânsito brasileira?",
+        options: ["Somente decretos municipais de cada prefeitura.", "Apenas a jurisprudência dos tribunais de trânsito.", "Resoluções do CONTRAN, portarias do DENATRAN/SENATRAN e normas estaduais e municipais.", "Somente o regimento interno dos DETRANs."],
+        correctIndex: 2,
+        explanation: "Correta C: o sistema combina CTB + resoluções CONTRAN + portarias do órgão executivo federal + normas locais.",
+        detailedExplanation: "Decretos municipais e regimentos sozinhos não dão conta; jurisprudência orienta, mas não legisla. A pirâmide é CTB, resoluções, portarias e normas locais.",
+        tip: "CTB + CONTRAN + DENATRAN + local.",
+        incidence: "alta",
+        trap: false,
+        difficulty: 1,
+        origin: "ia"
+    },
+    {
+        id: "bnc_snt_art5",
+        category: "legislacao",
+        statement: "Qual a finalidade do SNT (Sistema Nacional de Trânsito), conforme o Art. 5º do CTB?",
+        options: ["Apenas multar e arrecadar taxas dos condutores.", "Promover planejamento, normatização, registro, habilitação, educação, engenharia, fiscalização e penalidades.", "Apenas construir rodovias, sem normatizar, fiscalizar ou julgar infrações.", "Apenas aplicar multas, sem educar, registrar ou habilitar condutores."],
+        correctIndex: 1,
+        explanation: "Correta B: o SNT cobre todo o ciclo — planejar, normatizar, registrar, habilitar, educar, fiscalizar e punir.",
+        detailedExplanation: "Multar sozinho ou só construir estradas são visões parciais: o art. 5º lista planejamento, administração, pesquisa, registro, formação, educação, engenharia, operação, policiamento, julgamento e penalidades.",
+        legalBase: "Art. 5º do CTB",
+        commonMistake: "Reduzir o SNT a multa ou a obras.",
+        tip: "SNT = ciclo completo, do planejar ao punir.",
+        incidence: "alta",
+        trap: false,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "bnc_req_art140",
+        category: "legislacao",
+        statement: "Quais são os requisitos básicos para o candidato à primeira habilitação, conforme o Art. 140 do CTB?",
+        options: ["16 anos emancipado, com autorização dos pais.", "21 anos e curso superior completo.", "Apenas pagar taxas, sem exames ou documentos.", "18 anos, saber ler e escrever, RG (ou equivalente) e CPF."],
+        correctIndex: 3,
+        explanation: "Correta D: penalmente imputável (18 anos), alfabetizado, identidade e CPF (Res. 168/2004).",
+        detailedExplanation: "16 anos não habilita nem emancipado; 21 é para categorias C, D e E; e sem exames ninguém se habilita. O CPF veio com a Res. 168 do CONTRAN.",
+        legalBase: "Art. 140 do CTB; Res. CONTRAN nº 168/2004",
+        commonMistake: "Achar que emancipação antecipa a habilitação.",
+        tip: "Primeira habilitação = 18 + ler + RG + CPF.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 1,
+        group: "req-primeira-habilitacao",
+        origin: "ia"
+    },
+    {
+        id: "bnc_exames_res168",
+        category: "legislacao",
+        statement: "Quais exames o candidato à CNH deve fazer, segundo a Resolução nº 168 do CONTRAN?",
+        options: ["Apenas exame de vista e teste de baliza.", "Avaliação psicológica, aptidão física e mental, exame escrito e exame de direção.", "Apenas curso teórico online, sem provas presenciais.", "Somente exame médico e pagamento das taxas do DETRAN."],
+        correctIndex: 1,
+        explanation: "Correta B: o processo tem avaliação psicológica, aptidão física e mental, prova escrita e prova de direção.",
+        detailedExplanation: "Vista e baliza sozinhas não bastam; curso sem prova não habilita; e só pagar taxa não aprova ninguém. São quatro etapas eliminatórias.",
+        legalBase: "Res. CONTRAN nº 168/2004",
+        commonMistake: "Achar que só a baliza reprova ou que taxa substitui exame.",
+        tip: "Psico + médico + escrita + direção.",
+        incidence: "alta",
+        trap: false,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "bnc_teorico_70",
+        category: "legislacao",
+        statement: "Qual a pontuação mínima de acertos exigida no Exame Teórico-técnico para obter a CNH?",
+        options: ["50% das questões.", "60% das questões.", "70% de acertos, no mínimo.", "100% das questões, sem margem de erro."],
+        correctIndex: 2,
+        explanation: "Correta C: aprovação exige no mínimo 70% de aproveitamento na prova teórica.",
+        detailedExplanation: "Com 30 questões, 70% equivalem a 21 acertos. Abaixo disso, reprova e agenda novo exame após o prazo.",
+        tip: "Teórica = 70% (21 de 30).",
+        incidence: "alta",
+        trap: false,
+        difficulty: 1,
+        origin: "ia"
+    },
+    {
+        id: "bnc_cat_a",
+        category: "legislacao",
+        statement: "Descreva a Categoria 'A' de habilitação:",
+        options: ["Veículo motorizado de duas ou três rodas, com ou sem carro lateral.", "Qualquer automóvel de passeio até 3.500 kg.", "Ônibus e caminhões de qualquer lotação.", "Somente ciclomotores de até 50 cilindradas."],
+        correctIndex: 0,
+        explanation: "Correta A: categoria A abrange motos, motonetas e triciclos, com ou sem sidecar.",
+        detailedExplanation: "Carro até 3,5t é B; ônibus e caminhão são D e C; e 50cc é ciclomotor (ACC), incluído na A, não restrito a ela.",
+        legalBase: "Art. 143, I do CTB",
+        commonMistake: "Achar que A serve para carro ou que se limita a 50cc.",
+        tip: "A = 2 ou 3 rodas.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 1,
+        group: "cat-a-moto",
+        origin: "ia"
+    },
+    {
+        id: "bnc_cat_b",
+        category: "legislacao",
+        statement: "Descreva a Categoria 'B' de habilitação:",
+        options: ["Qualquer peso e lotação, inclusive carretas.", "Veículos não abrangidos pela A, PBT até 3,5t e lotação até 8 lugares, sem o motorista.", "Carga acima de 3,5t e passageiros acima de 8 lugares.", "Somente motos de duas rodas com sidecar."],
+        correctIndex: 1,
+        explanation: "Correta B: B é para veículos fora da A, até 3,5t e 8 passageiros mais o condutor.",
+        detailedExplanation: "Sem limite é E; carga +3,5t é C; passageiros +8 é D; moto com sidecar continua A. Oito lugares excluem o motorista (8+1).",
+        legalBase: "Art. 143, II do CTB",
+        commonMistake: "Contar o motorista nos 8 lugares.",
+        tip: "B = 3,5t e 8+1.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "cat-b-limites",
+        origin: "ia"
+    },
+    {
+        id: "bnc_cat_c",
+        category: "legislacao",
+        statement: "Descreva a Categoria 'C' de habilitação:",
+        options: ["Passageiros acima de 8 lugares, sem o motorista.", "Motos de duas ou três rodas.", "Combinações com reboque acima de 6 toneladas.", "Carga com PBT acima de 3,5 toneladas."],
+        correctIndex: 3,
+        explanation: "Correta D: categoria C é para transporte de carga com PBT superior a 3,5t.",
+        detailedExplanation: "Passageiros +8 é D; moto é A; combinação +6t é E. A C abrange caminhões, incluindo os da B.",
+        legalBase: "Art. 143, III do CTB",
+        commonMistake: "Confundir carga pesada (C) com passageiros (D) ou carretas (E).",
+        tip: "C = carga +3,5t.",
+        incidence: "alta",
+        trap: false,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "bnc_cat_d",
+        category: "legislacao",
+        statement: "Descreva a Categoria 'D' de habilitação:",
+        options: ["Carga com PBT acima de 3,5 toneladas.", "Motos e triciclos de qualquer cilindrada.", "Passageiros com lotação acima de 8 lugares, sem o motorista.", "Qualquer veículo, com apenas 1 ano de habilitação."],
+        correctIndex: 2,
+        explanation: "Correta C: categoria D é para passageiros acima de 8 lugares, excluído o motorista.",
+        detailedExplanation: "Carga +3,5t é C; moto é A; e D exige 21 anos, 2 anos de B (ou 1 de C) e ficha limpa de grave/gravíssima — não basta 1 ano.",
+        legalBase: "Art. 143, IV do CTB",
+        commonMistake: "Trocar carga (C) por passageiros (D).",
+        tip: "D = passageiros +8, sem o motorista.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "cat-d-passageiros",
+        origin: "ia"
+    },
+    {
+        id: "bnc_cat_e",
+        category: "legislacao",
+        statement: "Descreva a Categoria 'E' de habilitação:",
+        options: ["Combinação cuja unidade acoplada tenha 6t ou mais, ou lotação acima de 8 lugares.", "Qualquer moto com reboque lateral de pequeno porte.", "Somente ônibus articulados urbanos de dois andares.", "Carros de passeio com carretinha de até 750 kg."],
+        correctIndex: 0,
+        explanation: "Correta A: E é combinação com tratora B/C/D e reboque 6t+ ou +8 passageiros.",
+        detailedExplanation: "Moto com sidecar é A; ônibus articulado é D; carretinha leve com carro é B. A E cobre carretas, bitrens e trailers pesados.",
+        legalBase: "Art. 143, V do CTB",
+        commonMistake: "Achar que qualquer reboque exige E.",
+        tip: "E = combinação pesada (6t+ ou +8).",
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "bnc_acc",
+        category: "legislacao",
+        statement: "Qual documento é necessário para conduzir ciclomotores?",
+        options: ["CNH categoria E com curso de 5 anos.", "Nenhum documento, por ser veículo de pequeno porte.", "Apenas capacete, dispensada qualquer habilitação.", "ACC, sendo a categoria A também apta."],
+        correctIndex: 3,
+        explanation: "Correta D: ciclomotor exige ACC, e quem tem categoria A já está apto.",
+        detailedExplanation: "Ciclomotor (até 50cc) não dispensa habilitação: exige ACC própria ou CNH A. Capacete é obrigatório, mas não substitui o documento; E é para combinações pesadas.",
+        tip: "Ciclomotor = ACC (ou A).",
+        incidence: "alta",
+        trap: true,
+        difficulty: 1,
+        origin: "ia"
+    },
+    {
+        id: "bnc_ppd",
+        category: "legislacao",
+        statement: "Qual a validade da Permissão para Dirigir e as condições para obter a CNH definitiva?",
+        options: ["6 meses, vedada qualquer infração, ainda que leve.", "1 ano; sem grave/gravíssima nem reincidência em média.", "2 anos, admitindo até duas gravíssimas.", "5 anos, como a CNH definitiva comum."],
+        correctIndex: 1,
+        explanation: "Correta B: PPD de 1 ano; bloqueiam a definitiva grave, gravíssima ou reincidência em média.",
+        detailedExplanation: "Leve isolada não bloqueia; 2 anos e 5 anos são prazos de outras etapas. Quem bloqueia recomeça o processo.",
+        legalBase: "Art. 148 do CTB",
+        commonMistake: "Achar que qualquer infração leve impede a definitiva.",
+        tip: "PPD 1 ano: sem grave/gravíssima, sem repetir média.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        group: "ppd-regras",
+        origin: "ia"
+    },
+    {
+        id: "bnc_docs_porte",
+        category: "legislacao",
+        statement: "Quais documentos são de porte obrigatório para o condutor e para o veículo?",
+        options: ["CNH ou Permissão do condutor e CRLV do veículo, em original.", "Apenas comprovante de IPVA pago do exercício.", "Somente o manual do proprietário e a nota fiscal.", "Somente RG e CPF, dispensados CNH e CRLV."],
+        correctIndex: 0,
+        explanation: "Correta A: condutor porta CNH/PPD e o veículo, CRLV — ambos em original (físico ou digital).",
+        detailedExplanation: "IPVA é tributo, manual e nota não habilitam nem licenciam, e RG/CPF não substituem CNH e CRLV. O agente pode dispensar o físico se consultar o sistema.",
+        legalBase: "Arts. 133 e 159 do CTB",
+        commonMistake: "Apresentar IPVA ou RG no lugar de CNH e CRLV.",
+        tip: "Porte = CNH + CRLV.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 1,
+        group: "docs-porte-obrigatorio",
         origin: "ia"
     }
 ];
