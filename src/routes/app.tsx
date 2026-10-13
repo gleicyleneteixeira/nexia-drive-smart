@@ -593,9 +593,11 @@ function TeoricoDashboard() {
             <Loader2 className="h-5 w-5 animate-spin text-primary" />
           </div>
         ) : teoricoItems.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="flex overflow-x-auto gap-4 py-2 snap-x snap-mandatory">
             {teoricoItems.slice(0, 6).map((item) => (
-              <LibraryCard key={item.id} item={item} onPdfClick={setPdfModal} />
+              <div key={item.id} className="shrink-0 w-[240px] snap-start">
+                <LibraryCard item={item} onPdfClick={setPdfModal} />
+              </div>
             ))}
           </div>
         ) : (
@@ -701,9 +703,11 @@ function PsicotecnicoDashboard() {
             <Loader2 className="h-5 w-5 animate-spin text-primary" />
           </div>
         ) : psicoItems.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="flex overflow-x-auto gap-4 py-2 snap-x snap-mandatory">
             {psicoItems.slice(0, 6).map((item) => (
-              <LibraryCard key={item.id} item={item} onPdfClick={setPdfModal} />
+              <div key={item.id} className="shrink-0 w-[240px] snap-start">
+                <LibraryCard item={item} onPdfClick={setPdfModal} />
+              </div>
             ))}
           </div>
         ) : (
@@ -1284,9 +1288,11 @@ function DirecaoDashboard() {
                 <Loader2 className="h-6 w-6 animate-spin text-primary" />
               </div>
             ) : direcaoItems.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="flex overflow-x-auto gap-4 py-2 snap-x snap-mandatory">
                 {direcaoItems.map((item) => (
-                  <LibraryCard key={item.id} item={item} onPdfClick={setPdfModal} />
+                  <div key={item.id} className="shrink-0 w-[240px] snap-start">
+                    <LibraryCard item={item} onPdfClick={setPdfModal} />
+                  </div>
                 ))}
               </div>
             ) : (
