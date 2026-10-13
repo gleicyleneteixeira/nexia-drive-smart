@@ -280,6 +280,8 @@ function SimuladoPage() {
   const [elapsed, setElapsed] = useState(0);
   // Total de simulados finalizados (exibido no resultado)
   const [concluidos, setConcluidos] = useState(0);
+  // Momento em que o simulado atual começou (preservado entre saves)
+  const startedAtRef = useRef<number>(Date.now());
 
   // Registra 1 simulado finalizado (qualquer categoria/modo do teórico).
   // Abandonar no meio NÃO conta — só conclusão (última questão ou finalizar).
@@ -309,6 +311,7 @@ function SimuladoPage() {
       setSelected(persisted.selected);
       setAnswers(persisted.answers);
       setElapsed(persisted.startedAt ? Math.max(0, Math.floor((Date.now() - persisted.startedAt) / 1000)) : 0);
+      if (persisted.startedAt) startedAtRef.current = persisted.startedAt;
       setResumed(true);
       setMode(persisted.mode ?? null);
       if (persisted.index >= persisted.questions.length) {
@@ -335,16 +338,20 @@ function SimuladoPage() {
       index,
       selected,
       answers,
-      startedAt: Date.now(),
+      startedAt: startedAtRef.current,
+      mode: mode ?? undefined,
     });
-  }, [hydrated, questions, index, selected, answers]);
+  }, [hydrated, questions, index, selected, answers, mode]);
 
   // Auto-início via query param (usado pelo banner "Ir p/ Simulado"):
   // modo=completo -> Simulado Geral (30 questões); categoria=X -> Simulado por categoria.
+  // Se já existe um simulado salvo para retomar, NÃO auto-inicia — preserva o progresso.
   const search = Route.useSearch();
   const autoStartedRef = useRef(false);
   useEffect(() => {
     if (!hydrated || autoStartedRef.current) return;
+    // Já há simulado em andamento salvo → retoma em vez de recomeçar
+    if (loadPersisted()) return;
     if (search.modo === "completo") {
       autoStartedRef.current = true;
       startWithMode("completo");
@@ -366,6 +373,7 @@ function SimuladoPage() {
     if (!fresh.length) return;
     // Conta como INICIADO (retomada de salvo não passa por aqui)
     registrarSimuladoIniciado(user?.id);
+    startedAtRef.current = Date.now();
     setQuestions(fresh);
     setIndex(0);
     setSelected(null);
@@ -380,7 +388,7 @@ function SimuladoPage() {
       index: 0,
       selected: null,
       answers: [],
-      startedAt: Date.now(),
+      startedAt: startedAtRef.current,
       mode,
     });
   }
