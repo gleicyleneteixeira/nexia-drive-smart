@@ -188,17 +188,20 @@ function Section({ title, items }: { title: string; items: LibraryItem[] }) {
   return (
     <section>
       <h2 className="text-xl font-display font-bold mb-4">{title}</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {items.map((item, i) => (
-          <motion.div
-            key={item.id}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.04 * i }}
-          >
-            <ItemCard item={item} />
-          </motion.div>
-        ))}
+      <div className="flex flex-col sm:flex-row gap-4 overflow-x-auto pb-2 scrollbar-thin scrollbar-track-muted-foreground scrollbar-hide">
+        <div className="flex flex-col items-start snap-start min-w-0">
+          {items.map((item, i) => (
+            <motion.div
+              key={item.id}
+              style={{ flex: '0 0 auto' }}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ type: "spring", stiffness: 120, damping: 20 }}
+            >
+              <ItemCard item={item} />
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -241,13 +244,13 @@ function ItemCard({ item }: { item: LibraryItem }) {
         target={target}
         rel={rel}
         onClick={handleClick}
-        className="group block glass rounded-2xl overflow-hidden hover:bg-accent/30 transition-all hover:-translate-y-0.5 hover:shadow-glow h-full cursor-pointer"
+        className="group block glass rounded-2xl overflow-hidden hover:bg-accent/30 transition-all hover:-translate-y-0.5 hover:shadow-glow cursor-pointer min-w-0"
       >
         <div className="aspect-[4/3] relative bg-gradient-to-br from-primary/20 to-primary-glow/20 overflow-hidden">
           {item.cover_url ? (
-            <img src={item.cover_url} alt={item.title} className="w-full h-full object-cover" />
+            <img src={item.cover_url} alt={item.title} className="w-full object-cover" />
           ) : (
-            <div className="w-full h-full flex items-center justify-center">
+            <div className="w-full flex items-center justify-center">
               <Icon className="h-16 w-16 text-primary/50" />
             </div>
           )}
