@@ -49,6 +49,16 @@ function AdminPage() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
 
   useEffect(() => {
+    // Se a sessão morrer (ex.: sair em outra aba), volta pro login na hora
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_OUT") {
+        navigate({ to: "/auth" });
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [navigate]);
+
+  useEffect(() => {
     (async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
@@ -2716,20 +2726,56 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
     }
   }
 
+  // O 400 do storage quase sempre é sessão morta: o supabase-js envia a chave anônima
+  // quando não consegue renovar o token e o RLS nega. Garante token vivo antes de salvar.
+  async function ensureValidSession(): Promise<void> {
+    const { data: { session } } = await supabase.auth.getSession();
+    const stillValid = session?.expires_at && session.expires_at * 1000 > Date.now() + 60_000;
+    if (stillValid) return;
+    const { data: { session: renewed }, error } = await supabase.auth.refreshSession();
+    if (!renewed && error) {
+      throw new Error(
+        "Sua sessão expirou. Clique em “Sair” e entre de novo no painel, recarregue a página (Ctrl+F5) e tente salvar novamente."
+      );
+    }
+  }
+
+  const isAuthStorageError = (m: string | undefined) => {
+    const s = (m ?? "").toLowerCase();
+    return (
+      s.includes("jwt") ||
+      s.includes("jws") ||
+      s.includes("session") ||
+      s.includes("expired") ||
+      s.includes("unauthorized") ||
+      s.includes("row-level security")
+    );
+  };
+
   async function uploadToBucket(file: File, folder: string): Promise<string> {
     const ext = file.name.split(".").pop() ?? "bin";
     const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
     let { error } = await supabase.storage.from("library").upload(path, file);
-    // Sessão expirada é a causa clássica do erro 400 (invalid JWT): renova e tenta de novo
-    if (error) {
-      const msg = (error.message ?? "").toLowerCase();
-      if (msg.includes("jwt") || msg.includes("session") || msg.includes("expired")) {
-        await supabase.auth.refreshSession().catch(() => {});
+    // Token morreu no meio do caminho: renova e tenta uma vez mais
+    if (error && isAuthStorageError(error.message)) {
+      const { error: re } = await supabase.auth.refreshSession();
+      if (!re) {
         const retry = await supabase.storage.from("library").upload(path, file);
         error = retry.error;
       }
     }
     if (error) {
+      if (isAuthStorageError(error.message)) {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          throw new Error(
+            "Sessão expirada no meio do save. Saia e entre de novo no painel, recarregue (Ctrl+F5) e tente novamente."
+          );
+        }
+        throw new Error(
+          "Sem permissão para subir arquivos com esta conta. Confirme que está logada como admin e recarregue a página (Ctrl+F5)."
+        );
+      }
       throw new Error(`Falha no upload (${folder}): ${error.message}`);
     }
     const { data } = supabase.storage.from("library").getPublicUrl(path);
@@ -2740,6 +2786,7 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
     e.preventDefault();
     setSaving(true);
     try {
+      await ensureValidSession();
       let finalUrl = url;
       let finalCover = coverUrl;
       let finalSlides: any = null;
