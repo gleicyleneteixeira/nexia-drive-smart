@@ -2755,29 +2755,50 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
   async function uploadToBucket(file: File, folder: string): Promise<string> {
     const ext = file.name.split(".").pop() ?? "bin";
     const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-    let { error } = await supabase.storage.from("library").upload(path, file);
-    // Token morreu no meio do caminho: renova e tenta uma vez mais
-    if (error && isAuthStorageError(error.message)) {
+    const baseUrl = import.meta.env.VITE_SUPABASE_URL as string;
+    const anonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string;
+
+    // Upload com o token do usuário EXPLÍCITO: evita o fallback silencioso para a
+    // chave anônima (que provoca o 400 quando a sessão da aba está instável)
+    // e devolve o corpo do erro do servidor para diagnóstico.
+    const send = async (): Promise<{ status: number; body: string }> => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return { status: 0, body: "sem sessão nesta página" };
+      const fd = new FormData();
+      fd.append("", file);
+      const r = await fetch(`${baseUrl}/storage/v1/object/library/${path}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+          apikey: anonKey,
+          "x-upsert": "false",
+        },
+        body: fd,
+      });
+      return { status: r.status, body: await r.text() };
+    };
+
+    let res = await send();
+    if (res.status === 0 || res.status >= 400) {
+      // Sessão morreu no meio do caminho: renova e tenta uma vez mais
       const { error: re } = await supabase.auth.refreshSession();
-      if (!re) {
-        const retry = await supabase.storage.from("library").upload(path, file);
-        error = retry.error;
-      }
+      if (!re) res = await send();
     }
-    if (error) {
-      if (isAuthStorageError(error.message)) {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) {
-          throw new Error(
-            "Sessão expirada no meio do save. Saia e entre de novo no painel, recarregue (Ctrl+F5) e tente novamente."
-          );
-        }
+
+    if (res.status === 0) {
+      throw new Error(
+        "Você não está logada nesta página. Clique em “Sair”, entre de novo no painel (Ctrl+F5) e tente salvar novamente."
+      );
+    }
+    if (res.status >= 400) {
+      if (isAuthStorageError(res.body)) {
         throw new Error(
-          "Sem permissão para subir arquivos com esta conta. Confirme que está logada como admin e recarregue a página (Ctrl+F5)."
+          `O servidor recusou o upload pois o login desta página não foi aceito (${res.status}). Saia e entre de novo no painel e tente novamente. Detalhe: ${res.body.slice(0, 200)}`
         );
       }
-      throw new Error(`Falha no upload (${folder}): ${error.message}`);
+      throw new Error(`Falha no upload (${folder}): ${res.status} ${res.body.slice(0, 300)}`);
     }
+
     const { data } = supabase.storage.from("library").getPublicUrl(path);
     return data.publicUrl;
   }
