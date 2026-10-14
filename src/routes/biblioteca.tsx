@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchLibraryItems, type LibraryItem } from "@/lib/library";
-import { Book, ExternalLink, Lock, FileText, BookOpen, Loader2, Play, Image as ImageIcon, X } from "lucide-react";
+import { Book, ExternalLink, Lock, FileText, BookOpen, Loader2, Play, Image as ImageIcon, X, Headphones } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { NativePdfModal } from "@/components/NativePdfModal";
 
@@ -213,8 +213,9 @@ function ItemCard({ item }: { item: LibraryItem }) {
   const isVideo = item.item_type === "video";
   const isImage = item.item_type === "image";
   const isCarousel = item.item_type === "carousel";
-  const Icon = isCarousel ? BookOpen : isImage ? ImageIcon : isVideo ? Play : item.item_type === "pdf" ? BookOpen : item.item_type === "heyzine" ? FileText : ExternalLink;
-  const typeLabel = isCarousel ? "Carrossel" : isImage ? "Imagem" : isVideo ? "Vídeo" : item.item_type === "pdf" ? "Livrinho" : item.item_type === "heyzine" ? "Flipbook" : "Link";
+  const isAudio = item.item_type === "audio";
+  const Icon = isCarousel ? BookOpen : isAudio ? Headphones : isImage ? ImageIcon : isVideo ? Play : item.item_type === "pdf" ? BookOpen : item.item_type === "heyzine" ? FileText : ExternalLink;
+  const typeLabel = isCarousel ? "Carrossel" : isAudio ? "Áudio" : isImage ? "Imagem" : isVideo ? "Vídeo" : item.item_type === "pdf" ? "Livrinho" : item.item_type === "heyzine" ? "Flipbook" : "Link";
 
   const href = (isImage && !item.narrated) ? undefined : isVideo || item.item_type === "heyzine" ? item.url : (item.is_paid ? undefined : `/biblioteca/${item.id}`);
   const target = isVideo || item.item_type === "heyzine" ? "_blank" : undefined;

@@ -36,6 +36,7 @@ import {
   AlertTriangle,
   Info,
   HelpCircle,
+  Headphones,
 } from "lucide-react";
 
 export const Route = createFileRoute("/app")({
@@ -2246,8 +2247,9 @@ function LibraryCard({
   const isPdf = item.item_type === "pdf";
   const isHeyzine = item.item_type === "heyzine";
   const isLink = item.item_type === "link";
-  const Icon = isImage ? ImageIcon : isVideo ? Play : isPdf ? BookOpen : isHeyzine ? FileText : ExternalLink;
-  const typeLabel = isImage ? "Imagem" : isVideo ? "Vídeo" : isPdf ? "Livrinho" : isHeyzine ? "Flipbook" : "Link";
+  const isAudio = item.item_type === "audio";
+  const Icon = isImage ? ImageIcon : isVideo ? Play : isAudio ? Headphones : isPdf ? BookOpen : isHeyzine ? FileText : ExternalLink;
+  const typeLabel = isImage ? "Imagem" : isVideo ? "Vídeo" : isAudio ? "Áudio" : isPdf ? "Livrinho" : isHeyzine ? "Flipbook" : "Link";
 
   const handleClick = (e: React.MouseEvent) => {
     if (isPdf && onPdfClick) {
@@ -2294,9 +2296,9 @@ function LibraryCard({
   // For non-PDF items, keep the <a> behavior
   return (
     <a
-      href={item.url}
-      target="_blank"
-      rel="noreferrer"
+      href={isAudio ? `/biblioteca/${item.id}` : item.url}
+      target={isAudio ? undefined : "_blank"}
+      rel={isAudio ? undefined : "noreferrer"}
       className="group glass rounded-2xl overflow-hidden hover:bg-accent/30 transition-all hover:-translate-y-0.5 hover:shadow-glow cursor-pointer"
     >
       <div className="aspect-[16/9] relative bg-gradient-to-br from-primary/15 to-primary-glow/15 overflow-hidden">

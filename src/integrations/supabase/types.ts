@@ -444,7 +444,7 @@ profiles: {
     }
     Enums: {
       app_role: "admin" | "user"
-      library_item_type: "pdf" | "heyzine" | "link" | "video" | "image" | "carousel"
+      library_item_type: "pdf" | "heyzine" | "link" | "video" | "image" | "carousel" | "audio"
       reading_habit: "raramente" | "as_vezes" | "frequentemente"
     }
     CompositeTypes: {
@@ -574,7 +574,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
-      library_item_type: ["pdf", "heyzine", "link", "video", "image", "carousel"],
+      library_item_type: ["pdf", "heyzine", "link", "video", "image", "carousel", "audio"],
       reading_habit: ["raramente", "as_vezes", "frequentemente"],
     },
   },

@@ -152,6 +152,28 @@ function ItemViewer() {
               </a>
             </div>
           )}
+
+          {item.item_type === "audio" && (
+            <div className="glass rounded-3xl p-6 md:p-8 max-w-xl mx-auto text-center space-y-4">
+              <div className="w-16 h-16 mx-auto rounded-full gradient-primary flex items-center justify-center shadow-glow">
+                <Volume2 className="h-7 w-7 text-primary-foreground" />
+              </div>
+              <h2 className="font-display font-bold text-lg">{item.title}</h2>
+              {item.description && (
+                <p className="text-sm text-muted-foreground">{item.description}</p>
+              )}
+              <audio
+                controls
+                autoPlay
+                preload="metadata"
+                src={item.url}
+                className="w-full"
+              />
+              <p className="text-[11px] text-muted-foreground/60">
+                Use os controles do player para ouvir, pausar e ajustar o volume.
+              </p>
+            </div>
+          )}
         </>
       )}
     </div>

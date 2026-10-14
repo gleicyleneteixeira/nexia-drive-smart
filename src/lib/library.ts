@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 
-export type LibraryItemType = "pdf" | "heyzine" | "link" | "video" | "image" | "carousel";
+export type LibraryItemType = "pdf" | "heyzine" | "link" | "video" | "image" | "carousel" | "audio";
 
 export interface LibraryItem {
   id: string;
@@ -33,7 +33,7 @@ export async function fetchLibraryItems(includeUnpublished = false): Promise<Lib
         if (signed?.signedUrl) item.cover_url = signed.signedUrl;
       }
     }
-    if (item.url && (item.item_type === "image" || item.item_type === "pdf" || item.item_type === "carousel")) {
+    if (item.url && (item.item_type === "image" || item.item_type === "pdf" || item.item_type === "carousel" || item.item_type === "audio")) {
       const path = extractStoragePath(item.url);
       if (path) {
         const { data: signed } = await supabase.storage.from("library").createSignedUrl(path, 60 * 60 * 6);

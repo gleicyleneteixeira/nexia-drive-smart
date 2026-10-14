@@ -2739,6 +2739,9 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
       if (itemType === "image" && pdfFile) {
         finalUrl = await uploadToBucket(pdfFile, "images");
       }
+      if (itemType === "audio" && pdfFile) {
+        finalUrl = await uploadToBucket(pdfFile, "audios");
+      }
       if (itemType === "carousel") {
         const uploadedSlides = [];
         for (const slide of slides) {
@@ -2856,6 +2859,7 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
               <SelectItem value="image">Imagem (foto/ilustração)</SelectItem>
               <SelectItem value="link">Link externo (site)</SelectItem>
               <SelectItem value="carousel">Carrossel de Imagens</SelectItem>
+              <SelectItem value="audio">Áudio (MP3 — player embutido)</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -2915,6 +2919,21 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
             onChange={(e) => setPdfFile(e.target.files?.[0] ?? null)}
           />
           {editing && url && <p className="text-xs text-muted-foreground mt-1">Atual: {url}</p>}
+        </div>
+      )}
+
+      {itemType === "audio" && (
+        <div>
+          <Label>Arquivo de Áudio (MP3/WAV/M4A) {editing ? "(opcional — manter atual se vazio)" : "*"}</Label>
+          <Input
+            type="file"
+            accept="audio/*"
+            onChange={(e) => setPdfFile(e.target.files?.[0] ?? null)}
+          />
+          {editing && url && <p className="text-xs text-muted-foreground mt-1">Atual: {url.split("/").pop()}</p>}
+          <p className="text-[11px] text-muted-foreground mt-1">
+            O aluno ouve com o player embutido na página do item, sem sair do app.
+          </p>
         </div>
       )}
 
