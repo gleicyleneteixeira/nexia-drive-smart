@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";
 import { isProfileExpired } from "@/lib/subscription";
@@ -10,6 +10,7 @@ import { fetchVideoTutorials, type VideoTutorial } from "@/lib/video-tutorials";
 import { GroupPopups } from "@/components/WhatsAppGroupPopup";
 import { NativePdfModal } from "@/components/NativePdfModal";
 import { RankingReprovacao } from "@/components/RankingReprovacao";
+import { HCarousel } from "@/components/HCarousel";
 import { Loader2 } from "lucide-react";
 import {
   Sparkles,
@@ -594,13 +595,13 @@ function TeoricoDashboard() {
             <Loader2 className="h-5 w-5 animate-spin text-primary" />
           </div>
         ) : teoricoItems.length > 0 ? (
-          <div className="flex overflow-x-auto gap-4 py-2 snap-x snap-mandatory">
+          <HCarousel>
             {teoricoItems.slice(0, 6).map((item) => (
               <div key={item.id} className="shrink-0 w-[240px] snap-start">
                 <LibraryCard item={item} onPdfClick={setPdfModal} />
               </div>
             ))}
-          </div>
+          </HCarousel>
         ) : (
           <div className="glass rounded-2xl p-8 text-center">
             <BookOpen className="h-10 w-10 mx-auto text-muted-foreground/50 mb-2" />
@@ -704,13 +705,13 @@ function PsicotecnicoDashboard() {
             <Loader2 className="h-5 w-5 animate-spin text-primary" />
           </div>
         ) : psicoItems.length > 0 ? (
-          <div className="flex overflow-x-auto gap-4 py-2 snap-x snap-mandatory">
+          <HCarousel>
             {psicoItems.slice(0, 6).map((item) => (
               <div key={item.id} className="shrink-0 w-[240px] snap-start">
                 <LibraryCard item={item} onPdfClick={setPdfModal} />
               </div>
             ))}
-          </div>
+          </HCarousel>
         ) : (
           <div className="glass rounded-2xl p-8 text-center">
             <BookOpen className="h-10 w-10 mx-auto text-muted-foreground/50 mb-2" />
@@ -1289,13 +1290,13 @@ function DirecaoDashboard() {
                 <Loader2 className="h-6 w-6 animate-spin text-primary" />
               </div>
             ) : direcaoItems.length > 0 ? (
-              <div className="flex overflow-x-auto gap-4 py-2 snap-x snap-mandatory">
+              <HCarousel>
                 {direcaoItems.map((item) => (
                   <div key={item.id} className="shrink-0 w-[240px] snap-start">
                     <LibraryCard item={item} onPdfClick={setPdfModal} />
                   </div>
                 ))}
-              </div>
+              </HCarousel>
             ) : (
               <div className="glass rounded-2xl p-8 text-center border border-border/10">
                 <BookOpen className="h-10 w-10 mx-auto text-muted-foreground/50 mb-3" />

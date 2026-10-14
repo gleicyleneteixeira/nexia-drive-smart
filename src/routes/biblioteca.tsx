@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchLibraryItems, type LibraryItem } from "@/lib/library";
 import { Book, ExternalLink, Lock, FileText, BookOpen, Loader2, Play, Image as ImageIcon, X, Headphones } from "lucide-react";
+import { HCarousel } from "@/components/HCarousel";
 import { motion, AnimatePresence } from "framer-motion";
 import { NativePdfModal } from "@/components/NativePdfModal";
 
@@ -188,21 +189,13 @@ function Section({ title, items }: { title: string; items: LibraryItem[] }) {
   return (
     <section>
       <h2 className="text-xl font-display font-bold mb-4">{title}</h2>
-      <div className="flex flex-col sm:flex-row gap-4 overflow-x-auto pb-2 scrollbar-thin scrollbar-track-muted-foreground scrollbar-hide">
-        <div className="flex flex-col items-start snap-start min-w-0">
-          {items.map((item, i) => (
-            <motion.div
-              key={item.id}
-              style={{ flex: '0 0 auto' }}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ type: "spring", stiffness: 120, damping: 20 }}
-            >
-              <ItemCard item={item} />
-            </motion.div>
-          ))}
-        </div>
-      </div>
+      <HCarousel>
+        {items.map((item) => (
+          <div key={item.id} className="shrink-0 w-[260px] snap-start">
+            <ItemCard item={item} />
+          </div>
+        ))}
+      </HCarousel>
     </section>
   );
 }

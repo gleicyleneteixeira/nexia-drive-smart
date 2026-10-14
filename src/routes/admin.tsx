@@ -2719,8 +2719,19 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
   async function uploadToBucket(file: File, folder: string): Promise<string> {
     const ext = file.name.split(".").pop() ?? "bin";
     const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-    const { error } = await supabase.storage.from("library").upload(path, file);
-    if (error) throw error;
+    let { error } = await supabase.storage.from("library").upload(path, file);
+    // Sessão expirada é a causa clássica do erro 400 (invalid JWT): renova e tenta de novo
+    if (error) {
+      const msg = (error.message ?? "").toLowerCase();
+      if (msg.includes("jwt") || msg.includes("session") || msg.includes("expired")) {
+        await supabase.auth.refreshSession().catch(() => {});
+        const retry = await supabase.storage.from("library").upload(path, file);
+        error = retry.error;
+      }
+    }
+    if (error) {
+      throw new Error(`Falha no upload (${folder}): ${error.message}`);
+    }
     const { data } = supabase.storage.from("library").getPublicUrl(path);
     return data.publicUrl;
   }
