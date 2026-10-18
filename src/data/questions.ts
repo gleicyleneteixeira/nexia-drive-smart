@@ -10717,9 +10717,9 @@ export function getGeneralSimuladoQuestions(opts?: GeneralSimuladoOptions): Ques
 // Distribuição fixa por categoria (chaves = rótulos exibidos na tela de
 // desempenho, os mesmos de CATEGORY_LABELS), nos blocos do relatório oficial:
 //   Cuidar, Agir e Preservar .... Primeiros Socorros 3 + Meio Ambiente 3 = 6
-//   Escolhas e Consequências ..... Infrações 4 + Legislação 5 = 9
+//   Escolhas e Consequências ..... Infrações 4 + Legislação 9 = 13
 //   Na Direção da Segurança ...... Direção Defensiva 3 + Mecânica Básica 3 = 6
-//   Placas, Cores e Caminhos ..... Placas 7 + Prioridade de Passagem 2 = 9
+//   Placas, Cores e Caminhos ..... Placas 3 + Prioridade de Passagem 2 = 5
 //   Mecânica Básica ........... 7
 //   Direção Defensiva ......... 7
 //   Primeiros Socorros ........ 5
@@ -10743,16 +10743,16 @@ export const DISTRIBUICAO_SIMULADO: Record<string, number> = {
     'Primeiros Socorros': 3,
     'Meio Ambiente': 3,
 
-    // Bloco: Escolhas e Consequências (9 questões)
+    // Bloco: Escolhas e Consequências (13 questões)
     'Infrações': 4,
-    'Legislação': 5,
+    'Legislação': 9,
 
     // Bloco: Na Direção da Segurança (6 questões)
     'Direção Defensiva': 3,
     'Mecânica Básica': 3,
 
-    // Bloco: Placas, Cores e Caminhos (9 questões)
-    'Placas': 7,
+    // Bloco: Placas, Cores e Caminhos (5 questões)
+    'Placas': 3,
     'Prioridade de Passagem': 2,
 };
 const CATEGORY_BY_LABEL: Record<string, Category> = Object.fromEntries(
