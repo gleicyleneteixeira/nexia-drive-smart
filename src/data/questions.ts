@@ -10167,6 +10167,20 @@ export const QUESTIONS: Question[] = [
         difficulty: 1,
         origin: "ia"
     },
+    {
+        id: "nova_preferencia_pedestre_travessia_14",
+        category: "prioridade",
+        statement: "No desenho abaixo, observe os movimentos dos veículos 1, 3 e o pedestre atravessando a via. A preferência de passagem é do:",
+        options: ["Veículo 1, porque vai convergir.", "Veículo 2, porque está passando pelo veículo 1.", "Pedestre, porque já iniciou a travessia.", "Veículo 3, porque trafega em linha reta."],
+        correctIndex: 2,
+        explanation: "Quem já iniciou a travessia sobre a faixa tem a preferência: o art. 70 assegura a passagem do pedestre que atravessa a via sobre as faixas apropriadas, e o art. 214 pune com gravíssima, multa multiplicada por três e suspensão do direito de dirigir quem deixa de ceder, mesmo com sinal verde para os veículos. É o veículo que vai convergir que deve parar e esperar; ir em linha reta ou passar ao lado de outro veículo não cria preferência sobre quem já atravessou a faixa.",
+        legalBase: "Arts. 70 e 214 do CTB",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/PREFERENCIA.png",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
 ];
 
 // Questões que realmente caíram na prova do DETRAN.
