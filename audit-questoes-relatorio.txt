@@ -1,4 +1,4 @@
-Auditoria de 748 questoes - 2026-10-20T20:50:51.171Z
+Auditoria de 748 questoes - 2026-10-20T21:18:53.077Z
 
 ===== A. ESTRUTURA / GABARITO AUSENTE: 0 =====
 
@@ -17,21 +17,8 @@ qd01: codigos A-10 sem campo placa/image_url | enunciado: em rodovia em obras a 
 ===== B2. REFERENCIA VISUAL SEM RECURSO (nao respondivel): 0 =====
 
 
-===== C. ALTERNATIVA CORRETA MUITO MAIOR: 14 =====
-medio l01_02: correta 177 chars vs media 80 (x2.20), maior 93 | alt 1: aguardar que o pedestre conclua a travessia pois deixar de dar preferencia a pedestre que 
-medio l01_04: correta 144 chars vs media 71 (x2.02), maior 73 | alt 1: pelo bordo da pista em fila unica com prioridade sobre os veiculos exceto em locais proibi
-medio l01_08: correta 220 chars vs media 89 (x2.48), maior 98 | alt 3: o embarque e o desembarque devem ocorrer do lado da calcada exceto para o condutor e ningu
-medio l01_18: correta 161 chars vs media 69 (x2.32), maior 82 | alt 2: apenas pelo tempo indispensavel ao embarque ou desembarque de passageiros desde que nao in
-medio l01_30: correta 125 chars vs media 55 (x2.26), maior 59 | alt 0: controlar a producao a logistica a estampagem e a instalacao da placa alem de permitir a v
-medio l01_39: correta 220 chars vs media 93 (x2.37), maior 108 | alt 3: na cassacao decorridos 2 anos o infrator pode requerer reabilitacao submetendo se a todas 
-medio l02_100: correta 192 chars vs media 91 (x2.12), maior 106 | alt 2: teste exame clinico pericia ou outro procedimento por meios tecnicos ou cientificos em apa
-medio l02_66: correta 127 chars vs media 62 (x2.04), maior 69 | alt 2: nao pode ultrapassar nem cruzar a linha ao passo que o veiculo do lado da linha seccionada
-medio l02_75: correta 160 chars vs media 75 (x2.14), maior 83 | alt 0: o material de sinalizacao temporaria e em laranja e preto e a sinalizacao de regulamentaca
-medio l02_86: correta 137 chars vs media 59 (x2.34), maior 60 | alt 2: reduzir a velocidade aumentar a distancia do veiculo da frente evitar freadas e mudancas d
-medio l03_139: correta 94 chars vs media 39 (x2.39), maior 44 | alt 0: apenas na distancia necessaria a pequenas manobras e de forma a nao causar riscos a segura
-medio l03_150: correta 115 chars vs media 57 (x2.02), maior 63 | alt 3: o obstaculo fisico colocado na pista de rolamento destinado a ordenacao dos fluxos de tran
-medio l04_171: correta 106 chars vs media 43 (x2.48), maior 54 | alt 1: continua sujeito as penalidades pois as medidas administrativas nao as elidem e tem carate
-medio l05_234: correta 91 chars vs media 38 (x2.39), maior 44 | alt 1: cobrir a vitima com uma vestimenta disponivel para protege la do sol da chuva ou do frio
+===== C. ALTERNATIVA CORRETA MUITO MAIOR: 0 =====
+
 
 ===== D. RESPOSTA OBVIA / DISTRATORES FRACOS: 109 =====
 bnc_teorico_70: alternativas 0 e 1 quase equivalentes
