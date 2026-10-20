@@ -189,12 +189,20 @@ export function SimuladoEspelho({ onExit }: { onExit: () => void }) {
               {/* Statement */}
               <h2 className="text-lg md:text-xl font-medium leading-relaxed">{q.statement}</h2>
 
-              {/* Placa visual oficial */}
-              {q.placa && (
+              {/* Placa visual oficial ou imagem de apoio */}
+              {q.image_url ? (
+                <div className="mt-5 flex justify-center">
+                  <img
+                    src={q.image_url}
+                    alt="ilustração da questão"
+                    className="max-w-[170px] rounded-xl"
+                  />
+                </div>
+              ) : q.placa ? (
                 <div className="mt-5 flex justify-center">
                   <Placa id={q.placa} size={170} />
                 </div>
-              )}
+              ) : null}
 
               {/* Options */}
               <div className="mt-6 space-y-2.5">

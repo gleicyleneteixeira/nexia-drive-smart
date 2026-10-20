@@ -7,6 +7,7 @@ import {
   INCIDENCE_META,
 } from "@/data/questions";
 import { Eye, EyeOff, RotateCcw, Zap } from "lucide-react";
+import { Placa } from "@/components/Placa";
 
 export const Route = createFileRoute("/turbo")({
   component: TurboPage,
@@ -131,6 +132,17 @@ function TurboPage() {
             <p className="text-base font-medium leading-relaxed flex-1">
               {q.statement}
             </p>
+
+            {/* Imagem de apoio: placa oficial ou recurso visual da questão */}
+            {q.image_url ? (
+              <div className="mt-3 flex justify-center">
+                <img src={q.image_url} alt="ilustração da questão" className="max-w-[170px] rounded-xl" />
+              </div>
+            ) : q.placa ? (
+              <div className="mt-3 flex justify-center">
+                <Placa id={q.placa} size={170} />
+              </div>
+            ) : null}
 
             {/* Opções para tentar responder */}
             <div className="mt-4 space-y-2">

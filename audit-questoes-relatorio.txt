@@ -1,0 +1,170 @@
+Auditoria de 747 questoes - 2026-10-20T01:45:49.045Z
+
+===== A. ESTRUTURA / GABARITO AUSENTE: 0 =====
+
+
+===== B. PLACAS SEM IMAGEM (prioridade): 9 =====
+l02_52: codigos R-1, R-2 sem campo placa/image_url | enunciado: sobre a forma e as cores da sinalizacao vertical assinale a alternativa incorreta
+l02_54: codigos R-10, R-12, R-13, R-37 sem campo placa/image_url | enunciado: relacione as placas de regulamentacao as proibicoes de transito 1 r 10 2 r 12 3 r 13 4 r 37 i bicicletas ii mo
+l02_55: codigos R-33 sem campo placa/image_url | enunciado: ao encontrar a placa r 33 sentido circular na rotatoria o condutor deve
+l02_56: codigos R-4a, R-4b, R-5a, R-5b sem campo placa/image_url | enunciado: relacione as placas as proibicoes 1 r 4a 2 r 4b 3 r 5a 4 r 5b i retornar a direita ii virar a esquerda iii ret
+l02_57: codigos R-8a, R-8b sem campo placa/image_url | enunciado: as placas r 8a e r 8b proibem respectivamente
+l02_58: codigos A-32b, A-33a, A-33b sem campo placa/image_url | enunciado: relacione as placas de advertencia as suas mensagens 1 a 32b 2 a 33a 3 a 33b i passagem sinalizada de escolare
+l02_59: codigos A-28, A-29, A-44 sem campo placa/image_url | enunciado: relacione as placas de advertencia 1 a 28 2 a 29 3 a 44 i vento lateral ii pista escorregadia iii projecao de 
+l02_60: codigos A-14, A-15, A-25 sem campo placa/image_url | enunciado: sobre as placas de advertencia a 14 a 15 e a 25 assinale a alternativa correta
+qd01: codigos A-10 sem campo placa/image_url | enunciado: em rodovia em obras a placa a 10 avisa que a pista vai afunilar adiante como o condutor deve agir ao se aproxi
+
+===== B2. REFERENCIA VISUAL SEM RECURSO (nao respondivel): 0 =====
+
+
+===== C. ALTERNATIVA CORRETA MUITO MAIOR: 14 =====
+medio l01_02: correta 177 chars vs media 80 (x2.20), maior 93 | alt 1: aguardar que o pedestre conclua a travessia pois deixar de dar preferencia a pedestre que 
+medio l01_04: correta 144 chars vs media 71 (x2.02), maior 73 | alt 1: pelo bordo da pista em fila unica com prioridade sobre os veiculos exceto em locais proibi
+medio l01_08: correta 220 chars vs media 89 (x2.48), maior 98 | alt 3: o embarque e o desembarque devem ocorrer do lado da calcada exceto para o condutor e ningu
+medio l01_18: correta 161 chars vs media 69 (x2.32), maior 82 | alt 2: apenas pelo tempo indispensavel ao embarque ou desembarque de passageiros desde que nao in
+medio l01_30: correta 125 chars vs media 55 (x2.26), maior 59 | alt 0: controlar a producao a logistica a estampagem e a instalacao da placa alem de permitir a v
+medio l01_39: correta 220 chars vs media 93 (x2.37), maior 108 | alt 3: na cassacao decorridos 2 anos o infrator pode requerer reabilitacao submetendo se a todas 
+medio l02_100: correta 192 chars vs media 91 (x2.12), maior 106 | alt 2: teste exame clinico pericia ou outro procedimento por meios tecnicos ou cientificos em apa
+medio l02_66: correta 127 chars vs media 62 (x2.04), maior 69 | alt 2: nao pode ultrapassar nem cruzar a linha ao passo que o veiculo do lado da linha seccionada
+medio l02_75: correta 160 chars vs media 75 (x2.14), maior 83 | alt 0: o material de sinalizacao temporaria e em laranja e preto e a sinalizacao de regulamentaca
+medio l02_86: correta 137 chars vs media 59 (x2.34), maior 60 | alt 2: reduzir a velocidade aumentar a distancia do veiculo da frente evitar freadas e mudancas d
+medio l03_139: correta 94 chars vs media 39 (x2.39), maior 44 | alt 0: apenas na distancia necessaria a pequenas manobras e de forma a nao causar riscos a segura
+medio l03_150: correta 115 chars vs media 57 (x2.02), maior 63 | alt 3: o obstaculo fisico colocado na pista de rolamento destinado a ordenacao dos fluxos de tran
+medio l04_171: correta 106 chars vs media 43 (x2.48), maior 54 | alt 1: continua sujeito as penalidades pois as medidas administrativas nao as elidem e tem carate
+medio l05_234: correta 91 chars vs media 38 (x2.39), maior 44 | alt 1: cobrir a vitima com uma vestimenta disponivel para protege la do sol da chuva ou do frio
+
+===== D. RESPOSTA OBVIA / DISTRATORES FRACOS: 109 =====
+bnc_teorico_70: alternativas 0 e 1 quase equivalentes
+dd_n1_003: alternativas 0 e 1 quase equivalentes
+l01_21: alternativas 0 e 1 quase equivalentes
+l01_21: alternativas 0 e 2 quase equivalentes
+l01_21: alternativas 0 e 3 quase equivalentes
+l01_21: alternativas 1 e 2 quase equivalentes
+l01_21: alternativas 1 e 3 quase equivalentes
+l01_21: alternativas 2 e 3 quase equivalentes
+l01_36: alternativas 0 e 2 quase equivalentes
+l01_37: alternativas 0 e 1 quase equivalentes
+l01_37: alternativas 0 e 2 quase equivalentes
+l01_37: alternativas 0 e 3 quase equivalentes
+l01_37: alternativas 1 e 2 quase equivalentes
+l01_37: alternativas 1 e 3 quase equivalentes
+l01_37: alternativas 2 e 3 quase equivalentes
+l01_44: alternativas 0 e 1 quase equivalentes
+l01_44: alternativas 0 e 3 quase equivalentes
+l01_44: alternativas 1 e 3 quase equivalentes
+l02_51: alternativas 0 e 1 quase equivalentes
+l02_51: alternativas 0 e 2 quase equivalentes
+l02_51: alternativas 0 e 3 quase equivalentes
+l02_51: alternativas 1 e 2 quase equivalentes
+l02_51: alternativas 1 e 3 quase equivalentes
+l02_51: alternativas 2 e 3 quase equivalentes
+l02_54: alternativas 0 e 1 quase equivalentes
+l02_54: alternativas 0 e 2 quase equivalentes
+l02_54: alternativas 0 e 3 quase equivalentes
+l02_54: alternativas 1 e 2 quase equivalentes
+l02_54: alternativas 1 e 3 quase equivalentes
+l02_54: alternativas 2 e 3 quase equivalentes
+l02_56: alternativas 0 e 1 quase equivalentes
+l02_56: alternativas 0 e 2 quase equivalentes
+l02_56: alternativas 0 e 3 quase equivalentes
+l02_56: alternativas 1 e 2 quase equivalentes
+l02_56: alternativas 1 e 3 quase equivalentes
+l02_56: alternativas 2 e 3 quase equivalentes
+l02_58: alternativas 0 e 1 quase equivalentes
+l02_58: alternativas 0 e 2 quase equivalentes
+l02_58: alternativas 0 e 3 quase equivalentes
+l02_58: alternativas 1 e 2 quase equivalentes
+l02_58: alternativas 1 e 3 quase equivalentes
+l02_58: alternativas 2 e 3 quase equivalentes
+l02_59: alternativas 0 e 1 quase equivalentes
+l02_59: alternativas 0 e 2 quase equivalentes
+l02_59: alternativas 0 e 3 quase equivalentes
+l02_59: alternativas 1 e 2 quase equivalentes
+l02_59: alternativas 1 e 3 quase equivalentes
+l02_59: alternativas 2 e 3 quase equivalentes
+l02_72: alternativas 0 e 1 quase equivalentes
+l02_72: alternativas 0 e 2 quase equivalentes
+l02_72: alternativas 0 e 3 quase equivalentes
+l02_72: alternativas 1 e 2 quase equivalentes
+l02_72: alternativas 1 e 3 quase equivalentes
+l02_72: alternativas 2 e 3 quase equivalentes
+l02_79: alternativas 0 e 1 quase equivalentes
+l02_80: alternativas 0 e 1 quase equivalentes
+l02_80: alternativas 0 e 3 quase equivalentes
+l02_80: alternativas 1 e 3 quase equivalentes
+l03_102: alternativas 0 e 1 quase equivalentes
+l03_102: alternativas 0 e 2 quase equivalentes
+l03_102: alternativas 0 e 3 quase equivalentes
+l03_102: alternativas 1 e 2 quase equivalentes
+l03_102: alternativas 1 e 3 quase equivalentes
+l03_102: alternativas 2 e 3 quase equivalentes
+l03_146: alternativas 0 e 1 quase equivalentes
+l03_146: alternativas 0 e 2 quase equivalentes
+l03_146: alternativas 0 e 3 quase equivalentes
+l03_146: alternativas 1 e 2 quase equivalentes
+l03_146: alternativas 1 e 3 quase equivalentes
+l03_146: alternativas 2 e 3 quase equivalentes
+l04_154: alternativas 1 e 2 quase equivalentes
+l04_155: alternativas 1 e 2 quase equivalentes
+l04_166: alternativas 0 e 1 quase equivalentes
+l04_166: alternativas 0 e 2 quase equivalentes
+l04_166: alternativas 0 e 3 quase equivalentes
+l04_166: alternativas 1 e 2 quase equivalentes
+l04_166: alternativas 1 e 3 quase equivalentes
+l04_166: alternativas 2 e 3 quase equivalentes
+l04_183: alternativas 0 e 1 quase equivalentes
+l04_183: alternativas 2 e 3 quase equivalentes
+l04_191: alternativas 0 e 1 quase equivalentes
+l04_191: alternativas 0 e 2 quase equivalentes
+l04_191: alternativas 0 e 3 quase equivalentes
+l04_191: alternativas 1 e 2 quase equivalentes
+l04_191: alternativas 1 e 3 quase equivalentes
+l04_191: alternativas 2 e 3 quase equivalentes
+l05_204: alternativas 0 e 3 quase equivalentes
+l05_205: alternativas 1 e 3 quase equivalentes
+l05_239: alternativas 0 e 1 quase equivalentes
+l05_239: alternativas 0 e 2 quase equivalentes
+l05_239: alternativas 0 e 3 quase equivalentes
+l05_239: alternativas 1 e 2 quase equivalentes
+l05_239: alternativas 1 e 3 quase equivalentes
+l05_239: alternativas 2 e 3 quase equivalentes
+l05_244: alternativas 0 e 2 quase equivalentes
+l05_244: alternativas 0 e 3 quase equivalentes
+l05_244: alternativas 2 e 3 quase equivalentes
+q1: alternativas 0 e 3 quase equivalentes
+q_new_07: alternativas 0 e 1 quase equivalentes
+q_new_07: alternativas 0 e 2 quase equivalentes
+q_new_07: alternativas 0 e 3 quase equivalentes
+q_new_07: alternativas 1 e 2 quase equivalentes
+q_new_07: alternativas 1 e 3 quase equivalentes
+q_new_07: alternativas 2 e 3 quase equivalentes
+qp43: alternativas 1 e 2 quase equivalentes
+qp44: alternativas 0 e 2 quase equivalentes
+qp46: alternativas 0 e 1 quase equivalentes
+qp46: alternativas 0 e 3 quase equivalentes
+qp46: alternativas 1 e 3 quase equivalentes
+
+===== F. DUPLICAS / MUITO SEMELHANTES: 18 =====
+0.61 qp63 x nova_velocidade_vias_locais_alta_01: condutor trafega por via coletora urbana sem placa de velocidade qual  <> condutor trafega por via local em bairro residencial sem placa de velo
+0.61 td_02 x td_29: dois veiculos chegam juntos a um cruzamento sem placa semaforo ou agen <> em cruzamento sem placa sem semaforo e sem agente dois carros e um ped
+0.62 qe18 x qe19: em via urbana limitada a 40 km h radar registra condutor a 55 km h con <> em rodovia limitada a 110 km h condutor trafega a 170 km h conforme o 
+0.63 detran_q23_n1 x detran_q23_n2: em rodovia de pista simples o condutor realiza ultrapassagem invadindo <> o condutor realiza a ultrapassagem de outro veiculo invadindo a contra
+0.66 detran_q20_n1 x detran_q20_n2: apos chuva o condutor trafega por via urbana no perimetro e atravessa  <> apos forte chuva o condutor trafega por via urbana e atravessa poca d 
+0.80 inf_n1_002 x inf_n2_002: condutor estaciona em vaga reservada a pessoa com deficiencia sem exib <> condutor estaciona em vaga de pessoa com deficiencia em shopping sem e
+0.81 fix_seguimento_maior_08 x fix_def_seguimento_15: a distancia de seguimento deve <> distancia de seguimento e
+0.83 l01_12 x l03_110: antes de iniciar qualquer manobra que implique deslocamento lateral o  <> antes de iniciar manobra que implique deslocamento lateral o condutor 
+0.84 bnc_cat_b x bnc_cat_d: descreva a categoria b de habilitacao <> descreva a categoria d de habilitacao
+0.84 bnc_cat_b x bnc_cat_e: descreva a categoria b de habilitacao <> descreva a categoria e de habilitacao
+0.84 bnc_cat_d x bnc_cat_e: descreva a categoria d de habilitacao <> descreva a categoria e de habilitacao
+0.86 bnc_cat_b x bnc_cat_c: descreva a categoria b de habilitacao <> descreva a categoria c de habilitacao
+0.86 bnc_cat_c x bnc_cat_d: descreva a categoria c de habilitacao <> descreva a categoria d de habilitacao
+0.86 bnc_cat_c x bnc_cat_e: descreva a categoria c de habilitacao <> descreva a categoria e de habilitacao
+0.89 bnc_cat_a x bnc_cat_b: descreva a categoria a de habilitacao <> descreva a categoria b de habilitacao
+0.89 bnc_cat_a x bnc_cat_e: descreva a categoria a de habilitacao <> descreva a categoria e de habilitacao
+0.91 bnc_cat_a x bnc_cat_c: descreva a categoria a de habilitacao <> descreva a categoria c de habilitacao
+0.94 bnc_cat_a x bnc_cat_d: descreva a categoria a de habilitacao <> descreva a categoria d de habilitacao
+
+===== E. DISTRIBUICAO (info): 3 =====
+Distribuicao dos gabaritos no arquivo: A=244 (32.7%)  B=215 (28.8%)  C=147 (19.7%)  D=141 (18.9%)
+Maior sequencia com a mesma posicao: 41x seguidas (posicao A, terminando em qe59)
+Obs.: o app embaralha alternativas em runtime (shuffleOptions) e remapeia o gabarito por ID interno -> o padrao de posicao NAO chega ao usuario no simulado.

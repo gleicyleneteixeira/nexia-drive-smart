@@ -761,7 +761,8 @@ export const QUESTIONS: Question[] = [
         explanation: "Correta letra A: placa R-2 exige reduzir e ceder aos que circulam na preferencial.",
         detailedExplanation: "Se você tá na via secundária e quer entrar na via preferencial, é preciso dar passagem pra quem já tá lá. A via preferencial sempre tem prioridade, então reduza a velocidade e só entre quando for seguro, sem apressar a passagem.",
         incidence: "alta",
-        difficulty: 3
+        difficulty: 3,
+        placa: "R-2"
     },
     {
         id: "qe57",
@@ -798,7 +799,8 @@ export const QUESTIONS: Question[] = [
         detailedExplanation: "Quando você ignora a placa PARE e não para o carro, isso é considerado uma infração GRAVÍSSIMA, que dá 7 pontos na CNH e multa. A placa pede que você pare totalmente, não só diminua a velocidade, e mesmo que não venha ninguém, é preciso parar e olhar antes de seguir.",
         legalBase: "Art. 208 CTB",
         incidence: "alta",
-        difficulty: 3
+        difficulty: 3,
+        placa: "R-1"
     },
     {
         id: "qe60",
@@ -1172,7 +1174,8 @@ export const QUESTIONS: Question[] = [
         commonMistake: "Muita gente confunde com placas de aviso por causa do formato. Lembre-se: PARE é REGULAMENTAÇÃO.",
         incidence: "alta",
         difficulty: 3,
-        group: "placa-r1-octogonal"
+        group: "placa-r1-octogonal",
+        placa: "R-1"
     },
     {
         id: "q8",
@@ -4056,7 +4059,8 @@ export const QUESTIONS: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 1,
-        group: "placa-r1-octogonal"
+        group: "placa-r1-octogonal",
+        placa: "R-1"
     },
     {
         id: "pr_n2_001",
@@ -4105,7 +4109,8 @@ export const QUESTIONS: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 2,
-        group: "placa-r1-octogonal"
+        group: "placa-r1-octogonal",
+        placa: "R-1"
     },
     {
         id: "pl_n2_002",
@@ -5549,7 +5554,8 @@ export const QUESTIONS: Question[] = [
         correctIndex: 3,
         explanation: "Correta D: R-1 exige parada e preferência. Base: CTB Anexo II e Art. 29.",
         incidence: "alta",
-        difficulty: 2
+        difficulty: 2,
+        placa: "R-1"
     },
     {
         id: "td_27",
@@ -8529,7 +8535,7 @@ export const QUESTIONS: Question[] = [
         id: "l01_46",
         category: "infracoes",
         statement: "O crime de \"racha\" (art. 308) exige, para sua configuração:",
-        options: ["Apenas a participação em competição não autorizada, sem necessidade de risco.", "A condução embriagada em via pública.", "A participação, na direção de veículo automotor, em via pública, de corrida, disputa ou competição automobilística não autorizada pela autoridade competente, desde que resulte dano potencial à incolumidade pública ou privada.", "A ocorrência de lesão corporal a terceiros."],
+        options: ["Apenas a participação em competição não autorizada, sem qualquer demonstração de risco à incolumidade.", "A condução de veículo automotor em via pública sob influência de álcool, sem relação com competição.", "A participação, na direção de veículo automotor, em via pública, de corrida, disputa ou competição não autorizada, desde que resulte dano potencial à incolumidade pública ou privada.", "A ocorrência de lesão corporal ou dano material a terceiros, sem qualquer elemento de risco prévio."],
         correctIndex: 2,
         explanation: "O tipo penal exige a participação na disputa e o dano potencial (risco concreto). A A ignora o risco, e a D exige resultado (lesão), que só leva a formas agravadas. A B mistura dois crimes diferentes (art. 306).",
         legalBase: "Art. 308 do CTB",
@@ -8783,7 +8789,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l02_77",
         category: "direcao-defensiva",
-        statement: "De acordo com os dados apresentados no manual, as causas dos acidentes de trânsito são atribuídas a: falha humana, falha mecânica, deficiências da via e outros fatores, RESPECTIVAMENTE, em:",
+        statement: "Segundo o Manual para Primeira Habilitação de Condutores (Senado Federal), as causas dos acidentes de trânsito são atribuídas a falha humana, falha mecânica, deficiências da via e outros fatores, RESPECTIVAMENTE, em:",
         options: ["12%, 75%, 6% e 7%.", "75%, 6%, 12% e 7%.", "75%, 7%, 12% e 6%.", "75%, 12%, 6% e 7%."],
         correctIndex: 3,
         explanation: "A D está correta: 75% falha humana, 12% falha mecânica, 6% deficiências da via e 7% outros fatores. As demais alternativas reaproveitam exatamente os mesmos números em outra ordem, e o erro mais comum é trocar o 12% (mecânica) com o 6% (via). Em qualquer alternativa a falha humana predomina, o que reforça o princípio da direção defensiva: quase tudo é evitável.",
@@ -8861,7 +8867,7 @@ export const QUESTIONS: Question[] = [
         id: "l02_92",
         category: "legislacao",
         statement: "De acordo com o art. 306, § 2º, do CTB, a verificação do estado de alteração da capacidade psicomotora pode ser obtida mediante:",
-        options: ["Exclusivamente teste de etilômetro.", "Exclusivamente exame de sangue, mediante ordem judicial.", "Teste de alcoolemia, exame clínico, perícia, vídeo, prova testemunhal ou outros meios de prova admitidos em direito, observado o direito à contraprova.", "Apenas prova testemunhal, mesmo sem outros elementos técnicos."],
+        options: ["Exclusivamente o teste de etilômetro, aplicado no local da abordagem pelo agente autuador.", "Exclusivamente o exame de sangue, mediante ordem judicial, em serviço de saúde.", "Teste de alcoolemia, exame clínico, perícia, vídeo, prova testemunhal ou outros meios de prova admitidos em direito, observado o direito à contraprova.", "Apenas a prova testemunhal, mesmo sem qualquer elemento técnico ou registro de aparelho."],
         correctIndex: 2,
         explanation: "A C está correta: a lei admite meios variados de prova, sempre com direito à contraprova. A A e a B são as leituras mais comuns, mas restringem demais: o bafômetro e o exame de sangue são os mais usados, não os únicos. A D inverte a lógica — a prova testemunhal é admitida, mas nunca como único elemento de constatação.",
         legalBase: "Art. 306, § 2º do CTB",
@@ -8926,7 +8932,7 @@ export const QUESTIONS: Question[] = [
         id: "l02_100",
         category: "legislacao",
         statement: "O condutor envolvido em acidente de trânsito ou que for alvo de fiscalização de trânsito poderá ser submetido a:",
-        options: ["Apenas exame de sangue, mediante ordem judicial.", "Apenas teste de etilômetro, vedado qualquer outro meio.", "Teste, exame clínico, perícia ou outro procedimento que, por meios técnicos ou científicos, em aparelho homologado pelo Contran, permita certificar influência de álcool ou outra substância psicoativa.", "Somente autoavaliação do próprio condutor."],
+        options: ["Apenas exame de sangue, mediante ordem judicial, em serviço de saúde previamente indicado pela autoridade.", "Apenas teste de etilômetro, vedada a aplicação de qualquer outro meio de verificação.", "Teste, exame clínico, perícia ou outro procedimento por meios técnicos ou científicos em aparelho homologado pelo Contran, que certifique a influência de álcool ou outra substância psicoativa.", "Somente a autoavaliação do próprio condutor, sem qualquer exame ou teste técnico."],
         correctIndex: 2,
         explanation: "A C está correta: o art. 277 admite vários procedimentos de verificação, desde que por meios técnicos ou científicos em aparelho homologado pelo Contran. A A e a B restringem a fiscalização a um único meio e são os erros mais comuns. A D não tem qualquer previsão legal — a percepção do próprio condutor é justamente o que a lei considera insuficiente.",
         legalBase: "Art. 277 do CTB",
@@ -8947,7 +8953,7 @@ export const QUESTIONS: Question[] = [
         id: "l03_101",
         category: "legislacao",
         statement: "O agente de trânsito levanta o braço verticalmente, com a palma da mão para a frente, no momento em que o seu veículo já se encontra no interior da interseção. O condutor deve:",
-        options: ["Parar imediatamente onde estiver, bloqueando o cruzamento.", "Prosseguir e liberar a interseção, pois, quando a ordem é executada em interseções, os veículos que já se encontram nela não são obrigados a parar.", "Dar marcha à ré até a linha de retenção.", "Aguardar o agente repetir o gesto com as duas mãos."],
+        options: ["Parar imediatamente onde estiver, mesmo que isso signifique imobilizar o veículo no meio do cruzamento.", "Prosseguir e liberar a interseção, pois, quando a ordem é executada em interseções, os veículos que já se encontram nela não são obrigados a parar.", "Dar marcha à ré até a linha de retenção, mesmo sob risco de colidir com os veículos que vêm atrás.", "Aguardar o agente repetir o gesto com as duas mãos antes de prosseguir."],
         correctIndex: 1,
         explanation: "A B está correta: o gesto significa ordem de parada obrigatória, mas o manual ressalva que, nas interseções, quem já está nelas não é obrigado a parar — e jamais deve imobilizar o veículo no meio do cruzamento. A A é a mais tentadora, porque aplica o gesto ao pé da letra e gera risco de bloqueio da interseção. A C é manobra proibida na interseção e a D inventa uma repetição que a norma não exige.",
         legalBase: "Arts. 89 e 90 do CTB; Manual para Primeira Habilitação de Condutores (item 1.5.6)",
@@ -8974,7 +8980,7 @@ export const QUESTIONS: Question[] = [
         id: "l03_103",
         category: "legislacao",
         statement: "Quando o agente de trânsito mantém os dois braços estendidos horizontalmente, com as palmas das mãos voltadas para a frente, a ordem de parada vale para:",
-        options: ["Todos os veículos que venham de direções que cortem ortogonalmente a direção indicada pelos braços, qualquer que seja o sentido do seu deslocamento.", "Apenas os veículos que vêm de frente para o agente.", "Apenas os veículos que vêm pelas costas do agente.", "Somente os veículos pesados e os de transporte coletivo."],
+        options: ["Todos os veículos que venham de direções que cortem ortogonalmente a direção indicada pelos braços, qualquer que seja o sentido do seu deslocamento.", "Apenas os veículos que vêm de frente para o agente, nos dois sentidos da via.", "Apenas os veículos que vêm pelas costas do agente, no mesmo sentido do seu deslocamento.", "Somente os veículos pesados e os de transporte coletivo, independentemente do sentido."],
         correctIndex: 0,
         explanation: "A A está correta: com os dois braços estendidos, o agente \"fecha\" a via que cruza a direção indicada, nos dois sentidos do deslocamento. A B e a C restringem a ordem a um único lado, que é o raciocínio de quem confunde o gesto com o de um braço só. A D inventa preferência por porte de veículo, que não existe na regra dos gestos.",
         legalBase: "Manual para Primeira Habilitação de Condutores (item 1.5.6)",
@@ -8987,7 +8993,7 @@ export const QUESTIONS: Question[] = [
         id: "l03_104",
         category: "legislacao",
         statement: "Quando o agente de trânsito estende um braço horizontalmente, com a palma da mão para a frente, do lado do trânsito a que se destina, a ordem de parada se destina:",
-        options: ["A todos os veículos da via, independentemente da direção.", "Aos veículos que venham do lado oposto ao do braço estendido.", "Apenas aos veículos de transporte coletivo.", "Aos veículos que venham de direções que cortem ortogonalmente a direção indicada pelo braço estendido, do lado do trânsito a que se destina."],
+        options: ["A todos os veículos da via, nos dois sentidos, independentemente da direção do braço.", "Aos veículos que venham do lado oposto ao do braço estendido, no sentido contrário.", "Apenas aos veículos de transporte coletivo que circulam pelo lado do agente.", "Aos veículos que venham de direções que cortem ortogonalmente a direção indicada pelo braço estendido, do lado do trânsito a que se destina."],
         correctIndex: 3,
         explanation: "A D está correta: com um braço só, a ordem vale para o trânsito do lado a que o gesto se destina, abrangendo os veículos que cortam ortogonalmente aquela direção. A A mistura o gesto com o de braço levantado, que é parada para todos. A B inverte o lado do braço, erro comum de quem não fixa que o gesto se dirige ao lado visível do agente.",
         legalBase: "Manual para Primeira Habilitação de Condutores (item 1.5.6)",
@@ -9157,7 +9163,7 @@ export const QUESTIONS: Question[] = [
         id: "l03_147",
         category: "legislacao",
         statement: "O acostamento é a parte da via diferenciada da pista de rolamento destinada:",
-        options: ["À circulação normal de veículos, sempre que a pista estiver congestionada.", "Exclusivamente à circulação de pedestres.", "Ao estacionamento regular de veículos, durante o dia.", "À parada ou estacionamento de veículos em caso de emergência e à circulação de pedestres e bicicletas, quando não houver local apropriado para esse fim."],
+        options: ["À circulação normal de veículos, sempre que a pista de rolamento estiver congestionada.", "Exclusivamente à circulação de pedestres, vedado o trânsito de veículos e bicicletas.", "Ao estacionamento regular de veículos, durante o dia e sem qualquer restrição de tempo.", "À parada ou estacionamento de veículos em caso de emergência e à circulação de pedestres e bicicletas, quando não houver local apropriado para esse fim."],
         correctIndex: 3,
         explanation: "A D reproduz a definição do Anexo I: o acostamento serve à parada ou estacionamento em caso de emergência e à circulação de pedestres e bicicletas quando não houver local próprio. A B é a mais confusa, porque troca acostamento com calçada, o espaço do pedestre. A A e a C ampliam o uso para a circulação e o estacionamento rotineiros, que a definição não autoriza.",
         legalBase: "Anexo I do CTB (definições)",
@@ -9183,7 +9189,7 @@ export const QUESTIONS: Question[] = [
         id: "l03_149",
         category: "legislacao",
         statement: "A calçada é a parte da via:",
-        options: ["Destinada à parada de veículos em emergência.", "Destinada à circulação normal de veículos de pequeno porte.", "Normalmente segregada e em nível diferente, não destinada à circulação de veículos, reservada ao trânsito de pedestres e, quando possível, à implantação de mobiliário urbano, sinalização e vegetação.", "Delimitada por linhas de bordo, destinada ao estacionamento regular."],
+        options: ["Destinada à parada ou estacionamento de veículos em caso de emergência, como no acostamento.", "Destinada à circulação normal de veículos de pequeno porte, em velocidade reduzida.", "Normalmente segregada e em nível diferente, não destinada à circulação de veículos, reservada a pedestres e, quando possível, a mobiliário urbano, sinalização e vegetação.", "Delimitada por linhas de bordo da pista de rolamento, destinada ao estacionamento regular."],
         correctIndex: 2,
         explanation: "A C é a definição literal do Anexo I. A A descreve o acostamento, que é a parte da via usada em emergência. A B inverte a finalidade — a calçada justamente não recebe veículos — e a D mistura linhas de bordo, que delimitam a pista de rolamento, com estacionamento.",
         legalBase: "Anexo I do CTB (definições)",
@@ -9195,7 +9201,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l03_150",
         category: "legislacao",
-        statement: "A ilha, no CTB, é:",
+        statement: "A ilha, conforme as definições do CTB (Anexo I), é:",
         options: ["A faixa de pedestres elevada em relação à pista.", "O espaço destinado ao estacionamento oblíquo, nas vias urbanas.", "A parte da via destinada à parada de veículos de emergência.", "O obstáculo físico, colocado na pista de rolamento, destinado à ordenação dos fluxos de trânsito em uma interseção."],
         correctIndex: 3,
         explanation: "A D é a definição do Anexo I: ilha é obstáculo físico colocado na pista de rolamento para ordenar os fluxos na interseção. A A é a faixa de travessia elevada, figura diferente. A C é o acostamento. A B é a pegadinha vinda do nome: ilha sugere espaço isolado, mas o que define a figura é a função de separar e ordenar fluxos.",
@@ -9286,7 +9292,7 @@ export const QUESTIONS: Question[] = [
         id: "l04_159",
         category: "legislacao",
         statement: "As penalidades de suspensão do direito de dirigir e de cassação do documento de habilitação serão aplicadas:",
-        options: ["Pelo agente de trânsito, no momento da fiscalização.", "Mediante simples lavratura do auto de infração.", "Por decisão fundamentada da autoridade de trânsito competente, em processo administrativo, assegurado ao infrator amplo direito de defesa.", "Apenas mediante sentença judicial."],
+        options: ["Pelo agente de trânsito, no momento da fiscalização, com a lavratura do auto.", "Mediante simples lavratura do auto de infração, sem qualquer fase de defesa.", "Por decisão fundamentada da autoridade de trânsito competente, em processo administrativo, assegurado ao infrator amplo direito de defesa.", "Apenas mediante sentença judicial, em processo trazido pelo Ministério Público."],
         correctIndex: 2,
         explanation: "A C está correta: o art. 265 exige processo administrativo, decisão fundamentada e amplo direito de defesa para essas duas penalidades. A A e a B descrevem a aplicação de outras penalidades, feitas no curso da fiscalização. A D é falsa: a sentença judicial é uma das hipóteses de cassação (art. 263, III), não a regra de aplicação.",
         legalBase: "Art. 265 do CTB",
@@ -9299,7 +9305,7 @@ export const QUESTIONS: Question[] = [
         id: "l04_162",
         category: "legislacao",
         statement: "Um proprietário circula com o veículo sem o licenciamento anual regular. Quem responde pela infração é:",
-        options: ["O proprietário, pois lhe cabe a responsabilidade pela prévia regularização e pelo preenchimento das formalidades exigidas para o trânsito do veículo, como o licenciamento.", "Sempre o condutor, por ser quem dirige.", "O fabricante do veículo.", "Quem lhe emprestou o veículo."],
+        options: ["O proprietário, pois lhe cabe a responsabilidade pela prévia regularização e pelas formalidades exigidas para o trânsito do veículo.", "Sempre o condutor, por ser quem dirige o veículo no momento da abordagem.", "O fabricante do veículo, responsável por qualquer irregularidade após a venda.", "Quem lhe emprestou o veículo, ao transferir a obrigação de cuidado ao mutuário."],
         correctIndex: 0,
         explanation: "A A está correta: o art. 257, § 2º, atribui ao proprietário a responsabilidade pela prévia regularização e pelas formalidades exigidas para o trânsito do veículo. A B é a mais tentadora, porque a regra geral é a do art. 257, § 3º, que impõe ao condutor as infrações decorrentes de atos praticados na direção — e licenciamento não é ato de direção.",
         legalBase: "Art. 257, § 2º, do CTB",
@@ -9312,7 +9318,7 @@ export const QUESTIONS: Question[] = [
         id: "l04_163",
         category: "legislacao",
         statement: "Um condutor, que não é o proprietário do veículo, avança o sinal vermelho. Segundo o art. 257 do CTB, a responsabilidade pela infração é:",
-        options: ["Sempre do proprietário.", "Sempre da empresa de seguro.", "Do condutor, por se tratar de ato praticado na direção do veículo, cabendo ao principal condutor ou ao proprietário apresentá-lo no prazo de 30 dias, contado da notificação da autuação, sob pena de serem considerados responsáveis pela infração.", "Do fabricante, se o veículo tiver equipamento de segurança."],
+        options: ["Sempre do proprietário, ainda que o condutor esteja plenamente identificado no auto de infração.", "Sempre da empresa de seguro contratada, em razão da cobertura obrigatória.", "Do condutor, por se tratar de ato praticado na direção; não sendo imediata a identificação, o principal condutor ou o proprietário dispõe de 30 dias para apresentá-lo.", "Do fabricante do veículo, quando este estiver equipado com dispositivo de segurança."],
         correctIndex: 2,
         explanation: "A C está correta: ao condutor cabem as infrações decorrentes de atos praticados na direção (art. 257, § 3º) e, não sendo imediata a identificação, o § 7º dá 30 dias, contados da notificação da autuação, ao principal condutor ou ao proprietário para apresentá-lo. A A é a pegadinha: sem a indicação tempestiva a responsabilidade migra, mas a regra parte do condutor.",
         legalBase: "Art. 257, §§ 3º e 7º, do CTB",
@@ -9390,7 +9396,7 @@ export const QUESTIONS: Question[] = [
         id: "l04_169",
         category: "infracoes",
         statement: "Não sendo possível sanar a irregularidade no local, o veículo retido poderá ser retirado:",
-        options: ["Por qualquer pessoa, mediante pagamento da multa.", "Por condutor regularmente habilitado, mediante recolhimento do Certificado de Licenciamento Anual (CRLV), com prazo para regularizar a situação.", "Somente pelo proprietário.", "Somente pelo órgão de trânsito, por meio de guincho."],
+        options: ["Por qualquer pessoa indicada pelo proprietário, mediante simples pagamento da multa.", "Por condutor regularmente habilitado, mediante recolhimento do Certificado de Licenciamento Anual (CRLV), com prazo para regularizar a situação.", "Somente pelo proprietário, pessoalmente e com documento de identificação.", "Somente pelo órgão de trânsito, por meio de guia de recolhimento e guincho."],
         correctIndex: 1,
         explanation: "A B está correta: o art. 270, § 2º, admite que o veículo, desde que ofereça condições de segurança, seja entregue a condutor regularmente habilitado, mediante recolhimento do CRLV e com prazo razoável, não superior a 30 dias, para regularização. A C é a alternativa mais comum na cabeça do condutor, mas restringe demais: a norma não exige que quem retira seja o proprietário.",
         legalBase: "Art. 270, § 2º, do CTB",
@@ -9507,7 +9513,7 @@ export const QUESTIONS: Question[] = [
         id: "l04_188",
         category: "infracoes",
         statement: "Em um congestionamento, um condutor pensa em usar o acostamento para ultrapassar a fila. A conduta correta é:",
-        options: ["Usar o acostamento, pois ele existe para desafogar a via.", "Permanecer na fila e manter o acostamento livre: ultrapassar pelo acostamento é infração gravíssima, com multa multiplicada por cinco, e o trânsito sobre o acostamento só é permitido para adentrar ou sair de imóveis e áreas especiais de estacionamento.", "Usar o acostamento apenas se houver outros veículos fazendo o mesmo.", "Usar o acostamento se acionar o pisca-alerta."],
+        options: ["Usar o acostamento, pois ele existe justamente para desafogar o fluxo da via em congestionamento.", "Permanecer na fila e manter o acostamento livre: ultrapassar pelo acostamento é infração gravíssima com multa multiplicada por cinco.", "Usar o acostamento apenas se houver outros veículos fazendo a mesma manobra no mesmo trecho.", "Usar o acostamento se acionar o pisca-alerta, que sinaliza a manobra aos demais condutores."],
         correctIndex: 1,
         explanation: "A B está correta: o art. 202, I, tipifica a ultrapassagem pelo acostamento como gravíssima, com multa multiplicada por cinco, e o art. 29, V, restringe o trânsito sobre acostamentos à entrada e à saída de imóveis e áreas especiais de estacionamento. A C usa o argumento de que \"todo mundo faz\", e a D acredita que o pisca-alerta autoriza manobra proibida.",
         legalBase: "Arts. 202, I, e 29, V, do CTB",
@@ -9533,7 +9539,7 @@ export const QUESTIONS: Question[] = [
         id: "l04_192",
         category: "legislacao",
         statement: "Negado o recurso à JARI, o interessado pode recorrer em segunda instância:",
-        options: ["À própria JARI, novamente.", "À Justiça Federal, em 5 dias.", "Ao Cetran, ao Contrandife ou ao colegiado especial, no prazo de 30 dias.", "À Senatran, no prazo de 60 dias."],
+        options: ["À própria JARI, novamente, no mesmo processo e sem custo.", "À Justiça Federal, no prazo de 5 dias, por recurso ordinário.", "Ao Cetran, ao Contrandife ou ao colegiado especial, no prazo de 30 dias.", "À Senatran, no prazo de 60 dias, como último grau recursal."],
         correctIndex: 2,
         explanation: "A C está correta: o art. 288 dá 30 dias, contados da publicação ou da notificação da decisão da JARI, e o art. 289 define o segundo grau — CETRAN e CONTRANDIFE para penalidades estaduais, municipais e do Distrito Federal, e colegiado especial para as penalidades impostas pela União. A D é a pegadinha institucional: a Senatran é o órgão federal, mas não julga esse recurso.",
         legalBase: "Arts. 288 e 289 do CTB",
@@ -9559,7 +9565,7 @@ export const QUESTIONS: Question[] = [
         id: "l04_195",
         category: "legislacao",
         statement: "Não sendo imediata a identificação do infrator, o principal condutor ou o proprietário do veículo será notificado da autuação para apresentar o condutor. A responsabilidade pela infração passa a ser deles quando:",
-        options: ["Ele não pagar a multa em 5 dias.", "Transcorrido o prazo de 30 dias, contado da notificação da autuação, sem a apresentação do condutor.", "Automaticamente, no ato da notificação.", "Apenas se o proprietário for pessoa jurídica."],
+        options: ["Ele não pagar a multa no prazo de cinco dias úteis após o vencimento.", "Transcorrido o prazo de 30 dias, contado da notificação da autuação, sem a apresentação do condutor.", "Automaticamente, no próprio ato da notificação da autuação.", "Apenas se o proprietário for pessoa jurídica constituída em forma de sociedade."],
         correctIndex: 1,
         explanation: "A B está correta: o art. 257, § 7º, na redação da Lei 14.071/2020, dá 30 dias, contados da notificação da autuação, para apresentar o condutor e, não o fazendo, considera responsável o principal condutor ou, em sua ausência, o proprietário do veículo. A C é a pegadinha: a responsabilidade não migra no ato da notificação, e sim após o prazo. A D é falsa: a regra vale para pessoas físicas e jurídicas.",
         legalBase: "Art. 257, § 7º, do CTB",
@@ -9723,7 +9729,7 @@ export const QUESTIONS: Question[] = [
         id: "l05_212",
         category: "legislacao",
         statement: "Sobre o acesso ao RNPC e seu uso, assinale a alternativa CORRETA:",
-        options: ["A consulta é restrita aos órgãos de trânsito.", "A consulta é garantida apenas ao próprio cadastrado.", "A consulta é garantida a todos os cidadãos, e a União, os Estados, o Distrito Federal e os Municípios poderão utilizá-lo para conceder benefícios fiscais ou tarifários aos condutores cadastrados.", "O registro é atualizado anualmente e é vedado o uso para benefícios."],
+        options: ["A consulta é restrita aos órgãos de trânsito e às autoridades policiais, mediante justificativa.", "A consulta é garantida apenas ao próprio cadastrado, mediante comprovação de identidade.", "A consulta é garantida a todos os cidadãos, e a União, os Estados, o Distrito Federal e os Municípios poderão utilizá-lo para conceder benefícios fiscais ou tarifários aos condutores.", "O registro é atualizado anualmente, e é vedado seu uso para a concessão de qualquer benefício."],
         correctIndex: 2,
         explanation: "O § 5º garante a consulta a todos os cidadãos, e o § 6º permite benefícios fiscais ou tarifários. A D erra a periodicidade (a atualização é mensal, pelo § 1º) e a vedação.",
         legalBase: "Art. 268-A, §§ 1º, 5º e 6º, do CTB",
@@ -9749,7 +9755,7 @@ export const QUESTIONS: Question[] = [
         id: "l05_214",
         category: "legislacao",
         statement: "Os passageiros de motocicletas, motonetas e ciclomotores só poderão ser transportados, segundo o art. 55 do CTB:",
-        options: ["Sem capacete, se o trajeto for curto.", "Em qualquer posição, desde que usem capacete.", "Utilizando capacete, sentados à frente do condutor, em baixa velocidade.", "Utilizando capacete de segurança, em carro lateral acoplado ou em assento suplementar atrás do condutor, e usando vestuário de proteção."],
+        options: ["Sem capacete, desde que o trajeto seja curto e em velocidade reduzida.", "Em qualquer posição do veículo, desde que utilizem capacete de segurança.", "Utilizando capacete, sentados à frente do condutor, em baixa velocidade.", "Utilizando capacete de segurança, em carro lateral acoplado ou em assento suplementar atrás do condutor, e usando vestuário de proteção."],
         correctIndex: 3,
         explanation: "O art. 55 impõe capacete, posição (carro lateral ou assento suplementar atrás) e vestuário. A B é a pegadinha, porque dá a impressão de que o capacete basta.",
         legalBase: "Art. 55 do CTB",
@@ -9801,7 +9807,7 @@ export const QUESTIONS: Question[] = [
         id: "l05_218",
         category: "infracoes",
         statement: "Fazer malabarismo ou equilibrar-se apenas em uma roda ao conduzir motocicleta é infração de natureza e penalidade, RESPECTIVAMENTE:",
-        options: ["Média; multa.", "Gravíssima; multa e suspensão do direito de dirigir.", "Grave; multa.", "Gravíssima; apenas advertência por escrito."],
+        options: ["Média; multa e medida administrativa de retenção do veículo.", "Gravíssima; multa e suspensão do direito de dirigir.", "Grave; multa e suspensão do direito de dirigir.", "Gravíssima; apenas advertência por escrito, sem multa."],
         correctIndex: 1,
         explanation: "O art. 244, III, traz a conduta no grupo das gravíssimas, com multa e suspensão. A A é a mais tentadora: infrações vizinhas do mesmo artigo, como as dos incisos VI, VII e VIII, são de natureza média, e trocar os incisos é o erro clássico. A D combina gravidade com penalidade inexistente, pois o art. 244 não prevê advertência.",
         legalBase: "Art. 244, III, do CTB",
@@ -9840,7 +9846,7 @@ export const QUESTIONS: Question[] = [
         id: "l05_221",
         category: "infracoes",
         statement: "A vedação de conduzir motocicleta rebocando outro veículo (art. 244, VI) NÃO se aplica:",
-        options: ["Às motocicletas com passageiro.", "Às motocicletas utilizadas em atividade profissional.", "Às motocicletas conduzidas por pessoa com mais de 21 anos.", "Às motocicletas e motonetas que tracionem semirreboques especialmente projetados para esse fim e devidamente homologados pelo órgão competente."],
+        options: ["Às motocicletas que estejam transportando passageiro regularmente habilitado.", "Às motocicletas utilizadas em atividade profissional de transporte remunerado.", "Às motocicletas conduzidas por pessoa com mais de 21 anos e habilitação na categoria.", "Às motocicletas e motonetas que tracionem semirreboques especialmente projetados para esse fim e devidamente homologados pelo órgão competente."],
         correctIndex: 3,
         explanation: "O § 3º do art. 244 traz essa única exceção. A B é a mais tentadora, porque a atividade profissional cria a ideia de \"autorização especial\".",
         legalBase: "Art. 244, § 3º, do CTB (incluído pela Lei 10.517/2002)",
@@ -9879,7 +9885,7 @@ export const QUESTIONS: Question[] = [
         id: "l05_224",
         category: "legislacao",
         statement: "Para exercer a atividade profissional de transporte remunerado de mercadorias em motocicleta (moto-frete), exigem-se, entre outros requisitos:",
-        options: ["18 anos completos e 1 ano de habilitação.", "21 anos completos e habilitação na categoria B.", "21 anos completos, pelo menos 2 anos de habilitação na categoria, curso especializado e colete de segurança com dispositivos retrorrefletivos.", "25 anos completos e curso de primeiros socorros."],
+        options: ["18 anos completos e 1 ano de habilitação na categoria A para dirigir motocicleta.", "21 anos completos e habilitação na categoria B, sem exigência de tempo mínimo.", "21 anos completos, pelo menos 2 anos de habilitação na categoria, curso especializado e colete de segurança com dispositivos retrorrefletivos.", "25 anos completos, curso de primeiros socorros e colete de segurança."],
         correctIndex: 2,
         explanation: "O manual indica 21 anos, 2 anos de habilitação na categoria, curso especializado e colete retrorrefletivo. A B é a pegadinha: a categoria exigida é a A, e não a B. O primeiro habilitado não pode exercer a atividade.",
         legalBase: "Manual para Primeira Habilitação de Condutores (Senado Federal)",
@@ -9905,7 +9911,7 @@ export const QUESTIONS: Question[] = [
         id: "l05_226",
         category: "legislacao",
         statement: "Nos veículos de moto-frete, é proibido o transporte de combustíveis, produtos inflamáveis ou tóxicos e de galões, com exceção:",
-        options: ["Do gás de cozinha e de galões contendo água mineral, desde que com o auxílio de side-car, nos termos de regulamentação do Contran.", "De qualquer produto, se o condutor tiver curso especializado.", "De combustíveis, desde que em recipiente homologado.", "De produtos tóxicos, se acondicionados em baú."],
+        options: ["Do gás de cozinha e de galões contendo água mineral, desde que com o auxílio de side-car, nos termos de regulamentação do Contran.", "De qualquer produto inflamável ou tóxico, se o condutor tiver curso especializado de transporte.", "De combustíveis, desde que acondicionados em recipiente homologado pelo Contran.", "De produtos tóxicos, se acondicionados em baú fechado e lacrado."],
         correctIndex: 0,
         explanation: "A exceção é restrita ao gás de cozinha e à água mineral, com side-car. A C e a D são as mais tentadoras, porque o recipiente ou o baú \"protegem\" o produto, mas a lei não os admite.",
         legalBase: "Art. 139-A, § 2º, do CTB (Lei 12.009/2009)",
@@ -9931,7 +9937,7 @@ export const QUESTIONS: Question[] = [
         id: "l05_228",
         category: "legislacao",
         statement: "O condutor que acaba de obter a primeira habilitação (Permissão para Dirigir):",
-        options: ["Pode exercer a atividade de mototáxi, se tiver curso.", "Pode exercer a atividade de motofrete, desde que use colete refletivo.", "Não pode exercer atividade remunerada de transporte de passageiros ou de cargas em motocicleta, pois a atividade exige, entre outros requisitos, 2 anos de habilitação na categoria.", "Pode exercer qualquer atividade remunerada, desde que tenha 21 anos."],
+        options: ["Pode exercer a atividade de mototáxi, desde que comprove curso especializado.", "Pode exercer a atividade de motofrete, desde que utilize colete refletivo.", "Não pode exercer atividade remunerada de transporte de passageiros ou de cargas em motocicleta, pois a atividade exige 2 anos de habilitação na categoria.", "Pode exercer qualquer atividade remunerada com veículos automotores, desde que tenha 21 anos."],
         correctIndex: 2,
         explanation: "O requisito de tempo de habilitação impede o primeiro habilitado. A B e a D confundem porque cumprem apenas parte dos requisitos.",
         legalBase: "Manual para Primeira Habilitação de Condutores (Senado Federal)",
@@ -9957,7 +9963,7 @@ export const QUESTIONS: Question[] = [
         id: "l05_230",
         category: "mecanica",
         statement: "Sobre o capacete de motociclista, assinale a alternativa INCORRETA:",
-        options: ["Deve ter o selo de certificação do Inmetro.", "Capacete da mesma cor da motocicleta melhora a visibilidade do motociclista para os demais condutores.", "A jugular deve ficar ajustada, com folga de, no máximo, 1 dedo.", "Deve ser substituído após qualquer impacto."],
+        options: ["Deve ter o selo de certificação do Inmetro em local visível do capacete.", "Capacete da mesma cor da motocicleta melhora a visibilidade do motociclista para os demais condutores.", "A jugular deve ficar ajustada, com folga de no máximo um dedo entre o queixo e a alça.", "Deve ser substituído após qualquer impacto, mesmo sem danos visíveis."],
         correctIndex: 1,
         explanation: "O manual recomenda evitar capacete da cor da moto, e priorizar cores claras e vivas. A B confunde porque \"combinar\" parece harmônico, mas reduz a visibilidade. A, C e D são orientações do manual.",
         legalBase: "Manual para Primeira Habilitação de Condutores (Senado Federal)",
@@ -10035,7 +10041,7 @@ export const QUESTIONS: Question[] = [
         id: "l05_238",
         category: "primeiros-socorros",
         statement: "Em relação ao cinto de segurança da vítima, o manual orienta:",
-        options: ["Soltá-lo sempre, para facilitar a respiração.", "Não soltá-lo, a não ser que esteja dificultando a respiração da vítima, tomando cuidado para não movimentá-la.", "Cortá-lo imediatamente, com faca ou tesoura.", "Nunca soltá-lo, em nenhuma circunstância."],
+        options: ["Soltá-lo sempre, para facilitar a respiração e o atendimento da vítima.", "Não soltá-lo, a não ser que esteja dificultando a respiração da vítima, tomando cuidado para não movimentá-la.", "Cortá-lo imediatamente com faca ou tesoura, sem esperar a chegada do socorro.", "Nunca soltá-lo, em nenhuma circunstância, mesmo sem respiração."],
         correctIndex: 1,
         explanation: "A regra tem exceção: só se solta o cinto quando ele dificulta a respiração, e sem movimentar a vítima. A D é a mais tentadora, por ser a leitura \"absoluta\" da regra de não movimentar a vítima.",
         legalBase: "Manual para Primeira Habilitação de Condutores (Senado Federal)",
@@ -10074,7 +10080,7 @@ export const QUESTIONS: Question[] = [
         id: "l05_241",
         category: "meio-ambiente",
         statement: "O Proconve (Programa de Controle da Poluição do Ar por Veículos Automotores) envolve, segundo o manual:",
-        options: ["Apenas a fiscalização de multas por excesso de velocidade.", "A conscientização sobre a poluição causada pelos veículos, o incentivo à tecnologia para reduzir poluentes, o aprimoramento da qualidade dos combustíveis e a criação de programas de inspeção e manutenção para veículos em uso.", "Apenas a destinação de pneus inservíveis.", "Somente a inspeção veicular obrigatória de veículos novos."],
+        options: ["Apenas a fiscalização de multas por excesso de velocidade nas rodovias federais.", "A conscientização sobre a poluição, o incentivo à tecnologia limpa, a melhoria da qualidade dos combustíveis e programas de inspeção de veículos em uso.", "Apenas a destinação de pneus inservíveis pelos pontos autorizados de troca.", "Somente a inspeção veicular obrigatória aplicada exclusivamente a veículos novos."],
         correctIndex: 1,
         explanation: "O programa tem quatro frentes: conscientização, tecnologia, combustíveis e inspeção e manutenção. A C e a D tratam de um único tema, que são partes de resoluções específicas.",
         legalBase: "Manual para Primeira Habilitação de Condutores (Senado Federal)",
@@ -10113,7 +10119,7 @@ export const QUESTIONS: Question[] = [
         id: "l05_247",
         category: "mecanica",
         statement: "Sobre o extintor de incêndio automotivo, o manual orienta que:",
-        options: ["É dispensável, pois um princípio de incêndio veicular pode ser combatido com água.", "Seu uso independe do prazo de validade.", "É o único equipamento de segurança adequado para combater um princípio de incêndio veicular, devendo ter a validade conferida e as instruções de operação lidas no próprio equipamento.", "As instruções de operação constam apenas do manual do veículo."],
+        options: ["É dispensável, pois um princípio de incêndio veicular pode ser combatido com água ou extintor doméstico.", "Seu uso independe do prazo de validade, desde que o lacre esteja intacto.", "É o único equipamento adequado para combater um princípio de incêndio veicular, devendo ter a validade conferida e as instruções de operação lidas no próprio equipamento.", "As instruções de operação constam apenas do manual do veículo, dispensando etiqueta no equipamento."],
         correctIndex: 2,
         explanation: "O extintor é o único equipamento adequado, e a validade importa. A A é a mais tentadora, porque a água é o recurso de incêndio mais conhecido, mas pode piorar incêndios com óleo ou eletricidade.",
         legalBase: "Manual para Primeira Habilitação de Condutores (Senado Federal)",
@@ -10126,7 +10132,7 @@ export const QUESTIONS: Question[] = [
         id: "l05_248",
         category: "mecanica",
         statement: "Entre os equipamentos obrigatórios das motonetas, motocicletas e triciclos, há um que NÃO consta da lista dos ciclomotores. Trata-se de:",
-        options: ["Indicadores luminosos de mudança de direção, dianteiro e traseiro.", "Buzina.", "Velocímetro.", "Espelhos retrovisores de ambos os lados."],
+        options: ["Indicadores luminosos de mudança de direção, dianteiro e traseiro.", "Buzina, capaz de emitir som de alerta adequado às condições da via.", "Velocímetro, com indicação da velocidade máxima permitida em quilômetros por hora.", "Espelhos retrovisores montados nos dois lados do veículo."],
         correctIndex: 0,
         explanation: "Ciclomotores têm 7 itens e motocicletas têm 10. A diferença está nos indicadores de direção, na lanterna de freio e na iluminação da placa. B, C e D constam de ambas as listas.",
         legalBase: "Manual para Primeira Habilitação de Condutores (Senado Federal)",
@@ -10560,7 +10566,34 @@ function shuffleOptions(q: Question): Question {
         console.error(`[gabarito] dessincronia em ${q.id}: mantida a ordem original.`);
         return { ...q };
     }
-    return { ...q, options: newOptions, correctIndex: newCorrect };
+    // REFERÊNCIAS NAS EXPLICAÇÕES: o texto original cita alternativas por
+    // letra/número da ordem do banco ("A C está correta", "Correta a segunda",
+    // "opção 2"). Depois do embaralhamento a posição visual muda, então cada
+    // referência é reescrita para a nova letra/posição daquele conteúdo —
+    // mantendo explicação, gabarito e alternativa corretos em qualquer ordem.
+    const LETRAS = ["A", "B", "C", "D"];
+    const ORDAIS = ["primeira", "segunda", "terceira", "quarta"];
+    const novaLetra = (posicaoAntiga: number) => LETRAS[order.indexOf(posicaoAntiga)];
+    const remap = (texto: string | undefined): string | undefined => {
+        if (!texto) return texto;
+        let out = texto;
+        out = out.replace(/\b(letra|alternativa)\s+([A-D])\b/g, (_m, p, l) => `${p} ${novaLetra(LETRAS.indexOf(l))}`);
+        out = out.replace(/\b([Cc]orreta)\s+([A-D])\b/g, (_m, p, l) => `${p} ${novaLetra(LETRAS.indexOf(l))}`);
+        out = out.replace(/\b([Aa])\s+([A-D])\b/g, (_m, p, l) => `${p} ${novaLetra(LETRAS.indexOf(l))}`);
+        out = out.replace(/\b(op[cç][ãa]o|alternativa)\s*([1-4])\b/g, (_m, p, n) => `${p} ${order.indexOf(Number(n) - 1) + 1}`);
+        out = out.replace(/\b([Cc]orreta)\s+a\s+(primeira|segunda|terceira|quarta)\b/g, (_m, p, o) => `${p} a ${ORDAIS[order.indexOf(ORDAIS.indexOf(o))]}`);
+        out = out.replace(/\b(primeira|segunda|terceira|quarta)\s+alternativa\b/g, (m, o) => (m === o ? m : `${ORDAIS[order.indexOf(ORDAIS.indexOf(o))]} alternativa`));
+        return out;
+    };
+    return {
+        ...q,
+        options: newOptions,
+        correctIndex: newCorrect,
+        explanation: remap(q.explanation) ?? q.explanation,
+        detailedExplanation: remap(q.detailedExplanation),
+        commonMistake: remap(q.commonMistake),
+        tip: remap(q.tip),
+    };
 }
 
 // ---------------------------------------------------------------------------

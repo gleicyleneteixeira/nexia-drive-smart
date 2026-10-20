@@ -9,6 +9,7 @@ import {
   type Category,
 } from "@/data/questions";
 import { Flame, Sparkles } from "lucide-react";
+import { Placa } from "@/components/Placa";
 
 export const Route = createFileRoute("/mais-caem")({
   component: MaisCaem,
@@ -122,6 +123,17 @@ function MaisCaem() {
                 <p className="text-sm md:text-base font-medium leading-snug">
                   {q.statement}
                 </p>
+                {q.image_url ? (
+                  <img
+                    src={q.image_url}
+                    alt="ilustração da questão"
+                    className="mt-2 max-w-[130px] rounded-lg mx-auto"
+                  />
+                ) : q.placa ? (
+                  <div className="mt-2 flex justify-center">
+                    <Placa id={q.placa} size={130} />
+                  </div>
+                ) : null}
               </div>
             </motion.li>
           );
