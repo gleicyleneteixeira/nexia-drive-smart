@@ -10207,6 +10207,7 @@ export const REAL_EXAM_IDS = [
     "qp64",
     "placa_r20_proibido_buzina_alta",
     "qe_alagamento_01",
+    "nova_preferencia_pedestre_travessia_14",
     {
         id: "q3181",
         category: "legislacao",
