@@ -44,7 +44,7 @@ const jac = (a, b) => { let inter = 0; a.forEach((x) => { if (b.has(x)) inter++;
 
 const A = { // alertas
   estrutura: [], placasSemImagem: [], semRecursoVisual: [], tamanho: [],
-  obvias: [], duplicadas: [], resumo: [],
+  obvias: [], duplicadas: [], resumo: [], gabarito: [],
 };
 const add = (k, id, msg) => A[k].push(`${id}: ${msg}`);
 
@@ -159,6 +159,45 @@ for (let a = 0; a < ALL.length; a++) {
 }
 A.duplicadas.push(...pares);
 
+// ---------- G. gabarito x explicacao (claim explicito no inicio do texto) ----------
+const ORD_CLAIM = { primeira: 0, segunda: 1, terceira: 2, quarta: 3, "1a": 0, "2a": 1, "3a": 2, "4a": 3 };
+const LTR_CLAIM = { a: 0, b: 1, c: 2, d: 3, "1": 0, "2": 1, "3": 2, "4": 3 };
+function claimedIndex(text) {
+  if (!text) return null;
+  const t = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim();
+  let m;
+  // "Correta a terceira/opcao 2 ..."
+  if ((m = t.match(/^correta\s+(?:a\s+|ao\s+)?(?:alternativa\s+|opcao\s+|resposta\s+)?(primeira|segunda|terceira|quarta|1[ªa]|2[ªa]|3[ªa]|4[ªa])(?![a-z0-9])/i))) {
+    const k = m[1].toLowerCase();
+    return k[0] >= "1" && k[0] <= "4" ? "1234".indexOf(k[0]) : ORD_CLAIM[k];
+  }
+  // "Correta a alternativa A", "Correta letra B", "Correta opcao C"
+  if ((m = t.match(/^correta\s+(?:a\s+|ao\s+)?(?:alternativa|letra|opcao|resposta)\s*[:\-]?\s*([a-d1-4])(?![a-z0-9])(?!\s*-\s*\d)/i))) return LTR_CLAIM[m[1].toLowerCase()];
+  // letra solta (so caixa alta; evita falso "Correta: a permissao" e "Correta: A-28")
+  if ((m = t.match(/^correta\s+([a-d])(?![a-z0-9])(?!\s*-\s*\d)/i)) && m[1] === m[1].toUpperCase()) return LTR_CLAIM[m[1].toLowerCase()];
+  if ((m = t.match(/^correta\s*[:\-]\s*([a-d])(?![a-z0-9])(?!\s*-\s*\d)/i)) && m[1] === m[1].toUpperCase()) return LTR_CLAIM[m[1].toLowerCase()];
+  // "A alternativa D esta correta", "A B esta correta", "A B e a resposta"
+  if ((m = t.match(/^(?:a\s+)?alternativa\s+([a-d1-4])\s+(?:e|esta|seria)\s+(?:a\s+)?correta/i))) return LTR_CLAIM[m[1].toLowerCase()];
+  if ((m = t.match(/^(?:a\s+)?([a-d])\s+(?:e|esta|seria)\s+(?:a\s+)?(?:correta|resposta)(?![a-z])/i))) return LTR_CLAIM[m[1].toLowerCase()];
+  // "A segunda alternativa esta correta"
+  if ((m = t.match(/^(?:a\s+)?(primeira|segunda|terceira|quarta)\s+(?:alternativa|opcao)\s+(?:e|esta|seria)\s+(?:a\s+)?correta/i))) return ORD_CLAIM[m[1].toLowerCase()];
+  // "Resposta correta: B", "Gabarito: D"
+  if ((m = t.match(/^(?:a\s+)?(?:resposta|gabarito)(?:\s+(?:correta|certa))?\s*(?:e|:)\s*(?:a\s+)?(?:alternativa\s+|opcao\s+)?([a-d1-4])(?![a-z0-9])(?!\s*-\s*\d)/i)) && m[1] === m[1].toUpperCase()) return LTR_CLAIM[m[1].toLowerCase()];
+  return null;
+}
+let gClaims = 0;
+for (const q of ALL) {
+  for (const field of ["explanation", "detailedExplanation"]) {
+    const c = claimedIndex(q[field]);
+    if (c === null) continue;
+    gClaims++;
+    if (c !== q.correctIndex) {
+      add("gabarito", q.id, `${field} aponta alternativa ${c + 1} ("${(q.options[c] || "").slice(0, 70)}") mas correctIndex=${q.correctIndex} ("${(q.options[q.correctIndex] || "").slice(0, 70)}")`);
+    }
+  }
+}
+A.resumo.push(`claims verificados pelo criterio G: ${gClaims} de ${ALL.length} questoes`);
+
 // ---------- relatorio ----------
 const secoes = [
   ["A. ESTRUTURA / GABARITO AUSENTE", A.estrutura],
@@ -167,6 +206,7 @@ const secoes = [
   ["C. ALTERNATIVA CORRETA MUITO MAIOR", A.tamanho],
   ["D. RESPOSTA OBVIA / DISTRATORES FRACOS", A.obvias],
   ["F. DUPLICAS / MUITO SEMELHANTES", A.duplicadas],
+  ["G. GABARITO X EXPLICACAO (claim explicito)", A.gabarito],
   ["E. DISTRIBUICAO (info)", A.resumo],
 ];
 let out = `Auditoria de ${ALL.length} questoes - ${new Date().toISOString()}\r\n`;
