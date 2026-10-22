@@ -10239,6 +10239,20 @@ export const QUESTIONS: Question[] = [
         difficulty: 1,
         origin: "real"
     },
+    {
+        id: "detran_real_orgaos_normativos_snt",
+        category: "legislacao",
+        statement: "Quais são órgãos normativos do Sistema Nacional de Trânsito (SNT)?",
+        options: ["SENATRAN, CIRETRAN e DETRAN.", "CONTRAN, CETRAN e CONTRANDIFE.", "Prefeitura e JARI.", "DNIT, DER e PMRV."],
+        correctIndex: 1,
+        explanation: "Correta a segunda: o art. 7, I e II, do CTB apresenta o CONTRAN como órgão máximo normativo e consultivo e os CETRAN e o CONTRANDIFE como órgãos normativos, consultivos e coordenadores - nenhum outro órgão do Sistema tem essa natureza.",
+        legalBase: "Art. 7, I e II, do CTB",
+        commonMistake: "A e D misturam normativos com executivos: DETRAN (art. 7, III) e DNIT/DER (art. 7, IV) executam, não normatizam. Prefeitura (executiva) e JARI (art. 7, VII) também não são órgãos normativos.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 1,
+        origin: "real"
+    },
 ];
 
 // Questões que realmente caíram na prova do DETRAN.
@@ -10270,6 +10284,7 @@ export const REAL_EXAM_IDS = [
     "detran_real_conv_esq_unico",
     "detran_real_conv_dir",
     "detran_real_ciclomotor",
+    "detran_real_orgaos_normativos_snt",
     {
         id: "q3181",
         category: "legislacao",

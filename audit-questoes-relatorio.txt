@@ -1,4 +1,4 @@
-Auditoria de 752 questoes - 2026-10-22T13:11:20.877Z
+Auditoria de 753 questoes - 2026-10-22T15:05:48.524Z
 
 ===== A. ESTRUTURA / GABARITO AUSENTE: 0 =====
 
@@ -158,6 +158,6 @@ qp46: alternativas 1 e 3 quase equivalentes
 0.94 bnc_cat_a x bnc_cat_d: descreva a categoria a de habilitacao <> descreva a categoria d de habilitacao
 
 ===== E. DISTRIBUICAO (info): 3 =====
-Distribuicao dos gabaritos no arquivo: A=244 (32.4%)  B=217 (28.9%)  C=148 (19.7%)  D=143 (19.0%)
+Distribuicao dos gabaritos no arquivo: A=244 (32.4%)  B=218 (29.0%)  C=148 (19.7%)  D=143 (19.0%)
 Maior sequencia com a mesma posicao: 41x seguidas (posicao A, terminando em qe59)
 Obs.: o app embaralha alternativas em runtime (shuffleOptions) e remapeia o gabarito por ID interno -> o padrao de posicao NAO chega ao usuario no simulado.
