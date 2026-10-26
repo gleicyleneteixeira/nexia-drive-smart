@@ -123,8 +123,19 @@ function useAuthInternal() {
       }
     }
 
-    supabase.auth.getSession().then(({ data }) => {
-      const currentUser = data.session?.user ?? null;
+    supabase.auth.getUser().then(({ data, error }) => {
+      if (error) {
+        // Se o token salvo for inválido no servidor (ex.: migração de Supabase), limpa o storage local
+        if (error.status === 403 || error.message?.toLowerCase().includes("jwt")) {
+          supabase.auth.signOut();
+        }
+        setUser(null);
+        setProfile(null);
+        setIsAdmin(false);
+        setLoading(false);
+        return;
+      }
+      const currentUser = data?.user ?? null;
       setUser(currentUser);
       if (currentUser) {
         fetchProfileAndRole(currentUser.id).finally(() => setLoading(false));

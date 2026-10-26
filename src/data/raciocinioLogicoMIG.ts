@@ -7,8 +7,11 @@ export interface MIGQuestion {
   justification?: string;
 }
 
-const SUPABASE_BASE_URL =
-  "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images";
+const SUPABASE_URL =
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_SUPABASE_URL) ||
+  "https://sb.bigcreditos.com.br";
+
+const SUPABASE_BASE_URL = `${SUPABASE_URL}/storage/v1/object/public/library/images`;
 
 export const RACIOCINIO_LOGICO_FASE_2: MIGQuestion[] = [
   { id: 1, title: "Exemplo 01", isExample: true, imageUrl: `${SUPABASE_BASE_URL}/Teste_Atencao_Concentrada_heyzine-5.png`, correctAnswer: "B" },

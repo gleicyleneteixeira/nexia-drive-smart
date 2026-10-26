@@ -1482,7 +1482,7 @@ export const QUESTIONS: Question[] = [
         incidence: "alta",
         difficulty: 1,
         placa: "A-1a",
-        image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/placa-A-1a.png"
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-A-1a.png"
     },
     {
         id: "p7",
@@ -1496,7 +1496,7 @@ export const QUESTIONS: Question[] = [
         incidence: "alta",
         difficulty: 2,
         placa: "A-32b",
-        image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/placa-passagem-sinalizada-de-pedestres-A32b.webp"
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-passagem-sinalizada-de-pedestres-A32b.webp"
     },
     {
         id: "p8",
@@ -1509,7 +1509,7 @@ export const QUESTIONS: Question[] = [
         incidence: "media",
         difficulty: 1,
         placa: "A-33a",
-        image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/placa-area-escolar-A-33A.webp"
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-escolar-A-33A.webp"
     },
     {
         id: "p9",
@@ -2765,7 +2765,7 @@ export const QUESTIONS: Question[] = [
         incidence: "altissima",
         trap: true,
         difficulty: 2,
-        image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/placa-area-escolar-A-33A.webp"
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-escolar-A-33A.webp"
     },
     {
         id: "qp60",
@@ -2871,7 +2871,7 @@ export const QUESTIONS: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 3,
-        image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/placa-transito-de-pedestre-A32a.webp"
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-transito-de-pedestre-A32a.webp"
     },
     {
         id: "placa_regulamentacao_advertencia_alta",
@@ -2887,7 +2887,7 @@ export const QUESTIONS: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 3,
-        image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/placa-area-escolar-A-33A.webp"
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-escolar-A-33A.webp"
     },
     {
         id: "placa_r20_proibido_buzina_alta",
@@ -2903,7 +2903,7 @@ export const QUESTIONS: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 3,
-        image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/placa-R-20.jpg"
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-R-20.jpg"
     },
     {
         id: "placa_r2_de_a_preferencia_alta_01",
@@ -2920,7 +2920,7 @@ export const QUESTIONS: Question[] = [
         trap: true,
         difficulty: 3,
         placa: "R-2",
-        image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/51.jpg"
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/51.jpg"
     },
     {
         id: "validade_cnh_renovacao_alta_01",
@@ -2951,7 +2951,7 @@ export const QUESTIONS: Question[] = [
         incidence: "media",
         trap: true,
         difficulty: 3,
-        image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/55.jpg"
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/55.jpg"
     },
     {
         id: "placa_r16_altura_maxima_alta_01",
@@ -2967,7 +2967,7 @@ export const QUESTIONS: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 3,
-        image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/52.jpg"
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/52.jpg"
     },
     {
         id: "placa_a42a_inicio_pista_dupla_alta_01",
@@ -2983,7 +2983,7 @@ export const QUESTIONS: Question[] = [
         incidence: "media",
         trap: false,
         difficulty: 2,
-        image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/54.png"
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/54.png"
     },
     {
         id: "placa_a14_semaforo_frente_alta_01",
@@ -2999,7 +2999,7 @@ export const QUESTIONS: Question[] = [
         incidence: "alta",
         trap: false,
         difficulty: 2,
-        image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/50.jpg"
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/50.jpg"
     },
     {
         id: "nova_velocidade_vias_locais_alta_01",
@@ -3452,7 +3452,7 @@ export const QUESTIONS: Question[] = [
         incidence: "alta",
         trap: false,
         difficulty: 2,
-        image_url: "https://tqeqsotsasglmhlmwdwy.supabase.co/storage/v1/object/public/library/images/Placas-de-transito-estudacnh-pista-escorregadia-A-28.png"
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/Placas-de-transito-estudacnh-pista-escorregadia-A-28.png"
     },
     {
         id: "nova_prevencao_colisao_cruzamento_07",
