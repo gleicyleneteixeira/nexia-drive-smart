@@ -10508,6 +10508,10 @@ export const REAL_EXAM_IDS = [
         difficulty: 2
     }
 ];
+export function shuffleQuestionList(list: Question[]): Question[] {
+    return list.map(shuffleOptions);
+}
+
 export function getRealExamQuestions(): Question[] {
     // Pool validado "Prova Real": resolve os ids string para QUESTIONS e
     // inclui os objetos inline, sem duplicar. Usado no modo Prova Real
@@ -10633,7 +10637,14 @@ export function getRandomizedQuestions(count: number, opts?: {
     const picked = weighted.slice(0, Math.min(count, weighted.length));
     return picked.map(shuffleOptions);
 }
-function shuffleOptions(q: Question): Question {
+/**
+ * Embaralha as alternativas de UMA questão e recalcula o gabarito.
+ * É a função que a prova usa antes de exibir: monta o array temporário
+ * (resposta correta + distorções), sorteia a ordem, reatribui as letras
+ * A/B/C/D pela posição nova e devolve o `correctIndex` já apontando para
+ * a alternativa certa — que é o mapeamento usado na correção automática.
+ */
+export function shuffleOptions(q: Question): Question {
     // GABARITO POR IDENTIFICADOR (nunca por posição/letra):
     // cada alternativa tem um id interno permanente (questão + posição
     // original no banco). A resposta correta é o ID da alternativa certa;

@@ -9,6 +9,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   getRandomizedQuestions,
   getBalancedQuestions,
+  shuffleOptions,
   OFFICIAL_EXAM_PASS_SCORE,
   INCIDENCE_META,
   CATEGORY_LABELS,
@@ -221,7 +222,7 @@ function SimuladoDemoPage() {
     if (isTrial) {
       clearPersisted();
       const trialIds = ["qe60", "qe04", "qe39", "qe11", "qe74", "qe75", "q6"];
-      const fresh = (trialIds.map(id => QUESTIONS.find(q => q.id === id)).filter(Boolean) as Question[]).slice(0, trialCount);
+      const fresh = (trialIds.map(id => QUESTIONS.find(q => q.id === id)).filter(Boolean) as Question[]).slice(0, trialCount).map(shuffleOptions);
       setQuestions(fresh);
       setIndex(0);
       setSelected(null);

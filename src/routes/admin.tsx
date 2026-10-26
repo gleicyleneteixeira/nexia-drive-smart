@@ -1,9 +1,9 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState, type RefObject } from "react";
+import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchLibraryItems, checkIsAdmin, SUPER_ADMIN_EMAIL, CRONOGRAMA_BOOK_KEY, fetchCronogramaBookId, type LibraryItem, type LibraryItemType } from "@/lib/library";
-import { QUESTIONS, CATEGORY_LABELS, INCIDENCE_META, getQuestionBank, setQuestionOverrides, type Question, type Category } from "@/data/questions";
+import { QUESTIONS, CATEGORY_LABELS, INCIDENCE_META, getQuestionBank, setQuestionOverrides, shuffleOptions, type Question, type Category } from "@/data/questions";
 import { Placa, type PlacaId } from "@/components/Placa";
 
 const PLACA_IDS: PlacaId[] = ["R-1", "R-2", "R-6a", "R-6b", "R-19", "R-25a", "R-25d", "A-1a", "A-2b", "A-13a", "A-32b", "A-33a", "I-Hospital", "I-Posto"];
@@ -923,6 +923,20 @@ const QCATS: Category[] = ["legislacao", "placas", "direcao-defensiva", "primeir
 const QINC = ["altissima", "alta", "media", "baixa"] as const;
 const LETTERS = ["A", "B", "C", "D"];
 
+/**
+ * Sorteia em qual posição entra cada fonte da questão:
+ * 0 = resposta correta, 1/2/3 = distorções (falsas).
+ * É isso que define a letra (A-D) que o aluno vê — e ela muda a cada questão.
+ */
+function sortearOrdem(): number[] {
+  const ordem = [0, 1, 2, 3];
+  for (let i = ordem.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [ordem[i], ordem[j]] = [ordem[j], ordem[i]];
+  }
+  return ordem;
+}
+
 // Modelo oficial de importação (sem id: o sistema gera sozinho).
 const IMPORT_TEMPLATE = [
   {
@@ -1318,7 +1332,9 @@ export function QuestionsPanel() {
 
 // Prévia idêntica ao simulado do aluno: sem a correta marcada; o admin
 // clica numa opção, confere o acerto/erro e lê a explicação, como o usuário final.
-function SimuladoPreviewModal({ q, onClose }: { q: Question; onClose: () => void }) {
+function SimuladoPreviewModal({ q: original, onClose }: { q: Question; onClose: () => void }) {
+  // Embaralha na hora de abrir — mesmas letras dinâmicas e mesmo gabarito do aluno
+  const q = useMemo(() => shuffleOptions(original), [original]);
   const [selected, setSelected] = useState<number | null>(null);
   const incMeta = INCIDENCE_META[q.incidence];
 
@@ -1414,8 +1430,22 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
   const isNew = !initial;
   const [category, setCategory] = useState<Category>(initial?.category ?? "legislacao");
   const [statement, setStatement] = useState(initial?.statement ?? "");
-  const [options, setOptions] = useState<string[]>(initial ? [...initial.options, "", "", "", ""].slice(0, 4) : ["", "", "", ""]);
-  const [correctIndex, setCorrectIndex] = useState<number>(initial?.correctIndex ?? 0);
+  // ---- Resposta correta + 3 distorções (o formulário NÃO tem letra fixa A/B/C/D) ----
+  // Guardamos só o CONTEÚDO; a ordem (e a letra de cada alternativa) é decidida
+  // por `ordem`, que é embaralhada — mesma lógica que o simulado usa na hora de exibir.
+  const [correctAnswer, setCorrectAnswer] = useState(initial ? initial.options[initial.correctIndex] ?? "" : "");
+  const [distractors, setDistractors] = useState<string[]>(() => {
+    if (!initial) return ["", "", ""];
+    const rest = initial.options.filter((_, i) => i !== initial.correctIndex);
+    return [...rest, "", "", ""].slice(0, 3);
+  });
+  const [ordem, setOrdem] = useState<number[]>(() => {
+    if (!initial) return sortearOrdem();
+    // Editando: reconstrói a ORDEM original salva — explicações antigas citam
+    // letras ("a C está correta") dessa ordem e precisam continuar válidas.
+    const k = Math.min(Math.max(initial.correctIndex, 0), 3);
+    return [0, 1, 2, 3].map((pos) => (pos === k ? 0 : pos < k ? pos + 1 : pos));
+  });
   const [explanation, setExplanation] = useState(initial?.explanation ?? "");
   const [detailed, setDetailed] = useState(initial?.detailedExplanation ?? "");
   const [legalBase, setLegalBase] = useState(initial?.legalBase ?? "");
@@ -1423,6 +1453,12 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
   const [tip, setTip] = useState(initial?.tip ?? "");
   const [memoryHook, setMemoryHook] = useState(initial?.memoryHook ?? "");
   const [imageUrl, setImageUrl] = useState(initial?.image_url ?? "");
+  // Upload direto da imagem para o bucket (library/images) — sem depender de host externo
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imgStatus, setImgStatus] = useState<{ kind: "idle" | "busy" | "ok" | "err"; msg: string }>(
+    { kind: "idle", msg: "" }
+  );
+  const imageInputRef = useRef<HTMLInputElement | null>(null);
   const [placa, setPlaca] = useState<string>(initial?.placa ?? "");
   const [incidence, setIncidence] = useState<string>(initial?.incidence ?? "media");
   const [difficulty, setDifficulty] = useState<number>(initial?.difficulty ?? 2);
@@ -1430,9 +1466,62 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
   const [trap, setTrap] = useState<boolean>(!!initial?.trap);
   const [saving, setSaving] = useState(false);
 
+  // Array temporário exibido na prova: junta resposta + 3 distorções na ordem sorteada.
+  // `correctIndex` é o mapeamento do gabarito — é ele que a correção automática usa.
+  const fontes = [correctAnswer, ...distractors];
+  const options = ordem.map((s) => fontes[s] ?? "");
+  const correctIndex = ordem.indexOf(0);
+
+  /**
+   * Selecionou uma imagem: envia para `library/images` na hora e grava a URL
+   * pública em `imageUrl` — que é o que vai para o banco ao salvar a questão.
+   */
+  async function onImagePick(f: File | null) {
+    if (!f) {
+      setImageFile(null);
+      setImgStatus({ kind: "idle", msg: "" });
+      return;
+    }
+    if (f.type && !f.type.startsWith("image/")) {
+      setImageFile(null);
+      if (imageInputRef.current) imageInputRef.current.value = "";
+      setImgStatus({ kind: "err", msg: `❌ "${f.name}" não é uma imagem. Escolha um arquivo .png, .jpg ou .webp.` });
+      return;
+    }
+    if (f.size > 15 * 1024 * 1024) {
+      setImageFile(null);
+      if (imageInputRef.current) imageInputRef.current.value = "";
+      setImgStatus({ kind: "err", msg: `❌ "${f.name}" tem ${(f.size / 1024 / 1024).toFixed(1)} MB. Imagem de questão deve ter no máximo 15 MB.` });
+      return;
+    }
+    setImageFile(f);
+    setImgStatus({ kind: "busy", msg: `Enviando ${f.name} (${(f.size / 1024 / 1024).toFixed(2)} MB)…` });
+    try {
+      const url = await uploadToBucket(f, "images");
+      setImageUrl(url);
+      setImgStatus({ kind: "ok", msg: "✅ Imagem enviada para o bucket — a URL vai salva junto com a questão." });
+    } catch (err) {
+      setImageFile(null);
+      if (imageInputRef.current) imageInputRef.current.value = "";
+      setImgStatus({
+        kind: "err",
+        msg: `❌ Falha no upload: ${err instanceof Error ? err.message : String(err)}`,
+      });
+    }
+  }
+
+  function limparImagem() {
+    setImageUrl("");
+    setImageFile(null);
+    if (imageInputRef.current) imageInputRef.current.value = "";
+    setImgStatus({ kind: "idle", msg: "" });
+  }
+
   async function handleSave() {
     if (!statement.trim()) return toast.error("Preencha o enunciado.");
-    if (options.some((o) => !o.trim())) return toast.error("Preencha as 4 alternativas.");
+    if (!correctAnswer.trim()) return toast.error("Preencha a Resposta Correta.");
+    const distVazia = distractors.findIndex((d) => !d.trim());
+    if (distVazia >= 0) return toast.error(`Preencha a Distorção ${distVazia + 1} (alternativa falsa).`);
     if (!explanation.trim()) return toast.error("Preencha a explicação.");
     if (!isNew && initial.id.startsWith("detran_")) {
       if (!confirm(`"${initial.id}" é questão OFICIAL de prova real. Salvar cria uma exceção local só neste app. Continuar?`)) return;
@@ -1505,12 +1594,37 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
         <Textarea value={statement} onChange={(e) => setStatement(e.target.value)} rows={3} />
       </div>
       <div className="space-y-2">
-        <Label className="text-xs">Alternativas (marque a correta)</Label>
-        {options.map((op, i) => (
-          <div key={i} className="flex items-center gap-2">
-            <input type="radio" name="qcorrect" checked={correctIndex === i} onChange={() => setCorrectIndex(i)} className="accent-primary h-4 w-4 shrink-0" aria-label={`Alternativa ${LETTERS[i]} correta`} />
-            <span className="text-xs font-bold w-4 shrink-0">{LETTERS[i]}</span>
-            <Textarea value={op} onChange={(e) => setOptions((arr) => arr.map((v, j) => (j === i ? e.target.value : v)))} rows={2} className="flex-1" />
+        <div className="flex items-center justify-between gap-2">
+          <Label className="text-xs">Resposta correta e distorções</Label>
+          <Button type="button" size="sm" variant="outline" className="h-7 text-[11px]" onClick={() => setOrdem(sortearOrdem())}>
+            🎲 Sortear letras (A–D)
+          </Button>
+        </div>
+        <p className="text-[11px] text-muted-foreground leading-relaxed">
+          Aqui você digita só o <strong>conteúdo</strong>: a alternativa verdadeira e as 3 falsas. As letras A–C/D são
+          sorteadas na prova e mudam a cada tentativa — o que é salvo é o gabarito, não a posição. Se citar uma letra na
+          explicação, use a ordem que aparece na <strong>Prévia no simulado</strong> lá embaixo.
+        </p>
+
+        <div className="rounded-xl border border-success/40 bg-success/10 p-2.5 space-y-1">
+          <Label className="text-xs text-success font-semibold">✅ Resposta correta</Label>
+          <Textarea
+            value={correctAnswer}
+            onChange={(e) => setCorrectAnswer(e.target.value)}
+            rows={2}
+            placeholder="Digite a alternativa verdadeira"
+          />
+        </div>
+
+        {distractors.map((d, i) => (
+          <div key={i} className="rounded-xl border border-border/40 bg-background/30 p-2.5 space-y-1">
+            <Label className="text-xs text-muted-foreground">❌ Distorção {i + 1} (alternativa falsa)</Label>
+            <Textarea
+              value={d}
+              onChange={(e) => setDistractors((arr) => arr.map((v, j) => (j === i ? e.target.value : v)))}
+              rows={2}
+              placeholder={`Alternativa falsa plausível ${i + 1}`}
+            />
           </div>
         ))}
       </div>
@@ -1527,9 +1641,77 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
           <Label className="text-xs">Base legal (opcional)</Label>
           <Input value={legalBase} onChange={(e) => setLegalBase(e.target.value)} placeholder="Art. 29 do CTB" />
         </div>
-        <div className="space-y-1">
-          <Label className="text-xs">Imagem (URL opcional)</Label>
-          <Input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="https://..." />
+        <div className="space-y-1 sm:col-span-2">
+          <Label className="text-xs">Imagem da questão (opcional)</Label>
+          <FileDrop
+            label="Enviar imagem do computador"
+            hint="O arquivo sobe sozinho para o bucket library/images e a URL pública é preenchida aqui — não precisa hospedar em lugar nenhum."
+            accept="image/*"
+            file={imageFile}
+            inputRef={imageInputRef}
+            onPick={onImagePick}
+          />
+
+          {imgStatus.msg && (
+            <p
+              role={imgStatus.kind === "err" ? "alert" : "status"}
+              className={`text-xs rounded-lg px-2.5 py-1.5 border ${
+                imgStatus.kind === "err"
+                  ? "border-destructive/40 bg-destructive/10 text-destructive"
+                  : imgStatus.kind === "ok"
+                    ? "border-success/40 bg-success/10 text-success"
+                    : "border-warning/40 bg-warning/10 text-warning"
+              }`}
+            >
+              {imgStatus.kind === "busy" && <Loader2 className="inline h-3 w-3 animate-spin mr-1.5" />}
+              {imgStatus.msg}
+            </p>
+          )}
+
+          {/* Pré-visualização: confira se a foto/placa certa antes de salvar */}
+          {imageUrl && (
+            <div className="flex items-center gap-3 rounded-xl border border-border/40 bg-background/40 p-2">
+              <img
+                src={imageUrl}
+                alt="Pré-visualização da imagem da questão"
+                className="h-16 w-16 shrink-0 rounded-lg object-contain bg-background"
+                onError={(e) => {
+                  const el = e.currentTarget;
+                  el.style.display = "none";
+                  const fb = el.parentElement?.querySelector("[data-img-fb]") as HTMLElement | null;
+                  if (fb) fb.style.display = "flex";
+                }}
+              />
+              <span
+                data-img-fb
+                style={{ display: "none" }}
+                className="h-16 w-16 shrink-0 items-center justify-center rounded-lg border border-destructive/40 bg-destructive/10 text-[10px] text-center text-destructive px-1"
+              >
+                link não carregou
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-medium">Pré-visualização — confira antes de salvar</p>
+                <p className="text-[11px] text-muted-foreground truncate">{imageUrl}</p>
+              </div>
+              <Button size="sm" variant="ghost" onClick={limparImagem} type="button">Remover</Button>
+            </div>
+          )}
+
+          <details className="mt-1">
+            <summary className="text-[11px] text-muted-foreground cursor-pointer hover:text-foreground">
+              Ou use um link de imagem já hospedada
+            </summary>
+            <Input
+              className="mt-2"
+              value={imageUrl}
+              onChange={(e) => {
+                setImageUrl(e.target.value);
+                setImageFile(null);
+                if (imageInputRef.current) imageInputRef.current.value = "";
+              }}
+              placeholder="https://.../imagem.png"
+            />
+          </details>
         </div>
         <div className="space-y-1">
           <Label className="text-xs">Placa oficial (opcional)</Label>
@@ -1576,7 +1758,7 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
         <p className="text-[10px] uppercase tracking-widest text-primary-glow font-bold">Prévia no simulado</p>
         <div className="flex flex-wrap gap-2">
           <span className="text-xs px-2.5 py-1 rounded-full border border-border bg-secondary/50">{CATEGORY_LABELS[category]}</span>
-          <span className="text-xs px-2.5 py-1 rounded-full border border-success/30 bg-success/10 text-success font-semibold">Correta: {LETTERS[correctIndex]}</span>
+          <span className="text-xs px-2.5 py-1 rounded-full border border-success/30 bg-success/10 text-success font-semibold">Correta aqui: {LETTERS[correctIndex]} (letra sorteada)</span>
         </div>
         <p className="text-sm font-medium leading-relaxed">{statement.trim() || "Enunciado da questão..."}</p>
         {imageUrl.trim() ? (
@@ -1598,6 +1780,10 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
             </div>
           ))}
         </div>
+        <p className="text-[11px] text-muted-foreground leading-relaxed">
+          Esta é a ordem que será salva. Na prova, as alternativas são embaralhadas de novo e as letras (A, B, C, D)
+          seguem a posição — a correção automática compara pela <strong>alternativa certa</strong>, nunca pela letra.
+        </p>
       </div>
       <div className="flex gap-2 justify-end">
         <Button variant="outline" onClick={onCancel}>Cancelar</Button>
@@ -2745,6 +2931,98 @@ async function capaAutomaticaDeVideo(url: string): Promise<string | null> {
   return null;
 }
 
+// ---------------------------------------------------------------------------
+// Upload de arquivos no bucket `library` (módulo, para uso de QUALQUER formulário:
+// ItemForm [PDF/capa] e QuestionForm [imagem da questão]).
+// ---------------------------------------------------------------------------
+
+const isAuthStorageError = (m: string | undefined) => {
+  const s = (m ?? "").toLowerCase();
+  return (
+    s.includes("jwt") ||
+    s.includes("jws") ||
+    s.includes("session") ||
+    s.includes("expired") ||
+    s.includes("unauthorized") ||
+    s.includes("row-level security")
+  );
+};
+
+/**
+ * Caminho alternativo: envia o arquivo com fetch puro usando o token da sessão.
+ * Serve para contornar falhas do SDK e, principalmente, para capturar o status
+ * e o corpo EXATOS que o servidor devolveu (é isso que aparece no erro).
+ */
+async function uploadDirect(file: File, path: string): Promise<{ ok: boolean; detail: string }> {
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) return { ok: false, detail: "nenhuma sessão ativa no navegador" };
+
+    const base = (import.meta.env.VITE_SUPABASE_URL || "").replace(/\/+$/, "");
+    const key =
+      import.meta.env.VITE_SUPABASE_ANON_KEY ||
+      import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+      "";
+    if (!base || !key) return { ok: false, detail: "VITE_SUPABASE_URL/ANON_KEY ausentes no build" };
+
+    const fd = new FormData();
+    fd.append("file", file, file.name);
+
+    const r = await fetch(`${base}/storage/v1/object/library/${path}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${session.access_token}`,
+        apikey: key,
+        "x-upsert": "false",
+      },
+      body: fd,
+    });
+    const body = await r.text();
+    return { ok: r.ok, detail: `HTTP ${r.status}${body ? ` — ${body.slice(0, 300)}` : ""}` };
+  } catch (err) {
+    return { ok: false, detail: err instanceof Error ? err.message : String(err) };
+  }
+}
+
+/**
+ * Envia um arquivo para `library/<folder>/...` e devolve a URL pública.
+ * 3 camadas: SDK -> renova sessão e tenta de novo -> fetch direto com status/corpo.
+ */
+async function uploadToBucket(file: File, folder: string): Promise<string> {
+  const ext = (file.name.split(".").pop() || "bin").replace(/[^\w.-]/g, "").slice(0, 10) || "bin";
+  const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 10)}.${ext}`;
+
+  // 1) tentativa oficial do SDK
+  const attempt = () =>
+    supabase.storage.from("library").upload(path, file, { cacheControl: "3600", upsert: false });
+
+  let { error } = await attempt();
+
+  // 2) erro de autenticação? renova a sessão e tenta de novo
+  if (error && isAuthStorageError(error.message)) {
+    const { error: re } = await supabase.auth.refreshSession();
+    if (!re) error = (await attempt()).error;
+  }
+
+  // 3) ainda falhou? tenta o envio direto (captura status/corpo do servidor)
+  if (error) {
+    const direct = await uploadDirect(file, path);
+    if (direct.ok) {
+      const { data } = supabase.storage.from("library").getPublicUrl(path);
+      return data.publicUrl;
+    }
+    if (isAuthStorageError(error.message) || isAuthStorageError(direct.detail)) {
+      throw new Error(
+        `O servidor recusou o upload por autenticação. Saia e entre de novo no painel. Detalhe: ${direct.detail}`
+      );
+    }
+    throw new Error(`Falha no upload de ${folder}: ${direct.detail}`);
+  }
+
+  const { data } = supabase.storage.from("library").getPublicUrl(path);
+  return data.publicUrl;
+}
+
 function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: () => void }) {
   const qc = useQueryClient();
   const [title, setTitle] = useState("");
@@ -3020,89 +3298,6 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
     throw new Error(
       "Sua sessão expirou. Entre novamente no painel com o e-mail do administrador e refaça o envio."
     );
-  }
-
-  const isAuthStorageError = (m: string | undefined) => {
-    const s = (m ?? "").toLowerCase();
-    return (
-      s.includes("jwt") ||
-      s.includes("jws") ||
-      s.includes("session") ||
-      s.includes("expired") ||
-      s.includes("unauthorized") ||
-      s.includes("row-level security")
-    );
-  };
-
-  /**
-   * Caminho alternativo: envia o arquivo com fetch puro usando o token da sessão.
-   * Serve para contornar falhas do SDK e, principalmente, para capturar o status
-   * e o corpo EXATOS que o servidor devolveu (é isso que aparece no erro).
-   */
-  async function uploadDirect(file: File, path: string): Promise<{ ok: boolean; detail: string }> {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return { ok: false, detail: "nenhuma sessão ativa no navegador" };
-
-      const base = (import.meta.env.VITE_SUPABASE_URL || "").replace(/\/+$/, "");
-      const key =
-        import.meta.env.VITE_SUPABASE_ANON_KEY ||
-        import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
-        "";
-      if (!base || !key) return { ok: false, detail: "VITE_SUPABASE_URL/ANON_KEY ausentes no build" };
-
-      const fd = new FormData();
-      fd.append("file", file, file.name);
-
-      const r = await fetch(`${base}/storage/v1/object/library/${path}`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${session.access_token}`,
-          apikey: key,
-          "x-upsert": "false",
-        },
-        body: fd,
-      });
-      const body = await r.text();
-      return { ok: r.ok, detail: `HTTP ${r.status}${body ? ` — ${body.slice(0, 300)}` : ""}` };
-    } catch (err) {
-      return { ok: false, detail: err instanceof Error ? err.message : String(err) };
-    }
-  }
-
-  async function uploadToBucket(file: File, folder: string): Promise<string> {
-    const ext = (file.name.split(".").pop() || "bin").replace(/[^\w.-]/g, "").slice(0, 10) || "bin";
-    const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 10)}.${ext}`;
-
-    // 1) tentativa oficial do SDK
-    const attempt = () =>
-      supabase.storage.from("library").upload(path, file, { cacheControl: "3600", upsert: false });
-
-    let { error } = await attempt();
-
-    // 2) erro de autenticação? renova a sessão e tenta de novo
-    if (error && isAuthStorageError(error.message)) {
-      const { error: re } = await supabase.auth.refreshSession();
-      if (!re) error = (await attempt()).error;
-    }
-
-    // 3) ainda falhou? tenta o envio direto (captura status/corpo do servidor)
-    if (error) {
-      const direct = await uploadDirect(file, path);
-      if (direct.ok) {
-        const { data } = supabase.storage.from("library").getPublicUrl(path);
-        return data.publicUrl;
-      }
-      if (isAuthStorageError(error.message) || isAuthStorageError(direct.detail)) {
-        throw new Error(
-          `O servidor recusou o upload por autenticação. Saia e entre de novo no painel. Detalhe: ${direct.detail}`
-        );
-      }
-      throw new Error(`Falha no upload de ${folder}: ${direct.detail}`);
-    }
-
-    const { data } = supabase.storage.from("library").getPublicUrl(path);
-    return data.publicUrl;
   }
 
   async function onSubmit(e: React.FormEvent) {

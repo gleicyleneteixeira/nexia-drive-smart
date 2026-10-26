@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   getQuestionBank,
+  shuffleOptions,
   CATEGORY_LABELS,
   INCIDENCE_META,
   REAL_EXAM_IDS,
@@ -46,7 +47,9 @@ function getMemoryHook(q: Question): string {
 
 export function SimuladoEspelho({ onExit }: { onExit: () => void }) {
   const questions = useMemo(
-    () => getQuestionBank().filter((q) => REAL_EXAM_IDS.includes(q.id)),
+    // Embaralha as alternativas como no simulado real: letras sorteadas e
+    // correctIndex recalculado (a correção segue a alternativa certa).
+    () => getQuestionBank().filter((q) => REAL_EXAM_IDS.includes(q.id)).map(shuffleOptions),
     [],
   );
   const [index, setIndex] = useState(0);
