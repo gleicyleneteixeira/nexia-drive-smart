@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchLibraryItems, checkIsAdmin, SUPER_ADMIN_EMAIL, CRONOGRAMA_BOOK_KEY, fetchCronogramaBookId, type LibraryItem, type LibraryItemType } from "@/lib/library";
@@ -60,15 +60,35 @@ function AdminPage() {
 
   useEffect(() => {
     (async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        navigate({ to: "/auth" });
-        return;
+      try {
+        const primeiro = await supabase.auth.getUser();
+        let user = primeiro.data.user;
+        if (!user) {
+          // Token vencido/instável: renova a sessão UMA vez antes de deslogar
+          const r = await supabase.auth.refreshSession();
+          user = r.data.user;
+        }
+        if (!user) {
+          await supabase.auth.signOut();
+          navigate({ to: "/auth" });
+          return;
+        }
+        setUserEmail(user.email ?? null);
+        const ok = await checkIsAdmin();
+        setIsAdmin(ok);
+      } catch {
+        // Falha inesperada (ex.: rede caiu no meio do reload): tenta renovar e,
+        // só se não der, manda pro login — nunca derruba a sessão de prima.
+        const r = await supabase.auth.refreshSession().catch(() => null);
+        if (!r?.data?.user) {
+          navigate({ to: "/auth" });
+          return;
+        }
+        setUserEmail(r.data.user.email ?? null);
+        setIsAdmin(await checkIsAdmin().catch(() => false));
+      } finally {
+        setChecking(false);
       }
-      setUserEmail(user.email ?? null);
-      const ok = await checkIsAdmin();
-      setIsAdmin(ok);
-      setChecking(false);
     })();
   }, [navigate]);
 
@@ -2605,6 +2625,126 @@ export function UsersPanel() {
   );
 }
 
+/**
+ * Campo de arquivo à prova de "o sistema não reconhece":
+ * - input nativo SEMPRE visível (dá pra clicar e escolher);
+ * - arrastar e soltar também funciona;
+ * - mostra o arquivo escolhido com nome e tamanho (e botão "trocar");
+ * - o pai pode ler o arquivo pelo ref, mesmo se o estado se perder.
+ */
+function FileDrop({
+  label,
+  hint,
+  accept,
+  file,
+  inputRef,
+  onPick,
+}: {
+  label: string;
+  hint?: string;
+  accept?: string;
+  file: File | null;
+  inputRef: RefObject<HTMLInputElement | null>;
+  onPick: (f: File | null) => void;
+}) {
+  const [over, setOver] = useState(false);
+  // ícone do chip conforme o tipo de arquivo esperado no campo
+  const emoji = accept?.startsWith("image") ? "🖼️" : accept?.startsWith("audio") ? "🎧" : "📄";
+
+  function pick(f: File | null) {
+    if (!f && inputRef.current) inputRef.current.value = "";
+    onPick(f);
+  }
+
+  return (
+    <div className="space-y-1">
+      <Label>{label}</Label>
+      <div
+        onDragOver={(e) => {
+          e.preventDefault();
+          setOver(true);
+        }}
+        onDragLeave={() => setOver(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setOver(false);
+          const f = e.dataTransfer?.files?.[0] ?? null;
+          if (f) pick(f);
+        }}
+        className={`rounded-xl border-2 border-dashed p-3 transition-colors ${
+          over ? "border-primary bg-primary/10" : "border-border/40 bg-background/30"
+        }`}
+      >
+        <Input
+          ref={inputRef}
+          type="file"
+          accept={accept}
+          onChange={(e) => pick(e.target.files?.[0] ?? null)}
+        />
+        <p className="text-[11px] text-muted-foreground mt-2">
+          {hint ?? "Clique em “Escolher arquivo” ou arraste o arquivo até aqui."}
+        </p>
+      </div>
+      {file && (
+        <div className="flex items-center gap-2 rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-3 py-1.5 text-xs text-emerald-600">
+          <span className="truncate flex-1 min-w-0">
+            {emoji} {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+          </span>
+          <button
+            type="button"
+            className="underline shrink-0 hover:text-emerald-700"
+            onClick={() => pick(null)}
+          >
+            trocar
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Qualquer formato de link do YouTube (watch, youtu.be, shorts, embed, live) → ID. */
+function youtubeIdDe(url: string): string | null {
+  const m = url.match(
+    /(?:youtube\.com\/(?:watch\?(?:[^#]*&)?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/
+  );
+  return m ? m[1] : null;
+}
+
+/** ID do vídeo no Vimeo (vimeo.com/123 ou vimeo.com/video/123). */
+function vimeoIdDe(url: string): string | null {
+  const m = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  return m ? m[1] : null;
+}
+
+/**
+ * Capa automática de um link de vídeo.
+ * YouTube: direto da miniatura oficial (i.ytimg.com). Vimeo: consulta o oEmbed
+ * oficial e, se falhar, usa o vumbnail como último recurso.
+ * Retorna null quando não é um link de vídeo reconhecido.
+ */
+async function capaAutomaticaDeVideo(url: string): Promise<string | null> {
+  const limpa = url.trim();
+  const yt = youtubeIdDe(limpa);
+  if (yt) return `https://i.ytimg.com/vi/${yt}/hqdefault.jpg`;
+  const vm = vimeoIdDe(limpa);
+  if (vm) {
+    try {
+      const r = await fetch(
+        `https://vimeo.com/api/oembed.json?url=${encodeURIComponent(`https://vimeo.com/${vm}`)}`
+      );
+      if (r.ok) {
+        const j = await r.json();
+        if (j?.thumbnail_url) return j.thumbnail_url as string;
+      }
+    } catch {
+      // CORS/rede fora: cai no fallback abaixo
+    }
+    return `https://vumbnail.com/${vm}.jpg`;
+  }
+  return null;
+}
+
 function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: () => void }) {
   const qc = useQueryClient();
   const [title, setTitle] = useState("");
@@ -2618,7 +2758,148 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
   const [moduleType, setModuleType] = useState<"teorico" | "psicotecnico" | "direcao" | "tutorial">("teorico");
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [coverFile, setCoverFile] = useState<File | null>(null);
+  // Refs do input: se o estado se perder por qualquer motivo (re-render, HMR,
+  // rascunho restaurado), o envio ainda encontra o arquivo escolhido no DOM.
+  const pdfInputRef = useRef<HTMLInputElement | null>(null);
+  const coverInputRef = useRef<HTMLInputElement | null>(null);
+
+  // ---- Capa automática de vídeo (YouTube / Vimeo) ----
+  // O admin não precisa subir imagem: a capa vem da própria miniatura do vídeo,
+  // mas um switch permite trocar por arquivo ou por link de imagem.
+  const [capaAuto, setCapaAuto] = useState<string | null>(null);
+  const [capaAutoAtiva, setCapaAutoAtiva] = useState(true);
+
+  // ---- Classificação do arquivo escolhido (evita o "campo errado") ----
+  const ehPdf = (f: File) => f.type === "application/pdf" || /\.pdf$/i.test(f.name);
+  const ehImagem = (f: File) =>
+    f.type.startsWith("image/") || /\.(png|jpe?g|gif|webp|avif|svg|bmp)$/i.test(f.name);
+  const ehAudio = (f: File) =>
+    f.type.startsWith("audio/") || /\.(mp3|wav|m4a|ogg|aac|flac)$/i.test(f.name);
+
+  function avisoTamanho(f: File) {
+    if (f.size > 30 * 1024 * 1024) {
+      return ` Arquivo grande (${(f.size / 1024 / 1024).toFixed(1)} MB) — o envio pode demorar um pouco, aguarde o aviso verde.`;
+    }
+    return "";
+  }
+
+  /** Arquivo solto/escolhido no campo PRINCIPAL (PDF, imagem ou áudio). */
+  function onMainPick(f: File | null) {
+    if (!f) {
+      setPdfFile(null);
+      setBanner(null);
+      return;
+    }
+    const esperado =
+      itemType === "pdf" ? ehPdf(f) : itemType === "image" ? ehImagem(f) : ehAudio(f);
+    if (!esperado) {
+      // Limpa o input: senão o arquivo rejeitado continuaria no DOM e seria
+      // enviado na hora do submit (o envio também lê input.files).
+      if (pdfInputRef.current) pdfInputRef.current.value = "";
+      setPdfFile(null);
+      setBanner({
+        kind: "err",
+        msg:
+          itemType === "pdf"
+            ? ehImagem(f)
+              ? `"${f.name}" é uma imagem, não um PDF. Se quiser usá-la como capa, solte-a no campo "Capa (imagem)" mais abaixo. Para publicar o conteúdo, escolha um arquivo .pdf aqui em cima.`
+              : `"${f.name}" não é um PDF (nem imagem). Escolha um arquivo .pdf, ou use a dobra "usar um link (URL) do PDF" logo abaixo do campo.`
+            : `"${f.name}" não combina com o tipo "${itemType}". Escolha o arquivo correto.`,
+      });
+      return;
+    }
+    setPdfFile(f);
+    setBanner({
+      kind: "busy",
+      msg: `Arquivo selecionado: ${f.name} (${(f.size / 1024 / 1024).toFixed(2)} MB) — clique em "Adicionar à biblioteca".${avisoTamanho(f)}`,
+    });
+  }
+
+  /** Arquivo solto/escolhido no campo CAPA — se não for imagem, manda pro campo certo. */
+  function onCoverPick(f: File | null) {
+    if (!f) {
+      setCoverFile(null);
+      return;
+    }
+    if (!ehImagem(f)) {
+      // Erro clássico: PDF (ou áudio) solto na capa. Mova sozinho pro campo principal.
+      setCoverFile(null);
+      if (coverInputRef.current) coverInputRef.current.value = "";
+      const vaiParaPdf = itemType === "pdf" && ehPdf(f);
+      const vaiParaAudio = itemType === "audio" && ehAudio(f);
+      if (vaiParaPdf || vaiParaAudio) {
+        setPdfFile(f);
+        setBanner({
+          kind: "busy",
+          msg: `Atenção: "${f.name}" ${
+            vaiParaPdf ? "é um PDF" : "não é uma imagem"
+          } e não serve de capa — MOVI para o campo "${
+            vaiParaPdf ? "Arquivo PDF" : "Arquivo de Áudio"
+          }" lá em cima. Confira o chip verde e clique em "Adicionar à biblioteca".`,
+        });
+        return;
+      }
+      setBanner({
+        kind: "err",
+        msg: `"${f.name}" não é uma imagem, então não pode ser capa. Para usar este arquivo, selecione o tipo de item correspondente no campo "Tipo".`,
+      });
+      return;
+    }
+    setCoverFile(f);
+    setBanner({ kind: "busy", msg: `Capa selecionada: ${f.name} (${(f.size / 1024 / 1024).toFixed(2)} MB).` });
+    setCapaAutoAtiva(false); // escolha manual desliga a automática
+  }
+
+  // Descobre a capa automática sempre que a URL do item muda (só para vídeo/link).
+  useEffect(() => {
+    if (itemType !== "video" && itemType !== "link") {
+      setCapaAuto(null);
+      return;
+    }
+    const alvo = url.trim();
+    if (!alvo) {
+      setCapaAuto(null);
+      return;
+    }
+    // debounce: evita uma consulta a cada tecla digitada
+    const t = setTimeout(() => {
+      capaAutomaticaDeVideo(alvo).then((c) => setCapaAuto(c));
+    }, 450);
+    return () => clearTimeout(t);
+  }, [url, itemType]);
+
+  // Item já existente: a automática só assume se for exatamente a capa já salva.
+  // Nunca sobrescreve uma capa que o admin escolheu antes.
+  useEffect(() => {
+    setCapaAutoAtiva(
+      !editing || !editing.cover_url || (!!capaAuto && editing.cover_url === capaAuto)
+    );
+  }, [editing, capaAuto]);
+
+  /**
+   * Baixa a capa automática e guarda no próprio bucket (o item fica independente
+   * do YouTube/Vimeo). Se o download for bloqueado, devolve o link original —
+   * o <img> das capas carrega esse link normalmente.
+   */
+  async function guardarCapaRemota(remote: string): Promise<string> {
+    try {
+      const r = await fetch(remote, { mode: "cors" });
+      if (!r.ok) return remote;
+      const blob = await r.blob();
+      if (!blob.size) return remote;
+      const tipo = blob.type || "image/jpeg";
+      const ext = (tipo.split("/")[1] || "jpg").replace("jpeg", "jpg");
+      const f = new File([blob], `capa-${Date.now()}.${ext}`, { type: tipo });
+      return await uploadToBucket(f, "covers");
+    } catch {
+      return remote;
+    }
+  }
+
   const [saving, setSaving] = useState(false);
+  // Feedback VISÍVEL dentro do form: progresso, sucesso ou o erro exato do servidor.
+  // (o Toaster sozinho não bastava — quem está no painel precisa ver o passo a passo)
+  const [banner, setBanner] = useState<{ kind: "busy" | "ok" | "err"; msg: string } | null>(null);
   const [slides, setSlides] = useState<{ id: string; file: File | null; image_url: string; text: string; audioFile?: File | null; audio_url?: string }[]>([
     { id: Math.random().toString(), file: null, image_url: "", text: "", audioFile: null, audio_url: "" },
   ]);
@@ -2726,18 +3007,19 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
     }
   }
 
-  // O 400 do storage quase sempre é sessão morta: o supabase-js envia a chave anônima
-  // quando não consegue renovar o token e o RLS nega. Garante token vivo antes de salvar.
+  // Valida a sessão com o servidor. Antes de derrubar o login, tenta RENOVAR
+  // a sessão uma vez — assim um erro pontual de rede não desloga o painel.
   async function ensureValidSession(): Promise<void> {
-    const { data: { session } } = await supabase.auth.getSession();
-    const stillValid = session?.expires_at && session.expires_at * 1000 > Date.now() + 60_000;
-    if (stillValid) return;
-    const { data: { session: renewed }, error } = await supabase.auth.refreshSession();
-    if (!renewed && error) {
-      throw new Error(
-        "Sua sessão expirou. Clique em “Sair” e entre de novo no painel, recarregue a página (Ctrl+F5) e tente salvar novamente."
-      );
-    }
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) return;
+
+    const { data: { user: renewed }, error: re } = await supabase.auth.refreshSession();
+    if (renewed && !re) return;
+
+    await supabase.auth.signOut();
+    throw new Error(
+      "Sua sessão expirou. Entre novamente no painel com o e-mail do administrador e refaça o envio."
+    );
   }
 
   const isAuthStorageError = (m: string | undefined) => {
@@ -2752,51 +3034,71 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
     );
   };
 
-  async function uploadToBucket(file: File, folder: string): Promise<string> {
-    const ext = file.name.split(".").pop() ?? "bin";
-    const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-    const baseUrl = import.meta.env.VITE_SUPABASE_URL as string;
-    const anonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string;
-
-    // Upload com o token do usuário EXPLÍCITO: evita o fallback silencioso para a
-    // chave anônima (que provoca o 400 quando a sessão da aba está instável)
-    // e devolve o corpo do erro do servidor para diagnóstico.
-    const send = async (): Promise<{ status: number; body: string }> => {
+  /**
+   * Caminho alternativo: envia o arquivo com fetch puro usando o token da sessão.
+   * Serve para contornar falhas do SDK e, principalmente, para capturar o status
+   * e o corpo EXATOS que o servidor devolveu (é isso que aparece no erro).
+   */
+  async function uploadDirect(file: File, path: string): Promise<{ ok: boolean; detail: string }> {
+    try {
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return { status: 0, body: "sem sessão nesta página" };
+      if (!session) return { ok: false, detail: "nenhuma sessão ativa no navegador" };
+
+      const base = (import.meta.env.VITE_SUPABASE_URL || "").replace(/\/+$/, "");
+      const key =
+        import.meta.env.VITE_SUPABASE_ANON_KEY ||
+        import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+        "";
+      if (!base || !key) return { ok: false, detail: "VITE_SUPABASE_URL/ANON_KEY ausentes no build" };
+
       const fd = new FormData();
-      fd.append("", file);
-      const r = await fetch(`${baseUrl}/storage/v1/object/library/${path}`, {
+      fd.append("file", file, file.name);
+
+      const r = await fetch(`${base}/storage/v1/object/library/${path}`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${session.access_token}`,
-          apikey: anonKey,
+          apikey: key,
           "x-upsert": "false",
         },
         body: fd,
       });
-      return { status: r.status, body: await r.text() };
-    };
+      const body = await r.text();
+      return { ok: r.ok, detail: `HTTP ${r.status}${body ? ` — ${body.slice(0, 300)}` : ""}` };
+    } catch (err) {
+      return { ok: false, detail: err instanceof Error ? err.message : String(err) };
+    }
+  }
 
-    let res = await send();
-    if (res.status === 0 || res.status >= 400) {
-      // Sessão morreu no meio do caminho: renova e tenta uma vez mais
+  async function uploadToBucket(file: File, folder: string): Promise<string> {
+    const ext = (file.name.split(".").pop() || "bin").replace(/[^\w.-]/g, "").slice(0, 10) || "bin";
+    const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 10)}.${ext}`;
+
+    // 1) tentativa oficial do SDK
+    const attempt = () =>
+      supabase.storage.from("library").upload(path, file, { cacheControl: "3600", upsert: false });
+
+    let { error } = await attempt();
+
+    // 2) erro de autenticação? renova a sessão e tenta de novo
+    if (error && isAuthStorageError(error.message)) {
       const { error: re } = await supabase.auth.refreshSession();
-      if (!re) res = await send();
+      if (!re) error = (await attempt()).error;
     }
 
-    if (res.status === 0) {
-      throw new Error(
-        "Você não está logada nesta página. Clique em “Sair”, entre de novo no painel (Ctrl+F5) e tente salvar novamente."
-      );
-    }
-    if (res.status >= 400) {
-      if (isAuthStorageError(res.body)) {
+    // 3) ainda falhou? tenta o envio direto (captura status/corpo do servidor)
+    if (error) {
+      const direct = await uploadDirect(file, path);
+      if (direct.ok) {
+        const { data } = supabase.storage.from("library").getPublicUrl(path);
+        return data.publicUrl;
+      }
+      if (isAuthStorageError(error.message) || isAuthStorageError(direct.detail)) {
         throw new Error(
-          `O servidor recusou o upload pois o login desta página não foi aceito (${res.status}). Saia e entre de novo no painel e tente novamente. Detalhe: ${res.body.slice(0, 200)}`
+          `O servidor recusou o upload por autenticação. Saia e entre de novo no painel. Detalhe: ${direct.detail}`
         );
       }
-      throw new Error(`Falha no upload (${folder}): ${res.status} ${res.body.slice(0, 300)}`);
+      throw new Error(`Falha no upload de ${folder}: ${direct.detail}`);
     }
 
     const { data } = supabase.storage.from("library").getPublicUrl(path);
@@ -2805,25 +3107,58 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+
+    // Arquivo escolhido: estado OU o input real (o DOM nunca "esquece" o arquivo,
+    // então mesmo se o estado zerar por re-render o envio continua encontrando o PDF).
+    const chosenFile: File | null = pdfFile ?? pdfInputRef.current?.files?.[0] ?? null;
+    if (chosenFile !== pdfFile) setPdfFile(chosenFile);
+    const chosenCover: File | null = coverFile ?? coverInputRef.current?.files?.[0] ?? null;
+
+    // Validação VISÍVEL antes de qualquer requisição
+    if (!title.trim()) {
+      setBanner({ kind: "err", msg: "Digite o título do item antes de salvar." });
+      return;
+    }
+    if (!editing) {
+      if ((itemType === "pdf" || itemType === "image" || itemType === "audio") && !chosenFile && !url.trim()) {
+        setBanner({
+          kind: "err",
+          msg:
+            itemType === "pdf"
+              ? "Escolha o arquivo PDF (clique em “Escolher arquivo” — o nome deve aparecer logo abaixo — ou cole a URL) antes de salvar."
+              : itemType === "image"
+                ? "Escolha a imagem antes de salvar."
+                : "Escolha o arquivo de áudio antes de salvar.",
+        });
+        return;
+      }
+      if ((itemType === "heyzine" || itemType === "video" || itemType === "link") && !url.trim()) {
+        setBanner({ kind: "err", msg: "Cole a URL antes de salvar." });
+        return;
+      }
+    }
+
     setSaving(true);
+    setBanner({ kind: "busy", msg: "Verificando sua sessão…" });
     try {
       await ensureValidSession();
       let finalUrl = url;
       let finalCover = coverUrl;
       let finalSlides: any = null;
 
-      if (itemType === "pdf" && pdfFile) {
-        finalUrl = await uploadToBucket(pdfFile, "pdfs");
-      }
-      if (itemType === "image" && pdfFile) {
-        finalUrl = await uploadToBucket(pdfFile, "images");
-      }
-      if (itemType === "audio" && pdfFile) {
-        finalUrl = await uploadToBucket(pdfFile, "audios");
+      if ((itemType === "pdf" || itemType === "image" || itemType === "audio") && chosenFile) {
+        const pasta = itemType === "pdf" ? "pdfs" : itemType === "image" ? "images" : "audios";
+        setBanner({
+          kind: "busy",
+          msg: `Enviando o arquivo ${chosenFile.name} (${(chosenFile.size / 1024 / 1024).toFixed(1)} MB)…`,
+        });
+        finalUrl = await uploadToBucket(chosenFile, pasta);
       }
       if (itemType === "carousel") {
         const uploadedSlides = [];
-        for (const slide of slides) {
+        for (let i = 0; i < slides.length; i++) {
+          const slide = slides[i];
+          setBanner({ kind: "busy", msg: `Enviando slide ${i + 1} de ${slides.length}…` });
           let imageUrl = slide.image_url;
           if (slide.file) {
             imageUrl = await uploadToBucket(slide.file, "slides");
@@ -2845,8 +3180,13 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
         finalSlides = uploadedSlides;
         finalUrl = uploadedSlides[0].image_url;
       }
-      if (coverFile) {
-        finalCover = await uploadToBucket(coverFile, "covers");
+      if (chosenCover) {
+        setBanner({ kind: "busy", msg: "Enviando a capa…" });
+        finalCover = await uploadToBucket(chosenCover, "covers");
+      } else if (capaAutoAtiva && capaAuto) {
+        // Capa automática do vídeo (YouTube/Vimeo) — sem arquivo escolhido
+        setBanner({ kind: "busy", msg: "Usando a capa automática do vídeo…" });
+        finalCover = await guardarCapaRemota(capaAuto);
       }
 
       if (!finalUrl) throw new Error("Informe a URL ou faça upload do arquivo");
@@ -2866,6 +3206,7 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
       };
 
       let savedId: string | null = editing ? editing.id : null;
+      setBanner({ kind: "busy", msg: "Salvando o item na biblioteca…" });
       if (editing) {
         const { error } = await supabase.from("library_items").update(payload).eq("id", editing.id);
         if (error) throw error;
@@ -2902,17 +3243,30 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
         }
         qc.invalidateQueries({ queryKey: ["admin", "cronograma-book"] });
       }
+
+      const resumo =
+        `${editing ? "✅ Item atualizado" : "✅ Item salvo"}: "${title}"` +
+        ` — ${published ? "PUBLICADO" : "RASCUNHO (não publicado)"}` +
+        (finalUrl ? ` — ${finalUrl}` : "");
+      setBanner({ kind: "ok", msg: resumo });
+      toast.success(editing ? "Item atualizado" : "Item adicionado à biblioteca");
+
       reset();
       onDone();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Erro");
+      const msg = err instanceof Error ? err.message : "Erro desconhecido ao salvar o item";
+      setBanner({ kind: "err", msg: `❌ ${msg}` });
+      toast.error(msg);
     } finally {
       setSaving(false);
     }
   }
 
+  // noValidate: a bolha nativa do navegador ("Preencha este campo") passava
+  // despercebida e o form simplesmente "não fazia nada". A validação é nossa,
+  // com aviso em destaque dentro do formulário.
   return (
-    <form onSubmit={onSubmit} className="glass rounded-2xl p-5 space-y-4">
+    <form onSubmit={onSubmit} noValidate className="glass rounded-2xl p-5 space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="font-display font-bold">{editing ? "Editar item" : "Adicionar item"}</h2>
         {editing && (
@@ -2922,10 +3276,36 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
         )}
       </div>
 
+      {/* Feedback sempre visível: progresso, sucesso ou erro exato */}
+      {banner && (
+        <div
+          role={banner.kind === "err" ? "alert" : "status"}
+          aria-live="polite"
+          className={
+            banner.kind === "err"
+              ? "rounded-xl border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm font-medium text-destructive break-words"
+              : banner.kind === "ok"
+                ? "rounded-xl border border-emerald-500/50 bg-emerald-500/10 px-4 py-3 text-sm font-medium text-emerald-600 break-words"
+                : "rounded-xl border border-primary/40 bg-primary/10 px-4 py-3 text-sm font-medium text-foreground flex items-center gap-2"
+          }
+        >
+          {banner.kind === "busy" && <Loader2 className="h-4 w-4 animate-spin shrink-0" />}
+          <span className="min-w-0 break-words">{banner.msg}</span>
+        </div>
+      )}
+
       <div className="grid md:grid-cols-3 gap-4">
         <div>
           <Label>Título *</Label>
-          <Input required value={title} onChange={(e) => setTitle(e.target.value)} />
+          <Input
+            required
+            value={title}
+            onChange={(e) => {
+              setTitle(e.target.value);
+              // limpa o aviso antigo assim que a pessoa começa um novo item
+              if (banner && banner.kind !== "busy") setBanner(null);
+            }}
+          />
         </div>
         <div>
           <Label>Tipo *</Label>
@@ -2963,13 +3343,26 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
 
       {itemType === "pdf" && (
         <div>
-          <Label>Arquivo PDF {editing ? "(opcional — manter atual se vazio)" : "*"}</Label>
-          <Input
-            type="file"
-            accept="application/pdf"
-            onChange={(e) => setPdfFile(e.target.files?.[0] ?? null)}
+          <FileDrop
+            label={`Arquivo PDF ${editing ? "(opcional — manter atual se vazio)" : "*"}`}
+            hint="Clique em “Escolher arquivo” para abrir o seletor, ou arraste o PDF até aqui. O arquivo escolhido aparece logo abaixo com nome e tamanho."
+            accept="application/pdf,.pdf"
+            file={pdfFile}
+            inputRef={pdfInputRef}
+            onPick={onMainPick}
           />
           {editing && url && <p className="text-xs text-muted-foreground mt-1">Atual: {url.split("/").pop()}</p>}
+          <details className="mt-2">
+            <summary className="text-[11px] text-muted-foreground cursor-pointer hover:text-foreground">
+              Não tenho o arquivo agora — usar um link (URL) do PDF
+            </summary>
+            <Input
+              className="mt-2"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              placeholder="https://.../arquivo.pdf"
+            />
+          </details>
           <div className="flex items-start gap-2 mt-3 rounded-xl border border-primary/30 bg-primary/5 p-3">
             <Switch checked={isCronogramaBook} onCheckedChange={setIsCronogramaBook} id="cronobook" />
             <div>
@@ -2991,11 +3384,13 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
 
       {itemType === "image" && (
         <div>
-          <Label>Arquivo de Imagem {editing ? "(opcional — manter atual se vazio)" : "*"}</Label>
-          <Input
-            type="file"
+          <FileDrop
+            label={`Arquivo de Imagem ${editing ? "(opcional — manter atual se vazio)" : "*"}`}
+            hint="Clique em “Escolher arquivo” ou arraste a imagem até aqui."
             accept="image/*"
-            onChange={(e) => setPdfFile(e.target.files?.[0] ?? null)}
+            file={pdfFile}
+            inputRef={pdfInputRef}
+            onPick={onMainPick}
           />
           {editing && url && <p className="text-xs text-muted-foreground mt-1">Atual: {url}</p>}
         </div>
@@ -3003,11 +3398,13 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
 
       {itemType === "audio" && (
         <div>
-          <Label>Arquivo de Áudio (MP3/WAV/M4A) {editing ? "(opcional — manter atual se vazio)" : "*"}</Label>
-          <Input
-            type="file"
+          <FileDrop
+            label={`Arquivo de Áudio (MP3/WAV/M4A) ${editing ? "(opcional — manter atual se vazio)" : "*"}`}
+            hint="Clique em “Escolher arquivo” ou arraste o áudio até aqui."
             accept="audio/*"
-            onChange={(e) => setPdfFile(e.target.files?.[0] ?? null)}
+            file={pdfFile}
+            inputRef={pdfInputRef}
+            onPick={onMainPick}
           />
           {editing && url && <p className="text-xs text-muted-foreground mt-1">Atual: {url.split("/").pop()}</p>}
           <p className="text-[11px] text-muted-foreground mt-1">
@@ -3173,20 +3570,97 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
         </div>
       )}
 
-      <div>
-        <Label>Capa (imagem — opcional)</Label>
-        <Input type="file" accept="image/*" onChange={(e) => setCoverFile(e.target.files?.[0] ?? null)} />
-        {coverUrl && !coverFile && <p className="text-xs text-muted-foreground mt-1">Capa atual definida.</p>}
-        
-        {/* Video frame selector for video items */}
-        {itemType === "video" && url && (
+      <div className="space-y-3">
+        {/* Capa automática do vídeo (YouTube/Vimeo) — ligada por padrão */}
+        {capaAuto && (
+          <div className="rounded-xl border border-primary/30 bg-primary/5 p-3 space-y-2">
+            <div className="flex items-center justify-between gap-3">
+              <div className="min-w-0">
+                <p className="text-sm font-medium">🖼️ Capa automática do vídeo</p>
+                <p className="text-[11px] text-muted-foreground mt-0.5">
+                  É a própria imagem do vídeo, buscada sozinha. Desligue o switch para usar outra capa.
+                </p>
+              </div>
+              <Switch
+                checked={capaAutoAtiva}
+                onCheckedChange={(v) => {
+                  setCapaAutoAtiva(v);
+                  if (v) {
+                    setCoverFile(null);
+                    if (coverInputRef.current) coverInputRef.current.value = "";
+                  }
+                }}
+              />
+            </div>
+            {capaAutoAtiva && (
+              <div className="relative aspect-video rounded-lg overflow-hidden border border-border/40 bg-background/60">
+                <img
+                  src={capaAuto}
+                  alt="Capa automática do vídeo"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    const el = e.currentTarget;
+                    el.style.display = "none";
+                    const fb = el.parentElement?.querySelector("[data-capa-fb]") as HTMLElement | null;
+                    if (fb) fb.style.display = "flex";
+                  }}
+                />
+                <span
+                  data-capa-fb
+                  style={{ display: "none" }}
+                  className="absolute inset-0 items-center justify-center p-3 text-center text-[11px] text-muted-foreground"
+                >
+                  Não deu para carregar a capa automática. Desligue o switch acima e escolha uma imagem.
+                </span>
+                <span className="absolute bottom-1 left-1 rounded bg-black/60 px-1.5 py-0.5 text-[10px] text-white">
+                  capa automática
+                </span>
+              </div>
+            )}
+          </div>
+        )}
+
+        <FileDrop
+          label={capaAuto ? "Capa personalizada (opcional)" : "Capa (imagem — opcional)"}
+          hint={
+            capaAuto && capaAutoAtiva
+              ? "A capa automática está ligada — escolha um arquivo só se quiser trocar (isso desliga a automática)."
+              : "Imagem de capa do item. Se o objetivo é subir o PDF, use o campo “Arquivo PDF” lá em cima."
+          }
+          accept="image/*"
+          file={coverFile}
+          inputRef={coverInputRef}
+          onPick={onCoverPick}
+        />
+        {coverUrl && !coverFile && !capaAutoAtiva && (
+          <p className="text-xs text-muted-foreground mt-1">Capa atual definida.</p>
+        )}
+
+        {/* Outra forma de trocar a capa: link de imagem */}
+        {capaAuto && (
+          <details className="mt-1">
+            <summary className="text-[11px] text-muted-foreground cursor-pointer hover:text-foreground">
+              Usar outra capa por link de imagem (em vez da automática)
+            </summary>
+            <Input
+              className="mt-2"
+              value={coverUrl}
+              onChange={(e) => {
+                setCoverUrl(e.target.value);
+                if (e.target.value) setCapaAutoAtiva(false);
+              }}
+              placeholder="https://.../capa.jpg"
+            />
+          </details>
+        )}
+
+        {/* Captura de frame só quando NÃO há capa automática (TikTok, arquivo direto etc.) */}
+        {itemType === "video" && url && !capaAuto && (
           <div className="mt-3 space-y-2">
             <p className="text-xs text-muted-foreground">
-              {url.includes('youtube') || url.includes('youtu.be') 
-                ? "Capa buscada automaticamente do YouTube."
-                : "Selecione um frame do vídeo como capa (funciona para TikTok, Instagram, Facebook, etc.):"}
+              Selecione um frame do vídeo como capa (funciona para TikTok, Instagram, Facebook, etc.):
             </p>
-            {!url.includes('youtube') && !url.includes('youtu.be') && (
+            {(
               <>
                 <div className="relative rounded-lg overflow-hidden border border-border/40">
                   <video
@@ -3253,9 +3727,35 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
         </div>
       </div>
 
+      {/* Resumo do que será enviado — sempre visível acima do botão */}
+      {(pdfFile || coverFile || (capaAuto && capaAutoAtiva)) && (
+        <div className="rounded-xl border border-emerald-500/40 bg-emerald-500/10 px-3 py-2 text-xs text-emerald-600 space-y-0.5">
+          <p className="font-medium">✅ Pronto para enviar:</p>
+          {pdfFile && (
+            <p className="truncate">
+              📄 {pdfFile.name} ({(pdfFile.size / 1024 / 1024).toFixed(2)} MB)
+            </p>
+          )}
+          {coverFile && (
+            <p className="truncate">
+              🖼️ Capa: {coverFile.name} ({(coverFile.size / 1024 / 1024).toFixed(2)} MB)
+            </p>
+          )}
+          {!coverFile && capaAuto && capaAutoAtiva && (
+            <p className="truncate">🖼️ Capa automática do vídeo (buscada sozinha)</p>
+          )}
+        </div>
+      )}
+
       <Button type="submit" disabled={saving} className="w-full">
         {saving ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Upload className="h-4 w-4 mr-2" />}
-        {editing ? "Salvar alterações" : "Adicionar à biblioteca"}
+        {saving
+          ? "Enviando…"
+          : editing
+            ? "Salvar alterações"
+            : banner?.kind === "ok"
+              ? "Adicionar outro item"
+              : "Adicionar à biblioteca"}
       </Button>
     </form>
   );

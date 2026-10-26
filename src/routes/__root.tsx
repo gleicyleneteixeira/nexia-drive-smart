@@ -10,6 +10,7 @@ import {
 
 import { AppShell } from "@/components/AppShell";
 import { AuthProvider } from "@/hooks/use-auth";
+import { Toaster } from "@/components/ui/sonner";
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
@@ -138,6 +139,9 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <AppShell />
+        {/* Sem este componente nenhum toast.success/toast.error aparecia na tela:
+            o app inteiro ficava "mudo" quando algo dava certo ou errado. */}
+        <Toaster position="top-center" richColors closeButton duration={6000} />
       </AuthProvider>
     </QueryClientProvider>
   );
