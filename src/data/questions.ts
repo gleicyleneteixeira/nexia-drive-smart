@@ -1932,7 +1932,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp04",
         category: "meio-ambiente",
-        statement: "Com o aumento da exposição à radiação ultravioleta, médicos alertam para riscos diretos à população exposta ao sol sem proteção. A consequência direta é:",
+        statement: "A degradação da camada de ozônio aumenta a radiação ultravioleta que atinge a superfície terrestre. O principal risco à saúde pública decorrente dessa maior exposição é:",
         options: ["Aumento da temperatura média global em todas as regiões do planeta.","Maior incidência de doenças respiratórias na população urbana.","Aumento dos casos de câncer de pele e de lesões oculares na população.","Aumento da camada de ozônio, que filtra a radiação ultravioleta que atinge o solo."],
         correctIndex: 2,
         explanation: "Correta a alternativa C, pois a maior exposição ao UV eleva casos de câncer de pele e lesões oculares.",
