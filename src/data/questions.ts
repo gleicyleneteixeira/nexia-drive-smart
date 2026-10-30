@@ -8588,7 +8588,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l02_54",
         category: "placas",
-        statement: "Observe a placa abaixo (R-10): circular, fundo branco, orla vermelha e pictograma de automóvel. O que essa regulamentação proíbe?",
+        statement: "Observe a placa abaixo (R-10). O que essa sinalização de regulamentação proíbe?",
         options: ["Trânsito de bicicletas no trecho sinalizado da via.", "Trânsito de veículos automotores no trecho sinalizado.", "Trânsito de tratores e máquinas de obras no trecho.", "Trânsito apenas de motocicletas, motonetas e ciclomotores."],
         correctIndex: 1,
         explanation: "Correta B: R-10 proíbe o trânsito de veículos automotores. Bicicleta é R-12; tratores/máquinas, R-13; motos, R-37.",
@@ -8614,7 +8614,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l02_56",
         category: "placas",
-        statement: "Observe a placa abaixo (R-4a): circular, fundo branco, orla vermelha e seta à esquerda riscada. O que ela proíbe?",
+        statement: "Observe a placa abaixo (R-4a). O que essa sinalização de regulamentação proíbe?",
         options: ["Virar à esquerda no trecho ou na interseção sinalizada.", "Virar à direita no trecho ou na interseção sinalizada.", "Retornar à esquerda, mantida a conversão simples à esquerda.", "Retornar à direita, mantida qualquer conversão na interseção."],
         correctIndex: 0,
         explanation: "Correta A: R-4a proíbe virar à esquerda. Virar à direita é R-4b; retornar à esquerda é R-5a; retornar à direita é R-5b.",
@@ -8627,7 +8627,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l02_57",
         category: "placas",
-        statement: "Observe a placa abaixo (R-8a): circular, fundo branco, orla vermelha e setas indicando mudança de faixa da esquerda para a direita, riscadas. O que ela proíbe?",
+        statement: "Observe a placa abaixo (R-8a). O que essa sinalização de regulamentação proíbe?",
         options: ["Mudar de faixa ou pista da esquerda para a direita.", "Mudar de faixa ou pista da direita para a esquerda.", "Ultrapassar pela esquerda no trecho sinalizado.", "Retornar à esquerda na interseção imediatamente à frente."],
         correctIndex: 0,
         explanation: "Correta A: R-8a proíbe mudar de faixa/pista da esquerda para a direita. O sentido inverso é R-8b. Ultrapassagem é série R-7; retorno é R-5.",
@@ -8640,7 +8640,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l02_58",
         category: "placas",
-        statement: "Observe a placa abaixo (A-33b): losango amarelo com pictograma de pedestres e faixa. Qual é a mensagem dessa advertência?",
+        statement: "Observe a placa abaixo (A-33b). O que essa sinalização de advertência indica?",
         options: ["Área escolar adiante, sem faixa própria de travessia.", "Passagem sinalizada de pedestres, sem relação com escolares.", "Passagem sinalizada de escolares à frente.", "Regulamentação que obriga parar na faixa de pedestres."],
         correctIndex: 2,
         explanation: "Correta C: A-33b adverte passagem sinalizada de escolares. Área escolar é A-33a; passagem de pedestres é A-32b. Losango amarelo não regulamenta parada (isso seria R-1).",
@@ -8653,7 +8653,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l02_59",
         category: "placas",
-        statement: "Observe a placa abaixo (A-28): losango amarelo com pictograma de veículo derrapando. O que ela adverte?",
+        statement: "Observe a placa abaixo (A-28). O que essa sinalização de advertência indica?",
         options: ["Pista escorregadia à frente.", "Projeção de cascalho sobre a pista.", "Vento lateral forte no trecho.", "Parada obrigatória imediatamente à frente."],
         correctIndex: 0,
         explanation: "Correta A: A-28 é pista escorregadia. Cascalho é A-29; vento lateral é A-44; parada obrigatória à frente é A-15 (ainda advertência, não R-1).",
@@ -8666,7 +8666,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l02_60",
         category: "placas",
-        statement: "Observe a placa abaixo (A-15): losango amarelo com octógono vermelho de PARE. O que ela adverte?",
+        statement: "Observe a placa abaixo (A-15). O que essa sinalização de advertência indica?",
         options: ["Semáforo à frente, sem exigir preparação para parar.", "Pista escorregadia imediatamente após a curva.", "Mão única adiante, com circulação em um só sentido.", "Parada obrigatória à frente: reduzir e preparar-se para parar."],
         correctIndex: 3,
         explanation: "Correta D: A-15 adverte parada obrigatória à frente (R-1 mais adiante). Semáforo à frente é A-14; mão dupla é A-25; pista escorregadia é A-28.",
@@ -8679,7 +8679,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "placa_ind_r12",
         category: "placas",
-        statement: "Observe a placa abaixo (R-12): circular, fundo branco, orla vermelha e pictograma de bicicleta. O que essa regulamentação proíbe?",
+        statement: "Observe a placa abaixo (R-12). O que essa sinalização de regulamentação proíbe?",
         options: ["Trânsito de bicicletas no trecho sinalizado.", "Trânsito de veículos automotores no trecho.", "Trânsito de motocicletas, motonetas e ciclomotores.", "Trânsito de tratores e máquinas de obras."],
         correctIndex: 0,
         explanation: "Correta A: R-12 proíbe bicicletas. Automotores é R-10; motos é R-37; tratores é R-13.",
@@ -8692,7 +8692,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "placa_ind_r13",
         category: "placas",
-        statement: "Observe a placa abaixo (R-13): circular, fundo branco, orla vermelha e pictograma de trator. O que essa regulamentação proíbe?",
+        statement: "Observe a placa abaixo (R-13). O que essa sinalização de regulamentação proíbe?",
         options: ["Trânsito de bicicletas no trecho sinalizado.", "Trânsito de veículos automotores no trecho.", "Trânsito de tratores e máquinas de obras.", "Trânsito de motocicletas, motonetas e ciclomotores."],
         correctIndex: 2,
         explanation: "Correta C: R-13 proíbe tratores e máquinas de obras. Bicicleta é R-12; automotores, R-10; motos, R-37.",
@@ -8705,7 +8705,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "placa_ind_r37",
         category: "placas",
-        statement: "Observe a placa abaixo (R-37): circular, fundo branco, orla vermelha e pictograma de motocicleta. O que essa regulamentação proíbe?",
+        statement: "Observe a placa abaixo (R-37). O que essa sinalização de regulamentação proíbe?",
         options: ["Trânsito de bicicletas no trecho sinalizado.", "Trânsito de veículos automotores em geral no trecho.", "Trânsito de tratores e máquinas de obras.", "Trânsito de motocicletas, motonetas e ciclomotores."],
         correctIndex: 3,
         explanation: "Correta D: R-37 proíbe motocicletas, motonetas e ciclomotores. Automotores em geral é R-10; bicicleta é R-12.",
@@ -8718,7 +8718,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "placa_ind_r4b",
         category: "placas",
-        statement: "Observe a placa abaixo (R-4b): circular, fundo branco, orla vermelha e seta à direita riscada. O que ela proíbe?",
+        statement: "Observe a placa abaixo (R-4b). O que essa sinalização de regulamentação proíbe?",
         options: ["Virar à esquerda no trecho ou na interseção.", "Virar à direita no trecho ou na interseção.", "Retornar à esquerda na interseção à frente.", "Retornar à direita na interseção à frente."],
         correctIndex: 1,
         explanation: "Correta B: R-4b proíbe virar à direita. Virar à esquerda é R-4a; retornos são R-5a (esquerda) e R-5b (direita).",
@@ -8731,7 +8731,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "placa_ind_r5a",
         category: "placas",
-        statement: "Observe a placa abaixo (R-5a): circular, fundo branco, orla vermelha e seta de retorno à esquerda riscada. O que ela proíbe?",
+        statement: "Observe a placa abaixo (R-5a). O que essa sinalização de regulamentação proíbe?",
         options: ["Virar à esquerda, sem atingir o retorno.", "Virar à direita na interseção sinalizada.", "Retornar à esquerda no trecho sinalizado.", "Retornar à direita no trecho sinalizado."],
         correctIndex: 2,
         explanation: "Correta C: R-5a proíbe retornar à esquerda. Virar à esquerda é R-4a; retorno à direita é R-5b.",
@@ -8744,7 +8744,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "placa_ind_r5b",
         category: "placas",
-        statement: "Observe a placa abaixo (R-5b): circular, fundo branco, orla vermelha e seta de retorno à direita riscada. O que ela proíbe?",
+        statement: "Observe a placa abaixo (R-5b). O que essa sinalização de regulamentação proíbe?",
         options: ["Virar à direita, sem atingir o retorno.", "Virar à esquerda na interseção sinalizada.", "Retornar à esquerda no trecho sinalizado.", "Retornar à direita no trecho sinalizado."],
         correctIndex: 3,
         explanation: "Correta D: R-5b proíbe retornar à direita. Virar à direita é R-4b; retorno à esquerda é R-5a.",
@@ -8757,7 +8757,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "placa_ind_r8b",
         category: "placas",
-        statement: "Observe a placa abaixo (R-8b): circular, fundo branco, orla vermelha e setas de mudança de faixa da direita para a esquerda, riscadas. O que ela proíbe?",
+        statement: "Observe a placa abaixo (R-8b). O que essa sinalização de regulamentação proíbe?",
         options: ["Mudar de faixa ou pista da esquerda para a direita.", "Mudar de faixa ou pista da direita para a esquerda.", "Ultrapassar pela esquerda no trecho.", "Retornar à esquerda na interseção."],
         correctIndex: 1,
         explanation: "Correta B: R-8b proíbe mudar de faixa/pista da direita para a esquerda. O inverso é R-8a.",
@@ -8770,7 +8770,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "placa_ind_a29",
         category: "placas",
-        statement: "Observe a placa abaixo (A-29): losango amarelo com pictograma de pedras sendo lançadas. O que ela adverte?",
+        statement: "Observe a placa abaixo (A-29). O que essa sinalização de advertência indica?",
         options: ["Pista escorregadia à frente.", "Projeção de cascalho sobre a pista.", "Vento lateral forte no trecho.", "Obra na pista com estreitamento à frente."],
         correctIndex: 1,
         explanation: "Correta B: A-29 é projeção de cascalho. Escorregadia é A-28; vento lateral é A-44.",
@@ -8783,7 +8783,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "placa_ind_a44",
         category: "placas",
-        statement: "Observe a placa abaixo (A-44): losango amarelo com pictograma de vento lateral. A qual grupo pertence e o que informa?",
+        statement: "Observe a placa abaixo (A-44). O que essa sinalização de advertência indica?",
         options: ["Regulamentação: proíbe circular com velocidade acima de 40 km/h.", "Advertência: alerta para vento lateral no trecho à frente.", "Indicação: informa posto de combustível no acostamento.", "Regulamentação: obriga ligar o pisca-alerta sob vento forte."],
         correctIndex: 1,
         explanation: "Correta B: losango amarelo é advertência; A-44 avisa vento lateral. Não impõe velocidade nem pisca-alerta.",
@@ -8796,7 +8796,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "placa_ind_a14",
         category: "placas",
-        statement: "Observe a placa abaixo (A-14): losango amarelo com pictograma de semáforo. O que ela adverte?",
+        statement: "Observe a placa abaixo (A-14). O que essa sinalização de advertência indica?",
         options: ["Parada obrigatória (PARE) imediatamente à frente.", "Semáforo à frente; reduzir e preparar-se para o sinal.", "Mão dupla adiante, com fluxos opostos na mesma pista.", "Pista escorregadia no trecho após o cruzamento."],
         correctIndex: 1,
         explanation: "Correta B: A-14 adverte semáforo à frente. Parada obrigatória à frente é A-15; mão dupla é A-25.",
@@ -8809,7 +8809,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "placa_ind_a25",
         category: "placas",
-        statement: "Observe a placa abaixo (A-25): losango amarelo com duas setas opostas. O que ela adverte?",
+        statement: "Observe a placa abaixo (A-25). O que essa sinalização de advertência indica?",
         options: ["Pista de sentido único à frente.", "Mão dupla adiante, com circulação nos dois sentidos.", "Parada obrigatória imediatamente à frente.", "Semáforo à frente no cruzamento urbano."],
         correctIndex: 1,
         explanation: "Correta B: A-25 adverte mão dupla adiante. Sentido único é outra placa (A-26a). PARE à frente é A-15; semáforo é A-14.",
