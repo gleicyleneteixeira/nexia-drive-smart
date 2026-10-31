@@ -133,63 +133,41 @@ function buildFresh(mode?: Category | "prova-real"): Question[] {
       fresh = fresh.slice(0, TOTAL);
     }
   } else {
-    // Busca questões da categoria selecionada — exclui vistas globalmente E da sessão
-    const categoryQuestions = getRandomizedQuestions(TOTAL, { 
-      exclude: allExcluded, 
-      categories: [mode] 
+    // Simulado por categoria: NUNCA mistura outras categorias.
+    // Se as não vistas acabarem, reusa só da mesma categoria.
+    fresh = getRandomizedQuestions(TOTAL, {
+      exclude: allExcluded,
+      categories: [mode],
     });
-    
-    if (categoryQuestions.length >= 30) {
-      // Se a categoria já tem 30+, pega as primeiras 30 embaralhadas
-      fresh = categoryQuestions.slice(0, 30);
-    } else {
-      // Se tiver menos de 30, busca questões extras de outras categorias para completar
-      // MAS mantém a proporção da categoria selecionada
-      const fullExam = [...categoryQuestions];
-      
-      // Se a categoria tem poucas questões, completa com outras categorias
-      if (fullExam.length < 30) {
-        const needed = 30 - fullExam.length;
-        const allQuestions = getQuestionBank();
-        const otherCategories = allQuestions.filter(q => q.category !== mode);
-        const extraQuestions = getRandomizedQuestions(needed, { 
-          exclude: [...allExcluded, ...fullExam.map(q => q.id)], 
-          categories: otherCategories.map(q => q.category),
-          placasCount: 3 
-        });
-        fullExam.push(...extraQuestions);
-      }
-      
-      // Embaralha o array final
-      for (let i = fullExam.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [fullExam[i], fullExam[j]] = [fullExam[j], fullExam[i]];
-      }
-      
-      fresh = fullExam.slice(0, 30);
+    if (fresh.length < TOTAL) {
+      const picked = new Set(fresh.map((q) => q.id));
+      const reuse = getRandomizedQuestions(TOTAL - fresh.length, {
+        exclude: Array.from(picked),
+        categories: [mode],
+      });
+      fresh = [...fresh, ...reuse].slice(0, TOTAL);
     }
   }
 
-  // GARANTIA FINAL: preencher com questões de todas as categorias se ainda faltar,
-  // inclusive na prova-real (quando o pool de validadas esgota nas vistas,
-  // completa com as demais para sempre fechar 30; por fim, reusa vistas
-  // sem repetir dentro da prova).
-  if (fresh.length < TOTAL) {
-    const needed = TOTAL - fresh.length;
-    const freshIds = new Set(fresh.map(q => q.id));
-    const remainingPool = getQuestionBank().filter(q => !freshIds.has(q.id) && !allExcluded.includes(q.id));
-    const fillQuestions = getRandomizedQuestions(needed, {
-      questionsList: remainingPool,
-    });
-    fresh = [...fresh, ...fillQuestions].slice(0, TOTAL);
-  }
-  if (fresh.length < TOTAL) {
-    const freshIds = new Set(fresh.map(q => q.id));
-    const anyPool = getQuestionBank().filter(q => !freshIds.has(q.id));
-    const fillSeen = getRandomizedQuestions(TOTAL - fresh.length, {
-      questionsList: anyPool,
-    });
-    fresh = [...fresh, ...fillSeen].slice(0, TOTAL);
+  // Completa 30 só no simulado geral / prova-real — nunca no modo de uma categoria.
+  if (!mode || mode === "prova-real") {
+    if (fresh.length < TOTAL) {
+      const needed = TOTAL - fresh.length;
+      const freshIds = new Set(fresh.map((q) => q.id));
+      const remainingPool = getQuestionBank().filter((q) => !freshIds.has(q.id) && !allExcluded.includes(q.id));
+      const fillQuestions = getRandomizedQuestions(needed, {
+        questionsList: remainingPool,
+      });
+      fresh = [...fresh, ...fillQuestions].slice(0, TOTAL);
+    }
+    if (fresh.length < TOTAL) {
+      const freshIds = new Set(fresh.map((q) => q.id));
+      const anyPool = getQuestionBank().filter((q) => !freshIds.has(q.id));
+      const fillSeen = getRandomizedQuestions(TOTAL - fresh.length, {
+        questionsList: anyPool,
+      });
+      fresh = [...fresh, ...fillSeen].slice(0, TOTAL);
+    }
   }
 
   // Salva IDs na memória global e na sessão

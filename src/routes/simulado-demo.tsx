@@ -106,13 +106,22 @@ function buildFresh(questionsList: Question[], category?: Category, count: numbe
   saveSeen(newSeen);
   saveSessionSeen(fresh.map((q) => q.id), category);
 
-  // GARANTIA FINAL: preencher se ainda faltar questões
-  if (fresh.length < count) {
+  // Completa só no simulado geral. Por categoria, não mistura outros temas.
+  if (!category && fresh.length < count) {
     const needed = count - fresh.length;
-    const freshIds = new Set(fresh.map(q => q.id));
-    const remainingPool = QUESTIONS.filter(q => !freshIds.has(q.id) && !allExcluded.includes(q.id));
+    const freshIds = new Set(fresh.map((q) => q.id));
+    const remainingPool = QUESTIONS.filter((q) => !freshIds.has(q.id) && !allExcluded.includes(q.id));
     const fillQuestions = getRandomizedQuestions(needed, { questionsList: remainingPool });
     fresh = [...fresh, ...fillQuestions].slice(0, count);
+  } else if (category && fresh.length < count) {
+    const picked = new Set(fresh.map((q) => q.id));
+    const reuse = getBalancedQuestions({
+      questionsList,
+      categories: [category],
+      exclude: Array.from(picked),
+      total: count - fresh.length,
+    });
+    fresh = [...fresh, ...reuse].slice(0, count);
   }
 
   return fresh;

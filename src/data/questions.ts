@@ -1984,7 +1984,24 @@ export const QUESTIONS: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 3,
-        origin: "real"
+        origin: "real",
+        group: "vias-terrestres-art2"
+    },
+    {
+        id: "qp07_curta",
+        category: "legislacao",
+        statement: "De acordo com o CTB, as vias abertas à circulação interna e os acessos em condomínios fechados, bem como as praias abertas à circulação pública, são consideradas:",
+        options: ["Áreas terrestres.", "Vias terrestres.", "Áreas privadas.", "Vias privadas."],
+        correctIndex: 1,
+        explanation: "Correta B: o art. 2º, parágrafo único, do CTB classifica praias abertas à circulação pública e vias internas de condomínios como vias terrestres.",
+        legalBase: "Art. 2º, parágrafo único do CTB",
+        commonMistake: "Marcar área ou via privada — o CTB aplica-se nesses locais exatamente porque são vias terrestres.",
+        tip: "Praia aberta + condomínio = via terrestre.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 1,
+        origin: "ia",
+        group: "vias-terrestres-art2"
     },
     {
         id: "qp08",
@@ -8815,6 +8832,19 @@ export const QUESTIONS: Question[] = [
         explanation: "Correta B: A-25 adverte mão dupla adiante. Sentido único é outra placa (A-26a). PARE à frente é A-15; semáforo é A-14.",
         legalBase: "Anexo II do CTB — A-25",
         incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "placa_ind_a42c",
+        category: "placas",
+        statement: "Observe a placa abaixo (A-42c). O que essa sinalização de advertência indica?",
+        options: ["Início de pista dupla com fluxos opostos separados por canteiro central.", "Transição de pista dupla para pista simples, com fim do canteiro adiante.", "Divisão da pista por canteiro ou obstáculo em vias de mesmo sentido de circulação.", "Obrigação de mudar o sentido de direção na via a partir daquele ponto."],
+        correctIndex: 2,
+        explanation: "Correta C: A-42c adverte pista dividida no mesmo sentido (canteiro ou obstáculo). Início de pista dupla com sentidos opostos é A-42a; fim da dupla / volta à simples é A-42b. Advertência não obriga mudar o sentido.",
+        legalBase: "Anexo II do CTB — A-42c",
+        incidence: "media",
         trap: true,
         difficulty: 2,
         origin: "ia"
