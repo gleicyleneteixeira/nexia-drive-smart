@@ -107,18 +107,6 @@ export const QUESTIONS: Question[] = [
         difficulty: 3
     },
     {
-        id: "qe01",
-        category: "legislacao",
-        statement: "Candidato aprovado nos exames iniciais deseja abrir o cadastro nacional de condutores. Segundo as normas do CONTRAN, esse cadastro deverá ser feito:",
-        options: ["No DETRAN do estado ou do Distrito Federal onde o candidato possui residência.", "No CONTRAN, órgão máximo normativo do Sistema Nacional de Trânsito.", "No Centro de Formação de Condutores, com competência exclusiva para abertura.", "Na Secretaria Nacional de Trânsito, mediante requerimento direto em Brasília."],
-        correctIndex: 0,
-        explanation: "Correta letra A: o RENACH é aberto no órgão executivo de trânsito do Estado ou DF (DETRAN) do domicílio do candidato.",
-        detailedExplanation: "O Registro Nacional de Carteiras de Habilitação (RENACH) é um banco de dados que registra toda a vida do condutor, devendo ser iniciado no DETRAN de sua residência ou domicílio.",
-        legalBase: "Res. CONTRAN 789/2020",
-        incidence: "alta",
-        difficulty: 3
-    },
-    {
         id: "qe02",
         category: "legislacao",
         statement: "Candidato aprovado recebe a permissão provisória para conduzir. Conforme o CTB, qual o período probatório de vigência desse documento:",
@@ -9298,19 +9286,6 @@ export const QUESTIONS: Question[] = [
         origin: "ia"
     },
     {
-        id: "l02_77",
-        category: "direcao-defensiva",
-        statement: "Segundo o Manual para Primeira Habilitação de Condutores (Senado Federal), as causas dos acidentes de trânsito são atribuídas a falha humana, falha mecânica, deficiências da via e outros fatores, RESPECTIVAMENTE, em:",
-        options: ["12%, 75%, 6% e 7%.", "75%, 6%, 12% e 7%.", "75%, 7%, 12% e 6%.", "75%, 12%, 6% e 7%."],
-        correctIndex: 3,
-        explanation: "A D está correta: 75% falha humana, 12% falha mecânica, 6% deficiências da via e 7% outros fatores. As demais alternativas reaproveitam exatamente os mesmos números em outra ordem, e o erro mais comum é trocar o 12% (mecânica) com o 6% (via). Em qualquer alternativa a falha humana predomina, o que reforça o princípio da direção defensiva: quase tudo é evitável.",
-        legalBase: "Manual para Primeira Habilitação de Condutores (Senado Federal)",
-        incidence: "media",
-        trap: true,
-        difficulty: 2,
-        origin: "ia"
-    },
-    {
         id: "l02_79",
         category: "direcao-defensiva",
         statement: "O método de ação da direção defensiva compreende 3 ações. A sequência correta é:",
@@ -9471,20 +9446,6 @@ export const QUESTIONS: Question[] = [
         incidence: "media",
         trap: true,
         difficulty: 2,
-        origin: "ia"
-    },
-    {
-        id: "l03_102",
-        category: "legislacao",
-        statement: "Relacione os gestos do agente: 1) braço vertical, palma à frente; 2) braço horizontal, movimentos verticais; 3) braço levantado, antebraço à trás; 4) braço horizontal, luz vermelha. (I) seguir; (II) parada do veículo apontado; (III) parar todos; (IV) diminuir a marcha. A relação é:",
-        options: ["1-III, 2-I, 3-IV, 4-II.","1-IV, 2-III, 3-I, 4-II.","1-III, 2-IV, 3-I, 4-II.","1-III, 2-IV, 3-II, 4-I."],
-        correctIndex: 2,
-        explanation: "A C está correta: braço levantado com a palma para a frente é parada (III), braço horizontal com movimentos verticais é diminuição da velocidade (IV), o antebraço da frente para a retaguarda é seguir (I) e a luz vermelha dirigida a um veículo manda parar apenas aquele veículo (II). O gesto de seguir é o que mais engana, porque também usa o braço levantado, como o de parar — o que muda é o movimento do antebraço. A A troca diminuir por seguir, a B inverte parada e diminuição e a D confunde o gesto da luz vermelha com o de seguir.",
-        legalBase: "Manual para Primeira Habilitação de Condutores (item 1.5.6); Arts. 89 e 90 do CTB",
-        incidence: "alta",
-        trap: true,
-        difficulty: 3,
-        group: "gestos-agente",
         origin: "ia"
     },
     {
@@ -10034,45 +9995,6 @@ export const QUESTIONS: Question[] = [
         origin: "ia"
     },
     {
-        id: "l04_191",
-        category: "legislacao",
-        statement: "O recurso à JARI deve ser apresentado após a Notificação de Imposição de Penalidade, no prazo de:",
-        options: ["30 dias.", "10 dias.", "60 dias.", "90 dias."],
-        correctIndex: 0,
-        explanation: "A A está correta: o art. 282, § 4º, determina que da notificação conste a data do término do prazo para recurso, não inferior a 30 dias, contados da notificação da penalidade. A B (10 dias) é o prazo de regras antigas; a C (60) remete ao prazo de notificação da autuação em redação antiga do art. 281, e a D (90) a um julgamento automático que não é a regra hoje.",
-        legalBase: "Art. 282, § 4º, do CTB",
-        incidence: "altissima",
-        trap: false,
-        difficulty: 1,
-        origin: "ia"
-    },
-    {
-        id: "l04_192",
-        category: "legislacao",
-        statement: "Negado o recurso à JARI, o interessado pode recorrer em segunda instância:",
-        options: ["À própria JARI, novamente, no mesmo processo e sem custo.","Ao Cetran, no prazo de 30 dias, para as penalidades impostas pela União.","Ao Cetran, ao Contrandife ou ao colegiado especial, no prazo de 30 dias.","À Senatran, no prazo de 60 dias, como último grau recursal."],
-        correctIndex: 2,
-        explanation: "A C está correta: o art. 288 dá 30 dias, contados da publicação ou da notificação da decisão da JARI, e o art. 289 define o segundo grau — CETRAN e CONTRANDIFE para penalidades estaduais, municipais e do Distrito Federal, e colegiado especial para as penalidades impostas pela União. A D é a pegadinha institucional: a Senatran é o órgão federal, mas não julga esse recurso.",
-        legalBase: "Arts. 288 e 289 do CTB",
-        incidence: "alta",
-        trap: true,
-        difficulty: 2,
-        origin: "ia"
-    },
-    {
-        id: "l04_193",
-        category: "legislacao",
-        statement: "Sobre a defesa da autuação e o recurso, assinale a alternativa CORRETA:",
-        options: ["A defesa da autuação é apresentada após a Notificação de Imposição de Penalidade.", "A defesa da autuação é apresentada após a Notificação da Autuação, e o recurso à JARI, após a Notificação de Imposição de Penalidade.", "Defesa e recurso são apresentados na mesma data, em um único documento.", "A defesa da autuação é dirigida diretamente ao Cetran."],
-        correctIndex: 1,
-        explanation: "A B está correta: são fases sucessivas — a defesa prévia responde à autuação (art. 281-A) e o recurso à penalidade já imposta (art. 282, § 4º). A A inverte a ordem, o erro mais comum; a C funde fases com prazos e destinatários distintos, e a D manda a defesa a uma instância que não conhece dessa fase.",
-        legalBase: "Arts. 281-A e 282, § 4º, do CTB",
-        incidence: "altissima",
-        trap: true,
-        difficulty: 2,
-        origin: "ia"
-    },
-    {
         id: "l04_195",
         category: "legislacao",
         statement: "Não sendo imediata a identificação do infrator, o principal condutor ou o proprietário do veículo será notificado da autuação para apresentar o condutor. A responsabilidade pela infração passa a ser deles quando:",
@@ -10562,19 +10484,6 @@ export const QUESTIONS: Question[] = [
         origin: "ia"
     },
     {
-        id: "l05_239",
-        category: "meio-ambiente",
-        statement: "Relacione as resoluções do Conama aos assuntos: 1) Res. 297/02; 2) Res. 272/00; 3) Res. 416/09; 4) Res. 418/09. (I) limites de ruído de veículos automotores; (II) pneus inservíveis; (III) inspeção veicular; (IV) limites de emissão de motociclos e similares novos. A relação correta, respectivamente, é:",
-        options: ["1-IV, 2-I, 3-II, 4-III.","1-I, 2-IV, 3-III, 4-II.","1-III, 2-II, 3-I, 4-IV.","1-II, 2-III, 3-IV, 4-I."],
-        correctIndex: 0,
-        explanation: "A 297/02 trata de emissões de motos e similares novos, a 272/00 de ruídos, a 416/09 de pneus inservíveis e a 418/09 de inspeção veicular. A B é a mais confusa, porque troca emissões por ruídos.",
-        legalBase: "Resoluções CONAMA 297/2002, 272/2000, 416/2009 e 418/2009",
-        incidence: "media",
-        trap: true,
-        difficulty: 3,
-        origin: "ia"
-    },
-    {
         id: "l05_240",
         category: "meio-ambiente",
         statement: "Segundo o manual, uma pessoa exposta a ruídos excessivos dos veículos está sujeita a:",
@@ -10594,32 +10503,6 @@ export const QUESTIONS: Question[] = [
         options: ["A redução das emissões do ar, o controle do ruído veicular e a destinação de pneus inservíveis.","A conscientização sobre a poluição, o incentivo à tecnologia limpa, a melhoria da qualidade dos combustíveis e programas de inspeção de veículos em uso.","Apenas a destinação de pneus inservíveis pelos pontos autorizados de troca.","Somente a inspeção veicular obrigatória aplicada exclusivamente a veículos novos."],
         correctIndex: 1,
         explanation: "O programa tem quatro frentes: conscientização, tecnologia, combustíveis e inspeção e manutenção. A C e a D tratam de um único tema, que são partes de resoluções específicas.",
-        legalBase: "Manual para Primeira Habilitação de Condutores (Senado Federal)",
-        incidence: "media",
-        trap: true,
-        difficulty: 2,
-        origin: "ia"
-    },
-    {
-        id: "l05_243",
-        category: "meio-ambiente",
-        statement: "A Resolução Conama nº 416/09, sobre pneus inservíveis, definiu que, para cada pneu novo comercializado no mercado de reposição, as empresas fabricantes ou importadoras deverão dar destinação adequada a:",
-        options: ["Um pneu inservível.", "Cinco pneus inservíveis.", "Um pneu inservível, mas apenas quando o pneu novo for de caminhão.", "Nenhum pneu, pois a obrigação é apenas dos comerciantes."],
-        correctIndex: 0,
-        explanation: "A A está correta: o art. 3º fixa a regra de um para um — para cada pneu novo vendido no mercado de reposição, destina-se um pneu inservível. A B é a pegadinha numérica, comum em materiais desatualizados. A C restringe a regra aos pneus de caminhão, mas ela alcança os pneus novos com peso acima de 2 kg, e a D erra o responsável: a obrigação é dos fabricantes e importadores, enquanto a revenda apenas recebe, sem custo, o pneu usado na troca (art. 9º).",
-        legalBase: "Resolução CONAMA nº 416/2009",
-        incidence: "media",
-        trap: true,
-        difficulty: 2,
-        origin: "ia"
-    },
-    {
-        id: "l05_244",
-        category: "meio-ambiente",
-        statement: "Segundo o manual, utilizando mangueira, gastam-se cerca de 600 litros de água para lavar um veículo. Considerando uma frota estimada em 50 milhões de veículos de passeio, lavados uma vez por semana, o consumo semanal de água será de, aproximadamente:",
-        options: ["3 bilhões de litros.", "300 bilhões de litros.", "30 bilhões de litros.", "6 bilhões de litros."],
-        correctIndex: 2,
-        explanation: "600 × 50.000.000 = 30.000.000.000 litros. Erros de uma casa decimal (A e B) são os mais comuns em questões de cálculo com números grandes.",
         legalBase: "Manual para Primeira Habilitação de Condutores (Senado Federal)",
         incidence: "media",
         trap: true,
