@@ -596,7 +596,7 @@ function TeoricoDashboard() {
           </div>
         ) : teoricoItems.length > 0 ? (
           <HCarousel>
-            {teoricoItems.slice(0, 6).map((item) => (
+            {teoricoItems.map((item) => (
               <div key={item.id} className="shrink-0 w-[240px] snap-start">
                 <LibraryCard item={item} onPdfClick={setPdfModal} />
               </div>
@@ -706,7 +706,7 @@ function PsicotecnicoDashboard() {
           </div>
         ) : psicoItems.length > 0 ? (
           <HCarousel>
-            {psicoItems.slice(0, 6).map((item) => (
+            {psicoItems.map((item) => (
               <div key={item.id} className="shrink-0 w-[240px] snap-start">
                 <LibraryCard item={item} onPdfClick={setPdfModal} />
               </div>

@@ -8,6 +8,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
  */
 export function HCarousel({ children }: { children: React.ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
+  const cancelAnim = useRef<(() => void) | null>(null);
   const [pages, setPages] = useState(1);
   const [page, setPage] = useState(0);
   const [scrollable, setScrollable] = useState(false);
@@ -34,23 +35,66 @@ export function HCarousel({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
+  // Rolagem suave manual: o scrollBy/scrollTo nativo com behavior:"smooth"
+  // não anima neste container (fica em 0px), então animamos o scrollLeft via rAF.
+  // Fallback: se nenhum frame disparar em 80ms (aba oculta / rAF suspenso),
+  // aplica o destino instantaneamente para a setinha nunca ficar "morta".
+  const smoothScrollTo = (el: HTMLDivElement, target: number) => {
+    cancelAnim.current?.(); // interrompe animação anterior (cliques rápidos)
+    const max = Math.max(0, el.scrollWidth - el.clientWidth);
+    const to = Math.min(max, Math.max(0, target));
+    const from = el.scrollLeft;
+    const dist = to - from;
+    if (Math.abs(dist) < 1) return;
+    const dur = 380;
+    let start = 0;
+    let done = false;
+    const stop = () => {
+      done = true;
+      clearTimeout(timer);
+      cancelAnim.current = null;
+    };
+    cancelAnim.current = stop;
+    const timer = setTimeout(() => {
+      if (done) return;
+      el.scrollLeft = to;
+      stop();
+    }, 80);
+    const step = (t: number) => {
+      if (done) return;
+      if (!start) {
+        start = t;
+        clearTimeout(timer); // primeiro frame: animação rodando, cancela o fallback
+      }
+      const p = Math.min(1, (t - start) / dur);
+      const eased = 1 - Math.pow(1 - p, 3); // ease-out cubic
+      el.scrollLeft = from + dist * eased;
+      if (p < 1) {
+        requestAnimationFrame(step);
+      } else {
+        stop();
+      }
+    };
+    requestAnimationFrame(step);
+  };
+
   const go = (dir: number) => {
     const el = ref.current;
     if (!el) return;
-    el.scrollBy({ left: dir * Math.max(140, el.clientWidth * 0.85), behavior: "smooth" });
+    smoothScrollTo(el, el.scrollLeft + dir * Math.max(140, el.clientWidth * 0.85));
   };
 
   const goTo = (i: number) => {
     const el = ref.current;
     if (!el) return;
-    el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
+    smoothScrollTo(el, i * el.clientWidth);
   };
 
   return (
     <div className="relative group/hc">
       <div
         ref={ref}
-        className="flex gap-4 overflow-x-auto py-2 snap-x snap-mandatory scrollbar-none scroll-smooth"
+        className="flex gap-4 overflow-x-auto py-2 snap-x snap-proximity scrollbar-none"
       >
         {children}
       </div>

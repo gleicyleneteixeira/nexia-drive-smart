@@ -755,7 +755,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe56",
         category: "prioridade",
-        statement: "Condutor chega a cruzamento com placa R-2, sem semáforo em operação. Diante da placa de Dê a Preferência, ele deverá:",
+        statement: "Condutor chega a um cruzamento sem semáforo em operação e encontra a placa R-2. O condutor deverá:",
         options: ["Reduzir com segurança e dar preferência aos veículos da via preferencial.","Parar totalmente antes do cruzamento, pois a placa R-2 tem o mesmo efeito do sinal Pare (R-1).","Manter a velocidade e ingressar na preferencial, pois a preferência do fluxo de rodovia prevalece sobre a placa.","Reduzir e ceder apenas aos veículos que já estejam na preferencial, ainda que outros se aproximem."],
         correctIndex: 0,
         explanation: "Correta letra A: a placa R-2 obriga reduzir a velocidade e dar preferência a todos os veículos que já trafegam pela via preferencial, inclusive aos que ainda se aproximam dela.",
@@ -1400,7 +1400,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "p1",
         category: "placas",
-        statement: "Ao se aproximar de um cruzamento sem semáforo, o condutor visualiza a placa R-1 (Parada Obrigatória). Qual é o comportamento exigido pelo CTB?",
+        statement: "Ao se aproximar de um cruzamento sem semáforo, o condutor visualiza a placa R-1. Qual é o comportamento exigido pelo CTB?",
         options: ["Reduzir a velocidade e cruzar se não houver outros veículos na via preferencial.","Parar totalmente o veículo antes de entrar na via, observar o trânsito e avançar somente com segurança.","Reduzir a marcha e cruzar primeiro por estar à direita dos demais veículos.","Parar totalmente o veículo depois da faixa de pedestres, já adentrando o cruzamento."],
         correctIndex: 1,
         explanation: "Correta a opção 2: a placa R-1 exige a imobilização total do veículo antes da entrada na via ou cruzamento.",
@@ -1414,7 +1414,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "p2",
         category: "placas",
-        statement: "Diante da placa de regulamentação R-2 (Dê a Preferência), em formato de triângulo invertido, qual deve ser a atitude do condutor?",
+        statement: "Diante da placa de regulamentação R-2, em formato de triângulo invertido, qual deve ser a atitude do condutor?",
         options: ["Parar obrigatoriamente o veículo, de forma idêntica à placa R-1.","Reduzir a velocidade, ceder a passagem aos veículos que transitam pela via preferencial e prosseguir com segurança.","Ceder a passagem apenas aos veículos que chegam pela direita, aplicando a regra do cruzamento não sinalizado.","Manter a marcha e ceder passagem somente aos veículos de emergência com sirene e giro-flex acionados."],
         correctIndex: 1,
         explanation: "Correta a opção 2: a placa R-2 exige redução de velocidade e preferência aos veículos da via cruzante, sem obrigatoriedade de parada total se a via estiver livre.",
@@ -4478,7 +4478,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "pl_n1_001",
         category: "legislacao",
-        statement: "Candidato observa placa de parada obrigatória em cruzamento com pouca visibilidade. Qual é o formato característico da placa R-1 (PARE)?",
+        statement: "Candidato observa placa de parada obrigatória em cruzamento com pouca visibilidade. Qual é o formato característico da placa R-1?",
         options: ["Circular, com fundo branco e orla vermelha em todo o contorno.", "Losangular, com fundo amarelo e símbolo preto no centro.", "Retangular, com fundo azul e símbolo branco no centro.", "Octogonal, com fundo vermelho e a inscrição PARE em branco."],
         correctIndex: 3,
         explanation: "Correta: R-1 tem formato octogonal com fundo vermelho, conforme Manual de Sinalização.",
