@@ -34,6 +34,13 @@ import { Placa } from "@/components/Placa";
 import { triggerRatingPrompt } from "@/components/RatingPrompt";
 import { toast } from "sonner";
 import { registrarSimuladoConcluido, registrarSimuladoIniciado } from "@/lib/simulados-concluidos";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/simulado")({
   component: SimuladoPage,
@@ -254,6 +261,8 @@ function SimuladoPage() {
   const [resumed, setResumed] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
   const [mode, setMode] = useState<SimMode | null>(null);
+  const [pendingMode, setPendingMode] = useState<SimMode | null>(null);
+  const [switchOpen, setSwitchOpen] = useState(false);
   // Cronômetro do simulado (segundos desde o início)
   const [elapsed, setElapsed] = useState(0);
   // Total de simulados finalizados (exibido no resultado)
@@ -328,22 +337,69 @@ function SimuladoPage() {
   const autoStartedRef = useRef(false);
   useEffect(() => {
     if (!hydrated || autoStartedRef.current) return;
-    // Já há simulado em andamento salvo → retoma em vez de recomeçar
-    if (loadPersisted()) return;
-    if (search.modo === "completo") {
-      autoStartedRef.current = true;
-      startWithMode("completo");
-    } else if (search.modo === "prova-real") {
-      autoStartedRef.current = true;
-      startWithMode("prova-real");
-    } else if (
-      search.categoria &&
-      (search.categoria as Category) in CATEGORY_LABELS
-    ) {
-      autoStartedRef.current = true;
-      startWithMode(search.categoria as Category);
+    const wanted: SimMode | null =
+      search.modo === "completo"
+        ? "completo"
+        : search.modo === "prova-real"
+          ? "prova-real"
+          : search.categoria && (search.categoria as Category) in CATEGORY_LABELS
+            ? (search.categoria as Category)
+            : null;
+    if (!wanted) return;
+    autoStartedRef.current = true;
+    const saved = loadPersisted();
+    const inProgress = !!(saved && saved.questions?.length && saved.index < saved.questions.length);
+    if (inProgress && saved.mode !== wanted) {
+      setPendingMode(wanted);
+      setSwitchOpen(true);
+      return;
     }
+    if (inProgress) return;
+    startWithMode(wanted);
   }, [hydrated, search.modo, search.categoria]);
+
+  function simModeLabel(m: SimMode | null): string {
+    if (!m || m === "completo") return "Simulado completo";
+    if (m === "prova-real") return "Prova Real";
+    return CATEGORY_LABELS[m];
+  }
+
+  function hasInProgress(): boolean {
+    return questions.length > 0 && !showResult;
+  }
+
+  function requestStart(next: SimMode) {
+    if (!hasInProgress()) {
+      startWithMode(next);
+      return;
+    }
+    if (next === mode) {
+      setShowPicker(false);
+      setSwitchOpen(false);
+      setPendingMode(null);
+      return;
+    }
+    setPendingMode(next);
+    setSwitchOpen(true);
+  }
+
+  function continueCurrent() {
+    setSwitchOpen(false);
+    setPendingMode(null);
+    setShowPicker(false);
+  }
+
+  function finishAndStartNew() {
+    if (!pendingMode) {
+      setSwitchOpen(false);
+      return;
+    }
+    const next = pendingMode;
+    setSwitchOpen(false);
+    setPendingMode(null);
+    if (hasInProgress()) contarConclusao();
+    startWithMode(next);
+  }
 
   function startWithMode(mode: SimMode) {
     clearPersisted();
@@ -423,7 +479,21 @@ function SimuladoPage() {
     );
   }
   if (showPicker || !questions.length) {
-    return <ModePicker onPick={startWithMode} />;
+    return (
+      <>
+        <ModePicker
+          onPick={requestStart}
+          onBack={hasInProgress() ? continueCurrent : undefined}
+        />
+        <SwitchSimuladoDialog
+          open={switchOpen}
+          pendingLabel={simModeLabel(pendingMode)}
+          currentLabel={simModeLabel(mode)}
+          onContinue={continueCurrent}
+          onFinishNew={finishAndStartNew}
+        />
+      </>
+    );
   }
 
   const q = questions[Math.min(index, questions.length - 1)];
@@ -517,6 +587,15 @@ function SimuladoPage() {
         <div className="px-2 py-1 rounded-lg border border-success/30 bg-success/10 text-xs font-bold text-success shrink-0">
           ✅ {score} · ❌ {wrongCount}
         </div>
+        {!showResult && (
+          <button
+            type="button"
+            onClick={() => setShowPicker(true)}
+            className="hidden sm:inline-flex h-8 items-center rounded-lg border border-border bg-secondary/50 px-2 text-[11px] font-semibold text-muted-foreground hover:text-foreground shrink-0"
+          >
+            Trocar
+          </button>
+        )}
       </div>
 
       {/* Banner de retomada */}
@@ -697,7 +776,57 @@ function SimuladoPage() {
           />
         )}
       </AnimatePresence>
+      <SwitchSimuladoDialog
+        open={switchOpen}
+        pendingLabel={simModeLabel(pendingMode)}
+        currentLabel={simModeLabel(mode)}
+        onContinue={continueCurrent}
+        onFinishNew={finishAndStartNew}
+      />
     </div>
+  );
+}
+
+function SwitchSimuladoDialog({
+  open,
+  pendingLabel,
+  currentLabel,
+  onContinue,
+  onFinishNew,
+}: {
+  open: boolean;
+  pendingLabel: string;
+  currentLabel: string;
+  onContinue: () => void;
+  onFinishNew: () => void;
+}) {
+  return (
+    <Dialog open={open} onOpenChange={(o) => { if (!o) onContinue(); }}>
+      <DialogContent className="sm:max-w-md glass border-border/40">
+        <DialogHeader>
+          <DialogTitle className="font-display text-xl">Simulado em andamento</DialogTitle>
+          <DialogDescription className="text-sm text-muted-foreground leading-relaxed">
+            Você tem um simulado em andamento ({currentLabel}). Deseja continuar ou finalizar e começar um novo ({pendingLabel})?
+          </DialogDescription>
+        </DialogHeader>
+        <div className="flex flex-col gap-2 pt-2">
+          <button
+            type="button"
+            onClick={onContinue}
+            className="w-full h-11 rounded-xl font-bold gradient-primary text-primary-foreground shadow-glow"
+          >
+            Continuar o atual
+          </button>
+          <button
+            type="button"
+            onClick={onFinishNew}
+            className="w-full h-11 rounded-xl font-medium border border-border bg-secondary/50 hover:bg-secondary"
+          >
+            Finalizar e começar o novo
+          </button>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -765,7 +894,7 @@ function DetailedFeedback({
   );
 }
 
-function ModePicker({ onPick }: { onPick: (m: SimMode) => void }) {
+function ModePicker({ onPick, onBack }: { onPick: (m: SimMode) => void; onBack?: () => void }) {
   const cats: { id: Category; icon: string }[] = [
     { id: "legislacao", icon: "📘" },
     { id: "placas", icon: "🚸" },
@@ -779,6 +908,16 @@ function ModePicker({ onPick }: { onPick: (m: SimMode) => void }) {
   return (
     <div className="mx-auto max-w-3xl px-4 py-6 md:py-10">
       <div className="flex items-center justify-between mb-6 gap-3">
+        {onBack ? (
+          <button
+            type="button"
+            onClick={onBack}
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Continuar o atual
+          </button>
+        ) : (
         <Link
           to="/"
           className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
@@ -786,6 +925,7 @@ function ModePicker({ onPick }: { onPick: (m: SimMode) => void }) {
           <ArrowLeft className="h-4 w-4" />
           Voltar
         </Link>
+        )}
         <p className="text-xs uppercase tracking-widest text-primary-glow font-semibold">
           Simulado Inteligente
         </p>
