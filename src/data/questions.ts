@@ -2129,7 +2129,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp19",
         category: "mecanica",
-        statement: "Candidato observa os ressaltos no fundo dos sulcos e pergunta qual é o limite legal para rodar com segurança. Sobre a profundidade mínima, é correto afirmar:",
+        statement: "Na revisão, o mecânico mostra os ressaltos no fundo dos sulcos do pneu (TWI) e pergunta o limite legal para rodar. Sobre a profundidade mínima da banda de rodagem, é correto afirmar:",
         options: ["O TWI serve para medir a pressão interna do pneu calibrado.","A calibragem correta dispensa a troca, mesmo com sulcos abaixo do limite.","A profundidade mínima é 1,6 mm, indicada pelos ressaltos do TWI.","O limite de 1,6 mm é uma média considerando os quatro pneus do veículo."],
         correctIndex: 2,
         explanation: "Correta a alternativa C, pois o limite legal é 1,6 mm, marcado pelo TWI, abaixo disso é gravíssima.",

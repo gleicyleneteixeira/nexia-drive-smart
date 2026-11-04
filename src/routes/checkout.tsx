@@ -310,7 +310,7 @@ function CheckoutPage() {
       price: 29.90,
       oldPrice: 59.90,
       discount: "50% OFF",
-      badge: giftOfferActive ? "50% OFF — 1 ANO" : "OFERTA 50% OFF",
+      badge: giftOfferActive ? "50% OFF — 1 ANO" : "PLANO ANUAL",
       bulletPoints: [
         "Acesso total por 12 meses",
         "Simulados inteligentes ilimitados",
@@ -322,8 +322,10 @@ function CheckoutPage() {
       ],
       buttonText: giftOfferActive
         ? "Liberar com 50% OFF — R$ 29,90"
-        : "Garantir 1 ano por R$ 29,90",
-      priceLegend: "De R$ 59,90 por R$ 29,90 — pagamento único no Pix (12 meses)",
+        : "Liberar 1 ano por R$ 59,90",
+      priceLegend: giftOfferActive
+        ? "De R$ 59,90 por R$ 29,90 — pagamento único no Pix (12 meses)"
+        : "Pagamento único no Pix (12 meses de acesso)",
     },
   ];
 
@@ -539,11 +541,11 @@ function CheckoutPage() {
               role="button"
               tabIndex={0}
               title="Clique para gerar o Pix deste plano"
-              onClick={() => selectPlanSafe(plan.id, plan.price, plan.name)}
+              onClick={() => selectPlanSafe(plan.id, 29.90, plan.name)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
-                  selectPlanSafe(plan.id, plan.price, plan.name);
+                  selectPlanSafe(plan.id, 29.90, plan.name);
                 }
               }}
               className={`glass relative overflow-hidden flex flex-col justify-between transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-glow ${
@@ -555,22 +557,18 @@ function CheckoutPage() {
               }`}
             >
               <CardHeader className="pb-4 pt-6">
-                {giftOfferActive && plan.id === "6_months" ? (
-                  <div className="self-start inline-block mb-3 border text-[10px] font-bold px-2.5 py-0.5 rounded-full tracking-wider max-w-full truncate bg-warning/20 border-warning/40 text-warning">
-                    🏆 12 MESES DE ACESSO
-                  </div>
-                ) : plan.badge && (
+                {plan.badge && (
                   <div className={`self-start inline-block mb-3 border text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider max-w-full truncate ${
-                    plan.id === "6_months"
-                      ? "bg-warning/20 border-warning/40 text-warning"
+                    giftOfferActive
+                      ? "bg-success/20 border-success/40 text-success"
                       : "bg-primary/10 border-primary/20 text-primary-glow"
                   }`}>
                     {plan.badge}
                   </div>
                 )}
                 <CardTitle className="text-xl flex items-center gap-1.5">
-                  {giftOfferActive && plan.id === "6_months" ? "Combo CNH Aprovada" : plan.name}
-                  {isGiftOpened && (
+                  {plan.name}
+                  {giftOfferActive && (
                     <Sparkles className="h-4 w-4 text-warning fill-warning" />
                   )}
                 </CardTitle>
@@ -579,6 +577,7 @@ function CheckoutPage() {
  
               <CardContent className="space-y-4">
                 <div className="space-y-1">
+                  {giftOfferActive ? (
                   <div className="flex flex-col">
                     <span className="text-[11px] text-muted-foreground line-through">
                       De R$ {plan.oldPrice.toFixed(2).replace(".", ",")}
@@ -600,6 +599,16 @@ function CheckoutPage() {
                       {plan.priceLegend}
                     </span>
                   </div>
+                  ) : (
+                    <div className="flex flex-col">
+                      <span className="text-4xl font-bold font-display text-muted-foreground">
+                        R$ {plan.oldPrice.toFixed(2).replace(".", ",")}
+                      </span>
+                      <span className="text-xs text-muted-foreground block mt-1">
+                        {plan.priceLegend}
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <ul className="text-sm text-muted-foreground space-y-2 pt-2 border-t border-border/10">
                   {plan.bulletPoints.map((bp, index) => (
@@ -613,7 +622,7 @@ function CheckoutPage() {
  
               <CardFooter className="pt-4">
                 <Button
-                  onClick={(e) => { e.stopPropagation(); selectPlanSafe(plan.id, plan.price, plan.name); }}
+                  onClick={(e) => { e.stopPropagation(); selectPlanSafe(plan.id, 29.90, plan.name); }}
                   className="w-full h-11 rounded-xl font-bold cursor-pointer gradient-primary text-primary-foreground shadow-glow"
                 >
                   {plan.buttonText}
