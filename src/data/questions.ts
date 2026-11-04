@@ -11616,6 +11616,24 @@ export const QUESTIONS: Question[] = [
         difficulty: 2,
         origin: "real"
     },
+    {
+        id: "detran_ofuscamento_farol_01",
+        category: "direcao-defensiva",
+        statement: "Para evitar o ofuscamento da visão pelo farol alto do veículo em sentido contrário, o condutor deve tomar o cuidado de:",
+        options: [
+            "Acionar o farol alto quando avistar o outro veículo.",
+            "Acionar o pisca-alerta comunicando a sua presença.",
+            "Piscar os faróis e desviar o foco de visão para o acostamento do lado direito.",
+            "Apagar totalmente as luzes do veículo."
+        ],
+        correctIndex: 2,
+        explanation: "Correta a terceira: não olhe para o farol alto; desvie o olhar para o bordo direito da via. Um breve pisca de farol alerta o outro a baixar a luz. Farol alto de volta, pisca-alerta ou apagar as luzes aumentam o risco.",
+        legalBase: "Manual de Direção Defensiva / art. 40 do CTB",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "real"
+    },
 ];
 
 // Questões que realmente caíram na prova do DETRAN.
@@ -11739,6 +11757,7 @@ export const REAL_EXAM_IDS = [
     "go_prova_28",
     "go_prova_29",
     "go_prova_30",
+    "detran_ofuscamento_farol_01",
     {
         id: "q3181",
         category: "legislacao",
