@@ -304,52 +304,26 @@ function CheckoutPage() {
 
   const plans = [
     {
-      id: "1_month" as const,
-      name: "Plano Intensivo (30 Dias)",
-      description: "Para quem já está na reta final e quer apenas revisar.",
-      price: (() => {
-        if (isGiftOpened && discountTimeLeft > 0) return 19.90;
-        return 29.90;
-      })(),
-      oldPrice: 29.90,
-      discount: (() => {
-        if (isGiftOpened && discountTimeLeft > 0) return "33% OFF";
-        return "";
-      })(),
-      badge: "PLANO RÁPIDO",
+      id: "6_months" as const,
+      name: "Acesso Completo (1 ano)",
+      description: "Tudo que você precisa para passar no teórico, psicotécnico e prática.",
+      price: 29.90,
+      oldPrice: 59.90,
+      discount: "50% OFF",
+      badge: giftOfferActive ? "50% OFF — 1 ANO" : "OFERTA 50% OFF",
       bulletPoints: [
-        "Acesso completo por 30 dias",
+        "Acesso total por 12 meses",
         "Simulados inteligentes ilimitados",
         "Banco de questões atualizado do DETRAN",
-        "Histórico de desempenho e erros",
+        "Módulo Psicotécnico Completo (atenção, memória e palitinhos)",
+        "Guia da Prova Prática (baliza e erros que reprovam)",
+        "Suporte via WhatsApp",
+        "Atualizações de legislação inclusas",
       ],
-      buttonText: "Liberar Acesso 30 Dias",
-      priceLegend: "Pagamento único no Pix (30 dias de acesso)",
-    },
-    {
-      id: "6_months" as const,
-      name: "Combo CNH Aprovada (6 Meses)",
-      description: "O guia definitivo para não reprovar no Teórico, Psicotécnico e Prática.",
-      price: (() => {
-        if (isGiftOpened && discountTimeLeft > 0) return 29.90;
-        return 59.90;
-      })(),
-      oldPrice: 59.90,
-      discount: (() => {
-        if (isGiftOpened && discountTimeLeft > 0) return "50% OFF";
-        return "";
-      })(),
-      badge: "MAIS VENDIDO",
-      bulletPoints: [
-        "Acesso total por 180 dias (sem pressa de vencer)",
-        "Simulados inteligentes ilimitados",
-        "Módulo Psicotécnico Completo (Atenção, memória e teste dos palitinhos)",
-        "Guia da Prova Prática (Dicas de baliza e erros que reprovam)",
-        "Suporte prioritário via WhatsApp",
-        "Atualizações gratuitas de legislação",
-      ],
-      buttonText: "Liberar Combo Completo",
-      priceLegend: "Pagamento único no Pix (180 dias de acesso)",
+      buttonText: giftOfferActive
+        ? "Liberar com 50% OFF — R$ 29,90"
+        : "Garantir 1 ano por R$ 29,90",
+      priceLegend: "De R$ 59,90 por R$ 29,90 — pagamento único no Pix (12 meses)",
     },
   ];
 
@@ -424,7 +398,7 @@ function CheckoutPage() {
             <Sparkles className="h-4 w-4 text-warning fill-warning" />
           </p>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            Seus planos foram promovidos com <strong className="text-success">até 50% de desconto extra</strong>! Aproveite!
+            O plano anual saiu de <strong className="text-success">R$ 59,90 por R$ 29,90</strong> (50% OFF). Aproveite!
           </p>
           <p className="text-[10px] text-warning font-semibold flex items-center justify-center gap-1.5 animate-pulse">
             <Clock className="h-3.5 w-3.5" />
@@ -558,7 +532,7 @@ function CheckoutPage() {
       </Dialog>
  
         {/* Plans grid */}
-        <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+        <div className="grid grid-cols-1 gap-6 max-w-md mx-auto">
           {plans.map((plan) => (
             <Card
               key={plan.id}
@@ -581,13 +555,9 @@ function CheckoutPage() {
               }`}
             >
               <CardHeader className="pb-4 pt-6">
-                {giftOfferActive && plan.id === "1_month" ? (
-                  <div className="self-start inline-block mb-3 border text-[10px] font-bold px-2.5 py-0.5 rounded-full tracking-wider max-w-full truncate bg-success/20 border-success/40 text-success">
-                    🎁 BÔNUS: +30 DIAS GRÁTIS
-                  </div>
-                ) : giftOfferActive && plan.id === "6_months" ? (
+                {giftOfferActive && plan.id === "6_months" ? (
                   <div className="self-start inline-block mb-3 border text-[10px] font-bold px-2.5 py-0.5 rounded-full tracking-wider max-w-full truncate bg-warning/20 border-warning/40 text-warning">
-                    🏆 BÔNUS: +3 MESES GRÁTIS
+                    🏆 12 MESES DE ACESSO
                   </div>
                 ) : plan.badge && (
                   <div className={`self-start inline-block mb-3 border text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider max-w-full truncate ${
@@ -599,7 +569,7 @@ function CheckoutPage() {
                   </div>
                 )}
                 <CardTitle className="text-xl flex items-center gap-1.5">
-                  {giftOfferActive && plan.id === "1_month" ? "Plano Intensivo" : giftOfferActive && plan.id === "6_months" ? "Combo CNH Aprovada" : plan.name}
+                  {giftOfferActive && plan.id === "6_months" ? "Combo CNH Aprovada" : plan.name}
                   {isGiftOpened && (
                     <Sparkles className="h-4 w-4 text-warning fill-warning" />
                   )}
@@ -609,86 +579,35 @@ function CheckoutPage() {
  
               <CardContent className="space-y-4">
                 <div className="space-y-1">
-                  {giftOfferActive && plan.id === "1_month" ? (
-                    <div className="flex flex-col">
-                      <span className="text-[11px] text-muted-foreground line-through">
-                        De R$ {plan.oldPrice.toFixed(2).replace(".", ",")}
-                      </span>
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-4xl font-bold font-display text-primary-glow">
-                          R$ 19,90
-                        </span>
-                        <span className="inline-block text-[10px] font-bold text-success bg-success/15 border border-success/30 px-1.5 py-0.5 rounded">
-                          {plan.discount}
-                        </span>
-                      </div>
-                      <span className="text-xs text-muted-foreground mt-1 block">
-                        Pagamento único no Pix &bull; Sai por apenas <strong className="font-bold text-emerald-400">R$ 9,95/mês</strong>
-                      </span>
-                      <span className="text-xs text-muted-foreground block">
-                        (Acesso garantido por 60 dias)
-                      </span>
-                    </div>
-                  ) : giftOfferActive && plan.id === "6_months" ? (
-                    <div className="flex flex-col">
-                      <span className="text-[11px] text-muted-foreground line-through">
-                        De R$ {plan.oldPrice.toFixed(2).replace(".", ",")}
-                      </span>
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-4xl font-bold font-display text-primary-glow">
-                          R$ 29,90
-                        </span>
-                        <span className="inline-block text-[10px] font-bold text-success bg-success/15 border border-success/30 px-1.5 py-0.5 rounded">
-                          {plan.discount}
-                        </span>
-                      </div>
-                      <div className="mt-1.5 mb-1">
-                        <span className="inline-block bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full font-bold text-sm">
-                          🔥 Menos de R$ 4,98 por mês
-                        </span>
-                      </div>
-                      <span className="text-xs text-muted-foreground block">
-                        Pagamento único no Pix (Acesso garantido por 6 meses)
-                      </span>
-                    </div>
-                  ) : isGiftOpened ? (
-                    <div className="flex flex-col">
-                       <span className="text-[11px] text-muted-foreground line-through">
-                        De R$ {plan.oldPrice.toFixed(2).replace(".", ",")}
-                      </span>
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-3xl font-bold font-display text-primary-glow">
-                          R$ {plan.price.toFixed(2).replace(".", ",")}
-                        </span>
-                        <span className="inline-block text-[10px] font-bold text-success bg-success/15 border border-success/30 px-1.5 py-0.5 rounded">
-                          {plan.discount}
-                        </span>
-                      </div>
-                    </div>
-                  ) : (
-                    <span className="text-3xl font-bold font-display text-muted-foreground">
-                      R$ {plan.price.toFixed(2).replace(".", ",")}
+                  <div className="flex flex-col">
+                    <span className="text-[11px] text-muted-foreground line-through">
+                      De R$ {plan.oldPrice.toFixed(2).replace(".", ",")}
                     </span>
-                  )}
-                  {!giftOfferActive && (
-                    <span className="text-xs text-muted-foreground block mt-1">
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-4xl font-bold font-display text-primary-glow">
+                        R$ {plan.price.toFixed(2).replace(".", ",")}
+                      </span>
+                      <span className="inline-block text-[10px] font-bold text-success bg-success/15 border border-success/30 px-1.5 py-0.5 rounded">
+                        {plan.discount}
+                      </span>
+                    </div>
+                    <div className="mt-1.5 mb-1">
+                      <span className="inline-block bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full font-bold text-sm">
+                        🔥 Menos de R$ 2,50 por mês
+                      </span>
+                    </div>
+                    <span className="text-xs text-muted-foreground block">
                       {plan.priceLegend}
                     </span>
-                  )}
+                  </div>
                 </div>
                 <ul className="text-sm text-muted-foreground space-y-2 pt-2 border-t border-border/10">
-                  {plan.bulletPoints.map((bp, index) => {
-                    let text = bp;
-                    if (giftOfferActive && plan.id === "1_month" && index === 0) {
-                      text = "Acesso completo por 60 dias";
-                    }
-                    return (
+                  {plan.bulletPoints.map((bp, index) => (
                       <li key={index} className="flex items-center gap-2">
                         <CheckCircle2 className="h-4 w-4 text-success shrink-0" />
-                        {text}
+                        {bp}
                       </li>
-                    );
-                  })}
+                  ))}
                 </ul>
               </CardContent>
  
@@ -697,7 +616,7 @@ function CheckoutPage() {
                   onClick={(e) => { e.stopPropagation(); selectPlanSafe(plan.id, plan.price, plan.name); }}
                   className="w-full h-11 rounded-xl font-bold cursor-pointer gradient-primary text-primary-foreground shadow-glow"
                 >
-                  {giftOfferActive && plan.id === "1_month" ? "Liberar 60 Dias por R$ 19,90" : giftOfferActive && plan.id === "6_months" ? "Liberar Combo Completo por R$ 29,90" : plan.buttonText}
+                  {plan.buttonText}
                 </Button>
               </CardFooter>
             </Card>

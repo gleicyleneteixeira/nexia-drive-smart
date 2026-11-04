@@ -1,13 +1,17 @@
 const PLAN_DAYS: Record<string, number> = {
   "1_month": 30,
   "3_months": 90,
-  "6_months": 180,
+  "6_months": 365,
+  "1_year": 365,
 };
 
 export function getPlanDays(planType: string, amount?: number): number {
-  let days = PLAN_DAYS[planType] ?? 30;
+  let days = PLAN_DAYS[planType] ?? 365;
   if (planType === "1_month" && amount === 19.90) {
     days = 60;
+  }
+  if (amount === 29.9 || amount === 29.90) {
+    days = 365;
   }
   return days;
 }

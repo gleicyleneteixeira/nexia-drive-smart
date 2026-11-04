@@ -587,7 +587,7 @@ export const activateUser = createServerFn({ method: "POST" })
         ? new Date(data.expiresAt).toISOString()
         : getTrialExpiryDate().toISOString();
     } else {
-      // Pago: usar duração do plano contratado (2 ou 6 meses)
+      // Pago: usar duração do plano contratado (1 ano a partir de agora)
       let planType = "6_months";
       let amount = 0;
 

@@ -337,8 +337,8 @@ type SaleRow = {
 };
 
 const PLAN_SALES_LABELS: Record<string, string> = {
-  "1_month": "2 meses",
-  "6_months": "6 meses",
+  "1_month": "1 mês (legado)",
+  "6_months": "1 ano",
 };
 
 function salesPlanLabel(plan: string | null): string {
@@ -717,7 +717,7 @@ function StatusSelect({ user, isPaid, onRefresh }: { user: ProfileRow; isPaid: b
     try {
       const ops = await import("@/lib/admin-operations.server");
       if (newValue === "pago") {
-        // Pago: NÃO passar expiresAt — activateUser calcula do plano (2 ou 6 meses)
+        // Pago: NÃO passar expiresAt — activateUser calcula do plano (1 ano)
         await ops.activateUser({
           data: {
             userId: user.id,
@@ -1817,8 +1817,8 @@ export function UsersPanel() {
   const [releaseDate, setReleaseDate] = useState<string>("");
   const [releaseLoading, setReleaseLoading] = useState(false);
   const [pixTarget, setPixTarget] = useState<ProfileRow | null>(null);
-  const [pixAmount, setPixAmount] = useState<string>("19.90");
-  const [pixPlan, setPixPlan] = useState<string>("1_month");
+  const [pixAmount, setPixAmount] = useState<string>("29.90");
+  const [pixPlan, setPixPlan] = useState<string>("6_months");
   const [pixDate, setPixDate] = useState<string>("");
   const [pixLoading, setPixLoading] = useState(false);
   const resetPasswordFn = useServerFn(adminResetUserPassword);
@@ -2420,8 +2420,8 @@ export function UsersPanel() {
                   <button
                     title="Baixa por confirmação de Pix"
                     onClick={() => {
-                      setPixAmount("19.90");
-                      setPixPlan("1_month");
+                      setPixAmount("29.90");
+                      setPixPlan("6_months");
                       setPixDate(u.expires_at ? new Date(u.expires_at).toISOString().slice(0, 10) : "");
                       setPixTarget(u);
                     }}
@@ -2664,7 +2664,7 @@ export function UsersPanel() {
                   inputMode="decimal"
                   value={pixAmount}
                   onChange={(e) => setPixAmount(e.target.value)}
-                  placeholder="19.90"
+                  placeholder="29.90"
                 />
               </div>
               <div>
@@ -2674,8 +2674,8 @@ export function UsersPanel() {
                     <SelectValue placeholder="Plano" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="1_month">1 mês (R$ 19,90)</SelectItem>
-                    <SelectItem value="6_months">6 meses (R$ 29,90)</SelectItem>
+                    <SelectItem value="6_months">1 ano (R$ 29,90)</SelectItem>
+                    <SelectItem value="1_month">1 mês legado (R$ 19,90)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -2734,7 +2734,7 @@ export function UsersPanel() {
               <div>
                 <Label htmlFor="bulk-release-date">Até qual data (opcional)</Label>
                 <Input id="bulk-release-date" type="date" value={bulkReleaseDate} onChange={(e) => setBulkReleaseDate(e.target.value)} />
-                <p className="text-xs text-muted-foreground mt-1">Em branco = calcula 6 meses a partir de hoje.</p>
+                <p className="text-xs text-muted-foreground mt-1">Em branco = calcula 1 ano a partir de hoje.</p>
               </div>
               <DialogFooter>
                 <Button type="submit" disabled={bulkLoading} className="w-full">
