@@ -11634,6 +11634,486 @@ export const QUESTIONS: Question[] = [
         difficulty: 2,
         origin: "real"
     },
+    {
+        id: "detran_choque_sinal_01",
+        category: "primeiros-socorros",
+        statement: "Não constitui sinal de estado de choque:",
+        options: [
+            "Pele quente.",
+            "Visão nublada.",
+            "Sede intensa.",
+            "Respiração irregular."
+        ],
+        correctIndex: 0,
+        explanation: "Correta a primeira: no choque a pele fica fria, pálida e suada — não quente. Visão nublada, sede intensa e respiração irregular são sinais clássicos.",
+        legalBase: "Manual de Primeiros Socorros no Trânsito",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "real"
+    },
+    {
+        id: "detran_ultrapassagem_faixa_esq_01",
+        category: "direcao-defensiva",
+        statement: "O condutor que estiver circulando pela faixa da esquerda, ao perceber que outro que o segue tem o propósito de ultrapassá-lo, deverá:",
+        options: [
+            "Deslocar-se para a faixa da direita, sem acelerar a marcha.",
+            "Não deixar ultrapassar.",
+            "Nenhuma das respostas está correta.",
+            "Deslocar-se para a faixa da direita, acelerando a marcha."
+        ],
+        correctIndex: 0,
+        explanation: "Correta a primeira: art. 30 do CTB — quem está à esquerda cede a faixa da direita e não acelera para impedir a ultrapassagem.",
+        legalBase: "Art. 30 do CTB",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "real"
+    },
+    {
+        id: "detran_art202_ultrapassagem_01",
+        category: "legislacao",
+        statement: "Quando o condutor ultrapassar outro veículo pelo acostamento, em interseções e passagens de nível, terá como punição (art. 202, CTB):",
+        options: [
+            "Multa e retenção do veículo.",
+            "Multa, apenas.",
+            "Multa e remoção do veículo.",
+            "Multa e suspensão da CNH."
+        ],
+        correctIndex: 1,
+        explanation: "Correta a segunda: art. 202 — infração gravíssima, penalidade só de multa (cinco vezes). Não há retenção, remoção nem suspensão nesse artigo. A suspensão entra em hipóteses do art. 203.",
+        legalBase: "Art. 202 do CTB",
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        origin: "real"
+    },
+    {
+        id: "detran_art159_cnh_original_01",
+        category: "legislacao",
+        statement: "A Carteira Nacional de Habilitação e a Permissão para Dirigir terão validade para a condução do veículo quando forem (Art. 159, CTB):",
+        options: [
+            "Cópias autenticadas pelo DETRAN.",
+            "Cópias autenticadas por um cartório.",
+            "Originais.",
+            "Originais e apresentadas com a Carteira de Identidade."
+        ],
+        correctIndex: 2,
+        explanation: "Correta a terceira: para dirigir é obrigatório o porte da CNH/PPD (art. 159, § 1º) — o documento original, físico ou digital no aplicativo oficial. Cópia autenticada não substitui, e não é preciso apresentar RG junto: a CNH equivale a documento de identidade.",
+        legalBase: "Art. 159, § 1º, do CTB",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "real"
+    },
+    {
+        id: "detran_r9_caminhoes_01",
+        category: "placas",
+        statement: "Diante da placa de regulamentação R-9, qual deve ser a ação do condutor?",
+        options: [
+            "Pode transitar desde que não tenha carga no caminhão.",
+            "Não deverá transitar com caminhões com carga.",
+            "Não deverá transitar com caminhões a partir da placa.",
+            "Poderá transitar com caminhões a partir da placa."
+        ],
+        correctIndex: 2,
+        explanation: "Correta a terceira: R-9 proíbe o trânsito de caminhões (com ou sem carga) a partir da placa.",
+        legalBase: "Anexo II do CTB — R-9",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "real"
+    },
+    {
+        id: "detran_via_oleo_areia_01",
+        category: "direcao-defensiva",
+        statement: "São condições adversas, em vias pavimentadas, envolvendo riscos que podem contribuir para gerar acidentes, as seguintes características:",
+        options: [
+            "Presença de óleo e areia na pista.",
+            "Longos trechos de retas e pontes estreitas.",
+            "Pavimento em bom estado e acostamento em desnível.",
+            "Acostamento em desnível e sinalização em bom estado."
+        ],
+        correctIndex: 0,
+        explanation: "Correta a primeira: óleo e areia na pista pavimentada reduzem o atrito. 'Bom estado' não é condição adversa.",
+        legalBase: "Manual de Direção Defensiva",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "real"
+    },
+    {
+        id: "detran_sistema_transmissao_01",
+        category: "mecanica",
+        statement: "A energia mecânica produzida pelo motor de um veículo é transmitida às rodas por meio do sistema de:",
+        options: ["Rodagem.", "Marchas.", "Embreagem.", "Transmissão."],
+        correctIndex: 3,
+        explanation: "Correta a última: o sistema de transmissão leva a força do motor às rodas. Embreagem e caixa de marchas fazem parte dele; rodagem são pneus e rodas.",
+        legalBase: "Manual de Mecânica Básica",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "real"
+    },
+    {
+        id: "detran_arrefecimento_01",
+        category: "mecanica",
+        statement: "São componentes essenciais do sistema de controle do aquecimento do motor, com sistema de arrefecimento à água:",
+        options: [
+            "Válvula termostática, reservatório e alternador.",
+            "Termômetro, radiador, água com solução e embreagem.",
+            "Radiador, bomba-d'água e válvula termostática.",
+            "Bomba-d'água, câmaras de resfriamento e bulbo indicador."
+        ],
+        correctIndex: 2,
+        explanation: "Correta a terceira: radiador, bomba d'água e termostática controlam a temperatura. Alternador e embreagem não fazem parte do arrefecimento.",
+        legalBase: "Manual de Mecânica Básica",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "real"
+    },
+    {
+        id: "detran_acostamento_via_01",
+        category: "primeiros-socorros",
+        statement: "Em uma situação de emergência, sendo necessário ao condutor imobilizar o veículo na pista, em via desprovida de acostamento, ele deve sinalizar o local adequadamente para evitar uma colisão traseira. A ausência de acostamento é uma condição adversa relacionada com o(a):",
+        options: ["Clima e/ou ambiente.", "Veículo.", "Via.", "Condutor."],
+        correctIndex: 2,
+        explanation: "Correta a terceira: acostamento é elemento da via. Sem ele, a condição adversa é da via, não do clima, do veículo ou do condutor.",
+        legalBase: "Manual de Direção Defensiva / Primeiros Socorros",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "real"
+    },
+    {
+        id: "detran_animais_ibama_01",
+        category: "legislacao",
+        statement: "O condutor que transportar animais silvestres sem autorização poderá ser autuado em crimes ambientais, de acordo com a legislação:",
+        options: ["Do DETRAN.", "Do IBAMA.", "Da Anvisa.", "Do Denatran."],
+        correctIndex: 1,
+        explanation: "Correta a segunda: fauna silvestre é competência do IBAMA (Lei 9.605/98). DETRAN/Denatran não autorizam esse transporte.",
+        legalBase: "Lei 9.605/98 / IBAMA",
+        incidence: "media",
+        trap: true,
+        difficulty: 2,
+        origin: "real"
+    },
+    {
+        id: "detran_art2_vias_01",
+        category: "legislacao",
+        statement: "O Código de Trânsito Brasileiro (CTB) estabelece regras e normas válidas em todo o território nacional para:",
+        options: [
+            "Ruas, avenidas, rodovias e estradas.",
+            "Ruas, avenidas, logradouros, caminhos, passagens, rodovias, estradas, praias abertas à circulação e vias internas de condomínios.",
+            "Ruas, avenidas, logradouros, rodovias e estradas.",
+            "Ruas, avenidas, logradouros, caminhos, passagens, rodovias e estradas."
+        ],
+        correctIndex: 1,
+        explanation: "Correta a segunda: art. 2º — inclui também praias abertas à circulação e vias internas de condomínios. As outras cortam trechos da lei.",
+        legalBase: "Art. 2º do CTB",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "real",
+        group: "vias-terrestres-art2"
+    },
+    {
+        id: "detran_r28_duplo_01",
+        category: "placas",
+        statement: "A placa de regulamentação R-28 indica que:",
+        options: [
+            "A pista é de dupla circulação.",
+            "O condutor está proibido de estacionar.",
+            "A pista é de sentido único.",
+            "O condutor deve virar à direita."
+        ],
+        correctIndex: 0,
+        explanation: "Correta a primeira: R-28 = duplo sentido de circulação. Estacionar é R-6a; sentido único, R-24a; virar à direita, R-25b.",
+        legalBase: "Anexo II do CTB — R-28",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "real",
+        group: "placa-r28",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/55.jpg"
+    },
+    {
+        id: "detran_filtro_combustivel_01",
+        category: "mecanica",
+        statement: "Para reter as impurezas do combustível e manter o bom desempenho do veículo, é necessário assegurar regularmente a troca do filtro:",
+        options: ["De ar.", "De óleo.", "De ar-condicionado.", "De combustível."],
+        correctIndex: 3,
+        explanation: "Correta a última: o filtro de combustível retém impurezas da gasolina/etanol/diesel. Filtro de ar é admissão; óleo lubrifica o motor.",
+        legalBase: "Manual de Mecânica Básica",
+        incidence: "alta",
+        trap: true,
+        difficulty: 1,
+        origin: "real"
+    },
+    {
+        id: "detran_co_gases_01",
+        category: "meio-ambiente",
+        statement: "Por falta de manutenção preventiva, os veículos automotores liberam gases prejudiciais ao meio ambiente, entre os quais se inclui o:",
+        options: ["Hidrogênio.", "Oxigênio.", "Nitrogênio.", "Monóxido de carbono."],
+        correctIndex: 3,
+        explanation: "Correta a última: CO (monóxido de carbono) sai da queima incompleta. O2, N2 e H2 não são o poluente cobrado nessa questão.",
+        legalBase: "Manual de Meio Ambiente no Trânsito",
+        incidence: "alta",
+        trap: true,
+        difficulty: 1,
+        origin: "real"
+    },
+    {
+        id: "detran_3_providencias_01",
+        category: "primeiros-socorros",
+        statement: "Quais devem ser as três primeiras providências a ser tomadas no local de um acidente de trânsito com vítimas?",
+        options: [
+            "Sinalizar o local, acionar o serviço de emergência e medicar as vítimas.",
+            "Avaliar as condições gerais das vítimas, sinalizar bem o local e acionar o serviço de emergência.",
+            "Acionar o serviço de emergência, sinalizar o local e remover imediatamente o veículo acidentado da via.",
+            "Medicar vítimas, avisar os parentes e removê-las imediatamente do local."
+        ],
+        correctIndex: 1,
+        explanation: "Correta a segunda: proteger (sinalizar), avisar (emergência) e avaliar as vítimas. Não medicar por conta própria nem remover veículo/vítima sem necessidade.",
+        legalBase: "Manual de Primeiros Socorros — PAS",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "real"
+    },
+    {
+        id: "detran_ligar_resgate_01",
+        category: "primeiros-socorros",
+        statement: "Se ocorrer um acidente, o condutor, ao solicitar o serviço de resgate para atender às vítimas, deve adotar o seguinte procedimento:",
+        options: [
+            "Informar a gravidade do acidente, a localização, o estado das vítimas e o tipo de acidente.",
+            "Isolar a área e fazer mutirão com os demais condutores para atender às vítimas.",
+            "Informar a localização do acidente e adiantar o atendimento, liberando as vias aéreas da vítima.",
+            "Informar o tipo de acidente e retirar imediatamente a vítima do local do acidente."
+        ],
+        correctIndex: 0,
+        explanation: "Correta a primeira: ao chamar o resgate, informe local, tipo, gravidade e estado das vítimas. Não remova a vítima nem improvise atendimento em grupo.",
+        legalBase: "Manual de Primeiros Socorros no Trânsito",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "real"
+    },
+    {
+        id: "detran_sulcos_agua_01",
+        category: "mecanica",
+        statement: "Os sulcos dos pneus, cuja profundidade mínima é de 1,6 mm, existem para:",
+        options: [
+            "Escoar a água em pista molhada e manter o atrito com o pavimento.",
+            "Garantir a estabilidade do veículo ao fazer curvas acentuadas em alta velocidade.",
+            "Reduzir o volume de ruído produzido pelo atrito do pneu com o pavimento.",
+            "Distinguir os diversos tipos e modelos de pneus e de marcas de fabricantes."
+        ],
+        correctIndex: 0,
+        explanation: "Correta a primeira: sulcos drenam água e mantêm contato com o asfalto. Abaixo de 1,6 mm (TWI) o pneu está irregular.",
+        legalBase: "Resolução CONTRAN 913/2022, art. 4º / art. 230, XVIII, do CTB",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "real"
+    },
+    {
+        id: "detran_a24_obras_01",
+        category: "placas",
+        statement: "A placa de advertência A-24 indica que o condutor deve estar alerta devido à proximidade de:",
+        options: ["Área de desmoronamento na via.", "Obras.", "Projeção de cascalho na via.", "Tratores na via."],
+        correctIndex: 1,
+        explanation: "Correta a segunda: A-24 = obras. Desmoronamento é A-27; projeção de cascalho, A-29; tratores e máquinas agrícolas, A-31.",
+        legalBase: "Anexo II do CTB — A-24",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "real"
+    },
+    {
+        id: "detran_art38_conversao_01",
+        category: "legislacao",
+        statement: "Antes de entrar à direita ou à esquerda, em outra via ou em lotes lindeiros, o condutor deverá:",
+        options: [
+            "Ao sair da via pelo lado direito, aproximar-se o máximo possível do bordo direito da pista e executar a manobra no menor espaço possível, apenas.",
+            "Ao sair pelo lado direito, aproximar-se do bordo direito e manobrar no menor espaço; ao sair pelo esquerdo, aproximar-se do eixo ou da linha divisória (mão dupla) ou do bordo esquerdo (mão única).",
+            "Ao sair da via pelo lado esquerdo, aproximar-se o máximo possível do eixo ou da linha divisória, apenas.",
+            "Nenhuma das alternativas."
+        ],
+        correctIndex: 1,
+        explanation: "Correta a segunda: art. 38 — a lei descreve os dois lados (direita e esquerda). As outras estão incompletas.",
+        legalBase: "Art. 38 do CTB",
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        origin: "real"
+    },
+    {
+        id: "detran_r36a_01",
+        category: "placas",
+        statement: "A placa de regulamentação R-36a indica que:",
+        options: [
+            "É permitida a circulação apenas de pedestres na via.",
+            "É permitida a circulação de ciclistas e de pedestres.",
+            "É proibida a circulação de ciclistas e de pedestres.",
+            "Ciclistas devem andar à esquerda e pedestres à direita da via."
+        ],
+        correctIndex: 3,
+        explanation: "Correta a última: R-36a = ciclistas à esquerda e pedestres à direita. R-36b inverte os lados.",
+        legalBase: "Anexo II do CTB — R-36a",
+        incidence: "media",
+        trap: true,
+        difficulty: 3,
+        origin: "real"
+    },
+    {
+        id: "detran_a3b_sinuosa_01",
+        category: "placas",
+        statement: "Diante da placa de advertência A-3b, o condutor deve reduzir a velocidade, pois:",
+        options: [
+            "Ocorrem ventos fortes, que podem desestabilizar o veículo.",
+            "Há um declive à direita na via à frente, com risco de acidente.",
+            "A via à frente é sinuosa, com a primeira curva à direita, com risco de acidente.",
+            "A pista da via à frente é escorregadia, com risco de acidente."
+        ],
+        correctIndex: 2,
+        explanation: "Correta a terceira: A-3b = pista sinuosa à direita (primeira curva à direita). A-3a é à esquerda.",
+        legalBase: "Anexo II do CTB — A-3b",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "real"
+    },
+    {
+        id: "detran_visibilidade_via_01",
+        category: "direcao-defensiva",
+        statement: "Quais condições da via comprometem a visibilidade do condutor e podem contribuir para a ocorrência de acidentes?",
+        options: [
+            "Curvas, aclives e declives.",
+            "Pistas irregulares, saliências e depressões.",
+            "Pistas esburacadas e capeamento falho.",
+            "Retas planas com bom calçamento."
+        ],
+        correctIndex: 0,
+        explanation: "Correta a primeira: curva, subida e descida tapam a visão. Buraco e irregularidade são condição da pista (aderência), não de visibilidade.",
+        legalBase: "Manual de Direção Defensiva",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "real"
+    },
+    {
+        id: "detran_decisao_dd_01",
+        category: "direcao-defensiva",
+        statement: "Em direção defensiva, o elemento básico decisão depende:",
+        options: [
+            "Somente do tempo de experiência do condutor.",
+            "Da habilidade, tempo e prática de direção; da previsão das situações de risco; e do conhecimento das condições do veículo e da via.",
+            "Somente das condições do veículo e da via.",
+            "Da habilidade e da experiência do condutor."
+        ],
+        correctIndex: 1,
+        explanation: "Correta a segunda: decisão junta habilidade, tempo de reação, previsão do risco e conhecimento do veículo e da via. 'Somente' deixa a resposta incompleta.",
+        legalBase: "Manual de Direção Defensiva",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "real"
+    },
+    {
+        id: "detran_s2_s7_s13_01",
+        category: "placas",
+        statement: "As placas S-2, S-7 e S-13 são de indicação de serviço. Elas indicam, respectivamente nessa ordem, os seguintes serviços:",
+        options: [
+            "Serviço telefônico, hotel e ferrovia.",
+            "Serviço telefônico, restaurante e terminal ferroviário.",
+            "Serviço telefônico, restaurante e terminal rodoviário.",
+            "Serviço telefônico, restaurante e pronto-socorro."
+        ],
+        correctIndex: 1,
+        explanation: "Correta a segunda: S-2 telefone, S-7 restaurante, S-13 terminal ferroviário (padrão cobrado na prova teórica).",
+        legalBase: "Anexo II do CTB — indicação de serviços",
+        incidence: "media",
+        trap: true,
+        difficulty: 3,
+        origin: "real"
+    },
+    {
+        id: "detran_r11_tracao_animal_01",
+        category: "placas",
+        statement: "Qual deve ser a ação do motorista, ao visualizar a placa de regulamentação R-11?",
+        options: [
+            "Apesar de proibido o trânsito de veículos de tração animal, o condutor deve manter a atenção em relação ao possível desrespeito da sinalização.",
+            "Apesar de proibida a circulação de animais, o condutor deve manter a atenção em relação ao possível desrespeito da sinalização.",
+            "Apesar de proibido o trânsito de veículos de carga, o condutor deve manter a atenção em relação ao possível desrespeito da sinalização.",
+            "Apesar de proibida a circulação de animais silvestres, o condutor deve manter a atenção em relação ao possível desrespeito da sinalização."
+        ],
+        correctIndex: 0,
+        explanation: "Correta a primeira: R-11 = proibido trânsito de veículos de tração animal. Mesmo assim, o condutor segue atento a quem desrespeitar a placa.",
+        legalBase: "Anexo II do CTB — R-11",
+        incidence: "media",
+        trap: true,
+        difficulty: 2,
+        origin: "real"
+    },
+    {
+        id: "detran_homocinetica_01",
+        category: "mecanica",
+        statement: "Nos veículos com tração dianteira, a peça articulada que liga o semieixo à roda, permitindo a transmissão da força do motor às rodas, é:",
+        options: ["Embreagem.", "Caixa de câmbio.", "Junta homocinética.", "Ponta cinética da tração."],
+        correctIndex: 2,
+        explanation: "Correta a terceira: a junta homocinética liga o semieixo à roda na tração dianteira. 'Ponta cinética' não existe.",
+        legalBase: "Manual de Mecânica Básica",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "real"
+    },
+    {
+        id: "detran_art61_110_01",
+        category: "legislacao",
+        statement: "A velocidade máxima permitida em rodovias de pista dupla, nas quais não exista sinalização regulamentadora, para automóveis, camionetas e motocicletas, é de:",
+        options: ["80 km/h.", "110 km/h.", "90 km/h.", "60 km/h."],
+        correctIndex: 1,
+        explanation: "Correta a segunda: art. 61 — pista dupla sem placa: 110 km/h para auto, camioneta e moto; 90 km/h ônibus; 80 km/h demais. 60 km/h é estrada sem pavimento.",
+        legalBase: "Art. 61 do CTB",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "real"
+    },
+    {
+        id: "detran_crianca_moto_01",
+        category: "legislacao",
+        statement: "O transporte de criança em motocicleta é permitido a partir de:",
+        options: ["Quatro anos de idade.", "Cinco anos de idade.", "Sete anos de idade.", "Seis anos de idade."],
+        correctIndex: 2,
+        explanation: "Nesta prova clássica o gabarito é sete anos. Atenção: o CTB atual (art. 244, V, redação da Lei 14.071/2020) proíbe transportar criança menor de 10 anos em motocicleta.",
+        legalBase: "Art. 244 do CTB",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "real"
+    },
+    {
+        id: "detran_fadiga_parar_01",
+        category: "direcao-defensiva",
+        statement: "O nível de atenção do condutor é influenciado pela fadiga, especialmente se for dirigir por um longo período. Qual deve ser a atitude do condutor ao constatar que se encontra nesse estado?",
+        options: [
+            "O melhor é ingerir bebidas energéticas ou estimulantes, como café, para reduzir o cansaço.",
+            "Reclinar o banco ligeiramente para trás, esticar as pernas, relaxar os braços e continuar dirigindo.",
+            "O mais seguro é resistir ao cansaço e concluir a viagem antes que ocorra um acidente.",
+            "Parar para descansar em local seguro, antes de prosseguir a viagem com segurança."
+        ],
+        correctIndex: 3,
+        explanation: "Correta a última: com fadiga, a única conduta segura é parar e descansar. Café, reclinar o banco ou 'resistir' não eliminam o risco.",
+        legalBase: "Manual de Direção Defensiva",
+        incidence: "alta",
+        trap: true,
+        difficulty: 1,
+        origin: "real"
+    },
 ];
 
 // Questões que realmente caíram na prova do DETRAN.
@@ -11758,6 +12238,35 @@ export const REAL_EXAM_IDS = [
     "go_prova_29",
     "go_prova_30",
     "detran_ofuscamento_farol_01",
+    "detran_choque_sinal_01",
+    "detran_ultrapassagem_faixa_esq_01",
+    "detran_art202_ultrapassagem_01",
+    "detran_art159_cnh_original_01",
+    "detran_r9_caminhoes_01",
+    "detran_via_oleo_areia_01",
+    "detran_sistema_transmissao_01",
+    "detran_arrefecimento_01",
+    "detran_acostamento_via_01",
+    "detran_animais_ibama_01",
+    "detran_art2_vias_01",
+    "detran_r28_duplo_01",
+    "detran_filtro_combustivel_01",
+    "detran_co_gases_01",
+    "detran_3_providencias_01",
+    "detran_ligar_resgate_01",
+    "detran_sulcos_agua_01",
+    "detran_a24_obras_01",
+    "detran_art38_conversao_01",
+    "detran_r36a_01",
+    "detran_a3b_sinuosa_01",
+    "detran_visibilidade_via_01",
+    "detran_decisao_dd_01",
+    "detran_s2_s7_s13_01",
+    "detran_r11_tracao_animal_01",
+    "detran_homocinetica_01",
+    "detran_art61_110_01",
+    "detran_crianca_moto_01",
+    "detran_fadiga_parar_01",
     {
         id: "q3181",
         category: "legislacao",
