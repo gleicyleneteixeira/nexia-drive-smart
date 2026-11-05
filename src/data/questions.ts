@@ -109,7 +109,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe02",
         category: "legislacao",
-        statement: "Candidato aprovado recebe a permissão provisória para conduzir. Conforme o CTB, qual o período probatório de vigência desse documento:",
+        statement: "Candidato aprovado em todos os exames recebe a permissão para conduzir. Qual é o período de vigência desse documento?",
         options: ["12 meses, contados da data de expedição da permissão para conduzir.", "6 meses, prorrogáveis se não houver registro de infração leve.", "2 anos, equiparado ao prazo das avaliações de aptidão psicológica.", "5 anos, correspondente à carência fixada para exames de aptidão física."],
         correctIndex: 0,
         explanation: "Correta letra A: a Permissão para Dirigir (PPD) vigora por 12 meses (1 ano), conforme art. 148, §2º do CTB.",
@@ -147,7 +147,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe05",
         category: "legislacao",
-        statement: "Em blitz de trânsito, o agente solicita os documentos de porte obrigatório. Conforme o CTB, o condutor deverá apresentar:",
+        statement: "Em blitz de trânsito, o agente solicita os documentos de porte obrigatório. Quais documentos o condutor deve apresentar?",
         options: ["Carteira Nacional de Habilitação (CNH/PPD) e Certificado de Registro e Licenciamento do Veículo (CRLV).","Comprovante de pagamento do IPVA e nota fiscal de compra do veículo, pois comprovam a regularidade fiscal e a propriedade.","Documento de identidade civil (RG) e comprovante de residência, pois identificam o condutor e seu endereço perante o agente.","Comprovante de aprovação nos exames de aptidão física e mental e curso de reciclagem, pois atualizam a habilitação vigente."],
         correctIndex: 0,
         explanation: "Correta letra A: CNH/PPD e CRLV são os documentos de porte obrigatório (aceitos em formato físico ou digital via aplicativo oficial).",
@@ -172,7 +172,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe07",
         category: "legislacao",
-        statement: "Agente flagra pessoa conduzindo automóvel sem possuir CNH ou Permissão para Dirigir. Conforme o CTB, essa conduta configura infração de natureza:",
+        statement: "Agente flagra pessoa conduzindo automóvel sem possuir CNH ou Permissão para Dirigir. Que natureza de infração essa conduta configura?",
         options: ["Gravíssima, com multa multiplicada por três e retenção do veículo.","Grave, com multa e cinco pontos, além de retenção do veículo.","Média, com advertência escrita se o veículo estiver devidamente licenciado.","Gravíssima, com multa multiplicada por três e remoção do veículo."],
         correctIndex: 0,
         explanation: "Correta letra A: Dirigir sem possuir CNH ou PPD é infração gravíssima, com multa (3x) e retenção do veículo (Art. 162, I do CTB).",
@@ -184,7 +184,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe08",
         category: "legislacao",
-        statement: "Condutor teve a CNH suspensa após processo administrativo regular. Conforme o CTB, o curso de reciclagem será obrigatório nessa situação de:",
+        statement: "Condutor teve a CNH suspensa após processo administrativo regular. Em qual situação o curso de reciclagem será obrigatório?",
         options: ["Suspensão do direito de dirigir ou envolvimento em sinistro grave para o qual haja contribuído.", "Registro de infração média ou leve ainda na vigência da permissão provisória.", "Estacionamento em vaga de idoso sem uso da credencial obrigatória.", "Ultrapassagem em local proibido devidamente sinalizado na via."],
         correctIndex: 0,
         explanation: "Correta letra A: o curso de reciclagem é obrigatório em casos de suspensão do direito de dirigir, sinistro grave ou condenação judicial por crime de trânsito (Art. 268 do CTB).",
@@ -196,7 +196,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe09",
         category: "legislacao",
-        statement: "Condutor habilitado na categoria B há um ano deseja mudar para a categoria C. Para realizar essa mudança, conforme o CTB atualizado, ele não poderá ter cometido nos últimos 12 meses:",
+        statement: "Condutor habilitado na categoria B há um ano deseja mudar para a categoria C. Para realizar essa mudança, ele não poderá ter cometido nos últimos 12 meses:",
         options: ["Mais de uma infração de natureza gravíssima.","Nenhuma infração grave, devendo estar limpo de qualquer pontuação.","Qualquer infração de natureza média ou leve no período.","Mais de uma infração de natureza grave."],
         correctIndex: 0,
         explanation: "Correta letra A: para a mudança de categoria, o condutor não pode ter cometido mais de uma infração gravíssima nos últimos 12 meses (Art. 145, III do CTB).",
@@ -210,7 +210,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe10",
         category: "legislacao",
-        statement: "Jovem procura o DETRAN para iniciar o processo de habilitação. Conforme o CTB, o requisito essencial referente à capacidade civil será ser:",
+        statement: "Jovem procura o DETRAN para iniciar o processo de habilitação. Qual deve ser a condição de capacidade civil exigida do candidato?",
         options: ["Penalmente imputável (responder pelos atos perante a lei penal).", "Maior de 16 anos emancipado por casamento ou concessão dos pais.", "Eleitor regularmente alistado junto à Justiça Eleitoral.", "Maior de 18 anos, ainda que sem compreender os atos praticados."],
         correctIndex: 0,
         explanation: "Correta letra A: o candidato deve ser penalmente imputável, saber ler e escrever e possuir RG e CPF (Art. 140 do CTB).",
@@ -235,7 +235,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe12",
         category: "legislacao",
-        statement: "Motorista de caminhão precisa obter a primeira habilitação profissional. Conforme o CTB, o exame toxicológico será obrigatório nas categorias:",
+        statement: "Motorista de caminhão precisa obter a primeira habilitação profissional. Em quais categorias o exame toxicológico será obrigatório?",
         options: ["C, D e E, tanto na obtenção quanto na renovação da habilitação.","B, C e D, somente para condutores com atividade remunerada.","A, B e C, exigido somente na renovação da habilitação.","Apenas E, restrita a veículos com carga inflamável ou explosiva."],
         correctIndex: 0,
         explanation: "Correta letra A: o exame toxicológico é obrigatório para condutores das categorias C, D e E (Art. 148-A do CTB).",
@@ -247,7 +247,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe13",
         category: "infracoes",
-        statement: "Em shopping, condutor estaciona em vaga reservada a idoso sem usar credencial. Conforme o CTB, essa conduta configura infração de natureza:",
+        statement: "Em shopping, condutor estaciona em vaga reservada a idoso sem usar credencial. Que natureza de infração essa conduta configura?",
         options: ["Gravíssima, com multa, 7 pontos e remoção do veículo.","Grave, com multa e remoção do veículo do local.","Média, com multa e quatro pontos no prontuário.","Leve, punida apenas com advertência por escrito."],
         correctIndex: 0,
         explanation: "Correta letra A: estacionar em vaga reservada a PCD ou idoso sem credencial é infração gravíssima com remoção (Art. 181, XX do CTB).",
@@ -271,7 +271,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe15",
         category: "infracoes",
-        statement: "Em fiscalização, agente constata passageiro do banco traseiro sem cinto de segurança. Conforme o CTB, essa situação configura:",
+        statement: "Em fiscalização, agente constata passageiro do banco traseiro sem cinto de segurança. Como essa situação é classificada?",
         options: ["Infração grave do condutor, com multa e retenção do veículo para colocação do cinto.","Infração média do passageiro, como único responsável pela conduta.","Infração leve do proprietário, punida apenas com advertência por escrito.","Infração gravíssima, com multa e suspensão do direito de dirigir."],
         correctIndex: 0,
         explanation: "Correta letra A: deixar de usar o cinto de segurança (condutor ou passageiro) é infração grave dirigida ao condutor (Art. 167 do CTB).",
@@ -283,7 +283,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe16",
         category: "infracoes",
-        statement: "No semáforo, condutor é flagrado segurando ou manuseando o celular. Conforme o CTB, essa conduta configura infração:",
+        statement: "No semáforo, condutor é flagrado segurando ou manuseando o celular. Que natureza de infração essa conduta configura?",
         options: ["Gravíssima, com multa e 7 pontos no prontuário.","Grave, com multa e cinco pontos no prontuário.","Média, punida apenas com advertência escrita.","Leve, com multa e três pontos no prontuário."],
         correctIndex: 0,
         explanation: "Correta letra A: segurar ou manusear telefone celular enquanto conduz veículo é infração gravíssima (Art. 252, parágrafo único do CTB).",
@@ -295,7 +295,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe17",
         category: "infracoes",
-        statement: "Dois condutores disputam corrida não autorizada em via pública (racha). Conforme o CTB, essa conduta implicará em:",
+        statement: "Dois condutores disputam corrida não autorizada em via pública (racha). Quais penalidades essa conduta acarreta?",
         options: ["Multa multiplicada por dez, suspensão do direito de dirigir e remoção do veículo.","Multa multiplicada por dez, suspensão do direito de dirigir e recolhimento da CNH.","Multa multiplicada por três, retenção do veículo e sete pontos no prontuário.","Multa simples, cinco pontos e retenção do veículo no local."],
         correctIndex: 0,
         explanation: "Correta letra A: disputar corrida é infração gravíssima com multa (10x), suspensão do direito de dirigir e remoção do veículo (Art. 173 do CTB).",
@@ -307,7 +307,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe18",
         category: "infracoes",
-        statement: "Em via urbana limitada a 40 km/h, radar registra condutor a 55 km/h. Conforme o CTB, esse excesso de velocidade configura infração:",
+        statement: "Em via urbana limitada a 40 km/h, radar registra condutor a 55 km/h. Que natureza de infração esse excesso de velocidade configura?",
         options: ["Média, com multa e quatro pontos no prontuário do condutor.","Grave, por excesso de velocidade superior a 20 por cento até 50 por cento do limite.","Gravíssima, com multa triplicada e suspensão do direito de dirigir.","Leve, punida apenas com advertência escrita do órgão autuador."],
         correctIndex: 1,
         explanation: "Correta letra B: 55 km/h em via de 40 km/h representa um excesso de 37,5% (superior a 20% e até 50%), configurando infração grave (Art. 218, II do CTB).",
@@ -319,7 +319,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe19",
         category: "infracoes",
-        statement: "Em rodovia limitada a 110 km/h, condutor trafega a 170 km/h. Conforme o CTB, esse excesso de velocidade configura infração:",
+        statement: "Em rodovia limitada a 110 km/h, condutor trafega a 170 km/h. Que natureza de infração esse excesso de velocidade configura?",
         options: ["Gravíssima, com multa multiplicada por três e suspensão do direito de dirigir.","Grave, com multa simples e cinco pontos no prontuário do condutor.","Média, com multa simples e quatro pontos no prontuário do condutor.","Gravíssima, com multa simples e sete pontos no prontuário do condutor."],
         correctIndex: 0,
         explanation: "Correta letra A: em rodovia, velocidade superior a 20% da máxima é infração gravíssima com multa (três vezes) e suspensão do direito de dirigir (Art. 218, I, b do CTB); aqui o excesso supera 50%.",
@@ -331,7 +331,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe20",
         category: "infracoes",
-        statement: "Condutor avança sem parar com pedestre aguardando sobre a faixa sinalizada. Conforme o CTB, não dar passagem ao pedestre na faixa configura infração:",
+        statement: "Condutor avança sem parar com pedestre aguardando sobre a faixa sinalizada. Que natureza de infração não dar passagem ao pedestre na faixa configura?",
         options: ["Gravíssima, com multa e 7 pontos no prontuário.","Grave, com multa e cinco pontos no prontuário.","Média, punida apenas com advertência por escrito do agente.","Leve, com multa e três pontos no prontuário."],
         correctIndex: 0,
         explanation: "Correta letra A: deixar de dar passagem ao pedestre que esteja na faixa a ele destinada é infração gravíssima (Art. 214, I do CTB).",
@@ -343,7 +343,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe21",
         category: "infracoes",
-        statement: "Condutor transporta criança de 9 anos com 1,35 m de altura no carro. Conforme o CTB e normas do CONTRAN, essa criança deverá ser transportada:",
+        statement: "Condutor transporta criança de 9 anos com 1,35 m de altura no carro. Como essa criança deve ser transportada?",
         options: ["No banco traseiro, utilizando o assento de elevação com cinto de segurança de três pontos.", "No banco dianteiro, com cinto regulado na altura do ombro.", "No banco traseiro, sem necessidade de dispositivo de retenção além do cinto subabdominal.", "Em qualquer assento, com supervisão de adulto e cinto subabdominal."],
         correctIndex: 0,
         explanation: "Correta letra A: crianças menores de 10 anos que não tenham atingido 1,45 m de altura devem viajar no banco traseiro e utilizar o assento de elevação adequado (Art. 64 do CTB e Res. CONTRAN 819/2021).",
@@ -355,7 +355,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe22",
         category: "infracoes",
-        statement: "Em avenida, condutor ultrapassa pela direita sem que o veículo à frente sinalize conversão. Conforme o CTB, essa manobra configura:",
+        statement: "Em avenida, condutor ultrapassa pela direita sem que o veículo à frente sinalize conversão. Como essa manobra é classificada?",
         options: ["Infração média, salvo se o veículo da frente estiver dobrando ou sinalizando conversão à esquerda.","Infração grave, com multa e cinco pontos, aplicada mesmo em fluxo intenso de veículos.","Infração leve, com multa e três pontos no prontuário do condutor.","Infração gravíssima, com multa multiplicada por cinco vezes, em qualquer via."],
         correctIndex: 0,
         explanation: "Correta letra A: ultrapassar pela direita é infração média, exceto quando o veículo da frente estiver dobrando à esquerda (Art. 199 do CTB).",
@@ -367,7 +367,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe23",
         category: "infracoes",
-        statement: "Em aclive com faixa amarela contínua, condutor ultrapassa pela contramão. Conforme o CTB, essa ultrapassagem proibida configura infração:",
+        statement: "Em aclive com faixa amarela contínua, condutor ultrapassa pela contramão. Que natureza de infração essa ultrapassagem proibida configura?",
         options: ["Gravíssima, com multa multiplicada por cinco vezes.","Grave, com multa simples e cinco pontos no prontuário.","Média, punida apenas com advertência por escrito do agente.","Gravíssima, com multa multiplicada por três e suspensão do direito de dirigir."],
         correctIndex: 0,
         explanation: "Correta letra A: ultrapassar pela contramão em linha dupla contínua é infração gravíssima com multa (5x) (Art. 203, V do CTB).",
@@ -379,7 +379,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe24",
         category: "infracoes",
-        statement: "Em blitz da Lei Seca, condutor se recusa a realizar o teste do bafômetro. Conforme o CTB, essa recusa implicará em:",
+        statement: "Em blitz da Lei Seca, condutor se recusa a realizar o teste do bafômetro. Quais as consequências dessa recusa?",
         options: ["Infração gravíssima, multa multiplicada por dez (10x), suspensão por 12 meses e recolhimento do documento de habilitação.","Infração média, com multa e quatro pontos no prontuário do condutor.","Infração gravíssima, multa multiplicada por três e suspensão do direito de dirigir.","Infração grave, com multa simples e 5 pontos no prontuário."],
         correctIndex: 0,
         explanation: "Correta letra A: a recusa ao teste do bafômetro é infração gravíssima com multa (10x), suspensão do direito de dirigir por 12 meses e recolhimento da CNH (Art. 165-A do CTB).",
@@ -392,7 +392,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe25",
         category: "infracoes",
-        statement: "Em abordagem, agente constata CNH vencida há mais de 30 dias. Conforme o CTB, conduzir nessa condição configura infração de natureza:",
+        statement: "Em abordagem, agente constata CNH vencida há mais de 30 dias. Que natureza de infração conduzir nessa condição configura?",
         options: ["Gravíssima, com multa e retenção do veículo até a apresentação de condutor habilitado.","Grave, com multa e cinco pontos no prontuário do condutor.","Média, com multa e quatro pontos, sem retenção do veículo.","Gravíssima, com multa e sete pontos, sem qualquer medida administrativa."],
         correctIndex: 0,
         explanation: "Correta letra A: conduzir com CNH vencida há mais de 30 dias é infração gravíssima com retenção do veículo (Art. 162, V do CTB).",
@@ -404,7 +404,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe26",
         category: "infracoes",
-        statement: "À noite ou em local não permitido, condutor buzina de forma prolongada e sucessiva. Conforme o CTB, esse uso indevido da buzina configura infração:",
+        statement: "À noite ou em local não permitido, condutor buzina de forma prolongada e sucessiva. Que natureza de infração esse uso indevido da buzina configura?",
         options: ["Leve, com multa e 3 pontos no prontuário.","Média, com multa e quatro pontos no prontuário.","Grave, com multa e cinco pontos no prontuário.","Gravíssima, com multa e sete pontos no prontuário."],
         correctIndex: 0,
         explanation: "Correta letra A: buzinar de forma prolongada, sem motivo de perigo iminente ou entre 22h e 06h é infração leve (Art. 227 do CTB).",
@@ -631,7 +631,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe46",
         category: "meio-ambiente",
-        statement: "Em rodovia duplicada, passageiro lança lata pela janela com o carro em movimento. Conforme o CTB, essa conduta do condutor configura infração:",
+        statement: "Em rodovia duplicada, passageiro lança lata pela janela com o carro em movimento. Que natureza de infração essa conduta do condutor configura?",
         options: ["Média, com multa administrativa de responsabilidade do condutor.","Leve, com advertência escrita de responsabilidade do passageiro que lançou o objeto.","Grave, com multa e suspensão do direito de dirigir do condutor.","Gravíssima, com multa multiplicada e cassação da habilitação do condutor."],
         correctIndex: 0,
         explanation: "Correta letra A: lançar objetos pela janela é infração média, conforme art. 172 do CTB.",
@@ -755,7 +755,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe57",
         category: "prioridade",
-        statement: "Em via estreita sem pavimento, em declive forte, dois carros se cruzam. Conforme o CTB, a preferência nesse aclive será do veículo que estiver:",
+        statement: "Em via estreita sem pavimento, em declive forte, dois carros se cruzam. Quem tem a preferência de passagem nesse aclive?",
         options: ["Subindo a ladeira, devendo quem desce dar a preferência.","Descendo a ladeira, pois a preferência é de quem trafega no sentido descendente.","O veículo de maior porte, pois a prioridade cabe aos veículos maiores.","O que vier pela direita do outro condutor, pois a regra geral vale em qualquer via."],
         correctIndex: 0,
         explanation: "Correta letra A: em aclive, quem sobe tem preferência, conforme art. 29, inciso III do CTB.",
@@ -768,7 +768,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe58",
         category: "prioridade",
-        statement: "Em via com ciclistas, condutor pretende ultrapassar bicicleta adiante. Conforme o CTB, a manobra correta nessa situação será:",
+        statement: "Em via com ciclistas, condutor pretende ultrapassar bicicleta adiante. Qual a manobra correta nessa situação?",
         options: ["Guardar 1,5 m lateral, reduzir a velocidade e garantir a segurança.","Manter a velocidade e passar pela esquerda, pois a faixa da esquerda é para ultrapassagem.","Ultrapassar pela direita, pois a bicicleta deve circular nos bordos da pista de rolamento.","Sinalizar a manobra à esquerda e ultrapassar sem reduzir, pois a sinalização dispensa a redução."],
         correctIndex: 0,
         explanation: "Correta letra A: ao ultrapassar bicicleta, guarde 1,5 m e reduza, conforme art. 201 do CTB.",
@@ -780,7 +780,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe59",
         category: "legislacao",
-        statement: "Condutor avança cruzamento sem obedecer à placa R-1 de parada obrigatória. Conforme o CTB, desrespeitar a placa PARE configura infração:",
+        statement: "Condutor avança cruzamento sem obedecer à placa R-1 de parada obrigatória. Que natureza de infração desrespeitar a placa PARE configura?",
         options: ["Gravíssima, com multa e 7 pontos no prontuário da CNH.","Grave, com retenção do veículo até vistoria do agente.","Média, com multa e quatro pontos no prontuário da CNH.","Leve, com advertência se não houver fluxo transversal."],
         correctIndex: 0,
         explanation: "Correta letra A: avançar o PARE é infração gravíssima, conforme art. 208 do CTB.",
@@ -867,7 +867,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe66",
         category: "infracoes",
-        statement: "O motorista entra com o carro na contramão de via sinalizada com sentido único. Como o art. 186 do CTB classifica essa conduta?",
+        statement: "O motorista entra com o carro na contramão de via sinalizada com sentido único. Como essa conduta é classificada?",
         options: ["Infração gravíssima, com multa e sete pontos na habilitação do condutor.","Infração grave, com multa e cinco pontos, além de retenção do veículo no local.","Infração média, com multa e quatro pontos, sem retenção do veículo na via.","Infração gravíssima, com multa multiplicada por três e suspensão do direito de dirigir."],
         correctIndex: 0,
         explanation: "Correta a primeira: transitar pela contramão em sentido único é infração gravíssima, art. 186, CTB.",
@@ -1127,7 +1127,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "q5",
         category: "infracoes",
-        statement: "Em blitz da Lei Seca, o etilômetro aponta álcool acima da tolerância. Pelo art. 165 do CTB, qual é a infração e a penalidade aplicada ao condutor?",
+        statement: "Em blitz da Lei Seca, o etilômetro aponta álcool acima da tolerância. Quais são a infração e a penalidade aplicadas ao condutor?",
         options: ["Infração grave, com multa simples e cinco pontos na habilitação do condutor.","Infração gravíssima, com multa vezes dez e suspensão do direito de dirigir por doze meses.","Infração média, com multa e quatro pontos, além de retenção do veículo no local.","Infração gravíssima, com multa vezes dez e recolhimento imediato da CNH."],
         correctIndex: 1,
         explanation: "Correta a segunda: álcool ao dirigir é infração gravíssima, multa vezes dez e suspensão por doze meses, art. 165, CTB.",
@@ -2697,7 +2697,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qd02",
         category: "legislacao",
-        statement: "Pelo art. 90 do CTB, o apito do agente é sinal sonoro oficial. Qual o significado correto de cada tipo de silvo?",
+        statement: "O apito do agente de trânsito é sinal sonoro oficial. Qual o significado correto de cada tipo de silvo?",
         options: ["Um silvo longo libera a passagem e dois silvos breves mandam reduzir a marcha.", "Um silvo breve libera; dois breves mandam parar; um longo manda reduzir a marcha.", "Os silvos não têm significado oficial e servem só para chamar a atenção.", "O apito só vale com gestos; sozinho, não orienta o trânsito."],
         correctIndex: 1,
         explanation: "Correta B: um breve siga; dois breves pare; um longo reduza a marcha. Art. 90 do CTB.",
@@ -4401,7 +4401,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "leg_n2_001",
         category: "legislacao",
-        statement: "Candidato à habilitação questiona os limites da categoria B. Quais são o Peso Bruto Total e a lotação autorizados, conforme o art. 143 do CTB?",
+        statement: "Candidato à habilitação questiona os limites da categoria B. Quais são o Peso Bruto Total e a lotação autorizados para essa categoria?",
         options: ["PBT de até 6.000 kg e lotação de até 10 passageiros, incluindo o motorista do veículo.", "PBT sem limite de carga e lotação de até 8 ocupantes no total do veículo.", "Veículos de passeio com até 5 lugares no total, incluindo o condutor do veículo.", "PBT de até 3.500 kg e lotação de até 8 passageiros, excluído o condutor do veículo."],
         correctIndex: 3,
         explanation: "Correta: categoria B admite PBT até 3.500 kg e 8 passageiros mais o condutor, conforme art. 143 do CTB.",
@@ -5241,7 +5241,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_010",
         category: "infracoes",
-        statement: "Um motorista realiza uma mudança abrupta de faixa de rolamento sem acionar a luz indicadora de direção (seta) nem fazer sinal regulamentar de braço. De acordo com o Art. 196 do CTB, qual é a gravidade desta infração e qual penalidade está sujeita?",
+        statement: "Um motorista realiza uma mudança abrupta de faixa de rolamento sem acionar a luz indicadora de direção (seta) nem fazer sinal regulamentar de braço. Qual é a gravidade desta infração e qual penalidade está sujeita?",
         options: ["Infração Grave, sujeita a penalidade de Multa.", "Infração Gravíssima, sujeita a Multa e Recolhimento da CNH.", "Infração Média, sujeita a Advertência por escrito apenas.", "Infração Leve, sem aplicação de pontos no prontuário do condutor."],
         correctIndex: 0,
         explanation: "Deixar de dar seta ao mudar de faixa ou virar é infração GRAVE (5 pontos).",
@@ -5321,7 +5321,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_015",
         category: "infracoes",
-        statement: "Um condutor trafega atrás de uma ambulância que está com os alarmes sonoros e iluminação vermelha intermitente acionados, utilizando o 'vácuo' do veículo de emergência para ultrapassar o trânsito congestionado. Essa conduta configura qual tipo de infração segundo o Art. 190 do CTB?",
+        statement: "Um condutor trafega atrás de uma ambulância que está com os alarmes sonoros e iluminação vermelha intermitente acionados, utilizando o 'vácuo' do veículo de emergência para ultrapassar o trânsito congestionado. Essa conduta configura qual tipo de infração?",
         options: ["Infração Grave, sujeita a penalidade de Multa.","Infração Gravíssima, com suspensão imediata do direito de dirigir.","Infração Média, com retenção do veículo.","Infração Leve, com multa e três pontos no prontuário do condutor."],
         correctIndex: 0,
         explanation: "Seguir veículo de socorro/emergência em serviço é infração GRAVE (5 pontos).",
@@ -5369,7 +5369,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_018",
         category: "infracoes",
-        statement: "Durante uma fiscalização de rotina na rodovia, o condutor desobedece às ordens claras de parada emanadas de um Agente da Autoridade de Trânsito devidamente uniformizado. Segundo o Art. 195 do CTB, qual é a gravidade dessa infração?",
+        statement: "Durante uma fiscalização de rotina na rodovia, o condutor desobedece às ordens claras de parada emanadas de um Agente da Autoridade de Trânsito devidamente uniformizado. Qual é a gravidade dessa infração?",
         options: ["Infração Grave, sujeita a penalidade de Multa.","Infração Gravíssima, com multa e suspensão do direito de dirigir.","Infração Média, sujeita a advertência por escrito.","Infração Leve, com multa e três pontos no prontuário."],
         correctIndex: 0,
         explanation: "Desobedecer ordens do Agente de Trânsito é infração GRAVE (Art. 195).",
@@ -5433,7 +5433,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_022",
         category: "legislacao",
-        statement: "Um cidadão habilitado exclusivamente na Categoria 'B' pretende conduzir um veículo utilitário do tipo Picape/Camioneta. Para permanecer dentro dos limites legais estipulados pelo Art. 143 do CTB, o veículo deve atender às seguintes condições simultâneas:",
+        statement: "Um cidadão habilitado exclusivamente na Categoria 'B' pretende conduzir um veículo utilitário do tipo Picape/Camioneta. Para permanecer dentro dos limites legais, o veículo deve atender às seguintes condições simultâneas:",
         options: ["Peso Bruto Total (PBT) de até 3.500 kg e lotação que não exceda a 8 lugares, excluído o do motorista.", "Peso Bruto Total (PBT) de até 6.000 kg e lotação de até 12 passageiros.", "Qualquer peso bruto total, desde que o veículo não transporte carga perigosa.", "Lotação máxima de até 15 passageiros, independentemente do peso do veículo."],
         correctIndex: 0,
         explanation: "Categoria B autoriza veículos com PBT de até 3.500 kg e máximo de 8 passageiros.",
@@ -5465,7 +5465,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_024",
         category: "infracoes",
-        statement: "Um veículo é flagrado por um radar fixo trafegando a 72 km/h em uma via cuja velocidade máxima permitida era de 60 km/h (excesso de velocidade de 20%). De acordo com o Art. 218, I do CTB, qual é a gravidade desta infração?",
+        statement: "Um veículo é flagrado por um radar fixo trafegando a 72 km/h em uma via cuja velocidade máxima permitida era de 60 km/h (excesso de velocidade de 20%). Qual é a gravidade desta infração?",
         options: ["Infração Grave, sujeita a penalidade de Multa.","Infração Grave, com retenção da CNH do condutor.","Infração Gravíssima, com suspensão automática do direito de dirigir.","Infração Leve, sujeita apenas a advertência por escrito."],
         correctIndex: 0,
         explanation: "Excesso de velocidade de até 20% acima do limite é infração GRAVE, punida com multa simples e 5 pontos (art. 218, I, a do CTB).",
@@ -8705,7 +8705,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "bnc_snt_art5",
         category: "legislacao",
-        statement: "Qual a finalidade do SNT (Sistema Nacional de Trânsito), conforme o Art. 5º do CTB?",
+        statement: "Qual a finalidade do SNT (Sistema Nacional de Trânsito)?",
         options: ["Apenas multar e arrecadar taxas dos condutores.","Promover planejamento, normatização, registro, habilitação, educação, engenharia, fiscalização e penalidades.","Apenas construir rodovias, sem normatizar, fiscalizar ou julgar infrações.","Ser de competência exclusiva dos municípios, cabendo aos estados apenas arrecadar as multas."],
         correctIndex: 1,
         explanation: "Correta B: o SNT cobre todo o ciclo — planejar, normatizar, registrar, habilitar, educar, fiscalizar e punir.",
@@ -8721,7 +8721,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "bnc_req_art140",
         category: "legislacao",
-        statement: "Quais são os requisitos básicos para o candidato à primeira habilitação, conforme o Art. 140 do CTB?",
+        statement: "Quais são os requisitos básicos para o candidato à primeira habilitação?",
         options: ["16 anos emancipado, com autorização dos pais.","21 anos e curso superior completo.","Ter curso de direção defensiva e noções de primeiros socorros, exigidos a todo candidato.","18 anos, saber ler e escrever, RG (ou equivalente) e CPF."],
         correctIndex: 3,
         explanation: "Correta D: penalmente imputável (18 anos), alfabetizado, identidade e CPF (Res. 168/2004).",
@@ -8899,7 +8899,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l01_01",
         category: "legislacao",
-        statement: "Segundo o art. 29, § 2º, do CTB, respeitadas as normas de circulação e conduta, a responsabilidade pela segurança no trânsito é atribuída, em ordem decrescente, da seguinte forma:",
+        statement: "Respeitadas as normas de circulação e conduta, a responsabilidade pela segurança no trânsito é atribuída, em ordem decrescente, da seguinte forma:",
         options: ["Os veículos de menor porte respondem pela segurança dos maiores, e os não motorizados, pela dos motorizados.", "Os veículos motorizados respondem pela segurança dos pedestres, ficando os de maior porte dispensados de responsabilidade em relação aos menores.", "Os veículos de maior porte respondem pela segurança dos menores, os motorizados pela dos não motorizados e, juntos, pela incolumidade dos pedestres.", "O condutor que detiver a preferência de passagem responde, de forma exclusiva, pela segurança dos demais usuários da via."],
         correctIndex: 2,
         explanation: "A alternativa C reproduz a lógica do art. 29, § 2º: quem tem mais potencial de dano responde pela segurança de quem tem menos. A confusa é a B, porque cita motorizados e pedestres, mas \"esquece\" a responsabilidade dos maiores sobre os menores. A D mistura preferência de passagem com responsabilidade, que são conceitos diferentes.",
@@ -8964,7 +8964,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l01_08",
         category: "legislacao",
-        statement: "Sobre o embarque, o desembarque e a abertura de portas do veículo, o art. 49 do CTB determina que:",
+        statement: "Sobre o embarque e o desembarque de passageiros e a abertura de portas do veículo, qual regra deve ser seguida?",
         options: ["O embarque e o desembarque ocorram sempre do lado da calçada, exceto pelo lado do condutor.", "O embarque e o desembarque ocorram sempre do lado da calçada, sem qualquer exceção.", "A porta possa ser aberta do lado da pista após acionar o pisca-alerta.", "O condutor possa descer pelo lado da pista em vias de mão única."],
         correctIndex: 0,
         explanation: "O art. 49 manda embarcar e desembarcar sempre do lado da calçada, exceto pelo lado do condutor, e veda abrir a porta ou descer sem certificar-se de que não há perigo para os usuários da via.",
@@ -9211,7 +9211,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l01_44",
         category: "infracoes",
-        statement: "Segundo o art. 306 do CTB, a concentração de álcool que pode comprovar a alteração da capacidade psicomotora, para configurar o crime de conduzir veículo sob a influência de álcool, é igual ou superior a:",
+        statement: "A concentração de álcool que comprova a alteração da capacidade psicomotora, para configurar o crime de conduzir veículo sob a influência de álcool, é igual ou superior a:",
         options: ["0,3 g/L de sangue ou 0,6 mg/L de ar alveolar.", "0,6 mg/L de sangue ou 0,3 g/L de ar alveolar.", "0,6 g/L de sangue (6 decigramas) ou 0,3 mg/L de ar alveolar.", "0,06 g/L de sangue ou 0,03 mg/L de ar alveolar."],
         correctIndex: 2,
         explanation: "O CTB fixa 6 decigramas por litro de sangue ou 0,3 mg por litro de ar alveolar. A A e a B trocam os valores e as unidades. A D reduz tudo por um fator de 10, o que gera dúvida porque o número parece \"rigoroso\".",
@@ -9743,7 +9743,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l02_92",
         category: "legislacao",
-        statement: "De acordo com o art. 306, § 2º, do CTB, a verificação do estado de alteração da capacidade psicomotora pode ser obtida mediante:",
+        statement: "Como pode ser obtida a verificação do estado de alteração da capacidade psicomotora do condutor?",
         options: ["Exclusivamente o teste de etilômetro, aplicado no local da abordagem pelo agente autuador.", "Exclusivamente o exame de sangue, mediante ordem judicial, em serviço de saúde.", "Teste de alcoolemia, exame clínico, perícia, vídeo, prova testemunhal ou outros meios de prova admitidos em direito, observado o direito à contraprova.", "Apenas a prova testemunhal, mesmo sem qualquer elemento técnico ou registro de aparelho."],
         correctIndex: 2,
         explanation: "A C está correta: a lei admite meios variados de prova, sempre com direito à contraprova. A A e a B são as leituras mais comuns, mas restringem demais: o bafômetro e o exame de sangue são os mais usados, não os únicos. A D inverte a lógica — a prova testemunhal é admitida, mas nunca como único elemento de constatação.",
@@ -9756,7 +9756,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l02_95",
         category: "infracoes",
-        statement: "O art. 252 do CTB considera infração dirigir o veículo em determinadas situações. NÃO consta expressamente desse artigo:",
+        statement: "Entre as condutas abaixo, qual NÃO é considerada infração ao dirigir o veículo?",
         options: ["Com o braço para fora.", "Com o cinto de segurança afrouxado.", "Usando calçado que não se firme nos pés ou que comprometa a utilização dos pedais.", "Com apenas uma das mãos, exceto para mudar a marcha ou acionar equipamentos e acessórios do veículo."],
         correctIndex: 1,
         explanation: "A B é a resposta: o cinto afrouxado não está no rol do art. 252, que trata das posturas ao volante — o cinto é tratado pelo art. 167. A, C e D constam expressamente do art. 252, inclusive a exceção de usar apenas uma das mãos para trocar a marcha ou acionar equipamentos. A B é a alternativa mais tentadora, porque parece da mesma família de infrações de conduta.",
@@ -9769,7 +9769,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l02_96",
         category: "legislacao",
-        statement: "Segundo o art. 28 do CTB, o condutor deverá, a todo momento:",
+        statement: "Ao dirigir, o condutor deve, a todo momento:",
         options: ["Ter domínio de seu veículo, dirigindo-o com atenção e cuidados indispensáveis à segurança do trânsito.","Dirigir sempre abaixo da velocidade máxima sinalizada, mesmo onde houver velocidade mínima.","Evitar qualquer manobra que envolva deslocamento lateral.","Manter distância de segurança fixa do veículo da frente, qualquer que seja a velocidade."],
         correctIndex: 0,
         explanation: "A A é a literalidade do art. 28: domínio do veículo, atenção e cuidados indispensáveis à segurança. B, C e D são regras plausíveis que o artigo não traz: não há obrigação de dirigir sempre abaixo do limite, as mudanças de faixa são permitidas e sinalizadas (o deslocamento lateral é regulado pelo art. 35) e a distância de seguimento não é fixa — ela varia com velocidade, clima e visibilidade (art. 29, II).",
@@ -9999,7 +9999,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l03_141",
         category: "legislacao",
-        statement: "Constitui dever dos usuários das vias terrestres, previsto no art. 26 do CTB, EXCETO:",
+        statement: "Todos os itens abaixo são deveres dos usuários das vias terrestres, EXCETO:",
         options: ["Abster-se de todo ato que possa constituir perigo ou obstáculo para o trânsito de veículos, de pessoas ou de animais.", "Abster-se de obstruir o trânsito ou torná-lo perigoso, atirando, depositando ou abandonando na via objetos ou substâncias.", "Utilizar a buzina sempre que houver pedestre próximo da pista.", "Abster-se de causar danos a propriedades públicas ou privadas."],
         correctIndex: 2,
         explanation: "A C é a resposta: o art. 26 traz apenas deveres de abstenção — não criar perigo ou obstáculo (inclusive danos a propriedades) e não obstruir a via com objetos ou substâncias. A suposta regra da buzina não existe e ainda contraria o art. 41, que admite apenas toque breve para alertar perigo imediato. A A, a B e a D são literalidades do art. 26.",
@@ -10180,7 +10180,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l04_163",
         category: "legislacao",
-        statement: "Um condutor, que não é o proprietário do veículo, avança o sinal vermelho. Segundo o art. 257 do CTB, a responsabilidade pela infração é:",
+        statement: "Um condutor, que não é o proprietário do veículo, avança o sinal vermelho. Quem responde por essa infração?",
         options: ["Sempre do proprietário, ainda que o condutor esteja plenamente identificado no auto de infração.","Do principal condutor, pois a notificação da autuação já o designa responsável de imediato.","Do condutor, por se tratar de ato praticado na direção; não sendo imediata a identificação, o principal condutor ou o proprietário dispõe de 30 dias para apresentá-lo.","Do condutor, mas apenas quando o veículo estiver registrado em seu nome."],
         correctIndex: 2,
         explanation: "A C está correta: ao condutor cabem as infrações decorrentes de atos praticados na direção (art. 257, § 3º) e, não sendo imediata a identificação, o § 7º dá 30 dias, contados da notificação da autuação, ao principal condutor ou ao proprietário para apresentá-lo. A A é a pegadinha: sem a indicação tempestiva a responsabilidade migra, mas a regra parte do condutor.",
@@ -10193,7 +10193,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l04_164",
         category: "infracoes",
-        statement: "O art. 254 do CTB impõe deveres também aos pedestres. É proibido ao pedestre, EXCETO:",
+        statement: "Ao pedestre é proibido, EXCETO:",
         options: ["Permanecer ou andar nas pistas de rolamento, salvo para cruzá-las onde for permitido.", "Cruzar pistas de rolamento nos viadutos, pontes ou túneis, salvo onde exista permissão.", "Andar fora da faixa própria, passarela, passagem aérea ou subterrânea.", "Atravessar a via sobre a faixa de pedestres, quando houver sinal verde para ele."],
         correctIndex: 3,
         explanation: "A D é a EXCEÇÃO: atravessar pela faixa de pedestres com sinal a favor é conduta regular, não proibida. A, B e C reproduzem os incisos I, II e V do art. 254, punidos com multa de 50% do valor da infração leve. A pegadinha está no \"EXCETO\": três alternativas parecem regras comuns de comportamento do pedestre, mas todas constam do rol de proibições.",
@@ -10232,7 +10232,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l04_167",
         category: "infracoes",
-        statement: "Assinale a alternativa que NÃO é medida administrativa prevista no art. 269 do CTB:",
+        statement: "Qual das opções NÃO é medida administrativa aplicada pelo órgão de trânsito?",
         options: ["Retenção do veículo.", "Recolhimento da Carteira Nacional de Habilitação.", "Remoção do veículo.", "Cassação da Carteira Nacional de Habilitação."],
         correctIndex: 3,
         explanation: "A D está correta: a cassação é penalidade (art. 256, V) e depende de processo administrativo com direito de defesa (art. 265). A B é a mais tentadora: \"recolher\" e \"cassar\" a CNH parecem equivalentes, mas o recolhimento do documento é medida administrativa do art. 269, III — medida que, segundo o § 2º, não elide a penalidade.",
@@ -10271,7 +10271,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l04_171",
         category: "legislacao",
-        statement: "Aplicadas as medidas administrativas previstas no art. 269 do CTB, o infrator:",
+        statement: "Aplicadas as medidas administrativas pelo órgão de trânsito, o infrator:",
         options: ["Fica isento das penalidades pela infração.","Continua sujeito às penalidades, pois as medidas administrativas não as elidem.","Paga multa reduzida a oitenta por cento do valor, em razão das medidas administrativas.","Fica dispensado da suspensão do direito de dirigir, embora permaneça sujeito à multa."],
         correctIndex: 1,
         explanation: "O art. 269, § 2º, afirma que as medidas administrativas não elidem a aplicação das penalidades e têm caráter complementar a estas.",
@@ -10284,7 +10284,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l04_172",
         category: "legislacao",
-        statement: "Segundo o art. 269, § 1º, do CTB, a ordem, o consentimento, a fiscalização e as medidas administrativas e coercitivas adotadas pelas autoridades de trânsito e seus agentes têm por objetivo prioritário:",
+        statement: "As medidas adotadas pelas autoridades de trânsito e seus agentes têm por objetivo prioritário:",
         options: ["A arrecadação de recursos para o órgão de trânsito.", "A fluidez do trânsito em horários de pico.", "A punição exemplar do infrator.", "A proteção à vida e à incolumidade física da pessoa."],
         correctIndex: 3,
         explanation: "A D está correta: o § 1º do art. 269 fixa como objetivo prioritário a proteção à vida e à incolumidade física da pessoa. A B é a mais tentadora: a fluidez é um objetivo do trânsito (art. 1º), mas não é o prioritário das medidas administrativas. A A e a C são percepções comuns sobre a fiscalização, não objetivos legais.",
@@ -10310,7 +10310,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l04_175",
         category: "infracoes",
-        statement: "Em dia de chuva, um condutor passa em alta velocidade sobre uma poça, sem reduzir, e molha pessoas que esperam no ponto de ônibus. Segundo o art. 171 do CTB, usar o veículo para arremessar, sobre pedestres ou veículos, água ou detritos é infração de natureza:",
+        statement: "Em dia de chuva, um condutor passa em alta velocidade sobre uma poça, sem reduzir, e molha pessoas que esperam no ponto de ônibus. Usar o veículo para arremessar água ou detritos sobre pedestres ou veículos é infração de natureza:",
         options: ["Leve.", "Grave.", "Gravíssima.", "Média."],
         correctIndex: 3,
         explanation: "A D está correta: o art. 171 enquadra a conduta como média, punida com multa. Além da infração, o episódio retrata falta de empatia: reduzir diante da poça custa segundos e evita o dano a quem espera no ponto. A B e a C superestimam a natureza da infração, e a A subestima o risco que a água arremessada causa a pedestres e ciclistas.",
@@ -10414,7 +10414,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l04_200",
         category: "legislacao",
-        statement: "Segundo o art. 74 do CTB, a educação para o trânsito:",
+        statement: "A educação para o trânsito:",
         options: ["É facultativa para os componentes do Sistema Nacional de Trânsito.", "É dever exclusivo dos condutores.", "É direito de todos e dever prioritário para os componentes do Sistema Nacional de Trânsito.", "É dever apenas dos Detrans, nos Estados."],
         correctIndex: 2,
         explanation: "A C está correta: o caput do art. 74 reconhece a educação para o trânsito como direito de todos e dever prioritário dos componentes do Sistema Nacional de Trânsito. A B restringe o dever ao condutor e a D ao Detran, enquanto o § 1º exige coordenação educacional em cada órgão ou entidade do SNT.",
@@ -10448,7 +10448,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l05_204",
         category: "legislacao",
-        statement: "Segundo o art. 143, § 2º-A, do CTB (Lei 15.503/2026), os condutores da categoria B podem conduzir veículo elétrico ou híbrido de tração predominantemente elétrica com peso bruto total de até, observados eventuais critérios do Contran:",
+        statement: "Qual o peso bruto total máximo permitido para veículo elétrico ou híbrido de tração predominantemente elétrica conduzido por condutor da categoria B, observados eventuais critérios do Contran?",
         options: ["3.500 kg.", "6.000 kg.", "4.250 kg.", "4.500 kg."],
         correctIndex: 2,
         explanation: "A regra geral da categoria B é de 3.500 kg, mas há uma exceção para veículos elétricos ou híbridos, em razão do peso das baterias: até 4.250 kg. A A é o limite geral, e a B é o limite da motor-casa.",
@@ -10474,7 +10474,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l05_206",
         category: "legislacao",
-        statement: "Além dos candidatos à primeira habilitação, a avaliação psicológica será exigida, segundo o art. 147, § 3º, do CTB:",
+        statement: "Além dos candidatos à primeira habilitação, em qual situação a avaliação psicológica será exigida?",
         options: ["Em toda renovação da CNH, para qualquer condutor.", "Apenas para condutores com mais de 70 anos.", "Apenas na mudança da categoria B para a A.", "Para o condutor que pretenda exercer atividade remunerada ao veículo."],
         correctIndex: 3,
         explanation: "A avaliação psicológica é exigida na primeira habilitação e para quem pretenda exercer atividade remunerada ao veículo. A A é a ideia mais comum, de que \"toda renovação\" exige exame psicológico.",
@@ -10513,7 +10513,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l05_209",
         category: "legislacao",
-        statement: "Segundo o art. 268-A, § 7º, do CTB, o condutor que, ao término da validade da CNH ou da ACC, estiver cadastrado no RNPC:",
+        statement: "O condutor que, ao término da validade da CNH ou da ACC, estiver cadastrado no RNPC:",
         options: ["Terá a habilitação renovada automaticamente e ficará dispensado de todos os exames, inclusive os médicos.", "Terá a habilitação renovada automaticamente e ficará dispensado dos procedimentos do art. 147, com exceção dos exames de aptidão física e mental.", "Terá a habilitação renovada automaticamente, mediante pagamento de nova taxa, sem qualquer exame.", "Só terá a habilitação renovada se refizer a prova teórica."],
         correctIndex: 1,
         explanation: "A renovação automática dispensa os procedimentos do art. 147, mas mantém os exames de aptidão física e mental. A A é a mais tentadora, porque o enunciado \"renovação automática\" sugere dispensa total.",
@@ -10565,7 +10565,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l05_213",
         category: "legislacao",
-        statement: "Os condutores de motocicletas, motonetas e ciclomotores só poderão circular nas vias, segundo o art. 54 do CTB:",
+        statement: "Os condutores de motocicletas, motonetas e ciclomotores só poderão circular nas vias:",
         options: ["Utilizando capacete de segurança, com ou sem viseira, e vestuário de proteção apenas em rodovias.", "Utilizando capacete de segurança com viseira ou óculos protetores, segurando o guidom com as duas mãos e usando vestuário de proteção de acordo com as especificações do Contran.", "Utilizando capacete de segurança com viseira e transportando apenas um passageiro com vestuário de proteção.", "Utilizando capacete de segurança e segurando o guidom com uma das mãos, se estiver sinalizando manobra."],
         correctIndex: 1,
         explanation: "O art. 54 traz três exigências: capacete com viseira ou óculos, guidom com as duas mãos e vestuário de proteção. A D é a mais tentadora, porque a indicação de manobras por gesto é admitida, mas apenas de forma eventual (art. 244, VII).",
@@ -10578,7 +10578,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l05_214",
         category: "legislacao",
-        statement: "Os passageiros de motocicletas, motonetas e ciclomotores só poderão ser transportados, segundo o art. 55 do CTB:",
+        statement: "Os passageiros de motocicletas, motonetas e ciclomotores só poderão ser transportados:",
         options: ["Utilizando capacete de segurança e vestuário de proteção, em assento à frente do condutor.","Em qualquer posição do veículo, desde que utilizem capacete de segurança.","Utilizando capacete de segurança, sentados atrás do condutor, sem vestuário de proteção.","Utilizando capacete de segurança, em carro lateral acoplado ou em assento suplementar atrás do condutor, e usando vestuário de proteção."],
         correctIndex: 3,
         explanation: "O art. 55 impõe capacete, posição (carro lateral ou assento suplementar atrás) e vestuário. A B é a pegadinha, porque dá a impressão de que o capacete basta.",
@@ -10695,7 +10695,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l05_223",
         category: "infracoes",
-        statement: "Entre as condutas previstas no art. 244 do CTB, a que o § 1º aplica expressamente aos condutores de ciclos (bicicletas) é:",
+        statement: "Entre as condutas abaixo, qual é expressamente proibida aos condutores de ciclos (bicicletas)?",
         options: ["Fazer malabarismo ou equilibrar-se apenas em uma roda.", "Conduzir o veículo sem usar capacete de segurança.", "Rebocar outro veículo.", "Conduzir o veículo com capacete de segurança sem viseira ou óculos de proteção."],
         correctIndex: 0,
         explanation: "A A está correta: o § 1º do art. 244 aplica aos ciclos o disposto nos incisos III, VII e VIII, além de condutas próprias (passageiro fora da garupa, vias de trânsito rápido ou rodovias e transporte de crianças sem condições de cuidar da própria segurança). A B é a pegadinha mais comum: o inciso I (capacete) consta do caput, que alcança motocicletas, motonetas e ciclomotores — não bicicletas. A C é o inciso VI e a D o inciso X, e nenhum dos dois consta do rol do § 1º.",
@@ -12087,10 +12087,10 @@ export const QUESTIONS: Question[] = [
         id: "detran_crianca_moto_01",
         category: "legislacao",
         statement: "O transporte de criança em motocicleta é permitido a partir de:",
-        options: ["Quatro anos de idade.", "Cinco anos de idade.", "Sete anos de idade.", "Seis anos de idade."],
+        options: ["Quatro anos de idade.", "Sete anos de idade.", "Dez anos de idade.", "Seis anos de idade."],
         correctIndex: 2,
-        explanation: "Nesta prova clássica o gabarito é sete anos. Atenção: o CTB atual (art. 244, V, redação da Lei 14.071/2020) proíbe transportar criança menor de 10 anos em motocicleta.",
-        legalBase: "Art. 244 do CTB",
+        explanation: "Correta a terceira: desde a Lei 14.071/2020 o art. 244, V, proíbe transportar criança menor de 10 anos em motocicleta — infração gravíssima, com multa e suspensão do direito de dirigir. O \"sete anos\" era o gabarito de provas antigas, anteriores à mudança da lei.",
+        legalBase: "Art. 244, V, do CTB (redação da Lei 14.071/2020)",
         incidence: "alta",
         trap: true,
         difficulty: 2,
