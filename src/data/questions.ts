@@ -2202,7 +2202,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp24",
         category: "mecanica",
-        statement: "Condutor percebe vibração na alavanca do câmbio e dificuldade para engatar as marchas, com ruído áspero. O componente do sistema de transmissão com defeito provável é:",
+        statement: "Condutor percebe vibração na alavanca do câmbio e dificuldade para engatar as marchas, com ruído áspero. O componente do sistema de transmissão que provavelmente está com defeito é:",
         options: ["O sistema de embreagem ou os sincronizadores da caixa de marchas.", "O diferencial e as semiarvores de transmissão das rodas.", "O cilindro mestre do sistema de freios hidráulicos.", "O conjunto de amortecedores e molas da suspensão dianteira."],
         correctIndex: 0,
         explanation: "Correta a alternativa A, pois dentes 'arranhando', dificuldade de engate e ruídos na alavanca indicam desgastes no sistema de embreagem ou nos anéis sincronizadores do câmbio.",
