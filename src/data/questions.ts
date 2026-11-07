@@ -1,5 +1,6 @@
 import type { PlacaId } from "@/components/Placa";
 import { supabase } from "@/integrations/supabase/client";
+import { reviewFactor, isReviewDue } from "@/lib/review";
 export type Incidence = "altissima" | "alta" | "media" | "baixa";
 export type Category = "legislacao" | "placas" | "direcao-defensiva" | "primeiros-socorros" | "infracoes" | "meio-ambiente" | "mecanica" | "prioridade";
 export interface Question {
@@ -416,10 +417,10 @@ export const QUESTIONS: Question[] = [
     {
         id: "qe27",
         category: "direcao-defensiva",
-        statement: "Instrutor explica prevenção de acidentes em condições adversas. Conforme a doutrina de trânsito, o objetivo primordial da direção defensiva é:",
-        options: ["Evitar acidentes, apesar das ações incorretas de terceiros e das condições adversas da via.", "Prevenir acidentes somente quando as condições climáticas da via estão adversas, não se aplicando nas demais situações.", "Agir somente após a manifestação do perigo, respondendo às ações incorretas dos demais condutores.", "Transferir aos demais usuários a responsabilidade pela segurança quando suas condutas forem incorretas."],
+        statement: "Instrutor explica prevenção de sinistros em condições adversas. Conforme a doutrina de trânsito, o objetivo primordial da direção defensiva é:",
+        options: ["Evitar sinistros, apesar das ações incorretas de terceiros e das condições adversas da via.", "Prevenir sinistros somente quando as condições climáticas da via estão adversas, não se aplicando nas demais situações.", "Agir somente após a manifestação do perigo, respondendo às ações incorretas dos demais condutores.", "Transferir aos demais usuários a responsabilidade pela segurança quando suas condutas forem incorretas."],
         correctIndex: 0,
-        explanation: "Correta letra A: Direção defensiva é dirigir de modo a evitar acidentes, apesar das ações erradas dos outros e das condições adversas.",
+        explanation: "Correta letra A: Direção defensiva é dirigir de modo a evitar sinistros, apesar das ações erradas dos outros e das condições adversas.",
         detailedExplanation: "A direção defensiva foca na prevenção, antecipando perigos e adotando postura preventiva no trânsito.",
         legalBase: "Manual de Direção Defensiva - DENATRAN/SENATRAN",
         incidence: "altissima",
@@ -444,7 +445,7 @@ export const QUESTIONS: Question[] = [
         options: ["Verificar retrovisores e ponto cego, sinalizar, acelerar e retornar após ver o veículo no espelho.", "Sinalizar, conferir apenas o retrovisor interno e retornar sem observar o ponto cego.", "Aproximar-se do para-choque dianteiro e mudar de faixa sem sinalizar a manobra.", "Ultrapassar pelo acostamento, mantendo velocidade constante e sem sinalizar."],
         correctIndex: 0,
         explanation: "Correta letra A: ultrapassagem segura exige espelhos, ponto cego, seta e retorno com visibilidade.",
-        detailedExplanation: "A manobra de ultrapassagem tem passos importantes: 1) sinalizar pra esquerda com a seta; 2) checar retrovisores e o ponto cego; 3) mudar pra faixa da esquerda; 4) acelerar e ultrapassar; 5) sinalizar pra direita; 6) voltar pra faixa original só quando o carro ultrapassado aparecer no retrovisor. Ignorar qualquer passo pode causar acidente.",
+        detailedExplanation: "A manobra de ultrapassagem tem passos importantes: 1) sinalizar pra esquerda com a seta; 2) checar retrovisores e o ponto cego; 3) mudar pra faixa da esquerda; 4) acelerar e ultrapassar; 5) sinalizar pra direita; 6) voltar pra faixa original só quando o carro ultrapassado aparecer no retrovisor. Ignorar qualquer passo pode causar sinistro.",
         incidence: "alta",
         difficulty: 3
     },
@@ -499,7 +500,7 @@ export const QUESTIONS: Question[] = [
         options: ["Luz alta, trocando para baixa ao cruzar com outro veículo ou seguir à frente de outro.", "Luz de posição combinada com luzes de neblina em qualquer situação.", "Luz baixa fixa em qualquer hipótese, mesmo com pista livre.", "Farol alto permanente, mesmo ao cruzar com fluxos opostos."],
         correctIndex: 0,
         explanation: "Correta letra A: use luz alta em via escura e reduza ao cruzar ou seguir outro, conforme art. 40 do CTB.",
-        detailedExplanation: "Em rodovias escuras, o farol ALTO ajuda a ver melhor. Mas, quando você vê outro carro vindo ou está colado em um, troque pro farol BAIXO pra não cegar o motorista do outro lado — isso evita acidentes sérios. O mesmo vale se você estiver atrás de outro carro: use farol baixo pra não atrapalhar a visão dele.",
+        detailedExplanation: "Em rodovias escuras, o farol ALTO ajuda a ver melhor. Mas, quando você vê outro carro vindo ou está colado em um, troque pro farol BAIXO pra não cegar o motorista do outro lado — isso evita sinistros sérios. O mesmo vale se você estiver atrás de outro carro: use farol baixo pra não atrapalhar a visão dele.",
         legalBase: "Art. 40 CTB",
         incidence: "alta",
         difficulty: 3
@@ -534,7 +535,7 @@ export const QUESTIONS: Question[] = [
         options: ["Proteger o local, Avisar o socorro profissional e Socorrer as vítimas.","Prestar atendimento imediato, afastar curiosos e sinalizar após remoção.","Proteger o local, socorrer as vítimas e avisar o socorro somente após o atendimento.","Procurar testemunhas, avaliar lesões e sinalizar com galhos."],
         correctIndex: 0,
         explanation: "Correta letra A: PAS indica proteger, avisar e socorrer, nessa ordem de prioridade.",
-        detailedExplanation: "Quando chega em um acidente, primeiro você deve PROTEGER o local com sinalização, avisar as autoridades pelo telefone e, se souber, SOCORRER as vítimas. Essa ordem é importante pra evitar mais problemas e garantir a segurança de todos.",
+        detailedExplanation: "Quando chega em um sinistro, primeiro você deve PROTEGER o local com sinalização, avisar as autoridades pelo telefone e, se souber, SOCORRER as vítimas. Essa ordem é importante pra evitar mais problemas e garantir a segurança de todos.",
         incidence: "altissima",
         difficulty: 3
     },
@@ -569,7 +570,7 @@ export const QUESTIONS: Question[] = [
         options: ["192, para acionar o Serviço de Atendimento Móvel de Urgência.","193, para acionar o Corpo de Bombeiros Militar.","190, para acionar a Polícia Militar.","191, para acionar a Polícia Rodoviária Federal."],
         correctIndex: 0,
         explanation: "Correta letra A: SAMU é 192; 193 bombeiros e 190 polícia militar.",
-        detailedExplanation: "Saber os números de emergência é super importante pra agir rápido em acidentes. O SAMU (192) cuida das emergências médicas, enquanto o Corpo de Bombeiros (193) ajuda em incêndios e resgates. A Polícia Militar (190) entra em cena quando tem crime ou confusão.",
+        detailedExplanation: "Saber os números de emergência é super importante pra agir rápido em sinistros. O SAMU (192) cuida das emergências médicas, enquanto o Corpo de Bombeiros (193) ajuda em incêndios e resgates. A Polícia Militar (190) entra em cena quando tem crime ou confusão.",
         incidence: "alta",
         difficulty: 3
     },
@@ -580,7 +581,7 @@ export const QUESTIONS: Question[] = [
         options: ["80 passos longos da traseira, dobrando a distância com chuva, neblina ou curva.","60 passos longos da traseira, mantendo a mesma distância mesmo com chuva ou neblina.","20 passos longos do veículo, junto ao acostamento, apenas com o pisca-alerta.","100 passos longos da traseira, dobrando a distância mesmo em pista reta e dia claro."],
         correctIndex: 0,
         explanation: "Correta letra A: a distância do triângulo acompanha a velocidade da via e dobra sob risco.",
-        detailedExplanation: "O triângulo de sinalização precisa ficar pelo menos 30 metros atrás do carro, na mesma faixa. Isso ajuda quem vem atrás a ver e desacelerar a tempo. Em rodovias rápidas, é melhor colocar ainda mais longe, entre 50 e 100 metros, para evitar acidentes.",
+        detailedExplanation: "O triângulo de sinalização precisa ficar pelo menos 30 metros atrás do carro, na mesma faixa. Isso ajuda quem vem atrás a ver e desacelerar a tempo. Em rodovias rápidas, é melhor colocar ainda mais longe, entre 50 e 100 metros, para evitar sinistros.",
         incidence: "alta",
         difficulty: 3
     },
@@ -635,7 +636,7 @@ export const QUESTIONS: Question[] = [
         options: ["Média, com multa administrativa de responsabilidade do condutor.","Leve, com advertência escrita de responsabilidade do passageiro que lançou o objeto.","Grave, com multa e suspensão do direito de dirigir do condutor.","Gravíssima, com multa multiplicada e cassação da habilitação do condutor."],
         correctIndex: 0,
         explanation: "Correta letra A: lançar objetos pela janela é infração média, conforme art. 172 do CTB.",
-        detailedExplanation: "Quando você joga algo pela janela, pode levar multa e 4 pontos na CNH. Além disso, isso é crime ambiental e pode causar acidentes, como um motociclista perdendo o controle por causa de um objeto na pista.",
+        detailedExplanation: "Quando você joga algo pela janela, pode levar multa e 4 pontos na CNH. Além disso, isso é crime ambiental e pode causar sinistros, como um motociclista perdendo o controle por causa de um objeto na pista.",
         legalBase: "Art. 172 CTB",
         incidence: "media",
         difficulty: 3
@@ -847,7 +848,7 @@ export const QUESTIONS: Question[] = [
         options: ["Desviar o olhar para a faixa do bordo à direita e reduzir a velocidade de forma suave.", "Acender seu farol alto também para sinalizar e obrigar o outro a baixar a luz.", "Piscar os olhos repetidas vezes e manter a velocidade para passar logo pelo clarão.", "Acionar o pisca-alerta e frear bruscamente sobre a faixa para interromper a marcha."],
         correctIndex: 0,
         explanation: "Correta a primeira: desvie a visão para o bordo à direita e reduza suave, sem encarar o farol nem frear sobre a faixa.",
-        detailedExplanation: "Quando um carro vem na sua direção com farol alto e te ofusca, nunca olhe direto para ele, porque isso pode te deixar cego por alguns segundos. O certo é desviar o olhar para a margem direita da pista e ir diminuindo a velocidade, assim você consegue manter a visão e evitar acidentes. Também é bom piscar o farol rapidinho pra avisar o outro motorista.",
+        detailedExplanation: "Quando um carro vem na sua direção com farol alto e te ofusca, nunca olhe direto para ele, porque isso pode te deixar cego por alguns segundos. O certo é desviar o olhar para a margem direita da pista e ir diminuindo a velocidade, assim você consegue manter a visão e evitar sinistros. Também é bom piscar o farol rapidinho pra avisar o outro motorista.",
         incidence: "alta",
         difficulty: 3
     },
@@ -858,7 +859,7 @@ export const QUESTIONS: Question[] = [
         options: ["Com veículo parado em emergência, ou lento sob neblina intensa, ou onde a sinalização mandar.","Para parar em fila dupla por instantes e embarcar passageiro sem buscar vaga regular.","Para ultrapassar veículo mais lento na faixa da esquerda, em substituição à seta indicadora.","Para cruzar interseção com parada obrigatória reduzindo a velocidade sem imobilizar o veículo antes da linha."],
         correctIndex: 0,
         explanation: "Correta a primeira: pisca-alerta em emergência com veículo parado, ou lento sob neblina, ou onde a placa mandar, art. 251, CTB.",
-        detailedExplanation: "O pisca-alerta (quatro setas piscando) deve ser usado quando o carro está PARADO em situação de EMERGÊNCIA, como pane ou acidente, ou em movimento em situações de neblina/cerração e onde a sinalização determinar. Usar sem necessidade em movimento pode confundir outros condutores.",
+        detailedExplanation: "O pisca-alerta (quatro setas piscando) deve ser usado quando o carro está PARADO em situação de EMERGÊNCIA, como pane ou sinistro, ou em movimento em situações de neblina/cerração e onde a sinalização determinar. Usar sem necessidade em movimento pode confundir outros condutores.",
         legalBase: "Art. 251 CTB",
         incidence: "alta",
         trap: true,
@@ -883,7 +884,7 @@ export const QUESTIONS: Question[] = [
         options: ["Infração gravíssima e crime de trânsito por deixar de prestar socorro podendo fazê-lo.","Infração grave, com multa e cinco pontos, sem caracterizar crime de trânsito.","Infração média, com multa e quatro pontos no prontuário do condutor.","Infração gravíssima, com multa e sete pontos, sem caracterizar crime de trânsito."],
         correctIndex: 0,
         explanation: "Correta a primeira: omitir socorro podendo prestá-lo é infração gravíssima e crime, art. 304, CTB.",
-        detailedExplanation: "Deixar de prestar socorro à vítima de acidente, quando possível fazê-lo sem risco pessoal, configura infração gravíssima de trânsito e também crime previsto no Art. 304 do CTB.",
+        detailedExplanation: "Deixar de prestar socorro à vítima de sinistro, quando possível fazê-lo sem risco pessoal, configura infração gravíssima de trânsito e também crime previsto no Art. 304 do CTB.",
         legalBase: "Art. 176, I e Art. 304 CTB",
         incidence: "alta",
         difficulty: 3
@@ -1203,7 +1204,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "q11",
         category: "legislacao",
-        statement: "Após as alterações da Lei 14.071/2020, mudaram os prazos do exame de aptidão física e mental para renovação da CNH. Para o condutor com menos de 50 anos de idade, qual é o prazo máximo de validade?",
+        statement: "Para o condutor com menos de 50 anos de idade, qual é o prazo máximo de validade do exame de aptidão física e mental para renovar a CNH?",
         options: ["Cinco anos, mesmo sem atividade paga ao volante e sem restrição médica expressa.","Dez anos, salvo se houver indicação médica que recomende a redução desse prazo.","Três anos para todo habilitado, inclusive das categorias simples sem atividade paga.","Dez anos, exigidos somente para os condutores das categorias C, D e E."],
         correctIndex: 1,
         explanation: "Correta a opção 2: para condutores com menos de 50 anos, a validade do exame é de até 10 anos, conforme o art. 147, § 2º, I do CTB.",
@@ -1246,7 +1247,7 @@ export const QUESTIONS: Question[] = [
         options: ["Manter o pisca-alerta aceso e aguardar dentro do veículo a chegada da viatura.","Sinalizar o local da ocorrência e acionar o pisca-alerta, garantindo a segurança do local.","Iniciar a ventilação de resgate na primeira vítima caída na pista.","Remover as vítimas das ferragens puxando-as pelos braços."],
         correctIndex: 1,
         explanation: "Correta a opção 2: a prioridade absoluta é garantir a segurança da cena, sinalizando o local e acionando o socorro especializado.",
-        detailedExplanation: "O primeiro passo no atendimento a um sinistro de trânsito é a sinalização da via (uso de triângulo, pisca-alerta e galhos, se necessário) para evitar novos acidentes. Em seguida, aciona-se o socorro especializado (1193 Bombeiros, 192 SAMU ou 190 Polícia).",
+        detailedExplanation: "O primeiro passo no atendimento a um sinistro de trânsito é a sinalização da via (uso de triângulo, pisca-alerta e galhos, se necessário) para evitar novos sinistros. Em seguida, aciona-se o socorro especializado (1193 Bombeiros, 192 SAMU ou 190 Polícia).",
         tip: "Sinalizar e proteger a cena é a regra nº 1.",
         incidence: "altissima",
         difficulty: 3
@@ -1363,7 +1364,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "q24",
         category: "primeiros-socorros",
-        statement: "Ao prestar auxílio a uma vítima de acidente que apresenta sangramento abundante no braço, qual é a conduta primária recomendada para conter a hemorragia externa?",
+        statement: "Ao prestar auxílio a uma vítima de sinistro que apresenta sangramento abundante no braço, qual é a conduta primária recomendada para conter a hemorragia externa?",
         options: ["Aplicar torniquete largo 5 cm acima da lesão e afrouxá-lo a cada 15 minutos.", "Fazer compressão direta sobre o ferimento com um pano limpo ou gaze.", "Elevar o membro acima do coração e comprimir pontos arteriais próximos à lesão.", "Manter o braço imobilizado ao longo do corpo e aguardar a chegada do resgate."],
         correctIndex: 1,
         explanation: "Correta a opção 2: a compressão direta com pano ou pano limpo é a conduta padrão inicial para estancar hemorragias externas.",
@@ -1857,7 +1858,7 @@ export const QUESTIONS: Question[] = [
         options: ["Proibido durante o dia, pois consome energia e ofusca os demais condutores.", "Obrigatório, admitindo-se o uso do sistema DRL se o veículo dispuser do equipamento.", "Opcional durante o dia, ficando inteiramente a critério do condutor.", "Exigido apenas em túnel iluminado ou sob chuva, neblina ou cerração."],
         correctIndex: 1,
         explanation: "Correta a alternativa B, pois o CTB exige farol baixo de dia em pista simples, admitido o DRL.",
-        detailedExplanation: "Desde a Lei 13.290/2016, é regra ter o farol baixo aceso em rodovias, mesmo com boa visibilidade. Isso ajuda outros motoristas a verem o carro, diminuindo o risco de acidentes. A luz de condução diurna (DRL) pode ser usada no lugar do farol baixo, já que serve pra deixar o veículo mais visível. Nas cidades, essa regra não vale, a não ser em túneis ou em situações de chuva e neblina.",
+        detailedExplanation: "Desde a Lei 13.290/2016, é regra ter o farol baixo aceso em rodovias, mesmo com boa visibilidade. Isso ajuda outros motoristas a verem o carro, diminuindo o risco de sinistros. A luz de condução diurna (DRL) pode ser usada no lugar do farol baixo, já que serve pra deixar o veículo mais visível. Nas cidades, essa regra não vale, a não ser em túneis ou em situações de chuva e neblina.",
         legalBase: "Art. 250 do CTB",
         incidence: "media",
         difficulty: 2
@@ -1881,7 +1882,7 @@ export const QUESTIONS: Question[] = [
         options: ["Manter as luzes de posição apagadas e ligar o pisca-alerta com o veículo em movimento.", "Ligar o farol alto para tentar melhorar a visibilidade diante do veículo.", "Manter acesos o farol baixo ou a luz de posição, sem usar pisca-alerta em movimento.", "Acionar o pisca-alerta e passar a trafegar pelo acostamento da rodovia."],
         correctIndex: 2,
         explanation: "Correta a alternativa C, pois o art. 40 do CTB exige farol baixo e veda pisca-alerta com veículo em movimento.",
-        detailedExplanation: "O pisca-alerta não deve ser ligado enquanto você dirige, pois pode confundir quem está atrás, fazendo parecer que você está parado. Em neblina densa, é importante ter a visibilidade adequada para evitar acidentes.",
+        detailedExplanation: "O pisca-alerta não deve ser ligado enquanto você dirige, pois pode confundir quem está atrás, fazendo parecer que você está parado. Em neblina densa, é importante ter a visibilidade adequada para evitar sinistros.",
         legalBase: "Art. 40 do CTB",
         commonMistake: "Muita gente acha que pode usar o pisca-alerta na neblina, mas isso tá ERRADO na prova.",
         tip: "Neblina = Farol baixo. Pisca-alerta NUNCA em movimento.",
@@ -2005,7 +2006,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp09",
         category: "primeiros-socorros",
-        statement: "Popular sem formação médica chega primeiro ao acidente e quer ajudar as vítimas sem agravar as lesões. Primeiros socorros no trânsito significam:",
+        statement: "Popular sem formação médica chega primeiro ao sinistro e quer ajudar as vítimas sem agravar as lesões. Primeiros socorros no trânsito significam:",
         options: ["Aplicar técnica médica avançada e administrar medicamentos às vítimas.","Prestar atendimento inicial e temporário até a chegada do socorro profissional.","Transportar a vítima imediatamente ao hospital em veículo particular.","Sinalizar o local e manter distância da vítima até a chegada da autoridade policial."],
         correctIndex: 1,
         explanation: "Correta a alternativa B, pois primeiros socorros são cuidados iniciais e temporários até o socorro profissional.",
@@ -2018,11 +2019,11 @@ export const QUESTIONS: Question[] = [
         id: "qp10",
         category: "direcao-defensiva",
         statement: "Instrutor pergunta ao aluno o que caracteriza um motorista defensivo diante de pista molhada e erro de outros condutores. O conceito correto é:",
-        options: ["Conjunto de técnicas condicionado exclusivamente à manutenção preventiva do veículo, sem atuação do condutor.", "Prática de condução que elimina integralmente o risco de acidente, mesmo diante de erro dos demais usuários.", "Conjunto de técnicas que previne acidentes mesmo com pista adversa e erro alheio.", "Habilidade de antecipar perigos concentrando a atenção apenas na sinalização horizontal e nos limites de velocidade."],
+        options: ["Conjunto de técnicas condicionado exclusivamente à manutenção preventiva do veículo, sem atuação do condutor.", "Prática de condução que elimina integralmente o risco de sinistro, mesmo diante de erro dos demais usuários.", "Conjunto de técnicas que previne sinistros mesmo com pista adversa e erro alheio.", "Habilidade de antecipar perigos concentrando a atenção apenas na sinalização horizontal e nos limites de velocidade."],
         correctIndex: 2,
-        explanation: "Correta a alternativa C, pois direção defensiva é o conjunto de técnicas que previne acidentes mesmo em condição adversa.",
-        commonMistake: "Cuidado com a ideia de 'fazer de tudo' para evitar acidentes, isso não é direção defensiva.",
-        tip: "Situação = Ação: Dirigir seguro = Prevenir acidentes.",
+        explanation: "Correta a alternativa C, pois direção defensiva é o conjunto de técnicas que previne sinistros mesmo em condição adversa.",
+        commonMistake: "Cuidado com a ideia de 'fazer de tudo' para evitar sinistros, isso não é direção defensiva.",
+        tip: "Situação = Ação: Dirigir seguro = Prevenir sinistros.",
         incidence: "alta",
         trap: true,
         difficulty: 3
@@ -2202,7 +2203,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp24",
         category: "mecanica",
-        statement: "Condutor percebe vibração na alavanca do câmbio e dificuldade para engatar as marchas, com ruído áspero. O componente do sistema de transmissão que provavelmente está com defeito é:",
+        statement: "Condutor percebe vibração na alavanca do câmbio e dificuldade para engatar as marchas, com ruído áspero. Qual componente do sistema de transmissão está provavelmente com defeito?",
         options: ["O sistema de embreagem ou os sincronizadores da caixa de marchas.", "O diferencial e as semiarvores de transmissão das rodas.", "O cilindro mestre do sistema de freios hidráulicos.", "O conjunto de amortecedores e molas da suspensão dianteira."],
         correctIndex: 0,
         explanation: "Correta a alternativa A, pois dentes 'arranhando', dificuldade de engate e ruídos na alavanca indicam desgastes no sistema de embreagem ou nos anéis sincronizadores do câmbio.",
@@ -2307,7 +2308,7 @@ export const QUESTIONS: Question[] = [
         options: ["Gravíssima com agravante, por expor o pedestre a risco direto de atropelamento.","Grave, em razão da presença de pedestre sobre a faixa de travessia.","Média, em razão do desrespeito à sinalização luminosa do cruzamento.","Grave com agravante, aplicada somente quando houver colisão com o pedestre."],
         correctIndex: 0,
         explanation: "Avançar o sinal vermelho é infração gravíssima (Art. 208 do CTB); com pedestre sobre a faixa, o risco de atropelamento é direto.",
-        detailedExplanation: "Quando o motorista passa no sinal vermelho, ele comete uma infração GRAVÍSSIMA, que gera 7 pontos e multa. Isso é muito sério, principalmente em cruzamentos, onde pode causar acidentes com pedestres. O Código de Trânsito prioriza a segurança dos pedestres, então essa situação é ainda mais grave.",
+        detailedExplanation: "Quando o motorista passa no sinal vermelho, ele comete uma infração GRAVÍSSIMA, que gera 7 pontos e multa. Isso é muito sério, principalmente em cruzamentos, onde pode causar sinistros com pedestres. O Código de Trânsito prioriza a segurança dos pedestres, então essa situação é ainda mais grave.",
         legalBase: "Art. 208 do CTB",
         commonMistake: "Muita gente pensa que avançar o sinal vermelho é só uma infração grave, mas é gravíssima e tem 7 pontos.",
         tip: "Sinal vermelho = PARE. Cruzamento com pedestre = AÇÃO GRAVÍSSIMA.",
@@ -2370,7 +2371,7 @@ export const QUESTIONS: Question[] = [
         detailedExplanation: "Duas punições vêm por aí: (1) Infração GRAVÍSSIMA — não ajudar a vítima pode te dar multa e suspensão da CNH; (2) Crime de OMISSÃO DE SOCORRO — pode rolar detenção de 1 a 6 meses e multa. O certo é parar, sinalizar, ajudar ou chamar o SAMU e esperar a autoridade.",
         legalBase: "Arts. 304 e 305 do CTB / Art. 135 do Código Penal",
         commonMistake: "Muita gente pensa que só é infração, mas tem pena dupla: administrativa e criminal, mesmo que a vítima não morra.",
-        tip: "Acidente com vítima = pare, socorra, sinalize, aguarde. Fugir é crime.",
+        tip: "Sinistro com vítima = pare, socorra, sinalize, aguarde. Fugir é crime.",
         incidence: "alta",
         trap: true,
         difficulty: 2
@@ -2407,7 +2408,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp38",
         category: "primeiros-socorros",
-        statement: "Em acidente, vítima tem corte profundo no braço com sangramento intenso e não há material hospitalar. Qual a conduta imediata?",
+        statement: "Em sinistro, vítima tem corte profundo no braço com sangramento intenso e não há material hospitalar. Qual a conduta imediata?",
         options: ["Aplicar garrote improvisado logo acima do ferimento para bloquear todo o fluxo de sangue do braço.", "Comprimir o ferimento com pano limpo, com pressão firme e contínua, sem aliviar até chegar o socorro.", "Elevar o braço acima do coração e aguardar o sangramento parar sozinho apenas pela ação da gravidade.", "Lavar o corte com álcool e cobrir com curativo fechado para tentar conter a hemorragia."],
         correctIndex: 1,
         explanation: "Correta B: compressão direta firme e contínua é a primeira medida para conter hemorragia externa.",
@@ -2449,7 +2450,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp41",
         category: "primeiros-socorros",
-        statement: "Vítima de acidente tem convulsão com contrações generalizadas e perda de consciência. Como o socorrista deve agir?",
+        statement: "Vítima de sinistro tem convulsão com contrações generalizadas e perda de consciência. Como o socorrista deve agir?",
         options: ["Colocar a mão ou objeto duro na boca da vítima para evitar que ela morda a língua.", "Segurar com força braços e pernas da vítima para imobilizá-la durante a convulsão.", "Afastar objetos que possam ferir, proteger a cabeça com material macio e aguardar a crise passar sem conter os movimentos.", "Jogar água fria no rosto da vítima para interromper a convulsão imediatamente."],
         correctIndex: 2,
         explanation: "Correta C: proteja a cabeça, afaste objetos e nunca contenha os movimentos nem coloque nada na boca.",
@@ -2523,7 +2524,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "qp46",
         category: "legislacao",
-        statement: "Pela Lei 14.071/2021, o prazo de validade da CNH varia conforme a idade. Quais os prazos corretos por faixa etária?",
+        statement: "O prazo de validade da CNH varia conforme a idade do condutor. Quais são os prazos corretos por faixa etária?",
         options: ["10 anos até 50 anos; 5 anos de 50 a 69 anos; 3 anos a partir de 70 anos.","10 anos até 60 anos; 5 anos de 60 a 69 anos; 3 anos a partir de 70 anos.","5 anos para todas as idades, com renovação a cada dez anos apenas para as categorias C, D e E.","10 anos até 65 anos; 5 anos de 65 a 74 anos; 3 anos a partir de 75 anos."],
         correctIndex: 0,
         explanation: "Correta A: até 50 anos vale 10 anos; 50 a 69 vale 5 anos; 70 ou mais vale 3 anos. Art. 147 do CTB.",
@@ -2686,7 +2687,7 @@ export const QUESTIONS: Question[] = [
         options: ["Manter a velocidade, pois quem já está no trecho afunilado tem preferência.", "Reduzir a velocidade, observar a sinalização e revezar a passagem com os veículos já no trecho.", "Parar no acostamento e aguardar todo o fluxo passar antes de entrar.", "Acelerar levemente para não segurar o fluxo atrás durante o afunilamento."],
         correctIndex: 1,
         explanation: "Correta B: placa A-10 indica estreitamento; reduza e alterne a passagem no sistema zíper.",
-        detailedExplanation: "Quando a pista afunila, a placa A-10 aparece pra avisar que as faixas vão diminuir. O que você deve fazer é reduzir a velocidade, ficar atento e cooperar na passagem, deixando os carros entrarem de forma alternada, tipo um zíper. Acelerar, parar no meio ou buzinar só atrapalha e pode causar acidentes.",
+        detailedExplanation: "Quando a pista afunila, a placa A-10 aparece pra avisar que as faixas vão diminuir. O que você deve fazer é reduzir a velocidade, ficar atento e cooperar na passagem, deixando os carros entrarem de forma alternada, tipo um zíper. Acelerar, parar no meio ou buzinar só atrapalha e pode causar sinistros.",
         legalBase: "Manual Brasileiro de Sinalização de Trânsito — Volume I (placa A-10) e princípios da direção defensiva",
         commonMistake: "Muita gente confunde a placa A-10 com 'pare' ou 'preferência', mas ela é só um aviso de que a pista vai estreitar.",
         tip: "A-10 = Estreitamento = Reduz e ajuda no zíper.",
@@ -2765,7 +2766,7 @@ export const QUESTIONS: Question[] = [
         explanation: "Correta B: em área escolar, reduza abaixo do limite, com atenção total e pronto para parar. Arts. 28 e 29 do CTB.",
         detailedExplanation: "Quando tem aglomeração de crianças, a segurança é mais importante que a velocidade que tá na placa. O motorista deve dirigir devagar, prestar atenção e estar preparado pra parar, porque acelerar ou buzinar pode colocar os mais vulneráveis em risco. Ignorar a situação real e manter a velocidade da placa não é seguro, e o pisca-alerta não pode ser usado com o carro em movimento.",
         legalBase: "Arts. 28, 29 e 40 do CTB e princípios da direção defensiva",
-        commonMistake: "O erro comum é achar que pode manter a velocidade da placa, mesmo com risco de acidente.",
+        commonMistake: "O erro comum é achar que pode manter a velocidade da placa, mesmo com risco de sinistro.",
         tip: "Criança na rua = REDUZIR a velocidade + atenção redobrada + pronto pra parar.",
         incidence: "altissima",
         trap: true,
@@ -2779,9 +2780,9 @@ export const QUESTIONS: Question[] = [
         options: ["Parar no acostamento, ligar o pisca-alerta e dar marcha ré até alcançar a alça perdida.", "Parar no acostamento, descer do carro e buscar atalho ou entrada clandestina por perto.", "Seguir na rodovia até a próxima saída ou retorno sinalizado e liberado.", "Seguir devagar pela direita com seta ligada, aguardando brecha no canteiro central."],
         correctIndex: 2,
         explanation: "Correta C: perdeu a saída, siga até o próximo retorno sinalizado; ré em rodovia é infração gravíssima. Art. 206 do CTB.",
-        detailedExplanation: "Em rodovias rápidas, tentar voltar pode ser muito perigoso e causar acidentes. A melhor opção é seguir até o próximo retorno oficial, mesmo que isso signifique rodar mais alguns quilômetros. Fazer marcha à ré ou parar no acostamento sem emergência é uma infração gravíssima e coloca todos em risco.",
+        detailedExplanation: "Em rodovias rápidas, tentar voltar pode ser muito perigoso e causar sinistros. A melhor opção é seguir até o próximo retorno oficial, mesmo que isso signifique rodar mais alguns quilômetros. Fazer marcha à ré ou parar no acostamento sem emergência é uma infração gravíssima e coloca todos em risco.",
         legalBase: "Arts. 206, V e 219 do CTB e princípios da direção defensiva",
-        commonMistake: "Muita gente acha que dar uma ré no acostamento resolve, mas isso é gravíssimo e pode causar acidentes.",
+        commonMistake: "Muita gente acha que dar uma ré no acostamento resolve, mas isso é gravíssimo e pode causar sinistros.",
         tip: "Perdeu a saída = SEGUE EM FRENTE até o próximo retorno. Ré em rodovia é gravíssima, e parar no acostamento só em emergência real.",
         incidence: "altissima",
         trap: true,
@@ -2794,7 +2795,7 @@ export const QUESTIONS: Question[] = [
         options: ["A luz interna ajuda os outros a ver o carro e funciona como item extra de segurança.","A luz de teto é para carro parado; em movimento, reflete no para-brisa e prejudica a visão noturna.","A luz interna é recomendada à noite para que os ocupantes consultem mapa e documentos durante o trajeto.","A luz de teto é recomendada em via sem poste para indicar a presença de pessoas."],
         correctIndex: 1,
         explanation: "Correta B: luz interna em movimento reflete no para-brisa e compromete a visão; não é sinalização. Arts. 40 e 249 do CTB.",
-        detailedExplanation: "A luz do teto é só pra ajudar os passageiros e não serve pra sinalizar o carro. Quando tá escuro, a luz acesa dentro do carro reflete no vidro e dificulta a visão do motorista, aumentando as chances de acidente. A alternativa A engana porque mistura a luz interna com as luzes que realmente ajudam a ser visto na estrada.",
+        detailedExplanation: "A luz do teto é só pra ajudar os passageiros e não serve pra sinalizar o carro. Quando tá escuro, a luz acesa dentro do carro reflete no vidro e dificulta a visão do motorista, aumentando as chances de sinistro. A alternativa A engana porque mistura a luz interna com as luzes que realmente ajudam a ser visto na estrada.",
         legalBase: "Sistema de iluminação veicular (arts. 40 e 249 do CTB)",
         commonMistake: "A galera confunde a luz interna com as luzes que fazem o carro ser visto, achando que mais luz dentro ajuda na visibilidade externa.",
         tip: "Luz do teto à noite = conforto do passageiro, NÃO sinalização.",
@@ -2839,7 +2840,7 @@ export const QUESTIONS: Question[] = [
         options: ["Ligar o pisca-alerta e colocar o triângulo a pelo menos 30 m atrás, perpendicular à via e bem visível.", "Ligar o pisca-alerta e colocar o triângulo a exatos 30 m à frente, paralelo ao eixo da via.", "Colocar o triângulo a 30 m no centro da faixa, sem ligar o pisca-alerta se o carro estiver visível.", "Colocar o triângulo a menos de 30 m atravessado na via, pois o mínimo só vale com vítima."],
         correctIndex: 0,
         explanation: "Correta A: ligue o pisca-alerta e posicione o triângulo a pelo menos 30 m atrás, visível e perpendicular. Art. 176 do CTB.",
-        detailedExplanation: "Depois de um acidente, se o motorista puder fazer algo pra evitar mais problemas, ele deve sinalizar bem o local. Isso inclui ligar as luzes de alerta e colocar o triângulo a 30 metros da traseira do carro, de forma que fique visível e na posição certa.",
+        detailedExplanation: "Depois de um sinistro, se o motorista puder fazer algo pra evitar mais problemas, ele deve sinalizar bem o local. Isso inclui ligar as luzes de alerta e colocar o triângulo a 30 metros da traseira do carro, de forma que fique visível e na posição certa.",
         legalBase: "CTB, art. 176, V; Resolução CONTRAN nº 36/1998",
         commonMistake: "Colocar o triângulo perto demais do veículo ou esquecer de ligar o pisca-alerta.",
         tip: "Sinistro na pista = Pisca-alerta ligado + Triângulo a no mínimo 30m atrás.",
@@ -3328,7 +3329,7 @@ export const QUESTIONS: Question[] = [
         options: ["Órtese lombar com alças de tração, usada para imobilizar as costas sobre a maca.","Colar cervical ortopédico para imobilizar o pescoço.","Molinha improvisada com tecido resistente que mantém o pescoço flexionado.","Bandagem triangular ajustada sob o queixo e sobre a cabeça, sem conter a nuca."],
         correctIndex: 1,
         explanation: "Correta B: colar cervical imobiliza o pescoço e protege a medula em suspeita de trauma cervical.",
-        detailedExplanation: "Colocar o colar cervical é super importante em acidentes para evitar danos maiores na coluna. Isso ajuda a manter a vítima segura até a chegada de ajuda.",
+        detailedExplanation: "Colocar o colar cervical é super importante em sinistros para evitar danos maiores na coluna. Isso ajuda a manter a vítima segura até a chegada de ajuda.",
         legalBase: "Manual de Primeiros Socorros no Trânsito (ABNT e PHTLS)",
         commonMistake: "Muita gente confunde colar cervical com torniquete, que serve pra parar sangramentos em braços e pernas.",
         tip: "Suspeita de trauma no Pescoço/Coluna = Colar Cervical e Não movimentar a vítima.",
@@ -3701,7 +3702,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_mg_advertencia_escrito",
         category: "legislacao",
-        statement: "Possui caráter educativo e deve ser aplicada sempre que a infração for de natureza leve ou média não tendo o condutor cometido nenhuma outra infração nos últimos 12 meses:",
+        statement: "Qual penalidade tem caráter educativo e é aplicada quando a infração é leve ou média e o condutor não cometeu outra infração nos últimos 12 meses?",
         options: ["Multa.", "Suspensão do direito de dirigir.", "Advertência por escrito.", "Cassação da CNH."],
         correctIndex: 2,
         explanation: "Correta a terceira: advertência por escrito é educativa e cabe em leve ou média sem outra infração nos 12 meses (art. 267).",
@@ -3715,9 +3716,9 @@ export const QUESTIONS: Question[] = [
         id: "detran_mg_prevenir_socorro",
         category: "primeiros-socorros",
         statement: "Prevenir-se ao prestar socorro a alguém significa:",
-        options: ["Somente socorrer se estiver acompanhado de alguém.", "Evitar riscos pessoais e acidentes secundários.", "Evitar ser chamado como testemunha.", "Socorrer somente durante o dia."],
+        options: ["Somente socorrer se estiver acompanhado de alguém.", "Evitar riscos pessoais e sinistros secundários.", "Evitar ser chamado como testemunha.", "Socorrer somente durante o dia."],
         correctIndex: 1,
-        explanation: "Correta a segunda: prevenir-se é não se expor a risco nem gerar novo acidente.",
+        explanation: "Correta a segunda: prevenir-se é não se expor a risco nem gerar novo sinistro.",
         legalBase: "Manual de Primeiros Socorros no Trânsito",
         incidence: "alta",
         trap: false,
@@ -3743,7 +3744,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_mg_validade_cnh",
         category: "legislacao",
-        statement: "Quando da renovação da CNH o condutor de veículo automotor deverá ser submetido ao exame de aptidão física e mental, nos seguintes períodos:",
+        statement: "Na renovação da CNH, a cada quanto tempo o condutor deve se submeter ao exame de aptidão física e mental?",
         options: ["A cada 5 anos, com idade inferior a 50 anos.", "A cada 3 anos a partir de 40 anos de idade.", "A cada 5 anos com idade igual ou superior a 50 anos e inferior a 70 anos.", "A cada 5 anos até completar 70 anos de idade."],
         correctIndex: 2,
         explanation: "Correta a terceira (Lei 14.071/2020): 10 anos se menor de 50; 5 anos dos 50 aos 70; 3 anos a partir de 70. A opção de 5 anos entre 50 e 70 é a única alinhada à lei vigente.",
@@ -3783,7 +3784,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "prova_geral_02",
         category: "direcao-defensiva",
-        statement: "Sobre acidentes de trânsito podemos afirmar que a maioria deles está associada a:",
+        statement: "Sobre sinistros de trânsito podemos afirmar que a maioria deles está associada a:",
         options: ["Falhas mecânicas.", "Deficiência da via.", "Falta de sinalização.", "Falhas humanas."],
         correctIndex: 3,
         explanation: "Correta a última: a maioria dos sinistros está ligada a falha humana (imprudência, negligência, imperícia).",
@@ -3798,7 +3799,7 @@ export const QUESTIONS: Question[] = [
         statement: "Na impossibilidade da presença do resgate, o socorrista deve observar prioritariamente:",
         options: ["Lesões contundentes.", "Queimaduras de primeiro grau.", "Hemorragias.", "Sinalizar o local."],
         correctIndex: 3,
-        explanation: "Correta a última: antes de atender a vítima, sinalizar o local (proteger) para evitar novo acidente.",
+        explanation: "Correta a última: antes de atender a vítima, sinalizar o local (proteger) para evitar novo sinistro.",
         legalBase: "Manual de Primeiros Socorros no Trânsito",
         incidence: "alta",
         trap: true,
@@ -3834,9 +3835,9 @@ export const QUESTIONS: Question[] = [
         id: "prova_geral_06",
         category: "mecanica",
         statement: "A função básica do sistema de suspensão nos veículos automotores é:",
-        options: ["Absorver os balanços do veículo, somente quando está fazendo uma curva.", "Melhorar o controle do carro em pistas escorregadias.", "Absorver os choques provocados pelo piso irregular com o veículo em movimento.", "Absorver impactos no momento de um acidente."],
+        options: ["Absorver os balanços do veículo, somente quando está fazendo uma curva.", "Melhorar o controle do carro em pistas escorregadias.", "Absorver os choques provocados pelo piso irregular com o veículo em movimento.", "Absorver impactos no momento de um sinistro."],
         correctIndex: 2,
-        explanation: "Correta a terceira: a suspensão absorve as irregularidades do piso. Impacto de acidente é função de zona de deformação/airbag, não da suspensão.",
+        explanation: "Correta a terceira: a suspensão absorve as irregularidades do piso. Impacto de sinistro é função de zona de deformação/airbag, não da suspensão.",
         legalBase: "Manual de Mecânica Básica Veicular",
         incidence: "alta",
         difficulty: 1,
@@ -4108,7 +4109,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "prova_geral_27",
         category: "meio-ambiente",
-        statement: "Para melhorar o convívio e a qualidade de vida, existem alguns princípios que devem ser a base das nossas relações no trânsito. Indique abaixo qual princípio pode melhorar a nossa convivência no trânsito.",
+        statement: "Qual princípio do trânsito ajuda a melhorar a convivência e a qualidade de vida de todos?",
         options: ["Corresponsabilidade pela vida social: valorizar comportamentos necessários à segurança no trânsito e à efetivação do direito de mobilidade a todos os cidadãos.", "Dignidade da pessoa humana: princípio que não valoriza os direitos humanos e as atitudes fundamentais.", "Igualdade de direitos: visa garantir a igualdade e não se preocupa com a solidariedade.", "Participação: mobilização das pessoas onde os problemas de trânsito não são de fundamental importância."],
         correctIndex: 0,
         explanation: "Correta a primeira: as outras distorcem os princípios (dignidade, igualdade e participação).",
@@ -4120,7 +4121,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "prova_geral_28",
         category: "primeiros-socorros",
-        statement: "Ao se deparar com um acidente num local onde o socorro seja prestado somente pelo Corpo de Bombeiros, você deverá ligar para o número:",
+        statement: "Ao se deparar com um sinistro num local onde o socorro seja prestado somente pelo Corpo de Bombeiros, você deverá ligar para o número:",
         options: ["191.", "193.", "190.", "181."],
         correctIndex: 1,
         explanation: "Correta a segunda: 193 = Bombeiros. 190 PM; 191 PRF; 181 disque-denúncia.",
@@ -4158,13 +4159,13 @@ export const QUESTIONS: Question[] = [
     {
         id: "nova_primeiros_socorros_seguranca_local_alta_29",
         category: "primeiros-socorros",
-        statement: "Em acidente com vítimas presas às ferragens e combustível derramado na pista, qual é a primeira providência do socorrista antes de tocar nas vítimas?",
+        statement: "Em sinistro com vítimas presas às ferragens e combustível derramado na pista, qual é a primeira providência do socorrista antes de tocar nas vítimas?",
         options: ["Garantir a própria segurança e sinalizar o local para evitar novos sinistros de trânsito.", "Iniciar o socorro somente após a chegada da autoridade policial ao local do sinistro.", "Priorizar o atendimento imediato às vítimas sem sinalizar previamente o local do fato.", "Retirar as vítimas imediatamente do veículo antes de sinalizar a pista de rolamento."],
         correctIndex: 0,
         explanation: "Correta: garantir a segurança e sinalizar o local antes do atendimento, conforme o manual de primeiros socorros.",
         detailedExplanation: "Nos Primeiros Socorros, a regra é clara: se o socorrista se machuca, não ajuda ninguém. Então, é preciso sinalizar bem o local e cuidar da segurança pra evitar explosões ou atropelamentos depois.",
         legalBase: "Manual de Primeiros Socorros no Trânsito (ABNT)",
-        commonMistake: "Muita gente tenta ajudar as vítimas sem sinalizar, o que pode causar mais acidentes.",
+        commonMistake: "Muita gente tenta ajudar as vítimas sem sinalizar, o que pode causar mais sinistros.",
         tip: "1º Sinalizar o local = 2º Chamar resgate = 3º Atender as vítimas.",
         incidence: "alta",
         trap: false,
@@ -4267,7 +4268,7 @@ export const QUESTIONS: Question[] = [
         options: ["Área com desmoronamento à frente, exigindo reduzir a velocidade e manter atenção ao terreno.","Pista irregular à frente, exigindo reduzir a velocidade e atravessar o trecho com cautela.","Pista escorregadia à frente, com redução de aderência, exigindo menor velocidade.","Projeção de cascalho à frente, com alerta para pedras soltas sobre a pista."],
         correctIndex: 2,
         explanation: "Correta: A-28 adverte pista escorregadia à frente, conforme Anexo II do CTB.",
-        detailedExplanation: "Essa placa (Pista Escorregadia) mostra que, mais à frente, a pista pode estar escorregadia por causa de água, óleo ou areia. Por isso, é bom diminuir a velocidade pra evitar acidentes.",
+        detailedExplanation: "Essa placa (Pista Escorregadia) mostra que, mais à frente, a pista pode estar escorregadia por causa de água, óleo ou areia. Por isso, é bom diminuir a velocidade pra evitar sinistros.",
         legalBase: "Anexo II do CTB - Sinalização Vertical de Advertência",
         commonMistake: "Muita gente confunde 'Pista Escorregadia' (A-28) com 'Pista Alagada' ou 'Projeção de Cascalho' (A-29).",
         tip: "Pista escorregadia = Reduzir a velocidade.",
@@ -4283,7 +4284,7 @@ export const QUESTIONS: Question[] = [
         options: ["Manter a velocidade e a posição na faixa, pois a manobra é breve e não exige redução quando há sinalização ativa.","Manter a velocidade e transpor sem observar os lados, pois quem segue em frente tem sempre a preferência na interseção.","Acelerar para transpor rápido e não reter o fluxo dos veículos que vêm atrás.","Reduzir a velocidade, observar ambos os lados e respeitar a preferência indicada."],
         correctIndex: 3,
         explanation: "Correta: reduzir, observar os lados e respeitar a preferência, conforme art. 44 do CTB.",
-        detailedExplanation: "Chegar devagar no cruzamento é crucial pra evitar acidentes. Prestar atenção nos pedestres e em outros veículos que têm prioridade é fundamental pra passar com segurança.",
+        detailedExplanation: "Chegar devagar no cruzamento é crucial pra evitar sinistros. Prestar atenção nos pedestres e em outros veículos que têm prioridade é fundamental pra passar com segurança.",
         legalBase: "Art. 44 do CTB",
         commonMistake: "Muita gente acha que pode buzinar ou usar os faróis pra ter prioridade, mas isso não resolve.",
         tip: "Cruzamento à vista = Reduzir a velocidade + Olhar pros lados + Respeitar a preferência.",
@@ -4294,7 +4295,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "nova_transito_condicoes_seguras_direito_08",
         category: "legislacao",
-        statement: "Segundo o texto expresso do art. 1º do CTB, como o trânsito em condições seguras é definido para os usuários das vias terrestres?",
+        statement: "Como o trânsito em condições seguras é definido para os usuários das vias terrestres?",
         options: ["Dever exclusivo dos usuários das vias, sem obrigação atribuída aos órgãos do SNT.","Direito restrito a pedestres e ciclistas quando circulam em passeios e ciclovias.","Responsabilidade facultativa atribuída aos condutores de transporte coletivo de passageiros.","Direito de todos e dever dos órgãos e entidades do Sistema Nacional de Trânsito."],
         correctIndex: 3,
         explanation: "Correta: trânsito seguro é direito de todos e dever do Sistema Nacional de Trânsito, conforme art. 1º do CTB.",
@@ -4530,22 +4531,6 @@ export const QUESTIONS: Question[] = [
         difficulty: 1
     },
     {
-        id: "inf_n2_002",
-        category: "infracoes",
-        statement: "Condutor estaciona em vaga de pessoa com deficiência em shopping sem exibir credencial. Qual é a natureza dessa infração, segundo o CTB?",
-        options: ["Infração média, com 4 pontos e aplicação apenas de multa administrativa.", "Infração leve, com 3 pontos e advertência por escrito ao condutor.", "Infração grave, com 5 pontos e retenção da CNH do condutor abordado.", "Infração gravíssima, com 7 pontos na CNH e remoção do veículo do local."],
-        correctIndex: 3,
-        explanation: "Correta: vaga de pessoa com deficiência sem credencial é gravíssima com remoção, mesmo em área privada, conforme art. 181, XX, do CTB.",
-        detailedExplanation: "As vagas para Pessoas com Deficiência (PCD) precisam de credencial, e isso vale também para estacionamentos privados de uso coletivo. Se não tiver a credencial, a multa é gravíssima, com 7 pontos e o carro pode ser guinchado.",
-        legalBase: "Art. 181, XX do CTB",
-        commonMistake: "Muita gente pensa que em estacionamento privado não tem fiscalização ou que a infração é média.",
-        tip: "Vaga PCD = Ação gravíssima; Vaga idoso = Ação gravíssima (Art. 181, XX).",
-        memoryHook: "Vaga PCD = Ação gravíssima; Vaga idoso = Ação gravíssima.",
-        incidence: "alta",
-        trap: true,
-        difficulty: 2
-    },
-    {
         id: "inf_n1_003",
         category: "infracoes",
         statement: "Em rodovia com limite de 110 km/h, o radar registra veículo a 170 km/h. Como se classifica transitar acima de 50% do limite, segundo o CTB?",
@@ -4562,25 +4547,9 @@ export const QUESTIONS: Question[] = [
         difficulty: 1
     },
     {
-        id: "inf_n2_003",
-        category: "infracoes",
-        statement: "Radar registra 170 km/h em rodovia com limite de 110 km/h durante fiscalização. Qual é o enquadramento dessa conduta, segundo o CTB?",
-        options: ["Infração grave, com multa simples e 5 pontos no prontuário do condutor.","Infração média, com multa e anotação de pontos no prontuário do condutor.","Infração leve, com advertência por escrito e sem pontuação no prontuário.","Infração gravíssima, com multa triplicada e suspensão do direito de dirigir."],
-        correctIndex: 3,
-        explanation: "Correta: em rodovia, 170 km/h em limite de 110 km/h supera 20% do limite, infração gravíssima com multa triplicada e suspensão, conforme art. 218, I, b, do CTB.",
-        detailedExplanation: "Quando você ultrapassa 50% do limite de velocidade, isso é considerado uma infração gravíssima. Além da multa ser multiplicada por 3, o motorista ainda pode ter a carteira suspensa.",
-        legalBase: "Art. 218, I, b do CTB",
-        commonMistake: "Muita gente esquece de calcular e acha que é só uma infração grave.",
-        tip: ">50% = gravíssima x3.",
-        memoryHook: ">50% = gravíssima x3.",
-        incidence: "alta",
-        trap: true,
-        difficulty: 2
-    },
-    {
         id: "dd_n1_001",
         category: "direcao-defensiva",
-        statement: "Primeiro no local de acidente com vítimas, o motorista deve aplicar o protocolo PAS. O que cada letra dessa sigla significa, em ordem?",
+        statement: "Primeiro no local de sinistro com vítimas, o motorista deve aplicar o protocolo PAS. O que cada letra dessa sigla significa, em ordem?",
         options: ["Parar o veículo, Avisar o socorro e Socorrer as vítimas.","Prevenir novos riscos, Atender as vítimas e Salvar os ocupantes.","Prestar os primeiros cuidados, Acionar o freio e Sinalizar a pista.","Proteger o local, Avisar o socorro e Socorrer as vítimas com cautela."],
         correctIndex: 3,
         explanation: "Correta: PAS significa Proteger, Avisar e Socorrer, nessa ordem, conforme manual de primeiros socorros.",
@@ -4612,15 +4581,15 @@ export const QUESTIONS: Question[] = [
     {
         id: "dd_n2_001",
         category: "direcao-defensiva",
-        statement: "Diante de acidente com vítimas em rodovia movimentada, qual é a sequência correta do protocolo PAS dos primeiros socorros?",
+        statement: "Diante de sinistro com vítimas em rodovia movimentada, qual é a sequência correta do protocolo PAS dos primeiros socorros?",
         options: ["Socorrer as vítimas de imediato, depois avisar o socorro e por fim proteger a via.", "Parar sobre a pista, retirar pertences do veículo e sinalizar após remover as vítimas.", "Avisar os familiares, proteger o veículo e socorrer mesmo sem treinamento prévio.", "Proteger o local com sinalização, avisar o socorro pelo 192 e socorrer com cautela."],
         correctIndex: 0,
         explanation: "Correta: a ordem do PAS é Proteger, Avisar e Socorrer, conforme manual de primeiros socorros.",
-        detailedExplanation: "Primeiro, você deve proteger o local do acidente com um triângulo e pisca-alerta. Depois, avisa o socorro pelo telefone (SAMU 192, Bombeiros 193, Polícia 190) e só então pode ajudar as vítimas com cuidado.",
+        detailedExplanation: "Primeiro, você deve proteger o local do sinistro com um triângulo e pisca-alerta. Depois, avisa o socorro pelo telefone (SAMU 192, Bombeiros 193, Polícia 190) e só então pode ajudar as vítimas com cuidado.",
         legalBase: "Art. 180 do CTB",
         commonMistake: "Muita gente esquece de sinalizar antes de chamar o socorro.",
-        tip: "Acidente = Proteger, Avisar, Socorrer.",
-        memoryHook: "Acidente = Proteger, Avisar, Socorrer.",
+        tip: "Sinistro = Proteger, Avisar, Socorrer.",
+        memoryHook: "Sinistro = Proteger, Avisar, Socorrer.",
         incidence: "alta",
         trap: true,
         difficulty: 2
@@ -4644,7 +4613,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "ps_n1_001",
         category: "primeiros-socorros",
-        statement: "Em acidente com feridos graves em via urbana, qual é o número oficial do SAMU para solicitar atendimento médico de urgência no Brasil?",
+        statement: "Em sinistro com feridos graves em via urbana, qual é o número oficial do SAMU para solicitar atendimento médico de urgência no Brasil?",
         options: ["193, número do Corpo de Bombeiros Militar para incêndio e resgate.", "190, número da Polícia Militar para policiamento e emergências policiais.", "192, número do Serviço de Atendimento Móvel de Urgência para socorro médico.", "191, número da Polícia Rodoviária Federal para rodovias federais."],
         correctIndex: 2,
         explanation: "Correta: 192 é o número do SAMU para urgências médicas, conforme diretrizes de urgência.",
@@ -4660,15 +4629,15 @@ export const QUESTIONS: Question[] = [
     {
         id: "ps_n2_001",
         category: "primeiros-socorros",
-        statement: "Em acidente com vítimas presas nas ferragens e necessidade de socorro médico urgente, qual número e serviço devem ser acionados de imediato?",
+        statement: "Em sinistro com vítimas presas nas ferragens e necessidade de socorro médico urgente, qual número e serviço devem ser acionados de imediato?",
         options: ["193, Corpo de Bombeiros Militar, para resgate e combate a incêndio no local.", "190, Polícia Militar, para policiamento ostensivo e registro da ocorrência.", "199, Defesa Civil, para desabamentos e emergências de proteção civil.", "192, SAMU, Serviço de Atendimento Móvel de Urgência para socorro médico."],
         correctIndex: 3,
         explanation: "Correta: 192 aciona o SAMU para urgência médica em sinistros, conforme diretrizes de urgência.",
-        detailedExplanation: "Quando tem acidente e alguém tá preso nas ferragens, você liga pro SAMU no 192 pra pedir ajuda médica. Os Bombeiros (193) ajudam em incêndios e a Polícia (190) cuida de brigas, enquanto a PRF (191) é pra rodovias federais.",
+        detailedExplanation: "Quando tem sinistro e alguém tá preso nas ferragens, você liga pro SAMU no 192 pra pedir ajuda médica. Os Bombeiros (193) ajudam em incêndios e a Polícia (190) cuida de brigas, enquanto a PRF (191) é pra rodovias federais.",
         legalBase: "Art. 134 do CTB",
         commonMistake: "Muita gente confunde e acha que é o Bombeiro que cuida de tudo.",
-        tip: "Acidente = Liga pro SAMU 192.",
-        memoryHook: "Acidente = Liga pro SAMU 192.",
+        tip: "Sinistro = Liga pro SAMU 192.",
+        memoryHook: "Sinistro = Liga pro SAMU 192.",
         incidence: "alta",
         trap: true,
         difficulty: 2
@@ -4696,7 +4665,7 @@ export const QUESTIONS: Question[] = [
         options: ["Infração leve, punida apenas com advertência escrita, sem pontos na CNH.","Infração gravíssima, com multa multiplicada e suspensão da CNH do condutor.","Infração grave, com multa e cassação da permissão para dirigir do condutor.","Infração média, com multa e 4 pontos, de responsabilidade do condutor do veículo."],
         correctIndex: 3,
         explanation: "Correta: atirar objeto pela janela é infração média, conforme art. 172 do CTB.",
-        detailedExplanation: "Quando você joga ou deixa coisas na rua, isso é considerado uma infração média, que dá 4 pontos e multa. Além disso, pode ser crime ambiental e causar acidentes.",
+        detailedExplanation: "Quando você joga ou deixa coisas na rua, isso é considerado uma infração média, que dá 4 pontos e multa. Além disso, pode ser crime ambiental e causar sinistros.",
         legalBase: "Art. 172 do CTB",
         commonMistake: "Muita gente pensa que isso é infração leve.",
         tip: "Lixo pela janela = média.",
@@ -4969,7 +4938,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_ilum_001_alta",
         category: "mecanica",
-        statement: "Durante a circulação noturna, o condutor depende de um conjunto de equipamentos para garantir a visibilidade da pista de rolamento e sinalizar suas manobras aos demais condutores. Esse conjunto corresponde ao sistema:",
+        statement: "À noite, o condutor depende de um conjunto de equipamentos para garantir a visibilidade da pista e sinalizar suas manobras. Esse conjunto corresponde a qual sistema do veículo?",
         options: ["Sistema de Transmissão e Rodagem do veículo.", "Sistema de Iluminação e Sinalização do veículo.", "Sistema de Suspensão e Arrefecimento do motor.", "Sistema Elétrico de Partida e Ignição do motor."],
         correctIndex: 1,
         explanation: "O sistema de iluminação e sinalização ilumina a via e avisa sobre manobras aos outros motoristas.",
@@ -4985,7 +4954,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_ilum_002_alta",
         category: "direcao-defensiva",
-        statement: "Ao conduzir à noite em via urbana dotada de iluminação pública, o condutor percebe que a luz interna de teto do veículo automotor permanece acesa durante a marcha. Sob a ótica da Direção Defensiva, o risco dessa prática é:",
+        statement: "Dirigindo à noite em via urbana iluminada, o motorista mantém a luz interna de teto acesa durante a marcha. Pela Direção Defensiva, o risco dessa prática é:",
         options: ["Aumenta o consumo de combustível por sobrecarga contínua no alternador.","Gera reflexos no para-brisa e reduz a adaptação da visão ao escuro externo.","Provoca ofuscamento nos demais condutores, como ocorre com o farol alto em via urbana iluminada.","Cumpre a função da luz de posição exigida à noite em rodovias sem iluminação pública."],
         correctIndex: 1,
         explanation: "Luz de teto acesa à noite faz o vidro virar um espelho e impede você de ver a pista no escuro.",
@@ -5001,7 +4970,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_ilum_003_alta",
         category: "legislacao",
-        statement: "Durante a condução noturna em via não iluminada, ao avistar veículo em sentido oposto ou trafegando logo à frente no mesmo sentido, a fim de não ofuscar os demais usuários, o condutor deve, pelas regras do CTB, utilizar:",
+        statement: "Em via não iluminada à noite, ao avistar veículo em sentido oposto ou à frente no mesmo sentido, qual luz o condutor deve usar para não ofuscar os demais?",
         options: ["Luz alta contínua, fazendo apenas o piscar momentâneo ao aproximar a menos de 50m.", "Luz baixa, devendo alternar da luz alta para a baixa para não ofuscar os demais condutores.", "Luzes de posição (farolete) associadas aos faróis de neblina para manter a visão.", "Pisca-alerta ligado continuamente junto com o farol baixo até que conclua o cruzamento."],
         correctIndex: 1,
         explanation: "Pista escura pede farol alto, mas se cruzar ou seguir outro carro, mude para o farol baixo na hora.",
@@ -5017,7 +4986,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_ilum_004_alta",
         category: "legislacao",
-        statement: "Segundo o CTB e a regulamentação vigente, o condutor de veículo que não dispõe do sistema de luz de condução diurna (DRL) deve manter aceso, durante o período diurno, em rodovia de pista simples fora do perímetro urbano:",
+        statement: "Em rodovia de pista simples fora do perímetro urbano, durante o dia, o veículo sem luz de condução diurna (DRL) deve manter aceso:",
         options: ["Apenas as luzes de posição (faroletes) dianteiras.", "O farol baixo (ou a luz de condução diurna - DRL).", "O farol alto em ritmo de intermitência.", "As luzes de advertência do pisca-alerta."],
         correctIndex: 1,
         explanation: "Na rodovia de pista simples de dia, é obrigatório acender o farol baixo ou ter o DRL nativo.",
@@ -5033,7 +5002,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_ilum_005_alta",
         category: "legislacao",
-        statement: "As luzes indicadoras de direção (setas) do veículo integram a sinalização luminosa prevista no CTB e na sinalização do CONTRAN. Para qual finalidade específica o condutor deve acioná-las durante a circulação?",
+        statement: "Para que finalidade o condutor deve acionar as luzes indicadoras de direção (setas) durante a circulação?",
         options: ["Sinalizar a intenção de realizar conversão, mudança de faixa ou ultrapassagem.", "Garantir a preferência de passagem ao cruzar interseções não sinalizadas.", "Alertar os veículos seguintes que o trânsito adiante está parado em congestionamento.", "Substituir o farol baixo do veículo durante a circulação em túneis iluminados."],
         correctIndex: 0,
         explanation: "A seta serve para avisar antes de virar, mudar de faixa ou realizar ultrapassagens.",
@@ -5049,7 +5018,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_ilum_006_alta",
         category: "infracoes",
-        statement: "O condutor pretende converter à esquerda em interseção e não aciona o pisca-pisca (seta) nem faz sinal regulamentar de braço com antecedência. Pelo CTB, deixar de indicar a conversão ou a mudança de faixa constitui infração:",
+        statement: "Condutor pretende converter à esquerda e não aciona a seta nem faz sinal de braço. Deixar de indicar a conversão ou a mudança de faixa é infração de natureza:",
         options: ["Infração Leve, sujeita à penalidade de advertência por escrito do órgão autuador.", "Infração Média, sujeita à penalidade de multa.", "Infração Grave, sujeita a multa e retenção do veículo para regularização.", "Infração Gravíssima, sujeita a recolhimento imediato da CNH."],
         correctIndex: 1,
         explanation: "Esquecer de dar a seta antes de virar ou trocar de faixa é infração de natureza MÉDIA (4 pontos).",
@@ -5065,7 +5034,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_ilum_007_alta",
         category: "legislacao",
-        statement: "Para executar uma ultrapassagem completa e segura em rodovia de pista simples com duplo sentido de circulação, o condutor deve acionar as luzes indicadoras de direção (setas) durante as etapas da manobra da seguinte forma:",
+        statement: "Numa ultrapassagem em rodovia de pista simples com duplo sentido, como o condutor deve usar as setas durante a manobra?",
         options: ["Para a esquerda durante todo o percurso, até concluir integralmente a ultrapassagem.", "Para a esquerda ao transpor a faixa de origem e para a direita antes de retornar à faixa original.", "Em conjunto com o pisca-alerta enquanto permanecer na faixa da contramão de direção.", "Apenas piscando o farol alto, dispensando as setas nas vias rurais."],
         correctIndex: 1,
         explanation: "Ultrapassagem exige duas setas: para a esquerda na saída e para a direita ao voltar para a sua pista.",
@@ -5081,7 +5050,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_ilum_008_alta",
         category: "mecanica",
-        statement: "Ao acionar a seta para a esquerda, o condutor percebe que a luz indicadora no painel pisca em ritmo muito mais acelerado que o habitual, sem qualquer alteração de comando na alavanca. Esse sintoma indica:",
+        statement: "Ao acionar a seta à esquerda, a luz indicadora do painel pisca muito mais rápido que o habitual, sem mudança de comando na alavanca. Esse sintoma indica:",
         options: ["Sobrecarga no alternador devido ao uso contínuo do sistema de ar-condicionado.","Que uma das lâmpadas de seta do lado esquerdo está queimada ou com mau contato.","Que a bateria está com carga baixa, exigindo desligar os acessórios do veículo.","Falha na alavanca de comando, exigindo parada imediata para revisão elétrica."],
         correctIndex: 1,
         explanation: "Seta piscando rápido no painel é sinal de que uma lâmpada daquele lado queimou lá fora.",
@@ -5097,7 +5066,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_001",
         category: "legislacao",
-        statement: "Você conduz um veículo automotor em uma via urbana e observa no bordo direito da pista de rolamento uma placa octogonal de fundo vermelho com a inscrição PARE. Pela classificação geral da sinalização prevista no CTB, essa placa PARE pertence a qual modalidade de sinalização?",
+        statement: "Em via urbana, o condutor vê uma placa octogonal de fundo vermelho com a inscrição PARE. A que modalidade de sinalização essa placa pertence?",
         options: ["Vertical de Regulamentação: impõe obrigação e desrespeitar essa ordem dá infração.", "Dispositivos auxiliares que alertam sobre perigo imediato na via.", "Horizontal de Advertência que só orienta pedestre no acostamento.", "Semafórica de controle de fluxo que alterna a vez na interseção."],
         correctIndex: 0,
         explanation: "Placas fixadas ao lado ou suspensas sobre a via são sinalização vertical (Regulamentação).",
@@ -5113,7 +5082,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_002",
         category: "legislacao",
-        statement: "Um condutor de veículo automotor trafega por via de duplo sentido de circulação na pista de rolamento e pretende converter à direita para ingressar em uma via transversal. Pelas normas gerais de circulação e conduta do CTB, qual deve ser o posicionamento obrigatório do veículo antes da manobra?",
+        statement: "Em via de duplo sentido, o condutor pretende converter à direita. Como o veículo deve ficar posicionado antes da manobra?",
         options: ["Aproximar-se o máximo possível do bordo direito da via enquanto sinaliza a intenção.", "Aproximar-se do eixo central da pista para ter mais ângulo e espaço de manobra.", "Manter-se exatamente no centro da faixa de rolamento e desacelerar bruscamente no momento da virada.", "Deslocar-se para o bordo esquerdo da via antes de virar para garantir visibilidade dos veículos que vêm em sentido contrário."],
         correctIndex: 0,
         explanation: "Para virar à direita, encoste ao máximo no bordo direito (guia/meio-fio).",
@@ -5129,7 +5098,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_003",
         category: "direcao-defensiva",
-        statement: "Trafegando em uma rodovia de trânsito rápido a 100 km/h, um motorista percebe no último segundo que ultrapassou a alça de saída para o seu destino. Diante desse cenário e visando à máxima segurança viária, qual é a conduta correta a ser adotada?",
+        statement: "Em rodovia de trânsito rápido a 100 km/h, motorista percebe tarde demais que passou pela saída do seu destino. Qual a conduta segura?",
         options: ["Continuar o trajeto com segurança e realizar o retorno no próximo viaduto ou alça regulamentada.", "Imobilizar o veículo no acostamento, acionar o pisca-alerta e efetuar a marcha à ré até o ponto da saída.", "Realizar uma conversão brusca cruzando as faixas de rolamento para alcançar a alça de saída antes do canteiro central.", "Efetuar o retorno sobre o canteiro central divisor de pistas assim que houver uma brecha no tráfego."],
         correctIndex: 0,
         explanation: "Errou a saída? Siga em frente até o próximo retorno seguro.",
@@ -5145,7 +5114,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_004",
         category: "legislacao",
-        statement: "Ao circular por uma interseção complexa da via urbana, o condutor de veículo automotor visualiza na pista de rolamento marcas zebradas amarelas com linhas contínuas. A sinalização horizontal que utiliza 'marcas de canalização' tem como finalidade principal:",
+        statement: "Em interseção urbana, a pista apresenta marcas zebradas amarelas com linhas contínuas (marcas de canalização). Qual a finalidade principal dessas marcas?",
         options: ["Orientar e direcionar o fluxo de veículos, ordenando a circulação e proibindo o trânsito ou estacionamento sobre elas.", "Indicar zonas onde o estacionamento é livre para carga e descarga de mercadorias durante o horário comercial.", "Delimitar a área exclusiva destinada ao trânsito de ciclistas e pedestres nas interseções urbanas.", "Alertar sobre a proximidade de radares fixos de fiscalização eletrônica de velocidade."],
         correctIndex: 0,
         explanation: "Marcas de canalização (zebrados) direcionam o trânsito; é proibido transitar ou parar sobre elas.",
@@ -5161,7 +5130,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_005",
         category: "meio-ambiente",
-        statement: "No programa de Condução Ecológica (Eco-driving), o condutor avalia hábitos de manutenção preventiva para reduzir consumo e emissões. Entre as opções, a que possui maior impacto direto na redução do consumo é:",
+        statement: "No programa de Condução Ecológica (Eco-driving), qual hábito de manutenção preventiva tem maior impacto direto na redução do consumo?",
         options: ["Manter os pneus do veículo constantemente calibrados de acordo com a pressão recomendada pelo fabricante.","Manter o motor em marcha lenta por vários minutos para aquecer o veículo antes de cada trajeto.","Efetuar trocas de óleo do motor com intervalos menores que o recomendado no manual do proprietário.","Trafegar sempre com as janelas abertas em velocidades acima de 100 km/h para evitar ligar o ar-condicionado."],
         correctIndex: 0,
         explanation: "Pneu murcho aumenta o atrito com o solo e eleva o consumo de combustível.",
@@ -5177,7 +5146,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_006",
         category: "legislacao",
-        statement: "A atualização das normas e Manuais Brasileiros de Sinalização de Trânsito passou a adotar oficialmente o termo 'Sinistro de Trânsito' em substituição à antiga palavra 'Acidente de Trânsito'. Qual é a razão fundamentada para essa mudança conceitual?",
+        statement: "Os manuais de sinalização passaram a usar o termo 'Sinistro de Trânsito' no lugar de 'Acidente de Trânsito'. Qual a razão dessa mudança?",
         options: ["Evidenciar que a grande maioria dos eventos no trânsito é evitável e decorrente de falha humana (imprudência, negligência ou imperícia), desmistificando a ideia de 'obra do acaso'.", "Indicar que a palavra 'acidente' aplica-se exclusivamente a colisões que resultam em óbito confirmado no local.", "Padronizar a legislação de trânsito apenas para fins de ressarcimento do seguro obrigatório DPVAT/SPVAT.", "Restringir a aplicação da legislação às ocorrências registradas em rodovias federais e estaduais."],
         correctIndex: 0,
         explanation: "'Sinistro' reforça que quase todo evento de trânsito é evitável e culpa do fator humano.",
@@ -5193,7 +5162,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_007",
         category: "legislacao",
-        statement: "No Manual Brasileiro de Sinalização de Trânsito do CONTRAN, as placas de sinalização vertical de Indicação de fundo predominantemente VERDE, aplicadas sobretudo em rodovias e vias expressas, têm por objetivo principal:",
+        statement: "As placas de indicação de fundo VERDE, usadas sobretudo em rodovias e vias expressas, têm por objetivo principal:",
         options: ["Orientar os condutores quanto às direções, destinos, distâncias e rotas, sendo amplamente aplicadas em rodovias e vias expressas.", "Impor condutas obrigatórias, como velocidade máxima e parada obrigatória, mediante fiscalização no trecho.", "Alertar para perigos eventualmente existentes na via, como curvas acentuadas e alterações do pavimento.", "Identificar os nomes das vias urbanas e o sentido das mãos de circulação nas esquinas."],
         correctIndex: 0,
         explanation: "Placa verde é de indicação de direção, destino e distância em estradas/rodovias.",
@@ -5209,7 +5178,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_008",
         category: "direcao-defensiva",
-        statement: "A afirmação de que no trânsito o equilíbrio emocional é tão importante quanto o sistema de freios do veículo expressa um princípio fundamental da Direção Defensiva. Segundo os conceitos do CTB, isso significa que:",
+        statement: "Diz-se que no trânsito o equilíbrio emocional é tão importante quanto os freios do veículo. O que esse princípio da Direção Defensiva significa?",
         options: ["A estabilidade psíquica e o autocontrole do condutor são fatores essenciais de segurança passiva e ativa para a prevenção de sinistros.","A conservação do veículo (freios, pneus e iluminação em perfeito estado) é o fator que, isoladamente, assegura a prevenção de sinistros.","As condições da via, como curvas fechadas e aclives, determinam sozinhas o risco do trânsito e dispensam a atenção de quem dirige.","As condições do tempo, como chuva e neblina, exigem apenas reduzir a velocidade, sem qualquer relação com o equilíbrio de quem dirige."],
         correctIndex: 0,
         explanation: "O controle emocional evita reações agressivas e decisões imprudentes ao dirigir.",
@@ -5225,7 +5194,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_009",
         category: "direcao-defensiva",
-        statement: "O princípio defensivo 'Ver e Ser Visto' exige que o condutor adote medidas para garantir a visibilidade mútua no trânsito. Qual das alternativas apresenta uma conduta correta alinhada a esse princípio?",
+        statement: "O princípio defensivo 'Ver e Ser Visto' exige garantir a visibilidade mútua no trânsito. Qual conduta está alinhada a esse princípio?",
         options: ["Manter lentes dos faróis e lanternas limpas, reguladas e em perfeito estado de funcionamento.","Utilizar películas insulfilm escuras no para-brisa dianteiro acima dos limites legais para evitar o ofuscamento.","Circular apenas com as luzes de posição (lanternas) acesas em rodovias durante a noite para economizar bateria.","Manter a luz alta acesa em via urbana à noite, mesmo com veículos à frente, para enxergar mais longe."],
         correctIndex: 0,
         explanation: "Faróis limpos e regulados garantem que você enxergue a pista e seja visto pelos outros.",
@@ -5241,7 +5210,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_010",
         category: "infracoes",
-        statement: "Um motorista realiza uma mudança abrupta de faixa de rolamento sem acionar a luz indicadora de direção (seta) nem fazer sinal regulamentar de braço. Qual é a gravidade desta infração e qual penalidade está sujeita?",
+        statement: "Motorista muda de faixa de forma abrupta sem acionar a seta nem fazer sinal de braço. Qual a gravidade da infração e a penalidade?",
         options: ["Infração Grave, sujeita a penalidade de Multa.", "Infração Gravíssima, sujeita a Multa e Recolhimento da CNH.", "Infração Média, sujeita a Advertência por escrito apenas.", "Infração Leve, sem aplicação de pontos no prontuário do condutor."],
         correctIndex: 0,
         explanation: "Deixar de dar seta ao mudar de faixa ou virar é infração GRAVE (5 pontos).",
@@ -5257,7 +5226,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_011",
         category: "legislacao",
-        statement: "Ao trafegar com veículo automotor por via urbana classificada como LOCAL (via urbana residencial ou de acesso restrito) onde NÃO exista sinalização regulamentadora de velocidade, qual é a velocidade máxima permitida pelo CTB (Art. 61)?",
+        statement: "Em via urbana LOCAL (residencial ou de acesso restrito) sem sinalização de velocidade, qual é a velocidade máxima permitida?",
         options: ["30 km/h, limite padrão das vias locais sem sinalização (Art. 61).", "40 km/h, limite padrão das vias coletoras urbanas.", "60 km/h, limite padrão das vias arteriais urbanas.", "80 km/h, limite padrão das vias de trânsito rápido."],
         correctIndex: 0,
         explanation: "A velocidade máxima padrão para via local não sinalizada é 30 km/h.",
@@ -5273,7 +5242,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_012",
         category: "infracoes",
-        statement: "Um condutor de veículo automotor de passeio decide realizar a transposição de faixa para a faixa da direita regulamentada como EXCLUSIVA para ônibus do transporte público coletivo para fugir de congestionamento. Pelo Art. 184, III do CTB, como essa conduta é classificada?",
+        statement: "Condutor entra com o carro na faixa da direita exclusiva para ônibus a fim de fugir de congestionamento. Como essa conduta é classificada?",
         options: ["Infração Gravíssima, sujeita a penalidade de Multa e medida administrativa de Remoção do Veículo.","Infração Grave, sujeita apenas a penalidade de Multa.","Infração Média, com retenção do veículo no local.","Infração Gravíssima, com multa e suspensão do direito de dirigir."],
         correctIndex: 0,
         explanation: "Transitar em faixa exclusiva de ônibus é infração GRAVÍSSIMA com remoção do veículo.",
@@ -5289,7 +5258,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_013",
         category: "mecanica",
-        statement: "O sistema de airbag (bolsa inflável) é equipamento de segurança passiva obrigatório nos veículos modernos. Para que cumpra sua função sem causar lesões graves ao ocupante em colisão, é indispensável o uso concomitante do:",
+        statement: "Para que o airbag cumpra sua função sem lesionar o ocupante na colisão, é indispensável o uso concomitante de qual equipamento?",
         options: ["Cinto de segurança, que retém o corpo e evita que o ocupante seja projetado contra a bolsa em expansão.", "Encosto de cabeça ajustado ao nível dos ombros, que retém o tronco do ocupante durante a explosão da bolsa.", "Bancos reclináveis com apoio lombar, que imobilizam o corpo do ocupante durante a atuação do airbag.", "Volante com estrutura colapsável, que absorve sozinho toda a energia do impacto frontal."],
         correctIndex: 0,
         explanation: "O airbag complementa o cinto de segurança; sem o cinto, a explosão do airbag pode ferir gravemente.",
@@ -5305,7 +5274,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_014",
         category: "direcao-defensiva",
-        statement: "Ao entrar em uma via de trânsito rápido ou rodovia através de uma alça de acesso, o condutor se depara com a faixa de aceleração. Qual é a função técnica dessa faixa e a postura correta a ser adotada pelo condutor?",
+        statement: "Ao entrar em rodovia por uma alça de acesso, o condutor encontra a faixa de aceleração. Qual sua função e qual a postura correta do condutor?",
         options: ["Aumentar a velocidade do veículo na faixa suplementar para equipará-la ao fluxo da via principal antes de efetuar a fusão (incorporação).","Imobilizar o veículo no início da faixa e aguardar uma brecha no fluxo da via principal para entrar.","Manter a velocidade da alça de acesso e fundir-se ao fluxo principal sem se ajustar à velocidade dos demais.","Servir como acostamento temporário para parada de emergência e desembarque de passageiros."],
         correctIndex: 0,
         explanation: "A faixa de aceleração serve para atingir a velocidade do fluxo e entrar na pista com segurança.",
@@ -5321,7 +5290,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_015",
         category: "infracoes",
-        statement: "Um condutor trafega atrás de uma ambulância que está com os alarmes sonoros e iluminação vermelha intermitente acionados, utilizando o 'vácuo' do veículo de emergência para ultrapassar o trânsito congestionado. Essa conduta configura qual tipo de infração?",
+        statement: "Condutor usa o 'vácuo' de uma ambulância com alarme e luz vermelha acesos para ultrapassar o trânsito congestionado. Que infração isso configura?",
         options: ["Infração Grave, sujeita a penalidade de Multa.","Infração Gravíssima, com suspensão imediata do direito de dirigir.","Infração Média, com retenção do veículo.","Infração Leve, com multa e três pontos no prontuário do condutor."],
         correctIndex: 0,
         explanation: "Seguir veículo de socorro/emergência em serviço é infração GRAVE (5 pontos).",
@@ -5337,11 +5306,11 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_016",
         category: "direcao-defensiva",
-        statement: "No contexto dos conceitos de cidadania e de direção defensiva previstos na segurança do trânsito, qual das opções a seguir expressa o verdadeiro perfil de um bom condutor, aquele que efetivamente preserva vidas?",
+        statement: "Qual é o perfil de um bom condutor, aquele que efetivamente preserva vidas no trânsito?",
         options: ["Aquele que cumpre rigorosamente as normas de trânsito, antecipa perigos e age com cortesia, abrindo mão de seu direito para preservar vidas.","Aquele que trafega sempre no limite máximo de velocidade, mesmo quando as condições da via exigem redução.","Aquele que domina manobras difíceis em piso molhado, pois a habilidade técnica dispensa o cumprimento das normas.","Aquele que possui veículo moderno equipado com assistentes eletrônicos de última geração."],
         correctIndex: 0,
         explanation: "O bom condutor dirige defensivamente, respeita as leis e foca na segurança coletiva.",
-        detailedExplanation: "Direção defensiva é dirigir de modo a evitar acidentes, apesar das ações incorretas dos outros e das condições adversas. Envolve postura cidadã, respeito e prevenção.",
+        detailedExplanation: "Direção defensiva é dirigir de modo a evitar sinistros, apesar das ações incorretas dos outros e das condições adversas. Envolve postura cidadã, respeito e prevenção.",
         legalBase: "Manual de Direção Defensiva - DENATRAN",
         commonMistake: "Confundir habilidade técnica/perícia rápida com postura defensiva e segura.",
         tip: "Bom condutor = Prevenção + Cortesia + Respeito às leis.",
@@ -5353,7 +5322,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_017",
         category: "direcao-defensiva",
-        statement: "Ao aproximar-se de uma interseção em perímetro urbano com o veículo automotor, o condutor observa um pedestre iniciando a travessia da via urbana fora da faixa de pedestres. Pelo princípio da vulnerabilidade no trânsito (Art. 29, § 2º do CTB), qual deve ser a atitude do condutor?",
+        statement: "Em interseção urbana, o condutor vê um pedestre atravessando a via fora da faixa. Pelo princípio da vulnerabilidade, qual a atitude do condutor?",
         options: ["Reduzir a velocidade do veículo, dar a preferência ao pedestre e aguardar a travessia com segurança.","Manter a velocidade normal, pois o pedestre que inicia a travessia fora da faixa não tem preferência.","Reduzir apenas quando o pedestre já tiver ocupado a faixa de rolamento do condutor.","Acelerar para passar antes do pedestre, pois quem atravessa fora da faixa assume o risco da travessia."],
         correctIndex: 0,
         explanation: "O pedestre é o ente mais vulnerável; o condutor deve sempre zelar pela sua segurança.",
@@ -5369,7 +5338,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_018",
         category: "infracoes",
-        statement: "Durante uma fiscalização de rotina na rodovia, o condutor desobedece às ordens claras de parada emanadas de um Agente da Autoridade de Trânsito devidamente uniformizado. Qual é a gravidade dessa infração?",
+        statement: "Em fiscalização na rodovia, condutor desobedece à ordem de parada de um agente de trânsito uniformizado. Qual a gravidade dessa infração?",
         options: ["Infração Grave, sujeita a penalidade de Multa.","Infração Gravíssima, com multa e suspensão do direito de dirigir.","Infração Média, sujeita a advertência por escrito.","Infração Leve, com multa e três pontos no prontuário."],
         correctIndex: 0,
         explanation: "Desobedecer ordens do Agente de Trânsito é infração GRAVE (Art. 195).",
@@ -5385,7 +5354,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_019",
         category: "legislacao",
-        statement: "Ao trafegar por via urbana, o condutor observa elementos de sinalização vertical e dispositivos temporários de obras com fundo na cor LARANJA, previstos no Manual do CONTRAN. Essa coloração específica indica:",
+        statement: "Em via urbana, o condutor vê placas e dispositivos temporários de obras com fundo LARANJA. Essa cor indica:",
         options: ["Sinalização de Obras e situações temporárias na via, exigindo maior atenção e redução de velocidade.", "Sinalização temporária de eventos especiais, como desfiles e feiras, sem relação com obras na pista.", "Sinalização de Advertência permanente para riscos constantes, como áreas escolares e curvas acentuadas.", "Sinalização de Regulamentação de obras, impondo parada obrigatória antes do trecho interditado."],
         correctIndex: 0,
         explanation: "A cor laranja é usada exclusivamente para sinalização temporária e de Obras.",
@@ -5401,7 +5370,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_020",
         category: "meio-ambiente",
-        statement: "Para trajeto de curta distância no perímetro urbano, o cidadão compara modais quanto a custo, emissão de poluentes e benefício à saúde. O modal que apresenta custo financeiro zero e impacto zero em emissões é:",
+        statement: "Para um trajeto curto na cidade, qual meio de transporte não tem custo e não emite poluentes?",
         options: ["Caminhada (deslocamento a pé), de custo financeiro zero e emissão nula de poluentes.", "Ciclomotores elétricos de alta velocidade, com emissão zero porém custo de aquisição.", "Automóveis movidos a biocombustíveis em carona compartilhada paga.", "Motocicletas de baixa cilindrada com combustível flex."],
         correctIndex: 0,
         explanation: "A caminhada a pé é a forma mais limpa, barata e sustentável de mobilidade ativa.",
@@ -5417,7 +5386,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_021",
         category: "legislacao",
-        statement: "Dois veículos aproximam-se simultaneamente de uma interseção em nível em formato de ROTATÓRIA não sinalizada. Segundo as regras gerais de preferência de passagem do CTB (Art. 29, III, 'b'), a preferência pertence:",
+        statement: "Dois veículos chegam ao mesmo tempo a uma rotatória não sinalizada. Quem tem a preferência de passagem?",
         options: ["Ao veículo que já estiver circulando pela rotatória.", "Ao veículo que se aproxima pelo lado direito do cruzamento, independentemente de estar dentro da rotatória.", "Ao veículo de maior de porte ou que estiver trafegando em maior velocidade.", "Ao veículo que pretende efetuar a conversão à esquerda no anel viário."],
         correctIndex: 0,
         explanation: "Na rotatória sem sinalização, a preferência é do veículo que já está circulando dentro dela.",
@@ -5433,7 +5402,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_022",
         category: "legislacao",
-        statement: "Um cidadão habilitado exclusivamente na Categoria 'B' pretende conduzir um veículo utilitário do tipo Picape/Camioneta. Para permanecer dentro dos limites legais, o veículo deve atender às seguintes condições simultâneas:",
+        statement: "Condutor habilitado só na categoria B pretende dirigir uma picape. Quais condições o veículo deve atender?",
         options: ["Peso Bruto Total (PBT) de até 3.500 kg e lotação que não exceda a 8 lugares, excluído o do motorista.", "Peso Bruto Total (PBT) de até 6.000 kg e lotação de até 12 passageiros.", "Qualquer peso bruto total, desde que o veículo não transporte carga perigosa.", "Lotação máxima de até 15 passageiros, independentemente do peso do veículo."],
         correctIndex: 0,
         explanation: "Categoria B autoriza veículos com PBT de até 3.500 kg e máximo de 8 passageiros.",
@@ -5449,7 +5418,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_023",
         category: "legislacao",
-        statement: "Ao chegar a uma interseção com sinalização semafórica, o condutor do veículo automotor observa a luz vermelha acesa. Contudo, um agente da autoridade de trânsito no local determina com gestos claros que o veículo avance. Qual ordem deve ser seguida pela hierarquia das sinalizações (Art. 89 do CTB)?",
+        statement: "O semáforo está vermelho, mas um agente de trânsito no local faz gestos para o veículo avançar. O que o condutor deve fazer?",
         options: ["Seguir a ordem do Agente de Trânsito, pois suas ordens prevalecem sobre as indicações do semáforo e demais sinais.","Aguardar a luz verde do semáforo, pois equipamentos eletrônicos possuem prioridade sobre ordens humanas.","Obedecer à ordem do agente apenas quanto ao sentido da marcha, mantendo o semáforo como referência para avançar ou parar.","Seguir as regras da placa de 'PARE' que porventura esteja afixada no local."],
         correctIndex: 0,
         explanation: "A ordem do Agente de Trânsito prevalece sobre TODOS os outros sinais e regras.",
@@ -5481,7 +5450,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_025",
         category: "direcao-defensiva",
-        statement: "A sinalização antecedente de manobras mediante uso de seta (luz indicadora de direção) é um dever de todo condutor previsto no CTB. O objetivo fundamental dessa exigência legal e dessa direção defensiva é:",
+        statement: "Sinalizar antecipadamente as manobras com a seta é dever de todo condutor. Qual o objetivo fundamental dessa exigência?",
         options: ["Garantir a previsibilidade das ações do motorista, permitindo que os demais usuários da via reajam com segurança.","Indicar apenas a mudança de faixa, já que nas conversões a sinalização com seta não é obrigatória.","Garantir o direito de preferência absoluto sobre pedestres e veículos ao mudar de faixa.","Cumprir uma mera formalidade administrativa sem impacto na prevenção de sinistros."],
         correctIndex: 0,
         explanation: "A seta serve para dar previsibilidade às suas manobras para os outros condutores.",
@@ -5497,7 +5466,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_30q_026",
         category: "direcao-defensiva",
-        statement: "O Código de Trânsito Brasileiro estabelece a regra de proteção aos mais vulneráveis. De acordo com a legislação e os princípios da Direção Defensiva, qual é a ordem correta de responsabilidade pela segurança no trânsito?",
+        statement: "Pela regra de proteção aos mais vulneráveis, qual é a ordem correta de responsabilidade pela segurança no trânsito?",
         options: ["Os veículos de maior porte são responsáveis pelos menores, os motorizados pelos não motorizados, e todos juntos pela proteção dos pedestres.","Os pedestres são responsáveis por sua própria segurança quando cruzam fora da faixa, sem dever de cuidado do condutor.","Os veículos de transporte coletivo têm prioridade absoluta nos cruzamentos, mesmo quando a sinalização indica o contrário.","Os veículos menores e mais leves têm preferência de passagem sobre os de maior porte nas vias sem sinalização."],
         correctIndex: 0,
         explanation: "O maior protege o menor, o motorizado protege o não motorizado e todos protegem o pedestre.",
@@ -5513,7 +5482,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_q20_n1",
         category: "infracoes",
-        statement: "Após chuva, o condutor trafega por via urbana no perímetro e atravessa poça d'água na pista de rolamento, arremessando água sobre pedestres na calçada. Pelo CTB, essa conduta é classificada como infração:",
+        statement: "Após a chuva, condutor atravessa uma poça d'água na pista em alta velocidade e molha pedestres na calçada. Essa conduta é infração de natureza:",
         options: ["Infração média, punida com multa administrativa.","Infração Grave, sujeita a multa e cinco pontos no prontuário.","Infração Gravíssima, sujeita a multa e sete pontos no prontuário.","Infração leve, punida exclusivamente com advertência por escrito do agente."],
         correctIndex: 0,
         explanation: "Jogar água de poça nos pedestres na calçada é infração média com multa.",
@@ -5529,7 +5498,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_q21_n1",
         category: "primeiros-socorros",
-        statement: "Durante o atendimento a vítimas de acidente com sangramento visível, o socorrista fica exposto ao contato direto com fluidos sanguíneos e possíveis agentes infecciosos. É aconselhável, nesse contexto, que ele:",
+        statement: "Ao atender vítima de sinistro com sangramento visível, o socorrista se expõe a fluidos sanguíneos. O que é aconselhável que ele faça?",
         options: ["Utilize proteção individual — luva de borracha ou material equivalente — antes do contato com a vítima.","Aplique torniquete de rotina em todos os membros com ferimento sanguíneo.","Aplique compressa fria sobre o ferimento para conter o fluxo sanguíneo.","Imobilize o membro lesionado com talas e atadura até a chegada do resgate."],
         correctIndex: 0,
         explanation: "Use luvas de borracha para não pegar doenças pelo sangue da vítima.",
@@ -5545,7 +5514,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_q23_n1",
         category: "infracoes",
-        statement: "Em rodovia de pista simples, o condutor realiza ultrapassagem invadindo a contramão de direção exatamente sobre a faixa de travessia de pedestres e é flagrado pelo agente. Pelo CTB, essa conduta é infração de natureza:",
+        statement: "Em rodovia de pista simples, condutor ultrapassa invadindo a contramão sobre a faixa de pedestres e é flagrado. Essa conduta é infração de natureza:",
         options: ["Infração Leve, sujeita apenas a advertência por escrito.", "Infração Média, sujeita a multa com pontuação de 4 pontos.", "Infração Gravíssima, sujeita a multa com pontuação de 7 pontos na CNH.", "Infração Grave, sujeita a multa e retenção do veículo."],
         correctIndex: 2,
         explanation: "Ultrapassar pela contramão em cima da faixa de pedestre é infração gravíssima.",
@@ -5561,15 +5530,15 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_q24_n1",
         category: "primeiros-socorros",
-        statement: "No atendimento inicial prestado a vítima de acidente de trânsito, que pode necessitar de procedimento cirúrgico ou sedação de urgência, a conduta correta em relação à ingestão de líquidos por via oral antes do atendimento é:",
+        statement: "Vítima de sinistro pode precisar de cirurgia ou sedação de urgência. Antes do atendimento médico, o que fazer com a ingestão de líquidos?",
         options: ["Liberar a ingestão de líquidos desde que a vítima esteja lúcida e orientada.", "Manter a vítima em jejum absoluto até a avaliação da equipe de saúde.", "Oferecer água à vítima para acalmá-la durante a espera do resgate.", "Administrá-la em suco para evitar queda de pressão arterial."],
         correctIndex: 1,
         explanation: "Deixe o ferido sem comer e sem beber nada até o médico chegar.",
         detailedExplanation: "Não dê água nem comida para o ferido (manter em jejum), pois se ele precisar de cirurgia urgente no hospital ou desmaiar, pode se engasgar (broncoaspiração).",
         legalBase: "Manual de Primeiros Socorros do DENATRAN",
         commonMistake: "Dar água para 'acalmar' a vítima assustada.",
-        tip: "Vítima de acidente = Nada de água ou comida!",
-        memoryHook: "Vítima de acidente em jejum total!",
+        tip: "Vítima de sinistro = Nada de água ou comida!",
+        memoryHook: "Vítima de sinistro em jejum total!",
         incidence: "alta",
         trap: true,
         difficulty: 1
@@ -5577,7 +5546,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_q25_n1",
         category: "mecanica",
-        statement: "No meio do trajeto urbano, o painel acende e mantém acesa a luz indicadora de falha no sistema de arrefecimento do motor, sem vapor sob o capô. O procedimento correto do condutor diante desse alerta é:",
+        statement: "No trajeto, acende a luz de falha do arrefecimento do motor, sem vapor sob o capô. Qual o procedimento correto do condutor?",
         options: ["Imobilizar o veículo e verificar o nível do óleo lubrificante do motor.","Completar o líquido de arrefecimento sem parar o veículo e prosseguir a viagem.","Imobilizar o veículo em local seguro e verificar o nível de líquido de arrefecimento.","Prosseguir a viagem normalmente, pois o alerta dispensa atenção imediata."],
         correctIndex: 2,
         explanation: "Luz de temperatura acendeu? Pare o carro e olhe a água do motor.",
@@ -5593,7 +5562,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_q26_n1",
         category: "legislacao",
-        statement: "O pedestre aproxima-se de travessia sinalizada com o semáforo para pedestres de código SS-08, cujo sinal encontra-se aceso naquele instante. Diante dessa indicação semafórica, a atitude correta a ser adotada é:",
+        statement: "Pedestre se aproxima de travessia com o semáforo de pedestres (SS-08) aceso. Diante desse sinal, qual a atitude correta?",
         options: ["Iniciar a travessia, pois o sinal verde autoriza o pedestre a seguir.","Não ultrapassar a linha de retenção, permanecendo na calçada até a troca do sinal.","Atenção apenas, cruzando com cautela independentemente da indicação.","Atravessar rapidamente, pois o sinal vermelho vale apenas para os veículos."],
         correctIndex: 1,
         explanation: "Sinaleiro vermelho para pedestre (SS-08) significa que você não pode atravessar.",
@@ -5608,14 +5577,14 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_q27_n1",
         category: "legislacao",
-        statement: "Dentre as normas gerais de circulação e conduta previstas no CTB, assinale a alternativa que exprime corretamente uma das regras de conduta impostas pelo Código de Trânsito ao condutor e aos ocupantes do veículo:",
+        statement: "Qual das opções abaixo é uma regra de conduta correta para o condutor e os ocupantes do veículo?",
         options: ["Os animais isolados ou em grupos não poderão circular nas vias urbanas ou rurais.", "A parada para embarque de passageiros não poderá ser efetuada onde o estacionamento é proibido.", "O condutor e o passageiro não deverão abrir a porta sem certificar-se de que não há perigo.", "Em nenhuma hipótese será permitida a circulação de bicicletas nos passeios."],
         correctIndex: 2,
         explanation: "Só abra a porta do carro depois de olhar se não vem vindo ninguém.",
         detailedExplanation: "Motorista e passageiros só podem abrir as portas do carro após olhar pelos espelhos e ter certeza de que não vão atingir ciclistas, pedestres ou outros carros (Art. 49 do CTB).",
         legalBase: "Art. 49 do CTB",
         commonMistake: "Achar que é permitido desembarcar rápido sem olhar se vem bicicleta ou moto.",
-        tip: "Vai abrir a porta? Olhe antes para não causar acidente!",
+        tip: "Vai abrir a porta? Olhe antes para não causar sinistro!",
         incidence: "alta",
         trap: false,
         difficulty: 1
@@ -5623,7 +5592,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_q20_n2",
         category: "infracoes",
-        statement: "Após forte chuva, o condutor trafega por via urbana e atravessa poça d'água na pista de rolamento, arremessando água sobre pedestres na calçada com impacto. Pela regulamentação, essa conduta é considerada:",
+        statement: "Após a chuva forte, condutor atravessa poça d'água na pista e joga água com impacto sobre pedestres na calçada. Essa conduta é:",
         options: ["Infração de trânsito média, sujeita a penalidade de multa.","Infração Grave, sujeita a multa e a remoção do veículo do local.","Infração Gravíssima, sujeita a multa multiplicada por três vezes.","Infração leve, sujeita somente a advertência por escrito do agente."],
         correctIndex: 0,
         explanation: "Arremessar água em pedestres é infração média punida com multa de trânsito.",
@@ -5638,7 +5607,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_q21_n2",
         category: "primeiros-socorros",
-        statement: "Ao prestar o primeiro atendimento a vítima de acidente com ferimentos abertos e sangramento abundante, o socorrista fica exposto ao contato com fluidos biológicos. A recomendação técnica correta é que ele:",
+        statement: "No primeiro atendimento a vítima com ferimentos abertos e sangramento, o socorrista se expõe a fluidos biológicos. Qual a recomendação correta?",
         options: ["Utilize proteção individual — luva de borracha ou material equivalente — antes do contato com a ferida.","Aplique torniquete de rotina em todos os membros com ferimento sanguíneo.","Aplique compressa fria sobre o ferimento para conter o fluxo sanguíneo.","Imobilize o membro lesionado com talas e atadura até a chegada do resgate."],
         correctIndex: 0,
         explanation: "Sempre coloque luvas antes de tocar em ferimentos sangrando para sua própria proteção.",
@@ -5651,39 +5620,9 @@ export const QUESTIONS: Question[] = [
         difficulty: 2
     },
     {
-        id: "detran_q23_n2",
-        category: "infracoes",
-        statement: "O condutor realiza a ultrapassagem de outro veículo invadindo a contramão de direção exatamente sobre a faixa destinada à travessia de pedestres, em via de trânsito. Pelo CTB, essa conduta é classificada como infração de natureza:",
-        options: ["Infração Leve, com advertência por escrito.", "Infração Média, com multa e 4 pontos na CNH.", "Infração Gravíssima, com multa e 7 pontos na CNH.", "Infração Grave, com multa e retenção do veículo."],
-        correctIndex: 2,
-        explanation: "Ultrapassar invadindo a pista contrária na faixa de pedestre é infração gravíssima.",
-        detailedExplanation: "Fazer ultrapassagem pela pista contrária (contramão) em trechos perigosos como faixas de pedestres, pontes ou cruzamentos é infração de natureza gravíssima (Art. 203, II do CTB).",
-        legalBase: "Art. 203, II do CTB",
-        commonMistake: "Confundir a ultrapassagem proibida com infração grave.",
-        tip: "Ultrapassagem na contramão em faixa de pedestre = Gravíssima!",
-        incidence: "alta",
-        trap: true,
-        difficulty: 2
-    },
-    {
-        id: "detran_q24_n2",
-        category: "primeiros-socorros",
-        statement: "Em acidente de trânsito, vítima consciente e lúcida pede um copo de água enquanto aguarda o atendimento. Considerando a possibilidade de cirurgia de urgência, a conduta correta quanto à ingestão de líquidos é:",
-        options: ["Liberar a ingestão de líquidos desde que a vítima esteja lúcida e orientada.", "Manter a vítima em jejum absoluto até a avaliação da equipe de saúde.", "Oferecer água à vítima para acalmá-la durante a espera do resgate.", "Administrá-la em suco para evitar queda de pressão arterial."],
-        correctIndex: 1,
-        explanation: "Não ofereça água ou comida; mantenha o ferido em jejum total.",
-        detailedExplanation: "O ferido não deve beber nada (manter em jejum) para não se engasgar ou vomitar em caso de perda de consciência, além de não atrapalhar procedimentos com anestesia no hospital.",
-        legalBase: "Manual de Primeiros Socorros do DENATRAN",
-        commonMistake: "Dar água ou suco imaginando que vai ajudar a conter a queda de pressão.",
-        tip: "Atendimento inicial = Vítima sempre em JEJUM!",
-        incidence: "alta",
-        trap: true,
-        difficulty: 2
-    },
-    {
         id: "detran_q25_n2",
         category: "mecanica",
-        statement: "Durante tráfego em via expressa, com a temperatura do motor acima da faixa normal, o painel acusa problema no sistema de arrefecimento. Considerando os riscos de dano ao motor, o procedimento correto é:",
+        statement: "Em via expressa, a temperatura do motor sobe e o painel acusa falha no arrefecimento. Considerando o risco de dano ao motor, o procedimento correto é:",
         options: ["Imobilizar o veículo e verificar o nível do óleo lubrificante no cárter.","Completar a água do reservatório com o motor quente, sem desligar o veículo.","Imobilizar o veículo em local seguro e verificar o nível de líquido de arrefecimento.","Prosseguir a viagem em velocidade reduzida até o próximo posto de serviço."],
         correctIndex: 2,
         explanation: "Esquentou no painel? Pare o carro em local seguro e verifique o nível da água.",
@@ -5713,7 +5652,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_q27_n2",
         category: "legislacao",
-        statement: "Analisando as normas gerais de circulação e conduta previstas no CTB, e considerando os deveres do condutor e dos ocupantes quanto à segurança da via e à fluidez do trânsito, assinale a alternativa juridicamente correta:",
+        statement: "Qual é a regra correta de conduta do condutor e dos ocupantes quanto à segurança da via e à fluidez do trânsito?",
         options: ["Os animais isolados ou em grupos não poderão circular nas vias urbanas ou rurais.", "A parada para embarque de passageiros não poderá ser efetuada onde o estacionamento é proibido na via.", "O condutor e o passageiro não deverão abrir a porta do veículo sem antes certificar-se de que não constituem perigo para eles e demais usuários.", "Em nenhuma hipótese será permitida a circulação de bicicletas nos passeios."],
         correctIndex: 2,
         explanation: "Verifique os retrovisores antes de abrir as portas para não atingir ninguém na via.",
@@ -5728,7 +5667,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_q28_n1",
         category: "infracoes",
-        statement: "Em trecho urbano com grande concentração e movimentação de pedestres, o condutor mantém velocidade incompatível com a segurança do trânsito, sem reduzir na aproximação da travessia. Pelo CTB, essa conduta é infração de natureza:",
+        statement: "Em trecho urbano com muitos pedestres, condutor mantém velocidade incompatível com a segurança e não reduz na travessia. Essa conduta é infração de natureza:",
         options: ["Infração Gravíssima, com multa multiplicada por 3.","Infração Leve, com advertência por escrito.","Infração Gravíssima, com multa simples e 7 pontos na CNH.","Infração Grave, com multa e 5 pontos na CNH."],
         correctIndex: 2,
         explanation: "Não desacelerar onde há intensa movimentação de pedestres é infração gravíssima, com multa simples e 7 pontos (art. 220, XIV do CTB).",
@@ -5743,7 +5682,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_q29_n1",
         category: "direcao-defensiva",
-        statement: "Durante queimadas às margens da via, a fumaça densa reduz drasticamente a visibilidade sobre a pista de rolamento em rodovia. Diante dessa condição adversa, a conduta defensiva correta do condutor deve ser:",
+        statement: "Fumaça de queimadas às margens reduz muito a visibilidade na rodovia. Diante disso, qual a conduta defensiva correta do condutor?",
         options: ["Reduzir a velocidade e manter acesa a luz baixa do farol.","Manter a velocidade nominal e circular apenas com as lanternas acesas, aproveitando a luz difusa da fumaça.","Imobilizar o veículo no bordo da pista e acionar o pisca-alerta.","Manter a velocidade e utilizar a luz alta do farol no trecho."],
         correctIndex: 0,
         explanation: "Na fumaça, diminua a marcha e acenda a luz baixa do farol.",
@@ -5758,7 +5697,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_q30_n1",
         category: "legislacao",
-        statement: "O dever de não obstruir a marcha normal dos veículos, sem causa justificada, integra o conjunto de normas gerais de circulação e conduta impostas pelo CTB. Esse preceito do condutor enquadra-se no conceito jurídico de:",
+        statement: "O condutor não deve obstruir a marcha dos demais veículos nem trafegar devagar demais sem motivo. Esse preceito se enquadra em qual conceito jurídico?",
         options: ["Normas gerais de circulação e conduta.", "Penalidades e medidas administrativas aplicáveis às infrações previstas no CTB.", "Normas de sinalização e os dispositivos auxiliares de comando à disposição dos agentes.", "Regras de circulação e conduta adotadas exclusivamente nas rodovias federais."],
         correctIndex: 0,
         explanation: "Não atrapalhar o fluxo do trânsito sem motivo é uma regra das normas de circulação.",
@@ -5773,7 +5712,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_q28_n2",
         category: "infracoes",
-        statement: "Ao circular por trechos urbanos ou rurais com grande concentração e movimentação de pedestres, não reduzir a velocidade do veículo de forma compatível com a segurança do trânsito é considerada uma infração de natureza:",
+        statement: "Em trecho com muitos pedestres, não reduzir a velocidade de forma compatível com a segurança é infração de natureza:",
         options: ["Infração de natureza gravíssima, com multa multiplicada por 3.","Infração de natureza leve, com advertência por escrito.","Infração de natureza gravíssima, com multa simples e 7 pontos na CNH.","Infração de natureza grave, com multa e 5 pontos na CNH."],
         correctIndex: 2,
         explanation: "Diminua a velocidade na presença de pedestres; não fazer isso gera infração gravíssima, com multa simples (art. 220, XIV do CTB).",
@@ -5788,7 +5727,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_q29_n2",
         category: "direcao-defensiva",
-        statement: "A fumaça produzida por queimadas nos terrenos lindeiros à via provoca drástica redução da visibilidade em rodovia de pista simples. Diante dessa situação de risco, o procedimento correto do condutor é:",
+        statement: "Fumaça de queimada próximo à via reduz muito a visibilidade em rodovia de pista simples. Qual o procedimento correto do condutor?",
         options: ["Reduzir a velocidade e manter acesa a luz baixa do farol.","Manter a velocidade nominal e circular apenas com as lanternas acesas, aproveitando a luz difusa da fumaça.","Imobilizar o veículo no bordo da pista e acionar o pisca-alerta.","Manter a velocidade nominal e acionar a luz alta do farol."],
         correctIndex: 0,
         explanation: "Diminua o ritmo e acione o farol baixo para não ofuscar a visão na fumaça.",
@@ -5797,21 +5736,6 @@ export const QUESTIONS: Question[] = [
         commonMistake: "Ligar o farol alto, que reflete nas partículas de fumaça e cega o motorista.",
         tip: "Fumaça ou neblina = Luz baixa + desacelerar sem parar na pista!",
         incidence: "alta",
-        trap: false,
-        difficulty: 2
-    },
-    {
-        id: "detran_q30_n2",
-        category: "legislacao",
-        statement: "O preceito que estabelece que o condutor não deve obstruir a marcha normal dos demais veículos, abstendo-se de trafegar em velocidade anormalmente reduzida sem causa justificada, enquadra-se no conceito de:",
-        options: ["Normas gerais de circulação e conduta.", "Procedimentos adotados somente nas estradas rurais.", "Regras de procedimento adotadas livremente pelo condutor.", "Princípios exclusivos da direção defensiva."],
-        correctIndex: 0,
-        explanation: "Faz parte das Normas Gerais de Circulação e Conduta impostas pelo CTB.",
-        detailedExplanation: "As regras sobre fluxo livre, limites mínimos de velocidade (metade da máxima) e proibição de obstruir a marcha de outros veículos constituem a base das Normas Gerais de Circulação e Conduta (Art. 43 e 219 do CTB).",
-        legalBase: "Art. 43 e Art. 219 do CTB",
-        commonMistake: "Confundir obrigações legais de circulação com meros conselhos de direção defensiva.",
-        tip: "Velocidade mínima e fluxo livre = Normas Gerais de Circulação!",
-        incidence: "media",
         trap: false,
         difficulty: 2
     },
@@ -5833,7 +5757,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_compacto_03",
         category: "infracoes",
-        statement: "Durante abordagem em fiscalização, o condutor é solicitado a apresentar o CRLV-e (licenciamento) e declara não portar documento algum, digital ou impresso. Pelo CTB, a conduta gera qual medida administrativa e penalidade?",
+        statement: "Na fiscalização, condutor é solicitado a apresentar o CRLV-e e diz não ter nenhum documento, nem digital nem impresso. Que medida e penalidade isso gera?",
         options: ["Apenas advertência por escrito, sem retenção do veículo.", "Multa por infração leve e retenção do veículo até a apresentação do documento.", "Multa por infração gravíssima e remoção imediata do veículo.", "Multa por infração grave com apreensão obrigatória da CNH."],
         correctIndex: 1,
         explanation: "Não portar o CRLV é infração leve com retenção do veículo até regularização.",
@@ -5848,7 +5772,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_alta_01",
         category: "legislacao",
-        statement: "Durante fiscalização de rotina em uma rodovia de pista simples fora do perímetro urbano, um condutor é flagrado transitando com o veículo com o farol apagado durante o dia. Considerando as normas de trânsito vigentes, qual é a classificação da infração e a medida administrativa cabível?",
+        statement: "Em fiscalização em rodovia, condutor é flagrado com o farol apagado durante o dia. Qual a classificação da infração e a medida administrativa cabível?",
         options: ["Infração média, sujeita a multa e retenção do veículo para regularização.", "Infração grave, sujeita a multa e remoção do veículo ao pátio.", "Infração gravíssima, gerando suspensão imediata do direito de dirigir.", "Infração leve, punida apenas com advertência por escrito na primeira ocorrência."],
         correctIndex: 0,
         explanation: "Transitar em rodovia de pista simples durante o dia sem farol baixo ou DRL é infração média com retenção do veículo.",
@@ -5863,7 +5787,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_alta_10",
         category: "legislacao",
-        statement: "Conduzir veículo automotor não registrado e devidamente licenciado nas vias públicas terrestres configura qual tipo de infração de trânsito e qual a respectiva medida administrativa aplicada pela autoridade?",
+        statement: "Conduzir veículo não registrado e não licenciado na via pública configura qual infração e qual medida administrativa?",
         options: ["Infração grave com retenção do veículo até a apresentação dos papéis.", "Infração gravíssima, punida com multa, apreensão e remoção do veículo ao pátio.", "Infração média, passível apenas de penalidade pecuniária sem remoção.", "Não constitui infração caso o proprietário comprove que o veículo está quitado."],
         correctIndex: 1,
         explanation: "Conduzir veículo não registrado e licenciado é infração gravíssima com remoção do veículo (Art. 230, V do CTB).",
@@ -5878,7 +5802,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_alta_13",
         category: "placas",
-        statement: "Em rodovia, o condutor visualiza placa da sinalização de serviços auxiliares com fundo azul e símbolo de cruz vermelha, instalada com antecedência a um trecho urbano. Essa placa indica a proximidade de:",
+        statement: "Em rodovia, placa de serviços auxiliares com fundo azul e cruz vermelha avisa a proximidade de quê?",
         options: ["Posto de combustível à frente, como serviço auxiliar de apoio na via.","Pronto-socorro ou unidade hospitalar de atendimento de urgência.","Telefone de emergência disponível nas proximidades.","Posto de fiscalização rodoviária com balança para pesagem de veículos."],
         correctIndex: 1,
         explanation: "A placa de fundo azul com cruz vermelha sinaliza a presença de Pronto Socorro nas proximidades.",
@@ -5893,7 +5817,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_alta_14",
         category: "legislacao",
-        statement: "Durante o planejamento de uma viagem longa por rodovia interestadual, o condutor passa por engano pelo ponto exato da saída que pretendia acessar. Qual deve ser a conduta segura e legal a ser adotada?",
+        statement: "Em viagem por rodovia, o condutor passa de raspão pela saída que queria pegar. Qual a conduta segura e legal?",
         options: ["Consultar o aplicativo de navegação no celular para recalcular a rota imediatamente.","Seguir em frente com segurança e efetuar a manobra de retorno no próximo viaduto ou retorno oficial.","Utilizar a área de serviço mais próxima para voltar à saída perdida na rodovia.","Retornar à rodovia pelo acesso da saída, quando não houver veículos subindo."],
         correctIndex: 1,
         explanation: "Ao perder uma saída em rodovia, deve-se prosseguir até o próximo retorno oficial com segurança.",
@@ -5908,7 +5832,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_alta_17",
         category: "legislacao",
-        statement: "Os órgãos de trânsito e as normas técnicas brasileiras passaram a substituir gradualmente o termo acidente por sinistro de trânsito em estatísticas e legislações. A razão fundamental dessa mudança conceitual é:",
+        statement: "Por que os órgãos de trânsito passaram a usar o termo 'sinistro de trânsito' no lugar de 'acidente de trânsito'?",
         options: ["Para evidenciar que a grande maioria dos eventos na via é previsível e evitável por falha humana.", "Para isentar os fabricantes de veículos de responsabilidade civil em colisões frontais.", "Porque a palavra acidente juridicamente anula o pagamento do seguro obrigatório DPVAT.", "Para diferenciar colisões urbanas de ocorrências registradas em rodovias federais."],
         correctIndex: 0,
         explanation: "O termo 'sinistro' substitui 'acidente' para destacar que os eventos no trânsito decorrem de ações humanas evitáveis.",
@@ -5923,7 +5847,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_alta_30",
         category: "legislacao",
-        statement: "O proprietário permite que pessoa não habilitada, ou com CNH cassada ou suspensa, tome a posse e conduza veículo automotor na via pública. Pelo CTB, a infração aplicável e a responsabilidade administrativa recaem:",
+        statement: "Proprietário deixa pessoa sem habilitação (ou com CNH cassada/suspensa) dirigir seu veículo na via pública. Sobre quem recai a infração e a responsabilidade?",
         options: ["Apenas sobre o condutor flagrado ao volante, ficando o proprietário isento.","Sobre o proprietário do veículo, que comete infração gravíssima com multa multiplicada.","Sobre ambos, aplicando-se apenas advertência verbal na primeira ocorrência do ano.","Sobre o proprietário, com infração grave e multa simples, sem fator multiplicador."],
         correctIndex: 1,
         explanation: "Permitir posse a não habilitado ou cassado gera infração gravíssima com multa multiplicada para o proprietário (Art. 164 do CTB).",
@@ -6489,7 +6413,7 @@ export const QUESTIONS: Question[] = [
         id: "rst_07",
         category: "legislacao",
         statement: "Em bairro residencial de madrugada, o condutor usa a buzina para chamar alguém. Em qual situação o uso da buzina é proibido?",
-        options: ["Fora da cidade para advertir intenção de ultrapassar.", "Entre 22h e 6h ou em local com proibição sinalizada.", "Como advertência preventiva para evitar acidente no cruzamento.", "Ao avisar pedestres parados no bordo da pista urbana."],
+        options: ["Fora da cidade para advertir intenção de ultrapassar.", "Entre 22h e 6h ou em local com proibição sinalizada.", "Como advertência preventiva para evitar sinistro no cruzamento.", "Ao avisar pedestres parados no bordo da pista urbana."],
         correctIndex: 1,
         explanation: "Correta B: proibida de 22h às 6h e onde há placa. Base: Art. 227 do CTB.",
         incidence: "alta",
@@ -6555,7 +6479,7 @@ export const QUESTIONS: Question[] = [
         id: "rst_13",
         category: "primeiros-socorros",
         statement: "Após colisão com motociclista caído de capacete, populares tentam ajudar. No socorro à vítima, o que o prestador nunca deve fazer?",
-        options: ["Sinalizar o local do acidente antes de atender a vítima.", "Movimentar a vítima ou retirar o capacete do motociclista.", "Chamar emergência especializada pelo 192 ou 193.", "Desligar a ignição do veículo para evitar incêndio."],
+        options: ["Sinalizar o local do sinistro antes de atender a vítima.", "Movimentar a vítima ou retirar o capacete do motociclista.", "Chamar emergência especializada pelo 192 ou 193.", "Desligar a ignição do veículo para evitar incêndio."],
         correctIndex: 1,
         explanation: "Correta B: nunca mova nem tire o capacete. Base: manual de primeiros socorros do CTB.",
         incidence: "alta",
@@ -6768,13 +6692,13 @@ export const QUESTIONS: Question[] = [
     {
         id: "cid_n1_001",
         category: "legislacao",
-        statement: "Em caso de acidentes de trânsito sem vítimas, qual é a atitude correta e obrigatória do condutor envolvido para garantir a segurança e a fluidez?",
+        statement: "Em caso de sinistros de trânsito sem vítimas, qual é a atitude correta e obrigatória do condutor envolvido para garantir a segurança e a fluidez?",
         options: ["Aguardar a chegada da perícia policial no local, sem remover os veículos da via.","Remover os veículos do local de forma imediata para não atrapalhar o fluxo do trânsito.","Deixar os veículos na pista exatamente como pararam até o registro do boletim de ocorrência.","Sinalizar com o pisca-alerta e manter os veículos na pista, dispensando a remoção."],
         correctIndex: 1,
-        explanation: "Correta: em acidentes sem vítimas, é obrigatório retirar os veículos para não obstruir a via, conforme art. 178 do CTB.",
+        explanation: "Correta: em sinistros sem vítimas, é obrigatório retirar os veículos para não obstruir a via, conforme art. 178 do CTB.",
         detailedExplanation: "Bateu o carro e houve apenas danos materiais (ninguém se machucou)? A obrigação dos condutores é tirar os veículos do meio da rua imediatamente para liberar o trânsito. Deixar o carro bloqueando a via sem necessidade é infração média.",
         legalBase: "Art. 178 do CTB",
-        commonMistake: "Muitos acham que não se pode mover o carro de forma alguma antes da polícia chegar. Essa regra de não mexer vale apenas para acidentes COM vítimas.",
+        commonMistake: "Muitos acham que não se pode mover o carro de forma alguma antes da polícia chegar. Essa regra de não mexer vale apenas para sinistros COM vítimas.",
         tip: "Sem vítima = Tira o carro da via.",
         memoryHook: "Bateu, não machucou? Desobstruiu!",
         incidence: "alta",
@@ -7808,7 +7732,7 @@ export const QUESTIONS: Question[] = [
         id: "cid_boa_55",
         category: "legislacao",
         statement: "Ao bater no retrovisor de carro parado no semáforo, o causador prefere fugir temendo custo e discussão. Qual o dever ético?",
-        options: ["Parar em local seguro, identificar-se e assumir o reparo, pois fugir agrava a falta ética e demonstra desrespeito pelo patrimônio alheio.","Fugir para evitar custo e discussão, já que pequenos danos no espelho seriam irrelevantes diante da pressa do dia a dia.","Fugir do local, pois o CTB só exigiria a permanência do condutor quando o acidente envolver vítima.","Ir embora se o trânsito estiver fluindo, pois interromper o fluxo para resolver dano leve causaria mais prejuízo coletivo."],
+        options: ["Parar em local seguro, identificar-se e assumir o reparo, pois fugir agrava a falta ética e demonstra desrespeito pelo patrimônio alheio.","Fugir para evitar custo e discussão, já que pequenos danos no espelho seriam irrelevantes diante da pressa do dia a dia.","Fugir do local, pois o CTB só exigiria a permanência do condutor quando o sinistro envolver vítima.","Ir embora se o trânsito estiver fluindo, pois interromper o fluxo para resolver dano leve causaria mais prejuízo coletivo."],
         correctIndex: 0,
         explanation: "Assumir o dano e identificar-se é dever ético, mesmo em prejuízo pequeno. Os distratores usam pressa, fluxo e custo para justificar a fuga como se fosse razoável.",
 
@@ -7836,7 +7760,7 @@ export const QUESTIONS: Question[] = [
         id: "cid_boa_57",
         category: "legislacao",
         statement: "Em blitz da Lei Seca, o motorista se recusa a colaborar e ironiza os policiais. Qual comportamento demonstra cidadania?",
-        options: ["Recusar o teste de alcoolemia, pois a submissão só seria obrigatória quando houver acidente com vítima.","Recusar colaboração e incentivar outros a fazer o mesmo, porque resistir à fiscalização seria forma legítima de exercer cidadania.","Colaborar com respeito, seguir as orientações e entender a blitz como proteção coletiva, não como perseguição ao motorista.","Discutir e filmar para intimidar os fiscais, acreditando que pressioná-los garantiria tratamento privilegiado na fiscalização."],
+        options: ["Recusar o teste de alcoolemia, pois a submissão só seria obrigatória quando houver sinistro com vítima.","Recusar colaboração e incentivar outros a fazer o mesmo, porque resistir à fiscalização seria forma legítima de exercer cidadania.","Colaborar com respeito, seguir as orientações e entender a blitz como proteção coletiva, não como perseguição ao motorista.","Discutir e filmar para intimidar os fiscais, acreditando que pressioná-los garantiria tratamento privilegiado na fiscalização."],
         correctIndex: 2,
         explanation: "Respeitar e colaborar na blitz é cidadania, pois a fiscalização protege vidas. Os distratores disfarçam resistência e pressão como exercício legítimo de direitos.",
 
@@ -8059,7 +7983,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "cid_boa_73",
         category: "legislacao",
-        statement: "Ao transitar por uma rodovia de pista simples durante a noite sob chuva intensa e sem visibilidade adequada do sentido oposto, o condutor pretende realizar a ultrapassagem de um veículo lento à sua frente. Diante das condições adversas apresentadas, a conduta correta a ser adotada é:",
+        statement: "À noite, sob chuva forte e com pouca visibilidade, condutor quer ultrapassar um veículo lento em rodovia de pista simples. Qual a conduta correta?",
         options: ["Iniciar a ultrapassagem mantendo o veículo na faixa contrária pelo menor tempo possível, orientando-se estritamente pela sinalização horizontal da via.", "Aumentar a velocidade de transposição para reduzir o tempo de exposição ao risco de aquaplanagem na pista molhada.", "Realizar a ultrapassagem utilizando o acostamento do lado direito, onde a camada de água acumulada é menor.", "Desistir da manobra de ultrapassagem e aguardar momento oportuno com visibilidade plena e condições seguras para a execução."],
         correctIndex: 3,
         explanation: "Correta a quarta: sem visibilidade plena do sentido oposto, à noite e sob chuva, em pista simples, a conduta segura é desistir da manobra. A A usa a sinalização horizontal como falsa garantia, a B aumenta a velocidade, o que agrava a aquaplanagem, e a C transfere a ultrapassagem ao acostamento, onde a aderência é menor.",
@@ -8334,12 +8258,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "fix_previsao_acidentes_10",
         category: "direcao-defensiva",
-        statement: "Sobre o Método Básico de Previsão de Acidentes, assinale a alternativa correta:",
-        options: ["Exige condutor atento para perceber o perigo e escolher a melhor forma de evitar o acidente.", "Dispensa atenção, pois basta reagir com reflexo quando o perigo já estiver instalado.", "Vale só para rodovias, sendo inútil na via urbana de baixa velocidade.", "Consiste em acelerar para sair rápido da zona de perigo antes de avaliá-la."],
+        statement: "Sobre o Método Básico de Previsão de Sinistros, assinale a alternativa correta:",
+        options: ["Exige condutor atento para perceber o perigo e escolher a melhor forma de evitar o sinistro.", "Dispensa atenção, pois basta reagir com reflexo quando o perigo já estiver instalado.", "Vale só para rodovias, sendo inútil na via urbana de baixa velocidade.", "Consiste em acelerar para sair rápido da zona de perigo antes de avaliá-la."],
         correctIndex: 0,
         explanation: "Correta A: prever é perceber cedo o perigo para decidir com tempo a melhor saída.",
         detailedExplanation: "O método baseia-se em atenção constante: ver o risco formando-se, avaliar as opções e agir com antecedência. Reagir só na hora, sem previsão, raramente evita a colisão.",
-        tip: "Ver cedo + decidir cedo = acidente evitado.",
+        tip: "Ver cedo + decidir cedo = sinistro evitado.",
         incidence: "alta",
         trap: false,
         difficulty: 1,
@@ -8352,7 +8276,7 @@ export const QUESTIONS: Question[] = [
         options: ["Não beber antes de dirigir.", "Beber sempre em jejum, pois evita a embriaguez.", "Tomar um banho bem gelado para eliminar os efeitos do álcool.", "Deixar o condutor beber, desde que o trajeto seja curto e conhecido."],
         correctIndex: 0,
         explanation: "Correta A: a única conduta segura é não beber antes de dirigir; jejum, banho gelado e trajeto curto são mitos.",
-        detailedExplanation: "Jejum acelera a absorção, banho frio não elimina álcool do sangue e trajeto curto não impede o acidente. Só o tempo metaboliza o álcool — cerca de 1 hora por dose.",
+        detailedExplanation: "Jejum acelera a absorção, banho frio não elimina álcool do sangue e trajeto curto não impede o sinistro. Só o tempo metaboliza o álcool — cerca de 1 hora por dose.",
         commonMistake: "Acreditar em truques (café, banho, janela aberta) para enganar o bafômetro ou o efeito.",
         tip: "Álcool e direção: só o tempo resolve. Não beba.",
         incidence: "alta",
@@ -8367,7 +8291,7 @@ export const QUESTIONS: Question[] = [
         options: ["Com 6 decigramas ou mais há crime (detenção de 6 meses a 3 anos, multa e suspensão), e o álcool altera a percepção e retarda os reflexos.","Com qualquer quantidade há crime de detenção, e o celular em viva-voz é infração gravíssima.","O álcool reduz o tempo de reação, pois relaxa o condutor e melhora a resposta aos estímulos.","Abaixo de 6 decigramas não há qualquer punição, e beber em jejum evita a embriaguez."],
         correctIndex: 0,
         explanation: "Correta A: 6dg/L ou mais configura o crime do art. 306, e o álcool degrada percepção e reflexos.",
-        detailedExplanation: "Abaixo de 6dg/L já há infração gravíssima (art. 165); o crime exige 6dg/L ou sinais de alteração. Prever o perigo é qualidade que evita acidentes, e jejum piora a absorção.",
+        detailedExplanation: "Abaixo de 6dg/L já há infração gravíssima (art. 165); o crime exige 6dg/L ou sinais de alteração. Prever o perigo é qualidade que evita sinistros, e jejum piora a absorção.",
         legalBase: "Arts. 165 e 306 do CTB",
         commonMistake: "Achar que só acima de 6dg/L há punição ou que jejum ajuda.",
         tip: "6dg = crime. Qualquer dose = infração.",
@@ -8379,11 +8303,11 @@ export const QUESTIONS: Question[] = [
     {
         id: "fix_fatores_acidentes_13",
         category: "direcao-defensiva",
-        statement: "Sobre fatores e tipos de acidentes de trânsito, assinale a alternativa correta:",
+        statement: "Sobre fatores e tipos de sinistros de trânsito, assinale a alternativa correta:",
         options: ["Estreitamentos de pista elevam o risco, e colisões frontais geralmente envolvem veículo na contramão.","Os estreitamentos de pista exigem apenas atenção moderada, pois diminuem a velocidade do trânsito.","Colisões frontais ocorrem só em pista simples, e estreitamentos reduzem o risco.","As colisões frontais são raras em vias de tráfego intenso, pois todos respeitam a faixa de circulação."],
         correctIndex: 0,
         explanation: "Correta A: estreitamento exige atenção redobrada, e a frontal típica tem invasão da contramão.",
-        detailedExplanation: "Acidentes envolvem veículos, pedestres e ciclistas; vegetação alta tira visibilidade em curvas e acessos. A colisão frontal clássica ocorre quando um veículo trafega na mão contrária.",
+        detailedExplanation: "Sinistros envolvem veículos, pedestres e ciclistas; vegetação alta tira visibilidade em curvas e acessos. A colisão frontal clássica ocorre quando um veículo trafega na mão contrária.",
         tip: "Estreitamento = risco. Frontal = contramão.",
         incidence: "alta",
         trap: false,
@@ -8397,7 +8321,7 @@ export const QUESTIONS: Question[] = [
         options: ["Ocorre por desatenção ou desrespeito à distância mínima; muito próximo, não há tempo de reagir à freada brusca.","Ocorre mesmo com distância ampla, pois o tempo de reação não interfere na parada do veículo.","Evita-se mantendo a menor distância possível, o que amplia a visão além do veículo da frente.","Só ocorre em pista molhada, pois no seco a distância mínima é dispensável."],
         correctIndex: 0,
         explanation: "Correta A: colar elimina o tempo de reação diante da freada brusca de quem vai à frente.",
-        detailedExplanation: "A traseira é o acidente mais evitável: regra dos 2 segundos (4 com chuva), olhar longe e frear progressivo. No seco a distância também é obrigatória.",
+        detailedExplanation: "A traseira é o sinistro mais evitável: regra dos 2 segundos (4 com chuva), olhar longe e frear progressivo. No seco a distância também é obrigatória.",
         tip: "Colou, bateu. 2 segundos salvam.",
         incidence: "alta",
         trap: false,
@@ -8467,12 +8391,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "fix_sinalizar_local_19",
         category: "primeiros-socorros",
-        statement: "Em caso de acidente, é necessário sinalizar o local. Assinale a alternativa que indica corretamente as finalidades da sinalização:",
-        options: ["Indicar desvio, evitar novo acidente e manter o tráfego fluindo com segurança.","Sinalizar somente após a chegada da viatura, para não confundir os demais motoristas.","Sinalizar somente com o pisca-alerta do veículo, que já é suficiente para alertar.","Manter o fluxo rápido, dispensando o desvio do tráfego no local."],
+        statement: "Em caso de sinistro, é necessário sinalizar o local. Assinale a alternativa que indica corretamente as finalidades da sinalização:",
+        options: ["Indicar desvio, evitar novo sinistro e manter o tráfego fluindo com segurança.","Sinalizar somente após a chegada da viatura, para não confundir os demais motoristas.","Sinalizar somente com o pisca-alerta do veículo, que já é suficiente para alertar.","Manter o fluxo rápido, dispensando o desvio do tráfego no local."],
         correctIndex: 0,
         explanation: "Correta A: sinalizar desvia o tráfego, previne novas colisões e organiza o fluxo com segurança.",
         detailedExplanation: "A sinalização (triângulo, pisca-alerta, galhos) alerta quem se aproxima, permite o desvio e evita o engavetamento. Jamais significa dispensar ajuda — o socorro deve ser acionado.",
-        tip: "Sinalizar = alertar + desviar + evitar outro acidente.",
+        tip: "Sinalizar = alertar + desviar + evitar outro sinistro.",
         incidence: "alta",
         trap: true,
         difficulty: 2,
@@ -8510,7 +8434,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "fix_imobilizar_movimentar_22",
         category: "primeiros-socorros",
-        statement: "Sobre a movimentação da vítima de acidente, assinale a alternativa correta:",
+        statement: "Sobre a movimentação da vítima de sinistro, assinale a alternativa correta:",
         options: ["O ideal é movimentar sem imobilizar, pois a imobilização atrasa o socorro.", "A vítima deve ser movimentada já imobilizada, evitando agravar lesões de coluna.", "Deve-se sentar a vítima antes de movê-la, para avaliar a consciência.", "A imobilização só é necessária após a chegada ao hospital."],
         correctIndex: 1,
         explanation: "Correta B: suspeita de lesão medular exige movimentação em bloco e imobilizada (colar, prancha).",
@@ -8588,7 +8512,7 @@ export const QUESTIONS: Question[] = [
         options: ["Rejeitar críticas e perceber as necessidades dos outros no trânsito.","Comunicar ideias e perceber as necessidades dos outros no trânsito.","Comunicar ideias e provocar conflitos para impor respeito.","Provocar conflitos e comunicar ordens aos demais usuários."],
         correctIndex: 1,
         explanation: "Correta B: comunicar ideias e perceber o outro são habilidades pessoais positivas no trânsito.",
-        detailedExplanation: "Rejeitar críticas e provocar conflitos destroem a convivência. Comunicar-se bem e perceber necessidades (pedestre, ciclista, idoso) previnem atritos e acidentes.",
+        detailedExplanation: "Rejeitar críticas e provocar conflitos destroem a convivência. Comunicar-se bem e perceber necessidades (pedestre, ciclista, idoso) previnem atritos e sinistros.",
         tip: "Habilidade boa = comunica + percebe, sem conflito.",
         incidence: "alta",
         trap: false,
@@ -8615,12 +8539,12 @@ export const QUESTIONS: Question[] = [
         id: "fix_conducao_economica_29",
         category: "meio-ambiente",
         statement: "Sobre a condução econômica, assinale a alternativa correta:",
-        options: ["Tem como objetivo evitar acidentes durante as viagens do veículo.","Busca economizar combustível e reduzir emissões, com aceleração suave e manutenção em dia.","Considera apenas a manutenção mecânica, sem cuidados com o estilo de condução.","Exige velocidade máxima constante para otimizar o rendimento do motor."],
+        options: ["Tem como objetivo evitar sinistros durante as viagens do veículo.","Busca economizar combustível e reduzir emissões, com aceleração suave e manutenção em dia.","Considera apenas a manutenção mecânica, sem cuidados com o estilo de condução.","Exige velocidade máxima constante para otimizar o rendimento do motor."],
         correctIndex: 1,
-        explanation: "Correta B: condução econômica economiza combustível e polui menos; evitar acidentes é objetivo da direção defensiva.",
+        explanation: "Correta B: condução econômica economiza combustível e polui menos; evitar sinistros é objetivo da direção defensiva.",
         detailedExplanation: "Acelerar suave, trocar marchas na rotação ideal e manter pneus calibrados reduzem consumo e emissões. Desligar o motor andando (banguela) é infração média e perigoso; velocidade máxima gasta mais.",
         commonMistake: "Confundir condução econômica com direção defensiva ou achar que banguela economiza.",
-        tip: "Econômica = bolso + ar. Defensiva = acidentes.",
+        tip: "Econômica = bolso + ar. Defensiva = sinistros.",
         incidence: "alta",
         trap: true,
         difficulty: 1,
@@ -8659,7 +8583,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "fix_resolucao_14_98_32",
         category: "legislacao",
-        statement: "Sobre a Resolução nº 14/98 do CONTRAN, assinale a alternativa correta:",
+        statement: "Qual é o tema tratado pela Resolução nº 14/98 do CONTRAN?",
         options: ["Trata dos níveis de emissão de poluentes dos veículos automotores.", "Trata dos equipamentos de uso obrigatório dos veículos em circulação.", "Trata das infrações por excesso de velocidade e seus percentuais.", "Trata da classificação das CNHs por categoria de habilitação."],
         correctIndex: 1,
         explanation: "Correta B: a Res. 14/98 lista os equipamentos obrigatórios; emissões são do PROCONVE/CONAMA.",
@@ -8738,7 +8662,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "bnc_exames_res168",
         category: "legislacao",
-        statement: "Quais exames o candidato à CNH deve fazer, segundo a Resolução nº 168 do CONTRAN?",
+        statement: "Quais exames o candidato à CNH deve fazer para ser habilitado?",
         options: ["Apenas exame de vista e teste de baliza.", "Avaliação psicológica, aptidão física e mental, exame escrito e exame de direção.", "Apenas curso teórico online, sem provas presenciais.", "Somente exame médico e pagamento das taxas do DETRAN."],
         correctIndex: 1,
         explanation: "Correta B: o processo tem avaliação psicológica, aptidão física e mental, prova escrita e prova de direção.",
@@ -8925,7 +8849,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l01_03",
         category: "legislacao",
-        statement: "Sobre a travessia de pedestres (art. 69 do CTB), é INCORRETO afirmar que:",
+        statement: "Sobre a travessia de pedestres, é INCORRETO afirmar que:",
         options: ["Onde não houver faixa ou passagem, o cruzamento da via deverá ser feito em sentido perpendicular ao eixo da via.", "O pedestre deve utilizar sempre as faixas ou passagens a ele destinadas quando existirem a até cinquenta metros dele.", "Nas interseções e proximidades onde não existam faixas de travessia, o pedestre deve atravessar a via transversal contornando o perímetro da interseção.", "Onde houver passagem sinalizada sem foco de pedestres, o pedestre pode iniciar a travessia a qualquer momento, desde que observe os veículos."],
         correctIndex: 3,
         explanation: "Onde não há foco de pedestres, o pedestre deve aguardar que o semáforo ou o agente de trânsito interrompa o fluxo de veículos. A, B e C reproduzem o art. 69. A D gera dúvida porque \"observar os veículos\" soa prudente, mas não substitui a regra de aguardar a interrupção do fluxo.",
@@ -8952,7 +8876,7 @@ export const QUESTIONS: Question[] = [
         id: "l01_07",
         category: "legislacao",
         statement: "O condutor que tenha o propósito de ultrapassar veículo de transporte coletivo parado, efetuando embarque ou desembarque de passageiros, deverá:",
-        options: ["Reduzir a velocidade, dobrando a atenção, com o objetivo de evitar acidentes.", "Manter a velocidade e acionar a buzina em toque longo para alertar os pedestres.", "Aguardar a partida do veículo, pois a ultrapassagem é sempre proibida nessa situação.", "Passar o mais próximo possível do veículo parado, para liberar a via rapidamente."],
+        options: ["Reduzir a velocidade, dobrando a atenção, com o objetivo de evitar sinistros.", "Manter a velocidade e acionar a buzina em toque longo para alertar os pedestres.", "Aguardar a partida do veículo, pois a ultrapassagem é sempre proibida nessa situação.", "Passar o mais próximo possível do veículo parado, para liberar a via rapidamente."],
         correctIndex: 0,
         explanation: "O art. 31 exige redução de velocidade e atenção redobrada, porque pedestres podem surgir de trás do coletivo. A C é a mais tentadora, porque o CTB não proíbe de forma absoluta a ultrapassagem nessa situação. A B é conduta inadequada, e a D ignora a distância lateral de segurança.",
         legalBase: "Art. 31 do CTB",
@@ -8978,9 +8902,9 @@ export const QUESTIONS: Question[] = [
         id: "l01_09",
         category: "legislacao",
         statement: "Sobre o uso da buzina, assinale a única alternativa CORRETA:",
-        options: ["Em áreas urbanas, o toque breve é permitido para advertir que se tem o propósito de ultrapassar outro condutor.", "Fora das áreas urbanas, o toque breve é permitido para advertir que se tem o propósito de ultrapassar outro condutor.", "O toque longo é permitido para evitar acidentes, desde que não haja pedestres próximos.", "O toque breve é permitido para cumprimentar outros condutores ou chamar passageiros."],
+        options: ["Em áreas urbanas, o toque breve é permitido para advertir que se tem o propósito de ultrapassar outro condutor.", "Fora das áreas urbanas, o toque breve é permitido para advertir que se tem o propósito de ultrapassar outro condutor.", "O toque longo é permitido para evitar sinistros, desde que não haja pedestres próximos.", "O toque breve é permitido para cumprimentar outros condutores ou chamar passageiros."],
         correctIndex: 1,
-        explanation: "O art. 41 admite a buzina, em toque breve, só para advertências necessárias a fim de evitar acidentes e, fora das áreas urbanas, para advertir ultrapassagem. A A troca \"fora\" por \"em\" áreas urbanas, e é por isso que confunde. C e D abrem exceções que o artigo não prevê.",
+        explanation: "O art. 41 admite a buzina, em toque breve, só para advertências necessárias a fim de evitar sinistros e, fora das áreas urbanas, para advertir ultrapassagem. A A troca \"fora\" por \"em\" áreas urbanas, e é por isso que confunde. C e D abrem exceções que o artigo não prevê.",
         legalBase: "Art. 41 do CTB",
         incidence: "alta",
         trap: true,
@@ -9003,7 +8927,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l01_11",
         category: "legislacao",
-        statement: "Sobre as conversões (art. 38 do CTB), é INCORRETO afirmar que:",
+        statement: "Sobre as conversões de veículo, é INCORRETO afirmar que:",
         options: ["Ao sair da via pelo lado direito, o condutor deve aproximar-se o máximo possível do bordo direito da pista e executar a manobra no menor espaço possível.", "Ao sair pelo lado esquerdo em pista com circulação nos dois sentidos, o condutor deve aproximar-se o máximo possível do eixo ou da linha divisória da pista, quando houver.", "Ao sair pelo lado esquerdo em pista de um só sentido, o condutor deve aproximar-se o máximo possível do bordo esquerdo.", "Durante a manobra, o condutor deve ceder passagem apenas aos veículos que transitem em sentido contrário na pista da via da qual vai sair, ficando dispensado de ceder a pedestres e ciclistas."],
         correctIndex: 3,
         explanation: "O parágrafo único do art. 38 manda ceder passagem a pedestres e ciclistas e aos veículos em sentido contrário, respeitadas as normas de preferência. A, B e C reproduzem os incisos I e II. A D confunde porque o foco costuma ficar nos veículos, mas pedestres e ciclistas entram na regra.",
@@ -9016,7 +8940,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l01_12",
         category: "legislacao",
-        statement: "Antes de iniciar qualquer manobra que implique deslocamento lateral, o condutor deve indicar seu propósito de forma clara e com a devida antecedência (art. 35). Entende-se por deslocamento lateral:",
+        statement: "Antes de qualquer manobra que implique deslocamento lateral, o condutor deve sinalizar a intenção com antecedência. Entende-se por deslocamento lateral:",
         options: ["Apenas a ultrapassagem de outro veículo.", "Apenas a mudança de faixa dentro da mesma pista.", "A transposição de faixas, os movimentos de conversão à direita e à esquerda e os retornos.", "Toda redução de velocidade que altere a posição do veículo na faixa."],
         correctIndex: 2,
         explanation: "O parágrafo único do art. 35 define deslocamento lateral como transposição de faixas, conversões (direita e esquerda) e retornos. A e B são definições \"curtas\" demais. A D mistura com a sinalização de redução de velocidade, que é tratada no art. 43.",
@@ -9029,7 +8953,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l01_15",
         category: "legislacao",
-        statement: "Ao regular a velocidade, o condutor deve observar constantemente as condições físicas da via, do veículo e da carga, as condições meteorológicas e a intensidade do trânsito (art. 43). NÃO é dever previsto nesse artigo:",
+        statement: "Ao regular a velocidade, o condutor deve observar as condições da via, do veículo, do clima e do trânsito. NÃO é um dever nesse contexto:",
         options: ["Não obstruir a marcha normal dos demais veículos, transitando a velocidade anormalmente reduzida sem causa justificada.", "Antes de diminuir a velocidade, certificar-se de que pode fazê-lo sem risco nem inconvenientes para os outros condutores, salvo perigo iminente.", "Indicar aos demais condutores a manobra de redução de velocidade, sinalizando com o braço ou utilizando a luz indicadora de freio ou de marcha à ré.", "Reduzir a velocidade sempre que houver pedestres na calçada, mesmo que não demonstrem intenção de atravessar."],
         correctIndex: 3,
         explanation: "A, B e C reproduzem os incisos I, II e III do art. 43. A D é um \"dever\" criado: a redução de velocidade ocorre em situações específicas (como a aproximação de faixa, art. 220), não sempre que houver pedestre na calçada.",
@@ -9081,7 +9005,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l01_28",
         category: "placas",
-        statement: "De acordo com o Código de Trânsito Brasileiro (CTB), os veículos automotores são identificados externamente por meio de placas dianteira e traseira. Qual dos veículos abaixo é exceção a essa regra, sendo identificado APENAS pela Placa de Identificação Veicular (PIV) traseira?",
+        statement: "Os veículos automotores são identificados por placas dianteira e traseira. Qual dos veículos é exceção, tendo apenas a placa traseira (PIV)?",
         options: ["Automóvel de passeio (carro).", "Motocicleta.", "Caminhão.", "Ônibus."],
         correctIndex: 1,
         explanation: "Correta a segunda: motocicleta, motoneta e ciclomotor usam só a placa traseira. Carro, caminhão e ônibus levam dianteira e traseira (art. 115).",
@@ -9107,7 +9031,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l01_36",
         category: "legislacao",
-        statement: "Um condutor, sem qualquer infração gravíssima nos últimos 12 meses, acumulou duas infrações graves, três médias e quatro leves. Considerando a pontuação de cada natureza (leve 3, média 4, grave 5, gravíssima 7) e o limite aplicável, a situação é:",
+        statement: "Condutor sem infração gravíssima nos últimos 12 meses acumulou duas graves, três médias e quatro leves (leve 3, média 4, grave 5, gravíssima 7 pontos). Sua situação é:",
         options: ["34 pontos, com suspensão do direito de dirigir, pois ultrapassou 20 pontos.","34 pontos, sem suspensão por pontuação, pois o limite aplicável a quem não tem infração gravíssima é de 40 pontos.","34 pontos, com suspensão do direito de dirigir, pois ultrapassou 30 pontos.","34 pontos, sem suspensão por pontuação, pois os pontos só contam a partir de infração gravíssima."],
         correctIndex: 1,
         explanation: "2 × 5 + 3 × 4 + 4 × 3 = 10 + 12 + 12 = 34. Sem gravíssima, o limite é 40 (art. 261, inciso I, alínea c). A e C usam os limites das outras faixas: 20 pontos quando há duas ou mais gravíssimas e 30 pontos quando há uma. A D pressupõe que a contagem só se dá com infração gravíssima, o que a lei não estabelece.",
@@ -9120,7 +9044,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l01_37",
         category: "legislacao",
-        statement: "Para habilitar-se nas categorias D e E, ou para conduzir veículo de transporte coletivo de passageiros, de escolares, de emergência ou de produto perigoso, o candidato deve ser maior de:",
+        statement: "Para se habilitar nas categorias D e E ou dirigir transporte coletivo, escolares, emergência ou produto perigoso, o candidato deve ter quantos anos?",
         options: ["18 anos.", "20 anos.", "21 anos.", "25 anos."],
         correctIndex: 2,
         explanation: "O art. 145 exige mais de 21 anos. A A é a idade mínima para iniciar a habilitação, o que a torna a mais tentadora. B (20) e D (25) são números próximos que testam a memorização.",
@@ -9173,7 +9097,7 @@ export const QUESTIONS: Question[] = [
         id: "l01_41",
         category: "infracoes",
         statement: "Dirigir veículo automotor, em via pública, sem a devida Permissão para Dirigir ou Habilitação, gerando perigo de dano, configura:",
-        options: ["Apenas infração administrativa gravíssima.","Crime de trânsito (art. 309), além da infração administrativa.","Apenas crime de trânsito, sem infração administrativa.","Crime de trânsito somente se houver acidente com vítima."],
+        options: ["Apenas infração administrativa gravíssima.","Crime de trânsito (art. 309), além da infração administrativa.","Apenas crime de trânsito, sem infração administrativa.","Crime de trânsito somente se houver sinistro com vítima."],
         correctIndex: 1,
         explanation: "O fato gera as duas responsabilidades, a administrativa (art. 162) e a penal (art. 309), que não se excluem. A A é a mais tentadora porque a maioria dos condutores conhece só a multa. É o clássico \"Infração x Crime de Trânsito\".",
         legalBase: "Art. 309 do CTB",
@@ -9185,7 +9109,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l01_42",
         category: "infracoes",
-        statement: "Um condutor envolvido em acidente com vítima deixa de prestar imediato socorro, mas a vítima é prontamente socorrida por terceiros. Quanto ao crime de omissão de socorro (art. 304), é correto afirmar que o condutor:",
+        statement: "Condutor deixa de socorrer vítima de sinistro, mas terceiros a socorrem prontamente. Pelo crime de omissão de socorro, é correto afirmar que o condutor:",
         options: ["Não responde, pois a vítima foi socorrida.", "Responde somente se a vítima falecer por falta de socorro.", "Responde somente se a vítima tiver ferimentos graves.", "Responde pelo crime, ainda que a omissão seja suprida por terceiros."],
         correctIndex: 3,
         explanation: "O parágrafo único do art. 304 afirma que incide nas penas o condutor, ainda que a omissão seja suprida por terceiros ou que se trate de vítima com morte instantânea ou ferimentos leves. A A é a mais forte porque, na vida real, o socorro de terceiros \"resolve\" o problema da vítima, mas não o do condutor.",
@@ -9198,8 +9122,8 @@ export const QUESTIONS: Question[] = [
     {
         id: "l01_43",
         category: "infracoes",
-        statement: "Afastar-se o condutor do local do acidente, para fugir à responsabilidade penal ou civil que lhe possa ser atribuída, configura:",
-        options: ["Crime de trânsito previsto no art. 305 (fuga do local do acidente).", "Apenas infração administrativa gravíssima.", "O crime do art. 304 (omissão de socorro), em qualquer hipótese.", "Exercício regular de direito, se o condutor comunicar posteriormente à polícia."],
+        statement: "Afastar-se o condutor do local do sinistro, para fugir à responsabilidade penal ou civil que lhe possa ser atribuída, configura:",
+        options: ["Crime de trânsito previsto no art. 305 (fuga do local do sinistro).", "Apenas infração administrativa gravíssima.", "O crime do art. 304 (omissão de socorro), em qualquer hipótese.", "Exercício regular de direito, se o condutor comunicar posteriormente à polícia."],
         correctIndex: 0,
         explanation: "O art. 305 trata da fuga do local, e o art. 304 trata da omissão de socorro, que são condutas diferentes. A C confunde as duas. A D cria uma \"legalização\" posterior que não existe.",
         legalBase: "Art. 305 do CTB",
@@ -9237,7 +9161,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l01_46",
         category: "infracoes",
-        statement: "O crime de \"racha\" (art. 308) exige, para sua configuração:",
+        statement: "O crime de racha (competição não autorizada em via pública) exige, para sua configuração:",
         options: ["Apenas a participação em competição não autorizada, sem qualquer demonstração de risco à incolumidade.", "A condução de veículo automotor em via pública sob influência de álcool, sem relação com competição.", "A participação, na direção de veículo automotor, em via pública, de corrida, disputa ou competição não autorizada, desde que resulte dano potencial à incolumidade pública ou privada.", "A ocorrência de lesão corporal ou dano material a terceiros, sem qualquer elemento de risco prévio."],
         correctIndex: 2,
         explanation: "O tipo penal exige a participação na disputa e o dano potencial (risco concreto). A A ignora o risco, e a D exige resultado (lesão), que só leva a formas agravadas. A B mistura dois crimes diferentes (art. 306).",
@@ -9250,7 +9174,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l01_47",
         category: "infracoes",
-        statement: "O crime previsto no art. 311 (velocidade incompatível com a segurança, gerando perigo de dano) é cometido nas proximidades de determinados locais. NÃO é local expressamente citado pelo artigo:",
+        statement: "O crime de velocidade incompatível com a segurança (gerando perigo de dano) é cometido nas proximidades de certos locais. Qual NÃO é um desses locais?",
         options: ["Escolas.", "Hospitais.", "Estações de embarque e desembarque de passageiros.", "Rodovias de pista dupla com acostamento."],
         correctIndex: 3,
         explanation: "O art. 311 cita escolas, hospitais, estações de embarque e desembarque de passageiros, logradouros estreitos e locais de grande movimentação ou concentração de pessoas. Rodovias de pista dupla não constam, por isso a D confunde: o excesso de velocidade ali é infração, mas não o crime do art. 311.",
@@ -9652,7 +9576,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l02_72",
         category: "legislacao",
-        statement: "Relacione os gestos do agente de trânsito às ordens: 1) braço levantado verticalmente; 2) braço estendido horizontalmente, com movimentos verticais; 3) movimento do antebraço. (I) seguir; (II) diminuir a marcha; (III) parar. A relação correta, RESPECTIVAMENTE, é:",
+        statement: "Relacione os gestos do agente às ordens: 1) braço levantado verticalmente; 2) braço estendido horizontalmente em movimentos verticais; 3) movimento do antebraço. (I) seguir; (II) diminuir a marcha; (III) parar. A relação respectiva é:",
         options: ["1-II, 2-III, 3-I.", "1-III, 2-I, 3-II.", "1-I, 2-II, 3-III.", "1-III, 2-II, 3-I."],
         correctIndex: 3,
         explanation: "A D está correta: braço levantado verticalmente significa parar, braço estendido na horizontal com movimentos verticais significa diminuir a marcha e o movimento do antebraço significa seguir. O gesto de diminuir é o que mais confunde com o de parar, porque ambos usam o braço estendido — o que diferencia é o movimento vertical. A, B e C invertem pelo menos uma das três ordens.",
@@ -9796,9 +9720,9 @@ export const QUESTIONS: Question[] = [
         id: "l02_98",
         category: "infracoes",
         statement: "Conduzir veículo automotor com a capacidade psicomotora alterada em razão da influência de álcool ou de outra substância psicoativa que determine dependência configura:",
-        options: ["Apenas infração administrativa.", "Crime apenas se houver acidente.", "Apenas crime, sem infração administrativa.", "Crime (art. 306) e também infração administrativa (art. 165)."],
+        options: ["Apenas infração administrativa.", "Crime apenas se houver sinistro.", "Apenas crime, sem infração administrativa.", "Crime (art. 306) e também infração administrativa (art. 165)."],
         correctIndex: 3,
-        explanation: "A D está correta: as duas responsabilidades coexistem, a administrativa (art. 165) e a criminal (art. 306), porque são esferas diferentes — a multa e a suspensão não excluem a ação penal. A A e a C tratam como se uma excluísse a outra. A B exige acidente para haver crime, o que o art. 306 não prevê: basta a capacidade psicomotora alterada para configurar o tipo penal.",
+        explanation: "A D está correta: as duas responsabilidades coexistem, a administrativa (art. 165) e a criminal (art. 306), porque são esferas diferentes — a multa e a suspensão não excluem a ação penal. A A e a C tratam como se uma excluísse a outra. A B exige sinistro para haver crime, o que o art. 306 não prevê: basta a capacidade psicomotora alterada para configurar o tipo penal.",
         legalBase: "Arts. 165 e 306 do CTB",
         incidence: "alta",
         trap: true,
@@ -9808,10 +9732,10 @@ export const QUESTIONS: Question[] = [
     {
         id: "l02_100",
         category: "legislacao",
-        statement: "O condutor envolvido em acidente de trânsito ou que for alvo de fiscalização de trânsito poderá ser submetido a:",
-        options: ["Apenas exame de sangue, colhido mediante ordem judicial em serviço de saúde previamente indicado pela autoridade de trânsito.","Apenas o teste de etilômetro, vedada a perícia ou qualquer outro meio técnico de verificação da embriaguez.","Teste, exame clínico, perícia ou outro procedimento que, por meios técnicos ou científicos, na forma disciplinada pelo Contran, certifique a influência de álcool ou outra substância psicoativa que determine dependência.","O teste de alcoolemia aplicado a qualquer condutor, independentemente de suspeita ou de acidente."],
+        statement: "O condutor envolvido em sinistro de trânsito ou que for alvo de fiscalização de trânsito poderá ser submetido a:",
+        options: ["Apenas exame de sangue, colhido mediante ordem judicial em serviço de saúde previamente indicado pela autoridade de trânsito.","Apenas o teste de etilômetro, vedada a perícia ou qualquer outro meio técnico de verificação da embriaguez.","Teste, exame clínico, perícia ou outro procedimento que, por meios técnicos ou científicos, na forma disciplinada pelo Contran, certifique a influência de álcool ou outra substância psicoativa que determine dependência.","O teste de alcoolemia aplicado a qualquer condutor, independentemente de suspeita ou de sinistro."],
         correctIndex: 2,
-        explanation: "A C está correta: o art. 277 admite vários procedimentos de verificação, desde que por meios técnicos ou científicos, na forma disciplinada pelo Contran. A A e a B restringem a fiscalização a um único meio e são os erros mais comuns. A D amplia a fiscalização: o art. 277 só autoriza esses procedimentos em acidente de trânsito ou sob suspeita de alteração, nunca de forma generalizada a qualquer condutor.",
+        explanation: "A C está correta: o art. 277 admite vários procedimentos de verificação, desde que por meios técnicos ou científicos, na forma disciplinada pelo Contran. A A e a B restringem a fiscalização a um único meio e são os erros mais comuns. A D amplia a fiscalização: o art. 277 só autoriza esses procedimentos em sinistro de trânsito ou sob suspeita de alteração, nunca de forma generalizada a qualquer condutor.",
         legalBase: "Art. 277 do CTB",
         incidence: "media",
         trap: true,
@@ -9960,7 +9884,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l03_133",
         category: "prioridade",
-        statement: "Os veículos destinados a socorro de incêndio e salvamento, os de polícia, os de fiscalização e operação de trânsito e as ambulâncias, quando em serviço de urgência e devidamente identificados por dispositivos regulamentados de alarme sonoro e iluminação vermelha intermitente:",
+        statement: "Veículos de socorro, polícia, fiscalização e ambulância em serviço de urgência, com alarme sonoro e luz vermelha intermitente, têm:",
         options: ["Além de prioridade de trânsito, gozam de livre circulação, estacionamento e parada.","Têm apenas prioridade de trânsito, sem outras prerrogativas.","Podem estacionar em qualquer local, desde que o condutor permaneça no veículo.","Gozam de livre circulação e parada apenas com a luz vermelha acesa, dispensado o alarme sonoro."],
         correctIndex: 0,
         explanation: "A A está correta: o art. 29, VII soma a prioridade de trânsito à livre circulação, estacionamento e parada, sempre em serviço de urgência e com os dispositivos identificados. A B confunde ao reduzir as prerrogativas à prioridade, enquanto a C troca a exigência de serviço de urgência pela simples presença do condutor no veículo. A D dispensa o alarme sonoro, mas a livre circulação e a parada dependem dos dois dispositivos acionados.",
@@ -9973,7 +9897,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l03_135",
         category: "infracoes",
-        statement: "Deixar de dar passagem aos veículos precedidos de batedores ou aos de socorro de incêndio e salvamento, de polícia e ambulâncias, devidamente identificados e em serviço de urgência, é infração de natureza:",
+        statement: "Deixar de dar passagem a veículo de socorro, polícia ou ambulância identificado e em serviço de urgência é infração de natureza:",
         options: ["Leve.", "Média.", "Grave.", "Gravíssima."],
         correctIndex: 3,
         explanation: "A D está correta: o art. 189 classifica como gravíssima a falta de passagem para esses veículos em serviço de urgência. A C é a mais tentadora, porque o condutor acha que só deixou de ceder a passagem, sem perceber o risco para quem está sendo socorrida — e é exatamente por isso que o CTB pune com a natureza mais alta.",
@@ -10012,7 +9936,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l03_146",
         category: "legislacao",
-        statement: "Relacione as vias: 1) trânsito rápido; 2) arterial; 3) coletora; 4) local. (I) acessos especiais, sem interseções em nível; (II) interseções em nível, com semáforo e acesso aos lotes; (III) coleta e distribui o trânsito das demais; (IV) interseções não semaforizadas, de acesso local. A relação RESPECTIVAMENTE é:",
+        statement: "Relacione as vias: 1) trânsito rápido; 2) arterial; 3) coletora; 4) local. (I) acessos especiais, sem interseções em nível; (II) interseções com semáforo e acesso aos lotes; (III) coleta e distribui o trânsito das demais; (IV) interseções não semaforizadas, de acesso local. A relação respectiva é:",
         options: ["1-I, 2-II, 3-III, 4-IV.", "1-II, 2-I, 3-III, 4-IV.", "1-I, 2-III, 3-II, 4-IV.", "1-I, 2-II, 3-IV, 4-III."],
         correctIndex: 0,
         explanation: "A A está correta: trânsito rápido é a via de acessos especiais, sem interseções em nível (I); arterial é a de interseções em nível controladas por semáforo (II); coletora coleta e distribui o trânsito das demais (III); e local é a de acesso restrito, com interseções não semaforizadas (IV). A B troca as duas primeiras, que são as mais parecidas, a C inverte arterial e coletora e a D troca coletora com local. A pegadinha clássica é associar trânsito rápido à ideia de semáforo, quando justamente o que a distingue é não tê-los em nível.",
@@ -10089,7 +10013,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l04_154",
         category: "legislacao",
-        statement: "Para a penalidade de suspensão do direito de dirigir aplicada por atingir o limite de pontos, o art. 261, § 1º, I, estabelece o prazo de, e, no caso de reincidência no período de 12 meses, de, respectivamente:",
+        statement: "Na suspensão do direito de dirigir por atingir o limite de pontos, qual é o prazo e, em caso de reincidência em 12 meses, qual o prazo, respectivamente?",
         options: ["6 meses a 1 ano e 8 meses a 2 anos.", "1 a 12 meses e 6 a 24 meses.", "2 a 8 meses e 8 a 18 meses.", "12 meses fixos e 24 meses fixos."],
         correctIndex: 0,
         explanation: "A A está correta: para a suspensão por pontuação (inciso I), o prazo é de 6 meses a 1 ano e, na reincidência no período de 12 meses, de 8 meses a 2 anos. A C é a pegadinha: esses são os prazos do inciso II, das infrações que prevêem a suspensão de forma específica. A B remete a escalas antigas, e a D inventa prazos fixos, que só aparecem em dispositivos infracionais específicos.",
@@ -10102,7 +10026,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l04_155",
         category: "legislacao",
-        statement: "Nas infrações que preveem, de forma específica, a penalidade de suspensão do direito de dirigir, sem prazo descrito no próprio dispositivo infracional, o art. 261, § 1º, II, estabelece o prazo de, e, no caso de reincidência no período de 12 meses, de, respectivamente:",
+        statement: "Nas infrações que prevêm suspensão do direito de dirigir sem prazo definido na própria lei, qual é o prazo e, em caso de reincidência em 12 meses, qual o prazo, respectivamente?",
         options: ["6 meses a 1 ano e 8 meses a 2 anos.", "1 a 12 meses e 6 a 24 meses.", "2 a 8 meses e 8 a 18 meses.", "12 meses fixos e 24 meses fixos."],
         correctIndex: 2,
         explanation: "A C está correta: o inciso II fixa 2 a 8 meses e, na reincidência no período de 12 meses, de 8 a 18 meses — ressalvadas as infrações que trazem prazo no próprio dispositivo infracional. A A é o prazo da suspensão por pontuação (inciso I), e é a confusão mais comum. Os 12 meses fixos (D) vêm de artigos específicos, como a recusa ao teste de alcoolemia (art. 165-A).",
@@ -10128,7 +10052,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l04_157",
         category: "infracoes",
-        statement: "Assinale a alternativa que NÃO é hipótese de cassação do documento de habilitação (art. 263 do CTB):",
+        statement: "Qual das opções NÃO é hipótese de cassação do documento de habilitação?",
         options: ["Dirigir qualquer veículo durante o período de suspensão do direito de dirigir.", "Reincidir, no prazo de 12 meses, em infrações como as dos arts. 163, 164 e 165.", "Ser condenado judicialmente por delito de trânsito.", "Atingir o limite de pontos no período de 12 meses."],
         correctIndex: 3,
         explanation: "A D está correta: atingir o limite de pontos leva à suspensão do direito de dirigir (art. 261, I), e não à cassação — é o clássico \"Suspensão x Cassação\". A, B e C reproduzem, respectivamente, as hipóteses dos incisos I, II e III do art. 263, que exigem processo administrativo e amplo direito de defesa.",
@@ -10297,7 +10221,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l04_173",
         category: "legislacao",
-        statement: "No caso de documentos em meio digital, as medidas administrativas de recolhimento da CNH, da Permissão para Dirigir, do Certificado de Registro e do Certificado de Licenciamento Anual serão realizadas:",
+        statement: "Com documentos em meio digital, como as medidas administrativas de recolhimento da CNH, PPD, CRLV e CLA devem ser realizadas?",
         options: ["Por meio de registro no Renach ou no Renavam, conforme o caso, na forma estabelecida pelo Contran.","Mediante retenção do veículo, até que o condutor apresente o documento.","Não podem ser realizadas, por se tratar de documento digital.","Mediante impressão do documento no local da fiscalização."],
         correctIndex: 0,
         explanation: "A A está correta: o art. 269, § 5º, incluído pela Lei 14.071/2020, determina que, para documentos em meio digital, o recolhimento seja feito por registro no Renach ou no Renavam, conforme o caso. A C é a pegadinha: a digitalização do documento não impede a medida — apenas muda a sua forma.",
@@ -10310,7 +10234,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l04_175",
         category: "infracoes",
-        statement: "Em dia de chuva, um condutor passa em alta velocidade sobre uma poça, sem reduzir, e molha pessoas que esperam no ponto de ônibus. Usar o veículo para arremessar água ou detritos sobre pedestres ou veículos é infração de natureza:",
+        statement: "Em dia de chuva, condutor passa em alta velocidade sobre uma poça e molha pessoas no ponto de ônibus. Arremessar água ou detritos sobre pedestres é infração de natureza:",
         options: ["Leve.", "Grave.", "Gravíssima.", "Média."],
         correctIndex: 3,
         explanation: "A D está correta: o art. 171 enquadra a conduta como média, punida com multa. Além da infração, o episódio retrata falta de empatia: reduzir diante da poça custa segundos e evita o dano a quem espera no ponto. A B e a C superestimam a natureza da infração, e a A subestima o risco que a água arremessada causa a pedestres e ciclistas.",
@@ -10388,7 +10312,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l04_195",
         category: "legislacao",
-        statement: "Não sendo imediata a identificação do infrator, o principal condutor ou o proprietário do veículo será notificado da autuação para apresentar o condutor. A responsabilidade pela infração passa a ser deles quando:",
+        statement: "Quando o infrator não é identificado de imediato, o principal condutor ou proprietário é notificado para apresentar o condutor. A responsabilidade passa a ser deles quando:",
         options: ["Nunca, pois a responsabilidade permanece sempre do condutor, na forma do art. 257, § 3º.","Transcorrido o prazo de 30 dias, contado da notificação da autuação, sem a apresentação do condutor.","Automaticamente, no próprio ato da notificação da autuação.","Apenas se o proprietário for pessoa jurídica constituída em forma de sociedade."],
         correctIndex: 1,
         explanation: "A B está correta: o art. 257, § 7º, na redação da Lei 14.071/2020, dá 30 dias, contados da notificação da autuação, para apresentar o condutor e, não o fazendo, considera responsável o principal condutor ou, em sua ausência, o proprietário do veículo. A C é a pegadinha: a responsabilidade não migra no ato da notificação, e sim após o prazo. A D é falsa: a regra vale para pessoas físicas e jurídicas.",
@@ -10487,7 +10411,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l05_207",
         category: "legislacao",
-        statement: "O Registro Nacional Positivo de Condutores (RNPC), previsto no art. 268-A do CTB, tem a finalidade de:",
+        statement: "O Registro Nacional Positivo de Condutores (RNPC) tem a finalidade de:",
         options: ["Cadastrar os condutores que não cometeram infração de trânsito sujeita à pontuação nos últimos 12 meses.", "Cadastrar todos os condutores com CNH vigente, sem distinção.", "Cadastrar os condutores que já foram multados, para fins de cobrança.", "Registrar apenas os condutores profissionais que nunca sofreram suspensão."],
         correctIndex: 0,
         explanation: "O RNPC é um cadastro \"positivo\": reúne os condutores sem infração pontuada nos últimos 12 meses. A B generaliza demais. A C inverte a lógica, por confundir \"cadastro positivo\" com \"cadastro de infratores\".",
@@ -10526,7 +10450,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l05_210",
         category: "legislacao",
-        statement: "A renovação automática prevista no art. 268-A, § 7º, NÃO se aplica nas hipóteses abaixo, EXCETO a:",
+        statement: "A renovação automática da habilitação NÃO se aplica nas hipóteses abaixo, EXCETO a:",
         options: ["Condutores com idade a partir de 70 anos.", "Condutores cujo prazo de validade tenha sido reduzido por recomendação do médico (art. 147, § 4º).", "Condutores a partir de 50 anos, para mais de uma renovação.", "Condutor de 45 anos, cadastrado no RNPC e sem redução de prazo recomendada pelo médico."],
         correctIndex: 3,
         explanation: "O § 8º exclui os de 70 anos ou mais, os que têm prazo reduzido e as renovações adicionais para quem tem 50 anos ou mais. A D descreve quem pode usar a renovação automática, e por isso é a exceção. A \"dupla negativa\" (NÃO ... EXCETO) é o que confunde.",
@@ -10617,7 +10541,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l05_217",
         category: "infracoes",
-        statement: "Transportar em motocicleta criança menor de ___ anos de idade, ou que não tenha, nas circunstâncias, condições de cuidar da própria segurança, é infração gravíssima (art. 244, V):",
+        statement: "Transportar em motocicleta criança menor de quantos anos de idade, ou sem condições de cuidar da própria segurança, é infração gravíssima:",
         options: ["5.", "7.", "8.", "10."],
         correctIndex: 3,
         explanation: "A Lei 14.071/2020 elevou de 7 para 10 anos a idade mínima. A B (7) é a regra anterior, que ainda aparece em muita referência desatualizada.",
@@ -10669,7 +10593,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l05_221",
         category: "infracoes",
-        statement: "A vedação de conduzir motocicleta rebocando outro veículo (art. 244, VI) NÃO se aplica:",
+        statement: "É vedado conduzir motocicleta rebocando outro veículo. Essa vedação NÃO se aplica:",
         options: ["Às motocicletas que estejam transportando passageiro regularmente habilitado.", "Às motocicletas utilizadas em atividade profissional de transporte remunerado.", "Às motocicletas conduzidas por pessoa com mais de 21 anos e habilitação na categoria.", "Às motocicletas e motonetas que tracionem semirreboques especialmente projetados para esse fim e devidamente homologados pelo órgão competente."],
         correctIndex: 3,
         explanation: "O § 3º do art. 244 traz essa única exceção. A B é a mais tentadora, porque a atividade profissional cria a ideia de \"autorização especial\".",
@@ -10721,7 +10645,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l05_225",
         category: "legislacao",
-        statement: "Entre os dispositivos exigidos pelo art. 139-A do CTB para as motocicletas e motonetas destinadas ao transporte remunerado de mercadorias, nos termos de regulamentação do Contran, estão:",
+        statement: "Entre os dispositivos exigidos para motocicletas e motonetas de transporte remunerado de mercadorias, estão:",
         options: ["Buzina, retrovisores externos e luz de freio.","Capacete com viseira e colete de segurança retrorrefletivo.","Cinto de segurança e triângulo de sinalização.","Protetor de motor mata-cachorro e aparador de linha antena corta-pipas."],
         correctIndex: 3,
         explanation: "O mata-cachorro protege o motor e a perna do condutor em caso de tombamento, e a antena corta-pipas protege o condutor das linhas de pipa. A C é a mais confusa, porque são equipamentos de veículos de quatro rodas.",
@@ -10747,7 +10671,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l05_227",
         category: "infracoes",
-        statement: "Efetuar transporte remunerado de mercadorias em motocicleta em desacordo com o art. 139-A do CTB, ou com as normas que regem a atividade profissional dos mototaxistas, é infração de natureza e medida administrativa, RESPECTIVAMENTE:",
+        statement: "Fazer transporte remunerado de mercadorias em motocicleta fora das normas vigentes é infração de natureza e medida administrativa, respectivamente:",
         options: ["Média; retenção do veículo.", "Grave; apreensão do veículo para regularização.", "Gravíssima; recolhimento da CNH.", "Leve; advertência por escrito."],
         correctIndex: 1,
         explanation: "O art. 244, IX, traz infração grave, com multa e apreensão para regularização. A A é a mais tentadora, porque a retenção é a medida mais comum nas infrações de veículo.",
@@ -10799,7 +10723,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l05_232",
         category: "primeiros-socorros",
-        statement: "Segundo o manual, o condutor que, em um acidente com vítima, chama por socorro especializado:",
+        statement: "Segundo o manual, o condutor que, em um sinistro com vítima, chama por socorro especializado:",
         options: ["Já está prestando e providenciando socorro.", "Ainda não prestou socorro, pois deve também movimentar a vítima.", "Só presta socorro se tiver curso de primeiros socorros.", "Só presta socorro se permanecer no local até a chegada da equipe."],
         correctIndex: 0,
         explanation: "O manual define que deixar de prestar socorro significa não dar nenhuma assistência, e que chamar o socorro especializado já é prestar e providenciar socorro. A B é a pegadinha: movimentar a vítima é conduta que o manual proíbe.",
@@ -10813,7 +10737,7 @@ export const QUESTIONS: Question[] = [
         id: "l05_233",
         category: "primeiros-socorros",
         statement: "O primeiro-socorro, atendimento temporário e imediato prestado à vítima antes da chegada do socorro médico, tem por finalidade evitar o chamado \"2º trauma\", que consiste em:",
-        options: ["Uma segunda colisão no mesmo local.", "Um abalo emocional posterior ao acidente.", "Uma nova ocorrência de trânsito registrada na delegacia.", "Provocar outras lesões ou agravar as já existentes."],
+        options: ["Uma segunda colisão no mesmo local.", "Um abalo emocional posterior ao sinistro.", "Uma nova ocorrência de trânsito registrada na delegacia.", "Provocar outras lesões ou agravar as já existentes."],
         correctIndex: 3,
         explanation: "O \"2º trauma\" é o agravamento das lesões, em geral por atendimento inadequado. A A é a mais tentadora, porque \"segundo\" sugere \"segunda colisão\", mas o termo se refere à vítima.",
         legalBase: "Manual para Primeira Habilitação de Condutores (Senado Federal)",
@@ -10851,7 +10775,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "l05_237",
         category: "primeiros-socorros",
-        statement: "Em um acidente em que há vítima presa nas ferragens e risco de incêndio, o serviço indicado pelo manual para ser acionado é:",
+        statement: "Em um sinistro em que há vítima presa nas ferragens e risco de incêndio, o serviço indicado pelo manual para ser acionado é:",
         options: ["Apenas a Polícia Militar.", "Apenas o Samu, pois atende a maioria das vítimas.", "Apenas a Polícia Rodoviária Federal.", "O resgate do Corpo de Bombeiros."],
         correctIndex: 3,
         explanation: "O manual indica o Samu para a maioria das vítimas e o Corpo de Bombeiros quando houver vítima presa na ferragem ou risco de incêndio. A B é a mais tentadora, porque o Samu é o serviço mais indicado \"em geral\".",
@@ -10945,7 +10869,7 @@ export const QUESTIONS: Question[] = [
         statement: "Segundo o manual, quando o condutor percebe qualquer problema mecânico ou elétrico no veículo, por menor que seja, ele deve:",
         options: ["Circular até a próxima revisão programada.","Não circular com o veículo e, se não conseguir resolver, procurar um profissional.","Circular apenas em baixa velocidade, com o pisca-alerta acionado.","Reduzir a velocidade e a carga, seguindo até a oficina mais próxima."],
         correctIndex: 1,
-        explanation: "O manual é direto: não circule com qualquer problema mecânico ou elétrico, pois isso pode ocasionar acidente. A C é a pegadinha: reduzir a velocidade não elimina o risco, e o pisca-alerta tem uso restrito (art. 40, V).",
+        explanation: "O manual é direto: não circule com qualquer problema mecânico ou elétrico, pois isso pode ocasionar sinistro. A C é a pegadinha: reduzir a velocidade não elimina o risco, e o pisca-alerta tem uso restrito (art. 40, V).",
         legalBase: "Manual para Primeira Habilitação de Condutores (Senado Federal)",
         incidence: "media",
         trap: true,
@@ -11104,12 +11028,12 @@ export const QUESTIONS: Question[] = [
         id: "ambiente_ruido_retencao_05",
         category: "meio-ambiente",
         statement: "Sobre poluição e ruído do veículo, o que está certo?",
-        options: ["Fumaça acima do padrão dá multa, mas o veículo não pode ser retido.", "Ruído acima do limite dá multa e o veículo pode ser retido até regularizar.", "Jogar lixo pela janela só é infração se causar acidente.", "Emissão de poluentes só é fiscalizada em ônibus e caminhão."],
+        options: ["Fumaça acima do padrão dá multa, mas o veículo não pode ser retido.", "Ruído acima do limite dá multa e o veículo pode ser retido até regularizar.", "Jogar lixo pela janela só é infração se causar sinistro.", "Emissão de poluentes só é fiscalizada em ônibus e caminhão."],
         correctIndex: 1,
         explanation: "Correta B: o veículo reprovado na avaliação de emissão de poluentes e ruído está sujeito à retenção até a regularização (arts. 104, §5º, e 230, XVIII do CTB).",
-        detailedExplanation: "O art. 104, §5º do CTB determina a retenção dos veículos reprovados na inspeção de emissão de gases poluentes e ruído, e o art. 230, XVIII classifica como infração grave conduzir o veículo reprovado nessa avaliação, com retenção para regularização. Já o descarte de resíduos pela janela é infração sempre (arts. 171 e 172), mesmo sem acidente, e a fiscalização de emissão não se restringe a coletivos e carga: a inspeção do art. 104 é obrigatória para os veículos em circulação.",
+        detailedExplanation: "O art. 104, §5º do CTB determina a retenção dos veículos reprovados na inspeção de emissão de gases poluentes e ruído, e o art. 230, XVIII classifica como infração grave conduzir o veículo reprovado nessa avaliação, com retenção para regularização. Já o descarte de resíduos pela janela é infração sempre (arts. 171 e 172), mesmo sem sinistro, e a fiscalização de emissão não se restringe a coletivos e carga: a inspeção do art. 104 é obrigatória para os veículos em circulação.",
         legalBase: "Arts. 104, §5º, e 230, XVIII do CTB",
-        commonMistake: "A troca sutil entre 'autuado' e 'retido' muda o sentido da norma. Cuidado também com 'apenas quando causar acidente': descarte de resíduos é infração em qualquer caso.",
+        commonMistake: "A troca sutil entre 'autuado' e 'retido' muda o sentido da norma. Cuidado também com 'apenas quando causar sinistro': descarte de resíduos é infração em qualquer caso.",
         incidence: "media",
         trap: true,
         difficulty: 3,
@@ -11341,7 +11265,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "go_prova_10",
         category: "legislacao",
-        statement: "A remoção do veículo (art. 271) cabe quando:",
+        statement: "A remoção do veículo cabe quando:",
         options: ["Qualquer infração grave for lavrada no local.", "O condutor não portar a CNH em meio físico.", "A infração impede a circulação ou gera risco, e o veículo precisa ser recolhido.", "O proprietário não indicar o condutor em 15 dias."],
         correctIndex: 2,
         explanation: "Correta a terceira: remoção não é automática em toda multa; aplica-se quando a lei prevê e o veículo não pode seguir em segurança.",
@@ -11673,7 +11597,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_art202_ultrapassagem_01",
         category: "legislacao",
-        statement: "Quando o condutor ultrapassar outro veículo pelo acostamento, em interseções e passagens de nível, terá como punição (art. 202, CTB):",
+        statement: "Se o condutor ultrapassar outro veículo pelo acostamento, em interseções ou passagens de nível, qual a punição?",
         options: [
             "Multa e retenção do veículo.",
             "Multa, apenas.",
@@ -11691,7 +11615,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_art159_cnh_original_01",
         category: "legislacao",
-        statement: "A Carteira Nacional de Habilitação e a Permissão para Dirigir terão validade para a condução do veículo quando forem (Art. 159, CTB):",
+        statement: "A CNH e a PPD só têm validade para dirigir quando forem:",
         options: [
             "Cópias autenticadas pelo DETRAN.",
             "Cópias autenticadas por um cartório.",
@@ -11727,7 +11651,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_via_oleo_areia_01",
         category: "direcao-defensiva",
-        statement: "São condições adversas, em vias pavimentadas, envolvendo riscos que podem contribuir para gerar acidentes, as seguintes características:",
+        statement: "São condições adversas, em vias pavimentadas, envolvendo riscos que podem contribuir para gerar sinistros, as seguintes características:",
         options: [
             "Presença de óleo e areia na pista.",
             "Longos trechos de retas e pontes estreitas.",
@@ -11776,7 +11700,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_acostamento_via_01",
         category: "primeiros-socorros",
-        statement: "Em uma situação de emergência, sendo necessário ao condutor imobilizar o veículo na pista, em via desprovida de acostamento, ele deve sinalizar o local adequadamente para evitar uma colisão traseira. A ausência de acostamento é uma condição adversa relacionada com o(a):",
+        statement: "Em caso de emergência, o condutor pode precisar de parar o veículo na pista de uma via sem acostamento. Essa ausência de acostamento é uma condição adversa relacionada a qual fator?",
         options: ["Clima e/ou ambiente.", "Veículo.", "Via.", "Condutor."],
         correctIndex: 2,
         explanation: "Correta a terceira: acostamento é elemento da via. Sem ele, a condição adversa é da via, não do clima, do veículo ou do condutor.",
@@ -11867,7 +11791,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_3_providencias_01",
         category: "primeiros-socorros",
-        statement: "Quais devem ser as três primeiras providências a ser tomadas no local de um acidente de trânsito com vítimas?",
+        statement: "Quais devem ser as três primeiras providências a ser tomadas no local de um sinistro de trânsito com vítimas?",
         options: [
             "Sinalizar o local, acionar o serviço de emergência e medicar as vítimas.",
             "Avaliar as condições gerais das vítimas, sinalizar bem o local e acionar o serviço de emergência.",
@@ -11885,12 +11809,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_ligar_resgate_01",
         category: "primeiros-socorros",
-        statement: "Se ocorrer um acidente, o condutor, ao solicitar o serviço de resgate para atender às vítimas, deve adotar o seguinte procedimento:",
+        statement: "Se ocorrer um sinistro, o condutor, ao solicitar o serviço de resgate para atender às vítimas, deve adotar o seguinte procedimento:",
         options: [
-            "Informar a gravidade do acidente, a localização, o estado das vítimas e o tipo de acidente.",
+            "Informar a gravidade do sinistro, a localização, o estado das vítimas e o tipo de sinistro.",
             "Isolar a área e fazer mutirão com os demais condutores para atender às vítimas.",
-            "Informar a localização do acidente e adiantar o atendimento, liberando as vias aéreas da vítima.",
-            "Informar o tipo de acidente e retirar imediatamente a vítima do local do acidente."
+            "Informar a localização do sinistro e adiantar o atendimento, liberando as vias aéreas da vítima.",
+            "Informar o tipo de sinistro e retirar imediatamente a vítima do local do sinistro."
         ],
         correctIndex: 0,
         explanation: "Correta a primeira: ao chamar o resgate, informe local, tipo, gravidade e estado das vítimas. Não remova a vítima nem improvise atendimento em grupo.",
@@ -11973,9 +11897,9 @@ export const QUESTIONS: Question[] = [
         statement: "Diante da placa de advertência A-3b, o condutor deve reduzir a velocidade, pois:",
         options: [
             "Ocorrem ventos fortes, que podem desestabilizar o veículo.",
-            "Há um declive à direita na via à frente, com risco de acidente.",
-            "A via à frente é sinuosa, com a primeira curva à direita, com risco de acidente.",
-            "A pista da via à frente é escorregadia, com risco de acidente."
+            "Há um declive à direita na via à frente, com risco de sinistro.",
+            "A via à frente é sinuosa, com a primeira curva à direita, com risco de sinistro.",
+            "A pista da via à frente é escorregadia, com risco de sinistro."
         ],
         correctIndex: 2,
         explanation: "Correta a terceira: A-3b = pista sinuosa à direita (primeira curva à direita). A-3a é à esquerda.",
@@ -11988,7 +11912,7 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_visibilidade_via_01",
         category: "direcao-defensiva",
-        statement: "Quais condições da via comprometem a visibilidade do condutor e podem contribuir para a ocorrência de acidentes?",
+        statement: "Quais condições da via comprometem a visibilidade do condutor e podem contribuir para a ocorrência de sinistros?",
         options: [
             "Curvas, aclives e declives.",
             "Pistas irregulares, saliências e depressões.",
@@ -12099,11 +12023,11 @@ export const QUESTIONS: Question[] = [
     {
         id: "detran_fadiga_parar_01",
         category: "direcao-defensiva",
-        statement: "O nível de atenção do condutor é influenciado pela fadiga, especialmente se for dirigir por um longo período. Qual deve ser a atitude do condutor ao constatar que se encontra nesse estado?",
+        statement: "Dirigir por longo período cansa o condutor e reduz sua atenção. Ao constatar que está nesse estado, qual a atitude correta?",
         options: [
             "O melhor é ingerir bebidas energéticas ou estimulantes, como café, para reduzir o cansaço.",
             "Reclinar o banco ligeiramente para trás, esticar as pernas, relaxar os braços e continuar dirigindo.",
-            "O mais seguro é resistir ao cansaço e concluir a viagem antes que ocorra um acidente.",
+            "O mais seguro é resistir ao cansaço e concluir a viagem antes que ocorra um sinistro.",
             "Parar para descansar em local seguro, antes de prosseguir a viagem com segurança."
         ],
         correctIndex: 3,
@@ -12113,6 +12037,1956 @@ export const QUESTIONS: Question[] = [
         trap: true,
         difficulty: 1,
         origin: "real"
+    },
+    {
+        id: "ia_normas_001",
+        category: "legislacao",
+        statement: "Os usuários das vias terrestres devem abster-se de todo ato que possa constituir perigo ou obstáculo para o trânsito de:",
+        options: ["Veículos e pedestres, somente.", "Veículos, pessoas ou animais.", "Veículos motorizados e animais.", "Pessoas e animais, somente."],
+        correctIndex: 1,
+        explanation: "Correta letra B: a proteção abrange veículos, pessoas e animais; \"somente\" restringe indevidamente.",
+        commonMistake: "a proteção abrange veículos, pessoas e animais; \"somente\" restringe indevidamente.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_002",
+        category: "legislacao",
+        statement: "Antes de colocar o veículo em circulação, o condutor deve verificar se há combustível suficiente para:",
+        options: ["Atingir o primeiro posto de abastecimento.", "Percorrer o primeiro trecho da viagem.", "Retornar ao ponto de partida.", "Chegar ao local de destino."],
+        correctIndex: 3,
+        explanation: "Correta letra D: o combustível deve bastar até o destino, e não até o posto ou o primeiro trecho.",
+        commonMistake: "o combustível deve bastar até o destino, e não até o posto ou o primeiro trecho.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_003",
+        category: "legislacao",
+        statement: "A imobilização do veículo por falta de combustível constitui infração:",
+        options: ["Média, com 4 pontos.", "Grave, com 5 pontos.", "Média, com 5 pontos.", "Grave, com 4 pontos."],
+        correctIndex: 0,
+        explanation: "Correta letra A: combustível = média (4 pontos); equipamento obrigatório = grave (5 pontos).",
+        commonMistake: "combustível = média (4 pontos); equipamento obrigatório = grave (5 pontos).",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_004",
+        category: "legislacao",
+        statement: "O condutor flagrado com equipamento obrigatório inoperante sofre, como medida administrativa:",
+        options: ["Remoção do veículo.", "Recolhimento da CNH.", "Retenção do veículo para regularização.", "Recolhimento do documento do veículo."],
+        correctIndex: 2,
+        explanation: "Correta letra C: retenção × remoção; a remoção é a medida da falta de combustível.",
+        commonMistake: "retenção × remoção; a remoção é a medida da falta de combustível.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_005",
+        category: "meio-ambiente",
+        statement: "Entre os resíduos descartados de forma indevida às margens da via, o que leva mais tempo para se degradar na natureza é:",
+        options: ["O vidro.", "O plástico.", "O papel.", "O alumínio."],
+        correctIndex: 0,
+        explanation: "Correta letra A: o plástico é o mais lembrado, mas o vidro persiste por muito mais tempo.",
+        commonMistake: "o plástico é o mais lembrado, mas o vidro persiste por muito mais tempo.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_006",
+        category: "legislacao",
+        statement: "O condutor cujo veículo ficou imobilizado na via por falta de combustível, além da multa, sofrerá a medida administrativa de:",
+        options: ["Retenção do veículo.", "Recolhimento da habilitação.", "Remoção do veículo.", "Transbordo do excesso de carga."],
+        correctIndex: 2,
+        explanation: "Correta letra C: remoção (combustível) × retenção (equipamento).",
+        commonMistake: "remoção (combustível) × retenção (equipamento).",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_007",
+        category: "legislacao",
+        statement: "A circulação nas vias far-se-á pelo lado:",
+        options: ["Esquerdo, com exceções devidamente sinalizadas.", "Direito, sem qualquer exceção.", "Esquerdo, sem qualquer exceção.", "Direito, admitindo exceções devidamente sinalizadas."],
+        correctIndex: 3,
+        explanation: "Correta letra D: as exceções existem, mas só se estiverem sinalizadas.",
+        commonMistake: "as exceções existem, mas só se estiverem sinalizadas.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_008",
+        category: "legislacao",
+        statement: "A distância de segurança lateral mínima que o condutor deve guardar é de:",
+        options: ["1 metro.", "1,5 metro.", "2 metros.", "3 metros."],
+        correctIndex: 1,
+        explanation: "Correta letra B: lateral = 1,5 metro; frontal = 2 segundos.",
+        commonMistake: "lateral = 1,5 metro; frontal = 2 segundos.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_009",
+        category: "legislacao",
+        statement: "O condutor que deixa de guardar as distâncias de segurança lateral e frontal comete infração:",
+        options: ["Leve, sem pontuação.", "Média, com advertência por escrito.", "Gravíssima, com suspensão do direito de dirigir.", "Grave, com penalidade pecuniária."],
+        correctIndex: 3,
+        explanation: "Correta letra D: grave com multa; não chega à gravíssima nem à suspensão.",
+        commonMistake: "grave com multa; não chega à gravíssima nem à suspensão.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_010",
+        category: "legislacao",
+        statement: "Em pista com várias faixas no mesmo sentido, as faixas da direita destinam-se, quando não existir faixa especial, aos veículos:",
+        options: ["Mais lentos e de maior porte.", "Em ultrapassagem ou em maior velocidade.", "De passeio e de menor porte.", "Em manobra de conversão à esquerda."],
+        correctIndex: 0,
+        explanation: "Correta letra A: direita = lentos e de maior porte; esquerda = ultrapassagem ou maior velocidade.",
+        commonMistake: "direita = lentos e de maior porte; esquerda = ultrapassagem ou maior velocidade.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_011",
+        category: "legislacao",
+        statement: "Um automóvel mantém-se na faixa da esquerda, em velocidade inferior à do fluxo, sem ultrapassar. A conduta contraria a regra segundo a qual as faixas da esquerda destinam-se aos veículos:",
+        options: ["Mais lentos e de maior porte.", "De carga, em operação de descarga.", "Em ultrapassagem ou em maior velocidade.", "Que pretendem parar junto ao bordo."],
+        correctIndex: 2,
+        explanation: "Correta letra C: a esquerda não é faixa de circulação lenta.",
+        commonMistake: "a esquerda não é faixa de circulação lenta.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_012",
+        category: "legislacao",
+        statement: "Em via de três faixas no mesmo sentido, sem faixa especial, um caminhão lento deve trafegar pela faixa:",
+        options: ["Central, para não obstruir as demais.", "Da direita, por ser mais lento e de maior porte.", "Da esquerda, por ter maior porte.", "Livre, conforme o fluxo do momento."],
+        correctIndex: 1,
+        explanation: "Correta letra B: o porte maior leva o veículo à direita, e não à esquerda.",
+        commonMistake: "o porte maior leva o veículo à direita, e não à esquerda.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_013",
+        category: "legislacao",
+        statement: "Os veículos de grande porte são responsáveis pela segurança dos veículos de:",
+        options: ["Igual porte.", "Maior porte.", "Menor porte.", "Tração animal, somente."],
+        correctIndex: 2,
+        explanation: "Correta letra C: grande porte → menor porte; a ordem inversa é a armadilha.",
+        commonMistake: "grande porte → menor porte; a ordem inversa é a armadilha.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_014",
+        category: "legislacao",
+        statement: "Os veículos motorizados são responsáveis pela segurança dos:",
+        options: ["Pedestres, somente.", "Não motorizados.", "De grande porte.", "Coletivos, somente."],
+        correctIndex: 1,
+        explanation: "Correta letra B: motorizados respondem pelos não motorizados (e, em conjunto com todos, pelos pedestres).",
+        commonMistake: "motorizados respondem pelos não motorizados (e, em conjunto com todos, pelos pedestres).",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_015",
+        category: "legislacao",
+        statement: "Todos os veículos, em conjunto, são responsáveis pela segurança:",
+        options: ["Dos pedestres.", "Dos ciclistas, somente.", "Dos motociclistas, somente.", "Dos animais, somente."],
+        correctIndex: 0,
+        explanation: "Correta letra A: \"todos juntos\" respondem pelos pedestres.",
+        commonMistake: "\"todos juntos\" respondem pelos pedestres.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_016",
+        category: "legislacao",
+        statement: "Condutor circula pelo lado esquerdo, em faixa reversível devidamente sinalizada. A conduta é:",
+        options: ["Irregular, pois o lado esquerdo é sempre vedado.", "Irregular, salvo se acionar o pisca-alerta.", "Regular apenas para veículos de grande porte.", "Regular, pois a exceção está devidamente sinalizada."],
+        correctIndex: 3,
+        explanation: "Correta letra D: a sinalização legitima a exceção à regra do lado direito.",
+        commonMistake: "a sinalização legitima a exceção à regra do lado direito.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_017",
+        category: "legislacao",
+        statement: "A distância de seguimento mínima, em relação ao veículo da frente, é de:",
+        options: ["1,5 segundo.", "2 segundos.", "2 metros.", "3 segundos."],
+        correctIndex: 1,
+        explanation: "Correta letra B: frontal é tempo (2 s); lateral é espaço (1,5 m).",
+        commonMistake: "frontal é tempo (2 s); lateral é espaço (1,5 m).",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_018",
+        category: "legislacao",
+        statement: "Ao passar por uma bicicleta, o condutor deve manter distância lateral de:",
+        options: ["1 metro.", "2 metros.", "1,2 metro.", "1,5 metro."],
+        correctIndex: 3,
+        explanation: "Correta letra D: 1,5 metro; 2 metros parece \"mais seguro\", mas não é o valor legal.",
+        commonMistake: "1,5 metro; 2 metros parece \"mais seguro\", mas não é o valor legal.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_019",
+        category: "legislacao",
+        statement: "É proibido o trânsito de veículos na calçada ou passeio, exceto para:",
+        options: ["Entrar ou sair de lotes lindeiros.", "Imobilização por emergência.", "Embarque e desembarque de passageiros.", "Manobras de conversão à esquerda."],
+        correctIndex: 0,
+        explanation: "Correta letra A: as demais hipóteses são exceções do acostamento, não da calçada.",
+        commonMistake: "as demais hipóteses são exceções do acostamento, não da calçada.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_020",
+        category: "legislacao",
+        statement: "O acostamento NÃO admite o trânsito de veículos para:",
+        options: ["Circulação de pedestres.", "Circulação de ciclomotores.", "Ultrapassagem de veículos lentos.", "Circulação de tração animal."],
+        correctIndex: 2,
+        explanation: "Correta letra C: ultrapassagem não consta entre as exceções do acostamento.",
+        commonMistake: "ultrapassagem não consta entre as exceções do acostamento.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_021",
+        category: "legislacao",
+        statement: "O ciclista que desmonta e empurra a bicicleta equipara-se, em deveres e direitos:",
+        options: ["Ao pedestre.", "Ao condutor de ciclomotor.", "Ao veículo de propulsão humana.", "Ao condutor de tração animal."],
+        correctIndex: 0,
+        explanation: "Correta letra A: desmontado, passa a ser pedestre.",
+        commonMistake: "desmontado, passa a ser pedestre.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_022",
+        category: "legislacao",
+        statement: "Assinale a alternativa que NÃO constitui exceção à proibição de trânsito no acostamento:",
+        options: ["Acesso a lotes lindeiros.", "Embarque e desembarque de passageiros.", "Estacionamento prolongado para descanso do condutor.", "Imobilização por emergência."],
+        correctIndex: 2,
+        explanation: "Correta letra C: estacionar por tempo superior ao necessário não é exceção.",
+        commonMistake: "estacionar por tempo superior ao necessário não é exceção.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_023",
+        category: "legislacao",
+        statement: "Um motociclista, para ultrapassar fila de carros, transita pelo acostamento da rodovia. De acordo com o CTB, a conduta é:",
+        options: ["Regular, desde que sinalize com a luz indicadora de direção.", "Regular, pois motocicletas podem utilizar o acostamento.", "Irregular apenas se houver pedestres no acostamento.", "Irregular, pois a ultrapassagem não consta entre as exceções do acostamento."],
+        correctIndex: 3,
+        explanation: "Correta letra D: a seta não legitima o uso do acostamento para ultrapassar.",
+        commonMistake: "a seta não legitima o uso do acostamento para ultrapassar.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_024",
+        category: "legislacao",
+        statement: "O acostamento admite o trânsito de veículos para manobras de:",
+        options: ["Ultrapassagem e retorno à direita.", "Conversão e retornos à esquerda.", "Estacionamento e carga e descarga.", "Passagem e ultrapassagem lenta."],
+        correctIndex: 1,
+        explanation: "Correta letra B: o material lista conversão e retornos à esquerda entre as exceções.",
+        commonMistake: "o material lista conversão e retornos à esquerda entre as exceções.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_025",
+        category: "legislacao",
+        statement: "A operação de carga e descarga é considerada estacionamento e deve ser realizada com o veículo posicionado:",
+        options: ["Sobre o passeio, junto ao lote lindeiro.", "Perpendicular à guia da calçada.", "Em segunda fila, junto ao eixo da pista.", "No sentido do fluxo, paralelo ao bordo e junto à guia."],
+        correctIndex: 3,
+        explanation: "Correta letra D: perpendicular é regra de duas rodas, não de carga e descarga.",
+        commonMistake: "perpendicular é regra de duas rodas, não de carga e descarga.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_026",
+        category: "legislacao",
+        statement: "O ciclista pode circular montado sobre o passeio quando:",
+        options: ["Autorizado e sinalizado pelo órgão competente.", "Estiver em velocidade inferior a 10 km/h.", "Houver congestionamento na pista.", "Estiver acompanhado de pedestre."],
+        correctIndex: 0,
+        explanation: "Correta letra A: a autorização depende de ato e sinalização do órgão, nunca da conveniência do ciclista.",
+        commonMistake: "a autorização depende de ato e sinalização do órgão, nunca da conveniência do ciclista.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_027",
+        category: "legislacao",
+        statement: "É proibido o trânsito de ciclomotores:",
+        options: ["Nas vias arteriais e coletoras.", "No acostamento das rodovias.", "Nas vias de trânsito rápido e sobre a calçada das vias urbanas.", "Nas vias locais, no período noturno."],
+        correctIndex: 2,
+        explanation: "Correta letra C: o acostamento admite ciclomotores; trânsito rápido e calçada, não.",
+        commonMistake: "o acostamento admite ciclomotores; trânsito rápido e calçada, não.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_028",
+        category: "legislacao",
+        statement: "Um veículo de tração animal transita pelo acostamento da rodovia. De acordo com o CTB, o trânsito é:",
+        options: ["Irregular, pois só pedestres usam o acostamento.", "Regular, pois o acostamento admite veículos de tração animal.", "Irregular, pois deve circular junto ao eixo da pista.", "Regular apenas com autorização do órgão municipal."],
+        correctIndex: 1,
+        explanation: "Correta letra B: tração animal consta nas exceções do acostamento.",
+        commonMistake: "tração animal consta nas exceções do acostamento.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_029",
+        category: "legislacao",
+        statement: "Em interseção não sinalizada, terá preferência o veículo que:",
+        options: ["Vier pela esquerda do condutor.", "For de maior porte.", "Estiver circulando pela rodovia.", "Chegar primeiro ao centro da interseção."],
+        correctIndex: 2,
+        explanation: "Correta letra C: o porte e a ordem de chegada não definem a preferência.",
+        commonMistake: "o porte e a ordem de chegada não definem a preferência.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_030",
+        category: "legislacao",
+        statement: "Em rotatória, a preferência é do veículo que:",
+        options: ["Vier pela direita de quem circula.", "Estiver circulando por ela.", "Pretender sair pela primeira saída.", "For de maior porte."],
+        correctIndex: 1,
+        explanation: "Correta letra B: quem circula tem preferência, ainda que haja veículo à direita.",
+        commonMistake: "quem circula tem preferência, ainda que haja veículo à direita.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_031",
+        category: "legislacao",
+        statement: "Os veículos que se deslocam sobre trilhos têm preferência sobre os demais:",
+        options: ["Sempre.", "Somente com semáforo.", "Somente em rodovia.", "Somente sobre os de menor porte."],
+        correctIndex: 0,
+        explanation: "Correta letra A: aqui o \"sempre\" está na regra; não é palavra-armadilha.",
+        commonMistake: "aqui o \"sempre\" está na regra; não é palavra-armadilha.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_032",
+        category: "legislacao",
+        statement: "Em cruzamento não sinalizado, o condutor X vê um automóvel aproximar-se à sua direita. A preferência é:",
+        options: ["De X, se o seu veículo for de maior porte.", "De X, pois o outro vem pela sua esquerda.", "Do que estiver em maior velocidade.", "Do veículo que vier pela direita do condutor X."],
+        correctIndex: 3,
+        explanation: "Correta letra D: o porte não altera a regra; a direita é a do condutor.",
+        commonMistake: "o porte não altera a regra; a direita é a do condutor.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_033",
+        category: "legislacao",
+        statement: "A regra da preferência pela direita aplica-se:",
+        options: ["A toda interseção, sobrepondo-se às demais.", "Em todos os demais casos, ressalvadas rodovia, rotatória e trilhos.", "Apenas em vias urbanas de mão única.", "Apenas quando as vias tiverem a mesma largura."],
+        correctIndex: 1,
+        explanation: "Correta letra B: a direita é regra residual.",
+        commonMistake: "a direita é regra residual.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_034",
+        category: "legislacao",
+        statement: "Um condutor aproxima-se de uma rotatória onde já circula outro veículo. Deve:",
+        options: ["Entrar, pois vem pela direita.", "Entrar, se for de maior porte.", "Entrar, desde que sinalize com antecedência.", "Aguardar, pois a preferência é de quem circula pela rotatória."],
+        correctIndex: 3,
+        explanation: "Correta letra D: a seta não cria preferência.",
+        commonMistake: "a seta não cria preferência.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_035",
+        category: "legislacao",
+        statement: "Um condutor de via local aproxima-se de uma rodovia e vê veículo circulando por ela, à sua esquerda. A preferência é:",
+        options: ["Do veículo que circula pela rodovia.", "Do que vem pela direita.", "Do que chegou primeiro.", "Do de maior porte."],
+        correctIndex: 0,
+        explanation: "Correta letra A: a rodovia prevalece sobre a regra da direita.",
+        commonMistake: "a rodovia prevalece sobre a regra da direita.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_036",
+        category: "legislacao",
+        statement: "Assinale a alternativa INCORRETA sobre preferência nas interseções não sinalizadas:",
+        options: ["O veículo que circula pela rodovia tem preferência.", "O veículo que circula pela rotatória tem preferência.", "O veículo sobre trilhos tem preferência apenas com sinal semafórico.", "Nos demais casos, a preferência é de quem vier pela direita."],
+        correctIndex: 2,
+        explanation: "Correta letra C: trilhos sempre têm preferência.",
+        commonMistake: "trilhos sempre têm preferência.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_037",
+        category: "prioridade",
+        statement: "Aos veículos precedidos de batedores é assegurada:",
+        options: ["Prioridade de passagem.", "Livre parada e estacionamento.", "Livre circulação, parada e estacionamento.", "Prioridade de passagem e livre estacionamento."],
+        correctIndex: 0,
+        explanation: "Correta letra A: batedores têm apenas prioridade de passagem.",
+        commonMistake: "batedores têm apenas prioridade de passagem.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_038",
+        category: "prioridade",
+        statement: "Uma ambulância desloca-se para atender ocorrência com iluminação intermitente (giroflex) ligada, sem alarme sonoro. A prioridade:",
+        options: ["Existe, pois basta a luz intermitente.", "Existe, pois ambulâncias têm prioridade em qualquer deslocamento.", "Não existe, pois são exigidos alarme sonoro e iluminação intermitente.", "Existe apenas se acionado o pisca-alerta."],
+        correctIndex: 2,
+        explanation: "Correta letra C: sirene e giroflex são requisitos cumulativos.",
+        commonMistake: "sirene e giroflex são requisitos cumulativos.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_039",
+        category: "prioridade",
+        statement: "Aos veículos prestadores de serviços de utilidade pública é assegurada:",
+        options: ["Prioridade de passagem.", "Livre circulação e prioridade em qualquer via.", "Prioridade de passagem e estacionamento.", "Livre parada e estacionamento."],
+        correctIndex: 3,
+        explanation: "Correta letra D: utilidade pública não tem prioridade de passagem.",
+        commonMistake: "utilidade pública não tem prioridade de passagem.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_040",
+        category: "prioridade",
+        statement: "Ao perceberem a proximidade de veículo de urgência com prioridade, os demais condutores deverão deslocar-se para:",
+        options: ["A esquerda, deixando livre a passagem pela direita.", "A direita, deixando livre a passagem pela esquerda.", "O eixo da pista, com o pisca-alerta ligado.", "O acostamento, sem reduzir a velocidade."],
+        correctIndex: 1,
+        explanation: "Correta letra B: o deslocamento é para a direita; a passagem livre é pela esquerda.",
+        commonMistake: "o deslocamento é para a direita; a passagem livre é pela esquerda.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_041",
+        category: "prioridade",
+        statement: "Ao perceberem a proximidade de veículo de urgência, os pedestres deverão:",
+        options: ["Atravessar rapidamente pela faixa.", "Permanecer no bordo da pista.", "Aguardar no eixo da pista.", "Aguardar na calçada."],
+        correctIndex: 3,
+        explanation: "Correta letra D: o pedestre aguarda na calçada, não na pista.",
+        commonMistake: "o pedestre aguarda na calçada, não na pista.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_042",
+        category: "prioridade",
+        statement: "Uma ambulância retorna vazia para a base, com sirene e giroflex ligados. Segundo o CTB:",
+        options: ["Não tem prioridade, pois esta exige efetiva prestação de serviço de urgência.", "Tem prioridade, pois os dispositivos estão acionados.", "Tem prioridade, pois é veículo de socorro.", "Tem prioridade de passagem, mas sem livre estacionamento."],
+        correctIndex: 0,
+        explanation: "Correta letra A: identificação visual e sonora não bastam sem a efetiva prestação do serviço.",
+        commonMistake: "identificação visual e sonora não bastam sem a efetiva prestação do serviço.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_043",
+        category: "prioridade",
+        statement: "Têm prioridade de passagem, livre circulação, parada e estacionamento os veículos de:",
+        options: ["Utilidade pública e batedores.", "Polícia, desde que acompanhados de batedores.", "Socorro de incêndio, salvamento, polícia, fiscalização, operação de trânsito e ambulâncias.", "Salvamento e utilidade pública."],
+        correctIndex: 2,
+        explanation: "Correta letra C: batedores e utilidade pública têm garantias distintas.",
+        commonMistake: "batedores e utilidade pública têm garantias distintas.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_044",
+        category: "prioridade",
+        statement: "Uma viatura do corpo de bombeiros, em socorro, imobiliza-se em local onde o estacionamento é proibido. A conduta é:",
+        options: ["Irregular, pois a proibição vale para todos.", "Regular, pois lhe é assegurada livre parada e estacionamento.", "Regular apenas se acompanhada de batedores.", "Irregular, salvo se estiver sem a sirene acionada."],
+        correctIndex: 1,
+        explanation: "Correta letra B: livre parada e estacionamento é garantia do veículo em serviço de urgência.",
+        commonMistake: "livre parada e estacionamento é garantia do veículo em serviço de urgência.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_045",
+        category: "prioridade",
+        statement: "Assinale a alternativa INCORRETA sobre prioridades no trânsito:",
+        options: ["A prioridade existe na efetiva prestação de serviço de urgência.", "Os veículos de utilidade pública têm livre parada e estacionamento.", "Os veículos precedidos por batedores têm livre circulação, parada e estacionamento.", "Os veículos de operação de trânsito têm prioridade em serviço de urgência."],
+        correctIndex: 2,
+        explanation: "Correta letra C: batedores: apenas prioridade de passagem.",
+        commonMistake: "batedores: apenas prioridade de passagem.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_046",
+        category: "prioridade",
+        statement: "A prioridade dos veículos de urgência somente existe:",
+        options: ["Quando houver apenas iluminação intermitente.", "Na efetiva prestação do serviço, com alarme sonoro e iluminação intermitente.", "Quando acompanhados de batedores.", "Em qualquer deslocamento do veículo."],
+        correctIndex: 1,
+        explanation: "Correta letra B: são três requisitos juntos: serviço efetivo, sirene e giroflex.",
+        commonMistake: "são três requisitos juntos: serviço efetivo, sirene e giroflex.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_047",
+        category: "legislacao",
+        statement: "Para converter à direita, o condutor deve aproximar-se, o máximo possível:",
+        options: ["Do bordo direito da via e executar a manobra no menor espaço possível.", "Do eixo da pista e executar a manobra no maior espaço possível.", "Do canteiro central e executar a manobra com amplo raio.", "Do bordo esquerdo e executar a manobra pela faixa central."],
+        correctIndex: 0,
+        explanation: "Correta letra A: bordo direito + menor espaço.",
+        commonMistake: "bordo direito + menor espaço.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_048",
+        category: "legislacao",
+        statement: "Em via de mão única, para converter à esquerda, o condutor deve deslocar-se totalmente:",
+        options: ["Ao eixo da pista.", "Ao bordo direito da via.", "Ao acostamento da direita.", "Ao bordo esquerdo da via."],
+        correctIndex: 3,
+        explanation: "Correta letra D: bordo esquerdo = mão única; eixo = mão dupla.",
+        commonMistake: "bordo esquerdo = mão única; eixo = mão dupla.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_049",
+        category: "legislacao",
+        statement: "Em via de mão dupla, o condutor aguarda para converter à esquerda junto ao bordo direito. A conduta é:",
+        options: ["Regular, pois deve partir do bordo direito.", "Irregular, pois deveria aproximar-se do eixo da pista, sem atingir a contramão.", "Regular, desde que sinalize com antecedência.", "Irregular, pois deveria deslocar-se totalmente à esquerda da via."],
+        correctIndex: 1,
+        explanation: "Correta letra B: bordo esquerdo só vale para mão única.",
+        commonMistake: "bordo esquerdo só vale para mão única.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_050",
+        category: "legislacao",
+        statement: "Em rodovias, antes de realizar a conversão à esquerda, o condutor deve deslocar-se:",
+        options: ["Para o eixo da pista, sinalizando com o pisca-alerta.", "Para o canteiro central, quando houver.", "Para o acostamento à esquerda.", "Para o acostamento à direita."],
+        correctIndex: 3,
+        explanation: "Correta letra D: o acostamento é o da direita.",
+        commonMistake: "o acostamento é o da direita.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_051",
+        category: "legislacao",
+        statement: "A manobra de retorno em via urbana deve ser realizada:",
+        options: ["Em local determinado pela sinalização ou em outros que ofereçam segurança e fluidez.", "Somente em local determinado pela sinalização.", "Em qualquer local, desde que sinalize com antecedência.", "Exclusivamente em interseções, com preferência pela direita."],
+        correctIndex: 0,
+        explanation: "Correta letra A: não é só onde há sinalização, mas onde há segurança e fluidez.",
+        commonMistake: "não é só onde há sinalização, mas onde há segurança e fluidez.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_052",
+        category: "legislacao",
+        statement: "Em vias rurais com acostamento, a manobra de retorno deve ser feita:",
+        options: ["Pelo eixo da pista, junto à linha divisória.", "Pelo acostamento à esquerda.", "Em locais apropriados ou utilizando o acostamento à direita.", "Em qualquer ponto em que o canteiro central permita a travessia."],
+        correctIndex: 2,
+        explanation: "Correta letra C: o acostamento é sempre o da direita.",
+        commonMistake: "o acostamento é sempre o da direita.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_053",
+        category: "legislacao",
+        statement: "Na conversão à esquerda em via de mão dupla, o condutor deve aproximar-se:",
+        options: ["Do eixo da pista, sem atingir a contramão.", "Do bordo esquerdo da via.", "Do bordo direito da via.", "Do acostamento da direita."],
+        correctIndex: 0,
+        explanation: "Correta letra A: aproximar-se do eixo não autoriza invadir a contramão.",
+        commonMistake: "aproximar-se do eixo não autoriza invadir a contramão.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_054",
+        category: "legislacao",
+        statement: "Assinale a alternativa INCORRETA sobre mudança de direção:",
+        options: ["Na conversão à direita, aproxima-se do bordo direito.", "Na conversão à esquerda em mão dupla, aproxima-se do eixo da pista.", "Na conversão à direita, aproxima-se do eixo para manobrar em maior espaço.", "Em rodovias, a conversão à esquerda parte do acostamento à direita."],
+        correctIndex: 2,
+        explanation: "Correta letra C: direita = bordo direito + menor espaço.",
+        commonMistake: "direita = bordo direito + menor espaço.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_055",
+        category: "legislacao",
+        statement: "A comparação correta entre as conversões à direita e à esquerda, em via de mão dupla, é:",
+        options: ["Ambas partem do bordo da pista.", "A direita parte do eixo; a esquerda, do bordo direito.", "Ambas partem do eixo da pista.", "A direita parte do bordo direito; a esquerda, do eixo, sem atingir a contramão."],
+        correctIndex: 3,
+        explanation: "Correta letra D: bordo × eixo.",
+        commonMistake: "bordo × eixo.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_056",
+        category: "legislacao",
+        statement: "A conversão à direita deve ser executada no:",
+        options: ["Maior espaço possível, junto ao eixo.", "Menor espaço possível, junto ao bordo direito.", "Maior espaço possível, junto ao bordo direito.", "Menor espaço possível, junto ao eixo."],
+        correctIndex: 1,
+        explanation: "Correta letra B: a combinação certa é bordo direito + menor espaço.",
+        commonMistake: "a combinação certa é bordo direito + menor espaço.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_057",
+        category: "legislacao",
+        statement: "O retorno em via urbana pode ser feito em locais não sinalizados desde que:",
+        options: ["O condutor tenha preferência sobre os demais.", "A via possua canteiro central de largura mínima.", "O condutor acione o pisca-alerta durante a manobra.", "Ofereçam condições de segurança e fluidez."],
+        correctIndex: 3,
+        explanation: "Correta letra D: o critério é segurança e fluidez, não preferência ou pisca-alerta.",
+        commonMistake: "o critério é segurança e fluidez, não preferência ou pisca-alerta.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_058",
+        category: "legislacao",
+        statement: "Em via de mão única, um condutor aguarda para converter à esquerda posicionado junto ao eixo da pista. A conduta é:",
+        options: ["Irregular, pois deveria deslocar-se totalmente à esquerda, junto ao bordo esquerdo.", "Regular, pois deve aproximar-se do eixo.", "Irregular, pois deveria aproximar-se do bordo direito.", "Regular, desde que a via tenha acostamento."],
+        correctIndex: 0,
+        explanation: "Correta letra A: eixo é regra de mão dupla; em mão única, bordo esquerdo.",
+        commonMistake: "eixo é regra de mão dupla; em mão única, bordo esquerdo.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_059",
+        category: "legislacao",
+        statement: "Avançar à frente de outro veículo sem mudar de faixa configura:",
+        options: ["Ultrapassagem.", "Retorno.", "Passagem.", "Conversão."],
+        correctIndex: 2,
+        explanation: "Correta letra C: sem mudar de faixa = passagem; mudando e retornando = ultrapassagem.",
+        commonMistake: "sem mudar de faixa = passagem; mudando e retornando = ultrapassagem.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_060",
+        category: "legislacao",
+        statement: "As ultrapassagens devem ser realizadas pelo lado:",
+        options: ["Direito da via.", "Esquerdo da via.", "Que estiver livre.", "Do acostamento."],
+        correctIndex: 1,
+        explanation: "Correta letra B: a regra é o lado esquerdo.",
+        commonMistake: "a regra é o lado esquerdo.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_061",
+        category: "legislacao",
+        statement: "A ultrapassagem pela direita só é permitida quando o veículo da frente indicar a intenção de:",
+        options: ["Converter à direita, em via de duas faixas.", "Imobilizar-se junto ao bordo, em via de mão dupla.", "Convergir ou retornar à esquerda, em via de duas ou mais faixas no mesmo sentido.", "Reduzir a velocidade abaixo da mínima."],
+        correctIndex: 2,
+        explanation: "Correta letra C: o sinal é para a esquerda, e a via deve ter duas ou mais faixas.",
+        commonMistake: "o sinal é para a esquerda, e a via deve ter duas ou mais faixas.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_062",
+        category: "legislacao",
+        statement: "Antes da ultrapassagem, o condutor deve indicar a manobra:",
+        options: ["Com a buzina e o farol, sem antecedência.", "Com antecedência, pela seta ou gesto convencional de braço.", "Com o pisca-alerta, durante todo o deslocamento.", "Somente ao invadir a faixa da esquerda."],
+        correctIndex: 1,
+        explanation: "Correta letra B: antecedência obrigatória; buzina e farol não substituem a seta.",
+        commonMistake: "antecedência obrigatória; buzina e farol não substituem a seta.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_063",
+        category: "legislacao",
+        statement: "Antes de ultrapassar, o condutor deve verificar se:",
+        options: ["Nenhum condutor que o siga tenha iniciado a manobra primeiro.", "O condutor que o segue já iniciou a manobra, para ultrapassarem juntos.", "O veículo da frente indica a intenção de converter à direita.", "A faixa da direita está livre para o retorno imediato."],
+        correctIndex: 0,
+        explanation: "Correta letra A: o veículo de trás pode ter iniciado a manobra antes.",
+        commonMistake: "o veículo de trás pode ter iniciado a manobra antes.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_064",
+        category: "legislacao",
+        statement: "Antes de ultrapassar, o condutor deve verificar se o veículo da frente:",
+        options: ["Mantém velocidade abaixo da máxima permitida.", "É de maior porte que o seu.", "Já retornou à faixa de origem.", "Não indica a intenção de ultrapassar um terceiro."],
+        correctIndex: 3,
+        explanation: "Correta letra D: o foco é a intenção de ultrapassar um terceiro, não a velocidade ou o porte.",
+        commonMistake: "o foco é a intenção de ultrapassar um terceiro, não a velocidade ou o porte.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_065",
+        category: "legislacao",
+        statement: "Antes de ultrapassar, o condutor deve verificar se a faixa da contramão:",
+        options: ["Possui linha seccionada no eixo da pista.", "Está livre para a manobra com segurança.", "Possui canteiro central contínuo.", "Tem visibilidade para pedestres no bordo."],
+        correctIndex: 1,
+        explanation: "Correta letra B: não basta a sinalização do eixo; a faixa precisa estar livre.",
+        commonMistake: "não basta a sinalização do eixo; a faixa precisa estar livre.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_066",
+        category: "legislacao",
+        statement: "O condutor, ao perceber que outro que o segue pretende ultrapassá-lo, estando na faixa da esquerda, deve:",
+        options: ["Manter-se na faixa, reduzindo a velocidade.", "Deslocar-se ao bordo esquerdo, acelerando levemente.", "Acionar o pisca-alerta e manter a faixa.", "Deslocar-se para a direita, sem acelerar o veículo."],
+        correctIndex: 3,
+        explanation: "Correta letra D: deslocar-se para a direita sem acelerar.",
+        commonMistake: "deslocar-se para a direita sem acelerar.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_067",
+        category: "legislacao",
+        statement: "O condutor que perceber que outro que o segue pretende ultrapassá-lo, em faixa que não seja a da esquerda, deve:",
+        options: ["Permanecer onde está, sem acelerar o veículo.", "Deslocar-se para a direita, reduzindo a velocidade.", "Acelerar para completar a ultrapassagem antes do retorno.", "Deslocar-se para a esquerda, mantendo a distância lateral."],
+        correctIndex: 0,
+        explanation: "Correta letra A: faixa da esquerda desloca-se; demais faixas permanecem.",
+        commonMistake: "faixa da esquerda desloca-se; demais faixas permanecem.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_068",
+        category: "legislacao",
+        statement: "Um condutor, ao ser ultrapassado, acelera o veículo para impedir a manobra. A conduta é:",
+        options: ["Regular, pois o ultrapassado tem preferência.", "Regular, pois mantém a velocidade da via.", "Irregular, pois, ao ser ultrapassado, o condutor não deve acelerar o veículo.", "Regular, se estiver em faixa diferente da esquerda."],
+        correctIndex: 2,
+        explanation: "Correta letra C: acelerar ao ser ultrapassado é vedado em qualquer faixa.",
+        commonMistake: "acelerar ao ser ultrapassado é vedado em qualquer faixa.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_069",
+        category: "legislacao",
+        statement: "Concluída a ultrapassagem, o condutor deve:",
+        options: ["Retornar à faixa de origem.", "Permanecer na faixa da esquerda.", "Aproximar-se do bordo esquerdo.", "Deslocar-se para o acostamento da direita."],
+        correctIndex: 0,
+        explanation: "Correta letra A: ultrapassar é avançar e retornar à origem.",
+        commonMistake: "ultrapassar é avançar e retornar à origem.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_070",
+        category: "legislacao",
+        statement: "Em vias rurais, a buzina pode ser utilizada:",
+        options: ["Apenas como advertência.", "Apenas para ultrapassagem.", "Como advertência ou para ultrapassar outro veículo.", "Para chamar passageiros."],
+        correctIndex: 2,
+        explanation: "Correta letra C: o uso para ultrapassar é exceção das vias rurais.",
+        commonMistake: "o uso para ultrapassar é exceção das vias rurais.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_071",
+        category: "legislacao",
+        statement: "Assinale a alternativa INCORRETA sobre ultrapassagem:",
+        options: ["Deve ser realizada pelo lado esquerdo da via.", "Deve ser indicada com antecedência.", "O condutor deve verificar se a faixa da contramão está livre.", "É permitida pela direita sempre que a faixa da esquerda estiver ocupada."],
+        correctIndex: 3,
+        explanation: "Correta letra D: a direita só é admitida quando o da frente indicar convergir ou retornar à esquerda.",
+        commonMistake: "a direita só é admitida quando o da frente indicar convergir ou retornar à esquerda.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_072",
+        category: "legislacao",
+        statement: "Em via de três faixas no mesmo sentido, um automóvel avança à frente de outro que circula em faixa ao lado, sem mudar de faixa. A manobra é:",
+        options: ["Ultrapassagem.", "Passagem.", "Conversão.", "Retorno."],
+        correctIndex: 1,
+        explanation: "Correta letra B: sem mudança de faixa não há ultrapassagem.",
+        commonMistake: "sem mudança de faixa não há ultrapassagem.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_073",
+        category: "legislacao",
+        statement: "Em via de duas faixas no mesmo sentido, o veículo da frente indica a intenção de converter à esquerda. A ultrapassagem pelo condutor que o segue:",
+        options: ["É vedada, pois deve ser sempre pela esquerda.", "Deve ser feita pelo acostamento.", "Deve ser feita pelo eixo da pista.", "Pode ser feita pela direita, por tratar-se da exceção prevista."],
+        correctIndex: 3,
+        explanation: "Correta letra D: o sinal à esquerda do veículo da frente viabiliza a direita.",
+        commonMistake: "o sinal à esquerda do veículo da frente viabiliza a direita.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_074",
+        category: "legislacao",
+        statement: "O condutor percebe que o veículo à sua frente indica a intenção de ultrapassar um terceiro. Deve:",
+        options: ["Abster-se de iniciar a ultrapassagem.", "Acompanhá-lo, para ultrapassar os dois.", "Acionar a buzina e ultrapassar pela direita.", "Utilizar o acostamento para ganhar posição."],
+        correctIndex: 0,
+        explanation: "Correta letra A: a verificação é pré-requisito; ultrapassar junto é manobra irregular.",
+        commonMistake: "a verificação é pré-requisito; ultrapassar junto é manobra irregular.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_075",
+        category: "legislacao",
+        statement: "Parar é imobilizar o veículo:",
+        options: ["Por tempo superior ao necessário para embarque.", "Por até cinco minutos, em local permitido.", "Pelo tempo estritamente necessário ao embarque ou desembarque de passageiros.", "Por qualquer tempo, com o condutor ao volante."],
+        correctIndex: 2,
+        explanation: "Correta letra C: parar = tempo estritamente necessário; estacionar = tempo superior.",
+        commonMistake: "parar = tempo estritamente necessário; estacionar = tempo superior.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_076",
+        category: "legislacao",
+        statement: "Estacionar é imobilizar o veículo:",
+        options: ["Pelo tempo necessário ao desembarque.", "Por tempo superior ao necessário para embarque ou desembarque de passageiros.", "Apenas com o condutor ausente.", "Por mais de cinco minutos."],
+        correctIndex: 1,
+        explanation: "Correta letra B: o critério é o tempo; a presença do condutor e os minutos fixos são armadilhas.",
+        commonMistake: "o critério é o tempo; a presença do condutor e os minutos fixos são armadilhas.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_077",
+        category: "legislacao",
+        statement: "A operação de carga e descarga é considerada:",
+        options: ["Parada.", "Imobilização de emergência.", "Estacionamento.", "Manobra de retorno."],
+        correctIndex: 2,
+        explanation: "Correta letra C: carga e descarga = estacionamento, não parada.",
+        commonMistake: "carga e descarga = estacionamento, não parada.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_078",
+        category: "legislacao",
+        statement: "Os veículos de duas rodas devem ser estacionados:",
+        options: ["Paralelos à guia da calçada.", "Perpendiculares à guia da calçada e junto a ela.", "Oblíquos à guia da calçada.", "Paralelos ao eixo da pista."],
+        correctIndex: 1,
+        explanation: "Correta letra B: duas rodas = perpendicular; carga e descarga = paralelo.",
+        commonMistake: "duas rodas = perpendicular; carga e descarga = paralelo.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_079",
+        category: "legislacao",
+        statement: "O embarque e desembarque de passageiros devem ser feitos pelo lado:",
+        options: ["Da calçada, exceto para o condutor.", "Do eixo da pista, exceto para o condutor.", "Da calçada, inclusive para o condutor.", "Do eixo da pista, inclusive para o condutor."],
+        correctIndex: 0,
+        explanation: "Correta letra A: a exceção é do condutor.",
+        commonMistake: "a exceção é do condutor.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_080",
+        category: "legislacao",
+        statement: "Em imobilização de emergência no leito viário, o condutor deve providenciar:",
+        options: ["A luz alta acesa até a chegada do socorro.", "Apenas as luzes de posição.", "O deslocamento do veículo para o eixo da pista.", "A sinalização com luzes de emergência e outros modos regulamentados pelo CONTRAN."],
+        correctIndex: 3,
+        explanation: "Correta letra D: farol alto e luz de posição não substituem a sinalização de emergência.",
+        commonMistake: "farol alto e luz de posição não substituem a sinalização de emergência.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_081",
+        category: "legislacao",
+        statement: "Na carga e descarga, o veículo deve estar posicionado:",
+        options: ["Perpendicular à guia da calçada.", "No sentido do fluxo, paralelo ao bordo da pista e junto à guia.", "Oblíquo ao bordo da pista.", "Paralelo ao canteiro central."],
+        correctIndex: 1,
+        explanation: "Correta letra B: não confundir com a regra das duas rodas.",
+        commonMistake: "não confundir com a regra das duas rodas.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_082",
+        category: "legislacao",
+        statement: "Assinale a alternativa INCORRETA sobre parada e estacionamento:",
+        options: ["Parar é imobilizar pelo tempo estritamente necessário ao embarque.", "Os veículos de duas rodas são estacionados perpendiculares à guia.", "O embarque e desembarque se dão pelo lado da calçada, exceto para o condutor.", "A operação de carga e descarga é considerada parada."],
+        correctIndex: 3,
+        explanation: "Correta letra D: carga e descarga é estacionamento.",
+        commonMistake: "carga e descarga é estacionamento.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_083",
+        category: "legislacao",
+        statement: "Um táxi imobiliza-se apenas o tempo estritamente necessário ao desembarque de um passageiro. A situação configura:",
+        options: ["Parada.", "Estacionamento.", "Imobilização de emergência.", "Operação de carga e descarga."],
+        correctIndex: 0,
+        explanation: "Correta letra A: tempo estritamente necessário = parada.",
+        commonMistake: "tempo estritamente necessário = parada.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_084",
+        category: "legislacao",
+        statement: "Em caso de pane que imobilize o veículo no leito viário, o condutor deve:",
+        options: ["Manter o farol alto aceso e buzinar.", "Sinalizar com a luz de posição.", "Acionar as luzes de emergência e outros modos regulamentados.", "Acionar apenas a seta direita."],
+        correctIndex: 2,
+        explanation: "Correta letra C: o pisca-alerta é para a emergência com o veículo imobilizado.",
+        commonMistake: "o pisca-alerta é para a emergência com o veículo imobilizado.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_085",
+        category: "legislacao",
+        statement: "A buzina só deve ser utilizada:",
+        options: ["Como advertência ou, nas vias rurais, para ultrapassar outro veículo.", "Como advertência ou, em qualquer via, para ultrapassar.", "Para chamar passageiros, em vias urbanas e rurais.", "Como advertência ou, nas vias urbanas, para ultrapassar."],
+        correctIndex: 0,
+        explanation: "Correta letra A: a ultrapassagem com buzina é exceção das vias rurais.",
+        commonMistake: "a ultrapassagem com buzina é exceção das vias rurais.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_086",
+        category: "legislacao",
+        statement: "Sob neblina, o condutor deve utilizar:",
+        options: ["Luz alta.", "Luz alta e pisca-alerta.", "Luz baixa.", "Apenas luzes de posição."],
+        correctIndex: 2,
+        explanation: "Correta letra C: a luz alta reflete na neblina; a regra é luz baixa.",
+        commonMistake: "a luz alta reflete na neblina; a regra é luz baixa.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_087",
+        category: "legislacao",
+        statement: "Ao conduzir sob cerração em uma rodovia, o condutor deve acionar:",
+        options: ["Luz alta e pisca-alerta.", "Apenas luz baixa, dispensadas as luzes de posição.", "Apenas luzes de posição.", "Luz baixa e luzes de posição."],
+        correctIndex: 3,
+        explanation: "Correta letra D: cerração exige luz baixa e luzes de posição; o pisca-alerta não é para circulação.",
+        commonMistake: "cerração exige luz baixa e luzes de posição; o pisca-alerta não é para circulação.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_088",
+        category: "legislacao",
+        statement: "Ao circular em túnel, o condutor deve utilizar:",
+        options: ["Luz alta.", "Luz baixa.", "Luzes de posição, somente.", "Pisca-alerta."],
+        correctIndex: 1,
+        explanation: "Correta letra B: túnel está no rol da luz baixa.",
+        commonMistake: "túnel está no rol da luz baixa.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_089",
+        category: "legislacao",
+        statement: "A luz alta deve ser utilizada:",
+        options: ["Em túneis iluminados.", "Em rodovias de pista simples.", "Em vias não iluminadas, mesmo ao cruzar com outro veículo.", "Em vias não iluminadas, exceto ao cruzar com outro veículo ou ao segui-lo."],
+        correctIndex: 3,
+        explanation: "Correta letra D: as exceções são cruzar e seguir.",
+        commonMistake: "as exceções são cruzar e seguir.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_090",
+        category: "legislacao",
+        statement: "Em rodovia de pista simples, a luz baixa pode ser substituída pela:",
+        options: ["Luz de rodagem diurna (DRL).", "Luz de posição.", "Luz alta.", "Luz de emergência."],
+        correctIndex: 0,
+        explanation: "Correta letra A: a substituição é pela DRL, nunca pela luz de posição.",
+        commonMistake: "a substituição é pela DRL, nunca pela luz de posição.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_091",
+        category: "legislacao",
+        statement: "Os ciclos motorizados, ao circular, devem utilizar:",
+        options: ["Luz alta, à noite.", "Luz de posição, em via não iluminada.", "Luz baixa.", "Pisca-alerta, em baixa velocidade."],
+        correctIndex: 2,
+        explanation: "Correta letra C: ciclos motorizados constam no rol da luz baixa.",
+        commonMistake: "ciclos motorizados constam no rol da luz baixa.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_092",
+        category: "legislacao",
+        statement: "Os veículos coletivos, em faixas próprias a eles destinadas, devem utilizar:",
+        options: ["Luz alta.", "Luz baixa.", "Luzes de posição, somente.", "Pisca-alerta."],
+        correctIndex: 1,
+        explanation: "Correta letra B: a faixa própria também exige luz baixa.",
+        commonMistake: "a faixa própria também exige luz baixa.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_093",
+        category: "legislacao",
+        statement: "As luzes de posição têm a finalidade de:",
+        options: ["Clarear a pista em vias não iluminadas.", "Substituir a luz baixa na cerração.", "Mostrar as dimensões e o posicionamento do veículo.", "Sinalizar a imobilização por emergência."],
+        correctIndex: 2,
+        explanation: "Correta letra C: luzes de posição não clareiam a pista.",
+        commonMistake: "luzes de posição não clareiam a pista.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_094",
+        category: "legislacao",
+        statement: "Ao dirigir sob chuva forte, é obrigatória a utilização:",
+        options: ["Do farol alto.", "Das luzes de posição.", "Apenas do pisca-alerta.", "Do pisca-alerta e do farol alto."],
+        correctIndex: 1,
+        explanation: "Correta letra B: o pisca-alerta não é de uso na circulação sob chuva.",
+        commonMistake: "o pisca-alerta não é de uso na circulação sob chuva.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_095",
+        category: "legislacao",
+        statement: "À noite, durante o embarque ou desembarque de passageiros, devem permanecer acesas:",
+        options: ["As luzes de posição.", "As luzes de emergência.", "A luz alta.", "A luz de freio."],
+        correctIndex: 0,
+        explanation: "Correta letra A: nessa operação, a exigência é de luzes de posição.",
+        commonMistake: "nessa operação, a exigência é de luzes de posição.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_096",
+        category: "legislacao",
+        statement: "O pisca-alerta deve ser utilizado:",
+        options: ["Sob chuva, para ampliar a visibilidade.", "Ao reduzir a velocidade em pista simples.", "Em ultrapassagens, para alertar quem segue.", "Em emergência com o veículo imobilizado ou quando a sinalização de regulamentação determinar."],
+        correctIndex: 3,
+        explanation: "Correta letra D: o pisca-alerta não vale para circulação comum.",
+        commonMistake: "o pisca-alerta não vale para circulação comum.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_097",
+        category: "legislacao",
+        statement: "À noite, em operações de carga e descarga de mercadorias, devem permanecer acesas:",
+        options: ["A luz alta.", "As luzes de posição.", "Apenas o pisca-alerta.", "Nenhuma luz, para economizar energia."],
+        correctIndex: 1,
+        explanation: "Correta letra B: carga e descarga noturna = luzes de posição.",
+        commonMistake: "carga e descarga noturna = luzes de posição.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_098",
+        category: "legislacao",
+        statement: "Assinale a alternativa INCORRETA sobre o uso de luzes:",
+        options: ["A luz baixa deve ser utilizada à noite e em túneis.", "As luzes de posição não têm a finalidade de clarear a pista.", "A luz alta deve ser utilizada em vias não iluminadas, exceto ao cruzar ou seguir.", "O pisca-alerta deve ser utilizado em circulação sob chuva."],
+        correctIndex: 3,
+        explanation: "Correta letra D: chuva exige luz baixa e luzes de posição; o pisca-alerta, não.",
+        commonMistake: "chuva exige luz baixa e luzes de posição; o pisca-alerta, não.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_099",
+        category: "legislacao",
+        statement: "Os veículos de tração animal deverão ser conduzidos:",
+        options: ["Pela direita da pista e junto à guia da calçada.", "Pelo eixo da pista, com sinalização luminosa.", "Pelo bordo esquerdo, em sentido contrário ao fluxo.", "Pela faixa da esquerda, em baixa velocidade."],
+        correctIndex: 0,
+        explanation: "Correta letra A: direita e junto à guia.",
+        commonMistake: "direita e junto à guia.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_100",
+        category: "legislacao",
+        statement: "Os animais, quando em rebanhos, deverão ser conduzidos:",
+        options: ["Em grandes grupos, pelo eixo da pista.", "Em fila única, pela faixa da esquerda.", "Em grupos pequenos e junto ao bordo da pista.", "Em grupos pequenos, pelo canteiro central."],
+        correctIndex: 2,
+        explanation: "Correta letra C: grupos pequenos junto ao bordo, nunca eixo ou canteiro.",
+        commonMistake: "grupos pequenos junto ao bordo, nunca eixo ou canteiro.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_101",
+        category: "legislacao",
+        statement: "A regulamentação do trânsito de animais, tração animal, propulsão humana e ciclomotores cabe:",
+        options: ["Ao município.", "Ao CONTRAN, em todas as vias.", "Ao órgão rodoviário da União.", "Ao órgão de trânsito estadual."],
+        correctIndex: 0,
+        explanation: "Correta letra A: é competência do município.",
+        commonMistake: "é competência do município.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_102",
+        category: "legislacao",
+        statement: "Assinale a alternativa INCORRETA sobre o trânsito de animais:",
+        options: ["Veículos de tração animal circulam pela direita da pista.", "A regulamentação é a cargo do município.", "Os rebanhos devem ser conduzidos em grandes grupos, pelo eixo da pista.", "Os rebanhos devem ser conduzidos junto ao bordo da pista."],
+        correctIndex: 2,
+        explanation: "Correta letra C: grupos pequenos e junto ao bordo.",
+        commonMistake: "grupos pequenos e junto ao bordo.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_103",
+        category: "legislacao",
+        statement: "Os condutores de motocicletas só podem circular utilizando capacete:",
+        options: ["Sem viseira, desde que usem óculos de sol.", "Com viseira, dispensado o vestuário de proteção.", "Apenas em rodovias, acima de 80 km/h.", "Com viseira ou óculos de proteção."],
+        correctIndex: 3,
+        explanation: "Correta letra D: óculos de sol não são óculos de proteção.",
+        commonMistake: "óculos de sol não são óculos de proteção.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_104",
+        category: "legislacao",
+        statement: "O condutor de motocicleta só pode circular segurando o guidão:",
+        options: ["Com uma das mãos, em baixa velocidade.", "Com as duas mãos, exceto ao sinalizar com o braço.", "Com uma das mãos, ao usar a buzina.", "Com uma das mãos, ao transportar passageiro."],
+        correctIndex: 1,
+        explanation: "Correta letra B: a única exceção é a sinalização com o braço.",
+        commonMistake: "a única exceção é a sinalização com o braço.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_105",
+        category: "legislacao",
+        statement: "O vestuário de proteção exigido do condutor de motocicleta é aquele:",
+        options: ["Escolhido pelo condutor, conforme o percurso.", "Exigido apenas em rodovias.", "Exigido apenas à noite.", "Regulamentado pelo CONTRAN."],
+        correctIndex: 3,
+        explanation: "Correta letra D: é obrigatório e segue o CONTRAN.",
+        commonMistake: "é obrigatório e segue o CONTRAN.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_106",
+        category: "legislacao",
+        statement: "Os passageiros de motocicletas só podem ser transportados:",
+        options: ["Em sidecar ou assento suplementar atrás do condutor, com capacete e vestuário.", "No tanque, junto ao condutor, com capacete.", "Em assento suplementar à frente do condutor.", "Em sidecar, dispensado o capacete."],
+        correctIndex: 0,
+        explanation: "Correta letra A: atrás do condutor, nunca à frente.",
+        commonMistake: "atrás do condutor, nunca à frente.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_107",
+        category: "legislacao",
+        statement: "Transportar menores de dez anos em motocicletas constitui infração:",
+        options: ["Média, com remoção do veículo.", "Grave, só com penalidade pecuniária.", "Gravíssima, com suspensão do direito de dirigir.", "Gravíssima, sem suspensão do direito de dirigir."],
+        correctIndex: 2,
+        explanation: "Correta letra C: gravíssima COM suspensão.",
+        commonMistake: "gravíssima COM suspensão.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_108",
+        category: "legislacao",
+        statement: "Os ciclomotores devem ser conduzidos, quando não existir faixa especial:",
+        options: ["Pelo acostamento, junto ao bordo.", "No centro da faixa mais à direita da pista.", "Pelo eixo da pista, junto à linha divisória.", "Pela faixa da esquerda, em baixa velocidade."],
+        correctIndex: 1,
+        explanation: "Correta letra B: centro da faixa mais à direita; não o bordo nem o acostamento.",
+        commonMistake: "centro da faixa mais à direita; não o bordo nem o acostamento.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_109",
+        category: "legislacao",
+        statement: "Assinale a hipótese em que o ciclomotor tem trânsito vedado:",
+        options: ["Em vias arteriais.", "Em vias coletoras.", "Nas vias de trânsito rápido.", "No acostamento da rodovia."],
+        correctIndex: 2,
+        explanation: "Correta letra C: acostamento é permitido; trânsito rápido é vedado.",
+        commonMistake: "acostamento é permitido; trânsito rápido é vedado.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_110",
+        category: "legislacao",
+        statement: "Em via com várias faixas, em que a da direita é exclusiva para ônibus, o ciclomotor deve circular pela faixa:",
+        options: ["Da esquerda.", "Adjacente à da direita.", "Da direita.", "Adjacente à da esquerda."],
+        correctIndex: 1,
+        explanation: "Correta letra B: adjacente à da direita; não a da esquerda, nem a exclusiva.",
+        commonMistake: "adjacente à da direita; não a da esquerda, nem a exclusiva.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_111",
+        category: "legislacao",
+        statement: "Assinale a alternativa INCORRETA sobre motocicletas e ciclomotores:",
+        options: ["O ciclomotor pode circular livremente nas vias de trânsito rápido.", "O condutor deve segurar o guidão com as duas mãos.", "O passageiro deve usar capacete e vestuário de proteção.", "O ciclomotor circula no centro da faixa mais à direita."],
+        correctIndex: 0,
+        explanation: "Correta letra A: é proibido nas vias de trânsito rápido.",
+        commonMistake: "é proibido nas vias de trânsito rápido.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_112",
+        category: "legislacao",
+        statement: "Um motociclista retira momentaneamente uma das mãos do guidão para sinalizar com o braço. A conduta é:",
+        options: ["Irregular, pois o guidão deve ser segurado com as duas mãos sempre.", "Irregular, pois a sinalização deve ser pela luz indicadora.", "Regular apenas abaixo de 30 km/h.", "Regular, pois a sinalização com o braço é exceção prevista."],
+        correctIndex: 3,
+        explanation: "Correta letra D: a norma admite a mão fora do guidão para sinalizar com o braço.",
+        commonMistake: "a norma admite a mão fora do guidão para sinalizar com o braço.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_113",
+        category: "legislacao",
+        statement: "Na inexistência de ciclofaixa ou ciclovia, as bicicletas devem circular:",
+        options: ["Pelo eixo da pista, em fila.", "No mesmo sentido dos veículos e junto ao bordo direito da pista.", "Pelo bordo esquerdo, em sentido contrário.", "Pela calçada, em via de mão dupla."],
+        correctIndex: 1,
+        explanation: "Correta letra B: mesmo sentido e bordo direito.",
+        commonMistake: "mesmo sentido e bordo direito.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_114",
+        category: "legislacao",
+        statement: "As bicicletas só poderão circular sobre os passeios quando:",
+        options: ["Houver congestionamento na pista.", "Estiverem em baixa velocidade.", "Houver ciclofaixa lateral.", "Autorizado e sinalizado pelo órgão competente, ou nos casos permitidos."],
+        correctIndex: 3,
+        explanation: "Correta letra D: autorização e sinalização do órgão; não depende da vontade do ciclista.",
+        commonMistake: "autorização e sinalização do órgão; não depende da vontade do ciclista.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_115",
+        category: "legislacao",
+        statement: "O condutor que ultrapassa uma bicicleta deve manter distância lateral mínima de:",
+        options: ["1,5 metro.", "1 metro.", "2 metros.", "2,5 metros."],
+        correctIndex: 0,
+        explanation: "Correta letra A: 1,5 metro.",
+        commonMistake: "1,5 metro.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_116",
+        category: "legislacao",
+        statement: "O ciclista que empurra a bicicleta:",
+        options: ["Responde como condutor de bicicleta.", "Equipara-se ao condutor de ciclomotor.", "Equipara-se ao pedestre em deveres e direitos.", "Não está sujeito às normas de circulação."],
+        correctIndex: 2,
+        explanation: "Correta letra C: empurrando = pedestre.",
+        commonMistake: "empurrando = pedestre.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_117",
+        category: "legislacao",
+        statement: "Assinale a alternativa INCORRETA sobre bicicletas:",
+        options: ["Podem circular livremente sobre os passeios, sem autorização.", "Sem ciclovia, circulam junto ao bordo direito.", "A distância lateral ao ultrapassá-las é de 1,5 metro.", "O ciclista que empurra a bicicleta equipara-se ao pedestre."],
+        correctIndex: 0,
+        explanation: "Correta letra A: o passeio depende de autorização e sinalização.",
+        commonMistake: "o passeio depende de autorização e sinalização.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_118",
+        category: "legislacao",
+        statement: "Em sinistro, apurou-se que um automóvel ultrapassou um ciclista a um metro de distância lateral. A conduta foi:",
+        options: ["Regular, pois o ciclista estava junto ao bordo.", "Regular, pois a ultrapassagem foi pela esquerda.", "Irregular, pois a distância lateral mínima é de um metro e meio.", "Irregular, pois é vedada a ultrapassagem de bicicletas."],
+        correctIndex: 2,
+        explanation: "Correta letra C: o lado esquerdo estava correto, mas a distância lateral foi insuficiente.",
+        commonMistake: "o lado esquerdo estava correto, mas a distância lateral foi insuficiente.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_119",
+        category: "legislacao",
+        statement: "Em trechos urbanos desprovidos de passeio, os pedestres devem circular:",
+        options: ["Pelo eixo da pista, em dupla.", "Pelo bordo esquerdo, em sentido contrário.", "Pelos bordos da pista e em fila, cedendo passagem aos veículos.", "Pelos bordos da pista e em fila, preservando-se a prioridade sobre os veículos."],
+        correctIndex: 3,
+        explanation: "Correta letra D: em fila e com preservação da prioridade do pedestre.",
+        commonMistake: "em fila e com preservação da prioridade do pedestre.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_120",
+        category: "legislacao",
+        statement: "Nas vias rurais sem acostamento, os pedestres devem circular:",
+        options: ["Em fila, pelos bordos, no mesmo sentido dos veículos.", "Em fila, pelos bordos, em sentido contrário aos veículos.", "Em dupla, pelo eixo da pista.", "Pelo canteiro central, no mesmo sentido dos veículos."],
+        correctIndex: 1,
+        explanation: "Correta letra B: sentido contrário aos veículos.",
+        commonMistake: "sentido contrário aos veículos.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_121",
+        category: "legislacao",
+        statement: "Para cruzar a pista, o pedestre deve utilizar:",
+        options: ["O acostamento, até o ponto de menor movimento.", "O eixo da pista, em diagonal.", "O canteiro central, com atenção ao fluxo.", "A faixa própria de travessia."],
+        correctIndex: 3,
+        explanation: "Correta letra D: faixa própria; na falta dela, perpendicular ao eixo.",
+        commonMistake: "faixa própria; na falta dela, perpendicular ao eixo.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_122",
+        category: "legislacao",
+        statement: "Na inexistência de faixa própria, a travessia do pedestre deve ser feita:",
+        options: ["Em sentido perpendicular ao eixo da pista.", "Em diagonal, para reduzir a exposição.", "Em sentido paralelo ao eixo da pista.", "Em sentido oblíquo, acompanhando o tráfego."],
+        correctIndex: 0,
+        explanation: "Correta letra A: perpendicular ao eixo, e não oblíquo ou em diagonal.",
+        commonMistake: "perpendicular ao eixo, e não oblíquo ou em diagonal.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_123",
+        category: "legislacao",
+        statement: "Assinale a alternativa INCORRETA sobre pedestres:",
+        options: ["Nos trechos urbanos sem passeio, circulam pelos bordos, em fila.", "Para cruzar a pista, utilizam a faixa própria.", "Nas vias rurais sem acostamento, circulam no mesmo sentido dos veículos.", "Sem faixa, a travessia é perpendicular ao eixo da pista."],
+        correctIndex: 2,
+        explanation: "Correta letra C: o sentido é contrário ao dos veículos.",
+        commonMistake: "o sentido é contrário ao dos veículos.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_124",
+        category: "legislacao",
+        statement: "À noite, em rodovia sem acostamento, um pedestre caminha pelo bordo direito, no mesmo sentido do tráfego. A conduta é:",
+        options: ["Regular, pois o bordo direito é o correto.", "Irregular, pois deve circular em fila, pelos bordos, em sentido contrário.", "Irregular, pois deve circular pelo eixo da pista.", "Regular, desde que caminhe em dupla."],
+        correctIndex: 1,
+        explanation: "Correta letra B: o bordo está correto, mas o sentido deve ser contrário ao dos veículos.",
+        commonMistake: "o bordo está correto, mas o sentido deve ser contrário ao dos veículos.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_125",
+        category: "legislacao",
+        statement: "Nas vias internas de condomínios constituídos por unidades autônomas, a sinalização de regulamentação é implantada e mantida:",
+        options: ["Pelo órgão de trânsito do município.", "Pelo órgão rodoviário estadual.", "Por conta do próprio condomínio.", "Pelo CONTRAN, mediante convênio."],
+        correctIndex: 2,
+        explanation: "Correta letra C: responsabilidade do condomínio, não do poder público.",
+        commonMistake: "responsabilidade do condomínio, não do poder público.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_126",
+        category: "legislacao",
+        statement: "Em relação às vias internas de condomínios, é correto afirmar que:",
+        options: ["A sinalização é implantada pelo município e mantida pelo condomínio.", "A sinalização de regulamentação é implantada e mantida pelo condomínio.", "As vias internas não se submetem a sinalização.", "A sinalização depende de aprovação do CONTRAN."],
+        correctIndex: 1,
+        explanation: "Correta letra B: implantar e manter ficam a cargo do condomínio.",
+        commonMistake: "implantar e manter ficam a cargo do condomínio.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_127",
+        category: "legislacao",
+        statement: "A velocidade máxima nas estradas (vias rurais não pavimentadas) é de:",
+        options: ["60 km/h.", "80 km/h.", "90 km/h.", "100 km/h."],
+        correctIndex: 0,
+        explanation: "Correta letra A: estrada (sem pavimento) = 60; rodovia (pavimentada) = 90/100/110.",
+        commonMistake: "estrada (sem pavimento) = 60; rodovia (pavimentada) = 90/100/110.",
+        incidence: "altissima",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_128",
+        category: "legislacao",
+        statement: "Nas rodovias de pista dupla, a velocidade máxima para automóveis, camionetas e motocicletas é de:",
+        options: ["90 km/h.", "100 km/h.", "120 km/h.", "110 km/h."],
+        correctIndex: 3,
+        explanation: "Correta letra D: pista dupla = 110; pista simples = 100.",
+        commonMistake: "pista dupla = 110; pista simples = 100.",
+        incidence: "altissima",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_129",
+        category: "legislacao",
+        statement: "Nas rodovias de pista simples, a velocidade máxima para automóveis, camionetas e motocicletas é de:",
+        options: ["90 km/h.", "100 km/h.", "110 km/h.", "80 km/h."],
+        correctIndex: 1,
+        explanation: "Correta letra B: pista simples = 100; pista dupla = 110.",
+        commonMistake: "pista simples = 100; pista dupla = 110.",
+        incidence: "altissima",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_130",
+        category: "legislacao",
+        statement: "Nas rodovias, a velocidade máxima para os demais veículos é de:",
+        options: ["100 km/h.", "110 km/h.", "80 km/h.", "90 km/h."],
+        correctIndex: 3,
+        explanation: "Correta letra D: demais veículos = 90 km/h.",
+        commonMistake: "demais veículos = 90 km/h.",
+        incidence: "altissima",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_131",
+        category: "legislacao",
+        statement: "A velocidade máxima nas vias de trânsito rápido é de:",
+        options: ["80 km/h.", "60 km/h.", "100 km/h.", "70 km/h."],
+        correctIndex: 0,
+        explanation: "Correta letra A: sem interseção, semáforo, acesso a lotes e travessia em nível = 80.",
+        commonMistake: "sem interseção, semáforo, acesso a lotes e travessia em nível = 80.",
+        incidence: "altissima",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_132",
+        category: "legislacao",
+        statement: "A velocidade máxima nas vias arteriais é de:",
+        options: ["40 km/h.", "80 km/h.", "60 km/h.", "30 km/h."],
+        correctIndex: 2,
+        explanation: "Correta letra C: arterial (semáforo, interseção, lotes, travessia) = 60.",
+        commonMistake: "arterial (semáforo, interseção, lotes, travessia) = 60.",
+        incidence: "altissima",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_133",
+        category: "legislacao",
+        statement: "A velocidade máxima nas vias coletoras é de:",
+        options: ["40 km/h.", "30 km/h.", "60 km/h.", "50 km/h."],
+        correctIndex: 0,
+        explanation: "Correta letra A: coletora (coleta e distribui) = 40.",
+        commonMistake: "coletora (coleta e distribui) = 40.",
+        incidence: "altissima",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_134",
+        category: "legislacao",
+        statement: "A velocidade máxima nas vias locais (áreas restritas, locais, residenciais) é de:",
+        options: ["20 km/h.", "40 km/h.", "30 km/h.", "50 km/h."],
+        correctIndex: 2,
+        explanation: "Correta letra C: local = 30; coletora = 40.",
+        commonMistake: "local = 30; coletora = 40.",
+        incidence: "altissima",
+        trap: true,
+        difficulty: 2,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_135",
+        category: "legislacao",
+        statement: "O excesso de velocidade de até 20% acima do permitido constitui infração:",
+        options: ["Leve.", "Grave.", "Gravíssima.", "Média."],
+        correctIndex: 3,
+        explanation: "Correta letra D: até 20% = média.",
+        commonMistake: "até 20% = média.",
+        incidence: "altissima",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_136",
+        category: "legislacao",
+        statement: "O excesso de velocidade acima de 20% até 50% acima do permitido constitui infração:",
+        options: ["Média.", "Grave.", "Gravíssima.", "Leve."],
+        correctIndex: 1,
+        explanation: "Correta letra B: faixa intermediária (20% a 50%) = grave.",
+        commonMistake: "faixa intermediária (20% a 50%) = grave.",
+        incidence: "altissima",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_137",
+        category: "legislacao",
+        statement: "O excesso de velocidade acima de 50% do permitido implica, além da multa:",
+        options: ["Advertência por escrito.", "Retenção do veículo.", "Apenas pontos no prontuário.", "Suspensão do direito de dirigir, recolhimento da CNH e curso de reciclagem."],
+        correctIndex: 3,
+        explanation: "Correta letra D: gravíssima + suspensão + recolhimento da CNH + reciclagem.",
+        commonMistake: "gravíssima + suspensão + recolhimento da CNH + reciclagem.",
+        incidence: "altissima",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_138",
+        category: "legislacao",
+        statement: "Em via arterial de 60 km/h, um condutor trafega a 80 km/h. A infração é:",
+        options: ["Grave.", "Média.", "Gravíssima.", "Leve."],
+        correctIndex: 0,
+        explanation: "Correta letra A: 80 é cerca de 33% acima; entre 20% e 50% = grave.",
+        commonMistake: "80 é cerca de 33% acima; entre 20% e 50% = grave.",
+        incidence: "altissima",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_139",
+        category: "legislacao",
+        statement: "Em via coletora de 40 km/h, um condutor trafega a 61 km/h. A infração é:",
+        options: ["Média.", "Grave.", "Gravíssima.", "Leve."],
+        correctIndex: 2,
+        explanation: "Correta letra C: 61 é mais de 50% acima (limite de 60); logo, gravíssima.",
+        commonMistake: "61 é mais de 50% acima (limite de 60); logo, gravíssima.",
+        incidence: "altissima",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_140",
+        category: "legislacao",
+        statement: "Em via local de 30 km/h, um condutor trafega a 36 km/h, exatamente 20% acima. A infração é:",
+        options: ["Grave.", "Média.", "Gravíssima.", "Leve."],
+        correctIndex: 1,
+        explanation: "Correta letra B: \"até 20%\" inclui o valor exato de 20%.",
+        commonMistake: "\"até 20%\" inclui o valor exato de 20%.",
+        incidence: "altissima",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_141",
+        category: "legislacao",
+        statement: "Em rodovia de pista simples de 100 km/h, um automóvel trafega a 150 km/h, exatamente 50% acima. A infração é:",
+        options: ["Média.", "Gravíssima.", "Grave.", "Leve."],
+        correctIndex: 2,
+        explanation: "Correta letra C: a gravíssima exige ACIMA de 50%.",
+        commonMistake: "a gravíssima exige ACIMA de 50%.",
+        incidence: "altissima",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_142",
+        category: "legislacao",
+        statement: "Em rodovia de pista dupla de 110 km/h, um automóvel trafega a 170 km/h. A infração é:",
+        options: ["Grave.", "Gravíssima.", "Média.", "Leve."],
+        correctIndex: 1,
+        explanation: "Correta letra B: 170 está mais de 50% acima de 110 (limite de 165).",
+        commonMistake: "170 está mais de 50% acima de 110 (limite de 165).",
+        incidence: "altissima",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_143",
+        category: "legislacao",
+        statement: "A velocidade mínima de uma via corresponde a:",
+        options: ["50% da velocidade máxima.", "30% da velocidade máxima.", "60% da velocidade máxima.", "40 km/h em qualquer via."],
+        correctIndex: 0,
+        explanation: "Correta letra A: a mínima é 50% da máxima, e não um valor fixo.",
+        commonMistake: "a mínima é 50% da máxima, e não um valor fixo.",
+        incidence: "altissima",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_144",
+        category: "legislacao",
+        statement: "Em via de trânsito rápido (80 km/h), o condutor que trafega abaixo da velocidade mínima, sem motivo, comete infração:",
+        options: ["Grave, com 5 pontos e remoção.", "Leve, com advertência.", "Gravíssima, com suspensão.", "Média, com 4 pontos e multa."],
+        correctIndex: 3,
+        explanation: "Correta letra D: mínima de 40 km/h; abaixo dela = média, 4 pontos e multa.",
+        commonMistake: "mínima de 40 km/h; abaixo dela = média, 4 pontos e multa.",
+        incidence: "altissima",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_145",
+        category: "legislacao",
+        statement: "O órgão com circunscrição sobre a via poderá estabelecer velocidades superiores ou inferiores às do CTB:",
+        options: ["Por decisão administrativa, sem sinalização.", "Desde que expressas em sinalização regulamentadora.", "Apenas para reduzir os limites.", "Apenas em rodovias."],
+        correctIndex: 1,
+        explanation: "Correta letra B: a condição é a sinalização regulamentadora, e a alteração pode ser para mais ou para menos.",
+        commonMistake: "a condição é a sinalização regulamentadora, e a alteração pode ser para mais ou para menos.",
+        incidence: "altissima",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_146",
+        category: "legislacao",
+        statement: "Assinale a alternativa INCORRETA sobre excessos de velocidade:",
+        options: ["Até 20% acima do permitido: infração média.", "Acima de 20% até 50%: infração grave.", "Acima de 50%: infração gravíssima.", "Acima de 50%: apenas multa, sem outras penalidades."],
+        correctIndex: 3,
+        explanation: "Correta letra D: acima de 50% há suspensão, recolhimento da CNH e reciclagem.",
+        commonMistake: "acima de 50% há suspensão, recolhimento da CNH e reciclagem.",
+        incidence: "altissima",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_147",
+        category: "legislacao",
+        statement: "O condutor flagrado a mais de 50% acima do limite da via sofrerá, entre outras, a seguinte consequência:",
+        options: ["Suspensão do direito de dirigir.", "Advertência por escrito.", "Retenção do veículo para regularização.", "Transbordo do excesso de carga."],
+        correctIndex: 0,
+        explanation: "Correta letra A: retenção e transbordo são medidas de outros casos.",
+        commonMistake: "retenção e transbordo são medidas de outros casos.",
+        incidence: "altissima",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_148",
+        category: "legislacao",
+        statement: "Em via arterial de 60 km/h, um condutor trafega a 90 km/h, exatamente 50% acima. A infração é:",
+        options: ["Média.", "Gravíssima.", "Grave.", "Leve."],
+        correctIndex: 2,
+        explanation: "Correta letra C: exatamente 50% ainda não é \"acima de 50%\".",
+        commonMistake: "exatamente 50% ainda não é \"acima de 50%\".",
+        incidence: "altissima",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_149",
+        category: "legislacao",
+        statement: "Em via local de 30 km/h, um condutor trafega a 45 km/h, exatamente 50% acima. A infração é:",
+        options: ["Grave.", "Gravíssima.", "Média.", "Leve."],
+        correctIndex: 0,
+        explanation: "Correta letra A: o limite de 50% é inclusivo para a faixa grave.",
+        commonMistake: "o limite de 50% é inclusivo para a faixa grave.",
+        incidence: "altissima",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
+    },
+    {
+        id: "ia_normas_150",
+        category: "legislacao",
+        statement: "Assinale a alternativa INCORRETA sobre a classificação das vias:",
+        options: ["Trânsito rápido: 80 km/h, sem interseção e sem semáforo.", "Arterial: 60 km/h, com semáforo e interseção.", "Local: 50 km/h, em áreas residenciais.", "Coletora: 40 km/h, para coletar e distribuir."],
+        correctIndex: 2,
+        explanation: "Correta letra C: a via local é de 30 km/h.",
+        commonMistake: "a via local é de 30 km/h.",
+        incidence: "altissima",
+        trap: true,
+        difficulty: 3,
+        origin: "ia"
     },
 ];
 
@@ -12267,231 +14141,6 @@ export const REAL_EXAM_IDS = [
     "detran_art61_110_01",
     "detran_crianca_moto_01",
     "detran_fadiga_parar_01",
-    {
-        id: "q3181",
-        category: "legislacao",
-        statement: "Em interseção entre rodovia e estrada, ambas abertas à circulação e sem sinalização de preferência, o condutor precisa definir quem deve passar primeiro. Pela regra geral do CTB, a preferência pertence a:",
-        options: [
-            "Ao veículo que trafega pela estrada, por se tratar de via de menor porte.",
-            "Ao veículo que se aproxima pela direita do outro condutor.",
-            "Ao veículo que trafega pela rodovia, nos termos da regra específica do CTB.",
-            "Ao veículo que chegar primeiro e alertar o outro com toques de buzina."
-        ],
-        correctIndex: 2,
-        explanation: "O CTB estabelece que em cruzamentos sem sinalização entre rodovias e estradas, o veículo que trafega pela rodovia tem preferência.",
-        incidence: "alta",
-        difficulty: 2
-    },
-    {
-        id: "q3182",
-        category: "legislacao",
-        statement: "Dentro de rotatória no perímetro urbano, o condutor deve manter conduta compatível com a preferência legal e a fluidez do fluxo. A respeito do comportamento correto e obrigatório no anel viário, é correto afirmar:",
-        options: [
-            "Manter-se na faixa da esquerda e acelerar para entrar no anel com prioridade, pois quem já está circulando deve ceder.",
-            "Mudar de faixa repetidamente para alcançar no menor tempo possível, sinalizando cada mudança com antecedência.",
-            "Manter-se na faixa adequada, em velocidade moderada, atento ao fluxo de veículos e pedestres.",
-            "Dirigir sem considerar os demais veículos, pois o condutor já detém a preferência."
-        ],
-        correctIndex: 2,
-        explanation: "Dentro da rotatória, o condutor deve manter-se na faixa adequada, em velocidade moderada, e atento ao fluxo de veículos e pedestres.",
-        incidence: "alta",
-        difficulty: 1
-    },
-    {
-        id: "q3183",
-        category: "legislacao",
-        statement: "O fluxo de duas vias urbanas sem sinalização se cruza e nenhuma delas se classifica como rodovia ou possui rotatória. Pela regra geral de preferência de passagem prevista no Art. 29 do CTB, a prioridade pertence:",
-        options: [
-            "À ambulância, por se tratar de veículo de salvamento em qualquer hipótese.",
-            "Ao veículo de maior peso, que não consegue parar com facilidade.",
-            "Aos veículos de transporte coletivo de passageiros, em detrimento dos demais.",
-            "Ao veículo que se aproxima pela direita do outro condutor, na ausência de rodovia ou rotatória."
-        ],
-        correctIndex: 3,
-        explanation: "O CTB estabelece a preferência ao veículo que se aproximar pela direita do outro em cruzamentos sem sinalização, rodovias ou rotatórias.",
-        incidence: "media",
-        difficulty: 1
-    },
-    {
-        id: "q3184",
-        category: "infracoes",
-        statement: "Durante o período de Permissão para Dirigir (PPD), o condutor recém-habilitado fica sujeito a restrições legais de conduta previstas no CTB. Enquanto perdurar essa fase probatória de um ano, ele NÃO pode:",
-        options: [
-            "Não pode dirigir nas avenidas movimentadas de grandes metrópoles, como São Paulo ou Rio de Janeiro.",
-            "Não pode cometer infração grave ou gravíssima nem ser reincidente em infrações médias.",
-            "Não pode transportar crianças menores de 10 anos no banco traseiro do carro, mesmo que elas estejam utilizando o dispositivo de retenção adequado.",
-            "Não pode dirigir em rodovias federais com mais de três faixas de trânsito."
-        ],
-        correctIndex: 1,
-        explanation: "Durante o período probatório, o novo condutor não pode cometer infração grave ou gravíssima nem ser reincidente em infrações médias.",
-        incidence: "alta",
-        difficulty: 2
-    },
-    {
-        id: "q3185",
-        category: "legislacao",
-        statement: "Durante a execução de uma ultrapassagem em pista de rolamento de duplo sentido, o condutor deve observar as regras gerais de circulação e conduta do CTB. A respeito dessa manobra, a conduta correta é:",
-        options: [
-            "Pode exceder o limite de velocidade, lembrando que essa exceção é só durante a ultrapassagem.",
-            "Deve realizar a manobra pela esquerda, respeitando a sinalização e a distância segura.",
-            "Pode realizar a manobra pela direita sempre que julgar mais conveniente.",
-            "Deve utilizar a buzina de forma obrigatória antes de toda ultrapassagem."
-        ],
-        correctIndex: 1,
-        explanation: "A ultrapassagem deve ser realizada pela esquerda, respeitando a sinalização e a distância segura conforme o CTB.",
-        incidence: "alta",
-        difficulty: 1
-    },
-    {
-        id: "q3201",
-        category: "legislacao",
-        statement: "O condutor circula dentro de rotatória quando percebe viatura policial se aproximando com os dispositivos luminoso e sonoro desligados. Conforme as regras gerais de preferência do CTB, a conduta correta do condutor é:",
-        options: [
-            "Parar e permitir a entrada da viatura, pois os veículos policiais têm prioridade mesmo com os dispositivos desligados.",
-            "Parar para permitir a entrada da viatura, desde que isso não prejudique o fluxo de veículos.",
-            "Seguir o fluxo normalmente, pois sem alarme e luzes a viatura não goza de prerrogativa de passagem.",
-            "Parar ou seguir, conforme o motorista decidir no momento, sem regra aplicável."
-        ],
-        correctIndex: 2,
-        explanation: "Viaturas policiais só têm prerrogativa de passagem com os dispositivos luminosos e sonoros LIGADOS. Desligados, não têm prioridade.",
-        incidence: "alta",
-        difficulty: 2
-    },
-    {
-        id: "q3202",
-        category: "legislacao",
-        statement: "Em via urbana com várias faixas de trânsito no mesmo sentido de circulação, sem faixa exclusiva regulamentada para motocicletas, o CTB determina onde esses veículos devem trafegar. A conduta correta é:",
-        options: [
-            "Em qualquer faixa, evitando posicionar-se nos pontos cegos dos demais condutores.",
-            "Somente na faixa da esquerda, por serem veículos de maior velocidade.",
-            "Sobre a linha divisória entre as faixas, nos chamados corredores entre veículos.",
-            "Somente no corredor entre veículos, em alta velocidade, aproveitando a potência."
-        ],
-        correctIndex: 0,
-        explanation: "Motocicletas podem circular em qualquer faixa, desde que evitem os pontos cegos de outros condutores.",
-        incidence: "media",
-        difficulty: 1
-    },
-    {
-        id: "q3203",
-        category: "legislacao",
-        statement: "Pelas normas gerais de circulação e conduta do CTB, aplicáveis a toda via terrestre aberta à circulação pública no território nacional, o veículo automotor deve trafegar obrigatoriamente pelo lado da via:",
-        options: [
-            "Esquerdo, por corresponder ao sentido de trânsito mais rápido.",
-            "Qualquer da via, desde que respeitada a velocidade máxima permitida.",
-            "Direito da via, salvo sinalização diversa do órgão competente.",
-            "Meio da pista, para garantir maior visibilidade aos demais usuários."
-        ],
-        correctIndex: 2,
-        explanation: "O CTB estabelece que o veículo deve trafegar pelo lado direito da via, salvo sinalização em contrário.",
-        incidence: "altissima",
-        difficulty: 1
-    },
-    {
-        id: "q3204",
-        category: "legislacao",
-        statement: "Em via com várias faixas de trânsito no mesmo sentido, sem faixa exclusiva determinada, o CTB determina a posição dos veículos grandes e de baixa velocidade. De acordo com essa regra de posicionamento, esses veículos devem:",
-        options: [
-            "Circular preferencialmente pela faixa da esquerda.",
-            "Transitar pelo acostamento para aumentar a fluidez do fluxo.",
-            "Alternar-se de faixa continuamente durante o trajeto.",
-            "Circular pela faixa da direita, reservando-se a esquerda à ultrapassagem."
-        ],
-        correctIndex: 3,
-        explanation: "Veículos grandes e lentos devem circular na faixa da direita para não impedir o fluxo mais rápido.",
-        incidence: "media",
-        difficulty: 1
-    },
-    {
-        id: "q3205",
-        category: "legislacao",
-        statement: "Conforme o CTB, a imobilização do veículo por tempo superior ao necessário para o embarque e o desembarque de passageiros submete-se a classificação específica. Nessa hipótese, conforme a definição legal, o veículo está:",
-        options: [
-            "Em imobilização de emergência, admitida por motivo de força maior.",
-            "Apenas parado, sem qualquer responsabilidade do condutor.",
-            "Parado ou estacionado, conforme a opção do condutor no momento.",
-            "Estacionado, nos termos da definição legal do CTB."
-        ],
-        correctIndex: 3,
-        explanation: "O CTB diferencia parado (temporariamente, para embarque/desembarque) de estacionado (tempo superior ao necessário).",
-        incidence: "media",
-        difficulty: 2
-    },
-    {
-        id: "q3206",
-        category: "placas",
-        statement: "No perímetro urbano, a administração viária implantou faixa de pedestres elevada em frente à escola, alterando o nível da pista de rolamento em relação ao acostamento. A finalidade atribuída a essa instalação viária é:",
-        options: [
-            "Impor redução de velocidade aos veículos e assegurar travessia segura do pedestre.",
-            "Facilitar manobras de ultrapassagem em trechos de elevado fluxo de veículos.",
-            "Gerar impacto à circulação de veículos no entorno de estabelecimentos escolares.",
-            "Reservar área para embarque e desembarque temporário em frente às escolas."
-        ],
-        correctIndex: 0,
-        explanation: "A faixa de pedestres elevada (zebra crossing elevada) serve para forçar redução de velocidade e dar prioridade segura ao pedestre.",
-        incidence: "alta",
-        difficulty: 1
-    },
-    {
-        id: "q3207",
-        category: "placas",
-        statement: "O condutor transita em via urbana com fluxo intenso e se aproxima de faixa de travessia de pedestres com pessoas aguardando no acostamento. Pelo CTB, ao enxergar a sinalização horizontal de travessia, a conduta exigida é:",
-        options: [
-            "Reduzir apenas com o freio-motor, cruzando a faixa se o pedestre ainda estiver na calçada.",
-            "Parar somente se o pedestre já estiver sobre a faixa, seguindo se ele apenas aguardar.",
-            "Reduzir a velocidade, imobilizar o veículo antes da faixa e conceder a travessia ao pedestre.",
-            "Sinalizar com farol alto e seguir, pois a preferência é do veículo em via arterial."
-        ],
-        correctIndex: 2,
-        explanation: "O condutor deve reduzir a velocidade e parar dando preferência ao pedestre ao enxergar uma faixa de pedestres.",
-        incidence: "altissima",
-        difficulty: 1
-    },
-    {
-        id: "q3208",
-        category: "legislacao",
-        statement: "A pista de rolamento possui faixa exclusiva destinada ao transporte público coletivo (ônibus), sinalizada no perímetro urbano. Pelo CTB, a respeito do uso dessa faixa por outros veículos, é correto afirmar:",
-        options: [
-            "Não podem ser utilizadas por outros veículos nos dias e horários fixados pela sinalização.",
-            "Podem ser usadas para ultrapassar veículos mais lentos em horários de pico.",
-            "Nunca podem ser utilizadas por outros veículos, mesmo fora dos horários da sinalização.",
-            "Destinam-se exclusivamente ao transporte escolar."
-        ],
-        correctIndex: 0,
-        explanation: "As faixas exclusivas de ônibus só podem ser utilizadas por veículos de transporte público nos dias e horários estabelecidos.",
-        incidence: "media",
-        difficulty: 1
-    },
-    {
-        id: "q3209",
-        category: "legislacao",
-        statement: "Em frente a escola municipal, no período de entrada e saída de alunos, o condutor permanece imobilizado em fila dupla na pista de rolamento para embarque. Pelo CTB, essa conduta de trânsito é classificada como:",
-        options: [
-            "Perigosa, prejudica a fluidez do trânsito e constitui infração de natureza média.",
-            "Permitida em horários de pico, para dar agilidade à saída dos alunos.",
-            "Obstrutiva, mas sem configuração de infração nem risco à segurança.",
-            "Permitida com o pisca-alerta aceso, desde que não exceda dois minutos."
-        ],
-        correctIndex: 0,
-        explanation: "Filha dupla para embarcar alunos é perigosa, prejudica a fluidez e constitui infração média.",
-        incidence: "alta",
-        difficulty: 1
-    },
-    {
-        id: "q3210",
-        category: "legislacao",
-        statement: "A condutora de motocicleta trafega pela pista de rolamento de via urbana e encontra ônibus imobilizado à frente, ocupando a faixa. Pela direção defensiva e pelas normas gerais do CTB, a conduta correta da condutora é:",
-        options: [
-            "Passar pela direita, rente ao ônibus, para não obstruir o fluxo.",
-            "Ziguezaguear entre os veículos, mantendo equilíbrio e cautela.",
-            "Transitar sobre a calçada, desviando dos pedestres com atenção.",
-            "Aguardar a saída do ônibus ou ultrapassá-lo pela esquerda com segurança."
-        ],
-        correctIndex: 3,
-        explanation: "Ao encontrar um ônibus parado, o motociclista deve esperar o ônibus sair ou ultrapassar pela esquerda com cuidado.",
-        incidence: "media",
-        difficulty: 2
-    }
 ];
 export function shuffleQuestionList(list: Question[]): Question[] {
     return list.map(shuffleOptions);
@@ -12594,7 +14243,8 @@ export function getRandomizedQuestions(count: number, opts?: {
             s: Math.random() *
                 INCIDENCE_META[q.incidence].weight *
                 (q.trap ? 2.5 : 1) *
-                (1 + (q.difficulty - 1) * 0.3),
+                (1 + (q.difficulty - 1) * 0.3) *
+                reviewFactor(q.id), // repetição espaçada
         }))
             .sort((a, b) => b.s - a.s)
             .slice(0, n)
@@ -12615,7 +14265,8 @@ export function getRandomizedQuestions(count: number, opts?: {
         score: Math.random() *
             INCIDENCE_META[q.incidence].weight *
             (q.trap ? 2.5 : 1) *
-            (1 + (q.difficulty - 1) * 0.3),
+            (1 + (q.difficulty - 1) * 0.3) *
+            reviewFactor(q.id), // repetição espaçada
     }))
         .sort((a, b) => b.score - a.score)
         .map((x) => x.q);
@@ -12831,24 +14482,19 @@ export function getGeneralSimuladoQuestions(opts?: GeneralSimuladoOptions): Ques
 }
 
 // ---------------------------------------------------------------------------
-// Simulado oficial DETRAN: 30 questões, mínimo 20 acertos (66,7%).
-// Distribuição fixa por categoria (chaves = rótulos exibidos na tela de
-// desempenho, os mesmos de CATEGORY_LABELS), nos blocos do relatório oficial:
-//   Cuidar, Agir e Preservar .... Primeiros Socorros 3 + Meio Ambiente 3 = 6
-//   Escolhas e Consequências ..... Infrações 4 + Legislação 9 = 13
-//   Na Direção da Segurança ...... Direção Defensiva 3 + Mecânica Básica 3 = 6
-//   Placas, Cores e Caminhos ..... Placas 3 + Prioridade de Passagem 2 = 5
-//   Mecânica Básica ........... 7
-//   Direção Defensiva ......... 7
-//   Primeiros Socorros ........ 5
-//   Legislação ................ 3
-//   Infrações ................. 2
-//   Placas .................... 2
-//   Prioridade de Passagem .... 2
-//   Meio Ambiente ............. 2
-// Mescla de 5 a 8 questões do lote oficial (detran_*) em todo sorteio.
-// Respeita a exclusão de vistas, nunca repete id nem variação do mesmo
-// tema (group) na mesma prova e pondera por incidência/dificuldade.
+// Simulado oficial: 30 questões nos 5 eixos do curso teórico, mínimo 20
+// acertos (66,7%):
+//   Legislação de Trânsito ...... 12  (Legislação + Infrações + Prioridade
+//                                       + Placas, no máximo 2 de Placas)
+//   Direção Defensiva ........... 10
+//   Primeiros Socorros ..........  3
+//   Cidadania e Meio Ambiente ...  3
+//   Mecânica Básica .............  2
+// As 8 categorias do banco caem dentro desses 5 eixos; a tela de desempenho
+// agrupa por eixo (eixoDeCategoria). Mescla de 5 a 8 questões do lote
+// oficial (detran_*) em todo sorteio. Respeita a exclusão de vistas, nunca
+// repete id nem variação do mesmo tema (group) na mesma prova e pondera por
+// incidência/dificuldade.
 // ---------------------------------------------------------------------------
 export const OFFICIAL_EXAM_TOTAL = 30;
 export const OFFICIAL_EXAM_PASS_SCORE = 20;
@@ -12856,31 +14502,34 @@ export const OFFICIAL_EXAM_DETRAN_MIN = 5;
 export const OFFICIAL_EXAM_DETRAN_MAX = 8;
 // Mínimo de questões de nível difícil (difficulty 3) por prova: 11 de 30.
 export const OFFICIAL_EXAM_HARD_MIN = 11;
-export const DISTRIBUICAO_SIMULADO: Record<string, number> = {
-    // Bloco: Cuidar, Agir e Preservar (6 questões)
-    'Primeiros Socorros': 3,
-    'Meio Ambiente': 3,
+// Teto de questões de Placas dentro do eixo de Legislação de Trânsito.
+export const OFFICIAL_EXAM_PLACAS_MAX = 2;
 
-    // Bloco: Escolhas e Consequências (13 questões)
-    'Infrações': 4,
-    'Legislação': 9,
+export interface EixoSimulado {
+    /** Rótulo exibido na tela de desempenho. */
+    eixo: string;
+    /** Quantas questões desse eixo caem na prova de 30. */
+    count: number;
+    /** Categorias do banco que alimentam o eixo. */
+    categorias: Category[];
+}
 
-    // Bloco: Na Direção da Segurança (6 questões)
-    'Direção Defensiva': 3,
-    'Mecânica Básica': 3,
+export const EIXOS_SIMULADO: EixoSimulado[] = [
+    { eixo: "Legislação de Trânsito", count: 12, categorias: ["legislacao", "infracoes", "prioridade", "placas"] },
+    { eixo: "Direção Defensiva", count: 10, categorias: ["direcao-defensiva"] },
+    { eixo: "Primeiros Socorros", count: 3, categorias: ["primeiros-socorros"] },
+    { eixo: "Cidadania e Meio Ambiente", count: 3, categorias: ["meio-ambiente"] },
+    { eixo: "Mecânica Básica", count: 2, categorias: ["mecanica"] },
+];
 
-    // Bloco: Placas, Cores e Caminhos (5 questões)
-    'Placas': 3,
-    'Prioridade de Passagem': 2,
-};
-const CATEGORY_BY_LABEL: Record<string, Category> = Object.fromEntries(
-    Object.entries(CATEGORY_LABELS).map(([cat, label]) => [label, cat]),
-) as Record<string, Category>;
-export const OFFICIAL_EXAM_DISTRIBUTION: { category: Category; count: number }[] =
-    Object.entries(DISTRIBUICAO_SIMULADO).map(([label, count]) => ({
-        category: CATEGORY_BY_LABEL[label],
-        count,
-    }));
+const EIXO_POR_CATEGORIA: Record<string, string> = Object.fromEntries(
+    EIXOS_SIMULADO.flatMap((e) => e.categorias.map((c) => [c, e.eixo])),
+);
+
+/** Nome do eixo (um dos 5 blocos oficiais) que uma categoria do banco representa. */
+export function eixoDeCategoria(cat: Category): string {
+    return EIXO_POR_CATEGORIA[cat] ?? cat;
+}
 
 export interface OfficialSimuladoOptions {
     exclude?: string[];
@@ -12890,19 +14539,23 @@ export interface OfficialSimuladoOptions {
 }
 
 export function getOfficialSimuladoQuestions(opts?: OfficialSimuladoOptions): Question[] {
-    const total = OFFICIAL_EXAM_DISTRIBUTION.reduce((acc, d) => acc + d.count, 0);
+    const total = EIXOS_SIMULADO.reduce((acc, e) => acc + e.count, 0);
     const ex = new Set(opts?.exclude ?? []);
     const base = opts?.questionsList ? [...opts.questionsList] : getQuestionBank();
     const detranMin = opts?.detranMin ?? OFFICIAL_EXAM_DETRAN_MIN;
     const detranMax = opts?.detranMax ?? OFFICIAL_EXAM_DETRAN_MAX;
     const detranTarget = detranMin + Math.floor(Math.random() * (detranMax - detranMin + 1));
-    const quotaOf = (cat: Category): number =>
-        OFFICIAL_EXAM_DISTRIBUTION.find((d) => d.category === cat)?.count ?? 0;
-    const inQuota = (q: Question): boolean => quotaOf(q.category) > 0;
+    const quotaOf = (eixo: string): number =>
+        EIXOS_SIMULADO.find((e) => e.eixo === eixo)?.count ?? 0;
+    const inQuota = (q: Question): boolean => quotaOf(eixoDeCategoria(q.category)) > 0;
+    // Teto por categoria: só Placas tem limite explícito (2 por prova).
+    const capOf = (cat: Category): number =>
+        cat === "placas" ? OFFICIAL_EXAM_PLACAS_MAX : Infinity;
 
     const used = new Set<string>();
     const usedGroups = new Set<string>();
     const perCat = new Map<Category, number>();
+    const perEixo = new Map<string, number>();
     let detranPicked = 0;
     const selected: Question[] = [];
 
@@ -12910,40 +14563,66 @@ export function getOfficialSimuladoQuestions(opts?: OfficialSimuladoOptions): Qu
         Math.random() *
         INCIDENCE_META[q.incidence].weight *
         (q.trap ? 2.5 : 1) *
-        (1 + (q.difficulty - 1) * 0.3);
+        (1 + (q.difficulty - 1) * 0.3) *
+        reviewFactor(q.id); // repetição espaçada: vencidas/erradas pesam +, dominadas -
     const eligible = (q: Question, allowSeen: boolean): boolean =>
         (allowSeen || !ex.has(q.id)) &&
         !used.has(q.id) &&
         (!q.group || !usedGroups.has(q.group));
+    /** Ainda cabe nessa questão no eixo dela E no teto da categoria? */
+    const withinQuota = (q: Question): boolean =>
+        (perEixo.get(eixoDeCategoria(q.category)) ?? 0) < quotaOf(eixoDeCategoria(q.category)) &&
+        (perCat.get(q.category) ?? 0) < capOf(q.category);
     const take = (q: Question): void => {
         selected.push(q);
         used.add(q.id);
         if (q.group) usedGroups.add(q.group);
+        const eixo = eixoDeCategoria(q.category);
         perCat.set(q.category, (perCat.get(q.category) ?? 0) + 1);
+        perEixo.set(eixo, (perEixo.get(eixo) ?? 0) + 1);
         if (q.id.startsWith("detran_")) detranPicked++;
     };
     const ordered = (arr: Question[]): Question[] =>
         arr.map((q) => ({ q, s: scoreOf(q) })).sort((a, b) => b.s - a.s).map((x) => x.q);
 
-    // 1) Lote oficial primeiro: até detranTarget, sem estourar a cota da categoria.
+    // 0) Repetição espaçada: as questões VENCIDAS (revisão do dia em atraso)
+    //    vêm primeiro — é elas que "voltam sozinhas". Podem ser vistas, é isso
+    //    que se espera de uma revisão; respeitam eixo, teto de placas e o
+    //    limite de questões da prova real (detran_*).
+    const dueCap = Math.min(10, total);
+    let duePicked = 0;
+    for (const q of ordered(base.filter((q) => isReviewDue(q.id) && eligible(q, true)))) {
+        if (duePicked >= dueCap) break;
+        if (q.id.startsWith("detran_") && detranPicked >= detranTarget) continue;
+        if (!withinQuota(q)) continue;
+        take(q);
+        duePicked++;
+    }
+
+    // 1) Lote oficial primeiro: até detranTarget, sem estourar o eixo nem o teto.
     for (const q of ordered(base.filter((q) => q.id.startsWith("detran_") && inQuota(q) && eligible(q, false)))) {
         if (detranPicked >= detranTarget) break;
-        if ((perCat.get(q.category) ?? 0) >= quotaOf(q.category)) continue;
+        // recheca na hora: o filtro do início do laço envelhece a cada take
+        // (id/group já usados por picks anteriores do mesmo laço).
+        if (!eligible(q, true) || !withinQuota(q)) continue;
         take(q);
     }
 
-    // 2) Completa cada cota: não-detran inéditas -> qualquer inédita -> reuso de vistas.
-    for (const { category, count } of OFFICIAL_EXAM_DISTRIBUTION) {
-        let need = count - (perCat.get(category) ?? 0);
+    // 2) Completa cada eixo: não-detran inéditas -> qualquer inédita -> reuso de vistas.
+    for (const { eixo, count, categorias } of EIXOS_SIMULADO) {
+        let need = count - (perEixo.get(eixo) ?? 0);
         if (need <= 0) continue;
         const stages: Question[][] = [
-            base.filter((q) => q.category === category && !q.id.startsWith("detran_") && eligible(q, false)),
-            base.filter((q) => q.category === category && eligible(q, false)),
-            base.filter((q) => q.category === category && eligible(q, true)),
+            base.filter((q) => categorias.includes(q.category) && !q.id.startsWith("detran_") && eligible(q, false)),
+            base.filter((q) => categorias.includes(q.category) && eligible(q, false)),
+            base.filter((q) => categorias.includes(q.category) && eligible(q, true)),
         ];
         for (const stage of stages) {
             for (const q of ordered(stage)) {
                 if (need <= 0) break;
+                // recheca na hora: as listas dos 3 estágios foram montadas antes
+                // dos takes e podem conter id/group já usados por estágio anterior.
+                if (!eligible(q, true) || !withinQuota(q)) continue;
                 take(q);
                 need--;
             }
@@ -12959,7 +14638,9 @@ export function getOfficialSimuladoQuestions(opts?: OfficialSimuladoOptions): Qu
     if (hardCount < hardMin) {
         for (const out of [...selected]) {
             if (hardCount >= hardMin) break;
-            if (isHard(out) || out.id.startsWith("detran_")) continue;
+            // não troca o lote oficial, nem questões VENCIDAS (a revisão do
+            // dia tem prioridade sobre o nível difícil)
+            if (isHard(out) || out.id.startsWith("detran_") || isReviewDue(out.id)) continue;
             const rep = ordered(
                 base.filter(
                     (q) =>
@@ -12976,15 +14657,18 @@ export function getOfficialSimuladoQuestions(opts?: OfficialSimuladoOptions): Qu
         }
     }
 
-    // 3) Garantia final: se alguma cota secou, completa com qualquer questão do banco.
+    // 3) Garantia final: se algum eixo secou, completa com qualquer questão do
+    // banco — respeitando o teto de Placas (máx. 2 na prova inteira).
+    const fillCap = (q: Question): boolean =>
+        q.category !== "placas" || (perCat.get("placas") ?? 0) < OFFICIAL_EXAM_PLACAS_MAX;
     if (selected.length < total) {
-        for (const q of ordered(base.filter((q) => eligible(q, false)))) {
+        for (const q of ordered(base.filter((q) => eligible(q, false) && fillCap(q)))) {
             if (selected.length >= total) break;
             take(q);
         }
     }
     if (selected.length < total) {
-        for (const q of ordered(base.filter((q) => eligible(q, true)))) {
+        for (const q of ordered(base.filter((q) => eligible(q, true) && fillCap(q)))) {
             if (selected.length >= total) break;
             take(q);
         }
