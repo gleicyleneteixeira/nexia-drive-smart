@@ -33,7 +33,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { useServerFn } from "@tanstack/react-start";
 import { adminResetUserPassword, getSalesReport, type SalesReportProfile } from "@/lib/admin-users.functions";
 import { sendPasswordReset, deleteUser, deactivateUser, sendViperConnectWelcome, sendWaTest, listViperSessions } from "@/lib/admin-operations.server";
-import { WA_TEMPLATE_META, WA_DEFAULT_MESSAGES, parseStoredMessage, type WaTemplateKey } from "@/lib/viperconnect";
+import {
+  WA_TEMPLATE_META,
+  WA_DEFAULT_MESSAGES,
+  WELCOME_ACCESS_DEFAULT,
+  parseStoredMessage,
+  type WaTemplateKey,
+} from "@/lib/viperconnect";
 import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
 
@@ -4702,6 +4708,9 @@ export function SettingsPanel() {
     "Olá {nome}! Seja muito bem-vindo(a) ao Nexia Drive. Seu acesso já está liberado! 🚀"
   );
   const [vWelcomeMedia, setVWelcomeMedia] = useState("");
+  // Mensagem final da boas-vindas com os dados de acesso (usuário) do aluno
+  const [vAccessEnabled, setVAccessEnabled] = useState(true);
+  const [vAccessMessage, setVAccessMessage] = useState(WELCOME_ACCESS_DEFAULT);
   // Templates de mensagens automáticas WhatsApp (liga/desliga + texto + mídia)
   const [waTpl, setWaTpl] = useState<Record<WaTemplateKey, { enabled: boolean; message: string; media_url: string; delay_sec: number }>>({
     reset: { enabled: true, message: "", media_url: "", delay_sec: 3 },
@@ -4748,6 +4757,7 @@ export function SettingsPanel() {
   const [webhookEnabled, setWebhookEnabled] = useState(true);
   const [testPhone, setTestPhone] = useState("");
   const [testName, setTestName] = useState("");
+  const [testEmail, setTestEmail] = useState("");
   // Telefone de teste por template (cada cartão testa no seu número)
   const [waTestPhone, setWaTestPhone] = useState<Record<WaTemplateKey, string>>({
     reset: "",
@@ -5061,6 +5071,8 @@ export function SettingsPanel() {
           "viperconnect_welcome_enabled",
           "viperconnect_welcome_message",
           "viperconnect_welcome_media_url",
+          "viperconnect_welcome_access_enabled",
+          "viperconnect_welcome_access_message",
           "wa_reset_enabled",
           "wa_reset_message",
           "wa_reset_media_url",
@@ -5096,6 +5108,9 @@ export function SettingsPanel() {
           "Olá {nome}! Seja muito bem-vindo(a) ao Nexia Drive. Seu acesso já está liberado! 🚀"
       );
       setVWelcomeMedia(vmap.viperconnect_welcome_media_url ?? "");
+      // Nascem ligados (o serviço também usa default "true" se a chave não existir)
+      setVAccessEnabled(vmap.viperconnect_welcome_access_enabled !== "false");
+      setVAccessMessage(vmap.viperconnect_welcome_access_message || WELCOME_ACCESS_DEFAULT);
 
       // Templates de mensagens automáticas WhatsApp
       const waKeys: WaTemplateKey[] = ["reset", "reminder", "billing", "abandoned"];
@@ -5213,7 +5228,9 @@ export function SettingsPanel() {
     }
     setTestingKey("welcome");
     try {
-      await sendViperWelcomeFn({ data: { phone: testPhone, name: testName || "Teste" } });
+      await sendViperWelcomeFn({
+        data: { phone: testPhone, name: testName || "Teste", email: testEmail },
+      });
       toast.success("Mensagem de teste enviada! Verifique o WhatsApp.");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Falha ao enviar teste");
@@ -5263,12 +5280,19 @@ export function SettingsPanel() {
 
   // VARIÁVEL — boas-vindas (leva o número junto)
   const saveWelcome = () =>
-    runSave("welcome", () => upsertSys([
-      { key: "viperconnect_instance_id", value: vInstance },
-      { key: "viperconnect_welcome_enabled", value: vWelcomeEnabled ? "true" : "false" },
-      { key: "viperconnect_welcome_message", value: vWelcomeMessage },
-      { key: "viperconnect_welcome_media_url", value: vWelcomeMedia },
-    ]), "Boas-vindas salvas!");
+    runSave(
+      "welcome",
+      () =>
+        upsertSys([
+          { key: "viperconnect_instance_id", value: vInstance },
+          { key: "viperconnect_welcome_enabled", value: vWelcomeEnabled ? "true" : "false" },
+          { key: "viperconnect_welcome_message", value: vWelcomeMessage },
+          { key: "viperconnect_welcome_media_url", value: vWelcomeMedia },
+          { key: "viperconnect_welcome_access_enabled", value: vAccessEnabled ? "true" : "false" },
+          { key: "viperconnect_welcome_access_message", value: vAccessMessage },
+        ]),
+      "Boas-vindas salvas!",
+    );
 
   // VARIÁVEL — uma mensagem automática por vez (leva o número junto)
   const saveTemplate = (k: WaTemplateKey) => {
@@ -5313,6 +5337,8 @@ export function SettingsPanel() {
         { key: "viperconnect_welcome_enabled", value: vWelcomeEnabled ? "true" : "false" },
         { key: "viperconnect_welcome_message", value: vWelcomeMessage },
         { key: "viperconnect_welcome_media_url", value: vWelcomeMedia },
+        { key: "viperconnect_welcome_access_enabled", value: vAccessEnabled ? "true" : "false" },
+        { key: "viperconnect_welcome_access_message", value: vAccessMessage },
         { key: "wa_reset_enabled", value: waTpl.reset.enabled ? "true" : "false" },
         { key: "wa_reset_message", value: waTpl.reset.message },
         { key: "wa_reset_media_url", value: waTpl.reset.media_url },
@@ -5604,11 +5630,46 @@ export function SettingsPanel() {
           <p className="text-xs text-muted-foreground">Use <code className="text-primary">{"{nome}"}</code> e <code className="text-primary">{"{saudacao}"}</code> (Bom dia/Boa tarde/Boa noite por Brasília). Cada caixa = uma mensagem.</p>
         </div>
 
+        {/* ÚLTIMA mensagem da sequência: dados de acesso — resolve o */}
+        {/* "oi, qual é meu usuário e senha?" logo depois de contratar. */}
+        <div className="space-y-2 border-t border-border/30 pt-4">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <Label className="text-xs font-semibold">Mensagem final com dados de acesso</Label>
+              <p className="text-xs text-muted-foreground">
+                Enviada por último, com o usuário (e-mail de login) do aluno — corta a
+                dúvida "qual é meu login?" na hora da contratação.
+              </p>
+            </div>
+            <Switch checked={vAccessEnabled} onCheckedChange={setVAccessEnabled} />
+          </div>
+          <Textarea
+            value={vAccessMessage}
+            onChange={(e) => setVAccessMessage(e.target.value)}
+            rows={4}
+            className="text-xs"
+            placeholder={WELCOME_ACCESS_DEFAULT}
+          />
+          <p className="text-xs text-muted-foreground">
+            Use <code className="text-primary">{"{email}"}</code> para o usuário de login.
+            Linha em branco cria uma nova caixa (mensagem); quebra simples de linha fica na
+            mesma mensagem. Senha não é enviada (fica guardada em forma de hash) —
+            oriente o aluno a usar a que criou no cadastro.
+          </p>
+        </div>
+
         <div className="rounded-lg bg-secondary/30 border border-border/40 p-3 space-y-2">
           <p className="text-xs font-semibold">Testar envio</p>
           <div className="flex flex-col sm:flex-row gap-2">
             <Input value={testPhone} onChange={(e) => setTestPhone(e.target.value.replace(/[^\d]/g, "").slice(0, 13))} placeholder="Ex.: 5531991777947 ou 31991777947" className="flex-1" />
             <Input value={testName} onChange={(e) => setTestName(e.target.value)} placeholder="Nome de teste" className="flex-1" />
+            <Input
+              value={testEmail}
+              onChange={(e) => setTestEmail(e.target.value)}
+              placeholder="E-mail de teste (usuário)"
+              className="flex-1"
+              type="email"
+            />
             <Button onClick={() => { setEditingWelcome(false); saveWelcome(); }} disabled={busy} className="shrink-0" size="sm">
               {savingKey === "welcome" ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
               Salvar boas-vindas

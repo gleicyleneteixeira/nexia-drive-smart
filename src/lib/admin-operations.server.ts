@@ -1909,10 +1909,14 @@ export const verificarSelos = createServerFn({ method: "POST" })
   });
 
 export const sendViperConnectWelcome = createServerFn({ method: "POST" })
-  .inputValidator((d: { phone: string; name?: string }) => d)
+  .inputValidator((d: { phone: string; name?: string; email?: string }) => d)
   .handler(async ({ data }) => {
     const { dispatchViperConnectWelcome } = await import("@/lib/viperconnect");
-    const result = await dispatchViperConnectWelcome(data.phone, data.name || "aluno(a)");
+    // E-mail no teste: mostra a mensagem final de dados de acesso como ela
+    // sairia de verdade (sem e-mail informado, usa um exemplo de demonstração).
+    const result = await dispatchViperConnectWelcome(data.phone, data.name || "aluno(a)", {
+      email: data.email?.trim() || "aluno@exemplo.com",
+    });
     if (!result.ok) throw new Error(result.error || "Falha ao enviar mensagem.");
     return { success: true };
   });

@@ -8,6 +8,10 @@ interface ViperConnectSettings {
   welcome_enabled: string;
   welcome_message: string;
   welcome_media_url: string;
+  /** Liga/desliga a mensagem final com os dados de acesso (usuário). */
+  access_enabled: string;
+  /** Texto da mensagem final de acesso ({email} é resolvido no envio). */
+  access_message: string;
 }
 
 const VIPER_KEYS = [
@@ -17,7 +21,19 @@ const VIPER_KEYS = [
   "viperconnect_welcome_enabled",
   "viperconnect_welcome_message",
   "viperconnect_welcome_media_url",
+  "viperconnect_welcome_access_enabled",
+  "viperconnect_welcome_access_message",
 ] as const;
+
+/**
+ * Mensagem FINAL da boas-vindas: usuário + como recuperar a senha.
+ * A senha original é guardada em hash (não é possível lê-la), então o texto
+ * orienta que é a criada no cadastro e oferece a palavra-chave "SENHA"
+ * (fluxo de reset já existente). Usa só quebra simples (\n) para sair como
+ * UMA mensagem — o split de caixas acontece apenas em linha em branco.
+ */
+export const WELCOME_ACCESS_DEFAULT =
+  "🔐 *Seus dados de acesso* — tire um print e guarde!\n👤 Usuário / Acesso: {email}\n🔒 Senha: a que você criou no cadastro\n⚠️ Esqueceu? Mande aqui a palavra *SENHA* que eu gero uma nova na hora.";
 
 export async function getViperConnectSettings(): Promise<ViperConnectSettings> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -36,6 +52,9 @@ export async function getViperConnectSettings(): Promise<ViperConnectSettings> {
       map.viperconnect_welcome_message ??
       "Olá {nome}! Seja muito bem-vindo(a) ao Nexia Drive. Seu acesso já está liberado! 🚀",
     welcome_media_url: map.viperconnect_welcome_media_url ?? "",
+    // Nascem LIGADOS por padrão: a mensagem de acesso vai sempre que há e-mail.
+    access_enabled: map.viperconnect_welcome_access_enabled ?? "true",
+    access_message: map.viperconnect_welcome_access_message || WELCOME_ACCESS_DEFAULT,
   };
 }
 
@@ -372,7 +391,11 @@ export async function sendWaTemplate(
 }
 export async function dispatchViperConnectWelcome(
   phone: string,
-  name: string
+  name: string,
+  opts?: {
+    /** E-mail de login do aluno — habilita a mensagem final de dados de acesso. */
+    email?: string;
+  }
 ): Promise<DispatchResult> {
   const s = await getViperConnectSettings();
 
@@ -383,13 +406,21 @@ export async function dispatchViperConnectWelcome(
   // Mesmo motor dos templates: a mensagem salva no banco é a lista de caixas
   // em JSON (["msg1", "msg2"]) — cada item sai como mensagem individual
   // separada pelo loop interno (for...of), com pequeno intervalo entre elas.
+  const parts = parseStoredMessage(s.welcome_message || "Olá {nome}!");
+  const email = (opts?.email ?? "").trim();
+  // ÚLTIMA mensagem: dados de acesso (usuário + orientação de senha).
+  // Só entra quando há e-mail — sem login não há o que informar.
+  if (s.access_enabled === "true" && email) {
+    parts.push(...parseStoredMessage(s.access_message || WELCOME_ACCESS_DEFAULT));
+  }
   const res = await sendWhatsAppSequence({
     to: phone,
     body: s.welcome_message || "Olá {nome}!",
     name,
     imageUrl: s.welcome_media_url || undefined,
     delaySec: 1,
-    parts: parseStoredMessage(s.welcome_message || "Olá {nome}!"),
+    parts,
+    vars: email ? { email } : undefined,
   });
   return res;
 }
@@ -412,8 +443,19 @@ export async function sendPixWelcomeForUser(userId: string): Promise<void> {
       return;
     }
 
+    // E-mail de login: perfil; se o perfil não tiver, cai no login (auth).
+    let email = (profile.email ?? "").trim();
+    if (!email) {
+      try {
+        const { data: auth } = await supabaseAdmin.auth.admin.getUserById(userId);
+        email = (auth?.user?.email ?? "").trim();
+      } catch {
+        /* sem login no auth — segue sem e-mail (mensagem de acesso não entra) */
+      }
+    }
+
     const name = profile.display_name || profile.email || "aluno(a)";
-    const res = await dispatchViperConnectWelcome(profile.phone, name);
+    const res = await dispatchViperConnectWelcome(profile.phone, name, { email });
     if (!res.ok) {
       console.warn(`Boas-vindas ViperConnect não enviada para ${userId}: ${res.error}`);
     } else {
