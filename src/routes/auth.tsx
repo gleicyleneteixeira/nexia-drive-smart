@@ -291,7 +291,7 @@ function AuthPage() {
         <ArrowLeft className="h-3 w-3" /> Início
       </Link>
 
-      <div className="glass rounded-3xl p-7 shadow-card border border-border/40">
+      <div className="glass rounded-3xl p-7">
         <h1 className="text-2xl font-display font-bold mb-1">
           {mode === "login" ? "Entrar" : "Criar conta"}
         </h1>

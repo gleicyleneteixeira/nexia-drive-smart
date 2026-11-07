@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import { useAuth } from "@/hooks/use-auth";
+import { registerAnswer, scheduleReviewSync } from "@/lib/review";
 import { AnimatePresence, motion, type PanInfo } from "framer-motion";
 import {
   getRandomizedQuestions,
@@ -24,6 +26,7 @@ export const Route = createFileRoute("/turbo")({
 });
 
 function TurboPage() {
+  const { user } = useAuth();
   const [seed, setSeed] = useState(0);
   const cards = useMemo(() => getRandomizedQuestions(15), [seed]);
   const [i, setI] = useState(0);
@@ -59,6 +62,9 @@ function TurboPage() {
     } else {
       setMisses((m) => m + 1);
     }
+    // Repetição espaçada: cada card respondido alimenta o intervalo da questão.
+    registerAnswer(q.id, idx === q.correctIndex);
+    scheduleReviewSync(user?.id);
   }
 
   function onDragEnd(_: unknown, info: PanInfo) {

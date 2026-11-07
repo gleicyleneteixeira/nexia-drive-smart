@@ -10,6 +10,7 @@ import {
   getRandomizedQuestions,
   getBalancedQuestions,
   shuffleOptions,
+  eixoDeCategoria,
   OFFICIAL_EXAM_PASS_SCORE,
   INCIDENCE_META,
   CATEGORY_LABELS,
@@ -797,21 +798,22 @@ function ResultScreen({
   const errorPct = 100 - accuracy;
   const approved = score >= OFFICIAL_EXAM_PASS_SCORE;
 
-  // Desempenho por categoria
+  // Desempenho por eixo (5 blocos oficiais da distribuição)
   const byCategory = useMemo(() => {
-    const map = new Map<Question["category"], { right: number; total: number }>();
+    const map = new Map<string, { right: number; total: number }>();
     questions.forEach((q, i) => {
-      const cur = map.get(q.category) ?? { right: 0, total: 0 };
+      const key = eixoDeCategoria(q.category);
+      const cur = map.get(key) ?? { right: 0, total: 0 };
       cur.total += 1;
       if (answers[i] !== null && answers[i] !== undefined && answers[i] === q.correctIndex) {
         cur.right += 1;
       }
-      map.set(q.category, cur);
+      map.set(key, cur);
     });
     return Array.from(map.entries())
-      .map(([cat, v]) => ({
-        cat,
-        label: CATEGORY_LABELS[cat],
+      .map(([eixo, v]) => ({
+        cat: eixo,
+        label: eixo,
         pct: Math.round((v.right / v.total) * 100),
         right: v.right,
         total: v.total,
@@ -893,11 +895,11 @@ function ResultScreen({
         </div>
       )}
 
-      {/* Breakdown completo por categoria */}
+      {/* Breakdown completo por eixo */}
       {byCategory.length > 0 && (
         <div className="mt-3 rounded-2xl border border-border bg-background/30 p-4 space-y-2">
           <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold">
-            Desempenho por categoria
+            Desempenho por eixo
           </p>
           {byCategory.map((c) => (
             <div key={c.cat} className="flex items-center gap-3">

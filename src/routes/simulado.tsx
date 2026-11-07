@@ -7,12 +7,14 @@ import {
   getRealExamQuestions,
   getOfficialSimuladoQuestions,
   getQuestionBank,
+  eixoDeCategoria,
   OFFICIAL_EXAM_PASS_SCORE,
   INCIDENCE_META,
   CATEGORY_LABELS,
   type Question,
   type Category,
 } from "@/data/questions";
+import { registerAnswer, scheduleReviewSync, reviewStats } from "@/lib/review";
 import {
   Check,
   X,
@@ -112,8 +114,9 @@ function buildFresh(mode?: Category | "prova-real"): Question[] {
 
   let fresh: Question[];
   if (!mode) {
-    // Simulado oficial DETRAN: 30 questões na distribuição 7/7/7/5/4 por
-    // categoria, com 5 a 8 questões do lote oficial (detran_*).
+    // Simulado oficial: 30 questões nos 5 eixos (12 Legislação / 10 Direção
+    // Defensiva / 3 Primeiros Socorros / 3 Cidadania e Meio Ambiente /
+    // 2 Mecânica Básica), com 5 a 8 questões do lote oficial (detran_*).
     fresh = getOfficialSimuladoQuestions({ exclude: allExcluded });
   } else if (mode === "prova-real") {
     // Pool validado (bônus "caiu na prova"): só validadas, sem repetir.
@@ -282,6 +285,24 @@ function SimuladoPage() {
     }
   };
 
+  // Repetição espaçada: registra as respostas da prova concluída (uma vez só)
+  // e agenda a sincronização com o Supabase. Segue a mesma regra do contador:
+  // só conta o que foi efetivamente respondido/encerrado.
+  const reviewDoneRef = useRef(false);
+  function registrarRevisao(
+    lista: (number | null)[] = answers,
+    qs: Question[] = questions,
+  ) {
+    if (reviewDoneRef.current) return;
+    reviewDoneRef.current = true;
+    lista.forEach((a, i) => {
+      const q = qs[i];
+      if (!q || a === null || a === undefined) return;
+      registerAnswer(q.id, a === q.correctIndex);
+    });
+    scheduleReviewSync(user?.id);
+  }
+
   // Dispara pedido de avaliação 2s após terminar o simulado
   useEffect(() => {
     if (!showResult) return;
@@ -302,6 +323,8 @@ function SimuladoPage() {
       setResumed(true);
       setMode(persisted.mode ?? null);
       if (persisted.index >= persisted.questions.length) {
+        // estado ainda não aplicado aqui: registra com os dados persistidos
+        registrarRevisao(persisted.answers, persisted.questions);
         setShowResult(true);
       }
     } else {
@@ -405,6 +428,7 @@ function SimuladoPage() {
     clearPersisted();
     const fresh = buildFresh(mode === "completo" ? undefined : mode);
     if (!fresh.length) return;
+    reviewDoneRef.current = false; // nova prova: libera o registro de revisão
     // Conta como INICIADO (retomada de salvo não passa por aqui)
     registrarSimuladoIniciado(user?.id);
     startedAtRef.current = Date.now();
@@ -429,6 +453,7 @@ function SimuladoPage() {
 
   function restart() {
     clearPersisted();
+    reviewDoneRef.current = false; // nova prova: libera o registro de revisão
     setQuestions([]);
     setIndex(0);
     setSelected(null);
@@ -511,6 +536,7 @@ function SimuladoPage() {
     if (index + 1 >= questions.length) {
       setIndex(questions.length); // marca como finalizado
       clearPersisted(); // libera a sessão para futuras escolhas
+      registrarRevisao(newAnswers); // repetição espaçada: gravar acertos/erros
       contarConclusao();
       setShowResult(true);
     } else {
@@ -548,6 +574,7 @@ function SimuladoPage() {
     if (!confirmExit) return;
     // LIMPA o cache de sessão salva para liberar a escolha de outro simulado
     clearPersisted();
+    registrarRevisao(); // repetição espaçada: gravar acertos/erros
     contarConclusao();
     setShowResult(true);
   };
@@ -559,7 +586,7 @@ function SimuladoPage() {
 
   return (
     <div
-      className={`mx-auto max-w-3xl px-3 md:px-4 pt-2 pb-3 md:py-10 flex flex-col ${
+      className={`mx-auto max-w-3xl px-3 md:px-4 pt-2 pb-28 md:pt-10 md:pb-28 lg:pb-10 flex flex-col ${
         showResult ? "min-h-dvh overflow-y-auto" : "h-[100dvh] md:h-auto overflow-hidden md:overflow-visible"
       }`}
     >
@@ -638,7 +665,7 @@ function SimuladoPage() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -30 }}
             transition={{ duration: 0.25 }}
-            className="glass rounded-2xl md:rounded-3xl p-4 md:p-8 shadow-card mt-2 flex-1 min-h-0 flex flex-col overflow-hidden"
+            className="glass rounded-2xl md:rounded-3xl p-4 md:p-8 mt-2 flex-1 min-h-0 flex flex-col overflow-hidden"
           >
             {/* ÁREA DE CONTEÚDO (enunciado + imagem + alternativas): rola só se exceder */}
             <div className="flex-1 min-h-0 overflow-y-auto pr-0.5 pb-4">
@@ -673,8 +700,8 @@ function SimuladoPage() {
               </div>
             ) : null}
 
-{/* Options */}
-            <div className="mt-3 md:mt-6 space-y-2 md:space-y-2.5">
+{/* Options — botões de vidro bem espaçados */}
+            <div className="mt-3 md:mt-6 space-y-2.5 md:space-y-3">
               {q.options.map((opt, i) => {
                 const isSel = selected === i;
                 const isCorrect = i === q.correctIndex;
@@ -692,14 +719,14 @@ function SimuladoPage() {
                     key={i}
                     onClick={() => pick(i)}
                     disabled={selected !== null}
-                    className={`w-full text-left p-2.5 md:p-4 rounded-2xl border transition-all flex items-start gap-2.5 md:gap-3 ${
+                    className={`w-full text-left p-3 md:p-4 min-h-[48px] rounded-2xl border transition-all duration-200 flex items-start gap-2.5 md:gap-3 ${
                       state === "correct"
                         ? "border-success/50 bg-success/10"
                         : state === "wrong"
                           ? "border-destructive/50 bg-destructive/10"
                           : state === "muted"
-                            ? "border-border bg-secondary/30 opacity-60"
-                            : "border-border bg-secondary/50 hover:border-primary/40 hover:bg-secondary"
+                            ? "border-white/8 bg-white/4 opacity-60"
+                            : "border-white/12 bg-white/6 hover:border-primary/40 hover:bg-white/10 hover:shadow-[0_8px_30px_rgba(0,0,0,0.25)]"
                     } ${selected === null ? "cursor-pointer" : "cursor-default"}`}
                   >
                     <div
@@ -708,7 +735,7 @@ function SimuladoPage() {
                           ? "bg-success text-success-foreground border-success"
                           : state === "wrong"
                             ? "bg-destructive text-destructive-foreground border-destructive"
-                            : "bg-background/40 border-border"
+                            : "bg-white/8 border-white/15"
                       }`}
                     >
                       {state === "correct" ? (
@@ -1024,22 +1051,25 @@ function ResultScreen({
 
   const errorPct = 100 - accuracy;
   const approved = score >= OFFICIAL_EXAM_PASS_SCORE;
+  // Repetição espaçada: o registro já foi feito antes de abrir esta tela.
+  const review = useMemo(() => reviewStats(), []);
 
-  // Desempenho por categoria
+  // Desempenho por eixo (5 blocos oficiais da distribuição)
   const byCategory = useMemo(() => {
-    const map = new Map<Question["category"], { right: number; total: number }>();
+    const map = new Map<string, { right: number; total: number }>();
     questions.forEach((q, i) => {
-      const cur = map.get(q.category) ?? { right: 0, total: 0 };
+      const key = eixoDeCategoria(q.category);
+      const cur = map.get(key) ?? { right: 0, total: 0 };
       cur.total += 1;
       if (answers[i] !== null && answers[i] !== undefined && answers[i] === q.correctIndex) {
         cur.right += 1;
       }
-      map.set(q.category, cur);
+      map.set(key, cur);
     });
     return Array.from(map.entries())
-      .map(([cat, v]) => ({
-        cat,
-        label: CATEGORY_LABELS[cat],
+      .map(([eixo, v]) => ({
+        cat: eixo,
+        label: eixo,
         pct: Math.round((v.right / v.total) * 100),
         right: v.right,
         total: v.total,
@@ -1102,6 +1132,27 @@ function ResultScreen({
         <MetricCard label="Status" value={approved ? "Aprovado" : "Reprovado"} accent={approved ? "success" : "destructive"} />
       </div>
 
+      {/* Repetição espaçada: o que volta no próximo simulado */}
+      {review.total > 0 && (
+        <div className="mt-3 rounded-2xl border border-primary/30 bg-primary/5 p-4 flex items-start gap-3">
+          <span className="text-xl leading-none">🔁</span>
+          <div className="min-w-0">
+            <p className="text-[10px] uppercase tracking-widest text-primary-glow font-semibold">
+              Repetição espaçada
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              {review.due > 0
+                ? `${review.due} questão${review.due > 1 ? "ões" : ""} com revisão vencida já entram no próximo simulado${
+                    review.wrongRecent > 0 ? ` — das últimas, ${review.wrongRecent} você errou nos últimos dias` : ""
+                  }.`
+                : "Nada vencido agora: suas revisões aparecem sozinhas quando chegar a hora."}
+              {review.mastered > 0 &&
+                ` ${review.mastered} já estão dominadas: voltam só de vez em quando pra revisar.`}
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Melhor / Pior desempenho */}
       {byCategory.length > 1 && (
         <div className="grid md:grid-cols-2 gap-3 mt-3">
@@ -1126,11 +1177,11 @@ function ResultScreen({
         </div>
       )}
 
-      {/* Breakdown completo por categoria */}
+      {/* Breakdown completo por eixo */}
       {byCategory.length > 0 && (
         <div className="mt-3 rounded-2xl border border-border bg-background/30 p-4 space-y-2">
           <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold">
-            Desempenho por categoria
+            Desempenho por eixo
           </p>
           {byCategory.map((c) => (
             <div key={c.cat} className="flex items-center gap-3">

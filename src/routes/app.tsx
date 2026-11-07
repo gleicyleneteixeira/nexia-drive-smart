@@ -11,6 +11,11 @@ import { GroupPopups } from "@/components/WhatsAppGroupPopup";
 import { NativePdfModal } from "@/components/NativePdfModal";
 import { RankingReprovacao } from "@/components/RankingReprovacao";
 import { HCarousel } from "@/components/HCarousel";
+import { GlassCard, GlassButton, GlassBadge } from "@/components/glass";
+import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
+import { buildPlanoFromConfig } from "@/components/CronogramaModal";
+import { gerarCronograma, primeiraPendente } from "@/lib/schedule";
 import { Loader2 } from "lucide-react";
 import {
   Sparkles,
@@ -155,6 +160,13 @@ function DashboardController() {
 // ==========================================
 // 1. HUB SELECTION COMPONENT
 // ==========================================
+type EstudoConfigRow = Database["public"]["Tables"]["estudo_config"]["Row"];
+
+type ContinueState =
+  | { kind: "continue"; capitulo: string; dia: number; lidas: number; total: number; pct: number }
+  | { kind: "done" }
+  | null;
+
 function ModuleHub({ onSelect }: { onSelect: (mod: "teorico" | "psicotecnico" | "direcao") => void }) {
   const { data: videos = [], isLoading: videosLoading } = useQuery({
     queryKey: ["video-tutorials"],
@@ -169,6 +181,77 @@ function ModuleHub({ onSelect }: { onSelect: (mod: "teorico" | "psicotecnico" | 
   const hubVideos = videos.filter((v) => v.module === "hub");
   const tutorialItems = libraryItems.filter((i) => i.module_type === "tutorial" && !i.is_paid);
   const [selectedVideo, setSelectedVideo] = useState<VideoTutorial | null>(null);
+  const { user } = useAuth();
+
+  // -----------------------------------------------------------------------
+  // "Continue de onde parou" — SÓ dado real (estudo_config + progresso
+  // salvo em localStorage). Sem cronograma → nada é exibido (nunca inventa).
+  // -----------------------------------------------------------------------
+  const [continuar, setContinuar] = useState<ContinueState>(null);
+
+  useEffect(() => {
+    if (!user?.id) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data: config } = await supabase
+          .from("estudo_config")
+          .select("*")
+          .eq("user_id", user.id)
+          .maybeSingle();
+        if (!config || cancelled) return;
+
+        const plan = buildPlanoFromConfig(config as EstudoConfigRow);
+
+        // Mesma fonte de progresso do DailyCheckinBanner
+        let lidas = 0;
+        let lastAccess: string | null = null;
+        try {
+          const raw = localStorage.getItem(`cronograma_progress_${user.id}`);
+          if (raw) {
+            const lp = JSON.parse(raw);
+            if (typeof lp.completed_pages === "number") {
+              lidas = lp.completed_pages;
+              lastAccess = lp.last_access_date ?? null;
+            }
+          }
+        } catch {
+          /* sem localStorage: segue com 0 páginas */
+        }
+
+        const d = new Date();
+        const isoHoje = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+        const c = gerarCronograma({
+          progresso: lidas,
+          selectedDays: plan.selectedDays,
+          blockPages: plan.calculatedPages,
+          examDate: plan.semData ? null : plan.dataProva,
+          leuHoje: lastAccess === isoHoje,
+        });
+        if (cancelled) return;
+
+        const pend = primeiraPendente(c.blocos);
+        if (!pend) {
+          setContinuar({ kind: "done" });
+          return;
+        }
+        const total = c.blocos.reduce((acc, b) => acc + (b.paginaFim - b.paginaInicio + 1), 0);
+        setContinuar({
+          kind: "continue",
+          capitulo: pend.capitulo,
+          dia: pend.dia,
+          lidas,
+          total,
+          pct: total > 0 ? Math.min(100, Math.max(0, Math.round((lidas / total) * 100))) : 0,
+        });
+      } catch {
+        /* silencioso: sem cronograma, sem faixa */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.id]);
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 md:py-20 space-y-8 text-center relative">
@@ -187,6 +270,59 @@ function ModuleHub({ onSelect }: { onSelect: (mod: "teorico" | "psicotecnico" | 
           Sua aprovação no DETRAN começa aqui. Assista aos tutoriais e selecione o módulo desejado para ver materiais exclusivos e simulados.
         </p>
       </motion.div>
+
+      {/* Faixa "Continue de onde parou" — só quando há cronograma real */}
+      {continuar && (
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="glass rounded-3xl p-4 sm:p-5 max-w-4xl mx-auto text-left flex flex-col sm:flex-row sm:items-center gap-4"
+        >
+          <div className="flex-1 min-w-0">
+            <p className="section-label">
+              {continuar.kind === "done" ? "Cronograma" : "Continue de onde parou"}
+            </p>
+            {continuar.kind === "continue" ? (
+              <>
+                <p className="text-sm font-semibold mt-1.5 truncate">
+                  {continuar.capitulo} · Dia {continuar.dia}
+                </p>
+                <div
+                  className="mt-2.5 h-2 rounded-full bg-white/10 overflow-hidden"
+                  role="progressbar"
+                  aria-valuenow={continuar.pct}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-label="Progresso do cronograma de estudos"
+                >
+                  <div
+                    className="h-full rounded-full gradient-primary transition-[width] duration-500"
+                    style={{ width: `${continuar.pct}%` }}
+                  />
+                </div>
+                <p className="text-[11px] text-muted-foreground mt-1.5">
+                  {continuar.pct}% · {continuar.lidas} de {continuar.total} páginas lidas
+                </p>
+              </>
+            ) : (
+              <p className="text-sm font-semibold mt-1.5">
+                Todas as lições do cronograma foram concluídas 🎉
+              </p>
+            )}
+          </div>
+          {continuar.kind === "continue" && (
+            <GlassButton
+              variant="primary"
+              size="md"
+              onClick={() => onSelect("teorico")}
+              className="shrink-0"
+            >
+              Continuar
+              <ChevronRight className="h-4 w-4" />
+            </GlassButton>
+          )}
+        </motion.div>
+      )}
 
       {/* Video Tutorials Section */}
       {hubVideos.length > 0 && (
@@ -212,7 +348,7 @@ function ModuleHub({ onSelect }: { onSelect: (mod: "teorico" | "psicotecnico" | 
                   key={video.id}
                   whileHover={{ scale: 1.02 }}
                   onClick={() => setSelectedVideo(video)}
-                  className="glass rounded-2xl overflow-hidden cursor-pointer border border-border/30 hover:border-primary/50 transition-all shadow-card hover:shadow-glow"
+                  className="glass rounded-2xl overflow-hidden cursor-pointer"
                 >
                   <div className="aspect-video relative bg-background/50">
                     {video.thumbnail_url ? (
@@ -268,7 +404,7 @@ function ModuleHub({ onSelect }: { onSelect: (mod: "teorico" | "psicotecnico" | 
                 <motion.div
                   key={item.id}
                   whileHover={{ scale: 1.02 }}
-                  className="glass rounded-2xl overflow-hidden border border-border/30 hover:border-primary/50 transition-all shadow-card hover:shadow-glow"
+                  className="glass rounded-2xl overflow-hidden cursor-pointer"
                 >
                   <div className="aspect-video relative bg-background/50">
                     {item.cover_url ? (
@@ -334,110 +470,134 @@ function ModuleHub({ onSelect }: { onSelect: (mod: "teorico" | "psicotecnico" | 
         </div>
       )}
 
-      <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto pt-6">
-        {/* Module 1: Psicotecnico */}
+      <div className="grid md:grid-cols-3 gap-5 max-w-4xl mx-auto pt-6 items-stretch">
+        {/* Módulo 1: Psicotécnico */}
         <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.1 }}
+          role="button"
+          tabIndex={0}
+          aria-label="Começar Psicotécnico"
           onClick={() => onSelect("psicotecnico")}
-          className="group text-left glass rounded-3xl p-8 border-border/40 hover:border-primary/50 shadow-card hover:shadow-glow cursor-pointer transition-all hover:scale-[1.02] flex flex-col justify-between"
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              onSelect("psicotecnico");
+            }
+          }}
+          className="group h-full text-left cursor-pointer rounded-3xl outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
         >
-          <div className="space-y-5">
-            <div className="w-14 h-14 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center text-pink-400 group-hover:scale-110 transition-transform">
-              <Brain className="h-7 w-7" />
+          <GlassCard interactive className="h-full p-6 sm:p-7 flex flex-col justify-between gap-5">
+            <div className="space-y-4">
+              <div className="w-14 h-14 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center text-pink-400 group-hover:scale-110 transition-transform duration-200">
+                <Brain className="h-7 w-7" />
+              </div>
+              <div className="space-y-2">
+                <h2 className="text-xl sm:text-2xl font-bold font-display text-foreground leading-tight">
+                  Prepare-se para o <span className="gradient-text">Psicotécnico</span>
+                </h2>
+                <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
+                  Memorização, atenção, raciocínio lógico e o teste dos risquinhos (Palográfico).
+                </p>
+              </div>
+              <ul className="space-y-2 text-xs text-muted-foreground pt-1">
+                <li className="flex items-center gap-2">✓ Teste Palográfico interativo</li>
+                <li className="flex items-center gap-2">✓ Exercícios de Raciocínio Lógico e Atenção</li>
+                <li className="flex items-center gap-2">✓ Macetes gravados em vídeo explicativo</li>
+              </ul>
             </div>
-            <div className="space-y-2">
-              <h2 className="text-2xl font-bold font-display text-foreground leading-tight">
-                Prepare-se para o <span className="gradient-text">Psicotécnico</span> 🧠
-              </h2>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Vídeos e testes práticos de memorização, atenção concentrada, raciocínio lógico e o famoso teste dos risquinhos (Palográfico).
-              </p>
+            <div>
+              <span className="w-full py-3.5 px-5 rounded-xl font-bold gradient-primary text-primary-foreground flex items-center justify-center gap-2 shadow-glow group-hover:gap-3 transition-all duration-200 pointer-events-none">
+                Começar
+                <ChevronRight className="h-4 w-4" />
+              </span>
             </div>
-            <ul className="space-y-2 text-xs text-muted-foreground pt-2">
-              <li className="flex items-center gap-2">✓ Teste Palográfico interativo</li>
-              <li className="flex items-center gap-2">✓ Exercícios de Raciocínio Lógico e Atenção</li>
-              <li className="flex items-center gap-2">✓ Macetes gravados em vídeo explicativo</li>
-            </ul>
-          </div>
-          <div className="pt-6">
-            <div className="w-full py-3.5 px-5 rounded-xl font-bold gradient-primary text-primary-foreground flex items-center justify-center gap-2 shadow-glow group-hover:gap-3 transition-all pointer-events-none">
-              Acessar Psicotécnico
-              <ChevronRight className="h-4 w-4" />
-            </div>
-          </div>
+          </GlassCard>
         </motion.div>
 
-        {/* Module 2: Teorico */}
+        {/* Módulo 2: Teórico */}
         <motion.div
-          initial={{ opacity: 0, x: 30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.15 }}
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.15 }}
+          role="button"
+          tabIndex={0}
+          aria-label="Começar Parte Teórica"
           onClick={() => onSelect("teorico")}
-          className="group text-left glass rounded-3xl p-8 border-border/40 hover:border-primary/50 shadow-card hover:shadow-glow cursor-pointer transition-all hover:scale-[1.02] flex flex-col justify-between"
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              onSelect("teorico");
+            }
+          }}
+          className="group h-full text-left cursor-pointer rounded-3xl outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
         >
-          <div className="space-y-5">
-            <div className="w-14 h-14 rounded-2xl bg-red-500/10 border border-red-500/25 flex items-center justify-center text-red-500 group-hover:scale-110 transition-transform">
-              <BookOpen className="h-7 w-7" />
+          <GlassCard interactive className="h-full p-6 sm:p-7 flex flex-col justify-between gap-5">
+            <div className="space-y-4">
+              <div className="w-14 h-14 rounded-2xl bg-red-500/10 border border-red-500/25 flex items-center justify-center text-red-500 group-hover:scale-110 transition-transform duration-200">
+                <BookOpen className="h-7 w-7" />
+              </div>
+              <div className="space-y-2">
+                <h2 className="text-xl sm:text-2xl font-bold font-display text-foreground leading-tight">
+                  Prepare-se para a <span className="gradient-text">Parte Teórica</span>
+                </h2>
+                <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
+                  Legislação, Direção Defensiva, Primeiros Socorros, Mecânica Básica e Meio Ambiente.
+                </p>
+              </div>
+              <ul className="space-y-2 text-xs text-muted-foreground pt-1">
+                <li className="flex items-center gap-2">✓ Simulados inteligentes com cronômetro</li>
+                <li className="flex items-center gap-2">✓ Game interativo para memorizar Placas</li>
+                <li className="flex items-center gap-2">✓ Resumos e livrinhos virtuais em PDF</li>
+              </ul>
             </div>
-            <div className="space-y-2">
-              <h2 className="text-2xl font-bold font-display text-foreground leading-tight">
-                Prepare-se para a <span className="gradient-text">Parte Teórica</span> 📕
-              </h2>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Estudo focado na prova de legislação do DETRAN. Legislação, Direção Defensiva, Primeiros Socorros, Mecânica Básica e Meio Ambiente.
-              </p>
+            <div>
+              <span className="w-full py-3.5 px-5 rounded-xl font-bold gradient-primary text-primary-foreground flex items-center justify-center gap-2 shadow-glow group-hover:gap-3 transition-all duration-200 pointer-events-none">
+                Começar
+                <ChevronRight className="h-4 w-4" />
+              </span>
             </div>
-            <ul className="space-y-2 text-xs text-muted-foreground pt-2">
-              <li className="flex items-center gap-2">✓ Simulados inteligentes com cronômetro</li>
-              <li className="flex items-center gap-2">✓ Game interativo para memorizar Placas</li>
-              <li className="flex items-center gap-2">✓ Resumos e livrinhos virtuais em PDF</li>
-            </ul>
-          </div>
-          <div className="pt-6">
-            <div className="w-full py-3.5 px-5 rounded-xl font-bold gradient-primary text-primary-foreground flex items-center justify-center gap-2 shadow-glow group-hover:gap-3 transition-all pointer-events-none">
-              Acessar Parte Teórica
-              <ChevronRight className="h-4 w-4" />
-            </div>
-          </div>
+          </GlassCard>
         </motion.div>
 
-        {/* Module 3: Direcao (em breve - acesso desabilitado temporariamente) */}
+        {/* Módulo 3: Direção Prática — indisponível (visual desativado, sem clique) */}
         <motion.div
-          initial={{ opacity: 0, x: 30 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.2 }}
           aria-disabled="true"
           title="Módulo prático em breve"
-          className="group relative text-left glass rounded-3xl p-8 border-border/40 shadow-card transition-all flex flex-col justify-between opacity-70 cursor-not-allowed"
+          className="group relative h-full text-left rounded-3xl opacity-70 cursor-not-allowed"
         >
-          <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-yellow-400 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-yellow-950 shadow">
-            Em Breve
-          </span>
-          <div className="space-y-5">
-            <div className="w-14 h-14 rounded-2xl bg-warning/10 border border-warning/25 flex items-center justify-center text-warning group-hover:scale-110 transition-transform">
-              <TrafficCone className="h-7 w-7" />
+          <GlassBadge tone="warning" className="absolute -top-3 left-1/2 -translate-x-1/2 shadow-lg">
+            Em breve
+          </GlassBadge>
+          <GlassCard className="h-full p-6 sm:p-7 flex flex-col justify-between gap-5">
+            <div className="space-y-4">
+              <div className="w-14 h-14 rounded-2xl bg-warning/10 border border-warning/25 flex items-center justify-center text-warning">
+                <TrafficCone className="h-7 w-7" />
+              </div>
+              <div className="space-y-2">
+                <h2 className="text-xl sm:text-2xl font-bold font-display text-foreground leading-tight">
+                  <span className="gradient-text">Dicas</span> para passar na Direção Prática
+                </h2>
+                <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
+                  Dicas para arrasar no exame prático: manobras, baliza e o dia da avaliação.
+                </p>
+              </div>
+              <ul className="space-y-2 text-xs text-muted-foreground pt-1">
+                <li className="flex items-center gap-2">✓ O que o examinador avalia</li>
+                <li className="flex items-center gap-2">✓ Guia de manobras e baliza</li>
+                <li className="flex items-center gap-2">✓ Dicas para não ser reprovado</li>
+              </ul>
             </div>
-            <div className="space-y-2">
-              <h2 className="text-2xl font-bold font-display text-foreground leading-tight">
-                <span className="gradient-text">Dicas</span> para passar na Direção Prática 🚗
-              </h2>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Dicas e macetes para arrasar no exame prático do DETRAN. Manobras, provas de baliza e o que esperar no dia da avaliação.
-              </p>
+            <div>
+              <span className="w-full py-3.5 px-5 rounded-xl font-bold bg-white/8 border border-white/10 text-muted-foreground flex items-center justify-center gap-2 pointer-events-none">
+                Em breve
+              </span>
             </div>
-            <ul className="space-y-2 text-xs text-muted-foreground pt-2">
-              <li className="flex items-center gap-2">✓ O que o examinador avalia</li>
-              <li className="flex items-center gap-2">✓ Guia de manobras e baliza</li>
-              <li className="flex items-center gap-2">✓ Dicas para não ser reprovado</li>
-            </ul>
-          </div>
-          <div className="pt-6">
-            <div className="w-full py-3.5 px-5 rounded-xl font-bold bg-secondary text-muted-foreground flex items-center justify-center gap-2 pointer-events-none">
-              Em Breve
-            </div>
-          </div>
+          </GlassCard>
         </motion.div>
       </div>
 
@@ -1019,7 +1179,7 @@ const DASHBOARD_LIGHTS: DashboardLight[] = [
     color: "#EF4444",
     category: "perigo",
     description: "Indica que o módulo dos airbags dianteiros ou de cortina identificou um erro elétrico ou falha nos sensores. Em caso de batida, as bolsas de ar podem simplesmente não inflar.",
-    action: "Leve o veículo a uma concessionária ou mecânico especializado em eletrônica embarcada para passar o diagnóstico por computador. Trafegar com falha no airbag coloca em risco a vida dos passageiros em acidentes.",
+    action: "Leve o veículo a uma concessionária ou mecânico especializado em eletrônica embarcada para passar o diagnóstico por computador. Trafegar com falha no airbag coloca em risco a vida dos passageiros em sinistros.",
     options: [
       "Alerta de colisão iminente",
       "Cinto de segurança destravado",

@@ -24,6 +24,13 @@ dist-ssr
 # Vercel
 .vercel/
 
+# Artefatos temporários de trabalho (scripts, relatórios e logs de validação)
+tmp_*
+build_log.txt
+lint_log.txt
+.ohmyagent/
+public/tmp-resp-test.html
+
 # Supabase CLI temp
 supabase/.temp/
 

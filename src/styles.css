@@ -53,6 +53,46 @@
 :root {
   --radius: 1rem;
 
+  /* ------------------------------------------------------------------
+     GLASS TOKENS — sistema de vidro (glassmorphism).
+     Toda superfície de vidro usa estes valores; nada de CSS avulso.
+     ------------------------------------------------------------------ */
+  /* Fundos de vidro (branco em transparência) */
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-bg-soft: rgba(255, 255, 255, 0.06);
+  --glass-bg-strong: rgba(255, 255, 255, 0.12);
+  --glass-bg-active: rgba(255, 255, 255, 0.14);
+  /* Bordas */
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --glass-border-strong: rgba(255, 255, 255, 0.22);
+  /* Desfoque */
+  --glass-blur: 20px;
+  --glass-blur-sm: 16px;
+  --glass-blur-lg: 24px;
+  --glass-saturate: 140%;
+  /* Raios */
+  --glass-radius: 24px;
+  --glass-radius-sm: 18px;
+  --glass-radius-lg: 28px;
+  --glass-radius-pill: 999px;
+  /* Sombras */
+  --glass-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+  --glass-shadow-hover: 0 18px 50px rgba(0, 0, 0, 0.45);
+  --glass-shadow-active: 0 6px 20px rgba(0, 0, 0, 0.3);
+  /* Brilho interno (topo) */
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  /* Fundo sólido de FALTA DE SUPORTE a backdrop-filter */
+  --glass-fallback: rgba(22, 24, 38, 0.94);
+  /* Movimento */
+  --glass-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --glass-dur: 220ms;
+
+  /* Manchas de cor do fundo (o que o vidro refrata).
+     --blob-1 segue o primário do tema (rosa/azul) automaticamente. */
+  --blob-1: color-mix(in oklab, var(--primary, oklch(0.65 0.22 15)) 34%, transparent);
+  --blob-2: oklch(0.62 0.15 305 / 0.2); /* frio: violeta */
+  --blob-3: oklch(0.66 0.11 220 / 0.16); /* frio: azul-ciano */
+
   /* Videoooo dark slate theme */
   --background: oklch(0.15 0.02 260);
   --foreground: oklch(0.98 0.005 250);
@@ -121,6 +161,42 @@
     min-height: 100vh;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
+    position: relative;
+  }
+
+  /* ------------------------------------------------------------------
+     FUNDO — gradiente profundo + manchas de cor desfocadas.
+     Fica atrás de tudo (z-index negativo) e nunca captura clique.
+     É o que o vidro (backdrop-filter) refrata.
+     ------------------------------------------------------------------ */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(42% 38% at 12% 8%, var(--blob-1), transparent 70%),
+      radial-gradient(38% 34% at 88% 14%, var(--blob-2), transparent 72%),
+      radial-gradient(46% 42% at 78% 88%, var(--blob-3), transparent 72%),
+      radial-gradient(34% 30% at 8% 82%, var(--blob-2), transparent 74%),
+      linear-gradient(180deg, oklch(0.13 0.02 265) 0%, oklch(0.15 0.02 260) 45%, oklch(0.12 0.02 270) 100%);
+    background-attachment: fixed;
+  }
+
+  /* Segunda camada: desfoque real das manchas (só onde há suporte).
+     Sem suporte, os radial-gradient já são suaves por natureza. */
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    body::after {
+      content: "";
+      position: fixed;
+      inset: -60px;
+      z-index: -1;
+      pointer-events: none;
+      -webkit-backdrop-filter: blur(60px);
+      backdrop-filter: blur(60px);
+      background: transparent;
+    }
   }
 
   h1, h2, h3, h4 {
@@ -135,11 +211,125 @@
 }
 
 @layer utilities {
+  /* ------------------------------------------------------------------
+     SUPERFÍCIES DE VIDRO
+     Todas derivam dos tokens --glass-*. Nunca hardcode rgba aqui.
+     ------------------------------------------------------------------ */
   .glass {
-    background: color-mix(in oklab, var(--card) 70%, transparent);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid color-mix(in oklab, var(--foreground) 8%, transparent);
+    background: var(--glass-bg);
+    /* ORDEM IMPORTANTE: -webkit- ANTES do sem prefixo — o Lightning CSS
+       descarta o sem prefixo se ele vier primeiro (bug de dedupe). */
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-highlight), var(--glass-shadow);
+    border-radius: var(--glass-radius);
+  }
+
+  /* Vidro mais discreto (enunciados de questão, blocos de leitura) */
+  .glass-soft {
+    background: var(--glass-bg-soft);
+    -webkit-backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur-sm)) saturate(var(--glass-saturate));
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-highlight), var(--glass-shadow);
+    border-radius: var(--glass-radius);
+  }
+
+  /* Vidro mais denso (modais, topbar, menus — precisa de mais opacidade
+     para o texto contrastar em AA sobre o conteúdo de trás) */
+  .glass-strong {
+    background: color-mix(in srgb, var(--glass-bg-strong) 82%, var(--background));
+    -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur-lg)) saturate(var(--glass-saturate));
+    border: 1px solid var(--glass-border-strong);
+    box-shadow: var(--glass-highlight), var(--glass-shadow);
+    border-radius: var(--glass-radius);
+  }
+
+  /* Pílula (menus, tab bar, chips) */
+  .glass-pill {
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-highlight), var(--glass-shadow);
+    border-radius: var(--glass-radius-pill);
+  }
+
+  /* Estado hover/ativo padrão do vidro: eleva e brilha um pouco */
+  .glass-hover {
+    transition:
+      transform var(--glass-dur) var(--glass-ease),
+      box-shadow var(--glass-dur) var(--glass-ease),
+      background-color var(--glass-dur) var(--glass-ease),
+      border-color var(--glass-dur) var(--glass-ease);
+  }
+  .glass-hover:hover {
+    background: var(--glass-bg-strong);
+    border-color: var(--glass-border-strong);
+    box-shadow: var(--glass-highlight), var(--glass-shadow-hover);
+    transform: translateY(-2px);
+  }
+  .glass-hover:active {
+    box-shadow: var(--glass-highlight), var(--glass-shadow-active);
+    transform: translateY(0);
+  }
+
+  /* Item de menu ativo: vidro mais claro + borda mais forte */
+  .glass-active {
+    background: var(--glass-bg-active);
+    border-color: var(--glass-border-strong);
+    color: var(--foreground);
+    box-shadow: var(--glass-highlight), var(--glass-shadow);
+  }
+
+  /* ------------------------------------------------------------------
+     FALLBACK — navegador sem backdrop-filter: vidro vira vidro fosco
+     (fundo escuro semitransparente). Senão o texto ficaria ilegível
+     sobre o gradiente do fundo.
+     ------------------------------------------------------------------ */
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass,
+    .glass-soft,
+    .glass-strong,
+    .glass-pill,
+    .glass-hover,
+    .glass-active {
+      background: var(--glass-fallback);
+    }
+  }
+
+  /* Anel de foco visível para teclado em qualquer superfície de vidro */
+  .glass:focus-visible,
+  .glass-soft:focus-visible,
+  .glass-strong:focus-visible,
+  .glass-pill:focus-visible,
+  .glass-hover:focus-visible,
+  .glass-active:focus-visible,
+  .glass-focus:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  /* Rótulo de seção: caixa alta pequena com espaçamento */
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted-foreground);
+  }
+
+  /* Reserva o espaço da sidebar flutuante só no desktop.
+     --sidebar-space é definida pelo AppShell (276px expandida / 88px recolhida) */
+  .app-with-sidebar {
+    padding-left: 0;
+  }
+  @media (min-width: 1024px) {
+    .app-with-sidebar {
+      padding-left: var(--sidebar-space, 0px);
+    }
   }
 
   .gradient-primary {
@@ -177,183 +367,20 @@
   }
 }
 
-/* Sidebar styles matching videoooo */
-.sidebar-nav {
-  width: 72px;
-  min-width: 72px;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 50;
-  background: oklch(0.18 0.02 260);
-  border-right: 1px solid oklch(0.28 0.02 260 / 0.5);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 16px 0;
-  gap: 8px;
-}
-
-.sidebar-nav-item {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: oklch(0.65 0.02 255);
-  transition: all 0.2s ease;
-  cursor: pointer;
-  position: relative;
-}
-
-.sidebar-nav-item:hover {
-  background: oklch(0.25 0.02 260);
-  color: oklch(0.98 0.005 250);
-}
-
-.sidebar-nav-item.active {
-  background: oklch(0.65 0.22 15 / 0.15);
-  color: oklch(0.65 0.22 15);
-  border: 1px solid oklch(0.65 0.22 15 / 0.3);
-}
-
-.sidebar-nav-item.active::before {
-  content: '';
-  position: absolute;
-  left: -16px;
-  width: 4px;
-  height: 24px;
-  background: oklch(0.65 0.22 15);
-  border-radius: 0 4px 4px 0;
-}
-
-/* Header styles matching videoooo */
-.header-top {
-  height: 64px;
-  background: oklch(0.18 0.02 260 / 0.9);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid oklch(0.28 0.02 260 / 0.5);
-  position: sticky;
-  top: 0;
-  z-index: 40;
-  display: flex;
-  align-items: center;
-  padding: 0 24px;
-}
-
-/* Card styles matching videoooo */
-.card-viral {
-  background: oklch(0.20 0.02 260);
-  border: 1px solid oklch(0.28 0.02 260 / 0.5);
-  border-radius: 16px;
-  transition: all 0.2s ease;
-}
-
-.card-viral:hover {
-  border-color: oklch(0.65 0.22 15 / 0.3);
-  box-shadow: 0 0 30px -10px oklch(0.65 0.22 15 / 0.15);
-}
-
-/* Button styles matching videoooo */
-.btn-primary {
-  background: linear-gradient(135deg, oklch(0.65 0.22 15), oklch(0.70 0.18 350));
-  color: white;
-  font-weight: 700;
-  padding: 12px 24px;
-  border-radius: 12px;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 20px -4px oklch(0.65 0.22 15 / 0.4);
-}
-
-.btn-primary:hover {
-  transform: scale(1.02);
-  box-shadow: 0 6px 30px -4px oklch(0.65 0.22 15 / 0.5);
-}
-
-.btn-primary:active {
-  transform: scale(0.98);
-}
-
-.btn-secondary {
-  background: oklch(0.25 0.02 260);
-  border: 1px solid oklch(0.28 0.02 260 / 0.6);
-  color: oklch(0.98 0.005 250);
-  font-weight: 600;
-  padding: 10px 20px;
-  border-radius: 12px;
-  transition: all 0.2s ease;
-}
-
-.btn-secondary:hover {
-  background: oklch(0.30 0.02 260);
-  border-color: oklch(0.35 0.02 260);
-}
-
-/* Input styles matching videoooo */
-.input-viral {
-  background: oklch(0.18 0.02 260);
-  border: 1px solid oklch(0.28 0.02 260 / 0.6);
-  color: oklch(0.98 0.005 250);
-  border-radius: 12px;
-  padding: 12px 16px;
-  font-size: 14px;
-  transition: all 0.2s ease;
-  width: 100%;
-}
-
-.input-viral:focus {
-  outline: none;
-  border-color: oklch(0.65 0.22 15);
-  box-shadow: 0 0 0 3px oklch(0.65 0.22 15 / 0.15);
-}
-
-.input-viral::placeholder {
-  color: oklch(0.50 0.02 255);
-}
-
-/* Badge styles matching videoooo */
-.badge-viral {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 12px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.badge-rose {
-  background: oklch(0.65 0.22 15 / 0.15);
-  color: oklch(0.65 0.22 15);
-  border: 1px solid oklch(0.65 0.22 15 / 0.3);
-}
-
-.badge-amber {
-  background: oklch(0.82 0.16 85 / 0.15);
-  color: oklch(0.82 0.16 85);
-  border: 1px solid oklch(0.82 0.16 85 / 0.3);
-}
-
-.badge-emerald {
-  background: oklch(0.72 0.18 150 / 0.15);
-  color: oklch(0.72 0.18 150);
-  border: 1px solid oklch(0.72 0.18 150 / 0.3);
-}
-
-.badge-blue {
-  background: oklch(0.68 0.19 245 / 0.15);
-  color: oklch(0.68 0.19 245);
-  border: 1px solid oklch(0.68 0.19 245 / 0.3);
-}
-
 /* Scrollbar styles */
 .scrollbar-none {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 .scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+/* alias usado no AppShell */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 
@@ -433,3 +460,27 @@
     min-height: 100vh;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   ACESSIBILIDADE
+   --------------------------------------------------------------------------- */
+
+/* Anel de foco global visível para teclado (contraste AA sobre o vidro) */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Respeita quem pede menos movimento: corta transições e animações */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
