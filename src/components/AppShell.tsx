@@ -211,14 +211,27 @@ export function AppShell() {
     setSheetOpen(null);
   }, [pathname]);
 
-  const handleToggleModule = (mod: "teorico" | "psicotecnico" | "direcao") => {
+  // Só registra o módulo escolhido (estado + storage + evento). Sem navegar:
+  // quem decide o destino é quem chamou (dashboard ou material de estudo).
+  const definirModulo = (mod: "teorico" | "psicotecnico" | "direcao") => {
     setActiveModule(mod);
     localStorage.setItem("nexia:active_module", mod);
     window.dispatchEvent(new Event("nexia:active_module:change"));
     setActiveAdminSection(null);
+  };
+
+  const handleToggleModule = (mod: "teorico" | "psicotecnico" | "direcao") => {
+    definirModulo(mod);
     if (typeof window !== "undefined" && window.location.pathname !== "/app") {
       navigate({ to: "/app" });
     }
+  };
+
+  // "Estudar" do menu: cai DIRETO no material de estudo da categoria escolhida
+  // (galeria da biblioteca filtrada pelo módulo) — sem passar pelo dashboard.
+  const irParaMaterial = (mod: "teorico" | "psicotecnico" | "direcao") => {
+    definirModulo(mod);
+    navigate({ to: "/biblioteca", search: { module_type: mod } });
   };
 
   const handleToggleSidebarExpand = () => {
@@ -345,10 +358,10 @@ export function AppShell() {
 
   const onTab = (item: NavItem) => {
     if (item.id === "estudar") {
-      // Módulo escolhido no Início: "Estudar" cai no estudo dele.
-      // Já no hub ou no próprio dashboard → folha para escolher/trocar categoria.
-      if (activeModule !== "hub" && pathname !== "/app") {
-        handleToggleModule(activeModule);
+      // Módulo escolhido no Início: "Estudar" vai DIRETO ao material de
+      // estudo dessa categoria (galeria filtrada). Sem módulo → folha p/ escolher.
+      if (activeModule !== "hub") {
+        irParaMaterial(activeModule);
         return;
       }
       setSheetOpen((s) => (s === "estudar" ? null : "estudar"));
@@ -362,11 +375,11 @@ export function AppShell() {
   };
 
   // Cabeçalho clicável das seções da sidebar (desktop): ESTUDAR leva ao
-  // estudo do módulo escolhido; TREINAR leva aos simulados do teórico ou
-  // aos joguinhos do psicotécnico. Demais seções seguem sendo texto.
+  // material de estudo do módulo escolhido; TREINAR leva aos simulados do
+  // teórico ou aos joguinhos do psicotécnico. Demais seções seguem texto.
   const handleSectionClick = (sectionId: string) => {
     if (sectionId === "estudar") {
-      if (activeModule !== "hub") handleToggleModule(activeModule);
+      if (activeModule !== "hub") irParaMaterial(activeModule);
       else setPaletteOpen(true); // sem módulo: escolhe pela paleta (Ctrl+K)
       return;
     }
@@ -627,7 +640,15 @@ export function AppShell() {
         title={sheetOpen === "mais" ? "Mais opções" : "Estudar"}
         items={sheetItems}
         onClose={() => setSheetOpen(null)}
-        onNavigate={(item) => runAction(item)}
+        onNavigate={(item) => {
+          // Escolher a categoria DENTRO da folha "Estudar" já cai no material
+          // de estudo dela (mesmo destino do botão Estudar).
+          if (sheetOpen === "estudar" && item.action.kind === "module") {
+            irParaMaterial(item.action.module);
+            return;
+          }
+          runAction(item);
+        }}
       />
 
       {/* PALETA DE COMANDOS (Ctrl+K) */}

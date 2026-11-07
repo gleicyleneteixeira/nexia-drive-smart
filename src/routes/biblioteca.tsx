@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useLocation } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchLibraryItems, type LibraryItem } from "@/lib/library";
@@ -27,15 +27,15 @@ function BibliotecaPage() {
   const [moduleTab, setModuleTab] = useState<"all" | "teorico" | "psicotecnico" | "direcao">("all");
   const [typeTab, setTypeTab] = useState<"all" | "livros" | "videos" | "images" | "docs">("all");
 
+  // Filtro de módulo vem da URL (?module_type=teorico|psicotecnico|direcao)
+  // e é reaplicado a cada mudança: assim "Estudar" cai direto no material
+  // da categoria escolhida, mesmo já estando na biblioteca.
+  const location = useLocation();
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const mod = params.get("module_type") || params.get("category");
-      if (mod === "teorico" || mod === "psicotecnico" || mod === "direcao") {
-        setModuleTab(mod);
-      }
-    }
-  }, []);
+    const params = new URLSearchParams(location.search);
+    const mod = params.get("module_type") || params.get("category");
+    setModuleTab(mod === "teorico" || mod === "psicotecnico" || mod === "direcao" ? mod : "all");
+  }, [location.search]);
 
   const items = (data ?? []).filter((i) => {
     if (moduleTab !== "all" && i.module_type !== moduleTab) return false;
