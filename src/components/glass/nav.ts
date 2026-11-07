@@ -65,6 +65,59 @@ export const EIXOS_LINKS: NavItem[] = [
   { id: "eixo-meio-ambiente", label: "Meio Ambiente", icon: TrendingUp, action: { kind: "link", to: "/simulado", search: { categoria: "meio-ambiente" } }, keywords: ["poluicao", "natureza"] },
 ];
 
+/** Módulo escolhido no Início (hub = nenhum módulo escolhido ainda). */
+export type ModuloAtivo = "hub" | "teorico" | "psicotecnico" | "direcao";
+
+/**
+ * Item "Simulados" — muda conforme o módulo escolhido no Início:
+ *  - teórico/hub → "Simulados" (prova de 30 em /simulado);
+ *  - psicotécnico → "Treinar agora" levando aos joguinhos (/psicotecnico).
+ * Mesmo id ("simulado") nas duas versões para a pílula ativa não mudar de lugar.
+ */
+export function simuladosItem(modulo: ModuloAtivo): NavItem {
+  return modulo === "psicotecnico"
+    ? {
+        id: "simulado",
+        label: "Treinar agora",
+        icon: Target,
+        action: { kind: "link", to: "/psicotecnico" },
+        keywords: [
+          "treino",
+          "joguinhos",
+          "psicotecnico",
+          "atencao",
+          "memoria",
+          "raciocinio",
+          "palografico",
+        ],
+      }
+    : {
+        id: "simulado",
+        label: "Simulados",
+        icon: Target,
+        action: { kind: "link", to: "/simulado" },
+        keywords: ["prova", "teste", "30 questoes", "completo", "prova real"],
+      };
+}
+
+/** Seções laterais contextualizadas pelo módulo ativo (sidebar + paleta + sheets). */
+export function navSections(modulo: ModuloAtivo): NavSection[] {
+  const simulos = simuladosItem(modulo);
+  return NAV_SECTIONS.map((s) =>
+    s.id === "treinar"
+      ? { ...s, items: [simulos, ...s.items.filter((i) => i.id !== "simulado")] }
+      : s,
+  );
+}
+
+/** Tab bar (mobile) contextualizada. No psicotécnico o rótulo vira "Treino"
+ *  (curto: "Treinar agora" não cabe na pílula de 5 abas). */
+export function tabBarItems(modulo: ModuloAtivo): NavItem[] {
+  const simulos = simuladosItem(modulo);
+  const item = modulo === "psicotecnico" ? { ...simulos, label: "Treino" } : simulos;
+  return TAB_BAR_ITEMS.map((i) => (i.id === "simulado" ? item : i));
+}
+
 /** Seções ESTUDAR e TREINAR (estáticas). CONTA é montada no AppShell
  *  porque depende do link de suporte vindo do banco. */
 export const NAV_SECTIONS: NavSection[] = [

@@ -20,6 +20,10 @@ export interface GlassSidebarProps {
   collapsed: boolean;
   onToggleCollapsed: () => void;
   onNavigate: (sectionId: string, itemId: string) => void;
+  /** clique no cabeçalho da seção (ex.: "Estudar" leva ao módulo escolhido) */
+  onSectionClick?: (sectionId: string) => void;
+  /** quais cabeçalhos viram botão (os demais continuam sendo texto) */
+  sectionClickable?: (sectionId: string) => boolean;
   /** abre a paleta de comandos (Ctrl+K) */
   onOpenPalette: () => void;
   /** troca tema rosa/azul */
@@ -37,6 +41,8 @@ export function GlassSidebar({
   collapsed,
   onToggleCollapsed,
   onNavigate,
+  onSectionClick,
+  sectionClickable,
   onOpenPalette,
   onToggleTheme,
   themeIcon,
@@ -130,7 +136,18 @@ export function GlassSidebar({
       >
         {sections.map((section) => (
           <div key={section.id}>
-            {!collapsed && <p className="section-label px-3 pb-1.5">{section.label}</p>}
+            {!collapsed &&
+              (sectionClickable?.(section.id) ? (
+                <button
+                  type="button"
+                  onClick={() => onSectionClick?.(section.id)}
+                  className="section-label px-3 pb-1.5 w-full text-left font-sans cursor-pointer hover:text-foreground transition-colors"
+                >
+                  {section.label}
+                </button>
+              ) : (
+                <p className="section-label px-3 pb-1.5">{section.label}</p>
+              ))}
             <ul className="space-y-0.5">
               {section.items.map((item) => {
                 const Icon = item.icon;

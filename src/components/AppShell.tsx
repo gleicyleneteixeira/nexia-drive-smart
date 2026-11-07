@@ -30,8 +30,9 @@ import {
   GlassTopbar,
   GlassSheet,
   CommandPalette,
-  NAV_SECTIONS,
-  TAB_BAR_ITEMS,
+  navSections,
+  tabBarItems,
+  simuladosItem,
   contaSection,
   type NavItem,
 } from "@/components/glass";
@@ -284,15 +285,16 @@ export function AppShell() {
     [],
   );
 
-  // Seções completas: ESTUDAR + TREINAR + (Admin) + CONTA
+  // Seções completas: ESTUDAR + TREINAR + (Admin) + CONTA.
+  // Estudar/Treinar seguem o módulo escolhido no Início (navSections).
   const sections = useMemo(() => {
-    const base = [...NAV_SECTIONS];
+    const base = navSections(activeModule);
     if (isAdmin) {
       base.push({ id: "admin", label: "Admin", items: adminNavItems });
     }
     base.push(contaSection(supportLink));
     return base;
-  }, [isAdmin, supportLink, adminNavItems]);
+  }, [isAdmin, supportLink, adminNavItems, activeModule]);
 
   // Item ativo (pílula de vidro destacada)
   const location = useRouterState({ select: (s) => s.location });
@@ -309,12 +311,15 @@ export function AppShell() {
       return "inicio";
     }
     if (pathname === "/admin" && activeAdminSection) return `admin-${activeAdminSection}`;
+    // Joguinhos: destaca "Treinar agora"/"Simulados" só se o item contextual
+    // apontar para cá (módulo psicotécnico); caso contrário, nada aceso.
+    if (pathname === "/psicotecnico") return activeModule === "psicotecnico" ? "simulado" : null;
     if (pathname === "/simulado") {
       const cat = new URLSearchParams(searchStr).get("categoria");
       if (cat) {
-        const eixo = NAV_SECTIONS.flatMap((s) => s.items).find(
-          (i) => i.action.kind === "link" && i.action.search?.categoria === cat,
-        );
+        const eixo = sections
+          .flatMap((s) => s.items)
+          .find((i) => i.action.kind === "link" && i.action.search?.categoria === cat);
         if (eixo) return eixo.id;
       }
       return "simulado";
@@ -329,6 +334,7 @@ export function AppShell() {
     if (pathname === "/app") return activeModule === "hub" ? "inicio" : "estudar";
     if (pathname === "/biblioteca") return "estudar";
     if (pathname === "/simulado") return "simulado";
+    if (pathname === "/psicotecnico") return activeModule === "psicotecnico" ? "simulado" : null; // "Treino" no psicotécnico
     if (pathname === "/conquistas") return "conquistas";
     // demais rotas de treino caem no "Mais"
     const flat = sections.flatMap((s) => s.items);
@@ -339,6 +345,12 @@ export function AppShell() {
 
   const onTab = (item: NavItem) => {
     if (item.id === "estudar") {
+      // Módulo escolhido no Início: "Estudar" cai no estudo dele.
+      // Já no hub ou no próprio dashboard → folha para escolher/trocar categoria.
+      if (activeModule !== "hub" && pathname !== "/app") {
+        handleToggleModule(activeModule);
+        return;
+      }
       setSheetOpen((s) => (s === "estudar" ? null : "estudar"));
       return;
     }
@@ -349,15 +361,27 @@ export function AppShell() {
     runAction(item);
   };
 
+  // Cabeçalho clicável das seções da sidebar (desktop): ESTUDAR leva ao
+  // estudo do módulo escolhido; TREINAR leva aos simulados do teórico ou
+  // aos joguinhos do psicotécnico. Demais seções seguem sendo texto.
+  const handleSectionClick = (sectionId: string) => {
+    if (sectionId === "estudar") {
+      if (activeModule !== "hub") handleToggleModule(activeModule);
+      else setPaletteOpen(true); // sem módulo: escolhe pela paleta (Ctrl+K)
+      return;
+    }
+    if (sectionId === "treinar") runAction(simuladosItem(activeModule));
+  };
+
   const sheetItems = useMemo(() => {
-    if (sheetOpen === "estudar") return NAV_SECTIONS.find((s) => s.id === "estudar")?.items ?? [];
+    if (sheetOpen === "estudar") return sections.find((s) => s.id === "estudar")?.items ?? [];
     if (sheetOpen === "mais") {
-      const treinar = NAV_SECTIONS.find((s) => s.id === "treinar")?.items ?? [];
+      const treinar = sections.find((s) => s.id === "treinar")?.items ?? [];
       const conta = contaSection(supportLink).items.filter((i) => i.id !== "tema");
       return [...treinar, ...conta];
     }
     return [];
-  }, [sheetOpen, supportLink]);
+  }, [sheetOpen, supportLink, sections]);
 
   // Título/contexto da topbar (mesma semântica de antes)
   const pageTitle =
@@ -392,7 +416,7 @@ export function AppShell() {
   const pageEyebrow =
     pathname === "/app"
       ? "Área do aluno"
-      : pathname === "/simulado"
+      : pathname === "/simulado" || pathname === "/psicotecnico"
         ? "Treinar"
         : pathname === "/biblioteca"
           ? "Estudar"
@@ -416,6 +440,8 @@ export function AppShell() {
             const item = sections.flatMap((s) => s.items).find((i) => i.id === itemId);
             if (item) runAction(item);
           }}
+          onSectionClick={handleSectionClick}
+          sectionClickable={(id) => id === "estudar" || id === "treinar"}
           onOpenPalette={() => setPaletteOpen(true)}
           onToggleTheme={toggleTheme}
           themeIcon={themes[theme].icon}
@@ -592,7 +618,9 @@ export function AppShell() {
       {/* ---------------------------------------------------------------
           MOBILE: tab bar de vidro em pílula + sheets
           --------------------------------------------------------------- */}
-      {showChrome && <GlassTabBar items={TAB_BAR_ITEMS} activeId={activeTabId} onTab={onTab} />}
+      {showChrome && (
+        <GlassTabBar items={tabBarItems(activeModule)} activeId={activeTabId} onTab={onTab} />
+      )}
 
       <GlassSheet
         open={!!sheetOpen && showChrome}
