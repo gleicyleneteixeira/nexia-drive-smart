@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { fetchLibraryItem, type LibraryItem } from "@/lib/library";
-import { ArrowLeft, ExternalLink, Loader2, Lock, Volume2, VolumeX, ArrowRight, BookOpen } from "lucide-react";
+import { ArrowLeft, ExternalLink, Loader2, Lock, Volume2, VolumeX, ArrowRight, BookOpen, Download } from "lucide-react";
 import { PdfFlipbook } from "@/components/PdfFlipbook";
 import { Button } from "@/components/ui/button";
+import { baixarArquivo, nomeArquivoPdf } from "@/lib/download";
 import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -114,7 +115,19 @@ function ItemViewer() {
           <ArrowLeft className="h-4 w-4" /> Biblioteca
         </Link>
         <h1 className="font-display font-bold text-lg truncate max-w-[250px] md:max-w-md">{item.title}</h1>
-        <div className="w-20" />
+        <div className="w-20 flex justify-end shrink-0">
+          {item.item_type === "pdf" && !item.is_paid && !!item.url && (
+            <button
+              type="button"
+              onClick={() => void baixarArquivo(item.url, nomeArquivoPdf(item.title))}
+              aria-label={`Baixar ${item.title} em PDF`}
+              title="Baixar PDF"
+              className="p-2 rounded-full glass text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+            >
+              <Download className="h-4 w-4" />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Render Carousel or Narrated Image */}

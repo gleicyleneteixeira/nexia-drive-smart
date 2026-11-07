@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { X } from "lucide-react";
+import { Download, X } from "lucide-react";
 import { PdfReader } from "./PdfReader";
+import { baixarArquivo, nomeArquivoPdf } from "@/lib/download";
 
 interface NativePdfModalProps {
   pdfUrl: string;
@@ -48,6 +49,16 @@ export function NativePdfModal({ pdfUrl, title, onClose, initialPage, autoStart 
           className="absolute top-3 right-3 z-20 p-2 rounded-full bg-black/70 text-white/90 hover:text-white hover:bg-black/90 backdrop-blur-md transition-colors"
         >
           <X className="h-5 w-5" />
+        </button>
+
+        {/* Baixar — mesmo estilo do fechar, à esquerda dele */}
+        <button
+          onClick={() => void baixarArquivo(pdfUrl, nomeArquivoPdf(title))}
+          aria-label="Baixar PDF"
+          title="Baixar PDF"
+          className="absolute top-3 right-14 z-20 p-2 rounded-full bg-black/70 text-white/90 hover:text-white hover:bg-black/90 backdrop-blur-md transition-colors cursor-pointer"
+        >
+          <Download className="h-5 w-5" />
         </button>
 
         {/* PDF Reader */}

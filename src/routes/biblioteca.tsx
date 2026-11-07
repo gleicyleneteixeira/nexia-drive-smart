@@ -2,10 +2,11 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchLibraryItems, type LibraryItem } from "@/lib/library";
-import { Book, ExternalLink, Lock, FileText, BookOpen, Loader2, Play, Image as ImageIcon, X, Headphones } from "lucide-react";
+import { Book, ExternalLink, Lock, FileText, BookOpen, Loader2, Play, Image as ImageIcon, X, Headphones, Download } from "lucide-react";
 import { HCarousel } from "@/components/HCarousel";
 import { motion, AnimatePresence } from "framer-motion";
 import { NativePdfModal } from "@/components/NativePdfModal";
+import { baixarArquivo, nomeArquivoPdf } from "@/lib/download";
 
 export const Route = createFileRoute("/biblioteca")({
   component: BibliotecaPage,
@@ -213,6 +214,8 @@ function ItemCard({ item }: { item: LibraryItem }) {
   const href = (isImage && !item.narrated) ? undefined : isVideo || item.item_type === "heyzine" ? item.url : (item.is_paid ? undefined : `/biblioteca/${item.id}`);
   const target = isVideo || item.item_type === "heyzine" ? "_blank" : undefined;
   const rel = isVideo || item.item_type === "heyzine" ? "noreferrer" : undefined;
+  // Download direto só de PDF gratuito (premium continua bloqueado).
+  const podeBaixar = item.item_type === "pdf" && !item.is_paid && !!item.url;
 
   const handleClick = (e: React.MouseEvent) => {
     if (isImage && !item.narrated) {
@@ -229,6 +232,12 @@ function ItemCard({ item }: { item: LibraryItem }) {
       e.preventDefault();
       alert("Conteúdo premium — em breve disponível para compra.");
     }
+  };
+
+  const handleDownload = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    void baixarArquivo(item.url, nomeArquivoPdf(item.title));
   };
 
   return (
@@ -271,6 +280,17 @@ function ItemCard({ item }: { item: LibraryItem }) {
           <div className="absolute top-3 left-3 px-2 py-1 rounded-lg glass text-xs font-medium">
             {typeLabel}
           </div>
+          {podeBaixar && (
+            <button
+              type="button"
+              onClick={handleDownload}
+              aria-label={`Baixar ${item.title} em PDF`}
+              title="Baixar PDF"
+              className="absolute bottom-2 right-2 z-10 p-1.5 rounded-full bg-black/45 text-white/80 backdrop-blur-md border border-white/10 hover:bg-black/75 hover:text-white transition-colors cursor-pointer after:absolute after:-inset-2 after:content-['']"
+            >
+              <Download className="h-3.5 w-3.5" />
+            </button>
+          )}
         </div>
         <div className="p-4">
           <h3 className="font-semibold leading-tight">{item.title}</h3>
