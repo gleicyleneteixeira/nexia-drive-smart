@@ -1503,12 +1503,12 @@ export const QUESTIONS: Question[] = [
     {
         id: "p9",
         category: "placas",
-        statement: "Em interseção urbana, o condutor vê placa R-25d de fundo azul que define a trajetória. O que essa regulamentação impõe naquele ponto?",
-        options: ["Parar o veículo no local, podendo depois converter à direita ou à esquerda.", "Seguir em frente, ficando proibido converter à direita ou à esquerda.", "Não ultrapassar no trecho, podendo apenas mudar de faixa se preciso.", "Não estacionar no trecho, ficando liberada qualquer conversão na interseção."],
+        statement: "Em interseção urbana, o condutor vê a placa R-25d. O que essa regulamentação impõe naquele ponto?",
+        options: ["Parar o veículo no local, podendo depois converter à direita ou à esquerda.", "Seguir em frente ou virar à direita, sendo proibido conversões para a esquerda.", "Não ultrapassar no trecho, podendo apenas mudar de faixa se preciso.", "Não estacionar no trecho, ficando liberada qualquer conversão na interseção."],
         correctIndex: 1,
-        explanation: "Correta a segunda: placa azul de sentido de circulação/movimento obrigatório; na R-25d siga em frente, sem converter.",
-        detailedExplanation: "As placas de regulamentação com fundo azul e seta branca (como a R-25d) indicam as direções e movimentos permitidos/obrigatórios na faixa ou via. A indicação de seguir em frente obriga o condutor a manter a trajetória sem realizar conversões.",
-        tip: "Seta reta em fundo azul = Movimento obrigatório de seguir em frente.",
+        explanation: "Correta a segunda: a placa R-25d indica sentido obrigatório de seguir em frente ou à direita.",
+        detailedExplanation: "A R-25d é uma placa de sentido obrigatório: impõe seguir em frente ou virar à direita no ponto. A única conversão proibida é a da esquerda.",
+        tip: "R-25d = em frente ou à direita; conversão à esquerda, proibida.",
         incidence: "media",
         difficulty: 2,
         placa: "R-25d"
