@@ -670,6 +670,15 @@ interface HistoryItem {
   score: number;
 }
 
+// Duração do Treino de Atenção Concentrada por nível (segundos):
+// Nível 1 = 60s · Nível 2 = 120s · Nível 3 = 5 minutos (300s).
+const LEVEL_SECONDS: Record<1 | 2 | 3, number> = { 1: 60, 2: 120, 3: 300 };
+
+/** Rótulo amigável da duração ("120 segundos" / "5 minutos (300 segundos)"). */
+function levelSecondsLabel(lv: 1 | 2 | 3): string {
+  return LEVEL_SECONDS[lv] >= 300 ? "5 minutos (300 segundos)" : `${LEVEL_SECONDS[lv]} segundos`;
+}
+
 function Atencao({
   speech,
   onDone,
@@ -946,7 +955,7 @@ function Atencao({
   // Initialize and start game session
   const startGame = () => {
     synth.playCountdownStart();
-    const duration = level === 1 ? 60 : level === 2 ? 90 : 120;
+    const duration = LEVEL_SECONDS[level];
     setTimeRemaining(duration);
 
     const initialTargets = SECTION_SYMBOLS[level][0];
@@ -1155,7 +1164,12 @@ function Atencao({
               className="glass p-4 rounded-2xl hover:bg-accent/20 hover:scale-[1.02] transition-all text-left flex flex-col justify-between h-36"
             >
               <div>
-                <span className="text-xs font-bold text-success uppercase">Nível 1</span>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-xs font-bold text-success uppercase">Nível 1</span>
+                  <span className="text-[10px] font-semibold text-muted-foreground">
+                    ⏱ 60 segundos
+                  </span>
+                </div>
                 <h3 className="font-bold text-sm mt-1">Um Único Alvo</h3>
               </div>
               <p className="text-[10px] text-muted-foreground">
@@ -1170,7 +1184,12 @@ function Atencao({
               className="glass p-4 rounded-2xl hover:bg-accent/20 hover:scale-[1.02] transition-all text-left flex flex-col justify-between h-36"
             >
               <div>
-                <span className="text-xs font-bold text-warning uppercase">Nível 2</span>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-xs font-bold text-warning uppercase">Nível 2</span>
+                  <span className="text-[10px] font-semibold text-muted-foreground">
+                    ⏱ 120 segundos
+                  </span>
+                </div>
                 <h3 className="font-bold text-sm mt-1">Dois Alvos</h3>
               </div>
               <p className="text-[10px] text-muted-foreground">
@@ -1185,7 +1204,12 @@ function Atencao({
               className="glass p-4 rounded-2xl hover:bg-accent/20 hover:scale-[1.02] transition-all text-left flex flex-col justify-between h-36"
             >
               <div>
-                <span className="text-xs font-bold text-destructive uppercase">Nível 3</span>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-xs font-bold text-destructive uppercase">Nível 3</span>
+                  <span className="text-[10px] font-semibold text-muted-foreground">
+                    ⏱ 5 minutos
+                  </span>
+                </div>
                 <h3 className="font-bold text-sm mt-1">Três Alvos</h3>
               </div>
               <p className="text-[10px] text-muted-foreground">
@@ -1214,8 +1238,7 @@ function Atencao({
             <li className="text-xs md:text-sm flex items-start gap-2 p-3 rounded-xl bg-secondary/40 border border-border">
               <span className="text-primary font-bold">•</span>
               <span>
-                Você terá <strong>{level === 1 ? "60" : level === 2 ? "90" : "120"} segundos</strong>{" "}
-                para completar o teste.
+                Você terá <strong>{levelSecondsLabel(level)}</strong> para completar o teste.
               </span>
             </li>
             <li className="text-xs md:text-sm flex items-start gap-2 p-3 rounded-xl bg-secondary/40 border border-border">
