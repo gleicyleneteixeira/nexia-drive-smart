@@ -30,7 +30,6 @@ import {
   Brain,
   Sparkles,
   ListChecks,
-  BadgeCheck,
 } from "lucide-react";
 import { Placa } from "@/components/Placa";
 import { triggerRatingPrompt } from "@/components/RatingPrompt";
@@ -977,30 +976,13 @@ function ModePicker({ onPick, onBack }: { onPick: (m: SimMode) => void; onBack?:
             <p className="text-[10px] uppercase tracking-widest text-primary-glow font-bold">
               Recomendado
             </p>
-            <p className="font-display font-bold text-lg">Simulado completo</p>
+            <p className="font-display font-bold text-lg">Iniciar Simulado</p>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              30 questões no formato oficial: 12 Legislação / 10 Direção Defensiva / 3 Socorros / 3
+              Cidadania e Meio Ambiente / 2 Mecânica.
+            </p>
           </div>
           <ArrowRight className="h-5 w-5 text-primary-glow mt-2 shrink-0" />
-        </div>
-      </button>
-
-      <button
-        onClick={() => onPick("prova-real")}
-        className="w-full text-left rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-5 hover:bg-emerald-500/15 transition-colors mt-3"
-      >
-        <div className="flex items-start gap-3">
-          <div className="w-11 h-11 rounded-xl bg-emerald-500/20 flex items-center justify-center shrink-0">
-            <BadgeCheck className="h-5 w-5 text-emerald-400" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-[10px] uppercase tracking-widest text-emerald-400 font-bold">
-              Bônus validado
-            </p>
-            <p className="font-display font-bold text-lg">Prova Real</p>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Só perguntas que já caíram na prova, completando com o banco geral se preciso.
-            </p>
-          </div>
-          <ArrowRight className="h-5 w-5 text-emerald-400 mt-2 shrink-0" />
         </div>
       </button>
 
