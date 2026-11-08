@@ -689,30 +689,10 @@ function TeoricoDashboard() {
               </p>
               <p className="font-display font-bold text-lg">Simulado Completo</p>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Distribuição oficial por blocos, com questões da prova real. Mínimo 20 acertos.
+                Distribuição oficial por blocos e questões mais cobradas. Mínimo 20 acertos.
               </p>
             </div>
             <ChevronRight className="h-5 w-5 text-primary-glow mt-2 shrink-0" />
-          </Link>
-
-          <Link
-            to="/simulado"
-            search={{ modo: "prova-real", categoria: undefined }}
-            className="w-full text-left rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-5 hover:bg-emerald-500/15 transition-colors flex items-start gap-3"
-          >
-            <div className="w-11 h-11 rounded-xl bg-emerald-500/20 flex items-center justify-center shrink-0">
-              <ShieldCheck className="h-5 w-5 text-emerald-400" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-[10px] uppercase tracking-widest text-emerald-400 font-bold">
-                Bônus validado
-              </p>
-              <p className="font-display font-bold text-lg">Prova Real</p>
-              <p className="text-xs text-muted-foreground mt-0.5">
-                Só perguntas que já caíram na prova, completando com o banco geral se preciso.
-              </p>
-            </div>
-            <ChevronRight className="h-5 w-5 text-emerald-400 mt-2 shrink-0" />
           </Link>
         </div>
 
