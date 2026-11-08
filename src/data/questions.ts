@@ -9293,7 +9293,8 @@ export const QUESTIONS: Question[] = [
         incidence: "media",
         trap: true,
         difficulty: 2,
-        origin: "ia"
+        origin: "ia",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/Placas-de-transito-estudacnh-pista-escorregadia-A-28.png"
     },
     {
         id: "l02_60",
