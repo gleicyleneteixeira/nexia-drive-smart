@@ -120,20 +120,6 @@ export const QUESTIONS: Question[] = [
         difficulty: 3
     },
     {
-        id: "qe03",
-        category: "legislacao",
-        statement: "Condutor sem nenhuma infração gravíssima nos últimos 12 meses atinge pontuação elevada. Nesse caso, a suspensão do direito de dirigir ocorrerá aos:",
-        options: ["40 pontos acumulados no período de 12 meses de apuração.","30 pontos, desde que conste uma única infração de natureza grave.","20 pontos, independentemente da natureza das infrações registradas.","40 pontos em 12 meses, mesmo quando constar uma infração gravíssima registrada."],
-        correctIndex: 0,
-        explanation: "Correta letra A: sem NENHUMA infração gravíssima, o limite para suspensão é de 40 pontos em 12 meses (Art. 261, I, 'a' do CTB).",
-        detailedExplanation: "A regra de pontuação atual é: 20 pontos (se tiver 2 ou mais gravíssimas), 30 pontos (se tiver 1 gravíssima) e 40 pontos (se não tiver nenhuma gravíssima).",
-        legalBase: "Art. 261 do CTB",
-        commonMistake: "Achar que o limite de 20 pontos ainda vale para todos os casos.",
-        incidence: "altissima",
-        trap: true,
-        difficulty: 3
-    },
-    {
         id: "qe04",
         category: "legislacao",
         statement: "Motorista profissional que exerce atividade remunerada (EAR) soma pontos na CNH. Pelo CTB vigente, o limite para suspensão do direito de dirigir por pontuação para esse condutor será de:",
@@ -246,18 +232,6 @@ export const QUESTIONS: Question[] = [
         difficulty: 3
     },
     {
-        id: "qe13",
-        category: "infracoes",
-        statement: "Em shopping, condutor estaciona em vaga reservada a idoso sem usar credencial. Que natureza de infração essa conduta configura?",
-        options: ["Gravíssima, com multa, 7 pontos e remoção do veículo.","Grave, com multa e remoção do veículo do local.","Média, com multa e quatro pontos no prontuário.","Leve, punida apenas com advertência por escrito."],
-        correctIndex: 0,
-        explanation: "Correta letra A: estacionar em vaga reservada a PCD ou idoso sem credencial é infração gravíssima com remoção (Art. 181, XX do CTB).",
-        detailedExplanation: "Com as alterações da Lei 13.281/2016, estacionar indevidamente em vagas de idoso ou PCD passou a ser infração gravíssima com penalidade de multa e medida administrativa de remoção do veículo.",
-        legalBase: "Art. 181, XX do CTB",
-        incidence: "media",
-        difficulty: 3
-    },
-    {
         id: "qe14",
         category: "infracoes",
         statement: "Em supermercado, condutor ocupa vaga de pessoa com deficiência sem credencial. Mesmo em área privada de uso coletivo, essa conduta configura:",
@@ -279,18 +253,6 @@ export const QUESTIONS: Question[] = [
         detailedExplanation: "A responsabilidade pela segurança de todos os ocupantes é do condutor. A não utilização do cinto gera infração grave (5 pontos) e retenção do veículo até o cinto ser afivelado.",
         legalBase: "Art. 167 do CTB",
         incidence: "alta",
-        difficulty: 3
-    },
-    {
-        id: "qe16",
-        category: "infracoes",
-        statement: "No semáforo, condutor é flagrado segurando ou manuseando o celular. Que natureza de infração essa conduta configura?",
-        options: ["Gravíssima, com multa e 7 pontos no prontuário.","Grave, com multa e cinco pontos no prontuário.","Média, punida apenas com advertência escrita.","Leve, com multa e três pontos no prontuário."],
-        correctIndex: 0,
-        explanation: "Correta letra A: segurar ou manusear telefone celular enquanto conduz veículo é infração gravíssima (Art. 252, parágrafo único do CTB).",
-        detailedExplanation: "Segurar ou manusear celular (mesmo parado no semáforo ou no trânsito lento) é infração gravíssima com multa de R$ 293,47 e 7 pontos.",
-        legalBase: "Art. 252, parágrafo único do CTB",
-        incidence: "altissima",
         difficulty: 3
     },
     {
@@ -562,17 +524,6 @@ export const QUESTIONS: Question[] = [
         trap: true,
         difficulty: 3,
         group: "coluna-nao-mover"
-    },
-    {
-        id: "qe40",
-        category: "primeiros-socorros",
-        statement: "Pedestre presencia colisão com vítima e precisa chamar socorro médico. O número telefônico correto para acionar o SAMU será:",
-        options: ["192, para acionar o Serviço de Atendimento Móvel de Urgência.", "193, para acionar o Corpo de Bombeiros Militar, responsável pelo resgate de vítimas presas em ferragens.", "190, para acionar a Polícia Militar, que atende ocorrências de trânsito e de segurança pública na via.", "191, para acionar a Polícia Rodoviária Federal, responsável pela fiscalização das rodovias federais."],
-        correctIndex: 0,
-        explanation: "Correta letra A: SAMU é 192; 193 bombeiros e 190 polícia militar.",
-        detailedExplanation: "Saber os números de emergência é super importante pra agir rápido em sinistros. O SAMU (192) cuida das emergências médicas, enquanto o Corpo de Bombeiros (193) ajuda em incêndios e resgates. A Polícia Militar (190) entra em cena quando tem crime ou confusão.",
-        incidence: "alta",
-        difficulty: 3
     },
     {
         id: "qe41",
@@ -924,18 +875,6 @@ export const QUESTIONS: Question[] = [
         difficulty: 3
     },
     {
-        id: "qe71",
-        category: "legislacao",
-        statement: "Em rua urbana classificada como via local, sem placa de velocidade no trecho. Qual limite máximo o motorista deve respeitar pelo CTB?",
-        options: ["30 km/h.", "40 km/h.", "60 km/h.", "50 km/h."],
-        correctIndex: 0,
-        explanation: "Correta a primeira: sem placa, via local tem máxima de trinta por hora, art. 61, CTB.",
-        detailedExplanation: "Nas vias urbanas não sinalizadas, os limites máximos estabelecidos pelo CTB são: 30 km/h nas vias locais, 40 km/h nas coletoras, 60 km/h nas arteriais e 80 km/h nas de trânsito rápido.",
-        legalBase: "Art. 61, § 1º, I, 'a' CTB",
-        incidence: "altissima",
-        difficulty: 3
-    },
-    {
         id: "qe72",
         category: "legislacao",
         statement: "Em rodovia rural de pista dupla, sem placa de velocidade, segue um carro de passeio. Qual é a máxima permitida para esse carro pelo CTB?",
@@ -1167,18 +1106,6 @@ export const QUESTIONS: Question[] = [
         placa: "R-1"
     },
     {
-        id: "q8",
-        category: "meio-ambiente",
-        statement: "Com escapamento adulterado, o veículo emite gases acima do limite em medição ambiental. Qual é a sanção prevista no CTB para essa irregularidade?",
-        options: ["Advertência escrita do órgão ambiental, sem multa ou ponto na habilitação.","Infração grave, com multa e retenção do veículo para regularizar a emissão.","Infração gravíssima, com multa e sete pontos, além de remoção do veículo ao pátio.","Infração média, com multa e quatro pontos, sem retenção do veículo."],
-        correctIndex: 1,
-        explanation: "Correta a segunda: emitir gases acima do limite é infração grave, com multa e retenção, art. 231, CTB.",
-        detailedExplanation: "Transitar com o veículo produzindo fumaça, gases ou partículas em níveis superiores aos fixados pelo CONTRAN é infração grave (5 pontos e multa), com retenção do veículo para regularização.",
-        legalBase: "Art. 231, III do CTB",
-        incidence: "media",
-        difficulty: 3
-    },
-    {
         id: "q9",
         category: "mecanica",
         statement: "Na revisão do freio hidráulico, o mecânico mostra pedal, hidrovácuo, discos e tambores. Qual afirmação sobre o sistema está correta?",
@@ -1253,21 +1180,6 @@ export const QUESTIONS: Question[] = [
         difficulty: 3
     },
     {
-        id: "q15",
-        category: "prioridade",
-        statement: "Você se aproxima de uma rotatória urbana sem sinalização específica e nota outro veículo já circulando por ela. De quem é a preferência de passagem segundo o CTB?",
-        options: ["Do veículo que já estiver circulando pela rotatória.","Do veículo que se aproxima, pois a preferência de quem já circula exige sinalização.","Do veículo que se aproximar pela direita do condutor que já circula na rotatória.","Do veículo de maior porte, pois a prioridade cabe aos veículos maiores."],
-        correctIndex: 0,
-        explanation: "Correta a opção 1: em rotatórias não sinalizadas, a preferência de passagem é de quem já está circulando por ela, conforme o art. 29, III, 'b' do CTB.",
-        detailedExplanation: "Na ausência de sinalização específica de preferência, no caso de rotatória, a prioridade de passagem pertence ao veículo que já estiver em circulação no anel viário.",
-        legalBase: "Art. 29, III, 'b' do CTB",
-        commonMistake: "Confundir a regra geral da direita com a regra específica de rotatórias.",
-        tip: "Na rotatória sem placa: quem já está dentro tem a preferência.",
-        incidence: "altissima",
-        trap: true,
-        difficulty: 3
-    },
-    {
         id: "q16",
         category: "direcao-defensiva",
         statement: "A direção defensiva fundamenta-se em elementos básicos para a condução segura. Assinale a alternativa que NÃO representa uma atitude defensiva do condutor:",
@@ -1312,19 +1224,6 @@ export const QUESTIONS: Question[] = [
         explanation: "Correta a opção 2: a suspensão absorve as imperfeições do solo e garante a estabilidade e aderência dos pneus à pista.",
         detailedExplanation: "A função principal da suspensão é manter os pneus em contato com o solo em qualquer imperfeição da pista, garantindo a dirigibilidade, estabilidade nas curvas e o conforto dos ocupantes.",
         incidence: "baixa",
-        difficulty: 3
-    },
-    {
-        id: "q20",
-        category: "infracoes",
-        statement: "Ao conduzir o veículo, o motorista segura ou manuseia o telefone celular para ler uma mensagem. Essa conduta é caracterizada pelo CTB como:",
-        options: ["Infração média, com multa e quatro pontos na CNH.", "Infração grave, com multa e retenção do veículo.", "Infração gravíssima, com multa e sete pontos na CNH.", "Infração gravíssima, com multa multiplicada por dez e suspensão do direito de dirigir."],
-        correctIndex: 2,
-        explanation: "Correta a opção 3: segurar ou manusear telefone celular enquanto dirige é infração gravíssima (7 pontos e multa), conforme o art. 252, parágrafo único do CTB.",
-        detailedExplanation: "Dirigir o veículo segurando ou manuseando telefone celular é infração GRAVÍSSIMA. A infração se aplica inclusive em paradas temporárias de sinalização de trânsito ou semáforos.",
-        legalBase: "Art. 252, parágrafo único do CTB",
-        tip: "Segurar ou manusear celular = Gravíssima (7 pontos).",
-        incidence: "altissima",
         difficulty: 3
     },
     {
@@ -1575,7 +1474,8 @@ export const QUESTIONS: Question[] = [
         tip: "Sem gravíssima = 40 pontos. Com 1 gravíssima = 30. Com 2+ gravíssimas = 20.",
         incidence: "altissima",
         trap: true,
-        difficulty: 3
+        difficulty: 3,
+        group: "suspensao-40-pontos"
     },
     {
         id: "q30",
@@ -1586,30 +1486,6 @@ export const QUESTIONS: Question[] = [
         explanation: "Correta a opção 1: o art. 159 do CTB determina o porte obrigatório da CNH/PPD e do CRLV, aceitos em formato físico ou digital (Carteira Digital de Trânsito).",
         detailedExplanation: "São documentos de porte obrigatório para a condução de veículo automotor a Carteira Nacional de Habilitação (CNH) ou Permissão para Dirigir (PPD) e o Certificado de Registro e Licenciamento do Veículo (CRLV). Ambos têm validade jurídica no formato digital via aplicativo oficial.",
         legalBase: "Art. 159 e Art. 232 do CTB",
-        incidence: "alta",
-        difficulty: 1
-    },
-    {
-        id: "q31",
-        category: "infracoes",
-        statement: "Em fiscalização de estacionamento, o agente encontra veículo sem credencial exposta ocupando vaga reservada à pessoa com deficiência. Essa conduta configura infração:",
-        options: ["Leve, punida apenas com advertência por escrito e sem registro de pontos na CNH.","Média, punida com multa e 4 pontos, sem aplicação de medida administrativa.","Grave, punida com multa e 5 pontos, passível de conversão em advertência escrita.","Gravíssima, punida com multa, 7 pontos e remoção do veículo do local."],
-        correctIndex: 3,
-        explanation: "Correta a opção 4: o art. 181, XX do CTB estabelece infração gravíssima, 7 pontos e remoção do veículo para estacionamento indevido em vaga reservada.",
-        detailedExplanation: "Estacionar o veículo nas vagas reservadas às pessoas com deficiência ou idosos, sem a credencial que comprove tal condição exposta no painel, é infração GRAVÍSSIMA (7 pontos na CNH, multa de R$ 293,47 e medida administrativa de remoção do veículo).",
-        legalBase: "Art. 181, XX do CTB",
-        incidence: "alta",
-        difficulty: 1
-    },
-    {
-        id: "q32",
-        category: "infracoes",
-        statement: "Agente aborda condutor que nunca obteve habilitação e dirige sem CNH e sem PPD em via pública. Essa conduta configura infração:",
-        options: ["Leve, punida com advertência escrita na primeira ocorrência registrada.", "Média, punida com multa e 4 pontos, permitindo ao condutor seguir viagem.", "Grave, punida com multa e 5 pontos, sem retenção do veículo abordado.", "Gravíssima, punida com multa multiplicada por 3 e retenção do veículo."],
-        correctIndex: 3,
-        explanation: "Correta a opção 4: dirigir sem possuir CNH ou PPD é infração gravíssima com multa (três vezes) e retenção do veículo (art. 162, I do CTB).",
-        detailedExplanation: "Dirigir veículo sem possuir Carteira Nacional de Habilitação, Permissão para Dirigir ou Autorização para Conduzir Ciclomotor é infração GRAVÍSSIMA, punida com multa multiplicada por 3 e medida administrativa de retenção do veículo até a apresentação de condutor habilitado.",
-        legalBase: "Art. 162, I do CTB",
         incidence: "alta",
         difficulty: 1
     },
@@ -1700,18 +1576,6 @@ export const QUESTIONS: Question[] = [
         difficulty: 2
     },
     {
-        id: "q40",
-        category: "primeiros-socorros",
-        statement: "Vítima caída após colisão precisa de atendimento médico urgente e testemunhas discutem qual número chamar para socorro rápido. O número correto do socorro médico é:",
-        options: ["190, número da Polícia Militar para ocorrências policiais e de segurança.", "192, número do SAMU para atendimento médico de urgência e emergência.", "193, número do Corpo de Bombeiros para incêndios e resgates diversos.", "199, número da Defesa Civil para desastres e calamidades públicas."],
-        correctIndex: 1,
-        explanation: "Correta a opção 2: o telefone 192 pertence ao SAMU (Serviço de Atendimento Móvel de Urgência), responsável pelo atendimento médico pré-hospitalar.",
-        detailedExplanation: "Para socorro médico de urgência e emergência clínica/traumática, deve-se acionar o SAMU pelo número 192. O Corpo de Bombeiros (193) atua prioritariamente no resgate de vítimas presas em ferragens ou locais de difícil acesso, e a Polícia Militar (190) na garantia da segurança do local.",
-        tip: "SAMU = 192 | Bombeiros = 193 | Polícia Militar = 190 | PRF = 191.",
-        incidence: "alta",
-        difficulty: 1
-    },
-    {
         id: "q41",
         category: "primeiros-socorros",
         statement: "Vítima sofreu queimadura de segundo grau com formação de bolhas e o socorrista improvisado sugere receitas caseiras. O socorrista NÃO deve:",
@@ -1743,18 +1607,6 @@ export const QUESTIONS: Question[] = [
         explanation: "Correta a opção 2: o art. 227 do CTB proíbe o uso da buzina de forma prolongada, devendo ser utilizada apenas em toques curtos para advertência necessária.",
         detailedExplanation: "A buzina só deve ser acionada em toques curtos e estritamente em duas situações: para advertir outros usuários sobre situações de perigo iminente ou fora das áreas urbanas quando for necessário advertir um condutor que se tem o propósito de ultrapassá-lo. É proibido buzinar entre 22h e 6h, ou em locais sinalizados com a placa R-20 (Proibido acionar buzina ou sinal sonoro).",
         legalBase: "Art. 227 do CTB",
-        incidence: "media",
-        difficulty: 1
-    },
-    {
-        id: "q44",
-        category: "meio-ambiente",
-        statement: "Passageiro arremessa lata pela janela do veículo em movimento e o condutor nada faz para impedir. Essa conduta configura infração:",
-        options: ["Leve, punida apenas com advertência escrita, sem registro de pontos.","Média, punida com multa e 4 pontos, respondendo o condutor pelo ato.","Grave, punida com multa, pontos e suspensão do direito de dirigir do condutor.","Gravíssima, punida com multa multiplicada por 3 e remoção do veículo."],
-        correctIndex: 1,
-        explanation: "Correta a opção 2: atirar do veículo ou abandonar na via objetos ou substâncias é infração média (4 pontos na CNH), conforme o art. 172 do CTB.",
-        detailedExplanation: "Atirar do veículo ou abandonar na via pública qualquer tipo de objeto ou substância é infração MÉDIA (4 pontos e multa de R$ 130,16). O condutor responde administrativamente pelas infrações cometidas no veículo.",
-        legalBase: "Art. 172 do CTB",
         incidence: "media",
         difficulty: 1
     },
@@ -1812,18 +1664,6 @@ export const QUESTIONS: Question[] = [
         explanation: "Correta a alternativa B, pois o art. 29 do CTB prioriza emergência, pedestre, não motorizado e motorizado.",
         detailedExplanation: "Na via, quem tem mais direito é a ambulância com sirene. Depois, os pedestres que estão na faixa, seguidos das bicicletas e, por último, os carros. Essa ordem ajuda a proteger quem está mais vulnerável no trânsito.",
         legalBase: "Art. 29, §2º do CTB",
-        incidence: "alta",
-        difficulty: 2
-    },
-    {
-        id: "q50",
-        category: "legislacao",
-        statement: "Condutor trafega por bairro residencial em via local sem nenhuma placa de velocidade e precisa respeitar o limite padrão. Nesse caso, o limite é:",
-        options: ["20 km/h.", "30 km/h.", "40 km/h.", "60 km/h."],
-        correctIndex: 1,
-        explanation: "Correta a alternativa B, pois o art. 61 do CTB fixa 30 km/h para via local sem sinalização.",
-        detailedExplanation: "Quando não tem sinalização, o CTB diz que as vias locais, que são mais tranquilas e têm mais pedestres, devem ter limite de 30 km/h. As outras vias têm limites maiores: coletoras 40 km/h, arteriais 60 km/h e trânsito rápido 80 km/h. Lembre-se da sequência: 30, 40, 60, 80.",
-        legalBase: "Art. 61 do CTB",
         incidence: "alta",
         difficulty: 2
     },
@@ -2027,19 +1867,6 @@ export const QUESTIONS: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 3
-    },
-    {
-        id: "qp11",
-        category: "prioridade",
-        statement: "Dois veículos chegam ao mesmo tempo a cruzamento sem sinalização, semáforo ou agente, em vias de igual porte. Nesse caso, tem preferência:",
-        options: ["O veículo de maior porte, pois tem precedência sobre os menores.","O veículo que ocupar a faixa da esquerda, destinada ao deslocamento mais rápido.","O veículo que vier pela direita do outro condutor no cruzamento.","O veículo de serviço de utilidade pública, que goza de livre circulação na via."],
-        correctIndex: 2,
-        explanation: "Correta a alternativa C, pois o art. 29 do CTB dá preferência a quem vem pela direita sem sinalização.",
-        legalBase: "Art. 29, III do CTB",
-        commonMistake: "Muita gente pensa que a rua mais larga sempre tem preferência. ERRADO — a regra da direita é que vale.",
-        tip: "Sem sinalização? Direita é a prioridade!",
-        incidence: "altissima",
-        difficulty: 2
     },
     {
         id: "qp12",
@@ -2317,21 +2144,6 @@ export const QUESTIONS: Question[] = [
         difficulty: 1
     },
     {
-        id: "qp32",
-        category: "infracoes",
-        statement: "Em semáforo fechado, o condutor segura o celular para ler mensagem, manuseando o aparelho com o veículo parado na faixa. Essa conduta configura infração:",
-        options: ["Leve, punida com multa e registro de 3 pontos na CNH do condutor.", "Média, punida com multa e registro de 4 pontos na CNH do condutor.", "Gravíssima, com 7 pontos e multa multiplicada por 3 em caso de reincidência.", "Gravíssima, punida com multa e registro de 7 pontos na CNH do condutor."],
-        correctIndex: 3,
-        explanation: "Correta a alternativa D, pois o art. 252 do CTB prevê gravíssima, com 7 pontos, para manusear celular ao volante.",
-        detailedExplanation: "Segurar ou mexer no celular ao volante é uma infração GRAVÍSSIMA, que gera 7 pontos na CNH e uma multa de R$ 293,47. Não tem fator multiplicador nem suspensão do direito de dirigir: a penalidade é multa simples no valor da gravíssima.",
-        legalBase: "Art. 252, parágrafo único do CTB",
-        commonMistake: "Muita gente pensa que usar celular é infração média ou grave, mas é GRAVÍSSIMA de verdade.",
-        tip: "Celular no volante = GRAVÍSSIMA. Só atenda se estacionar em local seguro.",
-        incidence: "altissima",
-        trap: true,
-        difficulty: 2
-    },
-    {
         id: "qp33",
         category: "infracoes",
         statement: "Em blitz, o agente constata condutor e dois passageiros no banco traseiro todos sem cinto de segurança afivelado. Essa conduta do condutor configura:",
@@ -2504,7 +2316,8 @@ export const QUESTIONS: Question[] = [
         tip: "EAR = 40 pontos SEMPRE. É o limite fixo especial para profissionais.",
         incidence: "alta",
         trap: true,
-        difficulty: 2
+        difficulty: 2,
+        group: "suspensao-40-pontos"
     },
     {
         id: "qp45",
@@ -2534,7 +2347,8 @@ export const QUESTIONS: Question[] = [
         tip: "Validade CNH: <50 = 10a / 50-69 = 5a / 70+ = 3a.",
         incidence: "altissima",
         trap: true,
-        difficulty: 2
+        difficulty: 2,
+        group: "validade-cnh"
     },
     {
         id: "qp47",
@@ -2960,7 +2774,8 @@ export const QUESTIONS: Question[] = [
         tip: "< 50 anos = 10 anos.",
         incidence: "alta",
         trap: true,
-        difficulty: 3
+        difficulty: 3,
+        group: "validade-cnh"
     },
     {
         id: "placa_r28_duplo_sentido_alta_01",
@@ -3028,21 +2843,6 @@ export const QUESTIONS: Question[] = [
         trap: false,
         difficulty: 2,
         image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/50.jpg"
-    },
-    {
-        id: "nova_velocidade_vias_locais_alta_01",
-        category: "legislacao",
-        statement: "Condutor trafega por via local em bairro residencial, sem placa de velocidade. Qual o limite máximo padrão do CTB?",
-        options: ["30 km/h.", "40 km/h.", "50 km/h.", "20 km/h."],
-        correctIndex: 0,
-        explanation: "Correta A: via local sem placa tem limite de 30 km/h. Art. 61 do CTB.",
-        detailedExplanation: "Nas ruas sem sinalização, a velocidade varia: 80 km/h nas rápidas, 60 km/h nas arteriais, 40 km/h nas coletoras e 30 km/h nas locais. Então, como essa é uma via local, o limite é 30 km/h.",
-        legalBase: "Art. 61, § 1º, I, d do CTB",
-        commonMistake: "Muita gente confunde a velocidade de via local (30 km/h) com a de via coletora (40 km/h).",
-        tip: "Via Local = 30 km/h | Via Coletora = 40 km/h.",
-        incidence: "alta",
-        trap: true,
-        difficulty: 3
     },
     {
         id: "nova_advertencia_escrito_alta_02",
@@ -3320,7 +3120,8 @@ export const QUESTIONS: Question[] = [
         tip: "CNH vencida até 30 dias = Tolerado | Vencida há +30 dias = Infração GRAVÍSSIMA + Recolhimento da CNH.",
         incidence: "alta",
         trap: true,
-        difficulty: 3
+        difficulty: 3,
+        group: "cnh-vencida-30"
     },
     {
         id: "nova_primeiros_socorros_colar_cervical_alta_19",
@@ -3681,7 +3482,8 @@ export const QUESTIONS: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 2,
-        origin: "real"
+        origin: "real",
+        group: "cnh-vencida-30"
     },
     {
         id: "detran_mg_r16",
@@ -4384,39 +4186,6 @@ export const QUESTIONS: Question[] = [
         difficulty: 1
     },
     {
-        id: "leg_n1_002",
-        category: "legislacao",
-        statement: "Candidato aprovado obtém a Permissão para Dirigir e inicia o estágio probatório. Qual é o prazo dessa permissão até a CNH definitiva?",
-        options: ["6 meses de permissão, prorrogáveis uma vez mediante requerimento do condutor.", "12 meses de permissão, contados da expedição do documento de habilitação.", "24 meses de permissão, vinculados ao período das avaliações psicológicas.", "Prazo indefinido, mantido até o registro da primeira infração no prontuário."],
-        correctIndex: 1,
-        explanation: "Correta: a Permissão para Dirigir dura 12 meses, conforme art. 148 do CTB.",
-        detailedExplanation: "A Permissão para Dirigir (PPD) é válida por 12 meses. Se o motorista não tiver infrações graves ou gravíssimas e não repetir médias, ele ganha a CNH definitiva; se não, tem que começar tudo de novo.",
-        legalBase: "Art. 148, § 2º do CTB",
-        commonMistake: "Muita gente pensa que a PPD dura só 6 meses.",
-        tip: "PPD = 1 ano de prova.",
-        memoryHook: "PPD = 1 ano de prova.",
-        incidence: "alta",
-        trap: true,
-        difficulty: 1
-    },
-    {
-        id: "leg_n2_001",
-        category: "legislacao",
-        statement: "Candidato à habilitação questiona os limites da categoria B. Quais são o Peso Bruto Total e a lotação autorizados para essa categoria?",
-        options: ["PBT de até 6.000 kg e lotação de até 10 passageiros, incluindo o motorista do veículo.", "PBT sem limite de carga e lotação de até 8 ocupantes no total do veículo.", "Veículos de passeio com até 5 lugares no total, incluindo o condutor do veículo.", "PBT de até 3.500 kg e lotação de até 8 passageiros, excluído o condutor do veículo."],
-        correctIndex: 3,
-        explanation: "Correta: categoria B admite PBT até 3.500 kg e 8 passageiros mais o condutor, conforme art. 143 do CTB.",
-        detailedExplanation: "Isso significa que, além do motorista, você pode levar mais 8 pessoas no carro. Se o veículo passar desse peso ou número de passageiros, precisa de outra categoria, como C ou D.",
-        legalBase: "Art. 29 do CTB",
-        commonMistake: "Muita gente confunde e acha que os 8 passageiros incluem o motorista.",
-        tip: "B = 3.500 kg e 8+1.",
-        memoryHook: "B = 3.500 kg e 8+1.",
-        incidence: "alta",
-        trap: true,
-        difficulty: 2,
-        group: "cat-b-limites"
-    },
-    {
         id: "leg_n1_001",
         category: "legislacao",
         statement: "Condutor habilitado na categoria B pretende transportar passageiros no veículo. Qual é o limite legal de passageiros, excluído o condutor?",
@@ -4432,22 +4201,6 @@ export const QUESTIONS: Question[] = [
         trap: true,
         difficulty: 1,
         group: "cat-b-limites"
-    },
-    {
-        id: "leg_n2_003",
-        category: "legislacao",
-        statement: "Condutor completa 12 meses sem nenhuma infração gravíssima no prontuário. Com quantos pontos ele atinge o limite para suspensão do direito de dirigir?",
-        options: ["20 pontos, por regra fixa independente da gravidade das infrações cometidas no período avaliado.", "30 pontos, pela existência de ao menos uma infração grave no período avaliado de doze meses.", "14 pontos, por se tratar de condutor com atividade remunerada registrada no prontuário do órgão.", "40 pontos, limite aplicável ao condutor sem infração gravíssima nos últimos 12 meses."],
-        correctIndex: 3,
-        explanation: "Correta: sem infração gravíssima em 12 meses, o limite é 40 pontos, conforme art. 261 do CTB.",
-        detailedExplanation: "O número de pontos que você pode acumular muda: 40 se não tiver gravíssimas, 30 se tiver uma e 20 se tiver duas ou mais. A antiga regra dos 20 pontos fixos não vale mais.",
-        legalBase: "Art. 29 do CTB",
-        commonMistake: "Muita gente ainda acha que são 20 pontos fixos, mas isso mudou.",
-        tip: "Sem gravíssima = 40 pontos.",
-        memoryHook: "Sem gravíssima = 40 pontos.",
-        incidence: "alta",
-        trap: true,
-        difficulty: 2
     },
     {
         id: "inf_n1_001",
@@ -4483,38 +4236,6 @@ export const QUESTIONS: Question[] = [
         group: "ppd-regras"
     },
     {
-        id: "inf_n2_001",
-        category: "infracoes",
-        statement: "Motorista manipula o celular para ler mensagens ao trafegar em via de trânsito rápido. Como essa conduta é enquadrada pelo CTB?",
-        options: ["Infração grave, com 5 pontos no prontuário e remoção do veículo.","Infração média, com 4 pontos no prontuário e retenção do veículo.","Infração leve, com 3 pontos e conversão da multa em advertência por escrito.","Infração gravíssima, com 7 pontos na CNH e aplicação de multa ao condutor."],
-        correctIndex: 3,
-        explanation: "Correta: segurar ou manusear celular dirigindo é infração gravíssima, conforme art. 252 do CTB.",
-        detailedExplanation: "Quando o motorista está com o celular na mão, isso resulta em 7 pontos na CNH e multa. O uso só é permitido se for viva-voz ou com fone, sem segurar o aparelho.",
-        legalBase: "Art. 258 do CTB",
-        commonMistake: "Muita gente acha que isso é só uma infração grave.",
-        tip: "Celular na mão = gravíssima.",
-        memoryHook: "Celular na mão = gravíssima.",
-        incidence: "alta",
-        trap: true,
-        difficulty: 2
-    },
-    {
-        id: "leg_n1_003",
-        category: "legislacao",
-        statement: "Pela Lei nº 14.071/2020, o condutor sem nenhuma infração gravíssima em 12 meses sofre suspensão do direito de dirigir ao atingir quantos pontos?",
-        options: ["20 pontos fixos no prontuário, independentemente da natureza das infrações cometidas.", "30 pontos no prontuário, exigida a existência de ao menos uma infração grave.", "14 pontos no prontuário, por se tratar de condutor com atividade remunerada.", "40 pontos acumulados no prontuário nos últimos 12 meses de condução."],
-        correctIndex: 3,
-        explanation: "Correta: sem gravíssima em 12 meses, a suspensão ocorre aos 40 pontos, conforme art. 261 do CTB.",
-        detailedExplanation: "Com a nova lei, se você não tiver nenhuma infração gravíssima, pode acumular até 40 pontos. Se tiver uma gravíssima, o limite cai para 30 pontos e, se tiver duas ou mais, vai para 20 pontos.",
-        legalBase: "Art. 29 do CTB",
-        commonMistake: "Muita gente ainda acha que são sempre 20 pontos, mas a regra mudou.",
-        tip: "Sem gravíssima = 40 pontos.",
-        memoryHook: "Sem gravíssima = 40 pontos.",
-        incidence: "alta",
-        trap: true,
-        difficulty: 1
-    },
-    {
         id: "inf_n1_002",
         category: "infracoes",
         statement: "Condutor estaciona em vaga reservada a pessoa com deficiência sem exibir a credencial. Qual é a natureza dessa infração, segundo o CTB?",
@@ -4528,7 +4249,8 @@ export const QUESTIONS: Question[] = [
         memoryHook: "Vaga PCD = gravíssima; vaga idoso = gravíssima.",
         incidence: "alta",
         trap: true,
-        difficulty: 1
+        difficulty: 1,
+        group: "vaga-reservada-credencial"
     },
     {
         id: "inf_n1_003",
@@ -4625,22 +4347,6 @@ export const QUESTIONS: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 1
-    },
-    {
-        id: "ps_n2_001",
-        category: "primeiros-socorros",
-        statement: "Em sinistro com vítimas presas nas ferragens e necessidade de socorro médico urgente, qual número e serviço devem ser acionados de imediato?",
-        options: ["193, Corpo de Bombeiros Militar, para resgate e combate a incêndio no local.", "190, Polícia Militar, para policiamento ostensivo e registro da ocorrência.", "199, Defesa Civil, para desabamentos e emergências de proteção civil.", "192, SAMU, Serviço de Atendimento Móvel de Urgência para socorro médico."],
-        correctIndex: 3,
-        explanation: "Correta: 192 aciona o SAMU para urgência médica em sinistros, conforme diretrizes de urgência.",
-        detailedExplanation: "Quando tem sinistro e alguém tá preso nas ferragens, você liga pro SAMU no 192 pra pedir ajuda médica. Os Bombeiros (193) ajudam em incêndios e a Polícia (190) cuida de brigas, enquanto a PRF (191) é pra rodovias federais.",
-        legalBase: "Art. 134 do CTB",
-        commonMistake: "Muita gente confunde e acha que é o Bombeiro que cuida de tudo.",
-        tip: "Sinistro = Liga pro SAMU 192.",
-        memoryHook: "Sinistro = Liga pro SAMU 192.",
-        incidence: "alta",
-        trap: true,
-        difficulty: 2
     },
     {
         id: "ps_n1_002",
@@ -4852,22 +4558,6 @@ export const QUESTIONS: Question[] = [
         difficulty: 1,
         group: "placa-r1-octogonal",
         placa: "R-1"
-    },
-    {
-        id: "pr_n2_001",
-        category: "legislacao",
-        statement: "Ambulância em atendimento de urgência circula com sirene e luzes vermelhas ligadas. Qual prioridade de passagem o CTB garante nessa situação?",
-        options: ["Prioridade apenas quando os dispositivos de alarme estiverem acionados, dispensando o serviço de urgência.","Livre circulação e parada, mesmo fora de serviço de urgência, desde que o veículo esteja identificado.","Prioridade de passagem apenas, dispensada a prerrogativa de livre circulação na via.","Prioridade de passagem, devendo os demais condutores encostar à direita."],
-        correctIndex: 3,
-        explanation: "Correta: ambulância em urgência com sinais ligados tem prioridade, conforme art. 29, VII, do CTB.",
-        detailedExplanation: "Quando a ambulância está com os sinais ligados, ela tem que passar na frente de todo mundo. Se não tiver os sinais, já era, ela não tem mais essa prioridade.",
-        legalBase: "Art. 29 do CTB",
-        commonMistake: "Muita gente acha que pode ignorar a ambulância se estiver em um lugar apertado.",
-        tip: "Sinal ligado = Passagem garantida.",
-        memoryHook: "Sinal ligado = Passagem garantida.",
-        incidence: "alta",
-        trap: true,
-        difficulty: 2
     },
     {
         id: "pr_n2_002",
@@ -5224,22 +4914,6 @@ export const QUESTIONS: Question[] = [
         difficulty: 3
     },
     {
-        id: "detran_30q_011",
-        category: "legislacao",
-        statement: "Em via urbana LOCAL (residencial ou de acesso restrito) sem sinalização de velocidade, qual é a velocidade máxima permitida?",
-        options: ["30 km/h.", "40 km/h.", "60 km/h.", "80 km/h."],
-        correctIndex: 0,
-        explanation: "A velocidade máxima padrão para via local não sinalizada é 30 km/h.",
-        detailedExplanation: "O Art. 61, § 1º, I do CTB estabelece para vias urbanas não sinalizadas: Trânsito Rápido = 80 km/h; Arterial = 60 km/h; Coletora = 40 km/h; Local = 30 km/h.",
-        legalBase: "Art. 61, § 1º, I, 'd' do CTB",
-        commonMistake: "Confundir a velocidade da via local (30 km/h) com a da via coletora (40 km/h).",
-        tip: "Vias Urbanas: Rápida (80) - Arterial (60) - Coletora (40) - Local (30).",
-        memoryHook: "Via Local = Max 30 km/h!",
-        incidence: "alta",
-        trap: true,
-        difficulty: 3
-    },
-    {
         id: "detran_30q_012",
         category: "infracoes",
         statement: "Condutor entra com o carro na faixa da direita exclusiva para ônibus a fim de fugir de congestionamento. Como essa conduta é classificada?",
@@ -5413,7 +5087,8 @@ export const QUESTIONS: Question[] = [
         memoryHook: "Cat B = Até 3.500kg e 8 passageiros!",
         incidence: "alta",
         trap: true,
-        difficulty: 3
+        difficulty: 3,
+        group: "cat-b-limites"
     },
     {
         id: "detran_30q_023",
@@ -5605,36 +5280,6 @@ export const QUESTIONS: Question[] = [
         difficulty: 2
     },
     {
-        id: "detran_q21_n2",
-        category: "primeiros-socorros",
-        statement: "No primeiro atendimento a vítima com ferimentos abertos e sangramento, o socorrista se expõe a fluidos biológicos. Qual a recomendação correta?",
-        options: ["Utilize proteção individual — luva de borracha ou material equivalente — antes do contato com a ferida.", "Aplique torniquete de rotina em todos os membros com ferimento sanguíneo, para conter o sangramento rápido.", "Aplique compressa fria sobre o ferimento para conter o fluxo sanguíneo, sem usar luvas de proteção.", "Imobilize o membro lesionado com talas e atadura até a chegada do resgate, sem luvas de proteção."],
-        correctIndex: 0,
-        explanation: "Sempre coloque luvas antes de tocar em ferimentos sangrando para sua própria proteção.",
-        detailedExplanation: "Em qualquer socorro com sangramento, a primeira regra de proteção do socorrista (biossegurança) é usar luvas de borracha/látex para evitar infecção ou contágio por doenças transmitidas pelo sangue.",
-        legalBase: "Manual de Primeiros Socorros do DENATRAN",
-        commonMistake: "Tentar fazer garrote ou torniquete sem treinamento adequado.",
-        tip: "Sangramento na vítima = Proteja-se com luvas em 1º lugar!",
-        incidence: "alta",
-        trap: false,
-        difficulty: 2
-    },
-    {
-        id: "detran_q25_n2",
-        category: "mecanica",
-        statement: "Em via expressa, a temperatura do motor sobe e o painel acusa falha no arrefecimento. Considerando o risco de dano ao motor, o procedimento correto é:",
-        options: ["Imobilizar o veículo e verificar o nível do óleo lubrificante no cárter do motor, com o motor desligado.", "Completar a água do reservatório com o motor quente, sem desligar o veículo e sem cuidado com a pressão.", "Imobilizar o veículo em local seguro e verificar o nível de líquido de arrefecimento.", "Prosseguir a viagem em velocidade reduzida até o próximo posto de serviço, sem parar no acostamento."],
-        correctIndex: 2,
-        explanation: "Esquentou no painel? Pare o carro em local seguro e verifique o nível da água.",
-        detailedExplanation: "O sistema de arrefecimento controla a temperatura do motor através da circulação de água/aditivo. Se o painel alertar superaquecimento, o correto é encostar o carro e verificar o reservatório de água.",
-        legalBase: "Manual do Condutor / Mecânica Básica",
-        commonMistake: "Checar o óleo do motor quando o alerta é de temperatura/arrefecimento.",
-        tip: "Alerta de arrefecimento no painel = Pare e olhe o nível da água!",
-        incidence: "media",
-        trap: false,
-        difficulty: 2
-    },
-    {
         id: "detran_q26_n2",
         category: "legislacao",
         statement: "No cumprimento da sinalização semafórica para pedestres prevista no Manual Brasileiro do CONTRAN, o procedimento regulamentar a ser adotado diante do sinal identificado na cartela pelo código SS-08 é:",
@@ -5708,21 +5353,6 @@ export const QUESTIONS: Question[] = [
         incidence: "media",
         trap: false,
         difficulty: 1
-    },
-    {
-        id: "detran_q28_n2",
-        category: "infracoes",
-        statement: "Em trecho com muitos pedestres, não reduzir a velocidade de forma compatível com a segurança é infração de natureza:",
-        options: ["Infração de natureza gravíssima, com multa multiplicada por 3 e suspensão do direito de dirigir por doze meses.", "Infração de natureza leve, com advertência por escrito, sem pontuação no prontuário do condutor autuado.", "Infração de natureza gravíssima, com multa simples e 7 pontos na CNH.", "Infração de natureza grave, com multa e 5 pontos na CNH, sem qualquer medida administrativa de remoção."],
-        correctIndex: 2,
-        explanation: "Diminua a velocidade na presença de pedestres; não fazer isso gera infração gravíssima, com multa simples (art. 220, XIV do CTB).",
-        detailedExplanation: "O Art. 220, XIV do CTB estabelece que não reduzir a velocidade onde haja intensa movimentação de pedestres constitui infração gravíssima, punida com multa simples.",
-        legalBase: "Art. 220, XIV do CTB",
-        commonMistake: "Marcar \"grave\" por achar que pedestres só aumentam a multa; o art. 220, XIV prevê gravíssima.",
-        tip: "Locais de pedestres exige velocidade reduzida = Infração Grave!",
-        incidence: "alta",
-        trap: true,
-        difficulty: 2
     },
     {
         id: "detran_q29_n2",
@@ -6039,16 +5669,6 @@ export const QUESTIONS: Question[] = [
         options: ["Manter farol baixo ligado e ampliar a distância de seguimento à frente, sem reduzir a velocidade.", "Reduzir a velocidade sem freadas bruscas para evitar colisão traseira, mantendo o farol baixo ligado.", "Não acionar o pisca-alerta em movimento, usando-o somente parado, e manter a velocidade da via.", "Manter farol baixo, ampliar a distância e reduzir sem freadas bruscas, sem pisca-alerta em movimento."],
         correctIndex: 3,
         explanation: "Correta D: conduta completa na cerração. Base: direção defensiva e Art. 40 do CTB.",
-        incidence: "alta",
-        difficulty: 2
-    },
-    {
-        id: "td_02",
-        category: "legislacao",
-        statement: "Dois veículos chegam juntos a um cruzamento sem placa, semáforo ou agente. Qual regra de preferência do CTB deve ser aplicada?",
-        options: ["Preferência de quem se aproxima pela direita do condutor na via comum.", "Em cruzamento com rodovia, preferência de quem circula pela rodovia.", "Na rotatória, preferência de quem já circula pelo anel interno.", "Valem as três regras: direita na via comum, rodovia preferencial e anel da rotatória."],
-        correctIndex: 0,
-        explanation: "No cruzamento comum sem sinalização vale a preferência de quem vem pela direita (Art. 29). Rodovia e rotatória têm regras próprias, que não se aplicam a esse caso.",
         incidence: "alta",
         difficulty: 2
     },
@@ -8206,23 +7826,6 @@ export const QUESTIONS: Question[] = [
         incidence: "alta",
         trap: false,
         difficulty: 1,
-        origin: "ia"
-    },
-    {
-        id: "fix_documentos_porte_07",
-        category: "legislacao",
-        statement: "São documentos de porte obrigatório para condutor e veículo:",
-        options: ["CNH, IPVA e DPVAT.","CNH e CRLV.","CNH e CRV, em original.","DPVAT e CNH nas categorias “D” ou “E”."],
-        correctIndex: 1,
-        explanation: "Correta B: porte obrigatório é CNH (ou PPD) do condutor e CRLV do veículo, conforme arts. 133 e 159 do CTB.",
-        detailedExplanation: "IPVA e DPVAT (SPVAT) são obrigações pagas, não documentos de porte; CLA é o certificado de registro, e a categoria exigida varia com o veículo. O agente pode dispensar o porte físico se consultar o sistema.",
-        legalBase: "Arts. 133 e 159 do CTB",
-        commonMistake: "Apresentar comprovante de IPVA ou seguro no lugar do CRLV.",
-        tip: "Porte = CNH + CRLV.",
-        incidence: "alta",
-        trap: true,
-        difficulty: 1,
-        group: "docs-porte-obrigatorio",
         origin: "ia"
     },
     {
@@ -12352,19 +11955,6 @@ export const QUESTIONS: Question[] = [
         origin: "ia"
     },
     {
-        id: "ia_normas_025",
-        category: "legislacao",
-        statement: "A operação de carga e descarga é considerada estacionamento e deve ser realizada com o veículo posicionado:",
-        options: ["Sobre o passeio, junto ao lote lindeiro, de modo a não obstruir a passagem dos pedestres na calçada.", "Perpendicular à guia da calçada, aproveitando o espaço da pista junto ao meio-fio para a operação.", "Em segunda fila, junto ao eixo da pista, com o pisca-alerta ligado durante toda a operação de carga.", "No sentido do fluxo, paralelo ao bordo e junto à guia."],
-        correctIndex: 3,
-        explanation: "Correta letra D: perpendicular é regra de duas rodas, não de carga e descarga.",
-        commonMistake: "perpendicular é regra de duas rodas, não de carga e descarga.",
-        incidence: "alta",
-        trap: true,
-        difficulty: 2,
-        origin: "ia"
-    },
-    {
         id: "ia_normas_026",
         category: "legislacao",
         statement: "O ciclista pode circular montado sobre o passeio quando:",
@@ -12963,19 +12553,6 @@ export const QUESTIONS: Question[] = [
         origin: "ia"
     },
     {
-        id: "ia_normas_072",
-        category: "legislacao",
-        statement: "Em via de três faixas no mesmo sentido, um automóvel avança à frente de outro que circula em faixa ao lado, sem mudar de faixa. A manobra é:",
-        options: ["Ultrapassagem.", "Passagem.", "Conversão.", "Retorno."],
-        correctIndex: 1,
-        explanation: "Correta letra B: sem mudança de faixa não há ultrapassagem.",
-        commonMistake: "sem mudança de faixa não há ultrapassagem.",
-        incidence: "alta",
-        trap: true,
-        difficulty: 2,
-        origin: "ia"
-    },
-    {
         id: "ia_normas_073",
         category: "legislacao",
         statement: "Em via de duas faixas no mesmo sentido, o veículo da frente indica a intenção de converter à esquerda. A ultrapassagem pelo condutor que o segue:",
@@ -13080,19 +12657,6 @@ export const QUESTIONS: Question[] = [
         origin: "ia"
     },
     {
-        id: "ia_normas_081",
-        category: "legislacao",
-        statement: "Na carga e descarga, o veículo deve estar posicionado:",
-        options: ["Perpendicular à guia da calçada, ocupando o espaço da pista de rolamento junto ao meio-fio.", "No sentido do fluxo, paralelo ao bordo da pista e junto à guia.", "Oblíquo ao bordo da pista, aproveitando o espaço junto à guia da calçada para agilizar a operação.", "Paralelo ao canteiro central, deixando a faixa da direita livre para os demais veículos."],
-        correctIndex: 1,
-        explanation: "Correta letra B: não confundir com a regra das duas rodas.",
-        commonMistake: "não confundir com a regra das duas rodas.",
-        incidence: "alta",
-        trap: true,
-        difficulty: 2,
-        origin: "ia"
-    },
-    {
         id: "ia_normas_082",
         category: "legislacao",
         statement: "Assinale a alternativa INCORRETA sobre parada e estacionamento:",
@@ -13126,19 +12690,6 @@ export const QUESTIONS: Question[] = [
         correctIndex: 2,
         explanation: "Correta letra C: o pisca-alerta é para a emergência com o veículo imobilizado.",
         commonMistake: "o pisca-alerta é para a emergência com o veículo imobilizado.",
-        incidence: "alta",
-        trap: true,
-        difficulty: 2,
-        origin: "ia"
-    },
-    {
-        id: "ia_normas_085",
-        category: "legislacao",
-        statement: "A buzina só deve ser utilizada:",
-        options: ["Como advertência ou, nas vias rurais, para ultrapassar outro veículo.", "Como advertência ou, em qualquer via, para ultrapassar outro veículo, desde que em toque breve.", "Para chamar passageiros, em vias urbanas e rurais, quando não houver ponto de embarque sinalizado.", "Como advertência ou, nas vias urbanas, para ultrapassar outro veículo em qualquer situação de fluxo."],
-        correctIndex: 0,
-        explanation: "Correta letra A: a ultrapassagem com buzina é exceção das vias rurais.",
-        commonMistake: "a ultrapassagem com buzina é exceção das vias rurais.",
         incidence: "alta",
         trap: true,
         difficulty: 2,
@@ -13457,19 +13008,6 @@ export const QUESTIONS: Question[] = [
         origin: "ia"
     },
     {
-        id: "ia_normas_110",
-        category: "legislacao",
-        statement: "Em via com várias faixas, em que a da direita é exclusiva para ônibus, o ciclomotor deve circular pela faixa:",
-        options: ["Da esquerda.", "Adjacente à da direita.", "Da direita.", "Adjacente à da esquerda."],
-        correctIndex: 1,
-        explanation: "Correta letra B: adjacente à da direita; não a da esquerda, nem a exclusiva.",
-        commonMistake: "adjacente à da direita; não a da esquerda, nem a exclusiva.",
-        incidence: "alta",
-        trap: true,
-        difficulty: 2,
-        origin: "ia"
-    },
-    {
         id: "ia_normas_111",
         category: "legislacao",
         statement: "Assinale a alternativa INCORRETA sobre motocicletas e ciclomotores:",
@@ -13691,19 +13229,6 @@ export const QUESTIONS: Question[] = [
         origin: "ia"
     },
     {
-        id: "ia_normas_128",
-        category: "legislacao",
-        statement: "Nas rodovias de pista dupla, a velocidade máxima para automóveis, camionetas e motocicletas é de:",
-        options: ["90 km/h.", "100 km/h.", "120 km/h.", "110 km/h."],
-        correctIndex: 3,
-        explanation: "Correta letra D: pista dupla = 110; pista simples = 100.",
-        commonMistake: "pista dupla = 110; pista simples = 100.",
-        incidence: "altissima",
-        trap: true,
-        difficulty: 2,
-        origin: "ia"
-    },
-    {
         id: "ia_normas_129",
         category: "legislacao",
         statement: "Nas rodovias de pista simples, a velocidade máxima para automóveis, camionetas e motocicletas é de:",
@@ -13756,32 +13281,6 @@ export const QUESTIONS: Question[] = [
         origin: "ia"
     },
     {
-        id: "ia_normas_133",
-        category: "legislacao",
-        statement: "A velocidade máxima nas vias coletoras é de:",
-        options: ["40 km/h.", "30 km/h.", "60 km/h.", "50 km/h."],
-        correctIndex: 0,
-        explanation: "Correta letra A: coletora (coleta e distribui) = 40.",
-        commonMistake: "coletora (coleta e distribui) = 40.",
-        incidence: "altissima",
-        trap: true,
-        difficulty: 2,
-        origin: "ia"
-    },
-    {
-        id: "ia_normas_134",
-        category: "legislacao",
-        statement: "A velocidade máxima nas vias locais (áreas restritas, locais, residenciais) é de:",
-        options: ["20 km/h.", "40 km/h.", "30 km/h.", "50 km/h."],
-        correctIndex: 2,
-        explanation: "Correta letra C: local = 30; coletora = 40.",
-        commonMistake: "local = 30; coletora = 40.",
-        incidence: "altissima",
-        trap: true,
-        difficulty: 2,
-        origin: "ia"
-    },
-    {
         id: "ia_normas_135",
         category: "legislacao",
         statement: "O excesso de velocidade de até 20% acima do permitido constitui infração:",
@@ -13792,7 +13291,8 @@ export const QUESTIONS: Question[] = [
         incidence: "altissima",
         trap: true,
         difficulty: 3,
-        origin: "ia"
+        origin: "ia",
+        group: "excesso-velocidade"
     },
     {
         id: "ia_normas_136",
@@ -13805,7 +13305,8 @@ export const QUESTIONS: Question[] = [
         incidence: "altissima",
         trap: true,
         difficulty: 3,
-        origin: "ia"
+        origin: "ia",
+        group: "excesso-velocidade"
     },
     {
         id: "ia_normas_137",
@@ -13818,7 +13319,8 @@ export const QUESTIONS: Question[] = [
         incidence: "altissima",
         trap: true,
         difficulty: 3,
-        origin: "ia"
+        origin: "ia",
+        group: "excesso-velocidade"
     },
     {
         id: "ia_normas_138",
@@ -13831,7 +13333,8 @@ export const QUESTIONS: Question[] = [
         incidence: "altissima",
         trap: true,
         difficulty: 3,
-        origin: "ia"
+        origin: "ia",
+        group: "excesso-velocidade"
     },
     {
         id: "ia_normas_139",
@@ -13844,7 +13347,8 @@ export const QUESTIONS: Question[] = [
         incidence: "altissima",
         trap: true,
         difficulty: 3,
-        origin: "ia"
+        origin: "ia",
+        group: "excesso-velocidade"
     },
     {
         id: "ia_normas_140",
@@ -13857,7 +13361,8 @@ export const QUESTIONS: Question[] = [
         incidence: "altissima",
         trap: true,
         difficulty: 3,
-        origin: "ia"
+        origin: "ia",
+        group: "excesso-velocidade"
     },
     {
         id: "ia_normas_141",
@@ -13870,20 +13375,8 @@ export const QUESTIONS: Question[] = [
         incidence: "altissima",
         trap: true,
         difficulty: 3,
-        origin: "ia"
-    },
-    {
-        id: "ia_normas_142",
-        category: "legislacao",
-        statement: "Em rodovia de pista dupla de 110 km/h, um automóvel trafega a 170 km/h. A infração é:",
-        options: ["Grave.", "Gravíssima.", "Média.", "Leve."],
-        correctIndex: 1,
-        explanation: "Correta letra B: 170 está mais de 50% acima de 110 (limite de 165).",
-        commonMistake: "170 está mais de 50% acima de 110 (limite de 165).",
-        incidence: "altissima",
-        trap: true,
-        difficulty: 3,
-        origin: "ia"
+        origin: "ia",
+        group: "excesso-velocidade"
     },
     {
         id: "ia_normas_143",
@@ -13935,46 +13428,8 @@ export const QUESTIONS: Question[] = [
         incidence: "altissima",
         trap: true,
         difficulty: 3,
-        origin: "ia"
-    },
-    {
-        id: "ia_normas_147",
-        category: "legislacao",
-        statement: "O condutor flagrado a mais de 50% acima do limite da via sofrerá, entre outras, a seguinte consequência:",
-        options: ["Suspensão do direito de dirigir.", "Advertência por escrito.", "Retenção do veículo para regularização.", "Transbordo do excesso de carga."],
-        correctIndex: 0,
-        explanation: "Correta letra A: retenção e transbordo são medidas de outros casos.",
-        commonMistake: "retenção e transbordo são medidas de outros casos.",
-        incidence: "altissima",
-        trap: true,
-        difficulty: 3,
-        origin: "ia"
-    },
-    {
-        id: "ia_normas_148",
-        category: "legislacao",
-        statement: "Em via arterial de 60 km/h, um condutor trafega a 90 km/h, exatamente 50% acima. A infração é:",
-        options: ["Média.", "Gravíssima.", "Grave.", "Leve."],
-        correctIndex: 2,
-        explanation: "Correta letra C: exatamente 50% ainda não é \"acima de 50%\".",
-        commonMistake: "exatamente 50% ainda não é \"acima de 50%\".",
-        incidence: "altissima",
-        trap: true,
-        difficulty: 3,
-        origin: "ia"
-    },
-    {
-        id: "ia_normas_149",
-        category: "legislacao",
-        statement: "Em via local de 30 km/h, um condutor trafega a 45 km/h, exatamente 50% acima. A infração é:",
-        options: ["Grave.", "Gravíssima.", "Média.", "Leve."],
-        correctIndex: 0,
-        explanation: "Correta letra A: o limite de 50% é inclusivo para a faixa grave.",
-        commonMistake: "o limite de 50% é inclusivo para a faixa grave.",
-        incidence: "altissima",
-        trap: true,
-        difficulty: 3,
-        origin: "ia"
+        origin: "ia",
+        group: "excesso-velocidade"
     },
     {
         id: "ia_normas_150",
@@ -13988,22 +13443,6 @@ export const QUESTIONS: Question[] = [
         trap: true,
         difficulty: 3,
         origin: "ia"
-    },
-    {
-        id: "q_new_12",
-        category: "legislacao",
-        statement: "Quando uma via comportar duas ou mais faixas de trânsito e a da direita for destinada ao uso exclusivo de outro tipo de veículo, os ciclomotores deverão circular pela faixa:",
-        options: ["Da direita.", "Da esquerda.", "Adjacente à da esquerda.", "Adjacente à da direita."],
-        correctIndex: 3,
-        explanation: "Correta letra D: se a faixa da direita é de uso exclusivo de outro veículo, o ciclomotor usa a faixa ao lado dela.",
-        detailedExplanation: "Regra do art. 57: o ciclomotor anda pela direita, mas nunca numa faixa que seja exclusiva de outro tipo de veículo — nesse caso ele ocupa a faixa imediatamente ao lado da da direita.",
-        legalBase: "Art. 57, parágrafo único do CTB",
-        commonMistake: "Escolher \"da direita\" só porque a regra geral manda circular pela direita.",
-        tip: "Direita ocupada por outro veículo? Vai pra faixa ao lado.",
-        memoryHook: "Ciclomotor: direita, mas pula uma faixa se ela não é dele.",
-        incidence: "alta",
-        trap: true,
-        difficulty: 2
     },
     {
         id: "q_new_13",
