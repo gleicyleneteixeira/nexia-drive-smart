@@ -5,6 +5,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchLibraryItems, checkIsAdmin, SUPER_ADMIN_EMAIL, CRONOGRAMA_BOOK_KEY, fetchCronogramaBookId, type LibraryItem, type LibraryItemType } from "@/lib/library";
 import { QUESTIONS, CATEGORY_LABELS, INCIDENCE_META, getQuestionBank, setQuestionOverrides, shuffleOptions, type Question, type Category } from "@/data/questions";
 import { Placa, type PlacaId } from "@/components/Placa";
+import { OptionImage } from "@/components/OptionImage";
 
 const PLACA_IDS: PlacaId[] = ["R-1", "R-2", "R-6a", "R-6b", "R-19", "R-25a", "R-25d", "A-1a", "A-2b", "A-13a", "A-32b", "A-33a", "I-Hospital", "I-Posto"];
 import { 
@@ -1406,7 +1407,10 @@ function SimuladoPreviewModal({ q: original, onClose }: { q: Question; onClose: 
                 }`}>
                   {state === "correct" ? <Check className="h-4 w-4" /> : state === "wrong" ? <X className="h-4 w-4" /> : LETTERS[i]}
                 </div>
-                <span className="text-[13px] md:text-base pt-0.5">{opt}</span>
+                <span className="text-[13px] md:text-base pt-0.5 flex items-center gap-2.5">
+                  {q.option_images?.[i] && <OptionImage src={q.option_images[i]!} />}
+                  {opt}
+                </span>
               </button>
             );
           })}

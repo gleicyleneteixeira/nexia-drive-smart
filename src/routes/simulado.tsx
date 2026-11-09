@@ -32,6 +32,7 @@ import {
   ListChecks,
 } from "lucide-react";
 import { Placa } from "@/components/Placa";
+import { OptionImage } from "@/components/OptionImage";
 import { triggerRatingPrompt } from "@/components/RatingPrompt";
 import { toast } from "sonner";
 import { registrarSimuladoConcluido, registrarSimuladoIniciado } from "@/lib/simulados-concluidos";
@@ -745,7 +746,10 @@ function SimuladoPage() {
                         LETTERS[i]
                       )}
                     </div>
-                    <span className="text-[13px] md:text-base pt-0.5 md:pt-1">{opt}</span>
+                    <span className="text-[13px] md:text-base pt-0.5 md:pt-1 flex items-center gap-2.5">
+                      {q.option_images?.[i] && <OptionImage src={q.option_images[i]!} />}
+                      {opt}
+                    </span>
                   </button>
                 );
               })}

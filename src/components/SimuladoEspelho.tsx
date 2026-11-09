@@ -10,6 +10,7 @@ import {
   type Category,
 } from "@/data/questions";
 import { Placa } from "@/components/Placa";
+import { OptionImage } from "@/components/OptionImage";
 import {
   ArrowLeft,
   ArrowRight,
@@ -253,7 +254,10 @@ export function SimuladoEspelho({ onExit }: { onExit: () => void }) {
                           String.fromCharCode(65 + i)
                         )}
                       </div>
-                      <span className="text-sm md:text-base pt-1">{opt}</span>
+                      <span className="text-sm md:text-base pt-1 flex items-center gap-2.5">
+                        {q.option_images?.[i] && <OptionImage src={q.option_images[i]!} />}
+                        {opt}
+                      </span>
                     </button>
                   );
                 })}

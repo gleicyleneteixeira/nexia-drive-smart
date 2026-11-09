@@ -10,6 +10,7 @@ import {
 } from "@/data/questions";
 import { Eye, EyeOff, RotateCcw, Zap } from "lucide-react";
 import { Placa } from "@/components/Placa";
+import { OptionImage } from "@/components/OptionImage";
 
 export const Route = createFileRoute("/turbo")({
   component: TurboPage,
@@ -173,7 +174,10 @@ function TurboPage() {
                     }`}
                   >
                     <span className="font-bold mr-2">{LETTERS[idx] ?? idx + 1}</span>
-                    {opt}
+                    <span className="inline-flex items-center gap-2.5 align-middle">
+                      {q.option_images?.[idx] && <OptionImage src={q.option_images[idx]!} />}
+                      {opt}
+                    </span>
                   </button>
                 );
               })}

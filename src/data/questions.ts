@@ -21,6 +21,7 @@ export interface Question {
     group?: string; // chave do tema: variações da MESMA pergunta em níveis diferentes compartilham o group; o simulador nunca sorteia duas do mesmo group juntas
     placa?: PlacaId; // placa visual oficial para questões de identificação
     image_url?: string; // URL da imagem da placa (para renderização via img tag)
+    option_images?: (string | null)[]; // imagem por alternativa (mesma ordem de `options`): permite questões com várias placas
     origin?: "ia" | "real"; // origem do conteúdo (admin exibe/filtra; detran_* equivale a prova real)
 }
 export const CATEGORY_LABELS: Record<Category, string> = {
@@ -13782,6 +13783,11 @@ export function shuffleOptions(q: Question): Question {
     }
     const newOptions = order.map((i) => q.options[i]);
     const newIds = order.map((i) => ids[i]);
+    // A imagem de cada alternativa anda junto com o texto dela: sem isso,
+    // embaralhar as letras trocaria a placa mostrada em cada opção.
+    const newOptionImages = q.option_images
+        ? order.map((i) => q.option_images![i] ?? null)
+        : undefined;
     const newCorrect = newIds.indexOf(correctId);
     // Validação automática antes de finalizar: o gabarito deve apontar para
     // o conteúdo correto original, em qualquer posição que ele tenha caído.
@@ -13811,6 +13817,7 @@ export function shuffleOptions(q: Question): Question {
     return {
         ...q,
         options: newOptions,
+        option_images: newOptionImages,
         correctIndex: newCorrect,
         explanation: remap(q.explanation) ?? q.explanation,
         detailedExplanation: remap(q.detailedExplanation),
