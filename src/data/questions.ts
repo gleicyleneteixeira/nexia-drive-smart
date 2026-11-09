@@ -2822,7 +2822,7 @@ export const QUESTIONS: Question[] = [
         id: "qp63",
         category: "legislacao",
         statement: "Condutor trafega por via coletora urbana sem placa de velocidade. Qual o limite máximo padrão do CTB nessa via?",
-        options: ["30 km/h, padrão das vias locais de acesso restrito às edificações.", "40 km/h, padrão das vias coletoras sem sinalização regulamentadora.", "60 km/h, padrão das vias arteriais de ligação entre regiões.", "80 km/h, padrão das vias urbanas de trânsito rápido."],
+        options: ["30 km/h.", "40 km/h.", "60 km/h.", "80 km/h."],
         correctIndex: 1,
         explanation: "Correta B: via coletora sem placa tem limite de 40 km/h. Art. 61 do CTB.",
         detailedExplanation: "As vias coletoras são feitas pra juntar e soltar o trânsito que vem das vias principais e ajudam a movimentar os carros nos bairros. Se não tem placa, a velocidade máxima é 40 km/h, que é o limite pra esse tipo de via. Não confunda com a via local, que é 30 km/h, ou a arterial, que é 60 km/h.",
