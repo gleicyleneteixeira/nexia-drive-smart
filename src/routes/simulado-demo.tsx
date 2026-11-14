@@ -262,6 +262,13 @@ function SimuladoDemoPage() {
     setHydrated(true);
   }, [isTrial, trialCount]);
 
+  // Alerta de retomada: avisa e sai sozinho — não precisa ficar na tela
+  useEffect(() => {
+    if (!resumed) return;
+    const t = setTimeout(() => setResumed(false), 5000);
+    return () => clearTimeout(t);
+  }, [resumed]);
+
   // Persiste a cada mudança relevante
   useEffect(() => {
     if (!hydrated || !questions.length) return;

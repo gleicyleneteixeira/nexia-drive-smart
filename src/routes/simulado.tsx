@@ -333,6 +333,13 @@ function SimuladoPage() {
     setHydrated(true);
   }, []);
 
+  // Alerta de retomada: avisa e sai sozinho — não precisa ficar na tela
+  useEffect(() => {
+    if (!resumed) return;
+    const t = setTimeout(() => setResumed(false), 5000);
+    return () => clearTimeout(t);
+  }, [resumed]);
+
   // Cronômetro: conta enquanto a prova está ativa, pausa no resultado
   useEffect(() => {
     if (!hydrated || !questions.length || showResult) return;
