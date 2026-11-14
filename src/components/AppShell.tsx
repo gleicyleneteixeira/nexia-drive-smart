@@ -35,6 +35,7 @@ import {
   simuladosItem,
   contaSection,
   type NavItem,
+  type GlassSheetGroup,
 } from "@/components/glass";
 
 type NavItemLegacy = {
@@ -349,6 +350,8 @@ export function AppShell() {
     if (pathname === "/simulado") return "simulado";
     if (pathname === "/psicotecnico") return activeModule === "psicotecnico" ? "simulado" : null; // "Treino" no psicotécnico
     if (pathname === "/conquistas") return "conquistas";
+    // Painel admin (mobile): a entrada é a folha "Mais"
+    if (pathname === "/admin") return "mais";
     // demais rotas de treino caem no "Mais"
     const flat = sections.flatMap((s) => s.items);
     const hit = flat.find((i) => i.action.kind === "link" && i.action.to === pathname);
@@ -386,12 +389,21 @@ export function AppShell() {
     if (sectionId === "treinar") runAction(simuladosItem(activeModule));
   };
 
-  const sheetItems = useMemo(() => {
-    if (sheetOpen === "estudar") return sections.find((s) => s.id === "estudar")?.items ?? [];
+  const sheetGroups = useMemo<GlassSheetGroup[]>(() => {
+    if (sheetOpen === "estudar") {
+      return [{ items: sections.find((s) => s.id === "estudar")?.items ?? [] }];
+    }
     if (sheetOpen === "mais") {
       const treinar = sections.find((s) => s.id === "treinar")?.items ?? [];
+      // Seção "Admin" só existe nas seções quando a conta é administradora —
+      // é ela que dá acesso ao painel no celular (não há sidebar no mobile).
+      const admin = sections.find((s) => s.id === "admin")?.items ?? [];
       const conta = contaSection(supportLink).items.filter((i) => i.id !== "tema");
-      return [...treinar, ...conta];
+      return [
+        { label: "Treinar", items: treinar },
+        ...(admin.length ? [{ label: "Admin", items: admin }] : []),
+        { label: "Conta", items: conta },
+      ];
     }
     return [];
   }, [sheetOpen, supportLink, sections]);
@@ -638,7 +650,7 @@ export function AppShell() {
       <GlassSheet
         open={!!sheetOpen && showChrome}
         title={sheetOpen === "mais" ? "Mais opções" : "Estudar"}
-        items={sheetItems}
+        groups={sheetGroups}
         onClose={() => setSheetOpen(null)}
         onNavigate={(item) => {
           // Escolher a categoria DENTRO da folha "Estudar" já cai no material

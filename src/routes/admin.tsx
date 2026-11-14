@@ -1,13 +1,14 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useRouterState, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchLibraryItems, checkIsAdmin, SUPER_ADMIN_EMAIL, CRONOGRAMA_BOOK_KEY, fetchCronogramaBookId, type LibraryItem, type LibraryItemType } from "@/lib/library";
 import { QUESTIONS, CATEGORY_LABELS, INCIDENCE_META, getQuestionBank, setQuestionOverrides, shuffleOptions, type Question, type Category } from "@/data/questions";
 import { Placa, type PlacaId } from "@/components/Placa";
+import { cn } from "@/lib/utils";
 import { OptionImage } from "@/components/OptionImage";
 
-const PLACA_IDS: PlacaId[] = ["R-1", "R-2", "R-6a", "R-6b", "R-19", "R-25a", "R-25d", "A-1a", "A-2b", "A-13a", "A-32b", "A-33a", "I-Hospital", "I-Posto"];
+const PLACA_IDS: PlacaId[] = ["R-1", "R-2", "R-6a", "R-6b", "R-19", "R-25a", "R-25d", "A-1a", "A-2b", "A-13a", "A-32b", "A-33a", "I-Hospital", "I-Posto", "SAU-01"];
 import { 
   fetchVideoTutorials, 
   addVideoTutorial, 
@@ -131,6 +132,7 @@ function AdminPage() {
 
 function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut: () => void }) {
   const qc = useQueryClient();
+  const navigate = useNavigate();
   const { data: items = [], refetch } = useQuery({
     queryKey: ["library", "all"],
     queryFn: () => fetchLibraryItems(true),
@@ -155,6 +157,22 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
   const [tab, setTab] = useState(getInitialTab);
   const [categoryFilter, setCategoryFilter] = useState<"all" | "teorico" | "psicotecnico" | "direcao" | "tutorial">("all");
   const isSuper = email === SUPER_ADMIN_EMAIL;
+
+  // A seção ativa vive na URL (?tab=...). Sincroniza aqui: quem navega de
+  // fora (folha "Mais" no mobile, sidebar no desktop, link salvo) precisa
+  // trocar de seção mesmo com a página já montada — sem isto o painel fica
+  // preso na primeira seção.
+  const locationSearch = useRouterState({ select: (s) => s.location.searchStr });
+  useEffect(() => {
+    const t = new URLSearchParams(locationSearch).get("tab");
+    if (t && t !== tab) setTab(t);
+  }, [locationSearch, tab]);
+
+  /** Troca de seção: atualiza a tela E o endereço (?tab=). */
+  const goTab = (id: string) => {
+    setTab(id);
+    navigate({ to: "/admin", search: { tab: id } });
+  };
 
   // Filter items by selected category
   const filteredItems = categoryFilter === "all"
@@ -228,10 +246,44 @@ function AdminDashboard({ email, onSignOut }: { email: string | null; onSignOut:
           Voltar
         </Link>
       </div>
+
+      {/* Seções do painel — no mobile NÃO existe a sidebar lateral (ela é
+          desktop-only), então as seções viram chips roláveis aqui. No desktop
+          a sidebar continua mandando; por isso `lg:hidden`. */}
+      <nav
+        aria-label="Seções do painel"
+        className="lg:hidden sticky top-14 z-20 px-4 py-2 bg-background/80 backdrop-blur-xl border-b border-white/10"
+      >
+        <div className="flex gap-2 overflow-x-auto no-scrollbar">
+          {[...menuItems, ...superItems].map((m) => {
+            const Icon = m.icon;
+            const active = tab === m.id;
+            return (
+              <button
+                key={m.id}
+                type="button"
+                onClick={() => goTab(m.id)}
+                aria-current={active ? "page" : undefined}
+                className={cn(
+                  "shrink-0 flex items-center gap-1.5 h-9 px-3 rounded-full",
+                  "text-xs font-semibold border transition-all",
+                  active
+                    ? "bg-primary/15 border-primary/40 text-primary"
+                    : "bg-white/6 border-white/12 text-muted-foreground",
+                )}
+              >
+                <Icon className="h-3.5 w-3.5" />
+                {m.label}
+              </button>
+            );
+          })}
+        </div>
+      </nav>
+
       {/* Main Content */}
       <main className="overflow-y-auto">
         <div className="p-6">
-          {tab === "espelho" && <SimuladoEspelho onExit={() => setTab("sales")} />}
+          {tab === "espelho" && <SimuladoEspelho onExit={() => goTab("sales")} />}
           {tab === "sales" && <SalesPanel />}
           {tab === "users" && <UsersPanel />}
           {tab === "ratings" && <RatingsPanel />}
@@ -958,6 +1010,7 @@ const IMPORT_TEMPLATE = [
     tip: "Dica curta (opcional).",
     memoryHook: "Gancho de memória (opcional).",
     image_url: "https://... (opcional)",
+    option_images: ["https://... (opcional, uma por alternativa — mesma ordem de options)"],
     incidence: "alta",
     difficulty: 2,
     trap: false,
@@ -990,6 +1043,7 @@ function toTemplateShape(q: Question): Record<string, unknown> {
   if (q.tip) out.tip = q.tip;
   if (q.memoryHook) out.memoryHook = q.memoryHook;
   if (q.image_url) out.image_url = q.image_url;
+  if (q.option_images?.some(Boolean)) out.option_images = q.option_images;
   if (q.incidence) out.incidence = q.incidence;
   if (typeof q.difficulty === "number") out.difficulty = q.difficulty;
   if (q.trap) out.trap = true;
@@ -1005,6 +1059,10 @@ function validateImportItem(it: any, idx: number): string | null {
   if (typeof it.explanation !== "string" || !it.explanation.trim()) return `Item ${idx + 1}: explicação vazia.`;
   if (it.incidence !== undefined && !(QINC as readonly string[]).includes(it.incidence)) return `Item ${idx + 1}: incidence inválida (altissima/alta/media/baixa).`;
   if (it.difficulty !== undefined && ![1, 2, 3].includes(it.difficulty)) return `Item ${idx + 1}: difficulty inválida (1, 2 ou 3).`;
+  if (it.option_images !== undefined) {
+    if (!Array.isArray(it.option_images)) return `Item ${idx + 1}: option_images deve ser uma lista.`;
+    if (it.option_images.length > 4) return `Item ${idx + 1}: option_images aceita até 4 itens.`;
+  }
   return null;
 }
 
@@ -1162,6 +1220,7 @@ export function QuestionsPanel() {
           ...(it.tip ? { tip: String(it.tip) } : {}),
           ...(it.memoryHook ? { memoryHook: String(it.memoryHook) } : {}),
           ...(it.image_url ? { image_url: String(it.image_url) } : {}),
+          ...(Array.isArray(it.option_images) ? { option_images: it.option_images.map((u: any) => (u ? String(u) : null)) } : {}),
           incidence: it.incidence ?? "media",
           difficulty: it.difficulty ?? 2,
           ...(it.trap ? { trap: true } : {}),
@@ -1469,6 +1528,17 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
     { kind: "idle", msg: "" }
   );
   const imageInputRef = useRef<HTMLInputElement | null>(null);
+  // Imagem por alternativa (opcional): permite a questão "qual destas placas...".
+  // Guardada na ordem das FONTES (0 = correta, 1..3 = distorções) e reordenada
+  // por `ordem` na hora de salvar, para casar posição a posição com `options`.
+  const [optionImages, setOptionImages] = useState<(string | null)[]>(() => {
+    const arr: (string | null)[] = [null, null, null, null];
+    initial?.option_images?.forEach((url, pos) => {
+      if (url) arr[ordem[pos] ?? pos] = url;
+    });
+    return arr;
+  });
+  const [optImgBusy, setOptImgBusy] = useState<number | null>(null);
   const [placa, setPlaca] = useState<string>(initial?.placa ?? "");
   const [incidence, setIncidence] = useState<string>(initial?.incidence ?? "media");
   const [difficulty, setDifficulty] = useState<number>(initial?.difficulty ?? 2);
@@ -1527,6 +1597,35 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
     setImgStatus({ kind: "idle", msg: "" });
   }
 
+  /**
+   * Envia a imagem de UMA alternativa para `library/images` e guarda a URL
+   * pública na posição correspondente. É o que permite a questão do tipo
+   * "qual destas placas proíbe a entrada..." com 4 imagens diferentes.
+   */
+  async function onOptionImagePick(pos: number, f: File | null) {
+    const rotulo = pos === 0 ? "correta" : `distorção ${pos}`;
+    if (!f) {
+      setOptionImages((arr) => arr.map((v, i) => (i === pos ? null : v)));
+      return;
+    }
+    if (f.type && !f.type.startsWith("image/")) {
+      return toast.error(`"${f.name}" não é uma imagem. Use .png, .jpg ou .webp.`);
+    }
+    if (f.size > 15 * 1024 * 1024) {
+      return toast.error(`"${f.name}" tem ${(f.size / 1024 / 1024).toFixed(1)} MB (máximo 15 MB).`);
+    }
+    setOptImgBusy(pos);
+    try {
+      const url = await uploadToBucket(f, "images");
+      setOptionImages((arr) => arr.map((v, i) => (i === pos ? url : v)));
+      toast.success(`Imagem da alternativa (${rotulo}) enviada.`);
+    } catch (err) {
+      toast.error(`Falha no upload: ${err instanceof Error ? err.message : String(err)}`);
+    } finally {
+      setOptImgBusy(null);
+    }
+  }
+
   async function handleSave() {
     if (!statement.trim()) return toast.error("Preencha o enunciado.");
     if (!correctAnswer.trim()) return toast.error("Preencha a Resposta Correta.");
@@ -1538,12 +1637,18 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
     }
     setSaving(true);
     try {
+      // `optionImages` está na ordem das FONTES; a questão salva usa a ordem
+      // exibida (`options`), então a imagem é buscada pela mesma permutação.
+      const imagensOrdenadas = ordem.map((s) => optionImages[s] ?? null);
+      const temImagemOpcao = imagensOrdenadas.some(Boolean);
       const patch: Record<string, unknown> = {
         category, statement: statement.trim(), options: options.map((o) => o.trim()), correctIndex,
         explanation: explanation.trim(), detailedExplanation: detailed.trim() || undefined,
         legalBase: legalBase.trim() || undefined, commonMistake: commonMistake.trim() || undefined,
         tip: tip.trim() || undefined, memoryHook: memoryHook.trim() || undefined,
-        image_url: imageUrl.trim() || undefined, placa: (placa as PlacaId) || undefined, incidence, difficulty, trap: trap || undefined, origin,
+        image_url: imageUrl.trim() || undefined, placa: (placa as PlacaId) || undefined,
+        option_images: temImagemOpcao ? imagensOrdenadas : null,
+        incidence, difficulty, trap: trap || undefined, origin,
       };
       if (isNew) {
         const id = `custom-${Date.now().toString(36)}`;
@@ -1624,6 +1729,12 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
             rows={2}
             placeholder="Digite a alternativa verdadeira"
           />
+          <OptionImageField
+            pos={0}
+            url={optionImages[0]}
+            busy={optImgBusy === 0}
+            onPick={onOptionImagePick}
+          />
         </div>
 
         {distractors.map((d, i) => (
@@ -1634,6 +1745,12 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
               onChange={(e) => setDistractors((arr) => arr.map((v, j) => (j === i ? e.target.value : v)))}
               rows={2}
               placeholder={`Alternativa falsa plausível ${i + 1}`}
+            />
+            <OptionImageField
+              pos={i + 1}
+              url={optionImages[i + 1]}
+              busy={optImgBusy === i + 1}
+              onPick={onOptionImagePick}
             />
           </div>
         ))}
@@ -2894,6 +3011,53 @@ function FileDrop({
             trocar
           </button>
         </div>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Envio de imagem DENTRO de uma alternativa. O upload dispara assim que o
+ * arquivo é escolhido (a URL pública volta para o estado do formulário), então
+ * a questão pode ter 4 placas diferentes — uma por opção.
+ */
+function OptionImageField({
+  pos,
+  url,
+  busy,
+  onPick,
+}: {
+  pos: number;
+  url: string | null;
+  busy: boolean;
+  onPick: (pos: number, f: File | null) => void;
+}) {
+  return (
+    <div className="flex items-center gap-2 pt-1">
+      <label className="inline-flex items-center gap-1.5 text-[11px] px-2 py-1 rounded-lg border border-border/60 bg-background/50 hover:bg-background cursor-pointer">
+        {busy ? <Loader2 className="h-3 w-3 animate-spin" /> : <span>🖼️</span>}
+        {url ? "Trocar imagem" : "Imagem da alternativa (opcional)"}
+        <input
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => {
+            onPick(pos, e.target.files?.[0] ?? null);
+            e.currentTarget.value = "";
+          }}
+        />
+      </label>
+      {url && (
+        <>
+          <img src={url} alt="" className="h-10 w-10 rounded-md object-contain bg-white/80 border border-border/40" />
+          <button
+            type="button"
+            className="text-[11px] underline text-muted-foreground hover:text-foreground"
+            onClick={() => onPick(pos, null)}
+          >
+            remover
+          </button>
+        </>
       )}
     </div>
   );

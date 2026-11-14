@@ -3,6 +3,12 @@ import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { NavItem } from "./nav";
 
+/** Grupo de itens da folha — com rótulo (ex.: "Admin") ou sem (lista corrida). */
+export interface GlassSheetGroup {
+  label?: string;
+  items: NavItem[];
+}
+
 /**
  * Bottom sheet de VIDRO (mobile) — usado pelos itens "Estudar" e "Mais"
  * da tab bar, para não lotar a barra principal.
@@ -11,12 +17,52 @@ import type { NavItem } from "./nav";
 export interface GlassSheetProps {
   open: boolean;
   title: string;
-  items: NavItem[];
+  /** lista simples (sem rótulos) — alternativa a `groups` */
+  items?: NavItem[];
+  /** lista agrupada com rótulos (ex.: folha "Mais" com Treinar/Admin/Conta) */
+  groups?: GlassSheetGroup[];
   onClose: () => void;
   onNavigate: (item: NavItem) => void;
 }
 
-export function GlassSheet({ open, title, items, onClose, onNavigate }: GlassSheetProps) {
+export function GlassSheet({ open, title, items, groups, onClose, onNavigate }: GlassSheetProps) {
+  // Aceita as duas formas: `items` puro vira um grupo sem rótulo.
+  const renderedGroups: GlassSheetGroup[] = groups ?? (items ? [{ items }] : []);
+
+  const renderItem = (item: NavItem) => {
+    const Icon = item.icon;
+    return (
+      <li key={item.id}>
+        <button
+          onClick={() => {
+            if (item.soon) return;
+            onNavigate(item);
+            onClose();
+          }}
+          disabled={item.soon}
+          aria-disabled={item.soon || undefined}
+          className={cn(
+            "w-full min-h-[48px] flex items-center gap-3 rounded-2xl px-3 text-left",
+            "transition-all duration-200",
+            item.soon
+              ? "text-muted-foreground/50 cursor-not-allowed"
+              : "text-foreground hover:bg-white/10 active:scale-[0.99]",
+          )}
+        >
+          <span className="w-9 h-9 rounded-xl bg-white/8 border border-white/12 flex items-center justify-center shrink-0">
+            <Icon className={cn("h-4 w-4", !item.soon && "text-primary")} />
+          </span>
+          <span className="flex-1 text-sm font-medium truncate">{item.label}</span>
+          {item.soon && (
+            <span className="text-[10px] font-bold uppercase tracking-wider text-warning">
+              Em breve
+            </span>
+          )}
+        </button>
+      </li>
+    );
+  };
+
   return (
     // Wrapper FORA do AnimatePresence: ele re-renderiza com o estado real de
     // `open`, então o pointer-events segue o estado mesmo se a animação de
@@ -58,41 +104,16 @@ export function GlassSheet({ open, title, items, onClose, onNavigate }: GlassShe
                 </button>
               </div>
 
-              <ul className="space-y-1">
-                {items.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <li key={item.id}>
-                      <button
-                        onClick={() => {
-                          if (item.soon) return;
-                          onNavigate(item);
-                          onClose();
-                        }}
-                        disabled={item.soon}
-                        aria-disabled={item.soon || undefined}
-                        className={cn(
-                          "w-full min-h-[48px] flex items-center gap-3 rounded-2xl px-3 text-left",
-                          "transition-all duration-200",
-                          item.soon
-                            ? "text-muted-foreground/50 cursor-not-allowed"
-                            : "text-foreground hover:bg-white/10 active:scale-[0.99]",
-                        )}
-                      >
-                        <span className="w-9 h-9 rounded-xl bg-white/8 border border-white/12 flex items-center justify-center shrink-0">
-                          <Icon className={cn("h-4 w-4", !item.soon && "text-primary")} />
-                        </span>
-                        <span className="flex-1 text-sm font-medium truncate">{item.label}</span>
-                        {item.soon && (
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-warning">
-                            Em breve
-                          </span>
-                        )}
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
+              {/* Rolo próprio: a folha "Mais" pode ficar longa (Treinar +
+                  Admin + Conta) — sem isto os últimos itens saem da tela. */}
+              <div className="max-h-[62vh] overflow-y-auto no-scrollbar -mx-1 px-1">
+                {renderedGroups.map((group, gi) => (
+                  <div key={group.label ?? gi} className={gi > 0 ? "mt-3" : undefined}>
+                    {group.label && <p className="section-label px-3 pb-1">{group.label}</p>}
+                    <ul className="space-y-1">{group.items.map(renderItem)}</ul>
+                  </div>
+                ))}
+              </div>
             </motion.div>
           </div>
         )}
