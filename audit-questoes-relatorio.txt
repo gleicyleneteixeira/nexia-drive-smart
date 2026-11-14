@@ -1,4 +1,4 @@
-Auditoria de 1112 questoes - 2026-11-14T00:38:23.860Z
+Auditoria de 1119 questoes - 2026-11-14T23:06:58.901Z
 
 ===== A. ESTRUTURA / GABARITO AUSENTE: 8 =====
 detran_mg_a42a: campo placa "A-42a" fora do catalogo do componente Placa
@@ -256,7 +256,7 @@ td_24: enunciado praticamente repete a alternativa correta
 
 
 ===== E. DISTRIBUICAO (info): 4 =====
-Distribuicao dos gabaritos no arquivo: A=326 (29.3%)  B=314 (28.2%)  C=250 (22.5%)  D=222 (20.0%)
+Distribuicao dos gabaritos no arquivo: A=328 (29.3%)  B=315 (28.2%)  C=251 (22.4%)  D=225 (20.1%)
 Maior sequencia com a mesma posicao: 40x seguidas (posicao A, terminando em qe59)
 Obs.: o app embaralha alternativas em runtime (shuffleOptions) e remapeia o gabarito por ID interno -> o padrao de posicao NAO chega ao usuario no simulado.
-claims verificados pelo criterio G: 818 de 1112 questoes
+claims verificados pelo criterio G: 825 de 1119 questoes
