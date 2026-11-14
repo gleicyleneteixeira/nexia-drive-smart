@@ -29,7 +29,10 @@ function extractArray(marker) {
   }
   return new Function("return " + src.slice(mStart + marker.length - 1, end + 1))();
 }
-const QUESTIONS = extractArray("export const QUESTIONS: Question[] = [");
+// QUESTIONS pode vir como lista única (legado) ou dividida em A/B (arquivo grande).
+const QUESTIONS = src.includes("const QUESTIONS_A: Question[] = [")
+  ? extractArray("const QUESTIONS_A: Question[] = [").concat(extractArray("const QUESTIONS_B: Question[] = ["))
+  : extractArray("export const QUESTIONS: Question[] = [");
 // REAL_EXAM_IDS: mistura de strings (referencias) + objetos inline de prova real
 const REAL_INLINE = extractArray("export const REAL_EXAM_IDS = [").filter((e) => typeof e === "object" && e && e.id);
 const ALL = QUESTIONS.concat(REAL_INLINE);
@@ -67,7 +70,7 @@ for (const q of ALL) {
 const CODE_RE = /\b([RABCDESP]-\d{1,3}[a-z]{0,2}|I-[A-Za-z]+)\b/g;
 const VISUAL_CTX_RE = /\b(placa|placas|sinal(iza|izaç|izaçao|ização)?\s*(de|vertical)?|simbolo|símbolo|adesivo)\b/i;
 const MISSING_IMG_RE = /\b(figura|imagem|ilustra[çc][ãa]o|foto|gr[aá]fico|tabela|desenho (abaixo|acima|ao lado)|placa apresentada|placa mostrada)\b/i;
-const PLACA_IDS = new Set(["R-1","R-2","R-6a","R-6b","R-19","R-25a","R-25d","A-1a","A-2b","A-13a","A-32b","A-33a","I-Hospital","I-Posto"]);
+const PLACA_IDS = new Set(["R-1","R-2","R-6a","R-6b","R-19","R-25a","R-25d","A-1a","A-2b","A-13a","A-32b","A-33a","I-Hospital","I-Posto","SAU-01"]);
 for (const q of ALL) {
   const hasVisual = !!(q.placa || q.image_url);
   const codes = [...new Set(((q.statement || "") + " " + (q.options || []).join(" ")).match(CODE_RE) || [])];

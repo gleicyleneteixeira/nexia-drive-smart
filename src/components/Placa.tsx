@@ -15,7 +15,8 @@ export type PlacaId =
   | "A-32b"
   | "A-33a"
   | "I-Hospital"
-  | "I-Posto";
+  | "I-Posto"
+  | "SAU-01";
 
 interface Props {
   id: PlacaId;
@@ -281,6 +282,24 @@ function renderPlaca(id: PlacaId) {
             <path d="M125 95 v-10 h-5" fill="none" stroke="#000" strokeWidth="5" strokeLinecap="round" />
             <rect x="62" y="145" width="61" height="8" rx="2" fill="#000" />
           </g>
+        </>
+      );
+
+    case "SAU-01": // Área de estacionamento — "E" branca em fundo azul
+      return (
+        <>
+          <rect x="10" y="10" width="180" height="180" rx="14" fill="#0B6BB5" />
+          <text
+            x="100"
+            y="146"
+            textAnchor="middle"
+            fontSize="130"
+            fontWeight="700"
+            fill="#fff"
+            fontFamily="Arial, Helvetica, sans-serif"
+          >
+            E
+          </text>
         </>
       );
   }

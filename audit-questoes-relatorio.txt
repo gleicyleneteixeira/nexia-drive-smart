@@ -1,73 +1,88 @@
-Auditoria de 1012 questoes - 2026-11-07T19:10:00.833Z
+Auditoria de 1112 questoes - 2026-11-14T00:38:23.860Z
 
-===== A. ESTRUTURA / GABARITO AUSENTE: 9 =====
+===== A. ESTRUTURA / GABARITO AUSENTE: 8 =====
 detran_mg_a42a: campo placa "A-42a" fora do catalogo do componente Placa
 detran_mg_a7: campo placa "A-7" fora do catalogo do componente Placa
 detran_mg_r16: campo placa "R-16" fora do catalogo do componente Placa
 detran_mg_r28: campo placa "R-28" fora do catalogo do componente Placa
 go_prova_17: campo placa "A-14" fora do catalogo do componente Placa
 go_prova_18: campo placa "A-25" fora do catalogo do componente Placa
-go_prova_19: enunciado vazio ou curto demais
 prova_geral_12: campo placa "A-33b" fora do catalogo do componente Placa
 prova_geral_21: campo placa "R-4b" fora do catalogo do componente Placa
 
 ===== B. PLACAS SEM IMAGEM (prioridade): 27 =====
-detran_a24_obras_01: codigos A-24 sem campo placa/image_url | enunciado: a placa de advertencia a 24 indica que o condutor deve estar alerta devido a proximidade de
-detran_a3b_sinuosa_01: codigos A-3b sem campo placa/image_url | enunciado: diante da placa de advertencia a 3b o condutor deve reduzir a velocidade pois
-detran_r11_tracao_animal_01: codigos R-11 sem campo placa/image_url | enunciado: qual deve ser a acao do motorista ao visualizar a placa de regulamentacao r 11
-detran_r36a_01: codigos R-36a sem campo placa/image_url | enunciado: a placa de regulamentacao r 36a indica que
-detran_r9_caminhoes_01: codigos R-9 sem campo placa/image_url | enunciado: diante da placa de regulamentacao r 9 qual deve ser a acao do condutor
-detran_s2_s7_s13_01: codigos S-2, S-7, S-13 sem campo placa/image_url | enunciado: as placas s 2 s 7 e s 13 sao de indicacao de servico elas indicam respectivamente nessa ordem os seguintes ser
-l02_52: codigos R-1, R-2 sem campo placa/image_url | enunciado: sobre a forma e as cores da sinalizacao vertical assinale a alternativa incorreta
-l02_54: codigos R-10 sem campo placa/image_url | enunciado: observe a placa abaixo r 10 o que essa sinalizacao de regulamentacao proibe
-l02_55: codigos R-33, R-1 sem campo placa/image_url | enunciado: ao encontrar a placa r 33 sentido circular na rotatoria o condutor deve
-l02_56: codigos R-4a sem campo placa/image_url | enunciado: observe a placa abaixo r 4a o que essa sinalizacao de regulamentacao proibe
-l02_57: codigos R-8a sem campo placa/image_url | enunciado: observe a placa abaixo r 8a o que essa sinalizacao de regulamentacao proibe
-l02_58: codigos A-33b sem campo placa/image_url | enunciado: observe a placa abaixo a 33b o que essa sinalizacao de advertencia indica
-l02_59: codigos A-28 sem campo placa/image_url | enunciado: observe a placa abaixo a 28 o que essa sinalizacao de advertencia indica
-l02_60: codigos A-15 sem campo placa/image_url | enunciado: observe a placa abaixo a 15 o que essa sinalizacao de advertencia indica
-placa_ind_a14: codigos A-14 sem campo placa/image_url | enunciado: a placa a 14 adverte que voce vai encontrar
-placa_ind_a25: codigos A-25 sem campo placa/image_url | enunciado: observe a placa abaixo a 25 o que essa sinalizacao de advertencia indica
-placa_ind_a29: codigos A-29 sem campo placa/image_url | enunciado: observe a placa abaixo a 29 o que essa sinalizacao de advertencia indica
-placa_ind_a42c: codigos A-42c sem campo placa/image_url | enunciado: observe a placa abaixo a 42c o que essa sinalizacao de advertencia indica
-placa_ind_a44: codigos A-44 sem campo placa/image_url | enunciado: observe a placa abaixo a 44 o que essa sinalizacao de advertencia indica
-placa_ind_r12: codigos R-12 sem campo placa/image_url | enunciado: observe a placa abaixo r 12 o que essa sinalizacao de regulamentacao proibe
-placa_ind_r13: codigos R-13 sem campo placa/image_url | enunciado: observe a placa abaixo r 13 o que essa sinalizacao de regulamentacao proibe
-placa_ind_r37: codigos R-37 sem campo placa/image_url | enunciado: observe a placa abaixo r 37 o que essa sinalizacao de regulamentacao proibe
-placa_ind_r4b: codigos R-4b sem campo placa/image_url | enunciado: observe a placa abaixo r 4b o que essa sinalizacao de regulamentacao proibe
-placa_ind_r5a: codigos R-5a sem campo placa/image_url | enunciado: observe a placa abaixo r 5a o que essa sinalizacao de regulamentacao proibe
-placa_ind_r5b: codigos R-5b sem campo placa/image_url | enunciado: observe a placa abaixo r 5b o que essa sinalizacao de regulamentacao proibe
-placa_ind_r8b: codigos R-8b sem campo placa/image_url | enunciado: observe a placa abaixo r 8b o que essa sinalizacao de regulamentacao proibe
-qd01: codigos A-10 sem campo placa/image_url | enunciado: em rodovia em obras a placa a 10 avisa que a pista vai afunilar adiante como o condutor deve agir ao se aproxi
+detran_a24_obras_01: codigos A-24 sem campo placa/image_url | enunciado: a placa a 24 integra o grupo das advertencias de formato triangular sobre condicoes ou obras adiante na via a 
+detran_a3b_sinuosa_01: codigos A-3b sem campo placa/image_url | enunciado: a placa de advertencia a 3b avisa sobre a geometria da via adiante exigindo reducao preventiva de velocidade d
+detran_r11_tracao_animal_01: codigos R-11 sem campo placa/image_url | enunciado: a placa de regulamentacao r 11 proibe o transito de determinada categoria de veiculo no trecho adiante da via 
+detran_r36a_01: codigos R-36a sem campo placa/image_url | enunciado: em vias onde convivem modos diferentes de deslocamento a sinalizacao define a posicao que cada usuario deve oc
+detran_r9_caminhoes_01: codigos R-9 sem campo placa/image_url | enunciado: a placa de regulamentacao r 9 restringe o transito de certos veiculos no trecho adiante da placa impondo obrig
+detran_s2_s7_s13_01: codigos S-2, S-7, S-13 sem campo placa/image_url | enunciado: as placas de indicacao de servico informam equipamentos disponiveis adiante cada uma com simbolo proprio as pl
+l02_52: codigos R-1, R-2 sem campo placa/image_url | enunciado: cada grupo da sinalizacao vertical tem forma e cores proprias facilitando o reconhecimento a distancia pelo co
+l02_54: codigos R-10 sem campo placa/image_url | enunciado: placas de regulamentacao circular impoem ordens cujo descumprimento caracteriza infracao de transito para o co
+l02_55: codigos R-33, R-1 sem campo placa/image_url | enunciado: a placa r 33 orienta o sentido de circulacao em rotatorias e se soma as regras de preferencia ja vigentes naqu
+l02_56: codigos R-4a sem campo placa/image_url | enunciado: o simbolo dentro do circulo vermelho indica qual manobra e vedada naquele trecho ou na intersecao urbana sinal
+l02_57: codigos R-8a sem campo placa/image_url | enunciado: o circulo de regulamentacao com seta indica qual mudanca de faixa ou de pista e vedada naquele trecho da via s
+l02_58: codigos A-33b sem campo placa/image_url | enunciado: os simbolos de escolares aparecem em placas de advertencia que avisam sobre travessia de criancas nas proximid
+l02_60: codigos A-15 sem campo placa/image_url | enunciado: o codigo a 15 integra o grupo das placas de advertencia que antecipam ao condutor uma situacao de especial ate
+placa_ind_a14: codigos A-14 sem campo placa/image_url | enunciado: em via urbana o condutor avista adiantada no trajeto a placa de advertencia a 14 de formato triangular vertice
+placa_ind_a25: codigos A-25, R-1 sem campo placa/image_url | enunciado: a placa a 25 adverte sobre mudanca na configuracao da via adiante exigindo ajuste imediato do comportamento do
+placa_ind_a29: codigos A-29 sem campo placa/image_url | enunciado: a placa a 29 pertence ao grupo das advertencias de formato triangular e avisa sobre um risco especifico a fren
+placa_ind_a42c: codigos A-42c sem campo placa/image_url | enunciado: o codigo a 42c pertence ao grupo de placas de advertencia sobre a configuracao da pista de rolamento adiante c
+placa_ind_a44: codigos A-44 sem campo placa/image_url | enunciado: o desenho da placa a 44 representa o fenomeno que sera encontrado no trecho servindo de alerta antecipado ao c
+placa_ind_r12: codigos R-12 sem campo placa/image_url | enunciado: os simbolos de veiculos riscados no interior do circulo indicam qual categoria de veiculo nao pode transitar n
+placa_ind_r13: codigos R-13 sem campo placa/image_url | enunciado: as placas de proibicao circular trazem no interior o desenho da restricao aplicada naquele trecho da via sinal
+placa_ind_r37: codigos R-37 sem campo placa/image_url | enunciado: cada placa de proibicao usa um desenho especifico para identificar o que e vedado exigindo leitura atenta do s
+placa_ind_r4b: codigos R-4b sem campo placa/image_url | enunciado: o circulo vermelho com seta curva define a conversao proibida naquele trecho ou intersecao sinalizada vedando 
+placa_ind_r5a: codigos R-5a sem campo placa/image_url | enunciado: o simbolo de retorno riscado indica a manobra de mudanca de sentido vedada naquele trecho da via ou na interse
+placa_ind_r5b: codigos R-5b sem campo placa/image_url | enunciado: as placas de proibicao de retorno usam o simbolo riscado para apontar qual sentido de mudanca e vedado naquele
+placa_ind_r8b: codigos R-8b sem campo placa/image_url | enunciado: o circulo com seta indicando mudanca de faixa sinaliza qual trajetoria de mudanca e vedada naquele trecho da v
+placa_sentido_proibido_alternativas_01: codigos R-1, R-2, R-24a, R-25d sem campo placa/image_url | enunciado: as placas de regulamentacao com o simbolo de mao unica indicam o sentido permitido e a proibicao tem placa pro
+qd01: codigos A-10 sem campo placa/image_url | enunciado: o estreitamento da pista exige reducao de velocidade e revezamento entre os veiculos que ali trafegam em rodov
 
 ===== B2. REFERENCIA VISUAL SEM RECURSO (nao respondivel): 1 =====
-prova_geral_14: enunciado referencia imagem/figura sem recurso visual | observe a figura a qual veiculo pertence a preferencia
+prova_geral_14: enunciado referencia imagem/figura sem recurso visual | a figura da questao mostra um cruzamento sem qualquer sinalizacao de preferencia com dois veiculos chegando ex
 
-===== C. ALTERNATIVA CORRETA MUITO MAIOR: 18 =====
-CRITICO detran_decisao_dd_01: correta 131 chars vs media 43 (x3.05), maior 44 | alt 1: da habilidade tempo e pratica de direcao da previsao das situacoes de risco e do conhecime
-CRITICO detran_mg_objetivo_sinalizacao: correta 90 chars vs media 29 (x3.07), maior 43 | alt 0: condicoes da via restricoes impostas ao transito e obrigacoes e proibicoes no uso da via
-CRITICO ia_normas_043: correta 91 chars vs media 35 (x2.58), maior 45 | alt 2: socorro de incendio salvamento policia fiscalizacao operacao de transito e ambulancias
-CRITICO ia_normas_137: correta 75 chars vs media 24 (x3.13), maior 28 | alt 3: suspensao do direito de dirigir recolhimento da cnh e curso de reciclagem
-CRITICO prova_geral_26: correta 110 chars vs media 41 (x2.66), maior 62 | alt 0: fora das areas urbanas quando for conveniente advertir a um condutor que se tem o proposit
-medio detran_art2_vias_01: correta 129 chars vs media 52 (x2.50), maior 70 | alt 1: ruas avenidas logradouros caminhos passagens rodovias estradas praias abertas a circulacao
-medio detran_art38_conversao_01: correta 196 chars vs media 91 (x2.15), maior 145 | alt 1: ao sair pelo lado direito aproximar se do bordo direito e manobrar no menor espaco ao sair
-medio detran_mg_sangramento_nariz: correta 77 chars vs media 32 (x2.41), maior 35 | alt 0: comprima as narinas e coloque compressas de gelo sobre o nariz nuca e testa
-medio ia_normas_046: correta 77 chars vs media 38 (x2.03), maior 45 | alt 1: na efetiva prestacao do servico com alarme sonoro e iluminacao intermitente
-medio ia_normas_055: correta 79 chars vs media 38 (x2.06), maior 54 | alt 3: a direita parte do bordo direito a esquerda do eixo sem atingir a contramao
-medio ia_normas_070: correta 51 chars vs media 25 (x2.07), maior 26 | alt 2: como advertencia ou para ultrapassar outro veiculo
-medio ia_normas_076: correta 77 chars vs media 31 (x2.48), maior 37 | alt 1: por tempo superior ao necessario para embarque ou desembarque de passageiros
-medio ia_normas_080: correta 81 chars vs media 39 (x2.09), maior 47 | alt 3: a sinalizacao com luzes de emergencia e outros modos regulamentados pelo contran
-medio ia_normas_081: correta 63 chars vs media 29 (x2.17), maior 32 | alt 1: no sentido do fluxo paralelo ao bordo da pista e junto a guia
-medio ia_normas_089: correta 74 chars vs media 36 (x2.06), maior 58 | alt 3: em vias nao iluminadas exceto ao cruzar com outro veiculo ou ao segui lo
-medio ia_normas_090: correta 28 chars vs media 14 (x2.00), maior 18 | alt 0: luz de rodagem diurna drl
-medio ia_normas_096: correta 93 chars vs media 41 (x2.27), maior 43 | alt 3: em emergencia com o veiculo imobilizado ou quando a sinalizacao de regulamentacao determin
-medio ia_normas_114: correta 71 chars vs media 30 (x2.39), maior 33 | alt 3: autorizado e sinalizado pelo orgao competente ou nos casos permitidos
+===== C. ALTERNATIVA CORRETA MUITO MAIOR: 28 =====
+CRITICO l06_06: correta 85 chars vs media 29 (x2.90), maior 36 | alt 3: direito de todos e dever prioritario dos componentes do sistema nacional de transito
+CRITICO l06_25: correta 69 chars vs media 22 (x3.18), maior 23 | alt 2: quando houver perigo imediato de incendio ou outros riscos evidentes
+CRITICO l06_26: correta 135 chars vs media 38 (x3.55), maior 45 | alt 0: e o direito a protecao crescimento ser reconhecido e tratado com dignidade sem preconceito
+CRITICO q_new_23: correta 27 chars vs media 7 (x3.68), maior 15 | alt 3: policia rodoviaria federal
+CRITICO q_new_40: correta 86 chars vs media 23 (x3.69), maior 31 | alt 3: parada obrigatoria para todos os veiculos que venham de qualquer direcao na mesma via
+CRITICO q_new_46: correta 83 chars vs media 27 (x3.07), maior 28 | alt 1: curso especializado e curso de treinamento de pratica veicular em situacao de risco
+CRITICO q_new_47: correta 61 chars vs media 7 (x8.71), maior 10 | alt 2: leve com retencao do veiculo ate a apresentacao do documento
+CRITICO q_new_52: correta 88 chars vs media 26 (x3.34), maior 28 | alt 3: deixar livre a faixa da esquerda deslocando se para a direita e parando se necessario
+CRITICO q_new_53: correta 51 chars vs media 6 (x8.05), maior 10 | alt 3: grave com retencao do veiculo ate a regularizacao
+CRITICO q_new_59: correta 60 chars vs media 24 (x2.50), maior 32 | alt 2: ao aproximar se de curvas e de locais com pedestres na pista
+CRITICO q_new_62: correta 66 chars vs media 21 (x3.14), maior 27 | alt 0: responsabilidade solidaria pelas penalidades impostas apos a venda
+CRITICO q_new_64: correta 34 chars vs media 5 (x6.80), maior 6 | alt 2: gravissima com remocao do veiculo
+CRITICO q_new_69: correta 89 chars vs media 27 (x3.30), maior 31 | alt 2: nao reincidente no mesmo tipo de infracao nos ultimos 12 meses em infracao leve ou media
+CRITICO q_new_73: correta 41 chars vs media 7 (x5.59), maior 8 | alt 1: 30 dias sob pena de arquivamento do auto
+CRITICO q_new_78: correta 47 chars vs media 10 (x4.86), maior 10 | alt 3: 3 segundos contados a partir de um ponto fixo
+CRITICO q_new_79: correta 57 chars vs media 21 (x2.71), maior 39 | alt 1: tirar o pe do acelerador e girar o volante para a direita
+CRITICO q_new_83: correta 52 chars vs media 19 (x2.69), maior 20 | alt 0: em caso de risco iminente como incendio ou explosao
+medio l06_03: correta 98 chars vs media 49 (x2.01), maior 69 | alt 3: desempenhar tarefas de sinalizacao fiscalizacao aplicacao de penalidades e educacao de tra
+medio l06_14: correta 55 chars vs media 24 (x2.29), maior 28 | alt 0: seguir com a atencao redobrada e com baixa velocidade
+medio l06_63: correta 85 chars vs media 39 (x2.16), maior 49 | alt 0: certificado de registro e licenciamento de veiculo crlv inclusive em meio digital
+medio q_new_16: correta 16 chars vs media 8 (x2.09), maior 11 | alt 1: canteiro central
+medio q_new_25: correta 47 chars vs media 22 (x2.10), maior 24 | alt 1: haja convenio com o orgao executivo de transito
+medio q_new_33: correta 18 chars vs media 7 (x2.45), maior 8 | alt 2: de transito rapido
+medio q_new_56: correta 56 chars vs media 24 (x2.30), maior 34 | alt 0: nas curvas aclives declives pontes viadutos e tuneis
+medio q_new_57: correta 55 chars vs media 26 (x2.09), maior 34 | alt 1: parar antes da linha ferrea e so transpor com seguranca
+medio q_new_60: correta 59 chars vs media 26 (x2.27), maior 34 | alt 0: a velocidade as condicoes da via e as condicoes climaticas
+medio q_new_81: correta 26 chars vs media 12 (x2.17), maior 19 | alt 0: encosto de cabeca regulado
+medio q_new_84: correta 55 chars vs media 26 (x2.09), maior 30 | alt 3: converter gases poluentes em substancias menos nocivas
 
-===== D. RESPOSTA OBVIA / DISTRATORES FRACOS: 80 =====
+===== D. RESPOSTA OBVIA / DISTRATORES FRACOS: 166 =====
 bnc_teorico_70: alternativas 0 e 1 quase equivalentes
+cid_boa_01: enunciado praticamente repete a alternativa correta
+cid_boa_31: enunciado praticamente repete a alternativa correta
 dd_n1_003: alternativas 0 e 1 quase equivalentes
-detran_decisao_dd_01: correta longa (131) vs distratores muito curtos (44/42/43)
+dd_n2_001: enunciado praticamente repete a alternativa correta
+detran_30q_010: enunciado praticamente repete a alternativa correta
+detran_30q_018: enunciado praticamente repete a alternativa correta
 detran_r11_tracao_animal_01: alternativas 1 e 3 quase equivalentes
+ext_advertencia_01: enunciado praticamente repete a alternativa correta
+fr_01: enunciado praticamente repete a alternativa correta
 ia_normas_003: alternativas 0 e 2 quase equivalentes
 ia_normas_003: alternativas 1 e 3 quase equivalentes
 ia_normas_008: alternativas 0 e 1 quase equivalentes
@@ -77,6 +92,8 @@ ia_normas_018: alternativas 0 e 2 quase equivalentes
 ia_normas_018: alternativas 0 e 3 quase equivalentes
 ia_normas_018: alternativas 2 e 3 quase equivalentes
 ia_normas_040: alternativas 0 e 1 quase equivalentes
+ia_normas_076: enunciado praticamente repete a alternativa correta
+ia_normas_113: enunciado praticamente repete a alternativa correta
 ia_normas_115: alternativas 0 e 1 quase equivalentes
 ia_normas_115: alternativas 2 e 3 quase equivalentes
 ia_normas_143: alternativas 0 e 1 quase equivalentes
@@ -89,9 +106,6 @@ l01_37: alternativas 0 e 3 quase equivalentes
 l01_37: alternativas 1 e 2 quase equivalentes
 l01_37: alternativas 1 e 3 quase equivalentes
 l01_37: alternativas 2 e 3 quase equivalentes
-l01_44: alternativas 0 e 1 quase equivalentes
-l01_44: alternativas 0 e 3 quase equivalentes
-l01_44: alternativas 1 e 3 quase equivalentes
 l02_57: alternativas 0 e 1 quase equivalentes
 l02_72: alternativas 0 e 1 quase equivalentes
 l02_72: alternativas 0 e 2 quase equivalentes
@@ -121,7 +135,37 @@ l04_183: alternativas 0 e 1 quase equivalentes
 l04_183: alternativas 2 e 3 quase equivalentes
 l05_204: alternativas 0 e 3 quase equivalentes
 l05_205: alternativas 1 e 3 quase equivalentes
+l06_04: alternativas 0 e 1 quase equivalentes
+l06_04: alternativas 0 e 2 quase equivalentes
+l06_04: alternativas 1 e 2 quase equivalentes
+l06_20: alternativas 0 e 1 quase equivalentes
+l06_20: alternativas 0 e 2 quase equivalentes
+l06_20: alternativas 0 e 3 quase equivalentes
+l06_20: alternativas 1 e 2 quase equivalentes
+l06_20: alternativas 1 e 3 quase equivalentes
+l06_20: alternativas 2 e 3 quase equivalentes
+l06_24: alternativas 0 e 2 quase equivalentes
+l06_26: correta longa (135) vs distratores muito curtos (35/34/45)
+l06_39: alternativas 0 e 1 quase equivalentes
+l06_39: alternativas 0 e 2 quase equivalentes
+l06_39: alternativas 0 e 3 quase equivalentes
+l06_39: alternativas 1 e 2 quase equivalentes
+l06_39: alternativas 1 e 3 quase equivalentes
+l06_39: alternativas 2 e 3 quase equivalentes
+l06_42: alternativas 0 e 2 quase equivalentes
+l06_42: alternativas 0 e 3 quase equivalentes
+l06_42: alternativas 2 e 3 quase equivalentes
+l06_62: alternativas 0 e 1 quase equivalentes
+l06_62: alternativas 0 e 2 quase equivalentes
+l06_62: alternativas 0 e 3 quase equivalentes
+l06_62: alternativas 1 e 2 quase equivalentes
+l06_62: alternativas 1 e 3 quase equivalentes
+l06_62: alternativas 2 e 3 quase equivalentes
+leg_n1_001: enunciado praticamente repete a alternativa correta
+nova_aquaplanagem_fatores_risco_02: enunciado praticamente repete a alternativa correta
+nova_classificacao_vias_arterial_13: enunciado praticamente repete a alternativa correta
 placa_ind_r8b: alternativas 0 e 1 quase equivalentes
+prova_geral_08: enunciado praticamente repete a alternativa correta
 prova_geral_29: alternativas 0 e 3 quase equivalentes
 q1: alternativas 0 e 3 quase equivalentes
 q29: alternativas 0 e 1 quase equivalentes
@@ -130,6 +174,7 @@ q29: alternativas 0 e 3 quase equivalentes
 q29: alternativas 1 e 2 quase equivalentes
 q29: alternativas 1 e 3 quase equivalentes
 q29: alternativas 2 e 3 quase equivalentes
+q47: enunciado praticamente repete a alternativa correta
 q49: alternativas 1 e 2 quase equivalentes
 q49: alternativas 1 e 3 quase equivalentes
 q49: alternativas 2 e 3 quase equivalentes
@@ -139,130 +184,79 @@ q_new_07: alternativas 0 e 3 quase equivalentes
 q_new_07: alternativas 1 e 2 quase equivalentes
 q_new_07: alternativas 1 e 3 quase equivalentes
 q_new_07: alternativas 2 e 3 quase equivalentes
-qp43: alternativas 1 e 2 quase equivalentes
+q_new_11: enunciado praticamente repete a alternativa correta
+q_new_13: alternativas 0 e 2 quase equivalentes
+q_new_13: alternativas 1 e 3 quase equivalentes
+q_new_37: alternativas 0 e 1 quase equivalentes
+q_new_37: alternativas 0 e 2 quase equivalentes
+q_new_37: alternativas 0 e 3 quase equivalentes
+q_new_37: alternativas 1 e 2 quase equivalentes
+q_new_37: alternativas 1 e 3 quase equivalentes
+q_new_37: alternativas 2 e 3 quase equivalentes
+q_new_55: alternativas 0 e 1 quase equivalentes
+q_new_55: alternativas 0 e 2 quase equivalentes
+q_new_55: alternativas 0 e 3 quase equivalentes
+q_new_55: alternativas 1 e 2 quase equivalentes
+q_new_55: alternativas 1 e 3 quase equivalentes
+q_new_55: alternativas 2 e 3 quase equivalentes
+q_new_63: alternativas 0 e 1 quase equivalentes
+q_new_63: alternativas 0 e 2 quase equivalentes
+q_new_63: alternativas 0 e 3 quase equivalentes
+q_new_63: alternativas 1 e 2 quase equivalentes
+q_new_63: alternativas 1 e 3 quase equivalentes
+q_new_63: alternativas 2 e 3 quase equivalentes
+q_new_70: alternativas 1 e 2 quase equivalentes
+q_new_70: alternativas 1 e 3 quase equivalentes
+q_new_70: alternativas 2 e 3 quase equivalentes
+q_new_72: alternativas 0 e 1 quase equivalentes
+q_new_72: alternativas 0 e 2 quase equivalentes
+q_new_72: alternativas 0 e 3 quase equivalentes
+q_new_72: alternativas 1 e 2 quase equivalentes
+q_new_72: alternativas 1 e 3 quase equivalentes
+q_new_72: alternativas 2 e 3 quase equivalentes
+q_new_73: alternativas 0 e 2 quase equivalentes
+q_new_73: alternativas 0 e 3 quase equivalentes
+q_new_73: alternativas 2 e 3 quase equivalentes
+q_new_78: alternativas 1 e 2 quase equivalentes
+q_new_80: alternativas 0 e 1 quase equivalentes
+q_new_80: alternativas 0 e 2 quase equivalentes
+q_new_80: alternativas 0 e 3 quase equivalentes
+q_new_80: alternativas 1 e 2 quase equivalentes
+q_new_80: alternativas 1 e 3 quase equivalentes
+q_new_80: alternativas 2 e 3 quase equivalentes
+q_new_82: alternativas 0 e 3 quase equivalentes
+q_new_82: alternativas 1 e 2 quase equivalentes
+qe12: enunciado praticamente repete a alternativa correta
+qe39: enunciado praticamente repete a alternativa correta
+qe52: enunciado praticamente repete a alternativa correta
+qe67: enunciado praticamente repete a alternativa correta
+qe85: enunciado praticamente repete a alternativa correta
 qp44: alternativas 0 e 2 quase equivalentes
 qp46: alternativas 0 e 1 quase equivalentes
 qp46: alternativas 0 e 3 quase equivalentes
 qp46: alternativas 1 e 3 quase equivalentes
+rst_13: enunciado praticamente repete a alternativa correta
+td_07: enunciado praticamente repete a alternativa correta
+td_22: enunciado praticamente repete a alternativa correta
+td_24: enunciado praticamente repete a alternativa correta
 
-===== F. DUPLICAS / MUITO SEMELHANTES: 111 =====
-0.60 ia_normas_138 x ia_normas_139: em via arterial de 60 km h um condutor trafega a 80 km h a infracao e <> em via coletora de 40 km h um condutor trafega a 61 km h a infracao e
-0.61 detran_q28_n1 x detran_q28_n2: em trecho urbano com muitos pedestres condutor mantem velocidade incom <> em trecho com muitos pedestres nao reduzir a velocidade de forma compa
-0.61 ia_normas_132 x ia_normas_133: a velocidade maxima nas vias arteriais e de <> a velocidade maxima nas vias coletoras e de
-0.61 q_new_06 x placa_ind_tipo_ind: placa retangular de fundo azul com simbolo branco indica posto de comb <> placa retangular de fundo azul com simbolo branco de servico auxiliar 
-0.61 qe18 x qe19: em via urbana limitada a 40 km h radar registra condutor a 55 km h que <> em rodovia limitada a 110 km h condutor trafega a 170 km h que naturez
-0.61 qp63 x nova_velocidade_vias_locais_alta_01: condutor trafega por via coletora urbana sem placa de velocidade qual  <> condutor trafega por via local em bairro residencial sem placa de velo
-0.61 td_02 x td_29: dois veiculos chegam juntos a um cruzamento sem placa semaforo ou agen <> em cruzamento sem placa sem semaforo e sem agente dois carros e um ped
-0.62 ia_normas_013 x ia_normas_014: os veiculos de grande porte sao responsaveis pela seguranca dos veicul <> os veiculos motorizados sao responsaveis pela seguranca dos
-0.62 ia_normas_018 x ia_normas_115: ao passar por uma bicicleta o condutor deve manter distancia lateral d <> o condutor que ultrapassa uma bicicleta deve manter distancia lateral 
-0.62 ia_normas_098 x ia_normas_117: assinale a alternativa incorreta sobre o uso de luzes <> assinale a alternativa incorreta sobre bicicletas
-0.62 ia_normas_098 x ia_normas_123: assinale a alternativa incorreta sobre o uso de luzes <> assinale a alternativa incorreta sobre pedestres
-0.64 detran_mg_contran x detran_real_orgaos_normativos_snt: o orgao maximo normativo do sistema nacional de transito e <> quais sao orgaos normativos do sistema nacional de transito snt
-0.64 ia_normas_064 x ia_normas_065: antes de ultrapassar o condutor deve verificar se o veiculo da frente <> antes de ultrapassar o condutor deve verificar se a faixa da contramao
-0.64 ia_normas_071 x ia_normas_117: assinale a alternativa incorreta sobre ultrapassagem <> assinale a alternativa incorreta sobre bicicletas
-0.64 ia_normas_071 x ia_normas_123: assinale a alternativa incorreta sobre ultrapassagem <> assinale a alternativa incorreta sobre pedestres
-0.64 ia_normas_098 x ia_normas_102: assinale a alternativa incorreta sobre o uso de luzes <> assinale a alternativa incorreta sobre o transito de animais
-0.67 ia_normas_075 x ia_normas_076: parar e imobilizar o veiculo <> estacionar e imobilizar o veiculo
-0.67 ia_normas_111 x ia_normas_117: assinale a alternativa incorreta sobre motocicletas e ciclomotores <> assinale a alternativa incorreta sobre bicicletas
-0.67 ia_normas_117 x ia_normas_123: assinale a alternativa incorreta sobre bicicletas <> assinale a alternativa incorreta sobre pedestres
-0.67 ia_normas_138 x ia_normas_148: em via arterial de 60 km h um condutor trafega a 80 km h a infracao e <> em via arterial de 60 km h um condutor trafega a 90 km h exatamente 50
-0.67 ia_normas_140 x ia_normas_148: em via local de 30 km h um condutor trafega a 36 km h exatamente 20 ac <> em via arterial de 60 km h um condutor trafega a 90 km h exatamente 50
-0.69 l05_214 x ia_normas_106: os passageiros de motocicletas motonetas e ciclomotores so poderao ser <> os passageiros de motocicletas so podem ser transportados
-0.70 detran_mg_a42a x prova_geral_12: a placa a 42a adverte o condutor da existencia adiante de <> a placa a 33b adverte o condutor do veiculo da existencia adiante de
-0.71 ia_normas_063 x ia_normas_065: antes de ultrapassar o condutor deve verificar se <> antes de ultrapassar o condutor deve verificar se a faixa da contramao
-0.73 ia_normas_063 x ia_normas_064: antes de ultrapassar o condutor deve verificar se <> antes de ultrapassar o condutor deve verificar se o veiculo da frente
-0.73 ia_normas_148 x ia_normas_149: em via arterial de 60 km h um condutor trafega a 90 km h exatamente 50 <> em via local de 30 km h um condutor trafega a 45 km h exatamente 50 ac
-0.75 ia_normas_020 x ia_normas_024: o acostamento nao admite o transito de veiculos para <> o acostamento admite o transito de veiculos para manobras de
-0.77 ia_normas_066 x ia_normas_067: o condutor ao perceber que outro que o segue pretende ultrapassa lo es <> o condutor que perceber que outro que o segue pretende ultrapassa lo e
-0.79 detran_r28_duplo_01 x detran_r36a_01: a placa de regulamentacao r 28 indica que <> a placa de regulamentacao r 36a indica que
-0.81 fix_seguimento_maior_08 x fix_def_seguimento_15: a distancia de seguimento deve <> distancia de seguimento e
-0.81 p2 x detran_r9_caminhoes_01: diante da placa de regulamentacao r 2 qual deve ser a atitude do condu <> diante da placa de regulamentacao r 9 qual deve ser a acao do condutor
-0.83 ia_normas_128 x ia_normas_129: nas rodovias de pista dupla a velocidade maxima para automoveis camion <> nas rodovias de pista simples a velocidade maxima para automoveis cami
-0.84 bnc_cat_b x bnc_cat_d: descreva a categoria b de habilitacao <> descreva a categoria d de habilitacao
-0.84 bnc_cat_b x bnc_cat_e: descreva a categoria b de habilitacao <> descreva a categoria e de habilitacao
-0.84 bnc_cat_d x bnc_cat_e: descreva a categoria d de habilitacao <> descreva a categoria e de habilitacao
-0.84 ia_normas_140 x ia_normas_149: em via local de 30 km h um condutor trafega a 36 km h exatamente 20 ac <> em via local de 30 km h um condutor trafega a 45 km h exatamente 50 ac
-0.86 bnc_cat_b x bnc_cat_c: descreva a categoria b de habilitacao <> descreva a categoria c de habilitacao
-0.86 bnc_cat_c x bnc_cat_d: descreva a categoria c de habilitacao <> descreva a categoria d de habilitacao
-0.86 bnc_cat_c x bnc_cat_e: descreva a categoria c de habilitacao <> descreva a categoria e de habilitacao
-0.86 l02_58 x placa_ind_a42c: observe a placa abaixo a 33b o que essa sinalizacao de advertencia ind <> observe a placa abaixo a 42c o que essa sinalizacao de advertencia ind
-0.88 l02_58 x l02_59: observe a placa abaixo a 33b o que essa sinalizacao de advertencia ind <> observe a placa abaixo a 28 o que essa sinalizacao de advertencia indi
-0.88 l02_58 x l02_60: observe a placa abaixo a 33b o que essa sinalizacao de advertencia ind <> observe a placa abaixo a 15 o que essa sinalizacao de advertencia indi
-0.88 l02_58 x placa_ind_a25: observe a placa abaixo a 33b o que essa sinalizacao de advertencia ind <> observe a placa abaixo a 25 o que essa sinalizacao de advertencia indi
-0.88 l02_58 x placa_ind_a29: observe a placa abaixo a 33b o que essa sinalizacao de advertencia ind <> observe a placa abaixo a 29 o que essa sinalizacao de advertencia indi
-0.88 l02_58 x placa_ind_a44: observe a placa abaixo a 33b o que essa sinalizacao de advertencia ind <> observe a placa abaixo a 44 o que essa sinalizacao de advertencia indi
-0.88 l02_59 x placa_ind_a42c: observe a placa abaixo a 28 o que essa sinalizacao de advertencia indi <> observe a placa abaixo a 42c o que essa sinalizacao de advertencia ind
-0.88 l02_60 x placa_ind_a42c: observe a placa abaixo a 15 o que essa sinalizacao de advertencia indi <> observe a placa abaixo a 42c o que essa sinalizacao de advertencia ind
-0.88 placa_ind_a25 x placa_ind_a42c: observe a placa abaixo a 25 o que essa sinalizacao de advertencia indi <> observe a placa abaixo a 42c o que essa sinalizacao de advertencia ind
-0.88 placa_ind_a29 x placa_ind_a42c: observe a placa abaixo a 29 o que essa sinalizacao de advertencia indi <> observe a placa abaixo a 42c o que essa sinalizacao de advertencia ind
-0.89 bnc_cat_a x bnc_cat_b: descreva a categoria a de habilitacao <> descreva a categoria b de habilitacao
-0.89 bnc_cat_a x bnc_cat_e: descreva a categoria a de habilitacao <> descreva a categoria e de habilitacao
-0.89 l02_54 x l02_56: observe a placa abaixo r 10 o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 4a o que essa sinalizacao de regulamentacao p
-0.89 l02_54 x l02_57: observe a placa abaixo r 10 o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 8a o que essa sinalizacao de regulamentacao p
-0.89 l02_54 x placa_ind_r37: observe a placa abaixo r 10 o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 37 o que essa sinalizacao de regulamentacao p
-0.89 l02_54 x placa_ind_r4b: observe a placa abaixo r 10 o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 4b o que essa sinalizacao de regulamentacao p
-0.89 l02_54 x placa_ind_r5a: observe a placa abaixo r 10 o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 5a o que essa sinalizacao de regulamentacao p
-0.89 l02_54 x placa_ind_r5b: observe a placa abaixo r 10 o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 5b o que essa sinalizacao de regulamentacao p
-0.89 l02_54 x placa_ind_r8b: observe a placa abaixo r 10 o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 8b o que essa sinalizacao de regulamentacao p
-0.89 l02_56 x placa_ind_r12: observe a placa abaixo r 4a o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 12 o que essa sinalizacao de regulamentacao p
-0.89 l02_56 x placa_ind_r13: observe a placa abaixo r 4a o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 13 o que essa sinalizacao de regulamentacao p
-0.89 l02_56 x placa_ind_r37: observe a placa abaixo r 4a o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 37 o que essa sinalizacao de regulamentacao p
-0.89 l02_56 x placa_ind_r5b: observe a placa abaixo r 4a o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 5b o que essa sinalizacao de regulamentacao p
-0.89 l02_56 x placa_ind_r8b: observe a placa abaixo r 4a o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 8b o que essa sinalizacao de regulamentacao p
-0.89 l02_57 x placa_ind_r12: observe a placa abaixo r 8a o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 12 o que essa sinalizacao de regulamentacao p
-0.89 l02_57 x placa_ind_r13: observe a placa abaixo r 8a o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 13 o que essa sinalizacao de regulamentacao p
-0.89 l02_57 x placa_ind_r37: observe a placa abaixo r 8a o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 37 o que essa sinalizacao de regulamentacao p
-0.89 l02_57 x placa_ind_r4b: observe a placa abaixo r 8a o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 4b o que essa sinalizacao de regulamentacao p
-0.89 l02_57 x placa_ind_r5b: observe a placa abaixo r 8a o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 5b o que essa sinalizacao de regulamentacao p
-0.89 l02_59 x l02_60: observe a placa abaixo a 28 o que essa sinalizacao de advertencia indi <> observe a placa abaixo a 15 o que essa sinalizacao de advertencia indi
-0.89 l02_59 x placa_ind_a44: observe a placa abaixo a 28 o que essa sinalizacao de advertencia indi <> observe a placa abaixo a 44 o que essa sinalizacao de advertencia indi
-0.89 l02_60 x placa_ind_a29: observe a placa abaixo a 15 o que essa sinalizacao de advertencia indi <> observe a placa abaixo a 29 o que essa sinalizacao de advertencia indi
-0.89 l02_60 x placa_ind_a44: observe a placa abaixo a 15 o que essa sinalizacao de advertencia indi <> observe a placa abaixo a 44 o que essa sinalizacao de advertencia indi
-0.89 placa_ind_a29 x placa_ind_a44: observe a placa abaixo a 29 o que essa sinalizacao de advertencia indi <> observe a placa abaixo a 44 o que essa sinalizacao de advertencia indi
-0.89 placa_ind_a44 x placa_ind_a25: observe a placa abaixo a 44 o que essa sinalizacao de advertencia indi <> observe a placa abaixo a 25 o que essa sinalizacao de advertencia indi
-0.89 placa_ind_r12 x placa_ind_r37: observe a placa abaixo r 12 o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 37 o que essa sinalizacao de regulamentacao p
-0.89 placa_ind_r12 x placa_ind_r4b: observe a placa abaixo r 12 o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 4b o que essa sinalizacao de regulamentacao p
-0.89 placa_ind_r12 x placa_ind_r5a: observe a placa abaixo r 12 o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 5a o que essa sinalizacao de regulamentacao p
-0.89 placa_ind_r12 x placa_ind_r5b: observe a placa abaixo r 12 o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 5b o que essa sinalizacao de regulamentacao p
-0.89 placa_ind_r12 x placa_ind_r8b: observe a placa abaixo r 12 o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 8b o que essa sinalizacao de regulamentacao p
-0.89 placa_ind_r13 x placa_ind_r37: observe a placa abaixo r 13 o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 37 o que essa sinalizacao de regulamentacao p
-0.89 placa_ind_r13 x placa_ind_r4b: observe a placa abaixo r 13 o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 4b o que essa sinalizacao de regulamentacao p
-0.89 placa_ind_r13 x placa_ind_r5a: observe a placa abaixo r 13 o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 5a o que essa sinalizacao de regulamentacao p
-0.89 placa_ind_r13 x placa_ind_r5b: observe a placa abaixo r 13 o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 5b o que essa sinalizacao de regulamentacao p
-0.89 placa_ind_r13 x placa_ind_r8b: observe a placa abaixo r 13 o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 8b o que essa sinalizacao de regulamentacao p
-0.89 placa_ind_r37 x placa_ind_r4b: observe a placa abaixo r 37 o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 4b o que essa sinalizacao de regulamentacao p
-0.89 placa_ind_r37 x placa_ind_r5a: observe a placa abaixo r 37 o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 5a o que essa sinalizacao de regulamentacao p
-0.89 placa_ind_r37 x placa_ind_r5b: observe a placa abaixo r 37 o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 5b o que essa sinalizacao de regulamentacao p
-0.89 placa_ind_r37 x placa_ind_r8b: observe a placa abaixo r 37 o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 8b o que essa sinalizacao de regulamentacao p
-0.89 placa_ind_r4b x placa_ind_r5a: observe a placa abaixo r 4b o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 5a o que essa sinalizacao de regulamentacao p
-0.89 placa_ind_r5a x placa_ind_r8b: observe a placa abaixo r 5a o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 8b o que essa sinalizacao de regulamentacao p
-0.90 placa_ind_a44 x placa_ind_a42c: observe a placa abaixo a 44 o que essa sinalizacao de advertencia indi <> observe a placa abaixo a 42c o que essa sinalizacao de advertencia ind
-0.91 bnc_cat_a x bnc_cat_c: descreva a categoria a de habilitacao <> descreva a categoria c de habilitacao
-0.91 l02_59 x placa_ind_a25: observe a placa abaixo a 28 o que essa sinalizacao de advertencia indi <> observe a placa abaixo a 25 o que essa sinalizacao de advertencia indi
-0.91 l02_59 x placa_ind_a29: observe a placa abaixo a 28 o que essa sinalizacao de advertencia indi <> observe a placa abaixo a 29 o que essa sinalizacao de advertencia indi
-0.91 l02_60 x placa_ind_a25: observe a placa abaixo a 15 o que essa sinalizacao de advertencia indi <> observe a placa abaixo a 25 o que essa sinalizacao de advertencia indi
-0.91 placa_ind_a29 x placa_ind_a25: observe a placa abaixo a 29 o que essa sinalizacao de advertencia indi <> observe a placa abaixo a 25 o que essa sinalizacao de advertencia indi
-0.92 l02_54 x placa_ind_r12: observe a placa abaixo r 10 o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 12 o que essa sinalizacao de regulamentacao p
-0.92 l02_54 x placa_ind_r13: observe a placa abaixo r 10 o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 13 o que essa sinalizacao de regulamentacao p
-0.92 l02_56 x l02_57: observe a placa abaixo r 4a o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 8a o que essa sinalizacao de regulamentacao p
-0.92 l02_56 x placa_ind_r4b: observe a placa abaixo r 4a o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 4b o que essa sinalizacao de regulamentacao p
-0.92 l02_56 x placa_ind_r5a: observe a placa abaixo r 4a o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 5a o que essa sinalizacao de regulamentacao p
-0.92 l02_57 x placa_ind_r5a: observe a placa abaixo r 8a o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 5a o que essa sinalizacao de regulamentacao p
-0.92 l02_57 x placa_ind_r8b: observe a placa abaixo r 8a o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 8b o que essa sinalizacao de regulamentacao p
-0.92 placa_ind_r12 x placa_ind_r13: observe a placa abaixo r 12 o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 13 o que essa sinalizacao de regulamentacao p
-0.92 placa_ind_r4b x placa_ind_r5b: observe a placa abaixo r 4b o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 5b o que essa sinalizacao de regulamentacao p
-0.92 placa_ind_r4b x placa_ind_r8b: observe a placa abaixo r 4b o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 8b o que essa sinalizacao de regulamentacao p
-0.92 placa_ind_r5a x placa_ind_r5b: observe a placa abaixo r 5a o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 5b o que essa sinalizacao de regulamentacao p
-0.92 placa_ind_r5b x placa_ind_r8b: observe a placa abaixo r 5b o que essa sinalizacao de regulamentacao p <> observe a placa abaixo r 8b o que essa sinalizacao de regulamentacao p
-0.94 bnc_cat_a x bnc_cat_d: descreva a categoria a de habilitacao <> descreva a categoria d de habilitacao
-0.94 ia_normas_135 x ia_normas_136: o excesso de velocidade de ate 20 acima do permitido constitui infraca <> o excesso de velocidade acima de 20 ate 50 acima do permitido constitu
-ENUNCIADO IDENTICO: detran_mg_amperimetro + detran_mg_parar_linha_ferrea
+===== F. DUPLICAS / MUITO SEMELHANTES: 10 =====
+0.61 l02_56 x placa_ind_r5a: o simbolo dentro do circulo vermelho indica qual manobra e vedada naqu <> o simbolo de retorno riscado indica a manobra de mudanca de sentido ve
+0.61 qe05 x bnc_docs_porte: o condutor e o veiculo devem portar documentos habeis que comprovem ha <> o condutor e o veiculo devem portar documentos habeis que comprovem ha
+0.61 rst_02 x ia_normas_061: a ultrapassagem pela direita e excecao admitida apenas quando o veicul <> a ultrapassagem pela direita e excecao a regra geral admitida apenas q
+0.64 l02_56 x placa_ind_r4b: o simbolo dentro do circulo vermelho indica qual manobra e vedada naqu <> o circulo vermelho com seta curva define a conversao proibida naquele 
+0.65 ia_normas_066 x ia_normas_067: o condutor ultrapassado deve facilitar a manobra sem acelerar nem muda <> o condutor ultrapassado deve manter trajetoria previsivel sem acelerar
+0.65 l05_214 x ia_normas_106: o transporte de passageiro em motocicleta e restrito a assentos propri <> o transporte de passageiros em motocicleta e restrito ao uso de assent
+0.66 placa_ind_r5a x placa_ind_r5b: o simbolo de retorno riscado indica a manobra de mudanca de sentido ve <> as placas de proibicao de retorno usam o simbolo riscado para apontar 
+0.67 dd_n2_002 x fr_02: na aquaplanagem os pneus perdem o contato com o solo e qualquer comand <> na aquaplanagem os pneus perdem o contato com o pavimento e qualquer c
+0.77 l02_57 x placa_ind_r8b: o circulo de regulamentacao com seta indica qual mudanca de faixa ou d <> o circulo com seta indicando mudanca de faixa sinaliza qual trajetoria
+0.77 p7 x placa_ind_a14: em via urbana o condutor avista uma placa de advertencia triangular de <> em via urbana o condutor avista adiantada no trajeto a placa de advert
 
 ===== G. GABARITO X EXPLICACAO (claim explicito): 0 =====
 
 
 ===== E. DISTRIBUICAO (info): 4 =====
-Distribuicao dos gabaritos no arquivo: A=314 (31.0%)  B=292 (28.9%)  C=211 (20.8%)  D=195 (19.3%)
-Maior sequencia com a mesma posicao: 41x seguidas (posicao A, terminando em qe59)
+Distribuicao dos gabaritos no arquivo: A=326 (29.3%)  B=314 (28.2%)  C=250 (22.5%)  D=222 (20.0%)
+Maior sequencia com a mesma posicao: 40x seguidas (posicao A, terminando em qe59)
 Obs.: o app embaralha alternativas em runtime (shuffleOptions) e remapeia o gabarito por ID interno -> o padrao de posicao NAO chega ao usuario no simulado.
-claims verificados pelo criterio G: 705 de 1012 questoes
+claims verificados pelo criterio G: 818 de 1112 questoes
