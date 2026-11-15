@@ -1379,7 +1379,7 @@ const QUESTIONS_A: Question[] = [
         incidence: "alta",
         difficulty: 1,
         placa: "A-1a",
-        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-A-1a.png"
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-curva-acentuada-a-esquerda-A-1a.png"
     },
     {
         id: "p7",
@@ -1393,7 +1393,7 @@ const QUESTIONS_A: Question[] = [
         incidence: "alta",
         difficulty: 2,
         placa: "A-32b",
-        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-passagem-sinalizada-de-pedestres-A32b.webp"
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-passagem-sinalizada-de-pedestres-A-32b.png"
     },
     {
         id: "p8",
@@ -1406,7 +1406,7 @@ const QUESTIONS_A: Question[] = [
         incidence: "media",
         difficulty: 1,
         placa: "A-33a",
-        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-escolar-A-33A.webp"
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-escolar-A-33a.png"
     },
     {
         id: "p9",
@@ -2596,7 +2596,7 @@ const QUESTIONS_A: Question[] = [
         incidence: "altissima",
         trap: true,
         difficulty: 2,
-        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-escolar-A-33A.webp"
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-escolar-A-33a.png"
     },
     {
         id: "qp60",
@@ -2702,7 +2702,7 @@ const QUESTIONS_A: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 3,
-        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-transito-de-pedestre-A32a.webp"
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-passagem-de-pedestres-A-32a.png"
     },
     {
         id: "placa_regulamentacao_advertencia_alta",
@@ -2718,7 +2718,7 @@ const QUESTIONS_A: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 3,
-        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-escolar-A-33A.webp"
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-escolar-A-33a.png"
     },
     {
         id: "placa_r20_proibido_buzina_alta",
@@ -2734,7 +2734,7 @@ const QUESTIONS_A: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 3,
-        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-R-20.jpg"
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-acionar-buzina-ou-sinal-sonoro-R-20.png"
     },
     {
         // Questão com UMA PLACA POR ALTERNATIVA (option_images). As URLs são
@@ -6280,7 +6280,7 @@ const QUESTIONS_A: Question[] = [
         commonMistake: "Muita gente confunde a A-6 (cruzamento de vias) com a A-8 (passagem de linha férrea em nível), que é a placa do trem.",
         incidence: "alta",
         difficulty: 2,
-        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-Cruzamento-de%20vias-A-6.png"
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-cruzamento-de-vias-A-6.png"
     },
     {
         id: "plc_a6_02",
@@ -6295,7 +6295,7 @@ const QUESTIONS_A: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 3,
-        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-Cruzamento-de%20vias-A-6.png"
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-cruzamento-de-vias-A-6.png"
     },
     {
         id: "plc_a6_03",
@@ -6310,7 +6310,7 @@ const QUESTIONS_A: Question[] = [
         incidence: "altissima",
         trap: true,
         difficulty: 2,
-        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-Cruzamento-de%20vias-A-6.png"
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-cruzamento-de-vias-A-6.png"
     },
     {
         id: "qe_alagamento_01",
@@ -10727,7 +10727,7 @@ const QUESTIONS_B: Question[] = [
         trap: true,
         difficulty: 2,
         placa: "A-33a",
-        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-escolar-A-33A.webp",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-escolar-A-33a.png",
         origin: "ia"
     },
     {

@@ -1560,6 +1560,11 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
   const [imageUrl, setImageUrl] = useState(initial?.image_url ?? "");
   // Upload direto da imagem para o bucket (library/images) — sem depender de host externo
   const [imageFile, setImageFile] = useState<File | null>(null);
+  // Nome que o arquivo terá no bucket. Padrão: slug do nome do arquivo enviado
+  // (nome descritivo preservado). Editável — aceita também só o código da placa
+  // (ex.: "A-6" -> placa-{nome-do-arquivo}-A-6).
+  const [imageNome, setImageNome] = useState("");
+  const [imageNomeUsado, setImageNomeUsado] = useState("");
   const [imgStatus, setImgStatus] = useState<{ kind: "idle" | "busy" | "ok" | "err"; msg: string }>(
     { kind: "idle", msg: "" }
   );
@@ -1611,13 +1616,18 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
       return;
     }
     setImageFile(f);
-    setImgStatus({ kind: "busy", msg: `Enviando ${f.name} (${(f.size / 1024 / 1024).toFixed(2)} MB)…` });
+    const nome = nomeBaseParaBucket(f, "");
+    setImageNome(nome);
+    setImageNomeUsado(nome);
+    setImgStatus({ kind: "busy", msg: `Enviando ${f.name} (${(f.size / 1024 / 1024).toFixed(2)} MB) como ${nome}…` });
     try {
-      const url = await uploadToBucket(f, "images");
+      const url = await uploadToBucket(f, "images", { fileName: nome });
       setImageUrl(url);
-      setImgStatus({ kind: "ok", msg: "✅ Imagem enviada para o bucket — a URL vai salva junto com a questão." });
+      setImgStatus({ kind: "ok", msg: `✅ Imagem enviada como "${nome}" — a URL vai salva junto com a questão.` });
     } catch (err) {
       setImageFile(null);
+      setImageNome("");
+      setImageNomeUsado("");
       if (imageInputRef.current) imageInputRef.current.value = "";
       setImgStatus({
         kind: "err",
@@ -1629,8 +1639,54 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
   function limparImagem() {
     setImageUrl("");
     setImageFile(null);
+    setImageNome("");
+    setImageNomeUsado("");
     if (imageInputRef.current) imageInputRef.current.value = "";
     setImgStatus({ kind: "idle", msg: "" });
+  }
+
+  /**
+   * O admin digitou um nome/código novo em `imageNome`: reenvia o MESMO arquivo
+   * com o nome escolhido, remove o arquivo anterior (o que acabou de subir nesta
+   * sessão) para não duplicar no bucket e troca a URL da questão.
+   */
+  async function reenviarImagemComNome() {
+    if (!imageFile) return;
+    const nome = nomeBaseParaBucket(imageFile, imageNome);
+    if (nome === imageNomeUsado) return;
+    setImgStatus({ kind: "busy", msg: `Reenviando a imagem como ${nome}…` });
+    try {
+      const url = await uploadToBucket(imageFile, "images", { fileName: nome });
+      const caminhoNovo = caminhoDaUrlPublica(url);
+      const caminhoAntigo = imageNomeUsado ? caminhoDaUrlPublica(imageUrl) : null;
+      if (caminhoAntigo && caminhoNovo && caminhoAntigo !== caminhoNovo) {
+        // só remove o arquivo enviado nesta sessão; falha de permissão não
+        // pode quebrar o formulário (a URL nova já está valendo)
+        try {
+          const { error: rmError } = await supabase.storage.from("library").remove([caminhoAntigo]);
+          if (!rmError && caminhoAntigo.startsWith("images/")) {
+            // arquivo apagado: tira também do catálogo src/data/placas-catalog-named.json
+            try {
+              const { removerImagemDoCatalogo } = await import("@/lib/placas-catalog.server");
+              await removerImagemDoCatalogo({ data: { file: caminhoAntigo.replace(/^images\//, "") } });
+            } catch {
+              /* sem repositório local (produção): nada a sincronizar */
+            }
+          }
+        } catch {
+          /* segue o baile */
+        }
+      }
+      setImageUrl(url);
+      setImageNome(nome);
+      setImageNomeUsado(nome);
+      setImgStatus({ kind: "ok", msg: `✅ Imagem salva como "${nome}" no bucket.` });
+    } catch (err) {
+      setImgStatus({
+        kind: "err",
+        msg: `❌ Falha ao reenviar: ${err instanceof Error ? err.message : String(err)}`,
+      });
+    }
   }
 
   /**
@@ -1654,7 +1710,8 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
     try {
       const url = await uploadToBucket(f, "images");
       setOptionImages((arr) => arr.map((v, i) => (i === pos ? url : v)));
-      toast.success(`Imagem da alternativa (${rotulo}) enviada.`);
+      const nomeSalvo = decodeURIComponent(url.split("/").pop() ?? "");
+      toast.success(`Imagem da alternativa (${rotulo}) enviada como "${nomeSalvo}".`);
     } catch (err) {
       toast.error(`Falha no upload: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
@@ -1811,12 +1868,44 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
           <Label className="text-xs">Imagem da questão (opcional)</Label>
           <FileDrop
             label="Enviar imagem do computador"
-            hint="O arquivo sobe sozinho para o bucket library/images e a URL pública é preenchida aqui — não precisa hospedar em lugar nenhum."
+            hint="O arquivo sobe sozinho para o bucket library/images com um nome descritivo (slug do nome do arquivo) e a URL pública é preenchida aqui — não precisa hospedar em lugar nenhum."
             accept="image/*"
             file={imageFile}
             inputRef={imageInputRef}
             onPick={onImagePick}
           />
+
+          {/* Nome do arquivo no bucket: preserva o nome descritivo por padrão e
+              permite definir o nome/código da placa na hora do upload. */}
+          {imageFile && (
+            <div className="flex items-end gap-2">
+              <div className="flex-1 space-y-1 min-w-0">
+                <Label className="text-xs">Nome do arquivo no bucket</Label>
+                <Input
+                  value={imageNome}
+                  onChange={(e) => setImageNome(e.target.value)}
+                  placeholder="placa-cruzamento-de-vias-A-6"
+                />
+                <p className="text-[11px] text-muted-foreground">
+                  Padrão: nome do arquivo enviado (sem acento/caixa). Também aceita só o
+                  código da placa (ex.: A-6), que vira {"placa-{nome}-A-6"}. Toda imagem
+                  entra no catálogo <code>src/data/placas-catalog-named.json</code>.
+                </p>
+              </div>
+              {imageNome.trim() !== imageNomeUsado && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="shrink-0"
+                  disabled={imgStatus.kind === "busy"}
+                  onClick={reenviarImagemComNome}
+                >
+                  Aplicar e reenviar
+                </Button>
+              )}
+            </div>
+          )}
 
           {imgStatus.msg && (
             <p
@@ -3198,18 +3287,97 @@ async function uploadDirect(file: File, path: string): Promise<{ ok: boolean; de
 }
 
 /**
- * Envia um arquivo para `library/<folder>/...` e devolve a URL pública.
+ * Base do arquivo (sem extensão) escolhida no formulário:
+ * - vazia       -> preserva o nome descritivo do arquivo enviado (slug);
+ * - "A-6"       -> só o código da placa: vira `placa-{slug-do-arquivo}-A-6`;
+ * - texto livre -> slug do texto digitado pelo admin.
+ * O padrão casa com o catálogo src/data/placas-catalog-named.json
+ * (`placa-{nome-da-placa}-{código}.png`), o que permite achar a imagem
+ * depois tanto pelo nome quanto pelo código.
+ */
+const CODIGO_PLACA_RE = /^[A-Za-z]{1,4}-\d{1,2}[a-zA-Z]?$/;
+
+function slugDeNome(nome: string): string {
+  return nome
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80)
+    .replace(/-+$/, "");
+}
+
+function nomeBaseParaBucket(file: File, digitado?: string): string {
+  const proprio = slugDeNome(file.name.replace(/\.[^.]+$/, "")) || "arquivo";
+  const valor = (digitado ?? "").trim();
+  if (!valor) return proprio;
+  if (CODIGO_PLACA_RE.test(valor)) {
+    const base = proprio.replace(/^placa-/, "");
+    if (base.toLowerCase().endsWith(`-${valor.toLowerCase()}`)) return `placa-${base}`;
+    return `placa-${base}-${valor}`;
+  }
+  return slugDeNome(valor) || proprio;
+}
+
+/** Caminho `library/...` de uma URL pública deste bucket (null se não for daqui). */
+function caminhoDaUrlPublica(url: string): string | null {
+  const m = url.match(/\/storage\/v1\/object\/public\/library\/(.+)$/);
+  return m ? decodeURIComponent(m[1]) : null;
+}
+
+/**
+ * Registra a imagem enviada em src/data/placas-catalog-named.json (via server
+ * function) para o catálogo ficar sempre atualizado. Falha silenciosa quando o
+ * painel roda fora da máquina do repositório (produção) — no dev local o arquivo
+ * é atualizado a cada upload.
+ */
+async function catalogarImagemEnviada(d: {
+  path: string;
+  publicUrl: string;
+  bytes: number;
+  nomeOriginal: string;
+  definidoPeloUsuario: boolean;
+}): Promise<void> {
+  try {
+    const { registrarImagemNoCatalogo } = await import("@/lib/placas-catalog.server");
+    await registrarImagemNoCatalogo({
+      data: {
+        file: d.path.replace(/^images\//, ""),
+        publicUrl: d.publicUrl,
+        bytes: d.bytes,
+        nomeOriginal: d.nomeOriginal,
+        origem: d.definidoPeloUsuario ? "painel-nome-definido" : "painel-nome-do-arquivo",
+      },
+    });
+  } catch {
+    /* sem repositório local no servidor de produção: catálogo só sincroniza no dev */
+  }
+}
+
+/**
+ * Envia um arquivo para `library/<folder>/<nome descritivo>.<ext>` e devolve o
+ * CAMINHO no bucket. O nome vem de `fileName` (se o formulário definiu um) ou
+ * preserva o nome original do arquivo — nada mais de `{timestamp}-{random}`.
  * 3 camadas: SDK -> renova sessão e tenta de novo -> fetch direto com status/corpo.
  */
-async function uploadToBucket(file: File, folder: string): Promise<string> {
+async function enviarParaBucket(file: File, folder: string, fileName?: string): Promise<string> {
   const ext = (file.name.split(".").pop() || "bin").replace(/[^\w.-]/g, "").slice(0, 10) || "bin";
-  const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 10)}.${ext}`;
+  const base = nomeBaseParaBucket(file, fileName);
+  let path = `${folder}/${base}.${ext}`;
 
   // 1) tentativa oficial do SDK
   const attempt = () =>
     supabase.storage.from("library").upload(path, file, { cacheControl: "3600", upsert: false });
 
   let { error } = await attempt();
+
+  // 1b) já existe um arquivo com esse nome descritivo? Sufixo único em vez de
+  // sobrescrever — o nome base continua legível na busca.
+  if (error && /already exists|duplicate/i.test(error.message)) {
+    path = `${folder}/${base}-${Date.now().toString(36)}.${ext}`;
+    ({ error } = await attempt());
+  }
 
   // 2) erro de autenticação? renova a sessão e tenta de novo
   if (error && isAuthStorageError(error.message)) {
@@ -3220,10 +3388,7 @@ async function uploadToBucket(file: File, folder: string): Promise<string> {
   // 3) ainda falhou? tenta o envio direto (captura status/corpo do servidor)
   if (error) {
     const direct = await uploadDirect(file, path);
-    if (direct.ok) {
-      const { data } = supabase.storage.from("library").getPublicUrl(path);
-      return data.publicUrl;
-    }
+    if (direct.ok) return path;
     if (isAuthStorageError(error.message) || isAuthStorageError(direct.detail)) {
       throw new Error(
         `O servidor recusou o upload por autenticação. Saia e entre de novo no painel. Detalhe: ${direct.detail}`
@@ -3232,8 +3397,31 @@ async function uploadToBucket(file: File, folder: string): Promise<string> {
     throw new Error(`Falha no upload de ${folder}: ${direct.detail}`);
   }
 
+  return path;
+}
+
+/**
+ * Envia um arquivo para `library/<folder>/...` e devolve a URL pública.
+ * Imagens (folder `images`) também entram no catálogo placas-catalog-named.json.
+ */
+async function uploadToBucket(
+  file: File,
+  folder: string,
+  opts?: { fileName?: string }
+): Promise<string> {
+  const path = await enviarParaBucket(file, folder, opts?.fileName);
   const { data } = supabase.storage.from("library").getPublicUrl(path);
-  return data.publicUrl;
+  const publicUrl = data.publicUrl;
+  if (folder === "images") {
+    void catalogarImagemEnviada({
+      path,
+      publicUrl,
+      bytes: file.size,
+      nomeOriginal: file.name.replace(/\.[^.]+$/, ""),
+      definidoPeloUsuario: !!opts?.fileName?.trim(),
+    });
+  }
+  return publicUrl;
 }
 
 function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: () => void }) {

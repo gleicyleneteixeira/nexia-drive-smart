@@ -11,6 +11,13 @@ export default defineConfig({
     server: {
       port: 3001,
       host: "localhost",
+      // src/data/placas-catalog-named.json é atualizado pelo painel (server
+      // function) a cada upload de imagem. Sem esta regra, o Vite detectaria a
+      // troca do arquivo como mudança de código e recarregaria a página do
+      // admin no MEIO do formulário, perdendo o que estava sendo digitado.
+      watch: {
+        ignored: (p: string) => p.replace(/\\/g, "/").endsWith("/src/data/placas-catalog-named.json"),
+      },
     },
     // Versão do build (hash do commit na Vercel ou timestamp local).
     // O AppShell compara a versão do bundle do navegador com a do servidor
