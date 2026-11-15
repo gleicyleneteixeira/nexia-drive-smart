@@ -1,4 +1,4 @@
-Auditoria de 1119 questoes - 2026-11-14T23:06:58.901Z
+Auditoria de 1119 questoes - 2026-11-15T01:09:47.184Z
 
 ===== A. ESTRUTURA / GABARITO AUSENTE: 8 =====
 detran_mg_a42a: campo placa "A-42a" fora do catalogo do componente Placa
@@ -72,8 +72,7 @@ medio q_new_60: correta 59 chars vs media 26 (x2.27), maior 34 | alt 0: a veloci
 medio q_new_81: correta 26 chars vs media 12 (x2.17), maior 19 | alt 0: encosto de cabeca regulado
 medio q_new_84: correta 55 chars vs media 26 (x2.09), maior 30 | alt 3: converter gases poluentes em substancias menos nocivas
 
-===== D. RESPOSTA OBVIA / DISTRATORES FRACOS: 166 =====
-bnc_teorico_70: alternativas 0 e 1 quase equivalentes
+===== D. RESPOSTA OBVIA / DISTRATORES FRACOS: 165 =====
 cid_boa_01: enunciado praticamente repete a alternativa correta
 cid_boa_31: enunciado praticamente repete a alternativa correta
 dd_n1_003: alternativas 0 e 1 quase equivalentes
