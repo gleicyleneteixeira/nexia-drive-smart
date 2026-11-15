@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  QUESTIONS,
+  getQuestionBank,
+  loadQuestionOverrides,
   INCIDENCE_META,
   type Question,
 } from "@/data/questions";
@@ -62,11 +63,12 @@ function saveWeakness(map: WeaknessMap) {
   } catch {}
 }
 
-const PLACA_POOL: Question[] = QUESTIONS.filter((q) => !!q.placa);
-
-function buildSession(weakness: WeaknessMap): Question[] {
+// Pool de placas vem do banco efetivo (estático + overrides do admin):
+// questões desabilitadas ficam de fora das sessões de treino.
+function buildSession(weakness: WeaknessMap, pool: Question[]): Question[] {
+  const placaPool = pool.filter((q) => !!q.placa);
   const now = Date.now();
-  const scored = PLACA_POOL.map((q) => {
+  const scored = placaPool.map((q) => {
     const w = weakness[q.placa as PlacaId] ?? { seen: 0, wrong: 0 };
     const wrongRate = w.seen > 0 ? w.wrong / w.seen : 0;
     const incidenceWeight = INCIDENCE_META[q.incidence].weight;
@@ -117,16 +119,24 @@ function PlacasTrainerPage() {
   const [viewMode, setViewMode] = useState<"quiz" | "catalog">("quiz");
 
   useEffect(() => {
-    const w = loadWeakness();
-    setWeakness(w);
-    setQuestions(buildSession(w));
-    setHydrated(true);
+    let cancelled = false;
+    (async () => {
+      // Espera os overrides do admin chegar (questões desabilitadas) antes
+      // de montar a sessão — senão uma desabilitada poderia aparecer aqui.
+      await loadQuestionOverrides().catch(() => {});
+      if (cancelled) return;
+      const w = loadWeakness();
+      setWeakness(w);
+      setQuestions(buildSession(w, getQuestionBank()));
+      setHydrated(true);
+    })();
+    return () => { cancelled = true; };
   }, []);
 
   function restart() {
     const w = loadWeakness();
     setWeakness(w);
-    setQuestions(buildSession(w));
+    setQuestions(buildSession(w, getQuestionBank()));
     setIndex(0);
     setSelected(null);
     setAnswers([]);

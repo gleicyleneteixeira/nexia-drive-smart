@@ -2,12 +2,12 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import {
-  QUESTIONS,
   INCIDENCE_META,
   CATEGORY_LABELS,
   type Incidence,
   type Category,
 } from "@/data/questions";
+import { useQuestionBank } from "@/hooks/use-question-bank";
 import { Flame, Sparkles } from "lucide-react";
 import { Placa } from "@/components/Placa";
 
@@ -30,9 +30,11 @@ const INCIDENCES: Incidence[] = ["altissima", "alta", "media", "baixa"];
 function MaisCaem() {
   const [inc, setInc] = useState<Incidence | "all">("all");
   const [cat, setCat] = useState<Category | "all">("all");
+  // Banco reativo: questões desabilitadas no admin não entram no ranking.
+  const bank = useQuestionBank();
 
   const list = useMemo(() => {
-    return QUESTIONS.filter(
+    return bank.filter(
       (q) =>
         (inc === "all" || q.incidence === inc) &&
         (cat === "all" || q.category === cat),
@@ -40,7 +42,7 @@ function MaisCaem() {
       (a, b) =>
         INCIDENCE_META[b.incidence].weight - INCIDENCE_META[a.incidence].weight,
     );
-  }, [inc, cat]);
+  }, [bank, inc, cat]);
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 md:py-12 space-y-6">

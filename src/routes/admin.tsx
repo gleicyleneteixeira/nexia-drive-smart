@@ -3,7 +3,8 @@ import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchLibraryItems, checkIsAdmin, SUPER_ADMIN_EMAIL, CRONOGRAMA_BOOK_KEY, fetchCronogramaBookId, type LibraryItem, type LibraryItemType } from "@/lib/library";
-import { QUESTIONS, CATEGORY_LABELS, INCIDENCE_META, getQuestionBank, setQuestionOverrides, shuffleOptions, type Question, type Category } from "@/data/questions";
+import { QUESTIONS, CATEGORY_LABELS, INCIDENCE_META, getQuestionBank, getDisabledQuestionIds, setQuestionOverrides, shuffleOptions, type Question, type Category } from "@/data/questions";
+import { useQuestionBank } from "@/hooks/use-question-bank";
 import { Placa, type PlacaId } from "@/components/Placa";
 import { cn } from "@/lib/utils";
 import { OptionImage } from "@/components/OptionImage";
@@ -28,7 +29,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Loader2, Upload, Trash2, Pencil, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, X, XCircle, Star, Heart, Volume2, CheckCircle2, Check, AlertTriangle, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen, Video, BadgeDollarSign, Gift, CheckCheck, CalendarClock, Lock, ChevronUp, ChevronDown, GripVertical, BarChart3, Brain, Play, Eye, EyeOff, ListChecks } from "lucide-react";
+import { Loader2, Upload, Trash2, Pencil, Ban, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, X, XCircle, Star, Heart, Volume2, CheckCircle2, Check, AlertTriangle, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen, Video, BadgeDollarSign, Gift, CheckCheck, CalendarClock, Lock, ChevronUp, ChevronDown, GripVertical, BarChart3, Brain, Play, Eye, EyeOff, ListChecks } from "lucide-react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import * as XLSX from "xlsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
@@ -1107,13 +1108,19 @@ export function QuestionsPanel() {
       return (data ?? []) as OverrideRow[];
     },
   });
-  const disabledIds = new Set(rows.filter((r) => r.disabled).map((r) => r.id));
-  const bank = getQuestionBank();
+  // Fonte única: estado do módulo (sincronizado pelo queryFn e pelo AppShell)
+  // — assim `bank` e `disabledIds` nunca discordam.
+  const disabledIds = getDisabledQuestionIds();
+  // includeDisabled: o admin precisa ver as desabilitadas (listagem/badge).
+  const bank = useQuestionBank(true);
 
   const filtered = bank.filter((q) => {
+    // Desabilitadas só aparecem no filtro "Desabilitadas"; nas demais
+    // origens ficam de fora — é exatamente o que o aluno não vê.
+    const off = disabledIds.has(q.id);
+    if (orig === "off" ? !off : off) return false;
     if (cat !== "all" && q.category !== cat) return false;
     const o = originOf(q);
-    if (orig === "off" && !disabledIds.has(q.id)) return false;
     if (orig === "oficial" && !isOfficial(q)) return false;
     if (orig !== "all" && orig !== "off" && orig !== "oficial" && o !== orig) return false;
     const raw = search.trim().toLowerCase();
@@ -1240,17 +1247,33 @@ export function QuestionsPanel() {
     }
   }
 
-  async function handleDelete(q: Question) {
-    const isCustom = q.id.startsWith("custom-");
-    if (!confirm(isCustom ? `Apagar definitivamente "${q.id}"?` : `Desativar "${q.id}" nos sorteios? (a original continua no código)`)) return;
-    if (isCustom) {
-      const { error } = await (supabase as any).from("question_overrides").delete().eq("id", q.id);
-      if (error) return toast.error(error.message);
-    } else {
-      const { error } = await (supabase as any).from("question_overrides").upsert({ id: q.id, data: {}, disabled: true }, { onConflict: "id" });
-      if (error) return toast.error(error.message);
+  // Desabilitar é "soft": a questão some dos sorteios dos alunos sem apagar
+  // nada (estática OU custom) — o conteúdo salvo em `data` é preservado e
+  // "Reativar" traz de volta. Serve para tirar do ar questão com erro sem
+  // pressa de corrigir.
+  async function handleDisable(q: Question) {
+    if (!confirm(`Desabilitar "${q.id}"? Ela deixa de aparecer para os alunos e você pode reativar quando quiser.`)) return;
+    // Lê a linha atual direto do banco antes de escrever: nunca sobrescreve
+    // um patch/objeto custom salvo por outra sessão com `data: {}`.
+    let data: Record<string, unknown> = {};
+    try {
+      const { data: current } = await (supabase as any)
+        .from("question_overrides")
+        .select("data")
+        .eq("id", q.id)
+        .maybeSingle();
+      const cur = current?.data;
+      if (cur && typeof cur === "object" && Object.keys(cur).length > 0) {
+        data = cur;
+      } else if (q.id.startsWith("custom-")) {
+        data = { ...q }; // custom sem linha íntegra: guarda o objeto completo atual
+      }
+    } catch {
+      // Sem linha prévia (questão estática nunca editada): `data: {}` mesmo.
     }
-    toast.success(isCustom ? "Apagada" : "Desativada nos sorteios");
+    const { error } = await (supabase as any).from("question_overrides").upsert({ id: q.id, data, disabled: true }, { onConflict: "id" });
+    if (error) return toast.error(error.message);
+    toast.success("Desabilitada — some dos sorteios dos alunos");
     setEditing(null);
     reload();
   }
@@ -1265,7 +1288,11 @@ export function QuestionsPanel() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between gap-2 flex-wrap">
-        <h2 className="font-display font-bold text-lg">Questões do simulado ({filtered.length}/{bank.length})</h2>
+        <h2 className="font-display font-bold text-lg">
+          {orig === "off"
+            ? `Questões desabilitadas (${filtered.length})`
+            : `Questões do simulado (${filtered.length}/${Math.max(0, bank.length - disabledIds.size)})`}
+        </h2>
         <div className="flex gap-2 flex-wrap">
           <Button size="sm" variant="outline" onClick={() => { setShowImport(false); setShowModel((v) => !v); }}>Modelo</Button>
           <Button size="sm" variant="outline" onClick={handleExport}>Exportar</Button>
@@ -1335,9 +1362,18 @@ export function QuestionsPanel() {
               <SelectItem value="ia">Geradas por IA</SelectItem>
               <SelectItem value="oficial">Prova real (detran_*)</SelectItem>
               <SelectItem value="custom">Personalizadas</SelectItem>
-              <SelectItem value="off">Desativadas</SelectItem>
+              <SelectItem value="off">Desabilitadas</SelectItem>
             </SelectContent>
           </Select>
+          <Button
+            size="sm"
+            variant={orig === "off" ? "default" : "outline"}
+            className={orig === "off" ? "" : "text-destructive border-destructive/40 hover:bg-destructive/10"}
+            onClick={() => setOrig((v) => (v === "off" ? "all" : "off"))}
+            title="Ver só as questões desabilitadas (elas não aparecem para os alunos)"
+          >
+            <Ban className="h-3.5 w-3.5 mr-1.5" /> Desabilitadas ({disabledIds.size})
+          </Button>
         </div>
       </div>
 
@@ -1369,7 +1405,7 @@ export function QuestionsPanel() {
               <Badge variant="secondary" className="text-xs">Nível {cur.difficulty} — {cur.difficulty === 1 ? "Fácil" : cur.difficulty === 2 ? "Média" : "Difícil"}</Badge>
               <Badge variant="secondary" className="text-xs">Incidência: {cur.incidence}</Badge>
               {cur.trap && <Badge className="text-xs bg-destructive/15 text-destructive border border-destructive/40">Pegadinha</Badge>}
-              {disabledIds.has(cur.id) && <Badge className="text-xs bg-destructive/15 text-destructive border border-destructive/40">Desativada</Badge>}
+              {disabledIds.has(cur.id) && <Badge className="text-xs bg-destructive/15 text-destructive border border-destructive/40">Desabilitada</Badge>}
               {cur.id.startsWith("detran_") && <Badge className="text-xs bg-warning/15 text-warning border border-warning/40">Oficial — edite com cautela</Badge>}
             </div>
             <p className="text-sm font-medium leading-relaxed">{cur.statement}</p>
@@ -1384,8 +1420,8 @@ export function QuestionsPanel() {
             <div className="flex gap-2 pt-1 flex-wrap">
               <Button size="sm" variant="outline" onClick={() => { setCreating(false); setEditing(cur); }}><Pencil className="h-3.5 w-3.5 mr-1" /> Editar</Button>
               {disabledIds.has(cur.id)
-                ? <Button size="sm" variant="outline" onClick={() => handleRestore(cur)}>Reativar</Button>
-                : <Button size="sm" variant="ghost" className="text-destructive" onClick={() => handleDelete(cur)}><Trash2 className="h-3.5 w-3.5 mr-1" /> Apagar</Button>}
+                ? <Button size="sm" variant="outline" onClick={() => handleRestore(cur)}><Ban className="h-3.5 w-3.5 mr-1" /> Reativar</Button>
+                : <Button size="sm" variant="ghost" className="text-destructive" onClick={() => handleDisable(cur)}><Ban className="h-3.5 w-3.5 mr-1" /> Desabilitar</Button>}
             </div>
           </div>
         </div>
@@ -1655,7 +1691,10 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
         const { error } = await (supabase as any).from("question_overrides").insert({ id, data: patch, disabled: false });
         if (error) throw error;
       } else {
-        const { error } = await (supabase as any).from("question_overrides").upsert({ id: initial.id, data: patch, disabled: false }, { onConflict: "id" });
+        // Preserve o estado de desabilitada: salvar uma edição não pode
+        // reativar a questão silenciosamente.
+        const stillDisabled = getDisabledQuestionIds().has(initial.id);
+        const { error } = await (supabase as any).from("question_overrides").upsert({ id: initial.id, data: patch, disabled: stillDisabled }, { onConflict: "id" });
         if (error) throw error;
       }
       toast.success(isNew ? "Questão criada" : "Questão atualizada");

@@ -15552,6 +15552,32 @@ let overridePatch = new Map<string, Partial<Question>>();
 let overrideDisabled = new Set<string>();
 let overrideCustoms: Question[] = [];
 
+// Identidade estável dos arrays: exigência do useSyncExternalStore (React
+// compara por referência). Os caches são invalidados em setQuestionOverrides.
+let bankCache: Question[] | null = null;
+let bankWithDisabledCache: Question[] | null = null;
+const bankListeners = new Set<() => void>();
+
+/** Assina mudanças do banco (desabilitar/editar/criar questão no admin). */
+export function subscribeQuestionBank(listener: () => void): () => void {
+    bankListeners.add(listener);
+    return () => {
+        bankListeners.delete(listener);
+    };
+}
+
+function notifyBankListeners(): void {
+    bankCache = null;
+    bankWithDisabledCache = null;
+    bankListeners.forEach((l) => {
+        try {
+            l();
+        } catch {
+            // listener com erro não pode derrubar a notificação dos demais.
+        }
+    });
+}
+
 export function setQuestionOverrides(rows: QuestionOverrideRow[]): void {
     overridePatch = new Map();
     overrideDisabled = new Set();
@@ -15565,27 +15591,61 @@ export function setQuestionOverrides(rows: QuestionOverrideRow[]): void {
             overridePatch.set(r.id, r.data);
         }
     }
+    notifyBankListeners();
 }
 
-export async function loadQuestionOverrides(): Promise<void> {
-    try {
-        const { data } = await (supabase as any)
-            .from("question_overrides")
-            .select("id, data, disabled");
-        if (Array.isArray(data)) setQuestionOverrides(data as QuestionOverrideRow[]);
-    } catch {
-        // Sem acesso (tabela ausente/offline): mantém o banco estático.
-    }
+// Dedupe: várias telas podem disparar o carregamento ao montar; uma única
+// requisição em voo serve a todos (evita flicker/duplicação de fetch).
+let overridesInFlight: Promise<void> | null = null;
+
+export function loadQuestionOverrides(): Promise<void> {
+    if (overridesInFlight) return overridesInFlight;
+    overridesInFlight = (async () => {
+        try {
+            const { data } = await (supabase as any)
+                .from("question_overrides")
+                .select("id, data, disabled");
+            if (Array.isArray(data)) setQuestionOverrides(data as QuestionOverrideRow[]);
+        } catch {
+            // Sem acesso (tabela ausente/offline): mantém o banco estático.
+        } finally {
+            overridesInFlight = null;
+        }
+    })();
+    return overridesInFlight;
 }
 
-/** Banco efetivo usado por todos os sorteios: estático + overrides do admin. */
-export function getQuestionBank(): Question[] {
-    return QUESTIONS.filter((q) => !overrideDisabled.has(q.id))
+export interface QuestionBankOptions {
+    /** Inclui questões desabilitadas (listagem do admin). Padrão: false. */
+    includeDisabled?: boolean;
+}
+
+function buildQuestionBank(includeDisabled: boolean): Question[] {
+    return QUESTIONS.filter((q) => includeDisabled || !overrideDisabled.has(q.id))
         .map((q) => {
             const p = overridePatch.get(q.id);
             return p ? { ...q, ...p, id: q.id } : q;
         })
-        .concat(overrideCustoms.filter((c) => !overrideDisabled.has(c.id)));
+        .concat(overrideCustoms.filter((c) => includeDisabled || !overrideDisabled.has(c.id)));
+}
+
+/**
+ * Banco efetivo usado por todos os sorteios: estático + overrides do admin.
+ * Desabilitadas ficam de fora por padrão; o admin usa includeDisabled:true
+ * para listar (e reativar) o que foi desabilitado.
+ */
+export function getQuestionBank(opts?: QuestionBankOptions): Question[] {
+    if (opts?.includeDisabled) {
+        if (!bankWithDisabledCache) bankWithDisabledCache = buildQuestionBank(true);
+        return bankWithDisabledCache;
+    }
+    if (!bankCache) bankCache = buildQuestionBank(false);
+    return bankCache;
+}
+
+/** Ids desabilitados — fonte única p/ listagem e badges do admin. */
+export function getDisabledQuestionIds(): ReadonlySet<string> {
+    return overrideDisabled;
 }
 
 export function getRandomizedQuestions(count: number, opts?: {

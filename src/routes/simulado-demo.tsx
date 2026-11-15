@@ -14,9 +14,10 @@ import {
   OFFICIAL_EXAM_PASS_SCORE,
   INCIDENCE_META,
   CATEGORY_LABELS,
+  getQuestionBank,
+  loadQuestionOverrides,
   type Question,
   type Category,
-  QUESTIONS,
 } from "@/data/questions";
 import {
   Check,
@@ -111,7 +112,7 @@ function buildFresh(questionsList: Question[], category?: Category, count: numbe
   if (!category && fresh.length < count) {
     const needed = count - fresh.length;
     const freshIds = new Set(fresh.map((q) => q.id));
-    const remainingPool = QUESTIONS.filter((q) => !freshIds.has(q.id) && !allExcluded.includes(q.id));
+    const remainingPool = getQuestionBank().filter((q) => !freshIds.has(q.id) && !allExcluded.includes(q.id));
     const fillQuestions = getRandomizedQuestions(needed, { questionsList: remainingPool });
     fresh = [...fresh, ...fillQuestions].slice(0, count);
   } else if (category && fresh.length < count) {
@@ -198,7 +199,6 @@ function SimuladoDemoPage() {
   const [showResult, setShowResult] = useState(false);
   const [resumed, setResumed] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
-  const dbQuestions = QUESTIONS;
 
   // Carrega a quantidade de questões do teste grátis configurada no admin
   useEffect(() => {
@@ -228,38 +228,50 @@ function SimuladoDemoPage() {
 
   // Hidrata estado a partir do localStorage
   useEffect(() => {
-    const persisted = loadPersisted();
-    if (isTrial) {
-      clearPersisted();
-      const trialIds = ["qe60", "qe04", "qe39", "qe11", "qe74", "qe75", "q6"];
-      const fresh = (trialIds.map(id => QUESTIONS.find(q => q.id === id)).filter(Boolean) as Question[]).slice(0, trialCount).map(shuffleOptions);
-      setQuestions(fresh);
-      setIndex(0);
-      setSelected(null);
-      setAnswers([]);
-      setShowResult(false);
-      setResumed(false);
-      setShowPicker(false);
-      savePersisted({
-        questions: fresh,
-        index: 0,
-        selected: null,
-        answers: [],
-        startedAt: Date.now(),
-      });
-    } else if (persisted && persisted.questions?.length) {
-      setQuestions(persisted.questions);
-      setIndex(persisted.index);
-      setSelected(persisted.selected);
-      setAnswers(persisted.answers);
-      setResumed(true);
-      if (persisted.index >= persisted.questions.length) {
-        setShowResult(true);
+    let cancelled = false;
+    (async () => {
+      const persisted = loadPersisted();
+      if (isTrial) {
+        // Espera os overrides do admin (questões desabilitadas) antes de
+        // montar o teste grátis — desabilitada não pode aparecer aqui.
+        await loadQuestionOverrides().catch(() => {});
+        if (cancelled) return;
+        clearPersisted();
+        const trialIds = ["qe60", "qe04", "qe39", "qe11", "qe74", "qe75", "q6"];
+        let fresh = (trialIds.map(id => getQuestionBank().find(q => q.id === id)).filter(Boolean) as Question[]).slice(0, trialCount).map(shuffleOptions);
+        if (fresh.length < trialCount) {
+          // Alguma do conjunto fixo está desabilitada? Completa com outras.
+          fresh = buildFresh(getQuestionBank(), undefined, trialCount);
+        }
+        setQuestions(fresh);
+        setIndex(0);
+        setSelected(null);
+        setAnswers([]);
+        setShowResult(false);
+        setResumed(false);
+        setShowPicker(false);
+        savePersisted({
+          questions: fresh,
+          index: 0,
+          selected: null,
+          answers: [],
+          startedAt: Date.now(),
+        });
+      } else if (persisted && persisted.questions?.length) {
+        setQuestions(persisted.questions);
+        setIndex(persisted.index);
+        setSelected(persisted.selected);
+        setAnswers(persisted.answers);
+        setResumed(true);
+        if (persisted.index >= persisted.questions.length) {
+          setShowResult(true);
+        }
+      } else {
+        setShowPicker(true);
       }
-    } else {
-      setShowPicker(true);
-    }
-    setHydrated(true);
+      if (!cancelled) setHydrated(true);
+    })();
+    return () => { cancelled = true; };
   }, [isTrial, trialCount]);
 
   // Alerta de retomada: avisa e sai sozinho — não precisa ficar na tela
@@ -281,27 +293,30 @@ function SimuladoDemoPage() {
     });
   }, [hydrated, questions, index, selected, answers]);
 
-  function startWithMode(mode: "completo" | Category) {
+  async function startWithMode(mode: "completo" | Category) {
     clearPersisted();
     const count = isTrial ? trialCount : TOTAL;
+    // Espera os overrides do admin (questões desabilitadas) antes de sortear.
+    await loadQuestionOverrides().catch(() => {});
+    const bank = getQuestionBank();
     let fresh: Question[];
     if (isTrial) {
       if (mode === "completo") {
         const trialIds = ["qe60", "qe04", "qe39", "qe11", "qe74", "qe75", "q6"];
-        fresh = (trialIds.map(id => dbQuestions.find(q => q.id === id)).filter(Boolean) as Question[]).slice(0, trialCount);
+        fresh = (trialIds.map(id => bank.find(q => q.id === id)).filter(Boolean) as Question[]).slice(0, trialCount);
         if (fresh.length < trialCount) {
-          fresh = buildFresh(dbQuestions, undefined, trialCount);
+          fresh = buildFresh(bank, undefined, trialCount);
         }
       } else {
-        const categoryQuestions = dbQuestions.filter(q => q.category === mode);
+        const categoryQuestions = bank.filter(q => q.category === mode);
         const trialIds = ["qe60", "qe04", "qe39", "qe11", "qe74", "qe75", "q6"];
         const specTrialQs = categoryQuestions.filter(q => trialIds.includes(q.id));
         const exclude = specTrialQs.map(q => q.id);
-        const others = getRandomizedQuestions(Math.max(0, trialCount - specTrialQs.length), { exclude, categories: [mode], questionsList: dbQuestions });
+        const others = getRandomizedQuestions(Math.max(0, trialCount - specTrialQs.length), { exclude, categories: [mode], questionsList: bank });
         fresh = [...specTrialQs, ...others].slice(0, trialCount);
       }
     } else {
-      fresh = buildFresh(dbQuestions, mode === "completo" ? undefined : mode, count);
+      fresh = buildFresh(bank, mode === "completo" ? undefined : mode, count);
     }
     setQuestions(fresh);
     setIndex(0);
