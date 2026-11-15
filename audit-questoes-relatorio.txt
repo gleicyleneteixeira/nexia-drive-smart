@@ -1,4 +1,4 @@
-Auditoria de 1119 questoes - 2026-11-15T02:49:42.877Z
+Auditoria de 1119 questoes - 2026-11-15T02:53:34.260Z
 
 ===== A. ESTRUTURA / GABARITO AUSENTE: 8 =====
 detran_mg_a42a: campo placa "A-42a" fora do catalogo do componente Placa
