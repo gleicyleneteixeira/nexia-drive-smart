@@ -36,6 +36,8 @@ import { OptionImage } from "@/components/OptionImage";
 import { triggerRatingPrompt } from "@/components/RatingPrompt";
 import { toast } from "sonner";
 import { registrarSimuladoConcluido, registrarSimuladoIniciado } from "@/lib/simulados-concluidos";
+import { registrarNotaSimulado, prontidaoDoAluno } from "@/lib/prontidao";
+import { ScoreProntidaoCard } from "@/components/ScoreProntidao";
 import {
   Dialog,
   DialogContent,
@@ -303,6 +305,23 @@ function SimuladoPage() {
     scheduleReviewSync(user?.id);
   }
 
+  // Score de Prontidão: grava a nota do simulado concluído no histórico
+  // (uma vez só — mesma regra/vida útil do registro de revisão).
+  const prontidaoSavedRef = useRef(false);
+  function salvarNotaProntidao(
+    lista: (number | null)[] = answers,
+    qs: Question[] = questions,
+  ) {
+    if (prontidaoSavedRef.current || !qs.length) return;
+    prontidaoSavedRef.current = true;
+    const acertos = qs.reduce(
+      (acc, q, i) =>
+        acc + (lista[i] !== null && lista[i] !== undefined && lista[i] === q.correctIndex ? 1 : 0),
+      0,
+    );
+    registrarNotaSimulado(user?.id, (acertos / qs.length) * 100, mode ?? "completo");
+  }
+
   // Dispara pedido de avaliação 2s após terminar o simulado
   useEffect(() => {
     if (!showResult) return;
@@ -325,6 +344,7 @@ function SimuladoPage() {
       if (persisted.index >= persisted.questions.length) {
         // estado ainda não aplicado aqui: registra com os dados persistidos
         registrarRevisao(persisted.answers, persisted.questions);
+        salvarNotaProntidao(persisted.answers, persisted.questions);
         setShowResult(true);
       }
     } else {
@@ -436,6 +456,7 @@ function SimuladoPage() {
     const fresh = buildFresh(mode === "completo" ? undefined : mode);
     if (!fresh.length) return;
     reviewDoneRef.current = false; // nova prova: libera o registro de revisão
+    prontidaoSavedRef.current = false; // e a gravação da nota no score de prontidão
     // Conta como INICIADO (retomada de salvo não passa por aqui)
     registrarSimuladoIniciado(user?.id);
     startedAtRef.current = Date.now();
@@ -461,6 +482,7 @@ function SimuladoPage() {
   function restart() {
     clearPersisted();
     reviewDoneRef.current = false; // nova prova: libera o registro de revisão
+    prontidaoSavedRef.current = false; // e a gravação da nota no score de prontidão
     setQuestions([]);
     setIndex(0);
     setSelected(null);
@@ -544,6 +566,7 @@ function SimuladoPage() {
       setIndex(questions.length); // marca como finalizado
       clearPersisted(); // libera a sessão para futuras escolhas
       registrarRevisao(newAnswers); // repetição espaçada: gravar acertos/erros
+      salvarNotaProntidao(newAnswers); // score de prontidão: guarda a nota final
       contarConclusao();
       setShowResult(true);
     } else {
@@ -582,6 +605,7 @@ function SimuladoPage() {
     // LIMPA o cache de sessão salva para liberar a escolha de outro simulado
     clearPersisted();
     registrarRevisao(); // repetição espaçada: gravar acertos/erros
+    salvarNotaProntidao(); // score de prontidão: guarda a nota final
     contarConclusao();
     setShowResult(true);
   };
@@ -1031,6 +1055,7 @@ function ResultScreen({
   concluidos: number;
   onRestart: () => void;
 }) {
+  const { user } = useAuth();
   const [tab, setTab] = useState<"resumo" | "erradas" | "todas">("resumo");
   const total = questions.length;
   const errors = useMemo(
@@ -1046,6 +1071,9 @@ function ResultScreen({
   const approved = score >= OFFICIAL_EXAM_PASS_SCORE;
   // Repetição espaçada: o registro já foi feito antes de abrir esta tela.
   const review = useMemo(() => reviewStats(), []);
+  // Score de prontidão: a nota deste simulado já foi gravada pelo componente
+  // pai antes de abrir esta tela — é só ler o histórico atualizado.
+  const prontidao = useMemo(() => prontidaoDoAluno(user?.id), [user?.id]);
 
   // Desempenho por eixo (5 blocos oficiais da distribuição)
   const byCategory = useMemo(() => {
@@ -1124,6 +1152,9 @@ function ResultScreen({
         <MetricCard label="Aproveitamento" value={`${accuracy}%`} accent="primary" />
         <MetricCard label="Status" value={approved ? "Aprovado" : "Reprovado"} accent={approved ? "success" : "destructive"} />
       </div>
+
+      {/* Score de Prontidão: janela dos últimos 5 simulados */}
+      <ScoreProntidaoCard resultado={prontidao} className="mt-4" showCTA={false} />
 
       {/* Repetição espaçada: o que volta no próximo simulado */}
       {review.total > 0 && (

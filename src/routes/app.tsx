@@ -10,6 +10,7 @@ import { fetchVideoTutorials, type VideoTutorial } from "@/lib/video-tutorials";
 import { GroupPopups } from "@/components/WhatsAppGroupPopup";
 import { NativePdfModal } from "@/components/NativePdfModal";
 import { RankingReprovacao } from "@/components/RankingReprovacao";
+import { ScoreProntidao } from "@/components/ScoreProntidao";
 import { HCarousel } from "@/components/HCarousel";
 import { GlassCard, GlassButton, GlassBadge } from "@/components/glass";
 import { supabase } from "@/integrations/supabase/client";
@@ -626,6 +627,7 @@ const TEORICO_CATS: { id: Category; icon: string }[] = [
 ];
 
 function TeoricoDashboard() {
+  const { user } = useAuth();
   const { data: libraryItems = [], isLoading: libLoading } = useQuery({
     queryKey: ["library", "teorico-dash"],
     queryFn: () => fetchLibraryItems(false),
@@ -661,6 +663,9 @@ function TeoricoDashboard() {
           📚 Biblioteca
         </button>
       </div>
+
+      {/* Score de Prontidão: barra de progresso + selo (últimos 5 simulados) */}
+      <ScoreProntidao userId={user?.id} />
 
       {/* CENTRO (foco principal): escolha o tipo de simulado */}
       <section id="secao-simulados" className="scroll-mt-24">
