@@ -50,6 +50,33 @@ export const Route = createFileRoute("/placas")({
 const SESSION_SIZE = 10;
 const STORAGE_KEY = "nexia:placas:weakness:v1";
 
+/** Escolha do aluno dentro do Treino de Placas. */
+const OPCOES_PLACAS: {
+  modo: "catalog" | "jogo" | "adaptativo";
+  emoji: string;
+  titulo: string;
+  desc: string;
+}[] = [
+  {
+    modo: "catalog",
+    emoji: "📖",
+    titulo: "Ver todas as placas",
+    desc: `${CATALOGO.length} placas oficiais com imagem, código e significado — filtre por categoria.`,
+  },
+  {
+    modo: "jogo",
+    emoji: "🧠",
+    titulo: "Fazer o simulado",
+    desc: "15 placas por rodada: veja o sinal e escolha o significado certo.",
+  },
+  {
+    modo: "adaptativo",
+    emoji: "🎯",
+    titulo: "Treino adaptativo",
+    desc: "Prioriza as placas que você erra e as que mais caem na prova.",
+  },
+];
+
 interface WeaknessEntry {
   seen: number;
   wrong: number;
@@ -287,40 +314,27 @@ function PlacasTrainerPage() {
         )}
       </div>
 
-      {/* Modo Selector tabs */}
-      <div className="flex justify-center mb-5">
-        <div className="inline-flex p-1 rounded-2xl bg-black/40 border border-border/30 shadow-inner flex-wrap">
-          <button
-            onClick={() => setViewMode("catalog")}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              viewMode === "catalog"
-                ? "gradient-primary text-primary-foreground shadow-glow"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            📖 Catálogo
-          </button>
-          <button
-            onClick={() => setViewMode("jogo")}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              viewMode === "jogo"
-                ? "gradient-primary text-primary-foreground shadow-glow"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            🧠 Quiz das Placas
-          </button>
-          <button
-            onClick={() => setViewMode("adaptativo")}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              viewMode === "adaptativo"
-                ? "gradient-primary text-primary-foreground shadow-glow"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            🎯 Treino Adaptativo
-          </button>
-        </div>
+      {/* Escolha o que fazer: ver as placas ou fazer o simulado */}
+      <div className="grid sm:grid-cols-3 gap-3 mb-6">
+        {OPCOES_PLACAS.map((o) => {
+          const ativo = viewMode === o.modo;
+          return (
+            <button
+              key={o.modo}
+              type="button"
+              onClick={() => setViewMode(o.modo)}
+              className={`text-left rounded-2xl border p-4 transition-all cursor-pointer ${
+                ativo
+                  ? "border-primary/60 bg-primary/10 shadow-glow"
+                  : "border-border/40 bg-background/40 hover:border-primary/40 hover:bg-background/70"
+              }`}
+            >
+              <div className="text-2xl mb-1">{o.emoji}</div>
+              <p className="text-sm font-semibold leading-tight">{o.titulo}</p>
+              <p className="text-[11px] text-muted-foreground mt-1 leading-snug">{o.desc}</p>
+            </button>
+          );
+        })}
       </div>
 
       {/* Filtros de categoria (catálogo + quiz) */}

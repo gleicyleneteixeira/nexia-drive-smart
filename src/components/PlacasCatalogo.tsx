@@ -1,16 +1,14 @@
-import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { Link } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { AlertTriangle, ArrowRight, Info, Search, X } from "lucide-react";
+import { AlertTriangle, Info, Search, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
 import catalogoJson from "@/data/placas-catalog-named.json";
 import { PLACA_STUDY_DATA } from "@/data/placas-study";
 
 // ==========================================
 // CATÁLOGO DE PLACAS — peças compartilhadas
-// Usado pela página /placas e pelo bloco de
-// estudo dentro do TEÓRICO (app.tsx).
+// Usado pela página /placas (catálogo, grade e
+// modal de detalhe).
 // ==========================================
 
 export type CategoriaPlaca =
@@ -390,150 +388,5 @@ export function PlacasCatalogo({ categoria }: { categoria: FiltroCategoria }) {
 
       <PlacaDetalheModal p={sel} onClose={() => setSel(null)} />
     </div>
-  );
-}
-
-// ------------------------------------------------------------
-// BLOCO DO TEÓRICO — "todas as placas ou por categoria"
-// dentro da Parte Teórica, para o aluno estudar sem sair da tela.
-// ------------------------------------------------------------
-const LIMITE_INICIAL = 24;
-
-export function PlacasEstudo({ className }: { className?: string }) {
-  const [categoria, setCategoria] = useState<FiltroCategoria>("todas");
-  const [busca, setBusca] = useState("");
-  const [verTodas, setVerTodas] = useState(false);
-  const [sel, setSel] = useState<PlacaCatalogo | null>(null);
-
-  const filtradas = useMemo(
-    () => filtrarPlacas(categoria, busca),
-    [categoria, busca],
-  );
-  const visiveis = verTodas ? filtradas : filtradas.slice(0, LIMITE_INICIAL);
-  const restam = filtradas.length - visiveis.length;
-
-  // Ao trocar filtro/busca, volta para a lista curta
-  useEffect(() => {
-    setVerTodas(false);
-  }, [categoria, busca]);
-
-  return (
-    <section id="secao-placas" className={cn("scroll-mt-24", className)}>
-      <div className="glass rounded-3xl border border-border/40 p-5 md:p-6 space-y-4">
-        <div className="text-center">
-          <p className="text-xs uppercase tracking-widest text-primary-glow font-semibold">
-            Estudo de placas
-          </p>
-          <h2 className="text-xl md:text-2xl font-display font-bold mt-1">
-            Todas as Placas de Trânsito e Seus Significados
-          </h2>
-          <p className="text-sm text-muted-foreground mt-1">
-            Busque, filtre por categoria e estude as {CATALOGO.length} placas de
-            advertência, regulamentação e indicação com código e significado oficial.
-          </p>
-        </div>
-
-        {/* Filtro por categoria (abas no mesmo formato do site de referência) */}
-        <div className="flex gap-2 flex-wrap justify-center">
-          <ChipCategoria
-            valor="todas"
-            ativo={categoria === "todas"}
-            onClick={() => setCategoria("todas")}
-          />
-          <ChipCategoria
-            valor="advertencia"
-            ativo={categoria === "advertencia"}
-            onClick={() => setCategoria("advertencia")}
-          />
-          <ChipCategoria
-            valor="regulamentacao"
-            ativo={categoria === "regulamentacao"}
-            onClick={() => setCategoria("regulamentacao")}
-          />
-          <ChipCategoria
-            valor="identificacao"
-            ativo={categoria === "identificacao"}
-            onClick={() => setCategoria("identificacao")}
-          />
-          <ChipCategoria
-            valor="servicos"
-            ativo={categoria === "servicos"}
-            onClick={() => setCategoria("servicos")}
-          />
-          <ChipCategoria
-            valor="turisticas"
-            ativo={categoria === "turisticas"}
-            onClick={() => setCategoria("turisticas")}
-          />
-          <ChipCategoria
-            valor="obras"
-            ativo={categoria === "obras"}
-            onClick={() => setCategoria("obras")}
-          />
-        </div>
-
-        {/* Busca por nome ou código */}
-        <div className="relative max-w-md mx-auto">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-          <Input
-            value={busca}
-            onChange={(e) => setBusca(e.target.value)}
-            placeholder="Buscar por nome ou código (ex: A-1a)"
-            className="pl-10"
-            aria-label="Buscar placa por nome ou código"
-          />
-        </div>
-
-        <p className="text-[11px] text-muted-foreground text-center">
-          {filtradas.length} de {CATALOGO.length} placas
-          {categoria !== "todas" &&
-            ` · categoria ${CATEGORIA_META[categoria as CategoriaPlaca].label}`}
-          {busca.trim() && ` · busca "${busca.trim()}"`}
-        </p>
-
-        <PlacaGrade itens={visiveis} onSelect={setSel} />
-
-        <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
-          {restam > 0 && (
-            <ButtonOutline onClick={() => setVerTodas(true)}>
-              Ver todas as {filtradas.length} placas
-            </ButtonOutline>
-          )}
-          {verTodas && filtradas.length > LIMITE_INICIAL && (
-            <ButtonOutline onClick={() => setVerTodas(false)}>
-              Mostrar menos
-            </ButtonOutline>
-          )}
-          <Link
-            to="/placas"
-            className="inline-flex items-center gap-1.5 rounded-xl gradient-primary px-4 py-2 text-[11px] font-bold text-primary-foreground shadow-glow hover:scale-[1.03] active:scale-95 transition-transform"
-          >
-            Treinar no quiz das placas
-            <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
-        </div>
-      </div>
-
-      <PlacaDetalheModal p={sel} onClose={() => setSel(null)} />
-    </section>
-  );
-}
-
-/** Botão discreto (mesmo estilo do app) para "ver todas" / "mostrar menos". */
-function ButtonOutline({
-  children,
-  onClick,
-}: {
-  children: ReactNode;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-secondary/40 px-4 py-2 text-[11px] font-bold text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors"
-    >
-      {children}
-    </button>
   );
 }

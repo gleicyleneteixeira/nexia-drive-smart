@@ -8649,7 +8649,7 @@ const QUESTIONS_B: Question[] = [
     },
     {
         id: "l01_28",
-        category: "placas",
+        category: "legislacao",
         statement: "A identificação veicular usa placas dianteira e traseira, com exceção para veículos de duas rodas. Os veículos automotores são identificados por placas dianteira e traseira. Qual dos veículos é exceção, tendo apenas a placa traseira (PIV)?",
         options: ["Automóvel de passeio (carro).", "Motocicleta.", "Caminhão.", "Ônibus."],
         correctIndex: 1,
