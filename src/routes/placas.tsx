@@ -8,8 +8,17 @@ import {
   type Question,
 } from "@/data/questions";
 import { Placa, type PlacaId } from "@/components/Placa";
-import { Input } from "@/components/ui/input";
-import catalogoJson from "@/data/placas-catalog-named.json";
+import {
+  CATALOGO,
+  CATEGORIA_META,
+  ChipCategoria,
+  PlacasCatalogo,
+  categoriaDe,
+  estudoDaPlaca,
+  type CategoriaPlaca,
+  type FiltroCategoria,
+  type PlacaCatalogo,
+} from "@/components/PlacasCatalogo";
 import {
   Check,
   X,
@@ -20,9 +29,7 @@ import {
   Target,
   RotateCcw,
   Trophy,
-  Info,
   AlertTriangle,
-  Search,
   Gamepad2,
 } from "lucide-react";
 
@@ -117,86 +124,6 @@ function buildSession(weakness: WeaknessMap, pool: Question[]): Question[] {
 // do painel admin. 146 placas oficiais do CONTRAN com imagem real.
 // ==========================================
 
-type CategoriaPlaca = "advertencia" | "regulamentacao" | "indicacao";
-type FiltroCategoria = "todas" | CategoriaPlaca;
-
-interface PlacaCatalogo {
-  code?: string | null;
-  category?: string | null;
-  name?: string | null;
-  file?: string;
-  public_url?: string | null;
-}
-
-const CATALOGO: PlacaCatalogo[] = (
-  catalogoJson as unknown as PlacaCatalogo[]
-).filter((p) => !!p.public_url && !!p.name);
-
-const CATEGORIA_META: Record<
-  CategoriaPlaca,
-  {
-    label: string;
-    upper: string;
-    dot: string;
-    chipAtivo: string;
-    chipHover: string;
-    badge: string;
-    glow: string;
-  }
-> = {
-  advertencia: {
-    label: "Advertência",
-    upper: "ADVERTÊNCIA",
-    dot: "bg-amber-500",
-    chipAtivo: "bg-amber-500/20 border-amber-500/40 text-amber-400",
-    chipHover: "hover:text-amber-400",
-    badge: "bg-amber-500/15 border-amber-500/35 text-amber-400",
-    glow: "hover:border-amber-500/60 hover:shadow-[0_0_15px_rgba(245,158,11,0.25)]",
-  },
-  regulamentacao: {
-    label: "Regulamentação",
-    upper: "REGULAMENTAÇÃO",
-    dot: "bg-red-500",
-    chipAtivo: "bg-destructive/20 border-destructive/40 text-destructive-glow",
-    chipHover: "hover:text-destructive-glow",
-    badge: "bg-destructive/15 border-destructive/35 text-destructive-glow",
-    glow: "hover:border-destructive/60 hover:shadow-[0_0_15px_rgba(239,68,68,0.25)]",
-  },
-  indicacao: {
-    label: "Indicação",
-    upper: "INDICAÇÃO",
-    dot: "bg-blue-500",
-    chipAtivo: "bg-blue-500/20 border-blue-500/40 text-blue-400",
-    chipHover: "hover:text-blue-400",
-    badge: "bg-blue-500/15 border-blue-500/35 text-blue-400",
-    glow: "hover:border-blue-500/60 hover:shadow-[0_0_15px_rgba(59,130,246,0.25)]",
-  },
-};
-
-const CONTAGENS: Record<FiltroCategoria, number> = {
-  todas: CATALOGO.length,
-  advertencia: CATALOGO.filter((p) => categoriaDe(p) === "advertencia").length,
-  regulamentacao: CATALOGO.filter((p) => categoriaDe(p) === "regulamentacao")
-    .length,
-  indicacao: CATALOGO.filter((p) => categoriaDe(p) === "indicacao").length,
-};
-
-function categoriaDe(p: PlacaCatalogo): CategoriaPlaca | null {
-  return p.category === "advertencia" ||
-    p.category === "regulamentacao" ||
-    p.category === "indicacao"
-    ? p.category
-    : null;
-}
-
-/** Busca por nome/código ignora acento e caixa ("curva a" acha "Curva à"). */
-function normalizar(s: string): string {
-  return s
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase();
-}
-
 function embaralhar<T>(arr: T[]): T[] {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -207,10 +134,7 @@ function embaralhar<T>(arr: T[]): T[] {
 }
 
 /** Significado/dica escritos à mão para as placas-chave (estudo aprofundado). */
-function estudoDaPlaca(code?: string | null) {
-  if (!code) return undefined;
-  return PLACA_STUDY_DATA.find((s) => s.id === code);
-}
+// (helper compartilhado em @/components/PlacasCatalogo)
 
 // ==========================================
 // PÁGINA
@@ -708,42 +632,6 @@ function PlacasTrainerPage() {
 }
 
 // ==========================================
-// CHIP DE CATEGORIA (compartilhado catálogo/quiz)
-// ==========================================
-
-function ChipCategoria({
-  valor,
-  ativo,
-  onClick,
-}: {
-  valor: FiltroCategoria;
-  ativo: boolean;
-  onClick: () => void;
-}) {
-  const meta = valor === "todas" ? null : CATEGORIA_META[valor];
-  const label = valor === "todas" ? "Todas as Placas" : meta!.label;
-  const ativoClasses =
-    valor === "todas"
-      ? "bg-zinc-800 border-zinc-700 text-foreground"
-      : meta!.chipAtivo;
-  const hoverClasses = valor === "todas" ? "" : meta!.chipHover;
-
-  return (
-    <button
-      onClick={onClick}
-      className={`px-4 py-2 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1.5 cursor-pointer ${
-        ativo
-          ? ativoClasses
-          : `bg-secondary/20 border-border/20 text-muted-foreground ${hoverClasses}`
-      }`}
-    >
-      {meta && <span className={`w-2 h-2 rounded-full ${meta.dot}`} />}
-      {label} ({CONTAGENS[valor]})
-    </button>
-  );
-}
-
-// ==========================================
 // QUIZ DAS PLACAS (modelo souhabilitado /placas/jogar)
 // Mostra a IMAGEM da placa e pergunta o significado — 4 alternativas
 // (nome correto + 3 nomes de outras placas da mesma categoria).
@@ -1093,315 +981,3 @@ function QuizDasPlacas({
   );
 }
 
-// ==========================================
-// ESTUDO (significados escritos para placas-chave)
-// ==========================================
-interface PlacaStudyItem {
-  id: PlacaId;
-  title: string;
-  type: "regulamentacao" | "advertencia" | "indicacao";
-  meaning: string;
-  tip: string;
-  legalBase?: string;
-}
-
-const PLACA_STUDY_DATA: PlacaStudyItem[] = [
-  {
-    id: "R-1",
-    title: "R-1 — Parada Obrigatória",
-    type: "regulamentacao",
-    meaning: "Informa ao condutor que a parada do veículo é obrigatória antes de entrar ou cruzar a via transversal.",
-    tip: "A parada deve ser COMPLETA (rodas totalmente paradas), e não apenas uma redução lenta de velocidade. Desrespeitar é infração gravíssima.",
-    legalBase: "Art. 208 do CTB",
-  },
-  {
-    id: "R-2",
-    title: "R-2 — Dê a Preferência",
-    type: "regulamentacao",
-    meaning: "Indica ao condutor a obrigatoriedade de dar preferência de passagem ao veículo que circula pela via transversal.",
-    tip: "Não exige a parada obrigatória se a via estiver livre, mas exige que você reduza a velocidade e pare se houver tráfego vindo.",
-    legalBase: "Anexo II do CTB",
-  },
-  {
-    id: "R-6a",
-    title: "R-6a — Proibido Estacionar",
-    type: "regulamentacao",
-    meaning: "Assinala ao condutor a proibição de estacionar o veículo no trecho abrangido pela sinalização.",
-    tip: "Permite a PARADA rápida apenas pelo tempo estritamente necessário para embarque ou desembarque de passageiros, sem interromper o fluxo.",
-    legalBase: "Art. 181 do CTB",
-  },
-  {
-    id: "R-6b",
-    title: "R-6b — Proibido Parar e Estacionar",
-    type: "regulamentacao",
-    meaning: "Informa ao condutor que é proibida tanto a parada rápida quanto o estacionamento de veículos no trecho.",
-    tip: "Pegadinha comum: aqui você não pode parar nem para um desembarque de 3 segundos! A proibição é absoluta.",
-    legalBase: "Art. 181, VIII do CTB",
-  },
-  {
-    id: "R-19",
-    title: "R-19 — Velocidade Máxima Regulamentada",
-    type: "regulamentacao",
-    meaning: "Estabelece o limite máximo de velocidade em km/h permitido para a via.",
-    tip: "O limite é válido a partir do ponto onde a placa está instalada até que haja outra placa de limite ou fim da regulamentação.",
-    legalBase: "Art. 218 do CTB",
-  },
-  {
-    id: "R-25a",
-    title: "R-25a — Vire à Esquerda",
-    type: "regulamentacao",
-    meaning: "Regulamenta a obrigatoriedade de o condutor realizar a conversão à esquerda na interseção.",
-    tip: "Garante que o sentido de fluxo da via transversal requer obrigatoriamente a conversão à esquerda por motivos de segurança.",
-    legalBase: "Anexo II do CTB",
-  },
-  {
-    id: "R-25d",
-    title: "R-25d — Siga em Frente",
-    type: "regulamentacao",
-    meaning: "Assinala ao condutor que o único sentido de direção permitido é seguir em linha reta na interseção.",
-    tip: "Diferente de vias de mão única, esta placa obriga você a continuar em frente na próxima bifurcação ou cruzamento.",
-    legalBase: "Anexo II do CTB",
-  },
-  {
-    id: "A-1a",
-    title: "A-1a — Curva Acentuada à Esquerda",
-    type: "advertencia",
-    meaning: "Adverte o condutor sobre a proximidade de uma curva acentuada e perigosa para a esquerda à frente.",
-    tip: "Reduza a velocidade na aproximação, antes da curva, para manter o centro de gravidade estável e evitar derrapagens.",
-    legalBase: "Manual de Sinalização do CONTRAN",
-  },
-  {
-    id: "A-2b",
-    title: "A-2b — Curva à Direita",
-    type: "advertencia",
-    meaning: "Alerta o condutor sobre a existência de uma curva para a direita à frente na via.",
-    tip: "Possui raio de curvatura maior que o da curva acentuada, mas ainda requer atenção e adequação de velocidade segura.",
-    legalBase: "Manual de Sinalização do CONTRAN",
-  },
-  {
-    id: "A-13a",
-    title: "A-13a — Confluência à Esquerda",
-    type: "advertencia",
-    meaning: "Adverte o condutor sobre a junção de outra via à esquerda, onde há entrada de novos fluxos de tráfego.",
-    tip: "Atenção ao retrovisor esquerdo e reduza a velocidade para facilitar a integração segura de outros veículos à sua pista.",
-    legalBase: "Manual de Sinalização do CONTRAN",
-  },
-  {
-    id: "A-32b",
-    title: "A-32b — Passagem Sinalizada de Pedestres",
-    type: "advertencia",
-    meaning: "Alerta sobre a existência de faixa de travessia sinalizada para pedestres logo à frente.",
-    tip: "Reduza a velocidade. Lembre-se: o pedestre que iniciou a travessia na faixa tem prioridade absoluta de passagem sobre o veículo.",
-    legalBase: "Art. 70 do CTB",
-  },
-  {
-    id: "A-33a",
-    title: "A-33a — Área Escolar",
-    type: "advertencia",
-    meaning: "Adverte o condutor sobre a proximidade de trecho com trânsito frequente de escolares e crianças.",
-    tip: "Redobre o cuidado, reduza a velocidade significativamente e prepare o pé no freio para imobilização de emergência.",
-    legalBase: "Art. 220, XIV do CTB",
-  },
-  {
-    id: "I-Hospital",
-    title: "S-1 — Serviço de Hospital",
-    type: "indicacao",
-    meaning: "Indica a localização ou direção para acesso a serviços hospitalares de saúde e pronto-socorro.",
-    tip: "Ao passar próximo a hospitais, evite o uso de buzinas e mantenha o ruído do motor sob controle para o conforto dos pacientes.",
-    legalBase: "Art. 227 do CTB",
-  },
-  {
-    id: "I-Posto",
-    title: "S-13 — Posto de Abastecimento",
-    type: "indicacao",
-    meaning: "Indica a proximidade ou acesso de postos de combustível para abastecimento do veículo.",
-    tip: "Muito útil para planejar viagens longas e evitar a infração de pane seca por falta de combustível na estrada.",
-    legalBase: "Manual de Sinalização de Indicação",
-  },
-];
-
-// ==========================================
-// CATÁLOGO COMPLETO (146 placas oficiais — imagem real do Supabase)
-// ==========================================
-
-function PlacasCatalogo({ categoria }: { categoria: FiltroCategoria }) {
-  const [busca, setBusca] = useState("");
-  const [sel, setSel] = useState<PlacaCatalogo | null>(null);
-
-  const filtradas = useMemo(() => {
-    const termo = normalizar(busca.trim());
-    return CATALOGO.filter((p) => {
-      if (categoria !== "todas" && categoriaDe(p) !== categoria) return false;
-      if (!termo) return true;
-      return (
-        normalizar(p.name ?? "").includes(termo) ||
-        normalizar(p.code ?? "").includes(termo)
-      );
-    });
-  }, [categoria, busca]);
-
-  // Esc fecha o modal (como no site de referência)
-  useEffect(() => {
-    if (!sel) return;
-    const h = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setSel(null);
-    };
-    window.addEventListener("keydown", h);
-    return () => window.removeEventListener("keydown", h);
-  }, [sel]);
-
-  const selEstudo = sel ? estudoDaPlaca(sel.code) : undefined;
-  const selCat = sel ? categoriaDe(sel) : null;
-
-  return (
-    <div>
-      {/* Busca por nome ou código */}
-      <div className="relative mb-4">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-        <Input
-          value={busca}
-          onChange={(e) => setBusca(e.target.value)}
-          placeholder="Buscar por nome ou código (ex: A-1a)"
-          className="pl-10"
-          aria-label="Buscar placa por nome ou código"
-        />
-      </div>
-
-      <p className="text-[11px] text-muted-foreground mb-4">
-        {filtradas.length} de {CATALOGO.length} placas
-        {categoria !== "todas" &&
-          ` · categoria ${CATEGORIA_META[categoria as CategoriaPlaca].label}`}
-        {busca.trim() && ` · busca "${busca.trim()}"`}
-      </p>
-
-      {/* Grid */}
-      {filtradas.length === 0 ? (
-        <div className="glass rounded-2xl p-10 text-center text-muted-foreground text-sm">
-          Nenhuma placa encontrada para “{busca.trim()}”.
-        </div>
-      ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-3 md:gap-4">
-          {filtradas.map((p) => {
-            const cat = categoriaDe(p);
-            const glow = cat ? CATEGORIA_META[cat].glow : "";
-            return (
-              <button
-                key={p.file ?? p.public_url ?? p.name}
-                onClick={() => setSel(p)}
-                className={`glass rounded-2xl p-3 flex flex-col gap-2 border border-border/30 bg-[#0E101B]/80 cursor-pointer transition-all ${glow}`}
-              >
-                {/* Imagem real da placa (Supabase Storage) */}
-                <div className="aspect-square rounded-xl bg-white flex items-center justify-center p-2.5 shadow-inner">
-                  <img
-                    src={p.public_url ?? ""}
-                    alt={p.name ?? "Placa de trânsito"}
-                    loading="lazy"
-                    decoding="async"
-                    className="max-h-full max-w-full object-contain"
-                  />
-                </div>
-                <div className="text-left">
-                  {p.code && (
-                    <span className="inline-block text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border border-border/50 bg-secondary/60 text-muted-foreground mb-1">
-                      {p.code}
-                    </span>
-                  )}
-                  <p className="text-[11px] leading-snug font-medium text-foreground/90">
-                    {p.name}
-                  </p>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      )}
-
-      {/* Modal de detalhe */}
-      {sel && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
-          onClick={() => setSel(null)}
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            onClick={(e) => e.stopPropagation()}
-            className="glass max-w-lg w-full max-h-[90vh] overflow-y-auto rounded-3xl p-6 relative border border-zinc-800 bg-[#0C0F1A]"
-          >
-            <button
-              onClick={() => setSel(null)}
-              aria-label="Fechar"
-              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-zinc-800/60 hover:bg-zinc-800 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-            >
-              <X className="w-4 h-4" />
-            </button>
-
-            <div className="flex flex-col items-center text-center space-y-4">
-              <div className="w-40 h-40 rounded-2xl bg-white flex items-center justify-center p-4 shadow-2xl">
-                <img
-                  src={sel.public_url ?? ""}
-                  alt={sel.name ?? "Placa de trânsito"}
-                  className="max-h-full max-w-full object-contain"
-                />
-              </div>
-
-              <div className="space-y-1">
-                <h2 className="text-xl font-bold font-display">
-                  {sel.code ? `${sel.code} — ` : ""}
-                  {sel.name}
-                </h2>
-                <div className="flex justify-center">
-                  <span
-                    className={`inline-flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider px-3 py-1 rounded-full border ${
-                      selCat
-                        ? CATEGORIA_META[selCat].badge
-                        : "border-border bg-secondary/50 text-muted-foreground"
-                    }`}
-                  >
-                    {selCat ? CATEGORIA_META[selCat].label : "Placa"}
-                  </span>
-                </div>
-              </div>
-
-              <div className="w-full text-left space-y-4 pt-2">
-                <div className="space-y-1 bg-white/5 p-4 rounded-2xl border border-white/5">
-                  <h4 className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1">
-                    <Info className="w-3.5 h-3.5" /> Significado
-                  </h4>
-                  <p className="text-xs md:text-sm text-foreground/90 leading-relaxed">
-                    {selEstudo?.meaning ?? sel.name}
-                  </p>
-                </div>
-
-                {selEstudo?.tip && (
-                  <div className="space-y-1 bg-white/5 p-4 rounded-2xl border border-white/5">
-                    <h4 className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1">
-                      <AlertTriangle className="w-3.5 h-3.5 text-warning" />{" "}
-                      Dica de Prova / Macete
-                    </h4>
-                    <p className="text-xs md:text-sm text-foreground/90 leading-relaxed">
-                      {selEstudo.tip}
-                    </p>
-                  </div>
-                )}
-
-                {selEstudo?.legalBase && (
-                  <div className="text-[10px] text-muted-foreground text-right">
-                    Base legal: {selEstudo.legalBase}
-                  </div>
-                )}
-              </div>
-
-              <button
-                onClick={() => setSel(null)}
-                className="w-full py-3.5 rounded-xl font-bold gradient-primary text-primary-foreground text-xs shadow-glow transition-all cursor-pointer"
-              >
-                Voltar ao Catálogo
-              </button>
-            </div>
-          </motion.div>
-        </div>
-      )}
-    </div>
-  );
-}

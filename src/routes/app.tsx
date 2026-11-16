@@ -11,6 +11,7 @@ import { GroupPopups } from "@/components/WhatsAppGroupPopup";
 import { NativePdfModal } from "@/components/NativePdfModal";
 import { RankingReprovacao } from "@/components/RankingReprovacao";
 import { ScoreProntidao } from "@/components/ScoreProntidao";
+import { PlacasEstudo } from "@/components/PlacasCatalogo";
 import { HCarousel } from "@/components/HCarousel";
 import { GlassCard, GlassButton, GlassBadge } from "@/components/glass";
 import { supabase } from "@/integrations/supabase/client";
@@ -657,6 +658,13 @@ function TeoricoDashboard() {
         </button>
         <button
           type="button"
+          onClick={() => scrollToSection("secao-placas")}
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-border bg-secondary/50 text-xs font-semibold text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors"
+        >
+          🚦 Placas
+        </button>
+        <button
+          type="button"
           onClick={() => scrollToSection("secao-biblioteca")}
           className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-border bg-secondary/50 text-xs font-semibold text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors"
         >
@@ -718,6 +726,9 @@ function TeoricoDashboard() {
           ))}
         </div>
       </section>
+
+      {/* ESTUDO DE PLACAS: todas as placas ou por categoria, dentro do teórico */}
+      <PlacasEstudo />
 
       {/* ABAIXO DOS SIMULADOS: Biblioteca e Livros Virtuais */}
       <section id="secao-biblioteca" className="scroll-mt-24">
