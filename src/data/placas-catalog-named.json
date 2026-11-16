@@ -1,153 +1,343 @@
 [
   {
-    "code": "A-1a",
+    "code": null,
     "category": "advertencia",
     "ext": "png",
-    "name": "Curva acentuada à esquerda",
-    "url": "/images/placas/advertencia/A-1a.png",
-    "file": "placa-curva-acentuada-a-esquerda-A-1a.png",
-    "bytes": 6038,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-curva-acentuada-a-esquerda-A-1a.png"
+    "name": "Sinalização auxiliar de advertência — 1",
+    "url": "/images/placas/advertencia/advertencia-inform-1.png",
+    "file": "placa-advertencia-inform-1.png",
+    "bytes": 1303,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-advertencia-inform-1.png"
   },
   {
-    "code": "A-1b",
+    "code": null,
     "category": "advertencia",
     "ext": "png",
-    "name": "Curva acentuada à direita",
-    "url": "/images/placas/advertencia/A-1b.png",
-    "file": "placa-curva-acentuada-a-direita-A-1b.png",
-    "bytes": 9925,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-curva-acentuada-a-direita-A-1b.png"
+    "name": "Sinalização auxiliar de advertência — 10",
+    "url": "/images/placas/advertencia/advertencia-inform-10.png",
+    "file": "placa-advertencia-inform-10.png",
+    "bytes": 1726,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-advertencia-inform-10.png"
   },
   {
-    "code": "A-2a",
+    "code": null,
     "category": "advertencia",
     "ext": "png",
-    "name": "Curva à esquerda",
-    "url": "/images/placas/advertencia/A-2a.png",
-    "file": "placa-curva-a-esquerda-A-2a.png",
-    "bytes": 10433,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-curva-a-esquerda-A-2a.png"
+    "name": "Sinalização auxiliar de advertência — 11",
+    "url": "/images/placas/advertencia/advertencia-inform-11.png",
+    "file": "placa-advertencia-inform-11.png",
+    "bytes": 1649,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-advertencia-inform-11.png"
   },
   {
-    "code": "A-2b",
+    "code": null,
     "category": "advertencia",
     "ext": "png",
-    "name": "Curva à direita",
-    "url": "/images/placas/advertencia/A-2b.png",
-    "file": "placa-curva-a-direita-A-2b.png",
-    "bytes": 10278,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-curva-a-direita-A-2b.png"
+    "name": "Sinalização auxiliar de advertência — 12",
+    "url": "/images/placas/advertencia/advertencia-inform-12.png",
+    "file": "placa-advertencia-inform-12.png",
+    "bytes": 3292,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-advertencia-inform-12.png"
   },
   {
-    "code": "A-3a",
+    "code": null,
     "category": "advertencia",
     "ext": "png",
-    "name": "Pista sinuosa à esquerda",
-    "url": "/images/placas/advertencia/A-3a.png",
-    "file": "placa-pista-sinuosa-a-esquerda-A-3a.png",
-    "bytes": 11320,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-pista-sinuosa-a-esquerda-A-3a.png"
+    "name": "Sinalização auxiliar de advertência — 13",
+    "url": "/images/placas/advertencia/advertencia-inform-13.png",
+    "file": "placa-advertencia-inform-13.png",
+    "bytes": 2961,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-advertencia-inform-13.png"
   },
   {
-    "code": "A-3b",
+    "code": null,
     "category": "advertencia",
     "ext": "png",
-    "name": "Pista sinuosa à direita",
-    "url": "/images/placas/advertencia/A-3b.png",
-    "file": "placa-pista-sinuosa-a-direita-A-3b.png",
-    "bytes": 11151,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-pista-sinuosa-a-direita-A-3b.png"
+    "name": "Sinalização auxiliar de advertência — 14",
+    "url": "/images/placas/advertencia/advertencia-inform-14.png",
+    "file": "placa-advertencia-inform-14.png",
+    "bytes": 2898,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-advertencia-inform-14.png"
   },
   {
-    "code": "A-4a",
+    "code": null,
     "category": "advertencia",
     "ext": "png",
-    "name": "Curva acentuada em &quot;S&quot; à esquerda",
-    "url": "/images/placas/advertencia/A-4a.png",
-    "file": "placa-curva-acentuada-em-quot-s-quot-a-esquerda-A-4a.png",
-    "bytes": 11330,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-curva-acentuada-em-quot-s-quot-a-esquerda-A-4a.png"
+    "name": "Sinalização auxiliar de advertência — 15",
+    "url": "/images/placas/advertencia/advertencia-inform-15.png",
+    "file": "placa-advertencia-inform-15.png",
+    "bytes": 3037,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-advertencia-inform-15.png"
   },
   {
-    "code": "A-4b",
+    "code": null,
     "category": "advertencia",
     "ext": "png",
-    "name": "Curva acentuada em &quot;S&quot; à direita",
-    "url": "/images/placas/advertencia/A-4b.png",
-    "file": "placa-curva-acentuada-em-quot-s-quot-a-direita-A-4b.png",
-    "bytes": 11194,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-curva-acentuada-em-quot-s-quot-a-direita-A-4b.png"
+    "name": "Sinalização auxiliar de advertência — 16",
+    "url": "/images/placas/advertencia/advertencia-inform-16.png",
+    "file": "placa-advertencia-inform-16.png",
+    "bytes": 1724,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-advertencia-inform-16.png"
   },
   {
-    "code": "A-5a",
+    "code": null,
     "category": "advertencia",
     "ext": "png",
-    "name": "Curva em &quot;S&quot; à direita",
-    "url": "/images/placas/advertencia/A-5a.png",
-    "file": "placa-curva-em-quot-s-quot-a-direita-A-5a.png",
-    "bytes": 10632,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-curva-em-quot-s-quot-a-direita-A-5a.png"
+    "name": "Sinalização auxiliar de advertência — 17",
+    "url": "/images/placas/advertencia/advertencia-inform-17.png",
+    "file": "placa-advertencia-inform-17.png",
+    "bytes": 2509,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-advertencia-inform-17.png"
   },
   {
-    "code": "A-5b",
+    "code": null,
     "category": "advertencia",
     "ext": "png",
-    "name": "Curva em &quot;S&quot; à esquerda",
-    "url": "/images/placas/advertencia/A-5b.png",
-    "file": "placa-curva-em-quot-s-quot-a-esquerda-A-5b.png",
-    "bytes": 10405,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-curva-em-quot-s-quot-a-esquerda-A-5b.png"
+    "name": "Sinalização auxiliar de advertência — 18",
+    "url": "/images/placas/advertencia/advertencia-inform-18.png",
+    "file": "placa-advertencia-inform-18.png",
+    "bytes": 3208,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-advertencia-inform-18.png"
   },
   {
-    "code": "A-6",
+    "code": null,
     "category": "advertencia",
     "ext": "png",
-    "name": "Cruzamento de vias",
-    "url": "/images/placas/advertencia/A-6.png",
-    "file": "placa-cruzamento-de-vias-A-6.png",
-    "bytes": 8964,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-cruzamento-de-vias-A-6.png"
+    "name": "Sinalização auxiliar de advertência — 19",
+    "url": "/images/placas/advertencia/advertencia-inform-19.png",
+    "file": "placa-advertencia-inform-19.png",
+    "bytes": 3406,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-advertencia-inform-19.png"
   },
   {
-    "code": "A-7a",
+    "code": null,
     "category": "advertencia",
     "ext": "png",
-    "name": "Via lateral à esquerda",
-    "url": "/images/placas/advertencia/A-7a.png",
-    "file": "placa-via-lateral-a-esquerda-A-7a.png",
-    "bytes": 8788,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-via-lateral-a-esquerda-A-7a.png"
+    "name": "Sinalização auxiliar de advertência — 2",
+    "url": "/images/placas/advertencia/advertencia-inform-2.png",
+    "file": "placa-advertencia-inform-2.png",
+    "bytes": 1866,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-advertencia-inform-2.png"
   },
   {
-    "code": "A-7b",
+    "code": null,
     "category": "advertencia",
     "ext": "png",
-    "name": "Via lateral à direita",
-    "url": "/images/placas/advertencia/A-7b.png",
-    "file": "placa-via-lateral-a-direita-A-7b.png",
-    "bytes": 9010,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-via-lateral-a-direita-A-7b.png"
+    "name": "Sinalização auxiliar de advertência — 20",
+    "url": "/images/placas/advertencia/advertencia-inform-20.png",
+    "file": "placa-advertencia-inform-20.png",
+    "bytes": 3304,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-advertencia-inform-20.png"
   },
   {
-    "code": "A-8",
+    "code": null,
     "category": "advertencia",
     "ext": "png",
-    "name": "Bifurcação em &quot;T&quot;",
-    "url": "/images/placas/advertencia/A-8.png",
-    "file": "placa-bifurcacao-em-quot-t-quot-A-8.png",
-    "bytes": 6245,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-bifurcacao-em-quot-t-quot-A-8.png"
+    "name": "Sinalização auxiliar de advertência — 21",
+    "url": "/images/placas/advertencia/advertencia-inform-21.png",
+    "file": "placa-advertencia-inform-21.png",
+    "bytes": 3803,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-advertencia-inform-21.png"
   },
   {
-    "code": "A-9",
+    "code": null,
     "category": "advertencia",
     "ext": "png",
-    "name": "Bifurcação em &quot;Y&quot;",
-    "url": "/images/placas/advertencia/A-9.png",
-    "file": "placa-bifurcacao-em-quot-y-quot-A-9.png",
-    "bytes": 7279,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-bifurcacao-em-quot-y-quot-A-9.png"
+    "name": "Sinalização auxiliar de advertência — 3",
+    "url": "/images/placas/advertencia/advertencia-inform-3.png",
+    "file": "placa-advertencia-inform-3.png",
+    "bytes": 1984,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-advertencia-inform-3.png"
+  },
+  {
+    "code": null,
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Sinalização auxiliar de advertência — 4",
+    "url": "/images/placas/advertencia/advertencia-inform-4.png",
+    "file": "placa-advertencia-inform-4.png",
+    "bytes": 1957,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-advertencia-inform-4.png"
+  },
+  {
+    "code": null,
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Sinalização auxiliar de advertência — 5",
+    "url": "/images/placas/advertencia/advertencia-inform-5.png",
+    "file": "placa-advertencia-inform-5.png",
+    "bytes": 2578,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-advertencia-inform-5.png"
+  },
+  {
+    "code": null,
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Sinalização auxiliar de advertência — 6",
+    "url": "/images/placas/advertencia/advertencia-inform-6.png",
+    "file": "placa-advertencia-inform-6.png",
+    "bytes": 1987,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-advertencia-inform-6.png"
+  },
+  {
+    "code": null,
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Sinalização auxiliar de advertência — 7",
+    "url": "/images/placas/advertencia/advertencia-inform-7.png",
+    "file": "placa-advertencia-inform-7.png",
+    "bytes": 2903,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-advertencia-inform-7.png"
+  },
+  {
+    "code": null,
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Sinalização auxiliar de advertência — 8",
+    "url": "/images/placas/advertencia/advertencia-inform-8.png",
+    "file": "placa-advertencia-inform-8.png",
+    "bytes": 3091,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-advertencia-inform-8.png"
+  },
+  {
+    "code": null,
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Sinalização auxiliar de advertência — 9",
+    "url": "/images/placas/advertencia/advertencia-inform-9.png",
+    "file": "placa-advertencia-inform-9.png",
+    "bytes": 1913,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-advertencia-inform-9.png"
+  },
+  {
+    "code": null,
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Sinalização Especial — Condições da Pista e do Clima",
+    "url": "/images/placas/advertencia/sinalizacao-especial-de-advertencia-para-restricoes-ou-imposicoes-para-condicoes-da-pista-ou-condicoes-climaticas.png",
+    "file": "placa-sinalizacao-especial-de-advertencia-para-restricoes-ou-imposicoes-para-condicoes-da-pista-ou-condicoes-climaticas.png",
+    "bytes": 2280,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-especial-de-advertencia-para-restricoes-ou-imposicoes-para-condicoes-da-pista-ou-condicoes-climaticas.png"
+  },
+  {
+    "code": null,
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Sinalização Especial — Faixas Exclusivas de Ônibus",
+    "url": "/images/placas/advertencia/sinalizacao-especial-de-advertencia-para-faixas-ou-pistas-exclusivas-de-onibus.png",
+    "file": "placa-sinalizacao-especial-de-advertencia-para-faixas-ou-pistas-exclusivas-de-onibus.png",
+    "bytes": 2329,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-especial-de-advertencia-para-faixas-ou-pistas-exclusivas-de-onibus.png"
+  },
+  {
+    "code": null,
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Sinalização Especial — Pedestres",
+    "url": "/images/placas/advertencia/sinalizacao-especial-de-advertencia-para-pedestres.png",
+    "file": "placa-sinalizacao-especial-de-advertencia-para-pedestres.png",
+    "bytes": 2400,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-especial-de-advertencia-para-pedestres.png"
+  },
+  {
+    "code": null,
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Sinalização Especial — Usuários da Via",
+    "url": "/images/placas/advertencia/sinalizacao-especial-de-advertencia-para-restricoes-ou-imposicoes-para-usuarios-da-via.png",
+    "file": "placa-sinalizacao-especial-de-advertencia-para-restricoes-ou-imposicoes-para-usuarios-da-via.png",
+    "bytes": 3549,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-especial-de-advertencia-para-restricoes-ou-imposicoes-para-usuarios-da-via.png"
+  },
+  {
+    "code": null,
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Sinalização Especial — Vias de Trânsito Rápido",
+    "url": "/images/placas/advertencia/sinalizacao-especial-de-advertencia-para-vias-de-transito-rapido.png",
+    "file": "placa-sinalizacao-especial-de-advertencia-para-vias-de-transito-rapido.png",
+    "bytes": 2805,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-especial-de-advertencia-para-vias-de-transito-rapido.png"
+  },
+  {
+    "code": null,
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Sinalização especial de advertência para faixas ou pistas exclusivas de ônibus 2",
+    "url": "/images/placas/advertencia/sinalizacao-especial-de-advertencia-para-faixas-ou-pistas-exclusivas-de-onibus-2.png",
+    "file": "placa-sinalizacao-especial-de-advertencia-para-faixas-ou-pistas-exclusivas-de-onibus-2.png",
+    "bytes": 2348,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-especial-de-advertencia-para-faixas-ou-pistas-exclusivas-de-onibus-2.png"
+  },
+  {
+    "code": null,
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Sinalização especial de advertência para faixas ou pistas exclusivas de ônibus 3",
+    "url": "/images/placas/advertencia/sinalizacao-especial-de-advertencia-para-faixas-ou-pistas-exclusivas-de-onibus-3.png",
+    "file": "placa-sinalizacao-especial-de-advertencia-para-faixas-ou-pistas-exclusivas-de-onibus-3.png",
+    "bytes": 2429,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-especial-de-advertencia-para-faixas-ou-pistas-exclusivas-de-onibus-3.png"
+  },
+  {
+    "code": null,
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Sinalização especial de advertência para faixas ou pistas exclusivas de ônibus 4",
+    "url": "/images/placas/advertencia/sinalizacao-especial-de-advertencia-para-faixas-ou-pistas-exclusivas-de-onibus-4.png",
+    "file": "placa-sinalizacao-especial-de-advertencia-para-faixas-ou-pistas-exclusivas-de-onibus-4.png",
+    "bytes": 3701,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-especial-de-advertencia-para-faixas-ou-pistas-exclusivas-de-onibus-4.png"
+  },
+  {
+    "code": null,
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Sinalização especial de advertência para pedestres 2",
+    "url": "/images/placas/advertencia/sinalizacao-especial-de-advertencia-para-pedestres-2.png",
+    "file": "placa-sinalizacao-especial-de-advertencia-para-pedestres-2.png",
+    "bytes": 2520,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-especial-de-advertencia-para-pedestres-2.png"
+  },
+  {
+    "code": null,
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Sinalização especial de advertência para restrições ou imposições para condições da pista ou condições climáticas 2",
+    "url": "/images/placas/advertencia/sinalizacao-especial-de-advertencia-para-restricoes-ou-imposicoes-para-condicoes-da-pista-ou-condicoes-climaticas-2.png",
+    "file": "placa-sinalizacao-especial-de-advertencia-para-restricoes-ou-imposicoes-para-condicoes-da-pista-ou-condicoes-climaticas-2.png",
+    "bytes": 2006,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-especial-de-advertencia-para-restricoes-ou-imposicoes-para-condicoes-da-pista-ou-condicoes-climaticas-2.png"
+  },
+  {
+    "code": null,
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Sinalização especial de advertência para restrições ou imposições para condições da pista ou condições climáticas 3",
+    "url": "/images/placas/advertencia/sinalizacao-especial-de-advertencia-para-restricoes-ou-imposicoes-para-condicoes-da-pista-ou-condicoes-climaticas-3.png",
+    "file": "placa-sinalizacao-especial-de-advertencia-para-restricoes-ou-imposicoes-para-condicoes-da-pista-ou-condicoes-climaticas-3.png",
+    "bytes": 2757,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-especial-de-advertencia-para-restricoes-ou-imposicoes-para-condicoes-da-pista-ou-condicoes-climaticas-3.png"
+  },
+  {
+    "code": null,
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Sinalização especial de advertência para restrições ou imposições para usuários da via 2",
+    "url": "/images/placas/advertencia/sinalizacao-especial-de-advertencia-para-restricoes-ou-imposicoes-para-usuarios-da-via-2.png",
+    "file": "placa-sinalizacao-especial-de-advertencia-para-restricoes-ou-imposicoes-para-usuarios-da-via-2.png",
+    "bytes": 3379,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-especial-de-advertencia-para-restricoes-ou-imposicoes-para-usuarios-da-via-2.png"
+  },
+  {
+    "code": null,
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Sinalização especial de advertência para vias de trânsito rápido 2",
+    "url": "/images/placas/advertencia/sinalizacao-especial-de-advertencia-para-vias-de-transito-rapido-2.png",
+    "file": "placa-sinalizacao-especial-de-advertencia-para-vias-de-transito-rapido-2.png",
+    "bytes": 2428,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-especial-de-advertencia-para-vias-de-transito-rapido-2.png"
   },
   {
     "code": "A-10a",
@@ -278,6 +468,26 @@
     "file": "placa-depressao-A-19.png",
     "bytes": 9463,
     "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-depressao-A-19.png"
+  },
+  {
+    "code": "A-1a",
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Curva acentuada à esquerda",
+    "url": "/images/placas/advertencia/A-1a.png",
+    "file": "placa-curva-acentuada-a-esquerda-A-1a.png",
+    "bytes": 6038,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-curva-acentuada-a-esquerda-A-1a.png"
+  },
+  {
+    "code": "A-1b",
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Curva acentuada à direita",
+    "url": "/images/placas/advertencia/A-1b.png",
+    "file": "placa-curva-acentuada-a-direita-A-1b.png",
+    "bytes": 9925,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-curva-acentuada-a-direita-A-1b.png"
   },
   {
     "code": "A-20a",
@@ -440,6 +650,26 @@
     "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-projecao-de-cascalho-A-29.png"
   },
   {
+    "code": "A-2a",
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Curva à esquerda",
+    "url": "/images/placas/advertencia/A-2a.png",
+    "file": "placa-curva-a-esquerda-A-2a.png",
+    "bytes": 10433,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-curva-a-esquerda-A-2a.png"
+  },
+  {
+    "code": "A-2b",
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Curva à direita",
+    "url": "/images/placas/advertencia/A-2b.png",
+    "file": "placa-curva-a-direita-A-2b.png",
+    "bytes": 10278,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-curva-a-direita-A-2b.png"
+  },
+  {
     "code": "A-30a",
     "category": "advertencia",
     "ext": "png",
@@ -580,6 +810,26 @@
     "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-passagem-de-nivel-sem-barreira-A-39.png"
   },
   {
+    "code": "A-3a",
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Pista sinuosa à esquerda",
+    "url": "/images/placas/advertencia/A-3a.png",
+    "file": "placa-pista-sinuosa-a-esquerda-A-3a.png",
+    "bytes": 11320,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-pista-sinuosa-a-esquerda-A-3a.png"
+  },
+  {
+    "code": "A-3b",
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Pista sinuosa à direita",
+    "url": "/images/placas/advertencia/A-3b.png",
+    "file": "placa-pista-sinuosa-a-direita-A-3b.png",
+    "bytes": 11151,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-pista-sinuosa-a-direita-A-3b.png"
+  },
+  {
     "code": "A-40",
     "category": "advertencia",
     "ext": "png",
@@ -710,6 +960,26 @@
     "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-pedestres-a-direita-vlt-a-esquerda-A-49b.png"
   },
   {
+    "code": "A-4a",
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Curva acentuada em &quot;S&quot; à esquerda",
+    "url": "/images/placas/advertencia/A-4a.png",
+    "file": "placa-curva-acentuada-em-quot-s-quot-a-esquerda-A-4a.png",
+    "bytes": 11330,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-curva-acentuada-em-quot-s-quot-a-esquerda-A-4a.png"
+  },
+  {
+    "code": "A-4b",
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Curva acentuada em &quot;S&quot; à direita",
+    "url": "/images/placas/advertencia/A-4b.png",
+    "file": "placa-curva-acentuada-em-quot-s-quot-a-direita-A-4b.png",
+    "bytes": 11194,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-curva-acentuada-em-quot-s-quot-a-direita-A-4b.png"
+  },
+  {
     "code": "A-50a",
     "category": "advertencia",
     "ext": "png",
@@ -730,6 +1000,226 @@
     "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-veiculos-a-direita-vlt-a-esquerda-A-50b.png"
   },
   {
+    "code": "A-5a",
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Curva em &quot;S&quot; à direita",
+    "url": "/images/placas/advertencia/A-5a.png",
+    "file": "placa-curva-em-quot-s-quot-a-direita-A-5a.png",
+    "bytes": 10632,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-curva-em-quot-s-quot-a-direita-A-5a.png"
+  },
+  {
+    "code": "A-5b",
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Curva em &quot;S&quot; à esquerda",
+    "url": "/images/placas/advertencia/A-5b.png",
+    "file": "placa-curva-em-quot-s-quot-a-esquerda-A-5b.png",
+    "bytes": 10405,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-curva-em-quot-s-quot-a-esquerda-A-5b.png"
+  },
+  {
+    "code": "A-6",
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Cruzamento de vias",
+    "url": "/images/placas/advertencia/A-6.png",
+    "file": "placa-cruzamento-de-vias-A-6.png",
+    "bytes": 8964,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-cruzamento-de-vias-A-6.png"
+  },
+  {
+    "code": "A-7a",
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Via lateral à esquerda",
+    "url": "/images/placas/advertencia/A-7a.png",
+    "file": "placa-via-lateral-a-esquerda-A-7a.png",
+    "bytes": 8788,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-via-lateral-a-esquerda-A-7a.png"
+  },
+  {
+    "code": "A-7b",
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Via lateral à direita",
+    "url": "/images/placas/advertencia/A-7b.png",
+    "file": "placa-via-lateral-a-direita-A-7b.png",
+    "bytes": 9010,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-via-lateral-a-direita-A-7b.png"
+  },
+  {
+    "code": "A-8",
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Bifurcação em &quot;T&quot;",
+    "url": "/images/placas/advertencia/A-8.png",
+    "file": "placa-bifurcacao-em-quot-t-quot-A-8.png",
+    "bytes": 6245,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-bifurcacao-em-quot-t-quot-A-8.png"
+  },
+  {
+    "code": "A-9",
+    "category": "advertencia",
+    "ext": "png",
+    "name": "Bifurcação em &quot;Y&quot;",
+    "url": "/images/placas/advertencia/A-9.png",
+    "file": "placa-bifurcacao-em-quot-y-quot-A-9.png",
+    "bytes": 7279,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-bifurcacao-em-quot-y-quot-A-9.png"
+  },
+  {
+    "code": null,
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Sinalização auxiliar de regulamentação — 1",
+    "url": "/images/placas/regulamentacao/regulamentacao-inform-1.png",
+    "file": "placa-regulamentacao-inform-1.png",
+    "bytes": 1952,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-regulamentacao-inform-1.png"
+  },
+  {
+    "code": null,
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Sinalização auxiliar de regulamentação — 10",
+    "url": "/images/placas/regulamentacao/regulamentacao-inform-10.png",
+    "file": "placa-regulamentacao-inform-10.png",
+    "bytes": 3019,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-regulamentacao-inform-10.png"
+  },
+  {
+    "code": null,
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Sinalização auxiliar de regulamentação — 11",
+    "url": "/images/placas/regulamentacao/regulamentacao-inform-11.png",
+    "file": "placa-regulamentacao-inform-11.png",
+    "bytes": 1987,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-regulamentacao-inform-11.png"
+  },
+  {
+    "code": null,
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Sinalização auxiliar de regulamentação — 12",
+    "url": "/images/placas/regulamentacao/regulamentacao-inform-12.png",
+    "file": "placa-regulamentacao-inform-12.png",
+    "bytes": 2091,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-regulamentacao-inform-12.png"
+  },
+  {
+    "code": null,
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Sinalização auxiliar de regulamentação — 13",
+    "url": "/images/placas/regulamentacao/regulamentacao-inform-13.png",
+    "file": "placa-regulamentacao-inform-13.png",
+    "bytes": 1746,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-regulamentacao-inform-13.png"
+  },
+  {
+    "code": null,
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Sinalização auxiliar de regulamentação — 14",
+    "url": "/images/placas/regulamentacao/regulamentacao-inform-14.png",
+    "file": "placa-regulamentacao-inform-14.png",
+    "bytes": 2616,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-regulamentacao-inform-14.png"
+  },
+  {
+    "code": null,
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Sinalização auxiliar de regulamentação — 15",
+    "url": "/images/placas/regulamentacao/regulamentacao-inform-15.png",
+    "file": "placa-regulamentacao-inform-15.png",
+    "bytes": 2486,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-regulamentacao-inform-15.png"
+  },
+  {
+    "code": null,
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Sinalização auxiliar de regulamentação — 2",
+    "url": "/images/placas/regulamentacao/regulamentacao-inform-2.png",
+    "file": "placa-regulamentacao-inform-2.png",
+    "bytes": 2176,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-regulamentacao-inform-2.png"
+  },
+  {
+    "code": null,
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Sinalização auxiliar de regulamentação — 3",
+    "url": "/images/placas/regulamentacao/regulamentacao-inform-3.png",
+    "file": "placa-regulamentacao-inform-3.png",
+    "bytes": 1730,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-regulamentacao-inform-3.png"
+  },
+  {
+    "code": null,
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Sinalização auxiliar de regulamentação — 4",
+    "url": "/images/placas/regulamentacao/regulamentacao-inform-4.png",
+    "file": "placa-regulamentacao-inform-4.png",
+    "bytes": 2083,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-regulamentacao-inform-4.png"
+  },
+  {
+    "code": null,
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Sinalização auxiliar de regulamentação — 5",
+    "url": "/images/placas/regulamentacao/regulamentacao-inform-5.png",
+    "file": "placa-regulamentacao-inform-5.png",
+    "bytes": 2481,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-regulamentacao-inform-5.png"
+  },
+  {
+    "code": null,
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Sinalização auxiliar de regulamentação — 6",
+    "url": "/images/placas/regulamentacao/regulamentacao-inform-6.png",
+    "file": "placa-regulamentacao-inform-6.png",
+    "bytes": 3054,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-regulamentacao-inform-6.png"
+  },
+  {
+    "code": null,
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Sinalização auxiliar de regulamentação — 7",
+    "url": "/images/placas/regulamentacao/regulamentacao-inform-7.png",
+    "file": "placa-regulamentacao-inform-7.png",
+    "bytes": 2805,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-regulamentacao-inform-7.png"
+  },
+  {
+    "code": null,
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Sinalização auxiliar de regulamentação — 8",
+    "url": "/images/placas/regulamentacao/regulamentacao-inform-8.png",
+    "file": "placa-regulamentacao-inform-8.png",
+    "bytes": 3079,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-regulamentacao-inform-8.png"
+  },
+  {
+    "code": null,
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Sinalização auxiliar de regulamentação — 9",
+    "url": "/images/placas/regulamentacao/regulamentacao-inform-9.png",
+    "file": "placa-regulamentacao-inform-9.png",
+    "bytes": 2971,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-regulamentacao-inform-9.png"
+  },
+  {
     "code": "R-1",
     "category": "regulamentacao",
     "ext": "png",
@@ -738,136 +1228,6 @@
     "file": "placa-parada-obrigatoria-R-1.png",
     "bytes": 15941,
     "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-parada-obrigatoria-R-1.png"
-  },
-  {
-    "code": "R-2",
-    "category": "regulamentacao",
-    "ext": "png",
-    "name": "Dê a preferência",
-    "url": "/images/placas/regulamentacao/R-2.png",
-    "file": "placa-de-a-preferencia-R-2.png",
-    "bytes": 4286,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-de-a-preferencia-R-2.png"
-  },
-  {
-    "code": "R-3",
-    "category": "regulamentacao",
-    "ext": "png",
-    "name": "Sentido proibido",
-    "url": "/images/placas/regulamentacao/R-3.png",
-    "file": "placa-sentido-proibido-R-3.png",
-    "bytes": 7418,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sentido-proibido-R-3.png"
-  },
-  {
-    "code": "R-4a",
-    "category": "regulamentacao",
-    "ext": "png",
-    "name": "Proibido virar à esquerda",
-    "url": "/images/placas/regulamentacao/R-4a.png",
-    "file": "placa-proibido-virar-a-esquerda-R-4a.png",
-    "bytes": 9205,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-virar-a-esquerda-R-4a.png"
-  },
-  {
-    "code": "R-4b",
-    "category": "regulamentacao",
-    "ext": "png",
-    "name": "Proibido virar à direita",
-    "url": "/images/placas/regulamentacao/R-4b.png",
-    "file": "placa-proibido-virar-a-direita-R-4b.png",
-    "bytes": 7560,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-virar-a-direita-R-4b.png"
-  },
-  {
-    "code": "R-5a",
-    "category": "regulamentacao",
-    "ext": "png",
-    "name": "Proibido retornar à esquerda",
-    "url": "/images/placas/regulamentacao/R-5a.png",
-    "file": "placa-proibido-retornar-a-esquerda-R-5a.png",
-    "bytes": 8445,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-retornar-a-esquerda-R-5a.png"
-  },
-  {
-    "code": "R-5b",
-    "category": "regulamentacao",
-    "ext": "png",
-    "name": "Proibido retornar à direita",
-    "url": "/images/placas/regulamentacao/R-5b.png",
-    "file": "placa-proibido-retornar-a-direita-R-5b.png",
-    "bytes": 8370,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-retornar-a-direita-R-5b.png"
-  },
-  {
-    "code": "R-6a",
-    "category": "regulamentacao",
-    "ext": "png",
-    "name": "Proibido estacionar",
-    "url": "/images/placas/regulamentacao/R-6a.png",
-    "file": "placa-proibido-estacionar-R-6a.png",
-    "bytes": 6883,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-estacionar-R-6a.png"
-  },
-  {
-    "code": "R-6b",
-    "category": "regulamentacao",
-    "ext": "png",
-    "name": "Estacionamento regulamentado",
-    "url": "/images/placas/regulamentacao/R-6b.png",
-    "file": "placa-estacionamento-regulamentado-R-6b.png",
-    "bytes": 6478,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-estacionamento-regulamentado-R-6b.png"
-  },
-  {
-    "code": "R-6c",
-    "category": "regulamentacao",
-    "ext": "png",
-    "name": "Proibido parar e estacionar",
-    "url": "/images/placas/regulamentacao/R-6c.png",
-    "file": "placa-proibido-parar-e-estacionar-R-6c.png",
-    "bytes": 7293,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-parar-e-estacionar-R-6c.png"
-  },
-  {
-    "code": "R-7",
-    "category": "regulamentacao",
-    "ext": "png",
-    "name": "Proibido ultrapassar",
-    "url": "/images/placas/regulamentacao/R-7.png",
-    "file": "placa-proibido-ultrapassar-R-7.png",
-    "bytes": 8784,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-ultrapassar-R-7.png"
-  },
-  {
-    "code": "R-8a",
-    "category": "regulamentacao",
-    "ext": "png",
-    "name": "Proibido mudar de faixa de trânsito da esquerda para a direita",
-    "url": "/images/placas/regulamentacao/R-8a.png",
-    "file": "placa-proibido-mudar-de-faixa-de-transito-da-esquerda-para-a-direita-R-8a.png",
-    "bytes": 8079,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-mudar-de-faixa-de-transito-da-esquerda-para-a-direita-R-8a.png"
-  },
-  {
-    "code": "R-8b",
-    "category": "regulamentacao",
-    "ext": "png",
-    "name": "Proibido mudar de faixa de trânsito da direita para a esquerda",
-    "url": "/images/placas/regulamentacao/R-8b.png",
-    "file": "placa-proibido-mudar-de-faixa-de-transito-da-direita-para-a-esquerda-R-8b.png",
-    "bytes": 7834,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-mudar-de-faixa-de-transito-da-direita-para-a-esquerda-R-8b.png"
-  },
-  {
-    "code": "R-9",
-    "category": "regulamentacao",
-    "ext": "png",
-    "name": "Proibido trânsito de caminhões",
-    "url": "/images/placas/regulamentacao/R-9.png",
-    "file": "placa-proibido-transito-de-caminhoes-R-9.png",
-    "bytes": 7966,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-transito-de-caminhoes-R-9.png"
   },
   {
     "code": "R-10",
@@ -968,6 +1328,16 @@
     "file": "placa-velocidade-maxima-permitida-R-19.png",
     "bytes": 10247,
     "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-velocidade-maxima-permitida-R-19.png"
+  },
+  {
+    "code": "R-2",
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Dê a preferência",
+    "url": "/images/placas/regulamentacao/R-2.png",
+    "file": "placa-de-a-preferencia-R-2.png",
+    "bytes": 4286,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-de-a-preferencia-R-2.png"
   },
   {
     "code": "R-20",
@@ -1108,6 +1478,16 @@
     "file": "placa-proibido-transito-de-pedestres-R-29.png",
     "bytes": 9139,
     "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-transito-de-pedestres-R-29.png"
+  },
+  {
+    "code": "R-3",
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Sentido proibido",
+    "url": "/images/placas/regulamentacao/R-3.png",
+    "file": "placa-sentido-proibido-R-3.png",
+    "bytes": 7418,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sentido-proibido-R-3.png"
   },
   {
     "code": "R-30",
@@ -1300,163 +1680,2513 @@
     "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-circulacao-compartilhada-de-ciclistas-e-pedestres-R-44.png"
   },
   {
+    "code": "R-4a",
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Proibido virar à esquerda",
+    "url": "/images/placas/regulamentacao/R-4a.png",
+    "file": "placa-proibido-virar-a-esquerda-R-4a.png",
+    "bytes": 9205,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-virar-a-esquerda-R-4a.png"
+  },
+  {
+    "code": "R-4b",
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Proibido virar à direita",
+    "url": "/images/placas/regulamentacao/R-4b.png",
+    "file": "placa-proibido-virar-a-direita-R-4b.png",
+    "bytes": 7560,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-virar-a-direita-R-4b.png"
+  },
+  {
+    "code": "R-5a",
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Proibido retornar à esquerda",
+    "url": "/images/placas/regulamentacao/R-5a.png",
+    "file": "placa-proibido-retornar-a-esquerda-R-5a.png",
+    "bytes": 8445,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-retornar-a-esquerda-R-5a.png"
+  },
+  {
+    "code": "R-5b",
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Proibido retornar à direita",
+    "url": "/images/placas/regulamentacao/R-5b.png",
+    "file": "placa-proibido-retornar-a-direita-R-5b.png",
+    "bytes": 8370,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-retornar-a-direita-R-5b.png"
+  },
+  {
+    "code": "R-6a",
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Proibido estacionar",
+    "url": "/images/placas/regulamentacao/R-6a.png",
+    "file": "placa-proibido-estacionar-R-6a.png",
+    "bytes": 6883,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-estacionar-R-6a.png"
+  },
+  {
+    "code": "R-6b",
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Estacionamento regulamentado",
+    "url": "/images/placas/regulamentacao/R-6b.png",
+    "file": "placa-estacionamento-regulamentado-R-6b.png",
+    "bytes": 6478,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-estacionamento-regulamentado-R-6b.png"
+  },
+  {
+    "code": "R-6c",
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Proibido parar e estacionar",
+    "url": "/images/placas/regulamentacao/R-6c.png",
+    "file": "placa-proibido-parar-e-estacionar-R-6c.png",
+    "bytes": 7293,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-parar-e-estacionar-R-6c.png"
+  },
+  {
+    "code": "R-7",
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Proibido ultrapassar",
+    "url": "/images/placas/regulamentacao/R-7.png",
+    "file": "placa-proibido-ultrapassar-R-7.png",
+    "bytes": 8784,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-ultrapassar-R-7.png"
+  },
+  {
+    "code": "R-8a",
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Proibido mudar de faixa de trânsito da esquerda para a direita",
+    "url": "/images/placas/regulamentacao/R-8a.png",
+    "file": "placa-proibido-mudar-de-faixa-de-transito-da-esquerda-para-a-direita-R-8a.png",
+    "bytes": 8079,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-mudar-de-faixa-de-transito-da-esquerda-para-a-direita-R-8a.png"
+  },
+  {
+    "code": "R-8b",
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Proibido mudar de faixa de trânsito da direita para a esquerda",
+    "url": "/images/placas/regulamentacao/R-8b.png",
+    "file": "placa-proibido-mudar-de-faixa-de-transito-da-direita-para-a-esquerda-R-8b.png",
+    "bytes": 7834,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-mudar-de-faixa-de-transito-da-direita-para-a-esquerda-R-8b.png"
+  },
+  {
+    "code": "R-9",
+    "category": "regulamentacao",
+    "ext": "png",
+    "name": "Proibido trânsito de caminhões",
+    "url": "/images/placas/regulamentacao/R-9.png",
+    "file": "placa-proibido-transito-de-caminhoes-R-9.png",
+    "bytes": 7966,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-transito-de-caminhoes-R-9.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Identificação de municipios",
+    "url": "/images/placas/identificacao/identificacao-de-municipios.png",
+    "file": "placa-identificacao-de-municipios.png",
+    "bytes": 1597,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-identificacao-de-municipios.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Identificação de municipios 2",
+    "url": "/images/placas/identificacao/identificacao-de-municipios-2.png",
+    "file": "placa-identificacao-de-municipios-2.png",
+    "bytes": 1454,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-identificacao-de-municipios-2.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Identificação de regiões de interesse de identificação de limite de municipios divisa de estados fronteira e perímetro urbano",
+    "url": "/images/placas/identificacao/identificacao-de-regioes-de-interesse-de-identificacao-de-limite-de-municipios-divisa-de-estados-fronteira-e-perimetro-urbano.png",
+    "file": "placa-identificacao-de-regioes-de-interesse-de-identificacao-de-limite-de-municipios-divisa-de-estados-fronteira-e-perimetro-urbano.png",
+    "bytes": 2948,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-identificacao-de-regioes-de-interesse-de-identificacao-de-limite-de-municipios-divisa-de-estados-fronteira-e-perimetro-urbano.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Identificação de regiões de interesse de identificação de limite de municipios divisa de estados fronteira e perímetro urbano 2",
+    "url": "/images/placas/identificacao/identificacao-de-regioes-de-interesse-de-identificacao-de-limite-de-municipios-divisa-de-estados-fronteira-e-perimetro-urbano-2.png",
+    "file": "placa-identificacao-de-regioes-de-interesse-de-identificacao-de-limite-de-municipios-divisa-de-estados-fronteira-e-perimetro-urbano-2.png",
+    "bytes": 2924,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-identificacao-de-regioes-de-interesse-de-identificacao-de-limite-de-municipios-divisa-de-estados-fronteira-e-perimetro-urbano-2.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Identificação de regiões de interesse de identificação de limite de municipios divisa de estados fronteira e perímetro urbano 3",
+    "url": "/images/placas/identificacao/identificacao-de-regioes-de-interesse-de-identificacao-de-limite-de-municipios-divisa-de-estados-fronteira-e-perimetro-urbano-3.png",
+    "file": "placa-identificacao-de-regioes-de-interesse-de-identificacao-de-limite-de-municipios-divisa-de-estados-fronteira-e-perimetro-urbano-3.png",
+    "bytes": 2503,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-identificacao-de-regioes-de-interesse-de-identificacao-de-limite-de-municipios-divisa-de-estados-fronteira-e-perimetro-urbano-3.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Identificação de regiões de interesse de identificação de limite de municipios divisa de estados fronteira e perímetro urbano 4",
+    "url": "/images/placas/identificacao/identificacao-de-regioes-de-interesse-de-identificacao-de-limite-de-municipios-divisa-de-estados-fronteira-e-perimetro-urbano-4.png",
+    "file": "placa-identificacao-de-regioes-de-interesse-de-identificacao-de-limite-de-municipios-divisa-de-estados-fronteira-e-perimetro-urbano-4.png",
+    "bytes": 2277,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-identificacao-de-regioes-de-interesse-de-identificacao-de-limite-de-municipios-divisa-de-estados-fronteira-e-perimetro-urbano-4.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Identificação de regiões de interesse de identificação de pedágio",
+    "url": "/images/placas/identificacao/identificacao-de-regioes-de-interesse-de-identificacao-de-pedagio.png",
+    "file": "placa-identificacao-de-regioes-de-interesse-de-identificacao-de-pedagio.png",
+    "bytes": 3442,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-identificacao-de-regioes-de-interesse-de-identificacao-de-pedagio.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Identificação de regiões de interesse de identificação de pedágio 2",
+    "url": "/images/placas/identificacao/identificacao-de-regioes-de-interesse-de-identificacao-de-pedagio-2.png",
+    "file": "placa-identificacao-de-regioes-de-interesse-de-identificacao-de-pedagio-2.png",
+    "bytes": 3201,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-identificacao-de-regioes-de-interesse-de-identificacao-de-pedagio-2.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Identificação de regiões de interesse de identificação de pedágio 3",
+    "url": "/images/placas/identificacao/identificacao-de-regioes-de-interesse-de-identificacao-de-pedagio-3.png",
+    "file": "placa-identificacao-de-regioes-de-interesse-de-identificacao-de-pedagio-3.png",
+    "bytes": 2508,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-identificacao-de-regioes-de-interesse-de-identificacao-de-pedagio-3.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Identificação de regiões de interesse de identificação nominal de pontes viadutos tuneis e passarelas",
+    "url": "/images/placas/identificacao/identificacao-de-regioes-de-interesse-de-identificacao-nominal-de-pontes-viadutos-tuneis-e-passarelas.png",
+    "file": "placa-identificacao-de-regioes-de-interesse-de-identificacao-nominal-de-pontes-viadutos-tuneis-e-passarelas.png",
+    "bytes": 2546,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-identificacao-de-regioes-de-interesse-de-identificacao-nominal-de-pontes-viadutos-tuneis-e-passarelas.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Identificação de regiões de interesse de identificação nominal de pontes viadutos tuneis e passarelas 2",
+    "url": "/images/placas/identificacao/identificacao-de-regioes-de-interesse-de-identificacao-nominal-de-pontes-viadutos-tuneis-e-passarelas-2.png",
+    "file": "placa-identificacao-de-regioes-de-interesse-de-identificacao-nominal-de-pontes-viadutos-tuneis-e-passarelas-2.png",
+    "bytes": 3187,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-identificacao-de-regioes-de-interesse-de-identificacao-nominal-de-pontes-viadutos-tuneis-e-passarelas-2.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Identificação de regiões de interesse de identificação quilometrica",
+    "url": "/images/placas/identificacao/identificacao-de-regioes-de-interesse-de-identificacao-quilometrica.png",
+    "file": "placa-identificacao-de-regioes-de-interesse-de-identificacao-quilometrica.png",
+    "bytes": 1640,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-identificacao-de-regioes-de-interesse-de-identificacao-quilometrica.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Identificação de regiões de interesse de identificação quilometrica 2",
+    "url": "/images/placas/identificacao/identificacao-de-regioes-de-interesse-de-identificacao-quilometrica-2.png",
+    "file": "placa-identificacao-de-regioes-de-interesse-de-identificacao-quilometrica-2.png",
+    "bytes": 1999,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-identificacao-de-regioes-de-interesse-de-identificacao-quilometrica-2.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Identificação de regiões de interesse de tráfego e logradouros",
+    "url": "/images/placas/identificacao/identificacao-de-regioes-de-interesse-de-trafego-e-logradouros.png",
+    "file": "placa-identificacao-de-regioes-de-interesse-de-trafego-e-logradouros.png",
+    "bytes": 1319,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-identificacao-de-regioes-de-interesse-de-trafego-e-logradouros.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Identificação de regiões de interesse de tráfego e logradouros 2",
+    "url": "/images/placas/identificacao/identificacao-de-regioes-de-interesse-de-trafego-e-logradouros-2.png",
+    "file": "placa-identificacao-de-regioes-de-interesse-de-trafego-e-logradouros-2.png",
+    "bytes": 1983,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-identificacao-de-regioes-de-interesse-de-trafego-e-logradouros-2.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Identificação de regiões de interesse de tráfego e logradouros 3",
+    "url": "/images/placas/identificacao/identificacao-de-regioes-de-interesse-de-trafego-e-logradouros-3.png",
+    "file": "placa-identificacao-de-regioes-de-interesse-de-trafego-e-logradouros-3.png",
+    "bytes": 2248,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-identificacao-de-regioes-de-interesse-de-trafego-e-logradouros-3.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Identificação de regiões de interesse de tráfego e logradouros 4",
+    "url": "/images/placas/identificacao/identificacao-de-regioes-de-interesse-de-trafego-e-logradouros-4.png",
+    "file": "placa-identificacao-de-regioes-de-interesse-de-trafego-e-logradouros-4.png",
+    "bytes": 1555,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-identificacao-de-regioes-de-interesse-de-trafego-e-logradouros-4.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Identificação de regiões de interesse de tráfego e logradouros 5",
+    "url": "/images/placas/identificacao/identificacao-de-regioes-de-interesse-de-trafego-e-logradouros-5.png",
+    "file": "placa-identificacao-de-regioes-de-interesse-de-trafego-e-logradouros-5.png",
+    "bytes": 1613,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-identificacao-de-regioes-de-interesse-de-trafego-e-logradouros-5.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Identificação rodovias e estradas estaduais",
+    "url": "/images/placas/identificacao/identificacao-rodovias-e-estradas-estaduais.png",
+    "file": "placa-identificacao-rodovias-e-estradas-estaduais.png",
+    "bytes": 2913,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-identificacao-rodovias-e-estradas-estaduais.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Identificação rodovias e estradas federais",
+    "url": "/images/placas/identificacao/identificacao-rodovias-e-estradas-federais.png",
+    "file": "placa-identificacao-rodovias-e-estradas-federais.png",
+    "bytes": 2144,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-identificacao-rodovias-e-estradas-federais.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Identificação rodovias e estradas pan americanas",
+    "url": "/images/placas/identificacao/identificacao-rodovias-e-estradas-pan-americanas.png",
+    "file": "placa-identificacao-rodovias-e-estradas-pan-americanas.png",
+    "bytes": 4422,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-identificacao-rodovias-e-estradas-pan-americanas.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Orientação de destino placa diagramada",
+    "url": "/images/placas/identificacao/orientacao-de-destino-placa-diagramada.png",
+    "file": "placa-orientacao-de-destino-placa-diagramada.png",
+    "bytes": 3712,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-orientacao-de-destino-placa-diagramada.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Orientação de destino placa diagramada 2",
+    "url": "/images/placas/identificacao/orientacao-de-destino-placa-diagramada-2.png",
+    "file": "placa-orientacao-de-destino-placa-diagramada-2.png",
+    "bytes": 3270,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-orientacao-de-destino-placa-diagramada-2.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Orientação de destino placa diagramada 3",
+    "url": "/images/placas/identificacao/orientacao-de-destino-placa-diagramada-3.png",
+    "file": "placa-orientacao-de-destino-placa-diagramada-3.png",
+    "bytes": 3369,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-orientacao-de-destino-placa-diagramada-3.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Orientação de destino placa diagramada 4",
+    "url": "/images/placas/identificacao/orientacao-de-destino-placa-diagramada-4.png",
+    "file": "placa-orientacao-de-destino-placa-diagramada-4.png",
+    "bytes": 2423,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-orientacao-de-destino-placa-diagramada-4.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Orientação de destino placa diagramada 5",
+    "url": "/images/placas/identificacao/orientacao-de-destino-placa-diagramada-5.png",
+    "file": "placa-orientacao-de-destino-placa-diagramada-5.png",
+    "bytes": 4842,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-orientacao-de-destino-placa-diagramada-5.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Orientação de destino placa diagramada 6",
+    "url": "/images/placas/identificacao/orientacao-de-destino-placa-diagramada-6.png",
+    "file": "placa-orientacao-de-destino-placa-diagramada-6.png",
+    "bytes": 4832,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-orientacao-de-destino-placa-diagramada-6.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Orientação de destino placa indicativa de distância",
+    "url": "/images/placas/identificacao/orientacao-de-destino-placa-indicativa-de-distancia.png",
+    "file": "placa-orientacao-de-destino-placa-indicativa-de-distancia.png",
+    "bytes": 1879,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-orientacao-de-destino-placa-indicativa-de-distancia.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Orientação de destino placa indicativa de distância 2",
+    "url": "/images/placas/identificacao/orientacao-de-destino-placa-indicativa-de-distancia-2.png",
+    "file": "placa-orientacao-de-destino-placa-indicativa-de-distancia-2.png",
+    "bytes": 1592,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-orientacao-de-destino-placa-indicativa-de-distancia-2.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Orientação de destino placa indicativa de distância 3",
+    "url": "/images/placas/identificacao/orientacao-de-destino-placa-indicativa-de-distancia-3.png",
+    "file": "placa-orientacao-de-destino-placa-indicativa-de-distancia-3.png",
+    "bytes": 3178,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-orientacao-de-destino-placa-indicativa-de-distancia-3.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Orientação de destino placa indicativa de distância 4",
+    "url": "/images/placas/identificacao/orientacao-de-destino-placa-indicativa-de-distancia-4.png",
+    "file": "placa-orientacao-de-destino-placa-indicativa-de-distancia-4.png",
+    "bytes": 3783,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-orientacao-de-destino-placa-indicativa-de-distancia-4.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Orientação de destino placa indicativa de distância 5",
+    "url": "/images/placas/identificacao/orientacao-de-destino-placa-indicativa-de-distancia-5.png",
+    "file": "placa-orientacao-de-destino-placa-indicativa-de-distancia-5.png",
+    "bytes": 4005,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-orientacao-de-destino-placa-indicativa-de-distancia-5.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Orientação de destino placa indicativa de sentido direcao",
+    "url": "/images/placas/identificacao/orientacao-de-destino-placa-indicativa-de-sentido-direcao.png",
+    "file": "placa-orientacao-de-destino-placa-indicativa-de-sentido-direcao.png",
+    "bytes": 2712,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-orientacao-de-destino-placa-indicativa-de-sentido-direcao.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Orientação de destino placa indicativa de sentido direcao 2",
+    "url": "/images/placas/identificacao/orientacao-de-destino-placa-indicativa-de-sentido-direcao-2.png",
+    "file": "placa-orientacao-de-destino-placa-indicativa-de-sentido-direcao-2.png",
+    "bytes": 2765,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-orientacao-de-destino-placa-indicativa-de-sentido-direcao-2.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Orientação de destino placa indicativa de sentido direcao 3",
+    "url": "/images/placas/identificacao/orientacao-de-destino-placa-indicativa-de-sentido-direcao-3.png",
+    "file": "placa-orientacao-de-destino-placa-indicativa-de-sentido-direcao-3.png",
+    "bytes": 2396,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-orientacao-de-destino-placa-indicativa-de-sentido-direcao-3.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Orientação de destino placa indicativa de sentido direcao 4",
+    "url": "/images/placas/identificacao/orientacao-de-destino-placa-indicativa-de-sentido-direcao-4.png",
+    "file": "placa-orientacao-de-destino-placa-indicativa-de-sentido-direcao-4.png",
+    "bytes": 1699,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-orientacao-de-destino-placa-indicativa-de-sentido-direcao-4.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Orientação de destino placa indicativa de sentido direcao 5",
+    "url": "/images/placas/identificacao/orientacao-de-destino-placa-indicativa-de-sentido-direcao-5.png",
+    "file": "placa-orientacao-de-destino-placa-indicativa-de-sentido-direcao-5.png",
+    "bytes": 2103,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-orientacao-de-destino-placa-indicativa-de-sentido-direcao-5.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Orientação de destino placa indicativa de sentido direcao 6",
+    "url": "/images/placas/identificacao/orientacao-de-destino-placa-indicativa-de-sentido-direcao-6.png",
+    "file": "placa-orientacao-de-destino-placa-indicativa-de-sentido-direcao-6.png",
+    "bytes": 2871,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-orientacao-de-destino-placa-indicativa-de-sentido-direcao-6.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Orientação de destino placa indicativa de sentido direcao 7",
+    "url": "/images/placas/identificacao/orientacao-de-destino-placa-indicativa-de-sentido-direcao-7.png",
+    "file": "placa-orientacao-de-destino-placa-indicativa-de-sentido-direcao-7.png",
+    "bytes": 3313,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-orientacao-de-destino-placa-indicativa-de-sentido-direcao-7.png"
+  },
+  {
+    "code": null,
+    "category": "identificacao",
+    "ext": "png",
+    "name": "Orientação de destino placa indicativa de sentido direcao 8",
+    "url": "/images/placas/identificacao/orientacao-de-destino-placa-indicativa-de-sentido-direcao-8.png",
+    "file": "placa-orientacao-de-destino-placa-indicativa-de-sentido-direcao-8.png",
+    "bytes": 3909,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-orientacao-de-destino-placa-indicativa-de-sentido-direcao-8.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Placa em desuso estacionamento de trailer",
+    "url": "/images/placas/servicos/placa-em-desuso-estacionamento-de-trailer.png",
+    "file": "placa-placa-em-desuso-estacionamento-de-trailer.png",
+    "bytes": 1216,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placa-em-desuso-estacionamento-de-trailer.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Placa em desuso passagem protegida para pedestre",
+    "url": "/images/placas/servicos/placa-em-desuso-passagem-protegida-para-pedestre.png",
+    "file": "placa-placa-em-desuso-passagem-protegida-para-pedestre.png",
+    "bytes": 1480,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placa-em-desuso-passagem-protegida-para-pedestre.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Placa em desuso serviço sanitário",
+    "url": "/images/placas/servicos/placa-em-desuso-servico-sanitario.png",
+    "file": "placa-placa-em-desuso-servico-sanitario.png",
+    "bytes": 1389,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placa-em-desuso-servico-sanitario.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Placas Educativas",
+    "url": "/images/placas/servicos/sinalizacao-de-indicacao-placa-educativa.png",
+    "file": "placa-sinalizacao-de-indicacao-placa-educativa.png",
+    "bytes": 1023,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-de-indicacao-placa-educativa.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Serviços auxiliares abastecimento",
+    "url": "/images/placas/servicos/servicos-auxiliares-abastecimento.png",
+    "file": "placa-servicos-auxiliares-abastecimento.png",
+    "bytes": 1647,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-auxiliares-abastecimento.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Serviços auxiliares aeroporto",
+    "url": "/images/placas/servicos/servicos-auxiliares-aeroporto.png",
+    "file": "placa-servicos-auxiliares-aeroporto.png",
+    "bytes": 1228,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-auxiliares-aeroporto.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Serviços auxiliares área de campismo",
+    "url": "/images/placas/servicos/servicos-auxiliares-area-de-campismo.png",
+    "file": "placa-servicos-auxiliares-area-de-campismo.png",
+    "bytes": 1162,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-auxiliares-area-de-campismo.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Serviços auxiliares área de estacionamento",
+    "url": "/images/placas/servicos/servicos-auxiliares-area-de-estacionamento.png",
+    "file": "placa-servicos-auxiliares-area-de-estacionamento.png",
+    "bytes": 1087,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-auxiliares-area-de-estacionamento.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Serviços auxiliares borracheiro",
+    "url": "/images/placas/servicos/servicos-auxiliares-borracheiro.png",
+    "file": "placa-servicos-auxiliares-borracheiro.png",
+    "bytes": 1203,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-auxiliares-borracheiro.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Serviços auxiliares hotel",
+    "url": "/images/placas/servicos/servicos-auxiliares-hotel.png",
+    "file": "placa-servicos-auxiliares-hotel.png",
+    "bytes": 1289,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-auxiliares-hotel.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Serviços auxiliares informação turística",
+    "url": "/images/placas/servicos/servicos-auxiliares-informacao-turistica.png",
+    "file": "placa-servicos-auxiliares-informacao-turistica.png",
+    "bytes": 872,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-auxiliares-informacao-turistica.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Serviços auxiliares pedágio",
+    "url": "/images/placas/servicos/servicos-auxiliares-pedagio.png",
+    "file": "placa-servicos-auxiliares-pedagio.png",
+    "bytes": 1051,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-auxiliares-pedagio.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Serviços auxiliares placa para condutores",
+    "url": "/images/placas/servicos/servicos-auxiliares-placa-para-condutores.png",
+    "file": "placa-servicos-auxiliares-placa-para-condutores.png",
+    "bytes": 1631,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-auxiliares-placa-para-condutores.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Serviços auxiliares placa para condutores 2",
+    "url": "/images/placas/servicos/servicos-auxiliares-placa-para-condutores-2.png",
+    "file": "placa-servicos-auxiliares-placa-para-condutores-2.png",
+    "bytes": 1404,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-auxiliares-placa-para-condutores-2.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Serviços auxiliares placa para pedestres",
+    "url": "/images/placas/servicos/servicos-auxiliares-placa-para-pedestres.png",
+    "file": "placa-servicos-auxiliares-placa-para-pedestres.png",
+    "bytes": 2105,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-auxiliares-placa-para-pedestres.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Serviços auxiliares placa para pedestres 2",
+    "url": "/images/placas/servicos/servicos-auxiliares-placa-para-pedestres-2.png",
+    "file": "placa-servicos-auxiliares-placa-para-pedestres-2.png",
+    "bytes": 2166,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-auxiliares-placa-para-pedestres-2.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Serviços auxiliares placa para pedestres 3",
+    "url": "/images/placas/servicos/servicos-auxiliares-placa-para-pedestres-3.png",
+    "file": "placa-servicos-auxiliares-placa-para-pedestres-3.png",
+    "bytes": 2183,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-auxiliares-placa-para-pedestres-3.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Serviços auxiliares placa para pedestres 4",
+    "url": "/images/placas/servicos/servicos-auxiliares-placa-para-pedestres-4.png",
+    "file": "placa-servicos-auxiliares-placa-para-pedestres-4.png",
+    "bytes": 2152,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-auxiliares-placa-para-pedestres-4.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Serviços auxiliares ponto de parada",
+    "url": "/images/placas/servicos/servicos-auxiliares-ponto-de-parada.png",
+    "file": "placa-servicos-auxiliares-ponto-de-parada.png",
+    "bytes": 981,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-auxiliares-ponto-de-parada.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Serviços auxiliares pronto socorro",
+    "url": "/images/placas/servicos/servicos-auxiliares-pronto-socorro.png",
+    "file": "placa-servicos-auxiliares-pronto-socorro.png",
+    "bytes": 723,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-auxiliares-pronto-socorro.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Serviços auxiliares restaurante",
+    "url": "/images/placas/servicos/servicos-auxiliares-restaurante.png",
+    "file": "placa-servicos-auxiliares-restaurante.png",
+    "bytes": 1780,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-auxiliares-restaurante.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Serviços auxiliares serviço mecânico",
+    "url": "/images/placas/servicos/servicos-auxiliares-servico-mecanico.png",
+    "file": "placa-servicos-auxiliares-servico-mecanico.png",
+    "bytes": 1173,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-auxiliares-servico-mecanico.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Serviços auxiliares serviço telefônico",
+    "url": "/images/placas/servicos/servicos-auxiliares-servico-telefonico.png",
+    "file": "placa-servicos-auxiliares-servico-telefonico.png",
+    "bytes": 1209,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-auxiliares-servico-telefonico.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Serviços auxiliares terminal ferroviário",
+    "url": "/images/placas/servicos/servicos-auxiliares-terminal-ferroviario.png",
+    "file": "placa-servicos-auxiliares-terminal-ferroviario.png",
+    "bytes": 1079,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-auxiliares-terminal-ferroviario.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Serviços auxiliares terminal rodoviário",
+    "url": "/images/placas/servicos/servicos-auxiliares-terminal-rodoviario.png",
+    "file": "placa-servicos-auxiliares-terminal-rodoviario.png",
+    "bytes": 971,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-auxiliares-terminal-rodoviario.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Serviços auxiliares transporte sobre água",
+    "url": "/images/placas/servicos/servicos-auxiliares-transporte-sobre-agua.png",
+    "file": "placa-servicos-auxiliares-transporte-sobre-agua.png",
+    "bytes": 1645,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-auxiliares-transporte-sobre-agua.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Sinalização de indicação placa educativa 10",
+    "url": "/images/placas/servicos/sinalizacao-de-indicacao-placa-educativa-10.png",
+    "file": "placa-sinalizacao-de-indicacao-placa-educativa-10.png",
+    "bytes": 1261,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-de-indicacao-placa-educativa-10.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Sinalização de indicação placa educativa 11",
+    "url": "/images/placas/servicos/sinalizacao-de-indicacao-placa-educativa-11.png",
+    "file": "placa-sinalizacao-de-indicacao-placa-educativa-11.png",
+    "bytes": 1519,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-de-indicacao-placa-educativa-11.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Sinalização de indicação placa educativa 12",
+    "url": "/images/placas/servicos/sinalizacao-de-indicacao-placa-educativa-12.png",
+    "file": "placa-sinalizacao-de-indicacao-placa-educativa-12.png",
+    "bytes": 1580,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-de-indicacao-placa-educativa-12.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Sinalização de indicação placa educativa 13",
+    "url": "/images/placas/servicos/sinalizacao-de-indicacao-placa-educativa-13.png",
+    "file": "placa-sinalizacao-de-indicacao-placa-educativa-13.png",
+    "bytes": 1382,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-de-indicacao-placa-educativa-13.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Sinalização de indicação placa educativa 14",
+    "url": "/images/placas/servicos/sinalizacao-de-indicacao-placa-educativa-14.png",
+    "file": "placa-sinalizacao-de-indicacao-placa-educativa-14.png",
+    "bytes": 1566,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-de-indicacao-placa-educativa-14.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Sinalização de indicação placa educativa 15",
+    "url": "/images/placas/servicos/sinalizacao-de-indicacao-placa-educativa-15.png",
+    "file": "placa-sinalizacao-de-indicacao-placa-educativa-15.png",
+    "bytes": 1271,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-de-indicacao-placa-educativa-15.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Sinalização de indicação placa educativa 16",
+    "url": "/images/placas/servicos/sinalizacao-de-indicacao-placa-educativa-16.png",
+    "file": "placa-sinalizacao-de-indicacao-placa-educativa-16.png",
+    "bytes": 1146,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-de-indicacao-placa-educativa-16.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Sinalização de indicação placa educativa 17",
+    "url": "/images/placas/servicos/sinalizacao-de-indicacao-placa-educativa-17.png",
+    "file": "placa-sinalizacao-de-indicacao-placa-educativa-17.png",
+    "bytes": 2175,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-de-indicacao-placa-educativa-17.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Sinalização de indicação placa educativa 18",
+    "url": "/images/placas/servicos/sinalizacao-de-indicacao-placa-educativa-18.png",
+    "file": "placa-sinalizacao-de-indicacao-placa-educativa-18.png",
+    "bytes": 1694,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-de-indicacao-placa-educativa-18.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Sinalização de indicação placa educativa 19",
+    "url": "/images/placas/servicos/sinalizacao-de-indicacao-placa-educativa-19.png",
+    "file": "placa-sinalizacao-de-indicacao-placa-educativa-19.png",
+    "bytes": 1563,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-de-indicacao-placa-educativa-19.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Sinalização de indicação placa educativa 2",
+    "url": "/images/placas/servicos/sinalizacao-de-indicacao-placa-educativa-2.png",
+    "file": "placa-sinalizacao-de-indicacao-placa-educativa-2.png",
+    "bytes": 1351,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-de-indicacao-placa-educativa-2.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Sinalização de indicação placa educativa 20",
+    "url": "/images/placas/servicos/sinalizacao-de-indicacao-placa-educativa-20.png",
+    "file": "placa-sinalizacao-de-indicacao-placa-educativa-20.png",
+    "bytes": 1605,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-de-indicacao-placa-educativa-20.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Sinalização de indicação placa educativa 21",
+    "url": "/images/placas/servicos/sinalizacao-de-indicacao-placa-educativa-21.png",
+    "file": "placa-sinalizacao-de-indicacao-placa-educativa-21.png",
+    "bytes": 1664,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-de-indicacao-placa-educativa-21.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Sinalização de indicação placa educativa 22",
+    "url": "/images/placas/servicos/sinalizacao-de-indicacao-placa-educativa-22.png",
+    "file": "placa-sinalizacao-de-indicacao-placa-educativa-22.png",
+    "bytes": 1408,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-de-indicacao-placa-educativa-22.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Sinalização de indicação placa educativa 3",
+    "url": "/images/placas/servicos/sinalizacao-de-indicacao-placa-educativa-3.png",
+    "file": "placa-sinalizacao-de-indicacao-placa-educativa-3.png",
+    "bytes": 1464,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-de-indicacao-placa-educativa-3.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Sinalização de indicação placa educativa 4",
+    "url": "/images/placas/servicos/sinalizacao-de-indicacao-placa-educativa-4.png",
+    "file": "placa-sinalizacao-de-indicacao-placa-educativa-4.png",
+    "bytes": 1328,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-de-indicacao-placa-educativa-4.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Sinalização de indicação placa educativa 5",
+    "url": "/images/placas/servicos/sinalizacao-de-indicacao-placa-educativa-5.png",
+    "file": "placa-sinalizacao-de-indicacao-placa-educativa-5.png",
+    "bytes": 1273,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-de-indicacao-placa-educativa-5.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Sinalização de indicação placa educativa 6",
+    "url": "/images/placas/servicos/sinalizacao-de-indicacao-placa-educativa-6.png",
+    "file": "placa-sinalizacao-de-indicacao-placa-educativa-6.png",
+    "bytes": 1287,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-de-indicacao-placa-educativa-6.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Sinalização de indicação placa educativa 7",
+    "url": "/images/placas/servicos/sinalizacao-de-indicacao-placa-educativa-7.png",
+    "file": "placa-sinalizacao-de-indicacao-placa-educativa-7.png",
+    "bytes": 1509,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-de-indicacao-placa-educativa-7.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Sinalização de indicação placa educativa 8",
+    "url": "/images/placas/servicos/sinalizacao-de-indicacao-placa-educativa-8.png",
+    "file": "placa-sinalizacao-de-indicacao-placa-educativa-8.png",
+    "bytes": 1114,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-de-indicacao-placa-educativa-8.png"
+  },
+  {
+    "code": null,
+    "category": "servicos",
+    "ext": "png",
+    "name": "Sinalização de indicação placa educativa 9",
+    "url": "/images/placas/servicos/sinalizacao-de-indicacao-placa-educativa-9.png",
+    "file": "placa-sinalizacao-de-indicacao-placa-educativa-9.png",
+    "bytes": 1683,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sinalizacao-de-indicacao-placa-educativa-9.png"
+  },
+  {
     "code": "DEF-01",
-    "category": "indicacao",
+    "category": "servicos",
     "ext": "png",
     "name": "Rota, mobiliário ou equipamento acessível a pessoas com deficiência",
-    "url": "/images/placas/indicacao/DEF-01.png",
+    "url": "/images/placas/servicos/DEF-01.png",
     "file": "placa-rota-mobiliario-ou-equipamento-acessivel-a-pessoas-com-deficiencia-DEF-01.png",
     "bytes": 9657,
     "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-rota-mobiliario-ou-equipamento-acessivel-a-pessoas-com-deficiencia-DEF-01.png"
   },
   {
     "code": "SAU-06",
-    "category": "indicacao",
+    "category": "servicos",
     "ext": "png",
     "name": "Serviço telefônico",
-    "url": "/images/placas/indicacao/SAU-06.png",
+    "url": "/images/placas/servicos/SAU-06.png",
     "file": "placa-servico-telefonico-SAU-06.png",
     "bytes": 8580,
     "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servico-telefonico-SAU-06.png"
   },
   {
     "code": "SAU-08",
-    "category": "indicacao",
+    "category": "servicos",
     "ext": "png",
     "name": "Borracharia",
-    "url": "/images/placas/indicacao/SAU-08.png",
+    "url": "/images/placas/servicos/SAU-08.png",
     "file": "placa-borracharia-SAU-08.png",
     "bytes": 20920,
     "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-borracharia-SAU-08.png"
   },
   {
     "code": "SAU-09",
-    "category": "indicacao",
+    "category": "servicos",
     "ext": "png",
     "name": "Abastecimento",
-    "url": "/images/placas/indicacao/SAU-09.png",
+    "url": "/images/placas/servicos/SAU-09.png",
     "file": "placa-abastecimento-SAU-09.png",
     "bytes": 4654,
     "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-abastecimento-SAU-09.png"
   },
   {
     "code": "SAU-10",
-    "category": "indicacao",
+    "category": "servicos",
     "ext": "png",
     "name": "Pronto-socorro",
-    "url": "/images/placas/indicacao/SAU-10.png",
+    "url": "/images/placas/servicos/SAU-10.png",
     "file": "placa-pronto-socorro-SAU-10.png",
     "bytes": 1402,
     "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-pronto-socorro-SAU-10.png"
   },
   {
     "code": "SAU-12",
-    "category": "indicacao",
+    "category": "servicos",
     "ext": "png",
     "name": "Restaurante",
-    "url": "/images/placas/indicacao/SAU-12.png",
+    "url": "/images/placas/servicos/SAU-12.png",
     "file": "placa-restaurante-SAU-12.png",
     "bytes": 12747,
     "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-restaurante-SAU-12.png"
   },
   {
     "code": "SAU-13",
-    "category": "indicacao",
+    "category": "servicos",
     "ext": "png",
     "name": "Hotel",
-    "url": "/images/placas/indicacao/SAU-13.png",
+    "url": "/images/placas/servicos/SAU-13.png",
     "file": "placa-hotel-SAU-13.png",
     "bytes": 8364,
     "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-hotel-SAU-13.png"
   },
   {
     "code": "SAU-18",
-    "category": "indicacao",
+    "category": "servicos",
     "ext": "png",
     "name": "Pedágio",
-    "url": "/images/placas/indicacao/SAU-18.png",
+    "url": "/images/placas/servicos/SAU-18.png",
     "file": "placa-pedagio-SAU-18.png",
     "bytes": 5929,
     "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-pedagio-SAU-18.png"
   },
   {
     "code": "SAU-19",
-    "category": "indicacao",
+    "category": "servicos",
     "ext": "png",
     "name": "Terminal rodoviário",
-    "url": "/images/placas/indicacao/SAU-19.png",
+    "url": "/images/placas/servicos/SAU-19.png",
     "file": "placa-terminal-rodoviario-SAU-19.png",
     "bytes": 10420,
     "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-terminal-rodoviario-SAU-19.png"
   },
   {
     "code": "SAU-21",
-    "category": "indicacao",
+    "category": "servicos",
     "ext": "png",
     "name": "Aeroporto",
-    "url": "/images/placas/indicacao/SAU-21.png",
+    "url": "/images/placas/servicos/SAU-21.png",
     "file": "placa-aeroporto-SAU-21.png",
     "bytes": 6273,
     "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-aeroporto-SAU-21.png"
   },
   {
     "code": "SAU-26",
-    "category": "indicacao",
+    "category": "servicos",
     "ext": "png",
     "name": "Ponto de parada",
-    "url": "/images/placas/indicacao/SAU-26.png",
+    "url": "/images/placas/servicos/SAU-26.png",
     "file": "placa-ponto-de-parada-SAU-26.png",
     "bytes": 5546,
     "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-ponto-de-parada-SAU-26.png"
   },
   {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Área de campismo",
+    "url": "/images/placas/turisticas/servico-variado-area-de-campismo.png",
+    "file": "placa-servico-variado-area-de-campismo.png",
+    "bytes": 3477,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servico-variado-area-de-campismo.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Área de estacionamento",
+    "url": "/images/placas/turisticas/servico-variado-area-de-estacionamento-.png",
+    "file": "placa-servico-variado-area-de-estacionamento-.png",
+    "bytes": 3836,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servico-variado-area-de-estacionamento-.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Área para prática de esportes esportes",
+    "url": "/images/placas/turisticas/area-para-pratica-de-esportes-esportes.png",
+    "file": "placa-area-para-pratica-de-esportes-esportes.png",
+    "bytes": 2901,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-para-pratica-de-esportes-esportes.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Área para prática de esportes esportes aeroclube",
+    "url": "/images/placas/turisticas/area-para-pratica-de-esportes-esportes-aeroclube.png",
+    "file": "placa-area-para-pratica-de-esportes-esportes-aeroclube.png",
+    "bytes": 2680,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-para-pratica-de-esportes-esportes-aeroclube.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Área para prática de esportes esportes automobilístico",
+    "url": "/images/placas/turisticas/area-para-pratica-de-esportes-esportes-automobilistico.png",
+    "file": "placa-area-para-pratica-de-esportes-esportes-automobilistico.png",
+    "bytes": 4606,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-para-pratica-de-esportes-esportes-automobilistico.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Área para prática de esportes esportes canoagem",
+    "url": "/images/placas/turisticas/area-para-pratica-de-esportes-esportes-canoagem.png",
+    "file": "placa-area-para-pratica-de-esportes-esportes-canoagem.png",
+    "bytes": 3047,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-para-pratica-de-esportes-esportes-canoagem.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Área para prática de esportes esportes ciclismo",
+    "url": "/images/placas/turisticas/area-para-pratica-de-esportes-esportes-ciclismo.png",
+    "file": "placa-area-para-pratica-de-esportes-esportes-ciclismo.png",
+    "bytes": 3096,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-para-pratica-de-esportes-esportes-ciclismo.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Área para prática de esportes esportes equestres",
+    "url": "/images/placas/turisticas/area-para-pratica-de-esportes-esportes-equestres.png",
+    "file": "placa-area-para-pratica-de-esportes-esportes-equestres.png",
+    "bytes": 4009,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-para-pratica-de-esportes-esportes-equestres.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Área para prática de esportes esportes futebol",
+    "url": "/images/placas/turisticas/area-para-pratica-de-esportes-esportes-futebol.png",
+    "file": "placa-area-para-pratica-de-esportes-esportes-futebol.png",
+    "bytes": 2602,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-para-pratica-de-esportes-esportes-futebol.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Área para prática de esportes esportes golfe",
+    "url": "/images/placas/turisticas/area-para-pratica-de-esportes-esportes-golfe.png",
+    "file": "placa-area-para-pratica-de-esportes-esportes-golfe.png",
+    "bytes": 2411,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-para-pratica-de-esportes-esportes-golfe.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Área para prática de esportes esportes marina",
+    "url": "/images/placas/turisticas/area-para-pratica-de-esportes-esportes-marina.png",
+    "file": "placa-area-para-pratica-de-esportes-esportes-marina.png",
+    "bytes": 2515,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-para-pratica-de-esportes-esportes-marina.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Área para prática de esportes esportes mergulho",
+    "url": "/images/placas/turisticas/area-para-pratica-de-esportes-esportes-mergulho.png",
+    "file": "placa-area-para-pratica-de-esportes-esportes-mergulho.png",
+    "bytes": 2963,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-para-pratica-de-esportes-esportes-mergulho.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Área para prática de esportes esportes montanhismo",
+    "url": "/images/placas/turisticas/area-para-pratica-de-esportes-esportes-montanhismo.png",
+    "file": "placa-area-para-pratica-de-esportes-esportes-montanhismo.png",
+    "bytes": 3200,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-para-pratica-de-esportes-esportes-montanhismo.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Área para prática de esportes esportes náuticos",
+    "url": "/images/placas/turisticas/area-para-pratica-de-esportes-esportes-nauticos.png",
+    "file": "placa-area-para-pratica-de-esportes-esportes-nauticos.png",
+    "bytes": 3748,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-para-pratica-de-esportes-esportes-nauticos.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Área para prática de esportes esportes pesca esportiva",
+    "url": "/images/placas/turisticas/area-para-pratica-de-esportes-esportes-pesca-esportiva.png",
+    "file": "placa-area-para-pratica-de-esportes-esportes-pesca-esportiva.png",
+    "bytes": 3507,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-para-pratica-de-esportes-esportes-pesca-esportiva.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Área para prática de esportes esportes pesca submarina",
+    "url": "/images/placas/turisticas/area-para-pratica-de-esportes-esportes-pesca-submarina.png",
+    "file": "placa-area-para-pratica-de-esportes-esportes-pesca-submarina.png",
+    "bytes": 3587,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-para-pratica-de-esportes-esportes-pesca-submarina.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Área para prática de esportes esportes surfe",
+    "url": "/images/placas/turisticas/area-para-pratica-de-esportes-esportes-surfe.png",
+    "file": "placa-area-para-pratica-de-esportes-esportes-surfe.png",
+    "bytes": 2601,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-para-pratica-de-esportes-esportes-surfe.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Área para prática de esportes esportes voo livre",
+    "url": "/images/placas/turisticas/area-para-pratica-de-esportes-esportes-voo-livre.png",
+    "file": "placa-area-para-pratica-de-esportes-esportes-voo-livre.png",
+    "bytes": 2823,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-area-para-pratica-de-esportes-esportes-voo-livre.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Áreas de recreação barco de passeio",
+    "url": "/images/placas/turisticas/areas-de-recreacao-barco-de-passeio.png",
+    "file": "placa-areas-de-recreacao-barco-de-passeio.png",
+    "bytes": 3510,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-areas-de-recreacao-barco-de-passeio.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Áreas de recreação mirante",
+    "url": "/images/placas/turisticas/areas-de-recreacao-mirante.png",
+    "file": "placa-areas-de-recreacao-mirante.png",
+    "bytes": 2544,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-areas-de-recreacao-mirante.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Áreas de recreação parque de diversões",
+    "url": "/images/placas/turisticas/areas-de-recreacao-parque-de-diversoes.png",
+    "file": "placa-areas-de-recreacao-parque-de-diversoes.png",
+    "bytes": 3989,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-areas-de-recreacao-parque-de-diversoes.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Áreas de recreação parque urbano",
+    "url": "/images/placas/turisticas/areas-de-recreacao-parque-urbano.png",
+    "file": "placa-areas-de-recreacao-parque-urbano.png",
+    "bytes": 3396,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-areas-de-recreacao-parque-urbano.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Áreas de recreação praça",
+    "url": "/images/placas/turisticas/areas-de-recreacao-praca.png",
+    "file": "placa-areas-de-recreacao-praca.png",
+    "bytes": 2471,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-areas-de-recreacao-praca.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Áreas de recreação represa",
+    "url": "/images/placas/turisticas/areas-de-recreacao-represa.png",
+    "file": "placa-areas-de-recreacao-represa.png",
+    "bytes": 2534,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-areas-de-recreacao-represa.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Áreas de recreação teleférico",
+    "url": "/images/placas/turisticas/areas-de-recreacao-teleferico.png",
+    "file": "placa-areas-de-recreacao-teleferico.png",
+    "bytes": 2739,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-areas-de-recreacao-teleferico.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Atrativos históricos e culturais arquitetura histórica",
+    "url": "/images/placas/turisticas/atrativos-historicos-e-culturais-arquitetura-historica.png",
+    "file": "placa-atrativos-historicos-e-culturais-arquitetura-historica.png",
+    "bytes": 3889,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-atrativos-historicos-e-culturais-arquitetura-historica.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Atrativos históricos e culturais arquitetura militar",
+    "url": "/images/placas/turisticas/atrativos-historicos-e-culturais-arquitetura-militar.png",
+    "file": "placa-atrativos-historicos-e-culturais-arquitetura-militar.png",
+    "bytes": 3516,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-atrativos-historicos-e-culturais-arquitetura-militar.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Atrativos históricos e culturais arquitetura religiosa",
+    "url": "/images/placas/turisticas/atrativos-historicos-e-culturais-arquitetura-religiosa.png",
+    "file": "placa-atrativos-historicos-e-culturais-arquitetura-religiosa.png",
+    "bytes": 3860,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-atrativos-historicos-e-culturais-arquitetura-religiosa.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Atrativos históricos e culturais biblioteca",
+    "url": "/images/placas/turisticas/atrativos-historicos-e-culturais-biblioteca.png",
+    "file": "placa-atrativos-historicos-e-culturais-biblioteca.png",
+    "bytes": 2709,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-atrativos-historicos-e-culturais-biblioteca.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Atrativos históricos e culturais centro de cultura",
+    "url": "/images/placas/turisticas/atrativos-historicos-e-culturais-centro-de-cultura.png",
+    "file": "placa-atrativos-historicos-e-culturais-centro-de-cultura.png",
+    "bytes": 3862,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-atrativos-historicos-e-culturais-centro-de-cultura.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Atrativos históricos e culturais farol",
+    "url": "/images/placas/turisticas/atrativos-historicos-e-culturais-farol.png",
+    "file": "placa-atrativos-historicos-e-culturais-farol.png",
+    "bytes": 2244,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-atrativos-historicos-e-culturais-farol.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Atrativos históricos e culturais monumento",
+    "url": "/images/placas/turisticas/atrativos-historicos-e-culturais-monumento.png",
+    "file": "placa-atrativos-historicos-e-culturais-monumento.png",
+    "bytes": 2778,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-atrativos-historicos-e-culturais-monumento.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Atrativos históricos e culturais museu",
+    "url": "/images/placas/turisticas/atrativos-historicos-e-culturais-museu.png",
+    "file": "placa-atrativos-historicos-e-culturais-museu.png",
+    "bytes": 2226,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-atrativos-historicos-e-culturais-museu.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Atrativos históricos e culturais patrimônio cultural",
+    "url": "/images/placas/turisticas/atrativos-historicos-e-culturais-patrimonio-cultural.png",
+    "file": "placa-atrativos-historicos-e-culturais-patrimonio-cultural.png",
+    "bytes": 3946,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-atrativos-historicos-e-culturais-patrimonio-cultural.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Atrativos históricos e culturais ruína",
+    "url": "/images/placas/turisticas/atrativos-historicos-e-culturais-ruina.png",
+    "file": "placa-atrativos-historicos-e-culturais-ruina.png",
+    "bytes": 2122,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-atrativos-historicos-e-culturais-ruina.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Atrativos históricos e culturais sítio arqueológico",
+    "url": "/images/placas/turisticas/atrativos-historicos-e-culturais-sitio-arqueologico.png",
+    "file": "placa-atrativos-historicos-e-culturais-sitio-arqueologico.png",
+    "bytes": 3905,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-atrativos-historicos-e-culturais-sitio-arqueologico.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Atrativos turísticos naturais cachoeira",
+    "url": "/images/placas/turisticas/atrativos-turisticos-naturais-cachoeira.png",
+    "file": "placa-atrativos-turisticos-naturais-cachoeira.png",
+    "bytes": 3070,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-atrativos-turisticos-naturais-cachoeira.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Atrativos turísticos naturais estância hidromineral",
+    "url": "/images/placas/turisticas/atrativos-turisticos-naturais-estancia-hidromineral.png",
+    "file": "placa-atrativos-turisticos-naturais-estancia-hidromineral.png",
+    "bytes": 4100,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-atrativos-turisticos-naturais-estancia-hidromineral.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Atrativos turísticos naturais gruta",
+    "url": "/images/placas/turisticas/atrativos-turisticos-naturais-gruta.png",
+    "file": "placa-atrativos-turisticos-naturais-gruta.png",
+    "bytes": 2574,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-atrativos-turisticos-naturais-gruta.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Atrativos turísticos naturais ilha",
+    "url": "/images/placas/turisticas/atrativos-turisticos-naturais-ilha.png",
+    "file": "placa-atrativos-turisticos-naturais-ilha.png",
+    "bytes": 2367,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-atrativos-turisticos-naturais-ilha.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Atrativos turísticos naturais montanha",
+    "url": "/images/placas/turisticas/atrativos-turisticos-naturais-montanha.png",
+    "file": "placa-atrativos-turisticos-naturais-montanha.png",
+    "bytes": 2667,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-atrativos-turisticos-naturais-montanha.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Atrativos turísticos naturais patrimônio natural",
+    "url": "/images/placas/turisticas/atrativos-turisticos-naturais-patrimonio-natural.png",
+    "file": "placa-atrativos-turisticos-naturais-patrimonio-natural.png",
+    "bytes": 3844,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-atrativos-turisticos-naturais-patrimonio-natural.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Atrativos turísticos naturais praia",
+    "url": "/images/placas/turisticas/atrativos-turisticos-naturais-praia.png",
+    "file": "placa-atrativos-turisticos-naturais-praia.png",
+    "bytes": 2439,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-atrativos-turisticos-naturais-praia.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Atrativos turísticos naturais rio lago lagoa",
+    "url": "/images/placas/turisticas/atrativos-turisticos-naturais-rio-lago-lagoa.png",
+    "file": "placa-atrativos-turisticos-naturais-rio-lago-lagoa.png",
+    "bytes": 2260,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-atrativos-turisticos-naturais-rio-lago-lagoa.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Atrativos turísticos naturais turismo rural",
+    "url": "/images/placas/turisticas/atrativos-turisticos-naturais-turismo-rural.png",
+    "file": "placa-atrativos-turisticos-naturais-turismo-rural.png",
+    "bytes": 3102,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-atrativos-turisticos-naturais-turismo-rural.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Câmbio",
+    "url": "/images/placas/turisticas/servico-variado-cambio.png",
+    "file": "placa-servico-variado-cambio.png",
+    "bytes": 2844,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servico-variado-cambio.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Correio",
+    "url": "/images/placas/turisticas/servico-variado-correio.png",
+    "file": "placa-servico-variado-correio.png",
+    "bytes": 2530,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servico-variado-correio.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Estacionamento de trailer",
+    "url": "/images/placas/turisticas/servico-variado-estacionamento-de-trailer.png",
+    "file": "placa-servico-variado-estacionamento-de-trailer.png",
+    "bytes": 4046,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servico-variado-estacionamento-de-trailer.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Exemplo de compatibilização entre placa de orientação turística e placa de orientação de destino",
+    "url": "/images/placas/turisticas/exemplo-de-compatibilizacao-entre-placa-de-orientacao-turistica-e-placa-de-orientacao-de-destino.png",
+    "file": "placa-exemplo-de-compatibilizacao-entre-placa-de-orientacao-turistica-e-placa-de-orientacao-de-destino.png",
+    "bytes": 3268,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-exemplo-de-compatibilizacao-entre-placa-de-orientacao-turistica-e-placa-de-orientacao-de-destino.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Exemplo de compatibilização entre placa de orientação turística e placa de orientação de destino 2",
+    "url": "/images/placas/turisticas/exemplo-de-compatibilizacao-entre-placa-de-orientacao-turistica-e-placa-de-orientacao-de-destino-2.png",
+    "file": "placa-exemplo-de-compatibilizacao-entre-placa-de-orientacao-turistica-e-placa-de-orientacao-de-destino-2.png",
+    "bytes": 3349,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-exemplo-de-compatibilizacao-entre-placa-de-orientacao-turistica-e-placa-de-orientacao-de-destino-2.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Identificação de atrativo turístico",
+    "url": "/images/placas/turisticas/identificacao-de-atrativo-turistico.png",
+    "file": "placa-identificacao-de-atrativo-turistico.png",
+    "bytes": 3620,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-identificacao-de-atrativo-turistico.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Identificação de atrativo turístico 2",
+    "url": "/images/placas/turisticas/identificacao-de-atrativo-turistico-2.png",
+    "file": "placa-identificacao-de-atrativo-turistico-2.png",
+    "bytes": 5058,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-identificacao-de-atrativo-turistico-2.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Informações turísticas",
+    "url": "/images/placas/turisticas/servico-variado-informacoes-turisticas.png",
+    "file": "placa-servico-variado-informacoes-turisticas.png",
+    "bytes": 3766,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servico-variado-informacoes-turisticas.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Locais para atividades de interesse turístico artesanato",
+    "url": "/images/placas/turisticas/locais-para-atividades-de-interesse-turistico-artesanato.png",
+    "file": "placa-locais-para-atividades-de-interesse-turistico-artesanato.png",
+    "bytes": 3088,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-locais-para-atividades-de-interesse-turistico-artesanato.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Locais para atividades de interesse turístico convenções",
+    "url": "/images/placas/turisticas/locais-para-atividades-de-interesse-turistico-convencoes.png",
+    "file": "placa-locais-para-atividades-de-interesse-turistico-convencoes.png",
+    "bytes": 3180,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-locais-para-atividades-de-interesse-turistico-convencoes.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Locais para atividades de interesse turístico exposição agropecuária",
+    "url": "/images/placas/turisticas/locais-para-atividades-de-interesse-turistico-exposicao-agropecuaria.png",
+    "file": "placa-locais-para-atividades-de-interesse-turistico-exposicao-agropecuaria.png",
+    "bytes": 4359,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-locais-para-atividades-de-interesse-turistico-exposicao-agropecuaria.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Locais para atividades de interesse turístico feira típica",
+    "url": "/images/placas/turisticas/locais-para-atividades-de-interesse-turistico-feira-tipica.png",
+    "file": "placa-locais-para-atividades-de-interesse-turistico-feira-tipica.png",
+    "bytes": 3165,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-locais-para-atividades-de-interesse-turistico-feira-tipica.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Locais para atividades de interesse turístico festas populares",
+    "url": "/images/placas/turisticas/locais-para-atividades-de-interesse-turistico-festas-populares.png",
+    "file": "placa-locais-para-atividades-de-interesse-turistico-festas-populares.png",
+    "bytes": 3845,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-locais-para-atividades-de-interesse-turistico-festas-populares.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Locais para atividades de interesse turístico pavilhão de feiras e exposições",
+    "url": "/images/placas/turisticas/locais-para-atividades-de-interesse-turistico-pavilhao-de-feiras-e-exposicoes.png",
+    "file": "placa-locais-para-atividades-de-interesse-turistico-pavilhao-de-feiras-e-exposicoes.png",
+    "bytes": 3909,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-locais-para-atividades-de-interesse-turistico-pavilhao-de-feiras-e-exposicoes.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Locais para atividades de interesse turístico planetário",
+    "url": "/images/placas/turisticas/locais-para-atividades-de-interesse-turistico-planetario.png",
+    "file": "placa-locais-para-atividades-de-interesse-turistico-planetario.png",
+    "bytes": 3073,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-locais-para-atividades-de-interesse-turistico-planetario.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Locais para atividades de interesse turístico rodeio",
+    "url": "/images/placas/turisticas/locais-para-atividades-de-interesse-turistico-rodeio.png",
+    "file": "placa-locais-para-atividades-de-interesse-turistico-rodeio.png",
+    "bytes": 2678,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-locais-para-atividades-de-interesse-turistico-rodeio.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Locais para atividades de interesse turístico teatro",
+    "url": "/images/placas/turisticas/locais-para-atividades-de-interesse-turistico-teatro.png",
+    "file": "placa-locais-para-atividades-de-interesse-turistico-teatro.png",
+    "bytes": 2688,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-locais-para-atividades-de-interesse-turistico-teatro.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Locais para atividades de interesse turístico zoológico",
+    "url": "/images/placas/turisticas/locais-para-atividades-de-interesse-turistico-zoologico.png",
+    "file": "placa-locais-para-atividades-de-interesse-turistico-zoologico.png",
+    "bytes": 2934,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-locais-para-atividades-de-interesse-turistico-zoologico.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Placa indicativa de distância",
+    "url": "/images/placas/turisticas/placa-indicativa-de-distancia.png",
+    "file": "placa-placa-indicativa-de-distancia.png",
+    "bytes": 4395,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placa-indicativa-de-distancia.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Placa indicativa de sentido",
+    "url": "/images/placas/turisticas/placa-indicativa-de-sentido.png",
+    "file": "placa-placa-indicativa-de-sentido.png",
+    "bytes": 5643,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placa-indicativa-de-sentido.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Placa indicativa de sentido 2",
+    "url": "/images/placas/turisticas/placa-indicativa-de-sentido-2.png",
+    "file": "placa-placa-indicativa-de-sentido-2.png",
+    "bytes": 3777,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placa-indicativa-de-sentido-2.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Placa indicativa de sentido 3",
+    "url": "/images/placas/turisticas/placa-indicativa-de-sentido-3.png",
+    "file": "placa-placa-indicativa-de-sentido-3.png",
+    "bytes": 4184,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placa-indicativa-de-sentido-3.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Placa indicativa de sentido 4",
+    "url": "/images/placas/turisticas/placa-indicativa-de-sentido-4.png",
+    "file": "placa-placa-indicativa-de-sentido-4.png",
+    "bytes": 5502,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placa-indicativa-de-sentido-4.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Placa indicativa de sentido 5",
+    "url": "/images/placas/turisticas/placa-indicativa-de-sentido-5.png",
+    "file": "placa-placa-indicativa-de-sentido-5.png",
+    "bytes": 5295,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placa-indicativa-de-sentido-5.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Placa indicativa de sentido confirmação de saída",
+    "url": "/images/placas/turisticas/placa-indicativa-de-sentido-confirmacao-de-saida.png",
+    "file": "placa-placa-indicativa-de-sentido-confirmacao-de-saida.png",
+    "bytes": 2251,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placa-indicativa-de-sentido-confirmacao-de-saida.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Placa indicativa de sentido confirmação em frente",
+    "url": "/images/placas/turisticas/placa-indicativa-de-sentido-confirmacao-em-frente.png",
+    "file": "placa-placa-indicativa-de-sentido-confirmacao-em-frente.png",
+    "bytes": 3156,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placa-indicativa-de-sentido-confirmacao-em-frente.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Placa indicativa de sentido placa diagramada",
+    "url": "/images/placas/turisticas/placa-indicativa-de-sentido-placa-diagramada.png",
+    "file": "placa-placa-indicativa-de-sentido-placa-diagramada.png",
+    "bytes": 4725,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placa-indicativa-de-sentido-placa-diagramada.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Placa indicativa de sentido placa digramada 2",
+    "url": "/images/placas/turisticas/placa-indicativa-de-sentido-placa-digramada-2.png",
+    "file": "placa-placa-indicativa-de-sentido-placa-digramada-2.png",
+    "bytes": 8049,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placa-indicativa-de-sentido-placa-digramada-2.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Placa indicativa de sentido placa digramada confirmação de saída",
+    "url": "/images/placas/turisticas/placa-indicativa-de-sentido-placa-digramada-confirmacao-de-saida.png",
+    "file": "placa-placa-indicativa-de-sentido-placa-digramada-confirmacao-de-saida.png",
+    "bytes": 3271,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placa-indicativa-de-sentido-placa-digramada-confirmacao-de-saida.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Placa indicativa de sentido placa digramada pre sinalização",
+    "url": "/images/placas/turisticas/placa-indicativa-de-sentido-placa-digramada-pre-sinalizacao.png",
+    "file": "placa-placa-indicativa-de-sentido-placa-digramada-pre-sinalizacao.png",
+    "bytes": 5733,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placa-indicativa-de-sentido-placa-digramada-pre-sinalizacao.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Placa indicativa de sentido posicionamento na pista",
+    "url": "/images/placas/turisticas/placa-indicativa-de-sentido-posicionamento-na-pista.png",
+    "file": "placa-placa-indicativa-de-sentido-posicionamento-na-pista.png",
+    "bytes": 3994,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placa-indicativa-de-sentido-posicionamento-na-pista.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Placa indicativa de sentido posicionamento na pista 2",
+    "url": "/images/placas/turisticas/placa-indicativa-de-sentido-posicionamento-na-pista-2.png",
+    "file": "placa-placa-indicativa-de-sentido-posicionamento-na-pista-2.png",
+    "bytes": 3048,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placa-indicativa-de-sentido-posicionamento-na-pista-2.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Placa indicativa de sentido pre sinalização",
+    "url": "/images/placas/turisticas/placa-indicativa-de-sentido-pre-sinalizacao.png",
+    "file": "placa-placa-indicativa-de-sentido-pre-sinalizacao.png",
+    "bytes": 4089,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placa-indicativa-de-sentido-pre-sinalizacao.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Rua 24h",
+    "url": "/images/placas/turisticas/servico-variado-rua-24h.png",
+    "file": "placa-servico-variado-rua-24h.png",
+    "bytes": 3339,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servico-variado-rua-24h.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Serviço mecânico",
+    "url": "/images/placas/turisticas/servico-variado-servico-mecanico.png",
+    "file": "placa-servico-variado-servico-mecanico.png",
+    "bytes": 3466,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servico-variado-servico-mecanico.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Serviço sanitário",
+    "url": "/images/placas/turisticas/servico-variado-servico-sanitario.png",
+    "file": "placa-servico-variado-servico-sanitario.png",
+    "bytes": 3483,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servico-variado-servico-sanitario.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Serviços de transporte aeroporto",
+    "url": "/images/placas/turisticas/servicos-de-transporte-aeroporto.png",
+    "file": "placa-servicos-de-transporte-aeroporto.png",
+    "bytes": 3097,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-de-transporte-aeroporto.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Serviços de transporte ferroviário e metrôviário",
+    "url": "/images/placas/turisticas/servicos-de-transporte-ferroviario-e-metroviario.png",
+    "file": "placa-servicos-de-transporte-ferroviario-e-metroviario.png",
+    "bytes": 3949,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-de-transporte-ferroviario-e-metroviario.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Serviços de transporte heliporto",
+    "url": "/images/placas/turisticas/servicos-de-transporte-heliporto.png",
+    "file": "placa-servicos-de-transporte-heliporto.png",
+    "bytes": 2788,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-de-transporte-heliporto.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Serviços de transporte ponto de parada",
+    "url": "/images/placas/turisticas/servicos-de-transporte-ponto-de-parada.png",
+    "file": "placa-servicos-de-transporte-ponto-de-parada.png",
+    "bytes": 3264,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-de-transporte-ponto-de-parada.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Serviços de transporte porto",
+    "url": "/images/placas/turisticas/servicos-de-transporte-porto.png",
+    "file": "placa-servicos-de-transporte-porto.png",
+    "bytes": 2598,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-de-transporte-porto.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Serviços de transporte terminal aquaviário",
+    "url": "/images/placas/turisticas/servicos-de-transporte-terminal-aquaviario.png",
+    "file": "placa-servicos-de-transporte-terminal-aquaviario.png",
+    "bytes": 3855,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-de-transporte-terminal-aquaviario.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Serviços de transporte terminal rodoviário",
+    "url": "/images/placas/turisticas/servicos-de-transporte-terminal-rodoviario.png",
+    "file": "placa-servicos-de-transporte-terminal-rodoviario.png",
+    "bytes": 3758,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-de-transporte-terminal-rodoviario.png"
+  },
+  {
+    "code": null,
+    "category": "turisticas",
+    "ext": "png",
+    "name": "Serviços de transporte transporte sobre água",
+    "url": "/images/placas/turisticas/servicos-de-transporte-transporte-sobre-agua.png",
+    "file": "placa-servicos-de-transporte-transporte-sobre-agua.png",
+    "bytes": 4125,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-servicos-de-transporte-transporte-sobre-agua.png"
+  },
+  {
     "code": "TAR-03",
-    "category": "indicacao",
+    "category": "turisticas",
     "ext": "png",
     "name": "Parque urbano",
-    "url": "/images/placas/indicacao/TAR-03.png",
+    "url": "/images/placas/turisticas/TAR-03.png",
     "file": "placa-parque-urbano-TAR-03.png",
     "bytes": 7968,
     "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-parque-urbano-TAR-03.png"
   },
   {
     "code": "THC-05",
-    "category": "indicacao",
+    "category": "turisticas",
     "ext": "png",
     "name": "Museu",
-    "url": "/images/placas/indicacao/THC-05.png",
+    "url": "/images/placas/turisticas/THC-05.png",
     "file": "placa-museu-THC-05.png",
     "bytes": 3589,
     "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-museu-THC-05.png"
   },
   {
     "code": "THC-11",
-    "category": "indicacao",
+    "category": "turisticas",
     "ext": "png",
     "name": "Biblioteca",
-    "url": "/images/placas/indicacao/THC-11.png",
+    "url": "/images/placas/turisticas/THC-11.png",
     "file": "placa-biblioteca-THC-11.png",
     "bytes": 6821,
     "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-biblioteca-THC-11.png"
   },
   {
     "code": "TNA-05",
-    "category": "indicacao",
+    "category": "turisticas",
     "ext": "png",
     "name": "Cachoeira",
-    "url": "/images/placas/indicacao/TNA-05.png",
+    "url": "/images/placas/turisticas/TNA-05.png",
     "file": "placa-cachoeira-TNA-05.png",
     "bytes": 14297,
     "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-cachoeira-TNA-05.png"
   },
   {
     "code": "TNA-06",
-    "category": "indicacao",
+    "category": "turisticas",
     "ext": "png",
     "name": "Patrimônio natural",
-    "url": "/images/placas/indicacao/TNA-06.png",
+    "url": "/images/placas/turisticas/TNA-06.png",
     "file": "placa-patrimonio-natural-TNA-06.png",
     "bytes": 11559,
     "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-patrimonio-natural-TNA-06.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Baia de Emergência",
+    "url": "/images/placas/obras/baias-de-emergencia.png",
+    "file": "placa-baias-de-emergencia.png",
+    "bytes": 1992,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-baias-de-emergencia.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Baias de emergência 2",
+    "url": "/images/placas/obras/baias-de-emergencia-2.png",
+    "file": "placa-baias-de-emergencia-2.png",
+    "bytes": 3190,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-baias-de-emergencia-2.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Baias de emergência 3",
+    "url": "/images/placas/obras/baias-de-emergencia-3.png",
+    "file": "placa-baias-de-emergencia-3.png",
+    "bytes": 1600,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-baias-de-emergencia-3.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Baias de emergência 4",
+    "url": "/images/placas/obras/baias-de-emergencia-4.png",
+    "file": "placa-baias-de-emergencia-4.png",
+    "bytes": 1364,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-baias-de-emergencia-4.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Dispositivos de Sinalização de Alerta",
+    "url": "/images/placas/obras/dispositivos-de-sinalizacao-de-alerta.png",
+    "file": "placa-dispositivos-de-sinalizacao-de-alerta.png",
+    "bytes": 1446,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-dispositivos-de-sinalizacao-de-alerta.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Dispositivos de sinalização de alerta 2",
+    "url": "/images/placas/obras/dispositivos-de-sinalizacao-de-alerta-2.png",
+    "file": "placa-dispositivos-de-sinalizacao-de-alerta-2.png",
+    "bytes": 1799,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-dispositivos-de-sinalizacao-de-alerta-2.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Dispositivos de sinalização de alerta 3",
+    "url": "/images/placas/obras/dispositivos-de-sinalizacao-de-alerta-3.png",
+    "file": "placa-dispositivos-de-sinalizacao-de-alerta-3.png",
+    "bytes": 1434,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-dispositivos-de-sinalizacao-de-alerta-3.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Fiscalização Eletrônica (Radar)",
+    "url": "/images/placas/obras/placas-de-fiscalizacao-eletronica.png",
+    "file": "placa-placas-de-fiscalizacao-eletronica.png",
+    "bytes": 3054,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placas-de-fiscalizacao-eletronica.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Indicador de Curva Acentuada Adiante",
+    "url": "/images/placas/obras/indicador-de-curva-acentuada-adiante.png",
+    "file": "placa-indicador-de-curva-acentuada-adiante.png",
+    "bytes": 1635,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-indicador-de-curva-acentuada-adiante.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Indicador de curva acentuada adiante 2",
+    "url": "/images/placas/obras/indicador-de-curva-acentuada-adiante-2.png",
+    "file": "placa-indicador-de-curva-acentuada-adiante-2.png",
+    "bytes": 1600,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-indicador-de-curva-acentuada-adiante-2.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Indicador de curva acentuada adiante 3",
+    "url": "/images/placas/obras/indicador-de-curva-acentuada-adiante-3.png",
+    "file": "placa-indicador-de-curva-acentuada-adiante-3.png",
+    "bytes": 1320,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-indicador-de-curva-acentuada-adiante-3.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Marcador de Perigo",
+    "url": "/images/placas/obras/marcador-de-perigo.png",
+    "file": "placa-marcador-de-perigo.png",
+    "bytes": 1835,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-marcador-de-perigo.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Marcador de perigo 2",
+    "url": "/images/placas/obras/marcador-de-perigo-2.png",
+    "file": "placa-marcador-de-perigo-2.png",
+    "bytes": 1970,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-marcador-de-perigo-2.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Marcador de perigo 3",
+    "url": "/images/placas/obras/marcador-de-perigo-3.png",
+    "file": "placa-marcador-de-perigo-3.png",
+    "bytes": 1844,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-marcador-de-perigo-3.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Marcador de perigo 4",
+    "url": "/images/placas/obras/marcador-de-perigo-4.png",
+    "file": "placa-marcador-de-perigo-4.png",
+    "bytes": 2373,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-marcador-de-perigo-4.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Marcadores de alinhamento",
+    "url": "/images/placas/obras/marcadores-de-alinhamento.png",
+    "file": "placa-marcadores-de-alinhamento.png",
+    "bytes": 1809,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-marcadores-de-alinhamento.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Obras altura limitada",
+    "url": "/images/placas/obras/obras-altura-limitada.png",
+    "file": "placa-obras-altura-limitada.png",
+    "bytes": 3941,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-obras-altura-limitada.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Obras área com desmoronamento",
+    "url": "/images/placas/obras/obras-area-com-desmoronamento.png",
+    "file": "placa-obras-area-com-desmoronamento.png",
+    "bytes": 2794,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-obras-area-com-desmoronamento.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Obras caminhões na pista",
+    "url": "/images/placas/obras/obras-caminhoes-na-pista.png",
+    "file": "placa-obras-caminhoes-na-pista.png",
+    "bytes": 2105,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-obras-caminhoes-na-pista.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Obras depressão",
+    "url": "/images/placas/obras/obras-depressao.png",
+    "file": "placa-obras-depressao.png",
+    "bytes": 1653,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-obras-depressao.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Obras desvio a direita",
+    "url": "/images/placas/obras/obras-desvio-a-direita.png",
+    "file": "placa-obras-desvio-a-direita.png",
+    "bytes": 1746,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-obras-desvio-a-direita.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Obras desvio a direita 2",
+    "url": "/images/placas/obras/obras-desvio-a-direita-2.png",
+    "file": "placa-obras-desvio-a-direita-2.png",
+    "bytes": 3138,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-obras-desvio-a-direita-2.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Obras desvio a esquerda",
+    "url": "/images/placas/obras/obras-desvio-a-esquerda.png",
+    "file": "placa-obras-desvio-a-esquerda.png",
+    "bytes": 1876,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-obras-desvio-a-esquerda.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Obras desvio a esquerda 2",
+    "url": "/images/placas/obras/obras-desvio-a-esquerda-2.png",
+    "file": "placa-obras-desvio-a-esquerda-2.png",
+    "bytes": 3486,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-obras-desvio-a-esquerda-2.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Obras estreitamento de pista a direita",
+    "url": "/images/placas/obras/obras-estreitamento-de-pista-a-direita.png",
+    "file": "placa-obras-estreitamento-de-pista-a-direita.png",
+    "bytes": 2837,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-obras-estreitamento-de-pista-a-direita.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Obras estreitamento de pista a esquerda",
+    "url": "/images/placas/obras/obras-estreitamento-de-pista-a-esquerda.png",
+    "file": "placa-obras-estreitamento-de-pista-a-esquerda.png",
+    "bytes": 2547,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-obras-estreitamento-de-pista-a-esquerda.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Obras estreitamento de pista ao centro",
+    "url": "/images/placas/obras/obras-estreitamento-de-pista-ao-centro.png",
+    "file": "placa-obras-estreitamento-de-pista-ao-centro.png",
+    "bytes": 3024,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-obras-estreitamento-de-pista-ao-centro.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Obras fim de obras",
+    "url": "/images/placas/obras/obras-fim-de-obras.png",
+    "file": "placa-obras-fim-de-obras.png",
+    "bytes": 1715,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-obras-fim-de-obras.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Obras início de pista dividida",
+    "url": "/images/placas/obras/obras-inicio-de-pista-dividida.png",
+    "file": "placa-obras-inicio-de-pista-dividida.png",
+    "bytes": 3502,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-obras-inicio-de-pista-dividida.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Obras largura limitada",
+    "url": "/images/placas/obras/obras-largura-limitada.png",
+    "file": "placa-obras-largura-limitada.png",
+    "bytes": 3364,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-obras-largura-limitada.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Obras lombada",
+    "url": "/images/placas/obras/obras-lombada.png",
+    "file": "placa-obras-lombada.png",
+    "bytes": 1734,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-obras-lombada.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Obras mão dupla adiante",
+    "url": "/images/placas/obras/obras-mao-dupla-adiante.png",
+    "file": "placa-obras-mao-dupla-adiante.png",
+    "bytes": 2178,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-obras-mao-dupla-adiante.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Obras obras adiante",
+    "url": "/images/placas/obras/obras-obras-adiante.png",
+    "file": "placa-obras-obras-adiante.png",
+    "bytes": 3657,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-obras-obras-adiante.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Obras parada obrigatória a frente",
+    "url": "/images/placas/obras/obras-parada-obrigatoria-a-frente.png",
+    "file": "placa-obras-parada-obrigatoria-a-frente.png",
+    "bytes": 3378,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-obras-parada-obrigatoria-a-frente.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Obras pista escorregadia",
+    "url": "/images/placas/obras/obras-pista-escorregadia.png",
+    "file": "placa-obras-pista-escorregadia.png",
+    "bytes": 2713,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-obras-pista-escorregadia.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Obras pista irregular",
+    "url": "/images/placas/obras/obras-pista-irregular.png",
+    "file": "placa-obras-pista-irregular.png",
+    "bytes": 1958,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-obras-pista-irregular.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Obras projeção de cascalho",
+    "url": "/images/placas/obras/obras-projecao-de-cascalho.png",
+    "file": "placa-obras-projecao-de-cascalho.png",
+    "bytes": 2697,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-obras-projecao-de-cascalho.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Placas de fiscalização eletrônica 10",
+    "url": "/images/placas/obras/placas-de-fiscalizacao-eletronica-10.png",
+    "file": "placa-placas-de-fiscalizacao-eletronica-10.png",
+    "bytes": 2245,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placas-de-fiscalizacao-eletronica-10.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Placas de fiscalização eletrônica 11",
+    "url": "/images/placas/obras/placas-de-fiscalizacao-eletronica-11.png",
+    "file": "placa-placas-de-fiscalizacao-eletronica-11.png",
+    "bytes": 3928,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placas-de-fiscalizacao-eletronica-11.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Placas de fiscalização eletrônica 12",
+    "url": "/images/placas/obras/placas-de-fiscalizacao-eletronica-12.png",
+    "file": "placa-placas-de-fiscalizacao-eletronica-12.png",
+    "bytes": 1700,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placas-de-fiscalizacao-eletronica-12.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Placas de fiscalização eletrônica 2",
+    "url": "/images/placas/obras/placas-de-fiscalizacao-eletronica-2.png",
+    "file": "placa-placas-de-fiscalizacao-eletronica-2.png",
+    "bytes": 2268,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placas-de-fiscalizacao-eletronica-2.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Placas de fiscalização eletrônica 3",
+    "url": "/images/placas/obras/placas-de-fiscalizacao-eletronica-3.png",
+    "file": "placa-placas-de-fiscalizacao-eletronica-3.png",
+    "bytes": 1909,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placas-de-fiscalizacao-eletronica-3.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Placas de fiscalização eletrônica 4",
+    "url": "/images/placas/obras/placas-de-fiscalizacao-eletronica-4.png",
+    "file": "placa-placas-de-fiscalizacao-eletronica-4.png",
+    "bytes": 2522,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placas-de-fiscalizacao-eletronica-4.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Placas de fiscalização eletrônica 5",
+    "url": "/images/placas/obras/placas-de-fiscalizacao-eletronica-5.png",
+    "file": "placa-placas-de-fiscalizacao-eletronica-5.png",
+    "bytes": 1983,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placas-de-fiscalizacao-eletronica-5.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Placas de fiscalização eletrônica 6",
+    "url": "/images/placas/obras/placas-de-fiscalizacao-eletronica-6.png",
+    "file": "placa-placas-de-fiscalizacao-eletronica-6.png",
+    "bytes": 1752,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placas-de-fiscalizacao-eletronica-6.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Placas de fiscalização eletrônica 7",
+    "url": "/images/placas/obras/placas-de-fiscalizacao-eletronica-7.png",
+    "file": "placa-placas-de-fiscalizacao-eletronica-7.png",
+    "bytes": 2162,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placas-de-fiscalizacao-eletronica-7.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Placas de fiscalização eletrônica 8",
+    "url": "/images/placas/obras/placas-de-fiscalizacao-eletronica-8.png",
+    "file": "placa-placas-de-fiscalizacao-eletronica-8.png",
+    "bytes": 1832,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placas-de-fiscalizacao-eletronica-8.png"
+  },
+  {
+    "code": null,
+    "category": "obras",
+    "ext": "png",
+    "name": "Placas de fiscalização eletrônica 9",
+    "url": "/images/placas/obras/placas-de-fiscalizacao-eletronica-9.png",
+    "file": "placa-placas-de-fiscalizacao-eletronica-9.png",
+    "bytes": 3197,
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-placas-de-fiscalizacao-eletronica-9.png"
   }
 ]

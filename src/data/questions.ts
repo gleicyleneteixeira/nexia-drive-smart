@@ -15654,7 +15654,9 @@ export interface QuestionBankOptions {
 // ganha a imagem oficial do catálogo — evita o cartão branco (o <Placa> SVG
 // cobre só os 15 códigos de PLACA_SVG_IDS; o resto precisa da imagem).
 const catalogoImagemPorPlaca = new Map<string, string>(
-    catalogoPlacas.map((p): [string, string] => [p.code, p.public_url]),
+    catalogoPlacas
+        .filter((p) => !!p.code && !!p.public_url)
+        .map((p): [string, string] => [p.code as string, p.public_url as string]),
 );
 const placasComSvg: ReadonlySet<string> = new Set<string>(PLACA_SVG_IDS);
 

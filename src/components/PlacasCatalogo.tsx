@@ -13,7 +13,13 @@ import { PLACA_STUDY_DATA } from "@/data/placas-study";
 // estudo dentro do TEÓRICO (app.tsx).
 // ==========================================
 
-export type CategoriaPlaca = "advertencia" | "regulamentacao" | "indicacao";
+export type CategoriaPlaca =
+  | "advertencia"
+  | "regulamentacao"
+  | "identificacao"
+  | "servicos"
+  | "turisticas"
+  | "obras";
 export type FiltroCategoria = "todas" | CategoriaPlaca;
 
 export interface PlacaCatalogo {
@@ -58,14 +64,41 @@ export const CATEGORIA_META: Record<
     badge: "bg-destructive/15 border-destructive/35 text-destructive-glow",
     glow: "hover:border-destructive/60 hover:shadow-[0_0_15px_rgba(239,68,68,0.25)]",
   },
-  indicacao: {
-    label: "Indicação",
-    upper: "INDICAÇÃO",
-    dot: "bg-blue-500",
-    chipAtivo: "bg-blue-500/20 border-blue-500/40 text-blue-400",
-    chipHover: "hover:text-blue-400",
-    badge: "bg-blue-500/15 border-blue-500/35 text-blue-400",
-    glow: "hover:border-blue-500/60 hover:shadow-[0_0_15px_rgba(59,130,246,0.25)]",
+  identificacao: {
+    label: "Identificação",
+    upper: "IDENTIFICAÇÃO",
+    dot: "bg-emerald-500",
+    chipAtivo: "bg-emerald-500/20 border-emerald-500/40 text-emerald-400",
+    chipHover: "hover:text-emerald-400",
+    badge: "bg-emerald-500/15 border-emerald-500/35 text-emerald-400",
+    glow: "hover:border-emerald-500/60 hover:shadow-[0_0_15px_rgba(16,185,129,0.25)]",
+  },
+  servicos: {
+    label: "Serviços",
+    upper: "SERVIÇOS",
+    dot: "bg-sky-500",
+    chipAtivo: "bg-sky-500/20 border-sky-500/40 text-sky-400",
+    chipHover: "hover:text-sky-400",
+    badge: "bg-sky-500/15 border-sky-500/35 text-sky-400",
+    glow: "hover:border-sky-500/60 hover:shadow-[0_0_15px_rgba(14,165,233,0.25)]",
+  },
+  turisticas: {
+    label: "Turísticas",
+    upper: "TURÍSTICAS",
+    dot: "bg-amber-700",
+    chipAtivo: "bg-amber-700/25 border-amber-700/45 text-amber-600",
+    chipHover: "hover:text-amber-600",
+    badge: "bg-amber-700/20 border-amber-700/35 text-amber-600",
+    glow: "hover:border-amber-700/60 hover:shadow-[0_0_15px_rgba(180,83,9,0.25)]",
+  },
+  obras: {
+    label: "Obras",
+    upper: "OBRAS",
+    dot: "bg-orange-500",
+    chipAtivo: "bg-orange-500/20 border-orange-500/40 text-orange-400",
+    chipHover: "hover:text-orange-400",
+    badge: "bg-orange-500/15 border-orange-500/35 text-orange-400",
+    glow: "hover:border-orange-500/60 hover:shadow-[0_0_15px_rgba(249,115,22,0.25)]",
   },
 };
 
@@ -73,13 +106,19 @@ export const CONTAGENS: Record<FiltroCategoria, number> = {
   todas: CATALOGO.length,
   advertencia: CATALOGO.filter((p) => categoriaDe(p) === "advertencia").length,
   regulamentacao: CATALOGO.filter((p) => categoriaDe(p) === "regulamentacao").length,
-  indicacao: CATALOGO.filter((p) => categoriaDe(p) === "indicacao").length,
+  identificacao: CATALOGO.filter((p) => categoriaDe(p) === "identificacao").length,
+  servicos: CATALOGO.filter((p) => categoriaDe(p) === "servicos").length,
+  turisticas: CATALOGO.filter((p) => categoriaDe(p) === "turisticas").length,
+  obras: CATALOGO.filter((p) => categoriaDe(p) === "obras").length,
 };
 
 export function categoriaDe(p: PlacaCatalogo): CategoriaPlaca | null {
   return p.category === "advertencia" ||
     p.category === "regulamentacao" ||
-    p.category === "indicacao"
+    p.category === "identificacao" ||
+    p.category === "servicos" ||
+    p.category === "turisticas" ||
+    p.category === "obras"
     ? p.category
     : null;
 }
@@ -412,9 +451,24 @@ export function PlacasEstudo({ className }: { className?: string }) {
             onClick={() => setCategoria("regulamentacao")}
           />
           <ChipCategoria
-            valor="indicacao"
-            ativo={categoria === "indicacao"}
-            onClick={() => setCategoria("indicacao")}
+            valor="identificacao"
+            ativo={categoria === "identificacao"}
+            onClick={() => setCategoria("identificacao")}
+          />
+          <ChipCategoria
+            valor="servicos"
+            ativo={categoria === "servicos"}
+            onClick={() => setCategoria("servicos")}
+          />
+          <ChipCategoria
+            valor="turisticas"
+            ativo={categoria === "turisticas"}
+            onClick={() => setCategoria("turisticas")}
+          />
+          <ChipCategoria
+            valor="obras"
+            ativo={categoria === "obras"}
+            onClick={() => setCategoria("obras")}
           />
         </div>
 

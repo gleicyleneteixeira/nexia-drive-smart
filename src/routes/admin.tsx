@@ -15,10 +15,13 @@ import { OptionImage } from "@/components/OptionImage";
 const normalizarBusca = (s: string): string =>
   s.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 const PLACAS_CATALOGO = catalogoPlacas.map((p) => ({
-  code: p.code,
+  code: p.code ?? null,
   name: p.name.replace(/&quot;/g, '"').replace(/&amp;/g, "&").replace(/&#39;/g, "'"),
   public_url: p.public_url,
 }));
+// Só as placas com código oficial entram no seletor (o campo "placa" da questão
+// guarda o código — as demais do catálogo não têm código na norma).
+const PLACAS_COM_CODIGO = PLACAS_CATALOGO.filter((p) => p.code);
 import { 
   fetchVideoTutorials, 
   addVideoTutorial, 
@@ -1553,11 +1556,11 @@ function PlacaCombobox({ value, onChange }: { value: string; onChange: (v: strin
   const [busca, setBusca] = useState("");
   const termo = normalizarBusca(busca);
   const opcoes = termo
-    ? PLACAS_CATALOGO.filter(
-        (p) => normalizarBusca(p.code).includes(termo) || normalizarBusca(p.name).includes(termo),
+    ? PLACAS_COM_CODIGO.filter(
+        (p) => normalizarBusca(p.code || "").includes(termo) || normalizarBusca(p.name).includes(termo),
       )
-    : PLACAS_CATALOGO;
-  const atual = PLACAS_CATALOGO.find((p) => p.code === value);
+    : PLACAS_COM_CODIGO;
+  const atual = PLACAS_COM_CODIGO.find((p) => p.code === value);
 
   const fechar = () => {
     setOpen(false);
@@ -1604,9 +1607,9 @@ function PlacaCombobox({ value, onChange }: { value: string; onChange: (v: strin
               </CommandItem>
               {opcoes.map((p) => (
                 <CommandItem
-                  key={p.code}
-                  value={p.code}
-                  onSelect={() => { onChange(p.code); fechar(); }}
+                  key={p.code ?? p.name}
+                  value={p.code ?? p.name}
+                  onSelect={() => { onChange(p.code ?? ""); fechar(); }}
                 >
                   <Check className={cn("mr-2 h-4 w-4", value === p.code ? "opacity-100" : "opacity-0")} />
                   <span className="mr-2 font-mono text-xs font-semibold">{p.code}</span>

@@ -342,9 +342,24 @@ function PlacasTrainerPage() {
             onClick={() => setCategoria("regulamentacao")}
           />
           <ChipCategoria
-            valor="indicacao"
-            ativo={categoria === "indicacao"}
-            onClick={() => setCategoria("indicacao")}
+            valor="identificacao"
+            ativo={categoria === "identificacao"}
+            onClick={() => setCategoria("identificacao")}
+          />
+          <ChipCategoria
+            valor="servicos"
+            ativo={categoria === "servicos"}
+            onClick={() => setCategoria("servicos")}
+          />
+          <ChipCategoria
+            valor="turisticas"
+            ativo={categoria === "turisticas"}
+            onClick={() => setCategoria("turisticas")}
+          />
+          <ChipCategoria
+            valor="obras"
+            ativo={categoria === "obras"}
+            onClick={() => setCategoria("obras")}
           />
         </div>
       )}
