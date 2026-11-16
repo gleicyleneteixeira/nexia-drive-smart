@@ -562,11 +562,15 @@ function SimuladoDemoPage() {
             </h2>
 
             {/* Placa visual oficial */}
-            {q.placa && (
+            {q.image_url ? (
+              <div className="mt-5 flex justify-center">
+                <img src={q.image_url} alt="placa de trânsito" className="max-w-[170px]" />
+              </div>
+            ) : q.placa ? (
               <div className="mt-5 flex justify-center">
                 <Placa id={q.placa} size={170} />
               </div>
-            )}
+            ) : null}
 
             {/* Options */}
             <div className="mt-6 space-y-2.5">
@@ -1127,11 +1131,15 @@ function ReviewCard({
             className="overflow-hidden"
           >
             <div className="px-4 pb-4 space-y-3 border-t border-border/50 pt-3">
-              {q.placa && (
+              {q.image_url ? (
+                <div className="flex justify-center pt-2">
+                  <img src={q.image_url} alt="placa de trânsito" className="max-w-[120px]" />
+                </div>
+              ) : q.placa ? (
                 <div className="flex justify-center pt-2">
                   <Placa id={q.placa} size={120} />
                 </div>
-              )}
+              ) : null}
               {!skipped && !correct && (
                 <p className="text-sm">
                   <span className="text-destructive font-semibold">Sua resposta: </span>

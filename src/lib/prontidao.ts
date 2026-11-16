@@ -2,22 +2,34 @@
 // SCORE DE PRONTIDÃO — Simulado Nexia Drive
 // ------------------------------------------------------------
 // REGRA DE NEGÓCIO (exata):
-//   • O sistema analisa SEMPRE a janela com os ÚLTIMOS 5 simulados
-//     consecutivos realizados pelo aluno — e a janela precisa estar
-//     COMPLETA (5 simulados) para abrir a trava.
-//   • O aluno está PRONTO se, fechada a janela de 5:
-//       a) GABARITAR (100%) em qualquer um desses 5 simulados, OU
-//       b) acertar no mínimo 88% em pelo menos 3 desses 5 simulados.
-//     → Sem os 5 simulados avaliados, NÃO libera: a prova exige
-//       consistência real, não um único bom resultado.
+//   • Conta APENAS simulado GERAL ("completo", "prova-real" ou
+//     registro antigo sem modo). Simulado por categoria NÃO conta.
+//   • A contagem ZERA TODO DIA (fuso local do aluno): só os
+//     simulados gerais feitos HOJE entram no cálculo — fez ontem
+//     e faz hoje, a contagem recomeça na de hoje.
+//   • Dentro do dia, os simulados gerais formam BLOCOS DE 5:
+//       → 1º do bloco: score 0 (começa uma nova contagem);
+//       → 2º ao 4º: o score sobe gradualmente (qualidade × avanço);
+//       → 5º: RESULTADO DO BLOCO — aluno está PRONTO se:
+//           a) GABARITAR (100%) em qualquer um desses 5, OU
+//           b) acertar no mínimo 88% em pelo menos 3 dos 5.
+//       → 6º: zera de novo e inicia o próximo bloco (1/5) —
+//         o mesmo se repete no 10º, 15º … (fechamento de bloco).
 //
 // SAÍDA:
-//   • readiness: 0–100 (só chega a 100 quando a regra é batida)
+//   • readiness: 0–100 (só chega a 100 ao fechar bloco com regra)
 //   • status: texto ("Em preparação" | "Quase lá" | "🚀 Pronto…")
-//   • isReady: trava booleana para liberar/marcar a prova
+//   • isReady: trava booleana (true apenas ao fechar bloco com regra)
+//   • statusKey: classificação estruturada (para estilizar)
+//   • bloco: notas do bloco em curso (do dia), mais recente primeiro
+//   • melhorNota / noPadrao: apurados sobre o bloco em curso
+//   • faltamSimulados: quanto falta para fechar o bloco de 5
+//   • blocoCompleto: true ao 5º simulado do bloco (momento da avaliação)
+//   • faltam: quanto falta da regra "3 de 5 a 88%+"
+//   • mensagem: linha de apoio explicando o próximo passo
 // ============================================================
 
-export const JANELA_SIMULADOS = 5;
+export const JANELA_SIMULADOS = 5; // tamanho do bloco diário de simulados gerais
 export const LIMIAR_NOTA = 88; // mínimo de aproveitamento por simulado
 export const ACERTOS_NECESSARIOS = 3; // de 5 precisam chegar a 88%
 
@@ -27,7 +39,7 @@ export type StatusProntidao = "em-preparacao" | "quase-la" | "pronto";
 export interface NotaSimulado {
   pct: number; // aproveitamento 0–100
   em: string; // ISO date
-  modo?: string; // "completo" | "prova-real" | categoria
+  modo?: string; // "completo" | "prova-real" | categoria (categoria não conta)
 }
 
 export interface ResultadoProntidao {
@@ -35,71 +47,119 @@ export interface ResultadoProntidao {
   readiness: number;
   /** Texto do status para exibir ao aluno. */
   status: string;
-  /** Trava: true quando a regra de prontidão foi satisfeita. */
+  /** Trava: true quando a regra foi batida ao fechar um bloco de 5. */
   isReady: boolean;
   /** Classificação estruturada (útil para estilizar/tomar decisão). */
   statusKey: StatusProntidao;
-  /** Últimas notas analisadas, mais recente primeiro (máx. 5). */
-  janela: number[];
-  /** Melhor nota da janela (0 quando não há histórico). */
+  /** Notas do bloco em curso, mais recente primeiro (0–5). */
+  bloco: number[];
+  /** Melhor nota do bloco em curso (0 quando não há histórico hoje). */
   melhorNota: number;
-  /** Quantos simulados da janela chegaram a >= 88%. */
+  /** Quantos simulados do bloco em curso chegaram a >= 88%. */
   noPadrao: number;
-  /** Quantos simulados ainda faltam para a janela de 5 estar completa. */
+  /** Quantos simulados ainda faltam para fechar o bloco de 5. */
   faltamSimulados: number;
-  /** true quando já há 5 simulados na janela (pré-requisito da trava). */
-  janelaCompleta: boolean;
-  /** Quanto falta para a regra "3 de 5 a 88%+" (0 quando pronta). */
+  /** true quando o 5º do bloco foi concluído (avaliação da regra). */
+  blocoCompleto: boolean;
+  /** Quanto falta da regra "3 de 5 a 88%+" (0 quando cumprida). */
   faltam: number;
   /** Linha de apoio explicando o próximo passo. */
   mensagem: string;
 }
 
+/** Só simulado GERAL conta no score — modo de categoria não conta. */
+function ehModoGeral(modo?: string): boolean {
+  return !modo || modo === "completo" || modo === "prova-real";
+}
+
+/** true se a nota foi registrada no dia corrente (fuso local do aluno). */
+function ehHoje(iso?: string): boolean {
+  if (!iso) return false;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return false;
+  const agora = new Date();
+  return (
+    d.getFullYear() === agora.getFullYear() &&
+    d.getMonth() === agora.getMonth() &&
+    d.getDate() === agora.getDate()
+  );
+}
+
 /**
- * Calcula o Score de Prontidão a partir do histórico de notas do aluno.
+ * Calcula o Score de Prontidão a partir do histórico do aluno.
+ *
+ * As regras de contagem são aplicadas AQUI (em todo call site):
+ *   1) só simulado geral (categoria é ignorada);
+ *   2) só notas de HOJE (a contagem zera todo dia);
+ *   3) as notas do dia vêm em blocos de 5 — o 6º do dia zera e
+ *      começa nova contagem; o 5º de cada bloco mostra o resultado.
  *
  * @param historico Notas (0–100), em ORDEM CRONOLÓGICA (mais antiga → mais recente).
- *                 Só as últimas 5 são consideradas.
+ *                  Entradas numéricas puras (API legada/testes) entram sem
+ *                  metadados de data/modo e são aceitas como estão.
  *
  * @example
- *   calcularProntidao([72, 85, 90, 100, 96]);  // → isReady: true (janela cheia + gabaritou)
- *   calcularProntidao([88, 92, 88, 60, 70]);   // → isReady: true (janela cheia + 3 de 5 >= 88%)
- *   calcularProntidao([95, 97, 96]);            // → isReady: false (janela incompleta: só 3 de 5)
- *   calcularProntidao([60, 75, 80]);           // → isReady: false
+ *   calcularProntidao([72, 85, 90, 100, 96]);  // 5º do bloco + gabaritou → isReady: true
+ *   calcularProntidao([88, 92, 88, 60, 70]);   // 5º do bloco + 3 de 5 >= 88% → isReady: true
+ *   calcularProntidao([95, 97, 96]);           // bloco incompleto (3 de 5) → isReady: false
+ *   calcularProntidao([100]);                  // 1º do bloco → readiness: 0 (nova contagem)
  */
 export function calcularProntidao(
   historico: ReadonlyArray<number | NotaSimulado>,
 ): ResultadoProntidao {
-  // Normaliza para números e pega só a janela dos últimos 5
-  const notas = historico
-    .map((n) => (typeof n === "number" ? n : n?.pct))
-    .filter((n) => typeof n === "number" && Number.isFinite(n))
-    .map((n) => Math.min(100, Math.max(0, Math.round(n))));
+  // 1) Filtro de contagem: só simulado geral feito HOJE.
+  const notasDoDia: number[] = [];
+  for (const n of historico) {
+    if (typeof n === "number") {
+      if (Number.isFinite(n)) notasDoDia.push(n);
+      continue;
+    }
+    if (!n || typeof n.pct !== "number" || !Number.isFinite(n.pct)) continue;
+    if (!ehModoGeral(n.modo)) continue; // por categoria não conta
+    if (!ehHoje(n.em)) continue; // zera todo dia
+    notasDoDia.push(n.pct);
+  }
+  const notas = notasDoDia.map((n) => Math.min(100, Math.max(0, Math.round(n))));
 
-  const janela = notas.slice(-JANELA_SIMULADOS).reverse(); // mais recente primeiro
-  const total = janela.length;
-  const melhorNota = total ? Math.max(...janela) : 0;
-  const noPadrao = janela.filter((n) => n >= LIMIAR_NOTA).length;
+  // 2) Bloco em curso do dia: o 6º zera (posição 1 do novo bloco).
+  const noDia = notas.length;
+  const posicao = noDia === 0 ? 0 : ((noDia - 1) % JANELA_SIMULADOS) + 1; // 1..5
+  const bloco = noDia === 0 ? [] : notas.slice(noDia - posicao); // cronológico
+  const janela = [...bloco].reverse(); // mais recente primeiro
 
-  // A janela precisa estar COMPLETA (5 simulados) para a trava abrir:
-  // um único resultado bom não prova consistência.
-  const janelaCompleta = total >= JANELA_SIMULADOS;
+  const total = posicao; // notas do bloco em curso (0..5)
+  const melhorNota = total ? Math.max(...bloco) : 0;
+  const noPadrao = bloco.filter((n) => n >= LIMIAR_NOTA).length;
+
+  // O bloco só é AVALIADO no 5º simulado — antes disso a trava não abre.
+  const blocoCompleto = total >= JANELA_SIMULADOS;
   const faltamSimulados = Math.max(0, JANELA_SIMULADOS - total);
   const atingiuRegra = melhorNota >= 100 || noPadrao >= ACERTOS_NECESSARIOS;
-  const isReady = janelaCompleta && atingiuRegra;
+  const isReady = blocoCompleto && atingiuRegra;
 
   // Progresso em direção à regra (cada caminho vale até 100%):
-  //   A) melhor nota da janela — chega a 100 só se GABARITAR (100%)
+  //   A) melhor nota do bloco — chega a 100 só se GABARITAR (100%)
   //   B) quantidade de simulados >= 88% — chega a 100 com 3 de 5
-  // O maior dos dois caminhos é multiplicado pelo preenchimento da
-  // janela (0/5 … 5/5): a barra nunca chega a 100% com janela incompleta.
+  // Enquanto o bloco não fecha, o avanço é proporcional à posição
+  // (0 no 1º, 25% no 2º … 75% no 4º); no 5º vale o resultado real.
   const progressoGabarito = melhorNota >= 100 ? 1 : (melhorNota / 100) * 0.85;
   const progressoPadrao = Math.min(noPadrao, ACERTOS_NECESSARIOS) / ACERTOS_NECESSARIOS;
-  const progressoFinal =
-    (Math.max(progressoGabarito, progressoPadrao) * total) / JANELA_SIMULADOS;
-  const readiness = isReady
-    ? 100
-    : Math.min(99, Math.round(progressoFinal * 100));
+  const qualidade = Math.max(progressoGabarito, progressoPadrao);
+
+  let readiness: number;
+  if (isReady) {
+    readiness = 100;
+  } else if (total >= JANELA_SIMULADOS) {
+    // bloco fechou sem a regra: mostra o quão perto o aluno chegou
+    readiness = Math.min(99, Math.round(qualidade * 100));
+  } else if (total <= 1) {
+    readiness = 0; // nova contagem (1º do dia ou 6º do dia)
+  } else {
+    readiness = Math.min(
+      99,
+      Math.round((qualidade * (total - 1)) / (JANELA_SIMULADOS - 1) * 100),
+    );
+  }
 
   let statusKey: StatusProntidao;
   if (isReady) statusKey = "pronto";
@@ -118,8 +178,9 @@ export function calcularProntidao(
     isReady,
     faltam,
     faltamSimulados,
-    janelaCompleta,
+    blocoCompleto,
     total,
+    noPadrao,
   });
 
   return {
@@ -127,11 +188,11 @@ export function calcularProntidao(
     status,
     isReady,
     statusKey,
-    janela,
+    bloco: janela,
     melhorNota,
     noPadrao,
     faltamSimulados,
-    janelaCompleta,
+    blocoCompleto,
     faltam,
     mensagem,
   };
@@ -141,30 +202,36 @@ function montarMensagem({
   isReady,
   faltam,
   faltamSimulados,
-  janelaCompleta,
+  blocoCompleto,
   total,
+  noPadrao,
 }: {
   isReady: boolean;
   faltam: number;
   faltamSimulados: number;
-  janelaCompleta: boolean;
+  blocoCompleto: boolean;
   total: number;
+  noPadrao: number;
 }): string {
   if (isReady) {
-    return "Regra cumprida nos últimos 5 simulados. Pode marcar a prova com confiança.";
+    return "Bloco de 5 concluído com a regra — pode marcar a prova com confiança.";
   }
   if (total === 0) {
-    return "Faça seu primeiro simulado para ligar o seu score de prontidão.";
+    return "Faça um simulado GERAL hoje para ligar o score: a contagem é em blocos de 5 e zera todo dia.";
   }
-  if (!janelaCompleta) {
+  if (total === 1) {
+    return "Nova contagem iniciada: 1 de 5 simulados gerais de hoje. O resultado aparece ao completar o bloco.";
+  }
+  if (!blocoCompleto) {
     const faltamTxt = `Falta${faltamSimulados > 1 ? "m" : ""} ${faltamSimulados} simulado${
       faltamSimulados > 1 ? "s" : ""
-    } para fechar a janela dos últimos 5.`;
-    return faltam > 0
-      ? `${faltamTxt} Depois disso, ainda são necessários ${faltam} com 88% ou mais.`
-      : `${faltamTxt} Assim que ela fechar, a regra já estará cumprida.`;
+    } geral${faltamSimulados > 1 ? "eis" : ""} para fechar o bloco de hoje.`;
+    if (faltam === 0) {
+      return `${faltamTxt} Regra dos ${LIMIAR_NOTA}%+ já garantida (${noPadrao} de ${JANELA_SIMULADOS}).`;
+    }
+    return `${faltamTxt} ${noPadrao} de ${JANELA_SIMULADOS} já a ${LIMIAR_NOTA}%+ (precisa de ${ACERTOS_NECESSARIOS}).`;
   }
-  return `Faltam ${faltam} simulado${faltam > 1 ? "s" : ""} com 88% ou mais nos últimos 5 para liberar a prova.`;
+  return `Bloco fechado sem a regra: ${noPadrao} de ${JANELA_SIMULADOS} a ${LIMIAR_NOTA}%+ (precisa de ${ACERTOS_NECESSARIOS}) e nenhum gabarito. O próximo simulado geral inicia um novo bloco.`;
 }
 
 // ------------------------------------------------------------
@@ -201,7 +268,8 @@ export function carregarHistoricoNotas(
 }
 
 /**
- * Registra a nota de um simulado CONCLUÍDO no histórico do aluno.
+ * Registra a nota de um simulado GERAL concluído no histórico do aluno.
+ * Simulados por categoria são ignorados (não contam no score).
  * @param pct aproveitamento 0–100 (ex.: Math.round(acertos / total * 100))
  * @returns histórico atualizado (ordem cronológica)
  */
@@ -211,6 +279,7 @@ export function registrarNotaSimulado(
   modo?: string,
 ): NotaSimulado[] {
   const historico = carregarHistoricoNotas(userId);
+  if (!ehModoGeral(modo)) return historico; // por categoria não conta
   const nota: NotaSimulado = {
     pct: Math.min(100, Math.max(0, Math.round(pct))),
     em: new Date().toISOString(),
@@ -227,7 +296,10 @@ export function registrarNotaSimulado(
   return proximo;
 }
 
-/** Calcula o Score de Prontidão direto do histórico salvo do aluno. */
+/**
+ * Calcula o Score de Prontidão direto do histórico salvo do aluno
+ * (aplica as regras de contagem: só geral + só hoje + blocos de 5).
+ */
 export function prontidaoDoAluno(
   userId: string | null | undefined,
 ): ResultadoProntidao {

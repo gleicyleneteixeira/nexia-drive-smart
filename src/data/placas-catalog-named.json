@@ -43,21 +43,21 @@
     "code": "A-3a",
     "category": "advertencia",
     "ext": "png",
-    "name": "Pista sinuosa à direita",
+    "name": "Pista sinuosa à esquerda",
     "url": "/images/placas/advertencia/A-3a.png",
-    "file": "placa-pista-sinuosa-a-direita-A-3a.png",
+    "file": "placa-pista-sinuosa-a-esquerda-A-3a.png",
     "bytes": 11320,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-pista-sinuosa-a-direita-A-3a.png"
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-pista-sinuosa-a-esquerda-A-3a.png"
   },
   {
     "code": "A-3b",
     "category": "advertencia",
     "ext": "png",
-    "name": "Pista sinuosa à esquerda",
+    "name": "Pista sinuosa à direita",
     "url": "/images/placas/advertencia/A-3b.png",
-    "file": "placa-pista-sinuosa-a-esquerda-A-3b.png",
+    "file": "placa-pista-sinuosa-a-direita-A-3b.png",
     "bytes": 11151,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-pista-sinuosa-a-esquerda-A-3b.png"
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-pista-sinuosa-a-direita-A-3b.png"
   },
   {
     "code": "A-4a",
@@ -113,21 +113,21 @@
     "code": "A-7a",
     "category": "advertencia",
     "ext": "png",
-    "name": "Via lateral à direita",
+    "name": "Via lateral à esquerda",
     "url": "/images/placas/advertencia/A-7a.png",
-    "file": "placa-via-lateral-a-direita-A-7a.png",
+    "file": "placa-via-lateral-a-esquerda-A-7a.png",
     "bytes": 8788,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-via-lateral-a-direita-A-7a.png"
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-via-lateral-a-esquerda-A-7a.png"
   },
   {
     "code": "A-7b",
     "category": "advertencia",
     "ext": "png",
-    "name": "Via lateral à esquerda",
+    "name": "Via lateral à direita",
     "url": "/images/placas/advertencia/A-7b.png",
-    "file": "placa-via-lateral-a-esquerda-A-7b.png",
+    "file": "placa-via-lateral-a-direita-A-7b.png",
     "bytes": 9010,
-    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-via-lateral-a-esquerda-A-7b.png"
+    "public_url": "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-via-lateral-a-direita-A-7b.png"
   },
   {
     "code": "A-8",

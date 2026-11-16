@@ -258,9 +258,15 @@ function PlacasTrainerPage() {
 
   // Top fraquezas (computado antes de qualquer retorno para respeitar a regra dos hooks)
   const topWeakness = useMemo(() => {
+    // Imagem oficial por código (evita cartão branco p/ códigos fora do SVG).
+    const imgByPlaca = new Map<string, string>();
+    for (const wq of getQuestionBank()) {
+      if (wq.placa && wq.image_url && !imgByPlaca.has(wq.placa)) imgByPlaca.set(wq.placa, wq.image_url);
+    }
     return Object.entries(weakness)
       .map(([placa, w]) => ({
         placa: placa as PlacaId,
+        image: imgByPlaca.get(placa),
         rate: w.seen > 0 ? w.wrong / w.seen : 0,
         wrong: w.wrong,
         seen: w.seen,
@@ -455,7 +461,11 @@ function PlacasTrainerPage() {
                     className="flex items-center gap-2 rounded-xl bg-background/50 border border-border/40 pl-2 pr-3 py-1.5"
                     title={`${w.wrong}/${w.seen} erros`}
                   >
-                    <Placa id={w.placa} size={32} className="!p-1 !rounded-md" />
+                    {w.image ? (
+                      <img src={w.image} alt={w.placa} className="h-8 w-8 rounded-md bg-white p-0.5 object-contain" />
+                    ) : (
+                      <Placa id={w.placa} size={32} className="!p-1 !rounded-md" />
+                    )}
                     <span className="text-xs font-semibold">
                       {Math.round(w.rate * 100)}%
                       <span className="text-[10px] text-muted-foreground ml-1">
@@ -501,7 +511,11 @@ function PlacasTrainerPage() {
 
                 {/* Placa centralizada e grande */}
                 <div className="flex justify-center my-4">
-                  {q.placa && <Placa id={q.placa} size={200} />}
+                  {q.image_url ? (
+                    <img src={q.image_url} alt="placa de trânsito" className="max-h-[200px] max-w-[200px] object-contain" />
+                  ) : q.placa ? (
+                    <Placa id={q.placa} size={200} />
+                  ) : null}
                 </div>
 
                 <h2 className="text-lg md:text-xl font-medium leading-relaxed text-center">
@@ -643,13 +657,19 @@ function PlacasTrainerPage() {
                           : "border-destructive/30 bg-destructive/5"
                       }`}
                     >
-                      {qq.placa && (
+                      {qq.image_url ? (
+                        <img
+                          src={qq.image_url}
+                          alt={qq.placa ?? "placa"}
+                          className="h-[76px] w-[76px] shrink-0 rounded-xl bg-white p-2 object-contain"
+                        />
+                      ) : qq.placa ? (
                         <Placa
                           id={qq.placa}
                           size={44}
                           className="!p-1.5 !rounded-lg"
                         />
-                      )}
+                      ) : null}
                       <div className="min-w-0">
                         <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
                           {qq.placa}

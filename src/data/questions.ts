@@ -2518,7 +2518,8 @@ const QUESTIONS_A: Question[] = [
         tip: "A-10 = Estreitamento = Reduz e ajuda no zíper.",
         incidence: "alta",
         trap: true,
-        difficulty: 2
+        difficulty: 2,
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-estreitamento-de-pista-ao-centro-A-21a.png"
     },
     {
         id: "qd02",
@@ -3288,7 +3289,8 @@ const QUESTIONS_A: Question[] = [
         trap: true,
         difficulty: 2,
         origin: "real",
-        placa: "A-7"
+        placa: "A-7",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-entroncamento-obliquo-a-direita-A-10b.png"
     },
     {
         id: "detran_mg_retorno_rodovia",
@@ -3753,7 +3755,8 @@ const QUESTIONS_A: Question[] = [
         difficulty: 2,
         origin: "real",
         placa: "A-33b",
-        group: "placa-a33b"
+        group: "placa-a33b",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-passagem-sinalizada-de-escolares-A-33b.png"
     },
     {
         id: "prova_geral_13",
@@ -3873,7 +3876,8 @@ const QUESTIONS_A: Question[] = [
         difficulty: 2,
         origin: "real",
         placa: "R-4b",
-        group: "placa-r4b"
+        group: "placa-r4b",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-virar-a-direita-R-4b.png"
     },
     {
         id: "prova_geral_22",
@@ -8874,7 +8878,8 @@ const QUESTIONS_B: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 2,
-        origin: "ia"
+        origin: "ia",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-transito-de-veiculos-automotores-R-10.png"
     },
     {
         id: "l02_55",
@@ -8887,7 +8892,8 @@ const QUESTIONS_B: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 2,
-        origin: "ia"
+        origin: "ia",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sentido-circular-obrigatorio-R-33.png"
     },
     {
         id: "l02_56",
@@ -8900,7 +8906,8 @@ const QUESTIONS_B: Question[] = [
         incidence: "media",
         trap: true,
         difficulty: 2,
-        origin: "ia"
+        origin: "ia",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-virar-a-esquerda-R-4a.png"
     },
     {
         id: "l02_57",
@@ -8913,7 +8920,8 @@ const QUESTIONS_B: Question[] = [
         incidence: "media",
         trap: true,
         difficulty: 2,
-        origin: "ia"
+        origin: "ia",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-mudar-de-faixa-de-transito-da-esquerda-para-a-direita-R-8a.png"
     },
     {
         id: "l02_58",
@@ -8927,7 +8935,8 @@ const QUESTIONS_B: Question[] = [
         trap: true,
         difficulty: 2,
         origin: "ia",
-        group: "placa-a33b"
+        group: "placa-a33b",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-passagem-sinalizada-de-escolares-A-33b.png"
     },
     {
         id: "l02_59",
@@ -8954,7 +8963,8 @@ const QUESTIONS_B: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 2,
-        origin: "ia"
+        origin: "ia",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-parada-obrigatoria-a-frente-A-15.png"
     },
     {
         id: "placa_ind_r12",
@@ -8967,7 +8977,8 @@ const QUESTIONS_B: Question[] = [
         incidence: "media",
         trap: true,
         difficulty: 2,
-        origin: "ia"
+        origin: "ia",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-transito-de-bicicletas-R-12.png"
     },
     {
         id: "placa_ind_r13",
@@ -8980,7 +8991,8 @@ const QUESTIONS_B: Question[] = [
         incidence: "media",
         trap: true,
         difficulty: 2,
-        origin: "ia"
+        origin: "ia",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-transito-de-maquinas-agricolas-R-13.png"
     },
     {
         id: "placa_ind_r37",
@@ -8993,7 +9005,8 @@ const QUESTIONS_B: Question[] = [
         incidence: "media",
         trap: true,
         difficulty: 2,
-        origin: "ia"
+        origin: "ia",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-transito-de-motocicletas-motonetas-e-ciclomotores-R-37.png"
     },
     {
         id: "placa_ind_r4b",
@@ -9007,7 +9020,8 @@ const QUESTIONS_B: Question[] = [
         trap: true,
         difficulty: 2,
         origin: "ia",
-        group: "placa-r4b"
+        group: "placa-r4b",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-virar-a-direita-R-4b.png"
     },
     {
         id: "placa_ind_r5a",
@@ -9020,7 +9034,8 @@ const QUESTIONS_B: Question[] = [
         incidence: "media",
         trap: true,
         difficulty: 2,
-        origin: "ia"
+        origin: "ia",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-retornar-a-esquerda-R-5a.png"
     },
     {
         id: "placa_ind_r5b",
@@ -9033,7 +9048,8 @@ const QUESTIONS_B: Question[] = [
         incidence: "media",
         trap: true,
         difficulty: 2,
-        origin: "ia"
+        origin: "ia",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-retornar-a-direita-R-5b.png"
     },
     {
         id: "placa_ind_r8b",
@@ -9046,7 +9062,8 @@ const QUESTIONS_B: Question[] = [
         incidence: "media",
         trap: true,
         difficulty: 2,
-        origin: "ia"
+        origin: "ia",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-mudar-de-faixa-de-transito-da-direita-para-a-esquerda-R-8b.png"
     },
     {
         id: "placa_ind_a29",
@@ -9059,7 +9076,8 @@ const QUESTIONS_B: Question[] = [
         incidence: "media",
         trap: true,
         difficulty: 2,
-        origin: "ia"
+        origin: "ia",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-projecao-de-cascalho-A-29.png"
     },
     {
         id: "placa_ind_a44",
@@ -9072,7 +9090,8 @@ const QUESTIONS_B: Question[] = [
         incidence: "media",
         trap: true,
         difficulty: 2,
-        origin: "ia"
+        origin: "ia",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-vento-lateral-A-44.png"
     },
     {
         id: "placa_ind_a14",
@@ -9085,7 +9104,8 @@ const QUESTIONS_B: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 2,
-        origin: "real"
+        origin: "real",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-semaforo-a-frente-A-14.png"
     },
     {
         id: "placa_ind_a25",
@@ -9098,7 +9118,8 @@ const QUESTIONS_B: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 2,
-        origin: "ia"
+        origin: "ia",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-mao-dupla-adiante-A-25.png"
     },
     {
         id: "placa_ind_a42c",
@@ -9111,7 +9132,8 @@ const QUESTIONS_B: Question[] = [
         incidence: "media",
         trap: true,
         difficulty: 2,
-        origin: "ia"
+        origin: "ia",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-pista-dividida-A-42c.png"
     },
     // Sem imagem: cobra forma/cor da advertência (losango amarelo e preto).
     {
@@ -11024,7 +11046,8 @@ const QUESTIONS_B: Question[] = [
         difficulty: 2,
         origin: "real",
         placa: "A-14",
-        group: "placa-a14-semaforo"
+        group: "placa-a14-semaforo",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-semaforo-a-frente-A-14.png"
     },
     {
         id: "go_prova_18",
@@ -11038,7 +11061,8 @@ const QUESTIONS_B: Question[] = [
         trap: true,
         difficulty: 2,
         origin: "real",
-        placa: "A-25"
+        placa: "A-25",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-mao-dupla-adiante-A-25.png"
     },
     {
         id: "go_prova_19",
@@ -11304,7 +11328,8 @@ const QUESTIONS_B: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 2,
-        origin: "real"
+        origin: "real",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-transito-de-caminhoes-R-9.png"
     },
     {
         id: "detran_via_oleo_areia_01",
@@ -11511,7 +11536,8 @@ const QUESTIONS_B: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 2,
-        origin: "real"
+        origin: "real",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-obras-A-24.png"
     },
     {
         id: "detran_art38_conversao_01",
@@ -11547,7 +11573,8 @@ const QUESTIONS_B: Question[] = [
         incidence: "media",
         trap: true,
         difficulty: 3,
-        origin: "real"
+        origin: "real",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-ciclistas-a-esquerda-pedestres-a-direita-R-36a.png"
     },
     {
         id: "detran_a3b_sinuosa_01",
@@ -11565,7 +11592,8 @@ const QUESTIONS_B: Question[] = [
         incidence: "alta",
         trap: true,
         difficulty: 2,
-        origin: "real"
+        origin: "real",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-pista-sinuosa-a-direita-A-3b.png"
     },
     {
         id: "detran_visibilidade_via_01",
@@ -11637,7 +11665,8 @@ const QUESTIONS_B: Question[] = [
         incidence: "media",
         trap: true,
         difficulty: 2,
-        origin: "real"
+        origin: "real",
+        image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-proibido-transito-de-veiculos-de-tracao-animal-R-11.png"
     },
     {
         id: "detran_homocinetica_01",

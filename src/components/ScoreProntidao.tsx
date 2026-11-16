@@ -15,7 +15,9 @@ import {
 // SCORE DE PRONTIDÃO — bloco visual para o painel do aluno
 // ------------------------------------------------------------
 // Mostra a barra de progresso + selo de status.
-// Regra: gabaritar OU 88%+ em 3 dos últimos 5 simulados.
+// Só conta simulado GERAL; a contagem zera todo dia e forma
+// blocos de 5. Regra (avaliada no 5º do bloco): gabaritar OU
+// 88%+ em 3 dos 5 simulados do bloco.
 // ------------------------------------------------------------
 
 type Tom = {
@@ -104,7 +106,7 @@ export function ScoreProntidaoCard({
             Score de Prontidão
           </p>
           <p className="text-[11px] text-muted-foreground mt-1">
-            Baseado nos seus últimos {JANELA_SIMULADOS} simulados
+            Só simulado geral · zera todo dia · blocos de {JANELA_SIMULADOS}
           </p>
         </div>
 
@@ -126,10 +128,10 @@ export function ScoreProntidaoCard({
           </span>
           <span className="text-xs font-semibold text-muted-foreground">
             {pronto
-              ? "Janela completa · regra cumprida ✅"
-              : !resultado.janelaCompleta
-                ? `${resultado.janela.length}/${JANELA_SIMULADOS} simulados na janela`
-                : `${resultado.noPadrao}/${ACERTOS_NECESSARIOS} simulados a ${LIMIAR_NOTA}%+`}
+              ? "Bloco de 5 completo · regra cumprida ✅"
+              : !resultado.blocoCompleto
+                ? `${resultado.bloco.length}/${JANELA_SIMULADOS} no bloco de hoje`
+                : `${resultado.noPadrao}/${ACERTOS_NECESSARIOS} a ${LIMIAR_NOTA}%+`}
           </span>
         </div>
 
@@ -170,14 +172,14 @@ export function ScoreProntidaoCard({
         </p>
       </div>
 
-      {/* Últimos simulados da janela */}
-      {resultado.janela.length > 0 && (
+      {/* Simulados do bloco em curso (hoje) */}
+      {resultado.bloco.length > 0 && (
         <div className="mt-4">
           <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold mb-2">
-            Últimos {resultado.janela.length} de {JANELA_SIMULADOS}
+            Bloco de hoje · {resultado.bloco.length} de {JANELA_SIMULADOS}
           </p>
           <div className="flex flex-wrap gap-2">
-            {resultado.janela.map((pct, i) => (
+            {resultado.bloco.map((pct, i) => (
               <span
                 key={`${i}-${pct}`}
                 className={`inline-flex items-center rounded-lg border px-2.5 py-1 text-[11px] font-bold tabular-nums ${notaTom(pct)}`}
@@ -193,12 +195,10 @@ export function ScoreProntidaoCard({
       {/* Regra + CTA */}
       <div className="mt-4 pt-3 border-t border-border/20 flex flex-wrap items-center justify-between gap-3">
         <p className="text-[10px] text-muted-foreground leading-snug max-w-[60%]">
-          Regra: gabaritar <span className="text-foreground/80">(100%)</span> ou fazer{" "}
+          Só conta simulado geral · zera todo dia · a cada {JANELA_SIMULADOS} o resultado: gabaritar{" "}
+          <span className="text-foreground/80">(100%)</span> ou fazer{" "}
           <span className="text-foreground/80">{LIMIAR_NOTA}%+</span> em{" "}
-          <span className="text-foreground/80">
-            {ACERTOS_NECESSARIOS} dos últimos {JANELA_SIMULADOS}
-          </span>
-          .
+          <span className="text-foreground/80">{ACERTOS_NECESSARIOS} dos {JANELA_SIMULADOS}</span>.
         </p>
 
         {showCTA && !pronto && (

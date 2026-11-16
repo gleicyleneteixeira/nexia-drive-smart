@@ -664,7 +664,7 @@ function TeoricoDashboard() {
         </button>
       </div>
 
-      {/* Score de Prontidão: barra de progresso + selo (últimos 5 simulados) */}
+      {/* Score de Prontidão: barra de progresso + selo (bloco de 5 por dia, só simulado geral) */}
       <ScoreProntidao userId={user?.id} />
 
       {/* CENTRO (foco principal): escolha o tipo de simulado */}
