@@ -1,4 +1,5 @@
-import type { PlacaId } from "@/components/Placa";
+import { PLACA_SVG_IDS, type PlacaId } from "@/components/Placa";
+import catalogoPlacas from "./placas-catalog-named.json";
 import { supabase } from "@/integrations/supabase/client";
 import { reviewFactor, isReviewDue } from "@/lib/review";
 export type Incidence = "altissima" | "alta" | "media" | "baixa";
@@ -15649,13 +15650,32 @@ export interface QuestionBankOptions {
     includeDisabled?: boolean;
 }
 
+// Imagem de fallback por placa: questão marcada com `placa` mas SEM `image_url`
+// ganha a imagem oficial do catálogo — evita o cartão branco (o <Placa> SVG
+// cobre só os 15 códigos de PLACA_SVG_IDS; o resto precisa da imagem).
+const catalogoImagemPorPlaca = new Map<string, string>(
+    catalogoPlacas.map((p): [string, string] => [p.code, p.public_url]),
+);
+const placasComSvg: ReadonlySet<string> = new Set<string>(PLACA_SVG_IDS);
+
+function comImagemDaPlaca(q: Question): Question {
+    if (q.image_url || !q.placa || placasComSvg.has(q.placa)) return q;
+    const url = catalogoImagemPorPlaca.get(q.placa);
+    return url ? { ...q, image_url: url } : q;
+}
+
 function buildQuestionBank(includeDisabled: boolean): Question[] {
     return QUESTIONS.filter((q) => includeDisabled || !overrideDisabled.has(q.id))
         .map((q) => {
             const p = overridePatch.get(q.id);
             return p ? { ...q, ...p, id: q.id } : q;
         })
-        .concat(overrideCustoms.filter((c) => includeDisabled || !overrideDisabled.has(c.id)));
+        .map(comImagemDaPlaca)
+        .concat(
+            overrideCustoms
+                .filter((c) => includeDisabled || !overrideDisabled.has(c.id))
+                .map(comImagemDaPlaca),
+        );
 }
 
 /**

@@ -18,6 +18,29 @@ export type PlacaId =
   | "I-Posto"
   | "SAU-01";
 
+/**
+ * Códigos com SVG próprio neste componente. Qualquer OUTRA placa oficial
+ * precisa da imagem do catálogo (`placas-catalog-named.json`) — senão o
+ * render cai num `<svg>` vazio e vira cartão branco.
+ */
+export const PLACA_SVG_IDS: readonly PlacaId[] = [
+  "R-1",
+  "R-2",
+  "R-6a",
+  "R-6b",
+  "R-19",
+  "R-25a",
+  "R-25d",
+  "A-1a",
+  "A-2b",
+  "A-13a",
+  "A-32b",
+  "A-33a",
+  "I-Hospital",
+  "I-Posto",
+  "SAU-01",
+];
+
 interface Props {
   id: PlacaId;
   size?: number;

@@ -5,11 +5,20 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchLibraryItems, checkIsAdmin, SUPER_ADMIN_EMAIL, CRONOGRAMA_BOOK_KEY, fetchCronogramaBookId, type LibraryItem, type LibraryItemType } from "@/lib/library";
 import { QUESTIONS, CATEGORY_LABELS, INCIDENCE_META, getQuestionBank, getDisabledQuestionIds, setQuestionOverrides, shuffleOptions, type Question, type Category } from "@/data/questions";
 import { useQuestionBank } from "@/hooks/use-question-bank";
-import { Placa, type PlacaId } from "@/components/Placa";
+import { Placa, PLACA_SVG_IDS, type PlacaId } from "@/components/Placa";
 import { cn } from "@/lib/utils";
 import { OptionImage } from "@/components/OptionImage";
 
-const PLACA_IDS: PlacaId[] = ["R-1", "R-2", "R-6a", "R-6b", "R-19", "R-25a", "R-25d", "A-1a", "A-2b", "A-13a", "A-32b", "A-33a", "I-Hospital", "I-Posto", "SAU-01"];
+// Catálogo oficial de placas (146 entradas) — fonte do campo buscabível do
+// editor de questão. O nome vem com entidades HTML ("&quot;"), decodificadas
+// aqui para exibição.
+const normalizarBusca = (s: string): string =>
+  s.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+const PLACAS_CATALOGO = catalogoPlacas.map((p) => ({
+  code: p.code,
+  name: p.name.replace(/&quot;/g, '"').replace(/&amp;/g, "&").replace(/&#39;/g, "'"),
+  public_url: p.public_url,
+}));
 import { 
   fetchVideoTutorials, 
   addVideoTutorial, 
@@ -26,10 +35,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import catalogoPlacas from "@/data/placas-catalog-named.json";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Loader2, Upload, Trash2, Pencil, Ban, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, X, XCircle, Star, Heart, Volume2, CheckCircle2, Check, AlertTriangle, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen, Video, BadgeDollarSign, Gift, CheckCheck, CalendarClock, Lock, ChevronUp, ChevronDown, GripVertical, BarChart3, Brain, Play, Eye, EyeOff, ListChecks } from "lucide-react";
+import { Loader2, Upload, Trash2, Pencil, Ban, LogOut, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Search, Download, Users, KeyRound, UserX, X, XCircle, Star, Heart, Volume2, CheckCircle2, Check, AlertTriangle, Settings, ExternalLink, ShoppingBag, MessageCircle, LockOpen, Video, BadgeDollarSign, Gift, CheckCheck, CalendarClock, Lock, ChevronUp, ChevronDown, ChevronsUpDown, GripVertical, BarChart3, Brain, Play, Eye, EyeOff, ListChecks } from "lucide-react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import * as XLSX from "xlsx";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
@@ -1531,6 +1543,84 @@ function SimuladoPreviewModal({ q: original, onClose }: { q: Question; onClose: 
   );
 }
 
+/**
+ * Campo "Placa oficial" com filtro — TODAS as 146 placas do catálogo.
+ * A pessoa digita o código ("A-10b") ou o nome ("entroncamento") e a lista
+ * filtra na hora (sem acento/case-sensitivity). Salva só o código.
+ */
+function PlacaCombobox({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const [busca, setBusca] = useState("");
+  const termo = normalizarBusca(busca);
+  const opcoes = termo
+    ? PLACAS_CATALOGO.filter(
+        (p) => normalizarBusca(p.code).includes(termo) || normalizarBusca(p.name).includes(termo),
+      )
+    : PLACAS_CATALOGO;
+  const atual = PLACAS_CATALOGO.find((p) => p.code === value);
+
+  const fechar = () => {
+    setOpen(false);
+    setBusca("");
+  };
+
+  return (
+    <Popover open={open} onOpenChange={(o) => (o ? setOpen(o) : fechar())}>
+      <PopoverTrigger asChild>
+        <Button
+          type="button"
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          aria-label="Filtrar placa oficial"
+          className="w-full justify-between font-normal"
+        >
+          <span className="truncate">
+            {value ? (
+              <>
+                <span className="font-mono font-semibold">{value}</span>
+                {atual ? <span className="text-muted-foreground"> — {atual.name}</span> : null}
+              </>
+            ) : (
+              "Nenhuma"
+            )}
+          </span>
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent align="start" className="w-[var(--radix-popover-trigger-width)] p-0">
+        <Command shouldFilter={false}>
+          <CommandInput
+            placeholder="Filtrar por código ou nome (ex.: A-10b, estreitamento)"
+            value={busca}
+            onValueChange={setBusca}
+          />
+          <CommandList>
+            <CommandEmpty>Nenhuma placa encontrada.</CommandEmpty>
+            <CommandGroup>
+              <CommandItem value="__nenhuma__" onSelect={() => { onChange(""); fechar(); }}>
+                <Check className={cn("mr-2 h-4 w-4", value ? "opacity-0" : "opacity-100")} />
+                Nenhuma
+              </CommandItem>
+              {opcoes.map((p) => (
+                <CommandItem
+                  key={p.code}
+                  value={p.code}
+                  onSelect={() => { onChange(p.code); fechar(); }}
+                >
+                  <Check className={cn("mr-2 h-4 w-4", value === p.code ? "opacity-100" : "opacity-0")} />
+                  <span className="mr-2 font-mono text-xs font-semibold">{p.code}</span>
+                  <span className="truncate text-muted-foreground">{p.name}</span>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
 function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null; onCancel: () => void; onSaved: () => void }) {
   const isNew = !initial;
   const [category, setCategory] = useState<Category>(initial?.category ?? "legislacao");
@@ -1969,14 +2059,8 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
           </details>
         </div>
         <div className="space-y-1">
-          <Label className="text-xs">Placa oficial (opcional)</Label>
-          <Select value={placa || "none"} onValueChange={(v) => setPlaca(v === "none" ? "" : v)}>
-            <SelectTrigger><SelectValue placeholder="Nenhuma" /></SelectTrigger>
-            <SelectContent>
-              <SelectItem value="none">Nenhuma</SelectItem>
-              {PLACA_IDS.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
-            </SelectContent>
-          </Select>
+          <Label className="text-xs">Placa oficial (opcional) — digite para filtrar (146 placas)</Label>
+          <PlacaCombobox value={placa} onChange={setPlaca} />
         </div>
       </div>
       <div className="grid sm:grid-cols-3 gap-2">
@@ -2022,7 +2106,17 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
           </div>
         ) : placa ? (
           <div className="flex justify-center">
-            <Placa id={placa as PlacaId} size={120} />
+            {PLACA_SVG_IDS.includes(placa as PlacaId) ? (
+              <Placa id={placa as PlacaId} size={120} />
+            ) : PLACAS_CATALOGO.find((p) => p.code === placa) ? (
+              <img
+                src={PLACAS_CATALOGO.find((p) => p.code === placa)!.public_url}
+                alt={`Placa ${placa}`}
+                className="max-w-[170px]"
+              />
+            ) : (
+              <span className="text-xs text-muted-foreground">Sem imagem de “{placa}” no catálogo oficial.</span>
+            )}
           </div>
         ) : null}
         <div className="space-y-2">
