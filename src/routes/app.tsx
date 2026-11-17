@@ -660,7 +660,7 @@ function TeoricoDashboard() {
           onClick={() => scrollToSection("secao-biblioteca")}
           className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-border bg-secondary/50 text-xs font-semibold text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors"
         >
-          📚 Biblioteca
+          📚 Aulas e materiais
         </button>
       </div>
 
@@ -719,12 +719,12 @@ function TeoricoDashboard() {
         </div>
       </section>
 
-      {/* ABAIXO DOS SIMULADOS: Biblioteca e Livros Virtuais */}
+      {/* ABAIXO DOS SIMULADOS: aulas, galerias e materiais de estudo */}
       <section id="secao-biblioteca" className="scroll-mt-24">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-base font-display font-bold flex items-center gap-1.5">
             <Library className="h-4.5 w-4.5 text-primary" />
-            Livros e Materiais de Estudo
+            Aulas e materiais
           </h2>
           <Link
             to="/biblioteca"

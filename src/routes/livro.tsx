@@ -4,7 +4,7 @@ import { PdfReader } from "@/components/PdfReader";
 
 export const Route = createFileRoute("/livro")({
   component: LivroPage,
-  head: () => ({ meta: [{ title: "Leitor de PDF — NEXIA DRIVE" }] }),
+  head: () => ({ meta: [{ title: "Resumos narrados — NEXIA DRIVE" }] }),
 });
 
 function LivroPage() {

@@ -12,7 +12,7 @@ export const Route = createFileRoute("/biblioteca")({
   component: BibliotecaPage,
   head: () => ({
     meta: [
-      { title: "Biblioteca — Nexia DETRAN" },
+      { title: "Aulas e materiais — Nexia DETRAN" },
       { name: "description", content: "Livros, apostilas e materiais complementares para sua prova do DETRAN." },
     ],
   }),
@@ -52,9 +52,9 @@ function BibliotecaPage() {
     <div className="mx-auto max-w-6xl px-4 py-8 md:py-12 space-y-8">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <p className="text-sm uppercase tracking-widest text-primary-glow font-semibold">Biblioteca</p>
+          <p className="text-sm uppercase tracking-widest text-primary-glow font-semibold">Aulas e materiais</p>
           <h1 className="text-3xl md:text-5xl font-display font-bold mt-2">
-            Estude com <span className="gradient-text">livros e materiais</span>
+            Galerias de <span className="gradient-text">aulas e materiais</span>
           </h1>
           <p className="text-muted-foreground mt-2 max-w-2xl text-sm md:text-base">
             Livrinhos virtuais, apostilas, vídeos e conteúdo premium pra turbinar sua aprovação.

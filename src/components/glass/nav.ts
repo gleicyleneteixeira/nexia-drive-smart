@@ -102,7 +102,12 @@ export function simuladosItem(modulo: ModuloAtivo): NavItem {
 
 /** Seções laterais contextualizadas pelo módulo ativo (sidebar + paleta + sheets). */
 export function navSections(modulo: ModuloAtivo): NavSection[] {
-  const simulos = simuladosItem(modulo);
+  // No teórico o item é a prova completa (nome explícito dentro da seção
+  // "Simulados"); no psicotécnico é o atalho "Treinar agora" dos joguinhos.
+  const simulos =
+    modulo === "psicotecnico"
+      ? simuladosItem(modulo)
+      : { ...simuladosItem(modulo), label: "Simulado completo" };
   return NAV_SECTIONS.map((s) =>
     s.id === "treinar"
       ? { ...s, items: [simulos, ...s.items.filter((i) => i.id !== "simulado")] }
@@ -118,30 +123,38 @@ export function tabBarItems(modulo: ModuloAtivo): NavItem[] {
   return TAB_BAR_ITEMS.map((i) => (i.id === "simulado" ? item : i));
 }
 
-/** Seções ESTUDAR e TREINAR (estáticas). CONTA é montada no AppShell
- *  porque depende do link de suporte vindo do banco. */
+/**
+ * Seções AULAS E MATERIAIS (conteúdo) e SIMULADOS (treino/prova).
+ *
+ * A separação é intencional: conteúdo de aula mora na primeira, prova e
+ * treino na segunda. Nada de eixo de matéria dentro de "aulas" — os eixos
+ * são atalhos de SIMULADO e por isso vivem na seção de simulados.
+ *
+ * CONTA é montada no AppShell porque depende do link de suporte do banco.
+ */
 export const NAV_SECTIONS: NavSection[] = [
   {
     id: "estudar",
-    label: "Estudar",
+    label: "Aulas e materiais",
     items: [
       { id: "inicio", label: "Início", icon: Home, action: { kind: "home" }, keywords: ["hub", "dashboard", "comeco"] },
+      { id: "teorico", label: "Aulas da teoria", icon: BookOpen, action: { kind: "module", module: "teorico" }, keywords: ["teoria", "aulas", "conteudo", "resumo"] },
       { id: "psicotecnico", label: "Psicotécnico", icon: Brain, action: { kind: "module", module: "psicotecnico" }, keywords: ["ateno", "memoria", "raciocinio", "palografico", "teste"] },
-      { id: "teorico", label: "Parte Teórica", icon: BookOpen, action: { kind: "module", module: "teorico" }, keywords: ["teoria", "legislacao", "simulado"] },
-      ...EIXOS_LINKS,
-      { id: "biblioteca", label: "Biblioteca", icon: Library, action: { kind: "link", to: "/biblioteca" }, keywords: ["livros", "pdf", "materiais", "videos"] },
+      { id: "galerias", label: "Galerias e biblioteca", icon: Library, action: { kind: "link", to: "/biblioteca" }, keywords: ["livros", "pdf", "materiais", "videos", "galeria", "apostila"] },
+      { id: "livro", label: "Resumos narrados", icon: BookMarked, action: { kind: "link", to: "/livro" }, keywords: ["ler", "narra", "audio", "pdf", "resumo", "ouvir"] },
+      { id: "placas-catalogo", label: "Guia de placas", icon: Signpost, action: { kind: "link", to: "/placas", search: { ver: "catalogo" } }, keywords: ["sinalizacao", "placa", "significado", "catalogo", "consultar"] },
       { id: "pratico", label: "Direção Prática", icon: Car, action: { kind: "module", module: "direcao" }, soon: true, keywords: ["pratica", "baliza", "manobras"] },
     ],
   },
   {
     id: "treinar",
-    label: "Treinar",
+    label: "Simulados",
     items: [
-      { id: "simulado", label: "Simulados", icon: Target, action: { kind: "link", to: "/simulado" }, keywords: ["prova", "teste", "30 questoes", "completo", "prova real"] },
+      { id: "simulado", label: "Simulado completo", icon: Target, action: { kind: "link", to: "/simulado" }, keywords: ["prova", "teste", "30 questoes", "completo", "prova real"] },
+      ...EIXOS_LINKS,
+      { id: "placas-quiz", label: "Treino de placas", icon: Signpost, action: { kind: "link", to: "/placas", search: { ver: "simulado" } }, keywords: ["sinalizacao", "placa", "quiz", "adivinhar", "simulado"] },
       { id: "mais-caem", label: "Questões que mais caem", icon: TrendingUp, action: { kind: "link", to: "/mais-caem" }, keywords: ["incidencia", "tema", "ranking", "desempenho"] },
-      { id: "placas", label: "Treino de Placas", icon: Signpost, action: { kind: "link", to: "/placas" }, keywords: ["sinalizacao", "placa", "adivinhar"] },
       { id: "turbo", label: "Revisão Turbo", icon: Zap, action: { kind: "link", to: "/turbo" }, keywords: ["cards", "rapido", "revisar"] },
-      { id: "livro", label: "Livro com narração", icon: BookMarked, action: { kind: "link", to: "/livro" }, keywords: ["ler", "narra", "audio", "pdf"] },
       { id: "conquistas", label: "Conquistas", icon: Trophy, action: { kind: "link", to: "/conquistas" }, keywords: ["medalhas", "ranking", "gamificacao"] },
     ],
   },
@@ -163,7 +176,7 @@ export function contaSection(supportHref: string | null): NavSection {
 /** Itens da barra inferior (mobile) — 4 destinos + "Mais". */
 export const TAB_BAR_ITEMS: NavItem[] = [
   { id: "inicio", label: "Início", icon: Home, action: { kind: "home" } },
-  { id: "estudar", label: "Estudar", icon: BookOpen, action: { kind: "home" } }, // abre sheet
+  { id: "estudar", label: "Aulas", icon: BookOpen, action: { kind: "home" } }, // abre sheet
   { id: "simulado", label: "Simulados", icon: Target, action: { kind: "link", to: "/simulado" } },
   { id: "conquistas", label: "Conquistas", icon: Trophy, action: { kind: "link", to: "/conquistas" } },
   { id: "mais", label: "Mais", icon: Sparkles, action: { kind: "home" } }, // abre sheet

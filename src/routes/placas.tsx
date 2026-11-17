@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -35,6 +35,14 @@ import {
 
 export const Route = createFileRoute("/placas")({
   component: PlacasTrainerPage,
+  // O menu separa "Guia de placas" (conteúdo) de "Treino de placas" (simulado)
+  // — os dois apontam para esta rota e escolhem o modo por query param.
+  validateSearch: (search: Record<string, unknown>): { ver?: ModoPlacas } => {
+    const ver = search.ver;
+    return ver === "catalogo" || ver === "simulado" || ver === "adaptativo"
+      ? { ver }
+      : {};
+  },
   head: () => ({
     meta: [
       { title: "Placas de Trânsito — Catálogo + Quiz das Placas · Nexia DETRAN" },
@@ -50,9 +58,24 @@ export const Route = createFileRoute("/placas")({
 const SESSION_SIZE = 10;
 const STORAGE_KEY = "nexia:placas:weakness:v1";
 
+/** Modo de visualização da página (query param `ver`). */
+type ModoPlacas = "catalogo" | "simulado" | "adaptativo";
+type ViewMode = "catalog" | "jogo" | "adaptativo";
+
+const VIEW_POR_PARAM: Record<ModoPlacas, ViewMode> = {
+  catalogo: "catalog",
+  simulado: "jogo",
+  adaptativo: "adaptativo",
+};
+const PARAM_POR_VIEW: Record<ViewMode, ModoPlacas> = {
+  catalog: "catalogo",
+  jogo: "simulado",
+  adaptativo: "adaptativo",
+};
+
 /** Escolha do aluno dentro do Treino de Placas. */
 const OPCOES_PLACAS: {
-  modo: "catalog" | "jogo" | "adaptativo";
+  modo: ViewMode;
   emoji: string;
   titulo: string;
   desc: string;
@@ -168,6 +191,8 @@ function embaralhar<T>(arr: T[]): T[] {
 // ==========================================
 
 function PlacasTrainerPage() {
+  const { ver } = Route.useSearch();
+  const navigate = useNavigate();
   const [hydrated, setHydrated] = useState(false);
   const [weakness, setWeakness] = useState<WeaknessMap>({});
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -175,9 +200,20 @@ function PlacasTrainerPage() {
   const [selected, setSelected] = useState<number | null>(null);
   const [answers, setAnswers] = useState<(number | null)[]>([]);
   const [done, setDone] = useState(false);
-  const [viewMode, setViewMode] = useState<"catalog" | "jogo" | "adaptativo">(
-    "catalog",
+  // A URL é a fonte do modo: ?ver=catalogo (conteúdo) ou ?ver=simulado (quiz).
+  const [viewMode, setViewMode] = useState<ViewMode>(
+    ver ? VIEW_POR_PARAM[ver] : "catalog",
   );
+
+  useEffect(() => {
+    if (ver) setViewMode(VIEW_POR_PARAM[ver]);
+  }, [ver]);
+
+  const trocarModo = (modo: ViewMode) => {
+    setViewMode(modo);
+    navigate({ to: "/placas", search: { ver: PARAM_POR_VIEW[modo] }, replace: true });
+  };
+
   // Filtro de categoria compartilhado entre catálogo e quiz (como no
   // souhabilitado: "Todas / Advertência / Regulamentação / Indicação").
   const [categoria, setCategoria] = useState<FiltroCategoria>("todas");
@@ -322,7 +358,7 @@ function PlacasTrainerPage() {
             <button
               key={o.modo}
               type="button"
-              onClick={() => setViewMode(o.modo)}
+              onClick={() => trocarModo(o.modo)}
               className={`text-left rounded-2xl border p-4 transition-all cursor-pointer ${
                 ativo
                   ? "border-primary/60 bg-primary/10 shadow-glow"
@@ -385,7 +421,7 @@ function PlacasTrainerPage() {
       {viewMode === "jogo" && (
         <QuizDasPlacas
           categoria={categoria}
-          onSair={() => setViewMode("catalog")}
+          onSair={() => trocarModo("catalog")}
         />
       )}
 

@@ -311,11 +311,16 @@ export function AppShell() {
   }, [isAdmin, supportLink, adminNavItems, activeModule]);
 
   // Item ativo (pílula de vidro destacada)
-  const location = useRouterState({ select: (s) => s.location });
-  const [searchStr, setSearchStr] = useState("");
-  useEffect(() => {
-    setSearchStr(typeof window !== "undefined" ? window.location.search : "");
-  }, [location]);
+  // Query string atual, vinda do roteador (reage a navigate/replace sem reload).
+  const searchStr = useRouterState({ select: (s) => s.location.searchStr });
+
+  // Modo da página de placas (?ver=catalogo|simulado|adaptativo) — define qual
+  // dos dois itens do menu fica aceso e o título/contexto da topbar.
+  const verPlacas = useMemo(
+    () => new URLSearchParams(searchStr).get("ver"),
+    [searchStr],
+  );
+  const placasEmTreino = verPlacas === "simulado" || verPlacas === "adaptativo";
 
   const activeId = useMemo(() => {
     if (pathname === "/app") {
@@ -338,18 +343,23 @@ export function AppShell() {
       }
       return "simulado";
     }
+    // Placas: dois itens do menu apontam para /placas — o query param decide
+    // qual fica aceso (catálogo = aulas; quiz = simulados).
+    if (pathname === "/placas") return verPlacas === "catalogo" || !verPlacas ? "placas-catalogo" : "placas-quiz";
     const flat = sections.flatMap((s) => s.items);
     const hit = flat.find((i) => i.action.kind === "link" && i.action.to === pathname);
     return hit?.id ?? null;
-  }, [pathname, activeModule, activeAdminSection, searchStr, sections]);
+  }, [pathname, activeModule, activeAdminSection, searchStr, sections, verPlacas]);
 
   // Tab bar (mobile): mapeia a rota/módulo para a aba correta
   const activeTabId = useMemo(() => {
     if (pathname === "/app") return activeModule === "hub" ? "inicio" : "estudar";
-    if (pathname === "/biblioteca") return "estudar";
+    if (pathname === "/biblioteca" || pathname === "/livro") return "estudar";
     if (pathname === "/simulado") return "simulado";
     if (pathname === "/psicotecnico") return activeModule === "psicotecnico" ? "simulado" : null; // "Treino" no psicotécnico
     if (pathname === "/conquistas") return "conquistas";
+    // Placas: catálogo é conteúdo (aba Aulas); quiz é treino (aba Simulados).
+    if (pathname === "/placas") return placasEmTreino ? "simulado" : "estudar";
     // Painel admin (mobile): a entrada é a folha "Mais"
     if (pathname === "/admin") return "mais";
     // demais rotas de treino caem no "Mais"
@@ -357,7 +367,7 @@ export function AppShell() {
     const hit = flat.find((i) => i.action.kind === "link" && i.action.to === pathname);
     if (hit && (hit.id === "simulado" || hit.id === "conquistas")) return hit.id;
     return null;
-  }, [pathname, activeModule, sections]);
+  }, [pathname, activeModule, sections, placasEmTreino]);
 
   const onTab = (item: NavItem) => {
     if (item.id === "estudar") {
@@ -377,13 +387,13 @@ export function AppShell() {
     runAction(item);
   };
 
-  // Cabeçalho clicável das seções da sidebar (desktop): ESTUDAR leva ao
-  // material de estudo do módulo escolhido; TREINAR leva aos simulados do
+  // Cabeçalho clicável das seções da sidebar (desktop): AULAS E MATERIAIS
+  // leva às galerias do módulo escolhido; SIMULADOS leva ao simulado do
   // teórico ou aos joguinhos do psicotécnico. Demais seções seguem texto.
   const handleSectionClick = (sectionId: string) => {
     if (sectionId === "estudar") {
       if (activeModule !== "hub") irParaMaterial(activeModule);
-      else setPaletteOpen(true); // sem módulo: escolhe pela paleta (Ctrl+K)
+      else navigate({ to: "/biblioteca" });
       return;
     }
     if (sectionId === "treinar") runAction(simuladosItem(activeModule));
@@ -400,7 +410,7 @@ export function AppShell() {
       const admin = sections.find((s) => s.id === "admin")?.items ?? [];
       const conta = contaSection(supportLink).items.filter((i) => i.id !== "tema");
       return [
-        { label: "Treinar", items: treinar },
+        { label: "Simulados", items: treinar },
         ...(admin.length ? [{ label: "Admin", items: admin }] : []),
         { label: "Conta", items: conta },
       ];
@@ -414,12 +424,12 @@ export function AppShell() {
       ? activeModule === "psicotecnico"
         ? "Psicotécnico"
         : activeModule === "teorico"
-          ? "Parte Teórica"
+          ? "Aulas da teoria"
           : activeModule === "direcao"
             ? "Direção Prática"
             : "Início"
       : pathname === "/biblioteca"
-        ? "Biblioteca"
+        ? "Galerias e biblioteca"
         : pathname === "/simulado"
           ? "Simulados"
           : pathname === "/conquistas"
@@ -427,13 +437,15 @@ export function AppShell() {
             : pathname === "/admin"
               ? "Admin"
               : pathname === "/placas"
-                ? "Treino de Placas"
+                ? placasEmTreino
+                  ? "Treino de placas"
+                  : "Guia de placas"
                 : pathname === "/turbo"
                   ? "Revisão Turbo"
                   : pathname === "/mais-caem"
                     ? "Questões que mais caem"
                     : pathname === "/livro"
-                      ? "Livro com narração"
+                      ? "Resumos narrados"
                       : pathname === "/psicotecnico"
                         ? "Psicotécnico"
                         : "Nexia Drive";
@@ -441,11 +453,19 @@ export function AppShell() {
   const pageEyebrow =
     pathname === "/app"
       ? "Área do aluno"
-      : pathname === "/simulado" || pathname === "/psicotecnico"
-        ? "Treinar"
-        : pathname === "/biblioteca"
-          ? "Estudar"
-          : "Nexia Drive";
+      : pathname === "/biblioteca" || pathname === "/livro"
+        ? "Aulas e materiais"
+        : pathname === "/placas"
+          ? placasEmTreino
+            ? "Simulados"
+            : "Aulas e materiais"
+          : pathname === "/simulado" ||
+              pathname === "/psicotecnico" ||
+              pathname === "/conquistas" ||
+              pathname === "/turbo" ||
+              pathname === "/mais-caem"
+            ? "Simulados"
+            : "Nexia Drive";
 
   const isHub = activeModule === "hub";
   const showChrome = !isPublicPage && !!user;
@@ -649,18 +669,10 @@ export function AppShell() {
 
       <GlassSheet
         open={!!sheetOpen && showChrome}
-        title={sheetOpen === "mais" ? "Mais opções" : "Estudar"}
+        title={sheetOpen === "mais" ? "Mais opções" : "Aulas e materiais"}
         groups={sheetGroups}
         onClose={() => setSheetOpen(null)}
-        onNavigate={(item) => {
-          // Escolher a categoria DENTRO da folha "Estudar" já cai no material
-          // de estudo dela (mesmo destino do botão Estudar).
-          if (sheetOpen === "estudar" && item.action.kind === "module") {
-            irParaMaterial(item.action.module);
-            return;
-          }
-          runAction(item);
-        }}
+        onNavigate={(item) => runAction(item)}
       />
 
       {/* PALETA DE COMANDOS (Ctrl+K) */}
