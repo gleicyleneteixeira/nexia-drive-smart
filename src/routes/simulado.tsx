@@ -30,6 +30,7 @@ import {
   Brain,
   Sparkles,
   ListChecks,
+  Signpost,
 } from "lucide-react";
 import { Placa } from "@/components/Placa";
 import { OptionImage } from "@/components/OptionImage";
@@ -1020,6 +1021,32 @@ function ModePicker({ onPick, onBack }: { onPick: (m: SimMode) => void; onBack?:
           <ArrowRight className="h-5 w-5 text-primary-glow mt-2 shrink-0" />
         </div>
       </button>
+
+      {/* Treino de placas: entrada dentro do simulador para o aluno que quer
+          ver todas as placas ou fazer o quiz visual (não é o simulado de
+          questões escritas — esse continua na categoria "Placas" abaixo). */}
+      <Link
+        to="/placas"
+        search={{ ver: "catalogo" }}
+        className="mt-3 block rounded-2xl border border-border bg-background/40 p-5 hover:border-primary/40 hover:bg-primary/5 transition-colors"
+      >
+        <div className="flex items-start gap-3">
+          <div className="w-11 h-11 rounded-xl bg-amber-400/15 flex items-center justify-center shrink-0">
+            <Signpost className="h-5 w-5 text-amber-500" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-[10px] uppercase tracking-widest text-amber-500 font-bold">
+              Treino de placas
+            </p>
+            <p className="font-display font-bold text-lg">Ver todas as placas</p>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              Catálogo com imagem, código e significado por categoria — ou faça o quiz visual de 15
+              placas por rodada.
+            </p>
+          </div>
+          <ArrowRight className="h-5 w-5 text-muted-foreground mt-2 shrink-0" />
+        </div>
+      </Link>
 
       <div className="mt-6">
         <p className="text-xs uppercase tracking-widest text-muted-foreground font-semibold flex items-center gap-1.5 mb-3">
