@@ -14041,8 +14041,9 @@ const QUESTIONS_B: Question[] = [
         statement: "O uso do cinto de segurança é obrigatório para todos os ocupantes do veículo, e a infração por descumprimento tem natureza e medida administrativa próprias. Um condutor dirige sem usar o cinto de segurança. A infração é:",
         options: ["Leve", "Média", "Gravíssima", "Grave, com retenção do veículo até a regularização."],
         correctIndex: 3,
-        explanation: "Correta letra D: cinto é obrigatório para condutor e passageiros.",
-        commonMistake: "Achar que só vale na rodovia.",
+        explanation: "Correta letra D: bora entender — o cinto é obrigatório para condutor e passageiros, e a falta dele é infração GRAVE: 5 pontos, multa e retenção do veículo até a regularização (art. 167 do CTB). Não é gravíssima porque a classificação não vem da impressão de perigo, e sim do que o artigo prevê: o art. 167 já define expressamente a conduta como grave. A gravíssima (7 pontos) fica reservada a outras condutas, como transportar criança sem o dispositivo de retenção adequado (art. 168). Mesma área de segurança, artigos e penas diferentes.",
+        commonMistake: "Trocar o cinto do adulto (grave) pela cadeirinha da criança (gravíssima) — ou achar que o cinto só vale na rodovia.",
+        legalBase: "Art. 167 do CTB (grave: 5 pontos, multa e retenção). Comparar com o art. 168 (criança sem dispositivo de retenção: gravíssima).",
         incidence: "alta",
         trap: true,
         difficulty: 3
