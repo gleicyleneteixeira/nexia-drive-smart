@@ -1,261 +1,103 @@
-Auditoria de 1119 questoes - 2026-11-15T02:53:34.260Z
+AUDITORIA DO BANCO DE QUESTOES - NEXIA DRIVE
+Data: 2026-11-17
 
-===== A. ESTRUTURA / GABARITO AUSENTE: 8 =====
-detran_mg_a42a: campo placa "A-42a" fora do catalogo do componente Placa
-detran_mg_a7: campo placa "A-7" fora do catalogo do componente Placa
-detran_mg_r16: campo placa "R-16" fora do catalogo do componente Placa
-detran_mg_r28: campo placa "R-28" fora do catalogo do componente Placa
-go_prova_17: campo placa "A-14" fora do catalogo do componente Placa
-go_prova_18: campo placa "A-25" fora do catalogo do componente Placa
-prova_geral_12: campo placa "A-33b" fora do catalogo do componente Placa
-prova_geral_21: campo placa "R-4b" fora do catalogo do componente Placa
+1) TOTAL ANALISADO
+   2470 questoes no banco efetivo (1119 estaticas + 1382 overrides; 31 sobrepostas).
 
-===== B. PLACAS SEM IMAGEM (prioridade): 27 =====
-detran_a24_obras_01: codigos A-24 sem campo placa/image_url | enunciado: a placa a 24 integra o grupo das advertencias de formato triangular sobre condicoes ou obras adiante na via a 
-detran_a3b_sinuosa_01: codigos A-3b sem campo placa/image_url | enunciado: a placa de advertencia a 3b avisa sobre a geometria da via adiante exigindo reducao preventiva de velocidade d
-detran_r11_tracao_animal_01: codigos R-11 sem campo placa/image_url | enunciado: a placa de regulamentacao r 11 proibe o transito de determinada categoria de veiculo no trecho adiante da via 
-detran_r36a_01: codigos R-36a sem campo placa/image_url | enunciado: em vias onde convivem modos diferentes de deslocamento a sinalizacao define a posicao que cada usuario deve oc
-detran_r9_caminhoes_01: codigos R-9 sem campo placa/image_url | enunciado: a placa de regulamentacao r 9 restringe o transito de certos veiculos no trecho adiante da placa impondo obrig
-detran_s2_s7_s13_01: codigos S-2, S-7, S-13 sem campo placa/image_url | enunciado: as placas de indicacao de servico informam equipamentos disponiveis adiante cada uma com simbolo proprio as pl
-l02_52: codigos R-1, R-2 sem campo placa/image_url | enunciado: cada grupo da sinalizacao vertical tem forma e cores proprias facilitando o reconhecimento a distancia pelo co
-l02_54: codigos R-10 sem campo placa/image_url | enunciado: placas de regulamentacao circular impoem ordens cujo descumprimento caracteriza infracao de transito para o co
-l02_55: codigos R-33, R-1 sem campo placa/image_url | enunciado: a placa r 33 orienta o sentido de circulacao em rotatorias e se soma as regras de preferencia ja vigentes naqu
-l02_56: codigos R-4a sem campo placa/image_url | enunciado: o simbolo dentro do circulo vermelho indica qual manobra e vedada naquele trecho ou na intersecao urbana sinal
-l02_57: codigos R-8a sem campo placa/image_url | enunciado: o circulo de regulamentacao com seta indica qual mudanca de faixa ou de pista e vedada naquele trecho da via s
-l02_58: codigos A-33b sem campo placa/image_url | enunciado: os simbolos de escolares aparecem em placas de advertencia que avisam sobre travessia de criancas nas proximid
-l02_60: codigos A-15 sem campo placa/image_url | enunciado: o codigo a 15 integra o grupo das placas de advertencia que antecipam ao condutor uma situacao de especial ate
-placa_ind_a14: codigos A-14 sem campo placa/image_url | enunciado: em via urbana o condutor avista adiantada no trajeto a placa de advertencia a 14 de formato triangular vertice
-placa_ind_a25: codigos A-25, R-1 sem campo placa/image_url | enunciado: a placa a 25 adverte sobre mudanca na configuracao da via adiante exigindo ajuste imediato do comportamento do
-placa_ind_a29: codigos A-29 sem campo placa/image_url | enunciado: a placa a 29 pertence ao grupo das advertencias de formato triangular e avisa sobre um risco especifico a fren
-placa_ind_a42c: codigos A-42c sem campo placa/image_url | enunciado: o codigo a 42c pertence ao grupo de placas de advertencia sobre a configuracao da pista de rolamento adiante c
-placa_ind_a44: codigos A-44 sem campo placa/image_url | enunciado: o desenho da placa a 44 representa o fenomeno que sera encontrado no trecho servindo de alerta antecipado ao c
-placa_ind_r12: codigos R-12 sem campo placa/image_url | enunciado: os simbolos de veiculos riscados no interior do circulo indicam qual categoria de veiculo nao pode transitar n
-placa_ind_r13: codigos R-13 sem campo placa/image_url | enunciado: as placas de proibicao circular trazem no interior o desenho da restricao aplicada naquele trecho da via sinal
-placa_ind_r37: codigos R-37 sem campo placa/image_url | enunciado: cada placa de proibicao usa um desenho especifico para identificar o que e vedado exigindo leitura atenta do s
-placa_ind_r4b: codigos R-4b sem campo placa/image_url | enunciado: o circulo vermelho com seta curva define a conversao proibida naquele trecho ou intersecao sinalizada vedando 
-placa_ind_r5a: codigos R-5a sem campo placa/image_url | enunciado: o simbolo de retorno riscado indica a manobra de mudanca de sentido vedada naquele trecho da via ou na interse
-placa_ind_r5b: codigos R-5b sem campo placa/image_url | enunciado: as placas de proibicao de retorno usam o simbolo riscado para apontar qual sentido de mudanca e vedado naquele
-placa_ind_r8b: codigos R-8b sem campo placa/image_url | enunciado: o circulo com seta indicando mudanca de faixa sinaliza qual trajetoria de mudanca e vedada naquele trecho da v
-placa_sentido_proibido_alternativas_01: codigos R-1, R-2, R-24a, R-25d sem campo placa/image_url | enunciado: as placas de regulamentacao com o simbolo de mao unica indicam o sentido permitido e a proibicao tem placa pro
-qd01: codigos A-10 sem campo placa/image_url | enunciado: o estreitamento da pista exige reducao de velocidade e revezamento entre os veiculos que ali trafegam em rodov
+2) ENUNCIADOS CORRIGIDOS
+   910 enunciados (889 estaticas + 20 overrides via question_overrides + 1 ajuste manual).
+   Regra aplicada: removida a frase introdutoria que antecipava a explicacao ou repetia a regra;
+   mantido o cenario necessario + a pergunta. Enunciados de contexto (sem regra solta) preservados.
+   Revertidos 2 casos de questao de associacao (l02_72, l03_146) em que o corte quebrava o comando.
 
-===== B2. REFERENCIA VISUAL SEM RECURSO (nao respondivel): 1 =====
-prova_geral_14: enunciado referencia imagem/figura sem recurso visual | a figura da questao mostra um cruzamento sem qualquer sinalizacao de preferencia com dois veiculos chegando ex
+3) EXPLICACOES
+   1.170 explicacoes reescritas (1.119 estaticas + 51 overrides):
+     - todas passaram a comecar com "Correta letra X:", coerente com o correctIndex (o shuffleOptions
+       remapeia a letra automaticamente depois);
+     - pontuacao normalizada (ex.: "Nao;." -> "Nao.");
+     - 730 informacoes explicativas removidas dos enunciados foram transferidas para o feedback;
+     - 1.341 detailedExplanation genericos removidos (a tela passa a usar a explanation);
+     - 1.351 commonMistake genericos removidos ("leia de novo", "parece caber...");
+     - 1.351 tips genericos removidos, incluindo o tip com artigos errados
+       ("leve art. 170 / media art. 166 / grave art. 165 / gravissima art. 167").
 
-===== C. ALTERNATIVA CORRETA MUITO MAIOR: 28 =====
-CRITICO l06_06: correta 85 chars vs media 29 (x2.90), maior 36 | alt 3: direito de todos e dever prioritario dos componentes do sistema nacional de transito
-CRITICO l06_25: correta 69 chars vs media 22 (x3.18), maior 23 | alt 2: quando houver perigo imediato de incendio ou outros riscos evidentes
-CRITICO l06_26: correta 135 chars vs media 38 (x3.55), maior 45 | alt 0: e o direito a protecao crescimento ser reconhecido e tratado com dignidade sem preconceito
-CRITICO q_new_23: correta 27 chars vs media 7 (x3.68), maior 15 | alt 3: policia rodoviaria federal
-CRITICO q_new_40: correta 86 chars vs media 23 (x3.69), maior 31 | alt 3: parada obrigatoria para todos os veiculos que venham de qualquer direcao na mesma via
-CRITICO q_new_46: correta 83 chars vs media 27 (x3.07), maior 28 | alt 1: curso especializado e curso de treinamento de pratica veicular em situacao de risco
-CRITICO q_new_47: correta 61 chars vs media 7 (x8.71), maior 10 | alt 2: leve com retencao do veiculo ate a apresentacao do documento
-CRITICO q_new_52: correta 88 chars vs media 26 (x3.34), maior 28 | alt 3: deixar livre a faixa da esquerda deslocando se para a direita e parando se necessario
-CRITICO q_new_53: correta 51 chars vs media 6 (x8.05), maior 10 | alt 3: grave com retencao do veiculo ate a regularizacao
-CRITICO q_new_59: correta 60 chars vs media 24 (x2.50), maior 32 | alt 2: ao aproximar se de curvas e de locais com pedestres na pista
-CRITICO q_new_62: correta 66 chars vs media 21 (x3.14), maior 27 | alt 0: responsabilidade solidaria pelas penalidades impostas apos a venda
-CRITICO q_new_64: correta 34 chars vs media 5 (x6.80), maior 6 | alt 2: gravissima com remocao do veiculo
-CRITICO q_new_69: correta 89 chars vs media 27 (x3.30), maior 31 | alt 2: nao reincidente no mesmo tipo de infracao nos ultimos 12 meses em infracao leve ou media
-CRITICO q_new_73: correta 41 chars vs media 7 (x5.59), maior 8 | alt 1: 30 dias sob pena de arquivamento do auto
-CRITICO q_new_78: correta 47 chars vs media 10 (x4.86), maior 10 | alt 3: 3 segundos contados a partir de um ponto fixo
-CRITICO q_new_79: correta 57 chars vs media 21 (x2.71), maior 39 | alt 1: tirar o pe do acelerador e girar o volante para a direita
-CRITICO q_new_83: correta 52 chars vs media 19 (x2.69), maior 20 | alt 0: em caso de risco iminente como incendio ou explosao
-medio l06_03: correta 98 chars vs media 49 (x2.01), maior 69 | alt 3: desempenhar tarefas de sinalizacao fiscalizacao aplicacao de penalidades e educacao de tra
-medio l06_14: correta 55 chars vs media 24 (x2.29), maior 28 | alt 0: seguir com a atencao redobrada e com baixa velocidade
-medio l06_63: correta 85 chars vs media 39 (x2.16), maior 49 | alt 0: certificado de registro e licenciamento de veiculo crlv inclusive em meio digital
-medio q_new_16: correta 16 chars vs media 8 (x2.09), maior 11 | alt 1: canteiro central
-medio q_new_25: correta 47 chars vs media 22 (x2.10), maior 24 | alt 1: haja convenio com o orgao executivo de transito
-medio q_new_33: correta 18 chars vs media 7 (x2.45), maior 8 | alt 2: de transito rapido
-medio q_new_56: correta 56 chars vs media 24 (x2.30), maior 34 | alt 0: nas curvas aclives declives pontes viadutos e tuneis
-medio q_new_57: correta 55 chars vs media 26 (x2.09), maior 34 | alt 1: parar antes da linha ferrea e so transpor com seguranca
-medio q_new_60: correta 59 chars vs media 26 (x2.27), maior 34 | alt 0: a velocidade as condicoes da via e as condicoes climaticas
-medio q_new_81: correta 26 chars vs media 12 (x2.17), maior 19 | alt 0: encosto de cabeca regulado
-medio q_new_84: correta 55 chars vs media 26 (x2.09), maior 30 | alt 3: converter gases poluentes em substancias menos nocivas
+4) REPETIDAS / MUITO SEMELHANTES: 5 pares identicos
+   q_new_03 = q_new_06
+   fix_categoria_d_05 = bnc_cat_d
+   l02_51 = placa_ind_tipo_adv
+   l02_51 = placa_ind_tipo_ind
+   custom-aeo-2376 = custom-aeo-2395
+   (antes dos cortes a heuristica apontava 18 pares; os demais eram variacoes de redacao.
+    Nenhuma questao foi excluida: decisao de consolidar ou manter e humana.)
 
-===== D. RESPOSTA OBVIA / DISTRATORES FRACOS: 165 =====
-cid_boa_01: enunciado praticamente repete a alternativa correta
-cid_boa_31: enunciado praticamente repete a alternativa correta
-dd_n1_003: alternativas 0 e 1 quase equivalentes
-dd_n2_001: enunciado praticamente repete a alternativa correta
-detran_30q_010: enunciado praticamente repete a alternativa correta
-detran_30q_018: enunciado praticamente repete a alternativa correta
-detran_r11_tracao_animal_01: alternativas 1 e 3 quase equivalentes
-ext_advertencia_01: enunciado praticamente repete a alternativa correta
-fr_01: enunciado praticamente repete a alternativa correta
-ia_normas_003: alternativas 0 e 2 quase equivalentes
-ia_normas_003: alternativas 1 e 3 quase equivalentes
-ia_normas_008: alternativas 0 e 1 quase equivalentes
-ia_normas_008: alternativas 2 e 3 quase equivalentes
-ia_normas_017: alternativas 1 e 3 quase equivalentes
-ia_normas_018: alternativas 0 e 2 quase equivalentes
-ia_normas_018: alternativas 0 e 3 quase equivalentes
-ia_normas_018: alternativas 2 e 3 quase equivalentes
-ia_normas_040: alternativas 0 e 1 quase equivalentes
-ia_normas_076: enunciado praticamente repete a alternativa correta
-ia_normas_113: enunciado praticamente repete a alternativa correta
-ia_normas_115: alternativas 0 e 1 quase equivalentes
-ia_normas_115: alternativas 2 e 3 quase equivalentes
-ia_normas_143: alternativas 0 e 1 quase equivalentes
-ia_normas_143: alternativas 0 e 2 quase equivalentes
-ia_normas_143: alternativas 1 e 2 quase equivalentes
-l01_36: alternativas 0 e 2 quase equivalentes
-l01_37: alternativas 0 e 1 quase equivalentes
-l01_37: alternativas 0 e 2 quase equivalentes
-l01_37: alternativas 0 e 3 quase equivalentes
-l01_37: alternativas 1 e 2 quase equivalentes
-l01_37: alternativas 1 e 3 quase equivalentes
-l01_37: alternativas 2 e 3 quase equivalentes
-l02_57: alternativas 0 e 1 quase equivalentes
-l02_72: alternativas 0 e 1 quase equivalentes
-l02_72: alternativas 0 e 2 quase equivalentes
-l02_72: alternativas 0 e 3 quase equivalentes
-l02_72: alternativas 1 e 2 quase equivalentes
-l02_72: alternativas 1 e 3 quase equivalentes
-l02_72: alternativas 2 e 3 quase equivalentes
-l02_79: alternativas 0 e 1 quase equivalentes
-l02_80: alternativas 0 e 1 quase equivalentes
-l02_80: alternativas 0 e 3 quase equivalentes
-l02_80: alternativas 1 e 3 quase equivalentes
-l03_146: alternativas 0 e 1 quase equivalentes
-l03_146: alternativas 0 e 2 quase equivalentes
-l03_146: alternativas 0 e 3 quase equivalentes
-l03_146: alternativas 1 e 2 quase equivalentes
-l03_146: alternativas 1 e 3 quase equivalentes
-l03_146: alternativas 2 e 3 quase equivalentes
-l04_154: alternativas 1 e 2 quase equivalentes
-l04_155: alternativas 1 e 2 quase equivalentes
-l04_166: alternativas 0 e 1 quase equivalentes
-l04_166: alternativas 0 e 2 quase equivalentes
-l04_166: alternativas 0 e 3 quase equivalentes
-l04_166: alternativas 1 e 2 quase equivalentes
-l04_166: alternativas 1 e 3 quase equivalentes
-l04_166: alternativas 2 e 3 quase equivalentes
-l04_183: alternativas 0 e 1 quase equivalentes
-l04_183: alternativas 2 e 3 quase equivalentes
-l05_204: alternativas 0 e 3 quase equivalentes
-l05_205: alternativas 1 e 3 quase equivalentes
-l06_04: alternativas 0 e 1 quase equivalentes
-l06_04: alternativas 0 e 2 quase equivalentes
-l06_04: alternativas 1 e 2 quase equivalentes
-l06_20: alternativas 0 e 1 quase equivalentes
-l06_20: alternativas 0 e 2 quase equivalentes
-l06_20: alternativas 0 e 3 quase equivalentes
-l06_20: alternativas 1 e 2 quase equivalentes
-l06_20: alternativas 1 e 3 quase equivalentes
-l06_20: alternativas 2 e 3 quase equivalentes
-l06_24: alternativas 0 e 2 quase equivalentes
-l06_26: correta longa (135) vs distratores muito curtos (35/34/45)
-l06_39: alternativas 0 e 1 quase equivalentes
-l06_39: alternativas 0 e 2 quase equivalentes
-l06_39: alternativas 0 e 3 quase equivalentes
-l06_39: alternativas 1 e 2 quase equivalentes
-l06_39: alternativas 1 e 3 quase equivalentes
-l06_39: alternativas 2 e 3 quase equivalentes
-l06_42: alternativas 0 e 2 quase equivalentes
-l06_42: alternativas 0 e 3 quase equivalentes
-l06_42: alternativas 2 e 3 quase equivalentes
-l06_62: alternativas 0 e 1 quase equivalentes
-l06_62: alternativas 0 e 2 quase equivalentes
-l06_62: alternativas 0 e 3 quase equivalentes
-l06_62: alternativas 1 e 2 quase equivalentes
-l06_62: alternativas 1 e 3 quase equivalentes
-l06_62: alternativas 2 e 3 quase equivalentes
-leg_n1_001: enunciado praticamente repete a alternativa correta
-nova_aquaplanagem_fatores_risco_02: enunciado praticamente repete a alternativa correta
-nova_classificacao_vias_arterial_13: enunciado praticamente repete a alternativa correta
-placa_ind_r8b: alternativas 0 e 1 quase equivalentes
-prova_geral_08: enunciado praticamente repete a alternativa correta
-prova_geral_29: alternativas 0 e 3 quase equivalentes
-q1: alternativas 0 e 3 quase equivalentes
-q29: alternativas 0 e 1 quase equivalentes
-q29: alternativas 0 e 2 quase equivalentes
-q29: alternativas 0 e 3 quase equivalentes
-q29: alternativas 1 e 2 quase equivalentes
-q29: alternativas 1 e 3 quase equivalentes
-q29: alternativas 2 e 3 quase equivalentes
-q47: enunciado praticamente repete a alternativa correta
-q49: alternativas 1 e 2 quase equivalentes
-q49: alternativas 1 e 3 quase equivalentes
-q49: alternativas 2 e 3 quase equivalentes
-q_new_07: alternativas 0 e 1 quase equivalentes
-q_new_07: alternativas 0 e 2 quase equivalentes
-q_new_07: alternativas 0 e 3 quase equivalentes
-q_new_07: alternativas 1 e 2 quase equivalentes
-q_new_07: alternativas 1 e 3 quase equivalentes
-q_new_07: alternativas 2 e 3 quase equivalentes
-q_new_11: enunciado praticamente repete a alternativa correta
-q_new_13: alternativas 0 e 2 quase equivalentes
-q_new_13: alternativas 1 e 3 quase equivalentes
-q_new_37: alternativas 0 e 1 quase equivalentes
-q_new_37: alternativas 0 e 2 quase equivalentes
-q_new_37: alternativas 0 e 3 quase equivalentes
-q_new_37: alternativas 1 e 2 quase equivalentes
-q_new_37: alternativas 1 e 3 quase equivalentes
-q_new_37: alternativas 2 e 3 quase equivalentes
-q_new_55: alternativas 0 e 1 quase equivalentes
-q_new_55: alternativas 0 e 2 quase equivalentes
-q_new_55: alternativas 0 e 3 quase equivalentes
-q_new_55: alternativas 1 e 2 quase equivalentes
-q_new_55: alternativas 1 e 3 quase equivalentes
-q_new_55: alternativas 2 e 3 quase equivalentes
-q_new_63: alternativas 0 e 1 quase equivalentes
-q_new_63: alternativas 0 e 2 quase equivalentes
-q_new_63: alternativas 0 e 3 quase equivalentes
-q_new_63: alternativas 1 e 2 quase equivalentes
-q_new_63: alternativas 1 e 3 quase equivalentes
-q_new_63: alternativas 2 e 3 quase equivalentes
-q_new_70: alternativas 1 e 2 quase equivalentes
-q_new_70: alternativas 1 e 3 quase equivalentes
-q_new_70: alternativas 2 e 3 quase equivalentes
-q_new_72: alternativas 0 e 1 quase equivalentes
-q_new_72: alternativas 0 e 2 quase equivalentes
-q_new_72: alternativas 0 e 3 quase equivalentes
-q_new_72: alternativas 1 e 2 quase equivalentes
-q_new_72: alternativas 1 e 3 quase equivalentes
-q_new_72: alternativas 2 e 3 quase equivalentes
-q_new_73: alternativas 0 e 2 quase equivalentes
-q_new_73: alternativas 0 e 3 quase equivalentes
-q_new_73: alternativas 2 e 3 quase equivalentes
-q_new_78: alternativas 1 e 2 quase equivalentes
-q_new_80: alternativas 0 e 1 quase equivalentes
-q_new_80: alternativas 0 e 2 quase equivalentes
-q_new_80: alternativas 0 e 3 quase equivalentes
-q_new_80: alternativas 1 e 2 quase equivalentes
-q_new_80: alternativas 1 e 3 quase equivalentes
-q_new_80: alternativas 2 e 3 quase equivalentes
-q_new_82: alternativas 0 e 3 quase equivalentes
-q_new_82: alternativas 1 e 2 quase equivalentes
-qe12: enunciado praticamente repete a alternativa correta
-qe39: enunciado praticamente repete a alternativa correta
-qe52: enunciado praticamente repete a alternativa correta
-qe67: enunciado praticamente repete a alternativa correta
-qe85: enunciado praticamente repete a alternativa correta
-qp44: alternativas 0 e 2 quase equivalentes
-qp46: alternativas 0 e 1 quase equivalentes
-qp46: alternativas 0 e 3 quase equivalentes
-qp46: alternativas 1 e 3 quase equivalentes
-rst_13: enunciado praticamente repete a alternativa correta
-td_07: enunciado praticamente repete a alternativa correta
-td_22: enunciado praticamente repete a alternativa correta
-td_24: enunciado praticamente repete a alternativa correta
+5) PROBLEMAS LEGAIS
+   - 0 conflitos entre classificacao e pontuacao (3/4/5/7) nas explicacoes.
+   - 116 artigos citados; nenhum artigo inexistente (> art. 341).
+   - 1 alerta de limite de velocidade para conferencia: custom-aeo-19 (via arterial + 30 km/h).
+   - 1.351 tips com mapeamento artigo x gravidade errado removidos.
+   - Nenhum gabarito foi alterado nesta auditoria.
 
-===== F. DUPLICAS / MUITO SEMELHANTES: 10 =====
-0.61 l02_56 x placa_ind_r5a: o simbolo dentro do circulo vermelho indica qual manobra e vedada naqu <> o simbolo de retorno riscado indica a manobra de mudanca de sentido ve
-0.61 qe05 x bnc_docs_porte: o condutor e o veiculo devem portar documentos habeis que comprovem ha <> o condutor e o veiculo devem portar documentos habeis que comprovem ha
-0.61 rst_02 x ia_normas_061: a ultrapassagem pela direita e excecao admitida apenas quando o veicul <> a ultrapassagem pela direita e excecao a regra geral admitida apenas q
-0.64 l02_56 x placa_ind_r4b: o simbolo dentro do circulo vermelho indica qual manobra e vedada naqu <> o circulo vermelho com seta curva define a conversao proibida naquele 
-0.65 ia_normas_066 x ia_normas_067: o condutor ultrapassado deve facilitar a manobra sem acelerar nem muda <> o condutor ultrapassado deve manter trajetoria previsivel sem acelerar
-0.65 l05_214 x ia_normas_106: o transporte de passageiro em motocicleta e restrito a assentos propri <> o transporte de passageiros em motocicleta e restrito ao uso de assent
-0.66 placa_ind_r5a x placa_ind_r5b: o simbolo de retorno riscado indica a manobra de mudanca de sentido ve <> as placas de proibicao de retorno usam o simbolo riscado para apontar 
-0.67 dd_n2_002 x fr_02: na aquaplanagem os pneus perdem o contato com o solo e qualquer comand <> na aquaplanagem os pneus perdem o contato com o pavimento e qualquer c
-0.77 l02_57 x placa_ind_r8b: o circulo de regulamentacao com seta indica qual mudanca de faixa ou d <> o circulo com seta indicando mudanca de faixa sinaliza qual trajetoria
-0.77 p7 x placa_ind_a14: em via urbana o condutor avista uma placa de advertencia triangular de <> em via urbana o condutor avista adiantada no trajeto a placa de advert
+6) VALIDACAO HUMANA
+   323 explicacoes ainda sao apenas a resposta (curtas, sem justificativa).
+   Sao, na maioria, questoes AEO de completar frase. Precisam de texto pedagogico + base legal.
+   IDs:
+     ia_normas_116 q_new_82 custom-aeo-632 custom-aeo-383 custom-aeo-1335 custom-aeo-120 custom-aeo-427
+     custom-aeo-2374 custom-aeo-2490 custom-aeo-587 custom-aeo-204 custom-aeo-1555 custom-aeo-1051
+     custom-aeo-1593 custom-aeo-914 custom-aeo-4 custom-aeo-1778 custom-aeo-1817 custom-aeo-1497
+     custom-aeo-664 custom-aeo-1378 custom-aeo-988 custom-aeo-1416 custom-aeo-1476 custom-aeo-1509
+     custom-aeo-1196 custom-aeo-1085 custom-aeo-1289 custom-aeo-531 custom-aeo-442 custom-aeo-337
+     custom-aeo-1035 custom-aeo-940 custom-aeo-1210 custom-aeo-1018 custom-aeo-1232 custom-aeo-1465
+     custom-aeo-646 custom-aeo-613 custom-aeo-1434 custom-aeo-1129 custom-aeo-1823 custom-aeo-1819
+     custom-aeo-1178 custom-aeo-1501 custom-aeo-1508 custom-aeo-1824 custom-aeo-948 custom-aeo-1848
+     custom-aeo-1840 custom-aeo-1753 custom-aeo-1828 custom-aeo-978 custom-aeo-1842 custom-aeo-928
+     custom-aeo-340 custom-aeo-1502 custom-aeo-136 custom-aeo-2751 custom-aeo-1332 custom-aeo-2324
+     custom-aeo-578 custom-aeo-1070 custom-aeo-1764 custom-aeo-265 custom-aeo-2268 custom-aeo-1061
+     custom-aeo-799 custom-aeo-1433 custom-aeo-2501 custom-aeo-1272 custom-aeo-1816 custom-aeo-1292
+     custom-aeo-1167 custom-aeo-551 custom-aeo-1151 custom-aeo-500 custom-aeo-1072 custom-aeo-1318
+     custom-aeo-1672 custom-aeo-1234 custom-aeo-419 custom-aeo-1294 custom-aeo-1264 custom-aeo-1429
+     custom-aeo-1732 custom-aeo-1833 custom-aeo-504 custom-aeo-3086 custom-aeo-347 custom-aeo-563
+     custom-aeo-133 custom-aeo-1188 custom-aeo-602 custom-aeo-1118 custom-aeo-1086 custom-aeo-562
+     custom-aeo-1595 custom-aeo-2353 custom-aeo-989 custom-aeo-826 custom-aeo-1274 custom-aeo-1783
+     custom-aeo-1741 custom-aeo-1176 custom-aeo-338 custom-aeo-1011 custom-aeo-1241 custom-aeo-1059
+     custom-aeo-2945 custom-aeo-1838 custom-aeo-1115 custom-aeo-1005 custom-aeo-1231 custom-aeo-1745
+     custom-aeo-593 custom-aeo-1759 custom-aeo-513 custom-aeo-939 custom-aeo-344 custom-aeo-1461
+     custom-aeo-1673 custom-aeo-236 custom-aeo-882 custom-aeo-2481 custom-aeo-126 custom-aeo-568
+     custom-aeo-570 custom-aeo-2478 custom-aeo-1748 custom-aeo-972 custom-aeo-1699 custom-aeo-1273
+     custom-aeo-1338 custom-aeo-1815 custom-aeo-1793 custom-aeo-479 custom-aeo-638 custom-aeo-1514
+     custom-aeo-1455 custom-aeo-1523 custom-aeo-1470 custom-aeo-1395 custom-aeo-1517 custom-aeo-987
+     custom-aeo-1458 custom-aeo-1208 custom-aeo-1846 custom-aeo-1698 custom-aeo-1013 custom-aeo-1265
+     custom-aeo-1689 custom-aeo-1428 custom-aeo-151 custom-aeo-1288 custom-aeo-142 custom-aeo-1752
+     custom-aeo-1644 custom-aeo-1009 custom-aeo-893 custom-aeo-1558 custom-aeo-1204 custom-aeo-554
+     custom-aeo-1256 custom-aeo-2382 custom-aeo-1084 custom-aeo-3092 custom-aeo-218 custom-aeo-1742
+     custom-aeo-581 custom-aeo-1540 custom-aeo-2783 custom-aeo-904 custom-aeo-1198 custom-aeo-99
+     custom-aeo-1829 custom-aeo-1831 custom-aeo-1836 custom-aeo-1849 custom-aeo-1822 custom-aeo-1827
+     custom-aeo-820 custom-aeo-752 custom-aeo-1175 custom-aeo-176 custom-aeo-1168 custom-aeo-1245
+     custom-aeo-1002 custom-aeo-1832 custom-aeo-1034 custom-aeo-925 custom-aeo-183 custom-aeo-1630
+     custom-aeo-1334 custom-aeo-1795 custom-aeo-1362 custom-aeo-1796 custom-aeo-1744 custom-aeo-351
+     custom-aeo-1588 custom-aeo-1477 custom-aeo-1384 custom-aeo-2468 custom-aeo-1092 custom-aeo-1087
+     custom-aeo-1731 custom-aeo-530 custom-aeo-1247 custom-aeo-982 custom-aeo-1342 custom-aeo-1522
+     custom-aeo-1625 custom-aeo-789 custom-aeo-469 custom-aeo-19 custom-aeo-1141 custom-aeo-1057
+     custom-aeo-1729 custom-aeo-1006 custom-aeo-20 custom-aeo-1370 custom-aeo-1180 custom-aeo-2781
+     custom-aeo-1197 custom-aeo-1529 custom-aeo-1743 custom-aeo-517 custom-aeo-576 custom-aeo-1755
+     custom-aeo-2373 custom-aeo-307 custom-aeo-1456 custom-aeo-1459 custom-aeo-1533 custom-aeo-1763
+     custom-aeo-1506 custom-aeo-2634 custom-aeo-580 custom-aeo-1022 custom-aeo-1162 custom-aeo-1769
+     custom-aeo-1184 custom-aeo-1206 custom-aeo-1596 custom-aeo-1525 custom-aeo-956 custom-aeo-1640
+     custom-aeo-766 custom-aeo-1027 custom-aeo-642 custom-aeo-252 custom-aeo-470 custom-aeo-941
+     custom-aeo-1069 custom-aeo-514 custom-aeo-2029 custom-aeo-421 custom-aeo-1739 custom-aeo-444
+     custom-aeo-1194 custom-aeo-1270 custom-aeo-1532 custom-aeo-1658 custom-aeo-1261 custom-aeo-2765
+     custom-aeo-1259 custom-aeo-1545 custom-aeo-1818 custom-aeo-1589 custom-aeo-1692 custom-aeo-1037
+     custom-aeo-782 custom-aeo-1432 custom-aeo-2804 custom-aeo-1065 custom-aeo-1664 custom-aeo-2336
+     custom-aeo-1258 custom-aeo-352 custom-aeo-1749 custom-aeo-1407 custom-aeo-413 custom-aeo-2487
+     custom-aeo-1740 custom-aeo-548 custom-aeo-1403 custom-aeo-1283 custom-aeo-1177 custom-aeo-399
+     custom-aeo-1932 custom-aeo-840 custom-aeo-1249 custom-aeo-871 custom-aeo-902 custom-aeo-1825
+     custom-aeo-1650 custom-aeo-688 custom-aeo-1663 custom-aeo-1030 custom-aeo-402 custom-aeo-1422
+     custom-aeo-1649 custom-aeo-1263 custom-aeo-327 custom-aeo-1221 custom-aeo-1201 custom-aeo-906
+     custom-aeo-1190 custom-aeo-1451 custom-aeo-1655 custom-aeo-1114 custom-aeo-1369 custom-aeo-804
+     custom-aeo-1788 custom-aeo-1544 custom-aeo-592 custom-aeo-1140 custom-aeo-1635 custom-aeo-675
+     custom-aeo-1637 custom-aeo-1457 custom-aeo-71 custom-aeo-1132
 
-===== G. GABARITO X EXPLICACAO (claim explicito): 0 =====
-
-
-===== E. DISTRIBUICAO (info): 4 =====
-Distribuicao dos gabaritos no arquivo: A=328 (29.3%)  B=315 (28.2%)  C=251 (22.4%)  D=225 (20.1%)
-Maior sequencia com a mesma posicao: 40x seguidas (posicao A, terminando em qe59)
-Obs.: o app embaralha alternativas em runtime (shuffleOptions) e remapeia o gabarito por ID interno -> o padrao de posicao NAO chega ao usuario no simulado.
-claims verificados pelo criterio G: 830 de 1119 questoes
+7) PRESERVACAO
+   - 1.119 IDs estaticos preservados, sem duplicidade nem exclusao.
+   - 1.382 overrides preservados (mesmos IDs; atualizado apenas o conteudo em `data`).
+   - Estrutura (category, correctIndex, options, incidence, difficulty, placa) intacta.
+   - shuffleOptions, simulador, pontuacao, historico, sorteio e interface sem alteracao de codigo.
