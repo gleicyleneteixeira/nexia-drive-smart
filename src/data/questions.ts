@@ -718,7 +718,7 @@ const QUESTIONS_A: Question[] = [
     {
         id: "qe57",
         category: "prioridade",
-        statement: "Nas vias estreitas onde não é possível ultrapassagem, a preferência favorece o veículo que está subindo. Em via estreita sem pavimento, em declive forte, dois carros se cruzam. Quem tem a preferência de passagem nesse aclive?",
+        statement: "Em uma via estreita e íngreme, dois carros se cruzam: um sobe e o outro desce. Qual tem preferência de passagem?",
         options: ["Subindo a ladeira, devendo quem desce dar a preferência.","Descendo a ladeira, pois a preferência é de quem trafega no sentido descendente.","O veículo de maior porte, pois a prioridade cabe aos veículos maiores.","O que vier pela direita do outro condutor, pois a regra geral vale em qualquer via."],
         correctIndex: 0,
         explanation: "Correta letra A: em ladeira estreita, quem sobe tem preferência, porque é mais difícil e arriscado para quem está subindo dar ré do que para quem desce. É regra de segurança adotada nos manuais de direção defensiva — o CTB não tem inciso específico sobre isso, apenas as normas gerais de circulação do art. 29.",
@@ -901,7 +901,7 @@ const QUESTIONS_A: Question[] = [
     {
         id: "qe73",
         category: "legislacao",
-        statement: "Nas vias rurais sem pavimentação, o limite padrão é o mais baixo entre as categorias urbanas. Estrada é a via rural sem pavimento. Sem placa no local, qual é a máxima padrão na estrada para todo veículo automotor?",
+        statement: "Sem placa, qual é a velocidade máxima para todo veículo automotor em uma estrada (via rural não pavimentada)?",
         options: ["Sessenta por hora para todo veículo automotor que transita pela estrada.", "Oitenta por hora para leves e sessenta para pesados articulados na estrada.", "Noventa por hora para motos e caminhonetes em trecho de terra sem sinalização.", "Quarenta por hora para todos, por causa da falta de pavimento e risco de derrapar."],
         correctIndex: 0,
         explanation: "Correta letra A: sem placa, a máxima na estrada é sessenta por hora para todo veículo, art. 61, CTB.",
@@ -1093,7 +1093,7 @@ const QUESTIONS_A: Question[] = [
     {
         id: "q6",
         category: "prioridade",
-        statement: "Nas interseções sem sinalização, a preferência é definida pela regra geral das interseções não sinalizadas. Dois veículos chegam ao mesmo tempo a um cruzamento urbano sem semáforo, sem agente e sem placas. Nesse caso, a preferência de passagem é de:",
+        statement: "Dois veículos chegam ao mesmo tempo a um cruzamento urbano sem semáforo, agente ou placas. Qual tem a preferência de passagem?",
         options: ["O veículo que vier pela direita.","O veículo que vier pela esquerda.","O veículo de maior porte.","O veículo que ocupar a faixa da direita."],
         correctIndex: 0,
         explanation: "Correta letra A: bora entender — sem semáforo, sem agente e sem placa, quem vem da sua direita passa primeiro (art. 29, III, \"c\" do CTB). A pegadinha é achar que é pela esquerda — não é. A regra vale para todo mundo: carro, moto, ônibus.",
@@ -1248,6 +1248,7 @@ const QUESTIONS_A: Question[] = [
         correctIndex: 2,
         explanation: "Correta letra C: placas de indicação de destino em rodovias utilizam fundo verde com inscrições brancas. O grupo de indicação usa cores próprias para destinos e serviços auxiliares, com padrão padronizado. As placas de indicação orientam os condutores quanto a caminhos, destinos e distâncias.",
         detailedExplanation: "Placas com fundo VERDE indicam destinos, saídas e distâncias nas rodovias. Placas AZUIS indicam orientação de serviços e municípios, enquanto placas MARRONS são destinadas a atrativos turísticos.",
+        group: "classificacao-sinalizacao-vertical",
         incidence: "media",
         difficulty: 3
     },
@@ -1807,7 +1808,7 @@ const QUESTIONS_A: Question[] = [
     {
         id: "qp06",
         category: "prioridade",
-        statement: "Nas interseções, a preferência de certos veículos é absoluta e não depende da regra da direita. Em cruzamento sem sinalização semafórica, veículo sobre trilhos aproxima-se ao mesmo tempo que carros e motos. Nesse caso, a preferência do veículo sobre trilhos é:",
+        statement: "Em um cruzamento sem sinalização semafórica, um veículo sobre trilhos aproxima-se ao mesmo tempo que carros e motos. Qual é a preferência de passagem?",
         options: ["Relativa, aplicando-se apenas quando o veículo sobre trilhos for de maior porte.", "Absoluta, devendo os demais veículos aguardar a sua passagem.", "Condicionada à existência de sinalização semafórica no cruzamento.", "Compartilhada, aplicando-se a regra geral da preferência pela direita."],
         correctIndex: 1,
         explanation: "Correta letra B: Correta a alternativa B, pois o art. 29 do CTB dá preferência absoluta aos veículos sobre trilhos.",
@@ -2533,23 +2534,6 @@ const QUESTIONS_A: Question[] = [
         image_url: "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-estreitamento-de-pista-ao-centro-A-21a.png"
     },
     {
-        id: "qd02",
-        category: "legislacao",
-        statement: "Qual o significado correto de cada tipo de silvo?",
-        options: ["Um silvo longo libera a passagem e dois silvos breves mandam reduzir a marcha.", "Um silvo breve libera; dois breves mandam parar; um longo manda reduzir a marcha.", "Os silvos não têm significado oficial e servem só para chamar a atenção.", "O apito só vale com gestos; sozinho, não orienta o trânsito."],
-        correctIndex: 1,
-        explanation: "Correta letra B: bora entender — o apito do agente tem significado oficial (art. 90 do CTB): um silvo breve = siga; dois silvos breves = pare; um silvo longo = diminua a marcha. Não é \"só para chamar atenção\", e ele vale sozinho, sem gesto. Os sinais do agente de trânsito prevalecem sobre os demais sinais, e o apito transmite comandos padronizados de parada, redução e liberação. O apito do agente de trânsito é sinal sonoro oficial.",
-        detailedExplanation: "Imagine o som já dando a ordem: pio curto (vai), pio pio (para), pio comprido (devagar). É só conferir se a alternativa mistura esses três de forma certa.",
-        legalBase: "Art. 90 do CTB",
-        commonMistake: "Muita gente confunde e acha que dois silvos breves significam 'siga' ou que o silvo longo é pra parar. Lembre: 1 breve = siga; 2 breves = pare; 1 longo = devagar.",
-        tip: "1 pio = vai; 2 pios = para; 1 pio longo = devagar.",
-        incidence: "altissima",
-        trap: true,
-        difficulty: 2,
-        group: "silvos-apito",
-        origin: "real"
-    },
-    {
         id: "qd03",
         category: "legislacao",
         statement: "Em cruzamento com semáforo ligado, o agente manda uma via avançar e a outra parar. Qual ordem deve ser obedecida?",
@@ -2582,7 +2566,7 @@ const QUESTIONS_A: Question[] = [
     {
         id: "qp58",
         category: "mecanica",
-        statement: "No trânsito, o fluxo para de repente, o condutor erra nos comandos e as rodas traseiras travam com derrapagem. Qual a causa?",
+        statement: "O fluxo para de repente, o condutor erra nos comandos e as rodas traseiras travam com derrapagem. Qual a causa?",
         options: ["Pisar no freio de forma progressiva e acionar a embreagem antes da parada total do veículo.", "Puxar o freio de mão em movimento ou reduzir marcha em alta rotação, travando o eixo traseiro.", "Atuação do ABS, que trava tambor e sapata traseiros para máxima desaceleração na frenagem.", "Falha de fluido no cilindro mestre, que equaliza a pressão e trava apenas o freio traseiro do veículo."],
         correctIndex: 1,
         explanation: "Correta letra B: freio de mão em movimento ou redução brusca trava as rodas traseiras; ABS evita o travamento.",
@@ -2658,7 +2642,7 @@ const QUESTIONS_A: Question[] = [
     {
         id: "qp63",
         category: "legislacao",
-        statement: "Nas vias urbanas sem sinalização de velocidade, vale o limite padrão fixado para cada categoria de via na legislação. Condutor trafega por via coletora urbana sem placa de velocidade. Qual o limite máximo padrão nessa via?",
+        statement: "Um condutor trafega por uma via coletora urbana sem placa de velocidade. Qual é o limite máximo nessa via?",
         options: ["30 km/h.", "40 km/h.", "60 km/h.", "80 km/h."],
         correctIndex: 1,
         explanation: "Correta letra B: bora entender — sem placa, vale o limite padrão da via. Via coletora urbana é 40 km/h (art. 61 do CTB). \"Sem placa não tem limite\" é erro comum: sempre existe o limite padrão.",
@@ -2755,7 +2739,12 @@ const QUESTIONS_A: Question[] = [
         category: "placas",
         statement: "Em via de mão única, o agente fiscaliza a entrada de veículos no sentido de circulação indicado pela sinalização. Qual placa regulamenta essa proibição?",
         options: ["R-1", "R-2", "R-3", "R-25d"],
-        option_images: [null, null, null, null],
+        option_images: [
+            "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-parada-obrigatoria-R-1.png",
+            "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-de-a-preferencia-R-2.png",
+            "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-sentido-proibido-R-3.png",
+            "https://sb.bigcreditos.com.br/storage/v1/object/public/library/images/placa-siga-em-frente-ou-a-direita-R-25d.png"
+        ],
         correctIndex: 2,
         explanation: "Correta letra C: a R-3 (Sentido Proibido) é a placa que veda a entrada de veículos no sentido indicado. A R-1 obriga parar, a R-2 manda dar preferência e a R-25d manda seguir em frente ou à direita. A R-24a, por sua vez, indica o sentido de circulação da via/pista — não é a placa de proibição de entrada.",
         detailedExplanation: "A R-3 é a placa de sentido proibido: circular, fundo branco, orla vermelha e uma barra horizontal branca (o símbolo de “proibido entrar”). Ela veda a entrada de veículos naquele sentido. Não confunda com a R-24a, que indica o sentido de circulação da via/pista, nem com a R-25d, que obriga a seguir em frente ou à direita.",
@@ -2904,7 +2893,7 @@ const QUESTIONS_A: Question[] = [
     {
         id: "nova_psicoativas_reflexos_alta_03",
         category: "direcao-defensiva",
-        statement: "Condutor bebe antes de dirigir, julga mal o risco e sente falsa segurança. Qual o principal efeito sobre corpo e mente?",
+        statement: "Após consumir bebida alcoólica, o condutor avalia mal os riscos. Qual o principal efeito sobre o corpo e a mente?",
         options: ["Redução do tempo de reação, com aceleração paradoxal dos reflexos.","Retardo dos reflexos e estreitamento da visão periférica, a visão em túnel.","Aumento da acuidade visual e da atenção simultânea a vários estímulos.","Diminuição da sensação de cansaço e sensação de maior capacidade de permanecer alerta."],
         correctIndex: 1,
         explanation: "Correta letra B: álcool retarda reflexos e estreita a visão periférica, formando a visão em túnel. O álcool deprime o sistema nervoso, lentificando as reações e estreitando o campo de visão do condutor.",
@@ -2951,7 +2940,7 @@ const QUESTIONS_A: Question[] = [
     {
         id: "nova_ultrapassagem_direita_excecao_alta_05",
         category: "legislacao",
-        statement: "A regra geral manda ultrapassar pela esquerda, mas há uma exceção para passar pela direita. Qual situação permite isso?",
+        statement: "Em que situação é permitido ultrapassar pela direita?",
         options: ["Quando o veículo da frente estiver na faixa apropriada, mesmo sem sinalizar a intenção.","Quando o veículo da frente sinaliza que vai converter ou entrar à esquerda.","Quando o veículo da frente for ônibus parado para embarque de passageiros.","Em via urbana de sentido único, quando o acostamento da direita está livre."],
         correctIndex: 1,
         explanation: "Correta letra B: só é permitido ultrapassar pela direita se o da frente sinaliza conversão à esquerda. Art. 199 do CTB.",
@@ -2998,7 +2987,7 @@ const QUESTIONS_A: Question[] = [
     {
         id: "nova_objetivo_sinalizacao_alta_07",
         category: "legislacao",
-        statement: "A sinalização usa elementos verticais, horizontais, luminosos, sonoros e gestos. Qual sua finalidade nas vias públicas?",
+        statement: "Qual é a finalidade da sinalização de trânsito nas vias públicas?",
         options: ["Informar sobre a via, impor obrigações e proibições e advertir sobre perigos potenciais.","Garantir arrecadação de multas pelos órgãos executivos em trechos de grande fluxo.","Indicar somente serviços e limites administrativos da via, sem impor deveres ao condutor.","Isentar o Estado de responsabilidade civil por sinistros em rodovias não concedidas."],
         correctIndex: 0,
         explanation: "Correta letra A: sinalizar é informar, regulamentar e advertir para garantir segurança e fluidez. Art. 80 do CTB. A sinalização se expressa por vários elementos que se complementam para orientar e proteger os usuários.",
@@ -3168,7 +3157,7 @@ const QUESTIONS_A: Question[] = [
     {
         id: "nova_primeiros_socorros_colar_cervical_alta_19",
         category: "primeiros-socorros",
-        statement: "Na suspeita de lesão na coluna cervical, a imobilização evita movimentos que possam agravar o dano. Vítima de batida traseira tem suspeita de trauma na coluna do pescoço. Qual equipamento estabiliza a região cervical?",
+        statement: "Uma vítima de batida traseira tem suspeita de trauma na coluna cervical. Qual equipamento estabiliza essa região?",
         options: ["Órtese lombar com alças de tração, usada para imobilizar as costas sobre a maca.","Colar cervical ortopédico para imobilizar o pescoço.","Molinha improvisada com tecido resistente que mantém o pescoço flexionado.","Bandagem triangular ajustada sob o queixo e sobre a cabeça, sem conter a nuca."],
         correctIndex: 1,
         explanation: "Correta letra B: colar cervical imobiliza o pescoço e protege a medula em suspeita de trauma cervical.",
@@ -3183,7 +3172,7 @@ const QUESTIONS_A: Question[] = [
     {
         id: "nova_deveres_condutor_passagem_ferrea_alta_24",
         category: "legislacao",
-        statement: "O condutor deve parar antes de cruzar linha férrea em nível e ceder em via preferencial sinalizada, entre outros deveres. Analisando deveres e proibições do condutor, sobre linha férrea e acostamento, qual alternativa está juridicamente correta?",
+        statement: "Sobre os deveres do condutor ao cruzar uma linha férrea e ao usar o acostamento, qual alternativa está juridicamente correta?",
         options: ["Todo veículo pode retornar em qualquer ponto urbano, desde que não haja pedestre atravessando a via.", "Carro de passeio pode circular pelo acostamento sempre que houver congestionamento na pista principal.", "O condutor deve parar antes de cruzar linha férrea ou entrar em via preferencial onde houver sinalização.", "O condutor deve preferir pedestres apenas quando estiverem sobre a faixa de segurança."],
         correctIndex: 2,
         explanation: "Correta letra C: parar antes da linha férrea e na preferencial sinalizada é dever; desrespeitar é gravíssima. Arts. 212 e 208 do CTB.",
@@ -3198,7 +3187,7 @@ const QUESTIONS_A: Question[] = [
     {
         id: "nova_sinalizacao_horizontal_tachoes_alta_25",
         category: "legislacao",
-        statement: "Para orientar à noite e canalizar o fluxo em pontos críticos, usam-se peças refletivas fixadas no pavimento. Quais são elas?",
+        statement: "Como se chamam as peças refletivas instaladas no pavimento para orientar à noite e canalizar o fluxo em pontos críticos?",
         options: ["Marcas transversais de retenção e faixas de pedestres.", "Tachas e tachões refletivos, conhecidos como olhos de gato.", "Pinturas de legendas e símbolos de destino no asfalto.", "Placas de advertência instaladas no canteiro central."],
         correctIndex: 1,
         explanation: "Correta letra B: as tachas e tachões refletivos (conhecidos como \"olhos de gato\") refletem o farol e orientam a trajetória à noite. Anexo II do CTB. As peças refletivas fixadas no pavimento orientam o condutor à noite e canalizam o fluxo em pontos críticos da via.",
@@ -3213,7 +3202,7 @@ const QUESTIONS_A: Question[] = [
     {
         id: "nova_primeiros_socorros_epistaxe_alta_26",
         category: "primeiros-socorros",
-        statement: "No sangramento nasal, a conduta inicial do socorrista leigo deve controlar o fluxo sem piorar possível lesão associada. Vítima consciente tem sangramento nasal forte, sem fratura craniana grave. Qual a conduta inicial adequada?",
+        statement: "Uma vítima consciente apresenta sangramento nasal intenso, sem sinais de fratura craniana grave. Qual conduta inicial é adequada?",
         options: ["Manter a cabeça levemente elevada, comprimir as narinas por minutos e aplicar compressa fria no nariz.", "Inclinar a cabeça totalmente para trás para o sangue retornar à garganta e não sujar a roupa da vítima.", "Manter a vítima deitada com as pernas elevadas e agasalhar, como no estado de choque.", "Colocar a vítima em posição de segurança lateral, com a cabeça voltada para o lado."],
         correctIndex: 0,
         explanation: "Correta letra A: cabeça elevada sem jogar para trás, compressão das narinas e compressa fria; para trás faz engolir sangue.",
@@ -3319,7 +3308,7 @@ const QUESTIONS_A: Question[] = [
     {
         id: "detran_mg_via_local_30",
         category: "legislacao",
-        statement: "Nas vias locais, onde não há sinalização de velocidade, vale o limite padrão mais baixo entre as vias urbanas. Onde não houver sinalização regulamentadora, a velocidade máxima nas vias locais será de:",
+        statement: "Onde não houver sinalização regulamentadora, qual é a velocidade máxima nas vias locais?",
         options: ["30 km/h.", "20 km/h.", "50 km/h.", "40 km/h."],
         correctIndex: 0,
         explanation: "Correta letra A: via local sem placa = 30 km/h (art. 61). 40 km/h é coletora; 20 km/h não é o padrão urbano.",
@@ -3466,7 +3455,7 @@ const QUESTIONS_A: Question[] = [
     {
         id: "detran_mg_parar_linha_ferrea",
         category: "legislacao",
-        statement: "As normas gerais de circulação e conduta prevêem deveres do condutor em situações como retorno, circulação em acostamento, preferência e transposição de linha férrea. Nesse conjunto de regras, a conduta correta é:",
+        statement: "Sobre retorno, circulação pelo acostamento, preferência e transposição de linha férrea, assinale a conduta correta:",
         options: ["Todo veículo poderá retornar em qualquer local, nas vias urbanas, desde que facilite o trânsito para os outros veículos.", "A circulação pelo acostamento das rodovias é permitida em situações de congestionamento.", "Todo condutor deve dar preferência aos pedestres apenas quando estes se encontram sobre faixa de segurança.", "É dever do condutor parar o seu veículo antes de transpor linha férrea ou entrar em via com preferência de passagem."],
         correctIndex: 3,
         explanation: "Correta letra D: Correta a última: parar antes da linha férrea e antes de entrar em via preferencial sinalizada (arts. 212 e 208). Retorno livre, acostamento em congestionamento e preferência só na faixa estão errados.",
@@ -3731,7 +3720,7 @@ const QUESTIONS_A: Question[] = [
     {
         id: "prova_geral_10",
         category: "legislacao",
-        statement: "A sinalização horizontal é aplicada diretamente sobre o pavimento da via, em faixas, símbolos e palavras que orientam o fluxo de veículos e pedestres. Essa sinalização se apresenta nas seguintes cores:",
+        statement: "Quais cores são utilizadas na sinalização horizontal?",
         options: ["Amarela, vermelha, branca, azul e preta.", "Apenas amarela e branca.", "Apenas amarela, vermelha e branca.", "Amarela, vermelha, branca, verde e preta."],
         correctIndex: 0,
         explanation: "Correta letra A: marcas viárias usam amarelo, vermelho, branco, azul e preto (Anexo II).",
@@ -4024,7 +4013,7 @@ const QUESTIONS_A: Question[] = [
     {
         id: "nova_direcao_defensiva_conceito_alta_30",
         category: "direcao-defensiva",
-        statement: "O condutor defensivo antecipa riscos ajustando velocidade às condições da via e guardando distância segura. Em via de fluxo intenso sob chuva forte, qual atitude caracteriza o condutor defensivo para antecipar situações de risco e evitar sinistros?",
+        statement: "Em uma via de fluxo intenso sob chuva forte, qual atitude caracteriza a condução defensiva e ajuda a evitar sinistros?",
         options: ["Manter velocidade compatível com via, clima e fluxo, guardando distância segura do veículo à frente.", "Transitar sempre no limite máximo da placa, mesmo sob chuva intensa e pista escorregadia, para não atrasar o fluxo.", "Ultrapassar pela direita sobre ponte quando o fluxo da faixa esquerda estiver mais lento que o da direita.", "Acionar a buzina de forma contínua para impor prioridade sobre os pedestres na travessia da faixa."],
         correctIndex: 0,
         explanation: "Correta letra A: Correta: ajustar a velocidade às condições da via e do clima, com distância segura, conforme direção defensiva.",
@@ -4039,7 +4028,7 @@ const QUESTIONS_A: Question[] = [
     {
         id: "nova_medida_admin_reprovacao_inspecao_01",
         category: "legislacao",
-        statement: "Veículo reprovado em inspeção de segurança e emissão deve ser retido no local até a regularização. Caminhão de carga reprovado na inspeção de segurança e de emissão de poluentes. Qual medida administrativa é prevista de imediato nesse caso?",
+        statement: "Um caminhão de carga é reprovado na inspeção de segurança e de emissão de poluentes. Qual medida administrativa é prevista de imediato?",
         options: ["Aplicação de multa por infração gravíssima registrada pelo agente no momento do exame.", "Apreensão do veículo com remoção por guincho diretamente para o pátio credenciado.", "Recolhimento do veículo com cancelamento definitivo do licenciamento anual do caminhão.", "Retenção do veículo no local para regularização da situação antes de voltar a circular."],
         correctIndex: 3,
         explanation: "Correta letra D: Correta: retenção do veículo para regularização, conforme art. 230, XVIII, do CTB.",
@@ -4085,7 +4074,7 @@ const QUESTIONS_A: Question[] = [
     {
         id: "nova_exame_pratico_velocidade_inadequada_04",
         category: "legislacao",
-        statement: "No exame prático, manter velocidade inadequada sob chuva é falta grave, com perda de três pontos na ficha. No exame prático de direção, o candidato mantém velocidade inadequada sob chuva intensa e pista escorregadia. Como essa falta é classificada?",
+        statement: "Durante o exame prático, um candidato mantém velocidade inadequada sob chuva intensa e pista escorregadia. Como essa falta é classificada?",
         options: ["Falta eliminatória, com reprovação imediata do candidato no exame prático.", "Falta grave, com perda de 3 pontos na ficha de avaliação do exame prático.", "Falta média, com perda de 2 pontos na nota atribuída ao candidato avaliado.", "Falta leve, com perda de 1 ponto na pontuação registrada na ficha de avaliação."],
         correctIndex: 1,
         explanation: "Correta letra B: Correta: velocidade inadequada em condição adversa é falta grave, conforme Resolução Contran nº 789/2020.",
@@ -4115,7 +4104,7 @@ const QUESTIONS_A: Question[] = [
     {
         id: "nova_placa_a28_pista_escorregadia_06",
         category: "legislacao",
-        statement: "A placa de advertência A-28 avisa pista escorregadia à frente, exigindo redução de velocidade e atenção. Ao visualizar a placa de advertência A-28 em trecho com histórico de derrapagens, o que ela indica e qual cuidado o condutor deve adotar?",
+        statement: "Ao visualizar a placa A-28 em trecho com histórico de derrapagens, o que ela indica e qual cuidado o condutor deve adotar?",
         options: ["Área com desmoronamento à frente, exigindo reduzir a velocidade e manter atenção ao terreno.","Pista irregular à frente, exigindo reduzir a velocidade e atravessar o trecho com cautela.","Pista escorregadia à frente, com redução de aderência, exigindo menor velocidade.","Projeção de cascalho à frente, com alerta para pedras soltas sobre a pista."],
         correctIndex: 2,
         explanation: "Correta letra C: Correta: A-28 adverte pista escorregadia à frente, conforme Anexo II do CTB.",
@@ -4192,7 +4181,7 @@ const QUESTIONS_A: Question[] = [
     {
         id: "nova_exame_pratico_preferencia_pedestre_11",
         category: "legislacao",
-        statement: "No exame prático, não ceder preferência ao pedestre é falta grave, com perda de três pontos na ficha. No exame prático, o candidato converte à direita sem ceder preferência ao pedestre sobre a faixa. Quantos pontos essa falta gera na avaliação?",
+        statement: "No exame prático, um candidato converte à direita sem ceder preferência ao pedestre que atravessa na faixa. Quantos pontos essa falta gera na avaliação?",
         options: ["Falta eliminatória, com reprovação imediata do candidato no exame de direção.", "Perda de 3 pontos na ficha, por se tratar de falta grave no exame prático.", "Perda de 2 pontos na ficha, por se tratar de falta média no exame prático.", "Perda de 1 ponto na ficha, por se tratar de falta leve no exame prático."],
         correctIndex: 1,
         explanation: "Correta letra B: Correta: não ceder ao pedestre na conversão é falta grave, conforme Resolução Contran nº 789/2020.",
@@ -5115,7 +5104,7 @@ const QUESTIONS_A: Question[] = [
     {
         id: "detran_30q_021",
         category: "legislacao",
-        statement: "Nas interseções com circulação em anel, a regra de preferência define quem entra e quem já circula no anel viário. Dois veículos chegam ao mesmo tempo a uma rotatória não sinalizada. Quem tem a preferência de passagem?",
+        statement: "Dois veículos chegam ao mesmo tempo a uma rotatória não sinalizada. Qual deles tem a preferência de passagem?",
         options: ["Ao veículo que já estiver circulando pela rotatória.", "Ao veículo que se aproxima pelo lado direito do cruzamento, independentemente de estar dentro da rotatória.", "Ao veículo de maior de porte ou que estiver trafegando em maior velocidade.", "Ao veículo que pretende efetuar a conversão à esquerda no anel viário."],
         correctIndex: 0,
         explanation: "Correta letra A: Na rotatória sem sinalização, a preferência é do veículo que já está circulando dentro dela.",
@@ -5899,7 +5888,7 @@ const QUESTIONS_A: Question[] = [
     {
         id: "td_19",
         category: "infracoes",
-        statement: "O condutor deve dirigir com atenção plena, na pista correta e respeitando as restrições da via. Em avenida coletora movimentada, o motorista usa o celular e força passagem pelo acostamento. Quais condutas são vedadas?",
+        statement: "Em uma avenida coletora movimentada, um motorista usa o celular, trafega pelo acostamento e converte à direita diante do sinal vermelho sem autorização. Quais condutas são vedadas?",
         options: ["Ultrapassar pela direita quando o veículo da frente sinaliza conversão à esquerda.","Circular sobre o acostamento para entrar ou sair de imóveis e estacionamentos.","Converter à direita diante do sinal vermelho, onde houver sinalização que permita.","Acostamento, conversão proibida e celular ao volante, tudo vedado."],
         correctIndex: 3,
         explanation: "Correta letra D: as três condutas são proibidas. Base: Arts. 202, 207 e 252 do CTB.",
@@ -6004,7 +5993,7 @@ const QUESTIONS_A: Question[] = [
     {
         id: "td_29",
         category: "legislacao",
-        statement: "Nas interseções sem sinalização, vale a regra geral da direita, com redução ao ingressar e prioridade ao pedestre na travessia. Em cruzamento sem placa, sem semáforo e sem agente, dois carros e um pedestre chegam juntos. Qual regra de preferência se aplica?",
+        statement: "Em um cruzamento sem placa, sem semáforo e sem agente, dois carros e um pedestre chegam juntos. Qual regra de preferência se aplica?",
         options: ["Preferência do veículo que já circula pela rotatória, aplicando-se a regra do anel viário.","Preferência do veículo na faixa da esquerda, pois ela é destinada ao deslocamento mais rápido.","Preferência do veículo de maior porte, que responde pela segurança dos demais na via.","Direita primeiro, redução ao ingressar e pedestre na travessia com prioridade."],
         correctIndex: 3,
         explanation: "Correta letra D: regra completa sem sinalização. Base: Arts. 29 e 70 do CTB.",
@@ -6477,15 +6466,14 @@ const QUESTIONS_A: Question[] = [
         statement: "Quando o agente de trânsito emite um silvo breve com o apito, esse comando significa que o condutor deve:",
         options: ["Prosseguir, pois um silvo breve libera a passagem.", "Imobilizar o veículo imediatamente, mesmo que não haja agente visível à frente.", "Diminuir a marcha e seguir com atenção redobrada até a próxima interseção.", "Retornar ao sentido contrário para afastar-se do ponto de bloqueio sinalizado."],
         correctIndex: 0,
-        explanation: "Correta letra A: um silvo breve do apito significa siga, com a passagem liberada, conforme art. 90 do CTB. Os sinais do agente de trânsito prevalecem sobre os demais, e o apito transmite comandos padronizados de liberação, parada e redução.",
-        detailedExplanation: "O apito do agente tem três comandos: um silvo breve libera (siga); dois silvos breves mandam parar; um silvo longo manda diminuir a marcha.",
-        legalBase: "Art. 90 do CTB",
+        explanation: "Correta letra A: um silvo breve do apito significa siga, com a passagem liberada, conforme o Anexo II do CTB.",
+        detailedExplanation: "Um silvo breve do agente libera a passagem; o condutor deve prosseguir com atenção e obedecer às demais ordens da sinalização.",
+        legalBase: "Anexo II do CTB — sinais sonoros do agente de trânsito",
         commonMistake: "Confundir com os dois silvos breves, que mandam parar o veículo.",
         tip: "1 pio = vai.",
         memoryHook: "Um pio rapidinho, pode ir todinho.",
         incidence: "alta",
         difficulty: 1,
-        group: "silvos-apito",
         origin: "real"
     },
     {
@@ -6494,15 +6482,14 @@ const QUESTIONS_A: Question[] = [
         statement: "Quando o agente de trânsito emite dois silvos breves com o apito, esse comando significa que o condutor deve:",
         options: ["Seguir em frente sem alterar a marcha do veículo.", "Parar o veículo imediatamente.", "Diminuir a marcha e seguir devagar pelo trecho.", "Estacionar no acostamento mais próximo da via."],
         correctIndex: 1,
-        explanation: "Correta letra B: dois silvos breves do apito significam pare, com detenção obrigatória, conforme art. 90 do CTB. Os sinais do agente de trânsito prevalecem sobre os demais, e o apito transmite comandos padronizados de parada e liberação.",
-        detailedExplanation: "Dois silvos breves é ordem de parada obrigatória. Não confunda: um breve libera, dois breves param, um longo reduz a marcha.",
-        legalBase: "Art. 90 do CTB",
+        explanation: "Correta letra B: dois silvos breves do apito significam ordem de parada, conforme o Anexo II do CTB.",
+        detailedExplanation: "Dois silvos breves indicam ordem de parada. O condutor deve imobilizar o veículo em local seguro, sem bloquear o cruzamento.",
+        legalBase: "Anexo II do CTB — sinais sonoros do agente de trânsito",
         commonMistake: "Achar que dois silvos liberam a passagem — é o contrário: mandam parar.",
         tip: "2 pios = para.",
         memoryHook: "Pio-pio, parou o carro no meio do fio.",
         incidence: "alta",
         difficulty: 1,
-        group: "silvos-apito",
         origin: "real"
     },
     {
@@ -6511,15 +6498,14 @@ const QUESTIONS_A: Question[] = [
         statement: "Quando o agente de trânsito emite um silvo longo com o apito, esse comando significa que o condutor deve:",
         options: ["Parar o veículo imediatamente onde estiver.", "Seguir em frente mantendo a velocidade da via.", "Retornar e buscar uma rota alternativa.", "Diminuir a marcha do veículo no trecho."],
         correctIndex: 3,
-        explanation: "Correta letra D: um silvo longo do apito significa diminuam a marcha, conforme art. 90 do CTB. O comando sonoro do agente orienta o condutor durante a fiscalização, e cada tipo de silvo tem significado oficial próprio.",
+        explanation: "Correta letra D: um silvo longo do apito orienta o condutor a diminuir a marcha, conforme o Anexo II do CTB.",
         detailedExplanation: "O silvo longo é o comando de redução: o condutor deve diminuir a marcha ao se aproximar do ponto controlado pelo agente.",
-        legalBase: "Art. 90 do CTB",
+        legalBase: "Anexo II do CTB — sinais sonoros do agente de trânsito",
         commonMistake: "Achar que o silvo longo manda parar — parar são os dois silvos breves.",
         tip: "Pio longo = devagar.",
         memoryHook: "Pio comprido, pé contido.",
         incidence: "alta",
         difficulty: 1,
-        group: "silvos-apito",
         origin: "real"
     },
     {
@@ -7915,7 +7901,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "fix_lei_seca_09",
         category: "infracoes",
-        statement: "A legislação brasileira passou a vedar totalmente a condução de veículo sob efeito de álcool, sem tolerância para quantidades tidas como seguras pelo condutor. Essa regra, conhecida como Lei Seca, define que:",
+        statement: "Segundo a Lei Seca, qual regra se aplica ao condutor que ingeriu bebida alcoólica?",
         options: ["O condutor que beber até 3 copos de cerveja não pode ser multado.","O condutor só responde pela infração se recusar o teste do bafômetro.","O condutor que beber não deve dirigir.","O condutor e o passageiro podem beber a mesma quantidade de cerveja."],
         correctIndex: 2,
         explanation: "Correta letra C: a Lei Seca não admite quantidade segura — quem bebe, não dirige.",
@@ -8899,6 +8885,7 @@ const QUESTIONS_B: Question[] = [
         correctIndex: 0,
         explanation: "Correta letra A: A A é a incorreta, e por isso é a resposta: indicação e advertência não usam as mesmas cores. Advertência é amarela e preta, enquanto a indicação usa verde (orientação de destino) e azul (serviços auxiliares). A B, a C e a D estão corretas: regulamentação é circular, em vermelho, preto e branco, com as exceções octogonal (R-1) e triangular invertido (R-2), e a advertência é quadrada apoiada na ponta, amarela e preta. A pegadinha está na palavra informativas, que soa verdadeira para as duas categorias, mas não define cor. Cada grupo da sinalização vertical tem forma e cores próprias, facilitando o reconhecimento à distância pelo condutor.",
         legalBase: "Anexo II do CTB — Sinalização vertical",
+        group: "classificacao-sinalizacao-vertical",
         incidence: "alta",
         trap: true,
         difficulty: 2,
@@ -9287,18 +9274,40 @@ const QUESTIONS_B: Question[] = [
         origin: "ia"
     },
     {
-        id: "l02_72",
+        id: "leg_gesto_agente_reduzir_01",
         category: "legislacao",
-        statement: "Relacione os gestos do agente às ordens: 1) braço levantado verticalmente; 2) braço estendido horizontalmente em movimentos verticais; 3) movimento do antebraço. (I) seguir; (II) diminuir a marcha; (III) parar. A relação respectiva é:",
-        options: ["1-II, 2-III, 3-I.", "1-III, 2-I, 3-II.", "1-I, 2-II, 3-III.", "1-III, 2-II, 3-I."],
-        correctIndex: 3,
-        explanation: "Correta letra D: braço levantado verticalmente significa parar, braço estendido na horizontal com movimentos verticais significa diminuir a marcha e o movimento do antebraço significa seguir. O gesto de diminuir é o que mais confunde com o de parar, porque ambos usam o braço estendido — o que diferencia é o movimento vertical. A, B e C invertem pelo menos uma das três ordens.",
-        legalBase: "Arts. 89 e 90 do CTB",
+        statement: "Durante a fiscalização, o agente mantém um braço estendido horizontalmente e o movimenta para cima e para baixo. Que ação deve tomar o condutor?",
+        options: [
+            "Acelerar para liberar rapidamente o trecho controlado.",
+            "Diminuir a marcha e prosseguir com atenção, conforme a orientação do agente.",
+            "Parar obrigatoriamente no local, mesmo que bloqueie a interseção.",
+            "Manter a velocidade, pois o gesto não altera a circulação."
+        ],
+        correctIndex: 1,
+        explanation: "Correta letra B: o braço estendido com movimentos verticais orienta o condutor a diminuir a marcha e seguir com atenção.",
+        legalBase: "Anexo II do CTB — gestos dos agentes de trânsito",
+        group: "gesto-agente-reduzir",
         incidence: "alta",
         trap: true,
-        difficulty: 3,
-        group: "gestos-agente",
-        origin: "ia"
+        difficulty: 2
+    },
+    {
+        id: "leg_gesto_agente_seguir_01",
+        category: "legislacao",
+        statement: "Em uma via controlada, o agente faz um movimento de chamada com o antebraço, indicando que o fluxo à sua frente pode avançar. Como deve agir o condutor?",
+        options: [
+            "Parar e aguardar um novo sinal, mesmo que o agente esteja liberando o fluxo.",
+            "Reduzir a marcha e permanecer imobilizado junto à linha de retenção.",
+            "Prosseguir com atenção, obedecendo ao sentido indicado pelo agente.",
+            "Fazer retorno para liberar a passagem aos demais veículos."
+        ],
+        correctIndex: 2,
+        explanation: "Correta letra C: o movimento de chamada com o antebraço indica que o condutor pode seguir no sentido orientado pelo agente.",
+        legalBase: "Anexo II do CTB — gestos dos agentes de trânsito",
+        group: "gesto-agente-seguir",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2
     },
     {
         id: "l02_75",
@@ -9393,7 +9402,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "l02_95",
         category: "infracoes",
-        statement: "O condutor deve manter domínio do veículo e posição segura durante a condução, e certas condutas ao volante configuram infração. Entre as condutas abaixo, qual NÃO é considerada infração ao dirigir o veículo?",
+        statement: "Qual das condutas abaixo NÃO é considerada infração durante a condução do veículo?",
         options: ["Com o braço para fora.", "Com o cinto de segurança afrouxado.", "Usando calçado que não se firme nos pés ou que comprometa a utilização dos pedais.", "Com apenas uma das mãos, exceto para mudar a marcha ou acionar equipamentos e acessórios do veículo."],
         correctIndex: 1,
         explanation: "Correta letra B: A B é a resposta: o cinto afrouxado não está no rol do art. 252, que trata das posturas ao volante — o cinto é tratado pelo art. 167. A, C e D constam expressamente do art. 252, inclusive a exceção de usar apenas uma das mãos para trocar a marcha ou acionar equipamentos. A B é a alternativa mais tentadora, porque parece da mesma família de infrações de conduta.",
@@ -9406,7 +9415,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "l02_96",
         category: "legislacao",
-        statement: "As regras gerais de circulação impõem ao condutor deveres permanentes durante a condução, relacionados ao domínio do veículo, à atenção e aos cuidados indispensáveis. Sobre esses deveres, a exigência feita ao condutor a todo momento é:",
+        statement: "A todo momento, o condutor deve:",
         options: ["Ter domínio de seu veículo, dirigindo-o com atenção e cuidados indispensáveis à segurança do trânsito.", "Dirigir sempre abaixo da velocidade máxima sinalizada, mesmo onde houver velocidade mínima estabelecida.", "Evitar qualquer manobra que envolva deslocamento lateral, mantendo-se sempre na mesma faixa de rolamento.", "Manter distância de segurança fixa do veículo da frente, qualquer que seja a velocidade desenvolvida na via."],
         correctIndex: 0,
         explanation: "Correta letra A: bora entender — a lei resume o seu dever de todo momento em três coisas: ter domínio do carro, dirigir com atenção e com os cuidados que a segurança pede (art. 28 do CTB). As outras alternativas soam bonitas, mas o artigo não manda isso.",
@@ -10599,7 +10608,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "nova_preferencia_pedestre_travessia_14",
         category: "prioridade",
-        statement: "Na travessia de pedestres, quem já iniciou a passagem tem preferência sobre qualquer veículo na interseção. No desenho abaixo, observe os movimentos dos veículos 1, 3 e o pedestre atravessando a via. A preferência de passagem é do:",
+        statement: "No desenho abaixo, observe os movimentos dos veículos 1 e 3 e do pedestre que atravessa a via. Quem tem a preferência de passagem?",
         options: ["Veículo 1, porque vai convergir.", "Veículo 2, porque está passando pelo veículo 1.", "Pedestre, porque já iniciou a travessia.", "Veículo 3, porque trafega em linha reta."],
         correctIndex: 2,
         explanation: "Correta letra C: Quem já iniciou a travessia sobre a faixa tem a preferência: o art. 70 assegura a passagem do pedestre que atravessa a via sobre as faixas apropriadas, e o art. 214 pune com gravíssima e multa quem deixa de ceder, mesmo com sinal verde para os veículos. É o veículo que vai convergir que deve parar e esperar; ir em linha reta ou passar ao lado de outro veículo não cria preferência sobre quem já atravessou a faixa.",
@@ -10685,7 +10694,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "pref_intersecao_fluxo_01",
         category: "prioridade",
-        statement: "Nas interseções sem sinalização, a preferência segue a regra geral de quem chega pela direita, independentemente do volume de tráfego. Duas ruas se cruzam sem placa, sem semáforo e sem rotatória. Uma tem bem mais movimento que a outra. Quem tem preferência?",
+        statement: "Duas ruas se cruzam sem placa, sem semáforo e sem rotatória. Uma tem bem mais movimento que a outra. Quem tem preferência?",
         options: ["Quem vem pela direita, mesmo que a outra rua tenha mais carros.", "Quem vem pela rua de maior movimento, pois o fluxo intenso tem prioridade no cruzamento.", "Quem chegou primeiro ao cruzamento, independentemente da via em que esteja circulando.", "O veículo de maior porte, por ter mais dificuldade de manobra e maior distância de frenagem."],
         correctIndex: 0,
         explanation: "Correta letra A: bora entender — sem placa, sem semáforo, sem rotatória e sem rodovia: a direita manda (art. 29, III, alínea c do CTB). Ter mais carros na outra rua não dá preferência — não existe regra de maior fluxo no CTB.",
@@ -11039,7 +11048,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "go_prova_14",
         category: "placas",
-        statement: "A sinalização de serviço é feita por placas retangulares de fundo azul, que informam aos usuários a existência de serviços ao longo da via e orientam a busca por auxílio. Uma placa azul com o símbolo de pneu indica:",
+        statement: "Em uma placa azul de serviços auxiliares, o símbolo de um pneu indica qual serviço?",
         options: ["Curva perigosa à frente.", "Fiscalização eletrônica de velocidade.", "Serviço de borracharia.", "Restrição de tráfego a veículos pesados."],
         correctIndex: 2,
         explanation: "Correta letra C: fundo azul é indicação de serviço. Curva e restrição não usam esse padrão.",
@@ -11686,6 +11695,7 @@ const QUESTIONS_B: Question[] = [
         correctIndex: 1,
         explanation: "Correta letra B: S-2 telefone, S-7 restaurante, S-13 terminal ferroviário (padrão cobrado na prova teórica).",
         legalBase: "Anexo II do CTB — indicação de serviços",
+        group: "classificacao-sinalizacao-vertical",
         incidence: "media",
         trap: true,
         difficulty: 3,
@@ -11901,7 +11911,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_011",
         category: "legislacao",
-        statement: "Nas vias com várias faixas, cada faixa tem finalidade própria dentro do fluxo do mesmo sentido. Um automóvel mantém-se na faixa da esquerda, em velocidade inferior à do fluxo, sem ultrapassar. A conduta contraria a regra segundo a qual as faixas da esquerda destinam-se aos veículos:",
+        statement: "Um automóvel mantém-se na faixa da esquerda, em velocidade inferior à do fluxo, sem ultrapassar. A conduta contraria a regra segundo a qual as faixas da esquerda destinam-se aos veículos:",
         options: ["Mais lentos e de maior porte.", "De carga, em operação de descarga.", "Em ultrapassagem ou em maior velocidade.", "Que pretendem parar junto ao bordo."],
         correctIndex: 2,
         explanation: "Correta letra C: a esquerda não é faixa de circulação lenta.",
@@ -11940,7 +11950,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_014",
         category: "legislacao",
-        statement: "Na divisão das vias entre usuários, os veículos que possuem motor são mais pesados e potentes, por isso a proteção de quem não os tem recai sobre esses veículos. Os veículos motorizados são responsáveis pela segurança dos:",
+        statement: "Os veículos motorizados são responsáveis pela segurança dos:",
         options: ["Pedestres, somente.", "Não motorizados.", "De grande porte.", "Coletivos, somente."],
         correctIndex: 1,
         explanation: "Correta letra B: motorizados respondem pelos não motorizados (e, em conjunto com todos, pelos pedestres).",
@@ -12096,7 +12106,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_027",
         category: "legislacao",
-        statement: "Os ciclomotores têm baixa potência e estabilidade em comparação aos demais veículos, e por isso a sua circulação sofre restrições previstas nas regras de circulação. É proibido o trânsito de ciclomotores:",
+        statement: "É proibido o trânsito de ciclomotores:",
         options: ["Nas vias arteriais e coletoras, onde o fluxo de veículos é mais intenso e rápido.", "No acostamento das rodovias, onde a circulação é permitida em situações de emergência.", "Nas vias de trânsito rápido e sobre a calçada das vias urbanas.", "Nas vias locais, no período noturno, quando o fluxo de veículos é reduzido no bairro."],
         correctIndex: 2,
         explanation: "Correta letra C: o acostamento admite ciclomotores; trânsito rápido e calçada, não.",
@@ -12175,7 +12185,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_033",
         category: "legislacao",
-        statement: "A preferência pela direita é a regra geral aplicada nas interseções sem sinalização de preferência no cruzamento, mas ela possui exceções previstas na própria legislação de trânsito. Essa regra aplica-se:",
+        statement: "A preferência pela direita nas interseções sem sinalização aplica-se:",
         options: ["A toda interseção, sobrepondo-se às demais regras, inclusive nas rodovias e rotatórias sinalizadas.", "Em todos os demais casos, ressalvadas rodovia, rotatória e trilhos.", "Apenas em vias urbanas de mão única, onde não houver sinalização de preferência no cruzamento.", "Apenas quando as vias tiverem a mesma largura e o mesmo volume de tráfego no momento da chegada."],
         correctIndex: 1,
         explanation: "Correta letra B: a preferência pela direita é a regra geral nas interseções sem sinalização, mas não vale em rodovias, rotatórias nem em cruzamentos com trilhos, que têm regra própria.",
@@ -12188,7 +12198,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_034",
         category: "legislacao",
-        statement: "Na rotatória, a preferência é de quem já circula em torno da ilha, e quem aproxima deve aguardar a passagem do veículo que já está nela. Um condutor aproxima-se de uma rotatória onde já circula outro veículo. Deve:",
+        statement: "Um condutor aproxima-se de uma rotatória onde já circula outro veículo. Deve:",
         options: ["Entrar, pois vem pela direita e tem preferência sobre quem já circula na rotatória.", "Entrar, se for de maior porte que o veículo que já está circulando pela rotatória.", "Entrar, desde que sinalize com antecedência a manobra com a luz indicadora de direção.", "Aguardar, pois a preferência é de quem circula pela rotatória."],
         correctIndex: 3,
         explanation: "Correta letra D: na rotatória a preferência é de quem já circula em torno da ilha; quem chega deve reduzir, sinalizar e aguardar espaço para entrar.",
@@ -12202,7 +12212,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_035",
         category: "legislacao",
-        statement: "Nas interseções com rodovias, o veículo que trafega pela rodovia tem prioridade sobre quem ingressa. Um condutor de via local aproxima-se de uma rodovia e vê veículo circulando por ela, à sua esquerda. A preferência é:",
+        statement: "Um condutor de via local aproxima-se de uma rodovia e vê um veículo circulando por ela, à sua esquerda. Quem tem a preferência?",
         options: ["Do veículo que circula pela rodovia.", "Do que vem pela direita, pela regra geral de preferência em cruzamentos não sinalizados no perímetro urbano.", "Do que chegou primeiro, por ter iniciado a travessia antes dos demais veículos que se aproximam.", "Do de maior porte, pela maior dificuldade de manobra e pela maior distância de frenagem do veículo."],
         correctIndex: 0,
         explanation: "Correta letra A: a rodovia prevalece sobre a regra da direita.",
@@ -12215,7 +12225,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_036",
         category: "legislacao",
-        statement: "Nas interseções sem sinal, algumas situações têm preferência própria prevista nas regras gerais de circulação do trânsito. Assinale a alternativa INCORRETA sobre preferência nas interseções não sinalizadas:",
+        statement: "Assinale a alternativa INCORRETA sobre preferência nas interseções não sinalizadas:",
         options: ["O veículo que circula pela rodovia tem preferência sobre os que vêm das vias laterais do cruzamento.", "O veículo que circula pela rotatória tem preferência sobre os que pretendem entrar no anel viário.", "O veículo sobre trilhos tem preferência apenas com sinal semafórico, sem prioridade em outros casos.", "Nos demais casos, a preferência é de quem vier pela direita, salvo sinalização em contrário."],
         correctIndex: 2,
         explanation: "Correta letra C: trilhos sempre têm preferência.",
@@ -12358,7 +12368,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_047",
         category: "legislacao",
-        statement: "Na conversão à direita, o posicionamento próximo ao bordo reduz o espaço da manobra e protege pedestres e ciclistas no canto da via. Para converter à direita, o condutor deve aproximar-se, o máximo possível:",
+        statement: "Para converter à direita, o condutor deve aproximar-se, o máximo possível:",
         options: ["Do bordo direito da via e executar a manobra no menor espaço possível.", "Do eixo da pista e executar a manobra no maior espaço possível, ampliando o raio da curva.", "Do canteiro central e executar a manobra com amplo raio, para reduzir a força centrífuga.", "Do bordo esquerdo e executar a manobra pela faixa central, com o pisca-alerta acionado."],
         correctIndex: 0,
         explanation: "Correta letra A: para converter à direita o condutor se aproxima do bordo direito e executa a manobra no menor espaço possível, protegendo pedestres e ciclistas no canto da via.",
@@ -12371,7 +12381,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_048",
         category: "legislacao",
-        statement: "Na via de mão única, a conversão à esquerda parte do lado esquerdo, aproveitando a posição mais à esquerda da pista. Em via de mão única, para converter à esquerda, o condutor deve deslocar-se totalmente:",
+        statement: "Em via de mão única, para converter à esquerda, o condutor deve deslocar-se totalmente:",
         options: ["Ao eixo da pista.", "Ao bordo direito da via.", "Ao acostamento da direita.", "Ao bordo esquerdo da via."],
         correctIndex: 3,
         explanation: "Correta letra D: em via de mão única, a conversão à esquerda parte do bordo esquerdo da pista, posição que encurta a manobra e evita cruzar faixas alheias.",
@@ -12384,7 +12394,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_049",
         category: "legislacao",
-        statement: "Na conversão à esquerda em via de mão dupla, o posicionamento correto do veículo garante segurança e não obstrui a contramão. Em via de mão dupla, o condutor aguarda para converter à esquerda junto ao bordo direito. A conduta é:",
+        statement: "Em via de mão dupla, um condutor aguarda para converter à esquerda junto ao bordo direito. A conduta é:",
         options: ["Regular, pois deve partir do bordo direito da via, ampliando o raio da curva e a visibilidade do condutor.", "Irregular, pois deveria aproximar-se do eixo da pista, sem atingir a contramão.", "Regular, desde que sinalize com antecedência a manobra com a seta esquerda aos demais condutores.", "Irregular, pois deveria deslocar-se totalmente à esquerda da via, rente ao bordo esquerdo da pista."],
         correctIndex: 1,
         explanation: "Correta letra B: bordo esquerdo só vale para mão única.",
@@ -12397,7 +12407,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_050",
         category: "legislacao",
-        statement: "Nas rodovias, a conversão à esquerda é executada a partir do acostamento à direita, com a seta de direção acionada pelo condutor. Em rodovias, antes de realizar a conversão à esquerda, o condutor deve deslocar-se:",
+        statement: "Em rodovias, antes de realizar a conversão à esquerda, o condutor deve deslocar-se:",
         options: ["Para o eixo da pista, sinalizando com o pisca-alerta.", "Para o canteiro central, quando houver.", "Para o acostamento à esquerda.", "Para o acostamento à direita."],
         correctIndex: 3,
         explanation: "Correta letra D: o acostamento é o da direita.",
@@ -12410,7 +12420,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_051",
         category: "legislacao",
-        statement: "A operação de retorno muda o sentido de circulação do veículo em relação ao fluxo original e é autorizada em locais com segurança e fluidez do trânsito. Em via urbana, essa manobra de retorno deve ser realizada:",
+        statement: "Em via urbana, a manobra de retorno deve ser realizada:",
         options: ["Em local determinado pela sinalização ou em outros que ofereçam segurança e fluidez.", "Somente em local determinado pela sinalização, vedada a manobra em qualquer outro ponto da via.", "Em qualquer local, desde que o condutor sinalize com antecedência e verifique os retrovisores.", "Exclusivamente em interseções, com preferência pela direita e uso obrigatório da seta esquerda."],
         correctIndex: 0,
         explanation: "Correta letra A: não é só onde há sinalização, mas onde há segurança e fluidez.",
@@ -12423,7 +12433,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_052",
         category: "legislacao",
-        statement: "Em vias rurais, o retorno é manobra de mudança de sentido que exige segurança e fluidez, sendo feito em locais apropriados ou pelo acostamento à direita. Em vias rurais com acostamento, a manobra de retorno deve ser feita:",
+        statement: "Em vias rurais com acostamento, a manobra de retorno deve ser feita:",
         options: ["Pelo eixo da pista, junto à linha divisória.", "Pelo acostamento à esquerda.", "Em locais apropriados ou utilizando o acostamento à direita.", "Em qualquer ponto em que o canteiro central permita a travessia."],
         correctIndex: 2,
         explanation: "Correta letra C: o acostamento é sempre o da direita.",
@@ -12436,7 +12446,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_053",
         category: "legislacao",
-        statement: "Na conversão à esquerda em mão dupla, o veículo deve partir do centro da via para cruzar o sentido oposto com a menor trajetória. Na conversão à esquerda em via de mão dupla, o condutor deve aproximar-se:",
+        statement: "Na conversão à esquerda em via de mão dupla, o condutor deve aproximar-se:",
         options: ["Do eixo da pista, sem atingir a contramão.", "Do bordo esquerdo da via, rente à contramão, antes de iniciar a conversão.", "Do bordo direito da via, abrindo a curva para ganhar visibilidade.", "Do acostamento da direita, aguardando o fluxo antes de cruzar a pista."],
         correctIndex: 0,
         explanation: "Correta letra A: aproximar-se do eixo não autoriza invadir a contramão.",
@@ -12488,7 +12498,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_058",
         category: "legislacao",
-        statement: "Na conversão à esquerda em via de mão única, o veículo deve ocupar a posição mais à esquerda possível. Em via de mão única, um condutor aguarda para converter à esquerda posicionado junto ao eixo da pista. A conduta é:",
+        statement: "Em via de mão única, um condutor aguarda para converter à esquerda junto ao eixo da pista. A conduta é:",
         options: ["Irregular, pois deveria deslocar-se totalmente à esquerda, junto ao bordo esquerdo.", "Regular, pois deve aproximar-se do eixo da pista antes de iniciar a conversão à esquerda.", "Irregular, pois deveria aproximar-se do bordo direito da pista antes de iniciar a conversão.", "Regular, desde que a via tenha acostamento e o condutor sinalize a manobra com antecedência."],
         correctIndex: 0,
         explanation: "Correta letra A: eixo é regra de mão dupla; em mão única, bordo esquerdo.",
@@ -12592,7 +12602,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_066",
         category: "legislacao",
-        statement: "O condutor ultrapassado deve facilitar a manobra, sem acelerar nem mudar de posição de forma imprevisível na pista. O condutor, ao perceber que outro que o segue pretende ultrapassá-lo, estando na faixa da esquerda, deve:",
+        statement: "Ao perceber que outro condutor pretende ultrapassá-lo, estando na faixa da esquerda, o condutor deve:",
         options: ["Manter-se na faixa, reduzindo a velocidade.", "Deslocar-se ao bordo esquerdo, acelerando levemente.", "Acionar o pisca-alerta e manter a faixa.", "Deslocar-se para a direita, sem acelerar o veículo."],
         correctIndex: 3,
         explanation: "Correta letra D: quem é ultrapassado deve facilitar a manobra deslocando-se para a direita e mantendo a velocidade, sem acelerar nem mudar de faixa de forma imprevisível.",
@@ -12605,7 +12615,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_067",
         category: "legislacao",
-        statement: "O condutor ultrapassado deve manter trajetória previsível, sem acelerar nem mudar de faixa durante a manobra. O condutor que perceber que outro que o segue pretende ultrapassá-lo, em faixa que não seja a da esquerda, deve:",
+        statement: "Ao perceber que outro condutor pretende ultrapassá-lo, estando em faixa que não seja a da esquerda, o condutor deve:",
         options: ["Permanecer onde está, sem acelerar o veículo.", "Deslocar-se para a direita, reduzindo a velocidade.", "Acelerar para completar a ultrapassagem antes do retorno.", "Deslocar-se para a esquerda, mantendo a distância lateral."],
         correctIndex: 0,
         explanation: "Correta letra A: faixa da esquerda desloca-se; demais faixas permanecem.",
@@ -12618,7 +12628,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_068",
         category: "legislacao",
-        statement: "O condutor ultrapassado deve facilitar a manobra, mantendo a velocidade sem acelerar para impedir a passagem do outro veículo. Um condutor, ao ser ultrapassado, acelera o veículo para impedir a manobra. A conduta é:",
+        statement: "Um condutor acelera para impedir a ultrapassagem. A conduta é:",
         options: ["Regular, pois o ultrapassado tem preferência e pode manter a velocidade que já vinha desenvolvendo.", "Regular, pois mantém a velocidade da via e não tem obrigação de facilitar a manobra do outro.", "Irregular, pois, ao ser ultrapassado, o condutor não deve acelerar o veículo.", "Regular, se estiver em faixa diferente da esquerda, ainda que acelere para impedir a ultrapassagem."],
         correctIndex: 2,
         explanation: "Correta letra C: acelerar ao ser ultrapassado é vedado em qualquer faixa.",
@@ -12631,7 +12641,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_069",
         category: "legislacao",
-        statement: "A ultrapassagem é manobra em que o veículo avança, ultrapassa o outro e retorna à sua posição original na pista de rolamento, sempre com as condições de segurança verificadas. Concluída a ultrapassagem, o condutor deve:",
+        statement: "Concluída a ultrapassagem, o condutor deve:",
         options: ["Retornar à faixa de origem.", "Permanecer na faixa da esquerda.", "Aproximar-se do bordo esquerdo.", "Deslocar-se para o acostamento da direita."],
         correctIndex: 0,
         explanation: "Correta letra A: concluída a ultrapassagem, o condutor retorna à faixa de origem, à direita, depois de ver o veículo ultrapassado no retrovisor.",
@@ -12696,7 +12706,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_075",
         category: "legislacao",
-        statement: "No trânsito, parar e estacionar são institutos distintos, e a diferença entre eles está no tempo de imobilização do veículo, e não apenas no local. Pela definição técnica, parar é imobilizar o veículo:",
+        statement: "Parar é imobilizar o veículo:",
         options: ["Por tempo superior ao necessário para embarque ou desembarque, mesmo com o condutor no veículo.", "Por até cinco minutos, em local permitido e com o pisca-alerta acionado durante todo o período.", "Pelo tempo estritamente necessário ao embarque ou desembarque de passageiros.", "Por qualquer tempo, com o condutor ao volante e o veículo junto à guia da calçada, em local permitido."],
         correctIndex: 2,
         explanation: "Correta letra C: parar = tempo estritamente necessário; estacionar = tempo superior.",
@@ -12709,7 +12719,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_076",
         category: "legislacao",
-        statement: "No trânsito, estacionar é imobilizar o veículo por tempo superior ao necessário ao embarque ou desembarque de passageiros, ainda que breve, e não apenas pelo tempo da parada. Estacionar é imobilizar o veículo:",
+        statement: "Estacionar é imobilizar o veículo:",
         options: ["Pelo tempo necessário ao embarque ou ao desembarque de passageiros, com o condutor ainda ao volante.", "Por tempo superior ao necessário para embarque ou desembarque de passageiros, ainda que breve.", "Apenas quando o condutor se ausentar do veículo, deixando-o fechado e com o freio de mão acionado.", "Por mais de cinco minutos, mesmo que haja sinalização permitindo a imobilização do veículo no local."],
         correctIndex: 1,
         explanation: "Correta letra B: o critério é o tempo; a presença do condutor e os minutos fixos são armadilhas.",
@@ -12839,7 +12849,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_088",
         category: "legislacao",
-        statement: "Nos túneis, a iluminação artificial e a visibilidade são diferenciadas, e a regra de uso das luzes do veículo é própria para esse trecho da via. Ao circular em um túnel, o condutor deve utilizar sempre:",
+        statement: "Ao circular em um túnel, quais luzes o condutor deve utilizar?",
         options: ["Luz alta.", "Luz baixa.", "Luzes de posição, somente.", "Pisca-alerta."],
         correctIndex: 1,
         explanation: "Correta letra B: em túneis o condutor deve manter a luz baixa acesa, mesmo de dia, porque a iluminação artificial não garante que os outros vejam o seu carro.",
@@ -12865,7 +12875,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_090",
         category: "legislacao",
-        statement: "Em rodovia de pista simples, durante o dia, o condutor deve usar iluminação que garanta visibilidade sem ofuscar os veículos em sentido contrário. Nessa situação, a luz baixa pode ser substituída pela:",
+        statement: "Em rodovia de pista simples, durante o dia, a luz baixa pode ser substituída por:",
         options: ["Luz de rodagem diurna (DRL).", "Luz de posição, quando a visibilidade já estiver reduzida na via.", "Luz alta, quando não houver veículo em sentido contrário na via.", "Luz de emergência, sempre que o veículo estiver em movimento na rodovia."],
         correctIndex: 0,
         explanation: "Correta letra A: nas rodovias de pista simples fora do perímetro urbano, o veículo que dispõe de luz de rodagem diurna (DRL) pode usá-la durante o dia no lugar do farol baixo; quem não tem DRL é que precisa manter o farol baixo aceso (art. 40, §2º, do CTB). As luzes de posição não iluminam a pista e não substituem o farol.",
@@ -12930,7 +12940,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_095",
         category: "legislacao",
-        statement: "Durante a parada para embarque e desembarque à noite, o veículo imobilizado deve permanecer visível para o fluxo no escuro. À noite, durante o embarque ou desembarque de passageiros, devem permanecer acesas:",
+        statement: "À noite, durante o embarque ou desembarque de passageiros, quais luzes devem permanecer acesas?",
         options: ["As luzes de posição.", "As luzes de emergência.", "A luz alta.", "A luz de freio."],
         correctIndex: 0,
         explanation: "Correta letra A: nessa operação, a exigência é de luzes de posição.",
@@ -12956,7 +12966,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_097",
         category: "legislacao",
-        statement: "Durante a imobilização para carga e descarga à noite, o veículo precisa permanecer visível para os demais usuários da via. À noite, em operações de carga e descarga de mercadorias, devem permanecer acesas:",
+        statement: "À noite, durante operações de carga e descarga, quais luzes devem permanecer acesas?",
         options: ["A luz alta.", "As luzes de posição.", "Apenas o pisca-alerta.", "Nenhuma luz, para economizar energia."],
         correctIndex: 1,
         explanation: "Correta letra B: à noite, durante a carga e a descarga, o veículo permanece imobilizado com as luzes de posição acesas, para ser visto pelos demais usuários da via.",
@@ -12982,7 +12992,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_099",
         category: "legislacao",
-        statement: "Os veículos puxados por animais têm regras próprias de circulação nas vias urbanas e rurais, para não atrapalhar o fluxo nem colocar o rebanho em risco. Esses veículos de tração animal deverão ser conduzidos:",
+        statement: "Os veículos de tração animal devem ser conduzidos:",
         options: ["Pela direita da pista e junto à guia da calçada.", "Pelo eixo da pista, com sinalização luminosa.", "Pelo bordo esquerdo, em sentido contrário ao fluxo.", "Pela faixa da esquerda, em baixa velocidade."],
         correctIndex: 0,
         explanation: "Correta letra A: veículos de tração animal circulam pela direita da pista e junto à guia da calçada, em velocidade compatível e com atenção ao fluxo.",
@@ -13060,7 +13070,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_105",
         category: "legislacao",
-        statement: "O condutor de motocicleta também precisa de proteção contra impactos e abrasão, e o vestuário adequado é definido em regulamentação própria do órgão colegiado. O vestuário de proteção exigido do condutor de motocicleta é aquele:",
+        statement: "O vestuário de proteção exigido do condutor de motocicleta é aquele:",
         options: ["Escolhido pelo condutor, conforme o percurso.", "Exigido apenas em rodovias.", "Exigido apenas à noite.", "Regulamentado pelo CONTRAN."],
         correctIndex: 3,
         explanation: "Correta letra D: o vestuário de proteção do motociclista é o regulamentado pelo CONTRAN, com itens que reduzem abrasão e impacto em caso de queda.",
@@ -13138,7 +13148,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_112",
         category: "legislacao",
-        statement: "O condutor de motocicleta deve segurar o guidão com as duas mãos, admitida exceção para sinalizar a manobra com o braço. Um motociclista retira momentaneamente uma das mãos do guidão para sinalizar com o braço. A conduta é:",
+        statement: "Um motociclista retira momentaneamente uma das mãos do guidão para sinalizar uma manobra com o braço. A conduta é:",
         options: ["Irregular, pois o guidão deve ser segurado com as duas mãos sempre.", "Irregular, pois a sinalização deve ser pela luz indicadora.", "Regular apenas abaixo de 30 km/h.", "Regular, pois a sinalização com o braço é exceção prevista."],
         correctIndex: 3,
         explanation: "Correta letra D: a norma admite a mão fora do guidão para sinalizar com o braço.",
@@ -13190,7 +13200,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_116",
         category: "legislacao",
-        statement: "No trânsito, o ciclista que sai da bicicleta e a conduz empurrando ao lado muda de condição legal, deixando de ser tratado como condutor do veículo e passando a ter outros deveres. Nessa situação, o ciclista que empurra a bicicleta:",
+        statement: "O ciclista que desmonta e empurra a bicicleta equipara-se, em direitos e deveres, a:",
         options: ["Responde como condutor de bicicleta.", "Equipara-se ao condutor de ciclomotor.", "Equipara-se ao pedestre em deveres e direitos.", "Não está sujeito às normas de circulação."],
         correctIndex: 2,
         explanation: "Correta letra C: quem desce da bicicleta e a conduz empurrando deixa de ser condutor e passa a ser equiparado ao pedestre, com os mesmos direitos e deveres na via.",
@@ -13242,7 +13252,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_120",
         category: "legislacao",
-        statement: "Nas vias rurais, a ausência de acostamento e de passeio obriga o pedestre a dividir o leito viário com os veículos, e o sentido da marcha é decisivo para a segurança. Nas vias rurais sem acostamento, os pedestres devem circular:",
+        statement: "Nas vias rurais sem acostamento, como os pedestres devem circular?",
         options: ["Em fila, pelos bordos, no mesmo sentido dos veículos.", "Em fila, pelos bordos, em sentido contrário aos veículos.", "Em dupla, pelo eixo da pista.", "Pelo canteiro central, no mesmo sentido dos veículos."],
         correctIndex: 1,
         explanation: "Correta letra B: em via rural sem acostamento o pedestre anda em fila única pelos bordos e no sentido contrário ao dos veículos, para enxergar quem se aproxima.",
@@ -13294,7 +13304,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_124",
         category: "legislacao",
-        statement: "Nas vias sem infraestrutura para pedestres, a regra define sentido e posição para minimizar riscos. À noite, em rodovia sem acostamento, um pedestre caminha pelo bordo direito, no mesmo sentido do tráfego. A conduta é:",
+        statement: "À noite, em uma rodovia sem acostamento, um pedestre caminha pelo bordo direito, no mesmo sentido do tráfego. A conduta é:",
         options: ["Regular, pois o bordo direito é o correto para pedestres que caminham no mesmo sentido do tráfego.", "Irregular, pois deve circular em fila, pelos bordos, em sentido contrário.", "Irregular, pois deve circular pelo eixo da pista para ser visto a maior distância pelos condutores.", "Regular, desde que caminhe em dupla e use roupa clara para ser identificado pelos condutores."],
         correctIndex: 1,
         explanation: "Correta letra B: o bordo está correto, mas o sentido deve ser contrário ao dos veículos.",
@@ -13307,7 +13317,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_125",
         category: "legislacao",
-        statement: "Nas vias internas de condomínios, a sinalização de regulamentação é responsabilidade do próprio condomínio, e não do órgão de trânsito. Nas vias internas de condomínios constituídos por unidades autônomas, a sinalização de regulamentação é implantada e mantida:",
+        statement: "Nas vias internas de condomínios constituídos por unidades autônomas, quem implanta e mantém a sinalização de regulamentação?",
         options: ["Pelo órgão de trânsito do município.", "Pelo órgão rodoviário estadual.", "Por conta do próprio condomínio.", "Pelo CONTRAN, mediante convênio."],
         correctIndex: 2,
         explanation: "Correta letra C: responsabilidade do condomínio, não do poder público.",
@@ -13361,7 +13371,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "ia_normas_130",
         category: "legislacao",
-        statement: "Nas rodovias, o limite de velocidade varia conforme a categoria do veículo, distinguindo os automóveis e motocicletas dos demais veículos que circulam pela via. Nas rodovias, a velocidade máxima para os demais veículos é de:",
+        statement: "Nas rodovias, qual é a velocidade máxima para os demais veículos?",
         options: ["100 km/h.", "110 km/h.", "80 km/h.", "90 km/h."],
         correctIndex: 3,
         explanation: "Correta letra D: bora entender — carro, moto e camioneta andam até 100 (pista simples) ou 110 (dupla), mas os demais veículos — ônibus, caminhão, trator — ficam nos 90 km/h. Na régua, demais veículos sempre perdem para o automóvel (art. 61 do CTB).",
@@ -13910,12 +13920,12 @@ const QUESTIONS_B: Question[] = [
     {
         id: "q_new_40",
         category: "legislacao",
-        statement: "O agente de trânsito está com o braço levantado e a palma da mão voltada para a frente. Isso significa:",
-        options: ["Diminuir a velocidade", "Seguir com atenção", "Parar apenas se vier da direita", "Parada obrigatória para todos os veículos que venham de qualquer direção na mesma via."],
+        statement: "O agente de trânsito levanta um braço verticalmente, com a palma da mão voltada para a frente. Qual deve ser a ação do condutor?",
+        options: ["Diminuir a velocidade e manter o movimento.", "Prosseguir com atenção, pois a passagem está liberada.", "Parar apenas se vier da direita.", "Parar, sem bloquear a interseção."],
         correctIndex: 3,
-        explanation: "Correta letra D: braço levantado é parada para todos. Os gestos do agente de trânsito prevalecem sobre os sinais luminosos e sonoros, exigindo atenção imediata do condutor.",
+        explanation: "Correta letra D: o braço levantado verticalmente com a palma para a frente determina parada obrigatória para todos os veículos. Se o veículo já estiver na interseção, deve liberá-la com segurança, sem parar no cruzamento.",
         commonMistake: "Restringir a ordem a um sentido.",
-        group: "gestos-agente",
+        group: "gesto-agente-parada-vertical",
         incidence: "alta",
         trap: true,
         difficulty: 2
@@ -13928,7 +13938,7 @@ const QUESTIONS_B: Question[] = [
         correctIndex: 2,
         explanation: "Correta letra C: antebraço para cima é conversão à direita. Os gestos convencionais de braço sinalizam intenções do condutor quando as luzes de direção não funcionam.",
         commonMistake: "Trocar direita por esquerda.",
-        group: "gestos-agente",
+        group: "gesto-condutor-direita",
         incidence: "alta",
         trap: true,
         difficulty: 2
@@ -14007,7 +14017,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "q_new_48",
         category: "prioridade",
-        statement: "Nas interseções de mesma classificação sem sinalização, a preferência é de quem chega pela direita do outro. Dois veículos se aproximam de um cruzamento de vias perpendiculares, de mesma classificação, sem sinalização. A preferência é do que:",
+        statement: "Dois veículos se aproximam de um cruzamento sem sinalização entre vias perpendiculares de mesma classificação. A preferência é do que:",
         options: ["Vem pela esquerda", "Vem pela direita do outro condutor", "Trafega em maior velocidade", "Chegou primeiro ao cruzamento."],
         correctIndex: 1,
         explanation: "Correta letra B: sem sinalização, preferência de quem vem pela direita.",
@@ -14095,7 +14105,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "q_new_56",
         category: "legislacao",
-        statement: "A operação de retorno permite ao condutor mudar o sentido de circulação em via urbana, mas ela é vedada em locais de pouca visibilidade ou de risco, como curvas, aclives, declives, pontes, viadutos e túneis. A proibição alcança:",
+        statement: "É proibido realizar retorno:",
         options: ["Nas curvas, aclives, declives, pontes, viadutos e túneis", "Apenas nas vias de trânsito rápido", "Somente à noite", "Em vias com acostamento."],
         correctIndex: 0,
         explanation: "Correta letra A: o retorno é proibido em curvas, aclives, declives, pontes, viadutos e túneis, locais de pouca visibilidade em que a manobra surpreende quem vem no sentido oposto.",
@@ -14546,8 +14556,7 @@ const QUESTIONS_B: Question[] = [
     //     de detran_mg_via_local_30 (mesmos enunciado e alternativas);
     //   - questões 31, 32 e 64 (silvos do apito): gabarito invertido. O
     //     padrão oficial é 1 silvo breve = siga, 2 silvos breves = pare,
-    //     1 silvo longo = diminua a marcha - já coberto por qd02 e
-    //     leg_silvo_breve_01 / leg_silvo_parar_02 / leg_silvo_longo_03.
+    //     1 silvo longo = diminua a marcha; cada comando tem questão própria.
     // ⚠ Conferir antes de publicar: l06_01 e l06_05 (regras conforme a
     //   Res. CONTRAN 1.020/2025) e l06_38 (gabarito conforme a fonte).
     // ------------------------------------------------------------------
@@ -14811,7 +14820,7 @@ const QUESTIONS_B: Question[] = [
     {
         id: "l06_22",
         category: "legislacao",
-        statement: "Nas interseções as trajetórias se cruzam, por isso o CTB veda a ultrapassagem no local e nas suas proximidades. Nas interseções e suas proximidades, o condutor:",
+        statement: "Nas interseções e suas proximidades, o condutor:",
         options: ["Poderá efetuar ultrapassagem.", "Poderá estacionar.", "Não poderá efetuar ultrapassagem.", "Não precisa diminuir a velocidade do veículo."],
         correctIndex: 2,
         explanation: "Correta letra C: o art. 33 do CTB proíbe efetuar ultrapassagens nas interseções e suas proximidades. Reduzir a velocidade e não estacionar também são deveres, o que torna as demais alternativas incorretas.",
@@ -15426,6 +15435,82 @@ const QUESTIONS_B: Question[] = [
         detailedExplanation: "A moto não se sustenta em pé parada sem apoio, ao contrário do carro. Durante o deslocamento, o equilíbrio da moto é dinâmico e resulta de vários fatores, incluindo esterçamento, geometria da direção, ações do condutor e efeitos giroscópicos. Esses efeitos contribuem, mas não são a única causa; com descanso ou outro apoio, uma moto parada também pode estar em equilíbrio estático.",
         commonMistake: "Achar que as forças giroscópicas, sozinhas, mantêm a moto equilibrada.",
         tip: "Carro parado: apoio estável em quatro rodas. Moto em movimento: equilíbrio dinâmico com controle e esterçamento.",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2
+    },
+    {
+        id: "placas_educativas_cores_01",
+        category: "placas",
+        statement: "Durante uma campanha de conscientização viária em trecho urbano, o condutor observa uma placa educativa com a mensagem \"Use sempre o cinto de segurança\". Qual é o padrão de cores característico das placas educativas na sinalização vertical?",
+        options: [
+            "Fundo branco, com tarjas ou bordas e inscrições em preto.",
+            "Fundo azul, com tarjas e símbolos em branco.",
+            "Fundo marrom, com orla e legendas em branco.",
+            "Fundo verde, com borda e setas em branco."
+        ],
+        correctIndex: 0,
+        explanation: "Correta letra A: placas educativas têm fundo branco, com tarjas ou bordas e inscrições em preto, para transmitir mensagens de orientação e conscientização.",
+        detailedExplanation: "O fundo branco com elementos pretos caracteriza as mensagens educativas. Azul identifica serviços auxiliares, marrom indica atrativos turísticos e verde orienta destinos.",
+        legalBase: "Manual Brasileiro de Sinalização de Trânsito — sinalização educativa",
+        group: "classificacao-sinalizacao-vertical",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2
+    },
+    {
+        id: "placas_atrativos_turisticos_cores_01",
+        category: "placas",
+        statement: "Ao trafegar por uma rodovia em direção a um parque histórico e ecológico, o motorista vê placas que orientam sobre locais de interesse turístico. Qual cor identifica as placas de atrativos turísticos?",
+        options: [
+            "Fundo amarelo com orla e pictogramas pretos.",
+            "Fundo azul com símbolo e legenda brancos.",
+            "Fundo marrom com orla e inscrições ou símbolos brancos.",
+            "Fundo branco com orla vermelha e letras pretas."
+        ],
+        correctIndex: 2,
+        explanation: "Correta letra C: placas de atrativos turísticos usam fundo marrom, com orla, símbolos e legendas em branco.",
+        detailedExplanation: "O marrom identifica a sinalização de atrativos turísticos, culturais, históricos e ecológicos. Azul é usado para serviços auxiliares; verde, para orientação de destinos.",
+        legalBase: "Anexo II do CTB; Manual Brasileiro de Sinalização de Trânsito — sinalização de indicação",
+        group: "classificacao-sinalizacao-vertical",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2
+    },
+    {
+        id: "placas_servicos_auxiliares_cores_01",
+        category: "placas",
+        statement: "Em uma viagem, o condutor precisa localizar um posto de abastecimento e um pronto-socorro ao longo da via. Qual padrão de cores caracteriza as placas de indicação de serviços auxiliares?",
+        options: [
+            "Fundo verde com inscrição e tarja brancas.",
+            "Fundo azul com símbolo e tarja brancos.",
+            "Fundo marrom com símbolo e borda brancos.",
+            "Fundo branco com tarja e símbolos pretos."
+        ],
+        correctIndex: 1,
+        explanation: "Correta letra B: placas de indicação de serviços auxiliares usam fundo azul com símbolos, orla e legendas brancos.",
+        detailedExplanation: "O padrão azul e branco identifica serviços auxiliares, como hospitais, postos de combustível, restaurantes e borracharias. Verde indica orientação de destino; marrom, atrativos turísticos.",
+        legalBase: "Anexo II do CTB; Manual Brasileiro de Sinalização de Trânsito — sinalização de indicação",
+        group: "classificacao-sinalizacao-vertical",
+        incidence: "alta",
+        trap: true,
+        difficulty: 2
+    },
+    {
+        id: "placas_cores_comparativo_01",
+        category: "placas",
+        statement: "Um candidato ao exame teórico está revisando as cores da sinalização de indicação e de orientação educativa. Assinale a relação correta entre a cor da placa e sua finalidade.",
+        options: [
+            "Marrom: serviços auxiliares; azul: atrativos turísticos; branco e preto: educativa.",
+            "Azul: serviços auxiliares; marrom: atrativos turísticos; branco e preto: educativa.",
+            "Verde: serviços auxiliares; azul: educativa; marrom: regulamentação.",
+            "Azul: educativa; verde: atrativos turísticos; marrom: serviços auxiliares."
+        ],
+        correctIndex: 1,
+        explanation: "Correta letra B: azul identifica serviços auxiliares, marrom identifica atrativos turísticos e fundo branco com elementos pretos caracteriza a sinalização educativa.",
+        detailedExplanation: "A pegadinha troca as cores entre categorias: serviços auxiliares usam azul, atrativos turísticos usam marrom e placas educativas usam fundo branco com tarjas ou inscrições pretas.",
+        legalBase: "Anexo II do CTB; Manual Brasileiro de Sinalização de Trânsito",
+        group: "classificacao-sinalizacao-vertical",
         incidence: "alta",
         trap: true,
         difficulty: 2

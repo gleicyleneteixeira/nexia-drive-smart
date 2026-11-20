@@ -618,8 +618,10 @@ function SimuladoPage() {
 
   return (
     <div
-      className={`mx-auto max-w-3xl px-3 md:px-4 pt-2 pb-28 md:pt-10 md:pb-28 lg:pb-10 flex flex-col ${
-        showResult ? "min-h-dvh overflow-y-auto" : "h-[100dvh] md:h-auto overflow-hidden md:overflow-visible"
+      className={`mx-auto max-w-3xl px-3 md:px-4 pt-2 pb-4 md:pt-10 md:pb-10 lg:pb-10 flex flex-col ${
+        showResult
+          ? "min-h-[calc(100dvh-3.5rem)] overflow-y-auto"
+          : "h-[calc(100dvh-3.5rem)] md:h-auto overflow-hidden md:overflow-visible"
       }`}
     >
       {/* Header compacto em uma linha: voltar, título/contador, timer, placar, encerrar */}

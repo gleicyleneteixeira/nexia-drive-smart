@@ -26,16 +26,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   GlassSidebar,
-  GlassTabBar,
   GlassTopbar,
   GlassSheet,
   CommandPalette,
   navSections,
-  tabBarItems,
   simuladosItem,
   contaSection,
   type NavItem,
-  type GlassSheetGroup,
 } from "@/components/glass";
 
 type NavItemLegacy = {
@@ -93,9 +90,9 @@ export function AppShell() {
   const [supportLink, setSupportLink] = useState<string | null>(null);
   const [showSupportButton, setShowSupportButton] = useState(true);
 
-  // Paleta de comandos (Ctrl+K) e sheets mobile
+  // Paleta de comandos (Ctrl+K) e menu lateral mobile
   const [paletteOpen, setPaletteOpen] = useState(false);
-  const [sheetOpen, setSheetOpen] = useState<"estudar" | "mais" | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Versão do app: SOMENTE manual (menu do perfil → "Atualizar a versão").
   // Nada automático: nenhuma faixa, nenhuma verificação sozinha.
@@ -207,9 +204,9 @@ export function AppShell() {
     })();
   }, [user, profile, isAdmin, isPublicPage]);
 
-  // Fecha sheets ao trocar de página
+  // Fecha o menu lateral ao trocar de página
   useEffect(() => {
-    setSheetOpen(null);
+    setMobileMenuOpen(false);
   }, [pathname]);
 
   // Só registra o módulo escolhido (estado + storage + evento). Sem navegar:
@@ -242,7 +239,7 @@ export function AppShell() {
   };
 
   // ---------------------------------------------------------------------------
-  // NAVEGAÇÃO — fonte única de ação (sidebar, tab bar, sheets e paleta passam
+  // NAVEGAÇÃO — fonte única de ação (sidebar, menu mobile e paleta passam
   // por aqui). Só navegação/estado de UI; nenhuma regra de negócio.
   // ---------------------------------------------------------------------------
   const goHome = useCallback(() => {
@@ -351,42 +348,6 @@ export function AppShell() {
     return hit?.id ?? null;
   }, [pathname, activeModule, activeAdminSection, searchStr, sections, verPlacas]);
 
-  // Tab bar (mobile): mapeia a rota/módulo para a aba correta
-  const activeTabId = useMemo(() => {
-    if (pathname === "/app") return activeModule === "hub" ? "inicio" : "estudar";
-    if (pathname === "/biblioteca" || pathname === "/livro") return "estudar";
-    if (pathname === "/simulado") return "simulado";
-    if (pathname === "/psicotecnico") return activeModule === "psicotecnico" ? "simulado" : null; // "Treino" no psicotécnico
-    if (pathname === "/conquistas") return "conquistas";
-    // Placas: catálogo é conteúdo (aba Aulas); quiz é treino (aba Simulados).
-    if (pathname === "/placas") return placasEmTreino ? "simulado" : "estudar";
-    // Painel admin (mobile): a entrada é a folha "Mais"
-    if (pathname === "/admin") return "mais";
-    // demais rotas de treino caem no "Mais"
-    const flat = sections.flatMap((s) => s.items);
-    const hit = flat.find((i) => i.action.kind === "link" && i.action.to === pathname);
-    if (hit && (hit.id === "simulado" || hit.id === "conquistas")) return hit.id;
-    return null;
-  }, [pathname, activeModule, sections, placasEmTreino]);
-
-  const onTab = (item: NavItem) => {
-    if (item.id === "estudar") {
-      // Módulo escolhido no Início: "Estudar" vai DIRETO ao material de
-      // estudo dessa categoria (galeria filtrada). Sem módulo → folha p/ escolher.
-      if (activeModule !== "hub") {
-        irParaMaterial(activeModule);
-        return;
-      }
-      setSheetOpen((s) => (s === "estudar" ? null : "estudar"));
-      return;
-    }
-    if (item.id === "mais") {
-      setSheetOpen((s) => (s === "mais" ? null : "mais"));
-      return;
-    }
-    runAction(item);
-  };
-
   // Cabeçalho clicável das seções da sidebar (desktop): AULAS E MATERIAIS
   // leva às galerias do módulo escolhido; SIMULADOS leva ao simulado do
   // teórico ou aos joguinhos do psicotécnico. Demais seções seguem texto.
@@ -399,24 +360,10 @@ export function AppShell() {
     if (sectionId === "treinar") runAction(simuladosItem(activeModule));
   };
 
-  const sheetGroups = useMemo<GlassSheetGroup[]>(() => {
-    if (sheetOpen === "estudar") {
-      return [{ items: sections.find((s) => s.id === "estudar")?.items ?? [] }];
-    }
-    if (sheetOpen === "mais") {
-      const treinar = sections.find((s) => s.id === "treinar")?.items ?? [];
-      // Seção "Admin" só existe nas seções quando a conta é administradora —
-      // é ela que dá acesso ao painel no celular (não há sidebar no mobile).
-      const admin = sections.find((s) => s.id === "admin")?.items ?? [];
-      const conta = contaSection(supportLink).items.filter((i) => i.id !== "tema");
-      return [
-        { label: "Simulados", items: treinar },
-        ...(admin.length ? [{ label: "Admin", items: admin }] : []),
-        { label: "Conta", items: conta },
-      ];
-    }
-    return [];
-  }, [sheetOpen, supportLink, sections]);
+  const mobileMenuGroups = useMemo(
+    () => sections.map((section) => ({ label: section.label, items: section.items })),
+    [sections],
+  );
 
   // Título/contexto da topbar (mesma semântica de antes)
   const pageTitle =
@@ -523,6 +470,7 @@ export function AppShell() {
               }
             }}
             onOpenPalette={() => setPaletteOpen(true)}
+            onOpenMenu={() => setMobileMenuOpen(true)}
             message={
               isHub ? (
                 <>
@@ -629,8 +577,8 @@ export function AppShell() {
           <CronogramaModal open={cronogramaOpen} onOpenChange={setCronogramaOpen} />
         )}
 
-        {/* Botão WhatsApp — discreto, em vidro, acima da tab bar no mobile */}
-        {showSupportButton && supportLink && (
+        {/* Botão WhatsApp — discreto, em vidro, fora da tela do simulado */}
+        {showSupportButton && supportLink && pathname !== "/simulado" && (
           <a
             href={supportLink}
             target="_blank"
@@ -645,10 +593,9 @@ export function AppShell() {
           </a>
         )}
 
-        {/* Main Content — o simulado gerencia o próprio espaço (altura fixa),
-            as demais páginas reservam a área da tab bar no mobile */}
+        {/* Main Content — o simulado gerencia o próprio espaço (altura fixa). */}
         <main
-          className={`flex-1 min-w-0 ${pathname === "/simulado" ? "pb-0" : "pb-32 lg:pb-10"}`}
+          className={`flex-1 min-w-0 ${pathname === "/simulado" ? "pb-0" : "pb-10"}`}
         >
           {isPublicPage ? (
             <Outlet />
@@ -660,19 +607,17 @@ export function AppShell() {
         </main>
       </div>
 
-      {/* ---------------------------------------------------------------
-          MOBILE: tab bar de vidro em pílula + sheets
-          --------------------------------------------------------------- */}
-      {showChrome && (
-        <GlassTabBar items={tabBarItems(activeModule)} activeId={activeTabId} onTab={onTab} />
-      )}
-
       <GlassSheet
-        open={!!sheetOpen && showChrome}
-        title={sheetOpen === "mais" ? "Mais opções" : "Aulas e materiais"}
-        groups={sheetGroups}
-        onClose={() => setSheetOpen(null)}
-        onNavigate={(item) => runAction(item)}
+        open={mobileMenuOpen && showChrome}
+        title="Menu principal"
+        groups={mobileMenuGroups}
+        placement="left"
+        activeId={activeId}
+        onClose={() => setMobileMenuOpen(false)}
+        onNavigate={(item) => {
+          setMobileMenuOpen(false);
+          runAction(item);
+        }}
       />
 
       {/* PALETA DE COMANDOS (Ctrl+K) */}

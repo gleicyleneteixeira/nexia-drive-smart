@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
+import { useEffect } from "react";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { NavItem } from "./nav";
@@ -10,8 +11,7 @@ export interface GlassSheetGroup {
 }
 
 /**
- * Bottom sheet de VIDRO (mobile) — usado pelos itens "Estudar" e "Mais"
- * da tab bar, para não lotar a barra principal.
+ * Painel de VIDRO para navegação móvel, em formato de sidebar ou folha inferior.
  * Fecha no backdrop, no X e no Escape. Alvo de toque >= 44px.
  */
 export interface GlassSheetProps {
@@ -21,13 +21,35 @@ export interface GlassSheetProps {
   items?: NavItem[];
   /** lista agrupada com rótulos (ex.: folha "Mais" com Treinar/Admin/Conta) */
   groups?: GlassSheetGroup[];
+  /** apresentação lateral da sidebar ou inferior da folha */
+  placement?: "left" | "bottom";
+  activeId?: string | null;
   onClose: () => void;
   onNavigate: (item: NavItem) => void;
 }
 
-export function GlassSheet({ open, title, items, groups, onClose, onNavigate }: GlassSheetProps) {
+export function GlassSheet({
+  open,
+  title,
+  items,
+  groups,
+  placement = "bottom",
+  activeId,
+  onClose,
+  onNavigate,
+}: GlassSheetProps) {
   // Aceita as duas formas: `items` puro vira um grupo sem rótulo.
   const renderedGroups: GlassSheetGroup[] = groups ?? (items ? [{ items }] : []);
+  const isSidebar = placement === "left";
+
+  useEffect(() => {
+    if (!open) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [open, onClose]);
 
   const renderItem = (item: NavItem) => {
     const Icon = item.icon;
@@ -46,7 +68,9 @@ export function GlassSheet({ open, title, items, groups, onClose, onNavigate }: 
             "transition-all duration-200",
             item.soon
               ? "text-muted-foreground/50 cursor-not-allowed"
-              : "text-foreground hover:bg-white/10 active:scale-[0.99]",
+              : item.id === activeId
+                ? "glass-active text-foreground"
+                : "text-foreground hover:bg-white/10 active:scale-[0.99]",
           )}
         >
           <span className="w-9 h-9 rounded-xl bg-white/8 border border-white/12 flex items-center justify-center shrink-0">
@@ -86,12 +110,20 @@ export function GlassSheet({ open, title, items, groups, onClose, onNavigate }: 
               role="dialog"
               aria-modal="true"
               aria-label={title}
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "100%" }}
+              initial={isSidebar ? { x: "-100%" } : { y: "100%" }}
+              animate={isSidebar ? { x: 0 } : { y: 0 }}
+              exit={isSidebar ? { x: "-100%" } : { y: "100%" }}
               transition={{ type: "tween", duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
-              className="glass-strong fixed left-2 right-2 bottom-2 z-50 rounded-[28px] p-4 lg:hidden"
-              style={{ paddingBottom: "calc(1rem + env(safe-area-inset-bottom, 0px))" }}
+              className={cn(
+                "glass-strong fixed z-50 flex flex-col overflow-hidden p-4 lg:hidden",
+                isSidebar
+                  ? "left-0 top-0 bottom-0 w-[min(84vw,300px)] rounded-r-[28px]"
+                  : "left-2 right-2 bottom-2 rounded-[28px]",
+              )}
+              style={{
+                paddingTop: isSidebar ? "calc(1rem + env(safe-area-inset-top, 0px))" : undefined,
+                paddingBottom: `calc(1rem + env(safe-area-inset-bottom, 0px))`,
+              }}
             >
               <div className="flex items-center justify-between mb-3">
                 <p className="section-label">{title}</p>
@@ -104,9 +136,13 @@ export function GlassSheet({ open, title, items, groups, onClose, onNavigate }: 
                 </button>
               </div>
 
-              {/* Rolo próprio: a folha "Mais" pode ficar longa (Treinar +
-                  Admin + Conta) — sem isto os últimos itens saem da tela. */}
-              <div className="max-h-[62vh] overflow-y-auto no-scrollbar -mx-1 px-1">
+              {/* Rolo próprio mantém os últimos itens acessíveis em telas baixas. */}
+              <div
+                className={cn(
+                  "no-scrollbar -mx-1 px-1",
+                  isSidebar ? "flex-1 min-h-0 overflow-y-auto" : "max-h-[62vh] overflow-y-auto",
+                )}
+              >
                 {renderedGroups.map((group, gi) => (
                   <div key={group.label ?? gi} className={gi > 0 ? "mt-3" : undefined}>
                     {group.label && <p className="section-label px-3 pb-1">{group.label}</p>}

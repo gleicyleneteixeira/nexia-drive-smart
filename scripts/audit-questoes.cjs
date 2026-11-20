@@ -72,7 +72,7 @@ const VISUAL_CTX_RE = /\b(placa|placas|sinal(iza|izaç|izaçao|ização)?\s*(de|
 const MISSING_IMG_RE = /\b(figura|imagem|ilustra[çc][ãa]o|foto|gr[aá]fico|tabela|desenho (abaixo|acima|ao lado)|placa apresentada|placa mostrada)\b/i;
 const PLACA_IDS = new Set(["R-1","R-2","R-6a","R-6b","R-19","R-25a","R-25d","A-1a","A-2b","A-13a","A-32b","A-33a","I-Hospital","I-Posto","SAU-01"]);
 for (const q of ALL) {
-  const hasVisual = !!(q.placa || q.image_url);
+  const hasVisual = !!(q.placa || q.image_url || q.option_images?.some(Boolean));
   const codes = [...new Set(((q.statement || "") + " " + (q.options || []).join(" ")).match(CODE_RE) || [])];
   const noCodigoDisponivel = codes.filter((c) => !PLACA_IDS.has(c));
   if (codes.length && !hasVisual) {

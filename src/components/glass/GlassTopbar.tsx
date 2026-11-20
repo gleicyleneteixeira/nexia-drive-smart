@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { Search } from "lucide-react";
+import { Menu, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
@@ -21,6 +21,8 @@ export interface GlassTopbarProps {
   onLogoClick?: () => void;
   /** botão de busca (mobile) → Ctrl+K */
   onOpenPalette?: () => void;
+  /** abre o menu lateral no mobile */
+  onOpenMenu?: () => void;
   className?: string;
 }
 
@@ -32,6 +34,7 @@ export function GlassTopbar({
   logoHref,
   onLogoClick,
   onOpenPalette,
+  onOpenMenu,
   className,
 }: GlassTopbarProps) {
   return (
@@ -44,6 +47,17 @@ export function GlassTopbar({
       )}
     >
       <div className="flex items-center gap-3 px-4 sm:px-6 h-14">
+        {onOpenMenu && (
+          <button
+            type="button"
+            onClick={onOpenMenu}
+            className="lg:hidden w-9 h-9 shrink-0 rounded-xl flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-white/8 transition-all"
+            aria-label="Abrir menu principal"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+        )}
+
         {/* Logo (mobile/desktop) */}
         <Link
           to={logoHref}
