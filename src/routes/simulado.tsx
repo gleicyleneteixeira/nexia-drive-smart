@@ -266,6 +266,7 @@ function SimuladoPage() {
   const [showResult, setShowResult] = useState(false);
   const [resumed, setResumed] = useState(false);
   const [showPicker, setShowPicker] = useState(false);
+  const [showQuestionNav, setShowQuestionNav] = useState(false);
   const [mode, setMode] = useState<SimMode | null>(null);
   const [pendingMode, setPendingMode] = useState<SimMode | null>(null);
   const [switchOpen, setSwitchOpen] = useState(false);
@@ -587,6 +588,15 @@ function SimuladoPage() {
     setSelected(newAnswers[ni] ?? null);
   }
 
+  function goToQuestion(target: number) {
+    if (target < 0 || target >= questions.length || target === index) return;
+    const newAnswers = [...answers];
+    if (selected !== null) newAnswers[index] = selected;
+    setAnswers(newAnswers);
+    setIndex(target);
+    setSelected(newAnswers[target] ?? null);
+  }
+
   const score = answers.reduce<number>(
     (acc, a, i) => acc + (a !== null && a !== undefined && a === questions[i]?.correctIndex ? 1 : 0),
     0,
@@ -618,10 +628,10 @@ function SimuladoPage() {
 
   return (
     <div
-      className={`mx-auto max-w-3xl px-3 md:px-4 pt-2 pb-4 md:pt-10 md:pb-10 lg:pb-10 flex flex-col ${
+      className={`mx-auto w-full max-w-[1440px] px-3 md:px-4 pt-2 pb-4 md:pt-6 md:pb-10 lg:pb-10 flex flex-col ${
         showResult
           ? "min-h-[calc(100dvh-3.5rem)] overflow-y-auto"
-          : "h-[calc(100dvh-3.5rem)] md:h-auto overflow-hidden md:overflow-visible"
+          : "h-[calc(100dvh-3.5rem)] md:h-auto overflow-hidden md:overflow-visible lg:min-h-[calc(100dvh-3.5rem)]"
       }`}
     >
       {/* Header compacto em uma linha: voltar, título/contador, timer, placar, encerrar */}
@@ -637,17 +647,28 @@ function SimuladoPage() {
           <p className="text-[10px] uppercase tracking-widest text-primary-glow font-semibold truncate">
             Simulado{modeLabel ? ` — ${modeLabel}` : ""}
           </p>
-          <h1 className="text-sm font-display font-bold truncate">
+          <h1 className="text-sm font-display font-bold truncate lg:hidden">
             Questão {Math.min(index + 1, questions.length)}{" "}
             <span className="text-muted-foreground font-normal">/ {questions.length}</span>
           </h1>
         </div>
-        <div className="px-2 py-1 rounded-lg border border-border bg-secondary/50 text-xs font-semibold tabular-nums shrink-0">
+        <div className="px-2 py-1 rounded-lg border border-border bg-secondary/50 text-xs font-semibold tabular-nums shrink-0 lg:hidden">
           ⏱ {fmtTime(elapsed)}
         </div>
         <div className="px-2 py-1 rounded-lg border border-success/30 bg-success/10 text-xs font-bold text-success shrink-0">
           ✅ {score} · ❌ {wrongCount}
         </div>
+        {!showResult && (
+          <button
+            type="button"
+            onClick={() => setShowQuestionNav(true)}
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-secondary/50 text-muted-foreground hover:text-foreground lg:hidden"
+            aria-label="Abrir navegação das questões"
+            title="Navegar pelas questões"
+          >
+            <ListChecks className="h-4 w-4" />
+          </button>
+        )}
         {!showResult && (
           <button
             type="button"
@@ -682,155 +703,166 @@ function SimuladoPage() {
         )}
       </AnimatePresence>
 
-      {/* Progress slim */}
-      <div className="h-1 md:h-2 rounded-full bg-secondary overflow-hidden mb-2 md:mb-6 shrink-0">
-        <motion.div
-          className="h-full gradient-primary"
-          animate={{ width: `${progress}%` }}
-          transition={{ duration: 0.4 }}
-        />
-      </div>
-
-      {!showResult && (
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -30 }}
-            transition={{ duration: 0.25 }}
-            className="glass rounded-2xl md:rounded-3xl p-4 md:p-8 mt-2 flex-1 min-h-0 flex flex-col overflow-hidden"
-          >
-            {/* ÁREA DE CONTEÚDO (enunciado + imagem + alternativas): rola só se exceder */}
-            <div className="flex-1 min-h-0 overflow-y-auto pr-0.5 pb-4">
-            {/* Badges */}
-            <div className="flex flex-wrap gap-2 mb-2 md:mb-4 shrink-0">
-              <span className={`text-xs px-2.5 py-1 rounded-full border ${incMeta.className}`}>
-                {incMeta.emoji} {incMeta.label}
-              </span>
-              <span className="text-xs px-2.5 py-1 rounded-full border border-border bg-secondary/50">
-                {CATEGORY_LABELS[q.category]}
-              </span>
-              {q.trap && (
-                <span className="text-xs px-2.5 py-1 rounded-full border border-destructive/30 bg-destructive/10 text-destructive flex items-center gap-1">
-                  <AlertTriangle className="h-3 w-3" /> Pegadinha clássica
-                </span>
-              )}
+      {!showResult ? (
+        <div className="grid flex-1 min-h-0 gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(17rem,1fr)] lg:items-start">
+          <main className="flex min-w-0 min-h-0 flex-col">
+            {/* Progress slim */}
+            <div className="h-1 md:h-2 rounded-full bg-secondary overflow-hidden mb-2 md:mb-6 shrink-0">
+              <motion.div
+                className="h-full gradient-primary"
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 0.4 }}
+              />
             </div>
 
-            {/* Statement */}
-            <h2 className="text-[15px] leading-snug md:text-xl font-medium md:leading-relaxed shrink-0">
-              {q.statement}
-            </h2>
-
-            {/* Placa visual oficial */}
-            {q.image_url ? (
-              <div className="mt-3 md:mt-5 flex justify-center shrink-0">
-                <img src={q.image_url} alt="placa de advertência" className="max-w-[120px] md:max-w-[170px]" />
-              </div>
-            ) : q.placa ? (
-              <div className="mt-3 md:mt-5 flex justify-center shrink-0">
-                <Placa id={q.placa} size={170} />
-              </div>
-            ) : null}
-
-{/* Options — botões de vidro bem espaçados */}
-            <div className="mt-3 md:mt-6 space-y-2.5 md:space-y-3">
-              {q.options.map((opt, i) => {
-                const isSel = selected === i;
-                const isCorrect = i === q.correctIndex;
-                const reveal = selected !== null;
-                const state = !reveal
-                  ? "idle"
-                  : isCorrect
-                    ? "correct"
-                    : isSel
-                      ? "wrong"
-                      : "muted";
-
-                return (
-                  <button
-                    key={i}
-                    onClick={() => pick(i)}
-                    disabled={selected !== null}
-                    className={`w-full text-left p-3 md:p-4 min-h-[48px] rounded-2xl border transition-all duration-200 flex items-start gap-2.5 md:gap-3 ${
-                      state === "correct"
-                        ? "border-success/50 bg-success/10"
-                        : state === "wrong"
-                          ? "border-destructive/50 bg-destructive/10"
-                          : state === "muted"
-                            ? "border-white/8 bg-white/4 opacity-60"
-                            : "border-white/12 bg-white/6 hover:border-primary/40 hover:bg-white/10 hover:shadow-[0_8px_30px_rgba(0,0,0,0.25)]"
-                    } ${selected === null ? "cursor-pointer" : "cursor-default"}`}
-                  >
-                    <div
-                      className={`shrink-0 w-7 h-7 md:w-8 md:h-8 rounded-lg flex items-center justify-center font-semibold text-sm border ${
-                        state === "correct"
-                          ? "bg-success text-success-foreground border-success"
-                          : state === "wrong"
-                            ? "bg-destructive text-destructive-foreground border-destructive"
-                            : "bg-white/8 border-white/15"
-                      }`}
-                    >
-                      {state === "correct" ? (
-                        <Check className="h-4 w-4" />
-                      ) : state === "wrong" ? (
-                        <X className="h-4 w-4" />
-                      ) : (
-                        LETTERS[i]
-                      )}
-                    </div>
-                    <span className="text-[13px] md:text-base pt-0.5 md:pt-1 flex items-center gap-2.5">
-                      {q.option_images?.[i] && <OptionImage src={q.option_images[i]!} />}
-                      {opt}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Feedback detalhado */}
-            <AnimatePresence>
-              {selected !== null && <DetailedFeedback q={q} selected={selected} />}
-            </AnimatePresence>
-            </div>
-
-            {/* Ações da questão — logo abaixo da opção D */}
-            <div className="flex flex-col gap-2 mt-3 pt-2 border-t border-border shrink-0">
-              <button
-                type="button"
-                onClick={next}
-                disabled={selected === null}
-                className="w-full py-2.5 gradient-primary text-primary-foreground font-bold rounded-xl text-sm flex items-center justify-center gap-2 shadow-glow transition disabled:opacity-40"
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -30 }}
+                transition={{ duration: 0.25 }}
+                className="glass rounded-2xl md:rounded-3xl p-4 md:p-8 mt-2 flex-1 min-h-0 flex flex-col overflow-hidden"
               >
-                {index + 1 >= questions.length ? "Ver resultado" : "Próxima ➔"}
-              </button>
-              <div className="flex items-center justify-between gap-2">
-                <button
-                  type="button"
-                  onClick={goPrev}
-                  disabled={index <= 0}
-                  className="px-3 py-2 bg-secondary/50 hover:bg-accent/30 text-muted-foreground hover:text-foreground rounded-lg text-xs font-medium border border-border disabled:opacity-40 transition"
-                >
-                  ⬅️ Questão Anterior
-                </button>
-                <button
-                  type="button"
-                  onClick={handleFinishEarly}
-                  className="px-3 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg text-xs font-medium transition"
-                >
-                  ⏹️ Finalizar
-                </button>
-              </div>
-              <p className="text-center text-[10px] text-muted-foreground/60">cód. <span className="select-all font-mono">{q.id}</span></p>
-            </div>
-          </motion.div>
-        </AnimatePresence>
-      )}
+                {/* ÁREA DE CONTEÚDO (enunciado + imagem + alternativas): rola só se exceder */}
+                <div className="flex-1 min-h-0 overflow-y-auto pr-0.5 pb-4">
+                  {/* Badges */}
+                  <div className="flex flex-wrap gap-2 mb-2 md:mb-4 shrink-0">
+                    <span className={`text-xs px-2.5 py-1 rounded-full border ${incMeta.className}`}>
+                      {incMeta.emoji} {incMeta.label}
+                    </span>
+                    <span className="text-xs px-2.5 py-1 rounded-full border border-border bg-secondary/50">
+                      {CATEGORY_LABELS[q.category]}
+                    </span>
+                    {q.trap && (
+                      <span className="text-xs px-2.5 py-1 rounded-full border border-destructive/30 bg-destructive/10 text-destructive flex items-center gap-1">
+                        <AlertTriangle className="h-3 w-3" /> Pegadinha clássica
+                      </span>
+                    )}
+                  </div>
 
-      {/* Tela de Resultado + Revisão */}
-      <AnimatePresence>
-        {showResult && (
+                  {/* Statement */}
+                  <h2 className="text-[15px] leading-snug md:text-xl font-medium md:leading-relaxed shrink-0">
+                    {q.statement}
+                  </h2>
+
+                  {/* Placa visual oficial */}
+                  {q.image_url ? (
+                    <div className="mt-3 md:mt-5 flex justify-center shrink-0">
+                      <img src={q.image_url} alt="placa de advertência" className="max-w-[120px] md:max-w-[170px]" />
+                    </div>
+                  ) : q.placa ? (
+                    <div className="mt-3 md:mt-5 flex justify-center shrink-0">
+                      <Placa id={q.placa} size={170} />
+                    </div>
+                  ) : null}
+
+                  {/* Options — botões de vidro bem espaçados */}
+                  <div className="mt-3 md:mt-6 space-y-2.5 md:space-y-3">
+                    {q.options.map((opt, i) => {
+                      const isSel = selected === i;
+                      const isCorrect = i === q.correctIndex;
+                      const reveal = selected !== null;
+                      const state = !reveal
+                        ? "idle"
+                        : isCorrect
+                          ? "correct"
+                          : isSel
+                            ? "wrong"
+                            : "muted";
+
+                      return (
+                        <button
+                          key={i}
+                          onClick={() => pick(i)}
+                          disabled={selected !== null}
+                          className={`w-full text-left p-3 md:p-4 min-h-[48px] rounded-2xl border transition-all duration-200 flex items-start gap-2.5 md:gap-3 ${
+                            state === "correct"
+                              ? "border-success/50 bg-success/10"
+                              : state === "wrong"
+                                ? "border-destructive/50 bg-destructive/10"
+                                : state === "muted"
+                                  ? "border-white/8 bg-white/4 opacity-60"
+                                  : "border-white/12 bg-white/6 hover:border-primary/40 hover:bg-white/10 hover:shadow-[0_8px_30px_rgba(0,0,0,0.25)]"
+                          } ${selected === null ? "cursor-pointer" : "cursor-default"}`}
+                        >
+                          <div
+                            className={`shrink-0 w-7 h-7 md:w-8 md:h-8 rounded-lg flex items-center justify-center font-semibold text-sm border ${
+                              state === "correct"
+                                ? "bg-success text-success-foreground border-success"
+                                : state === "wrong"
+                                  ? "bg-destructive text-destructive-foreground border-destructive"
+                                  : "bg-white/8 border-white/15"
+                            }`}
+                          >
+                            {state === "correct" ? (
+                              <Check className="h-4 w-4" />
+                            ) : state === "wrong" ? (
+                              <X className="h-4 w-4" />
+                            ) : (
+                              LETTERS[i]
+                            )}
+                          </div>
+                          <span className="text-[13px] md:text-base pt-0.5 md:pt-1 flex items-center gap-2.5">
+                            {q.option_images?.[i] && <OptionImage src={q.option_images[i]!} />}
+                            {opt}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Feedback detalhado */}
+                  <AnimatePresence>
+                    {selected !== null && <DetailedFeedback q={q} selected={selected} />}
+                  </AnimatePresence>
+                </div>
+
+                {/* Ações da questão — logo abaixo da opção D */}
+                <div className="flex flex-col gap-2 mt-3 pt-2 border-t border-border shrink-0">
+                  <button
+                    type="button"
+                    onClick={next}
+                    disabled={selected === null}
+                    className="w-full py-2.5 gradient-primary text-primary-foreground font-bold rounded-xl text-sm flex items-center justify-center gap-2 shadow-glow transition disabled:opacity-40"
+                  >
+                    {index + 1 >= questions.length ? "Ver resultado" : "Próxima ➔"}
+                  </button>
+                  <div className="flex items-center justify-between gap-2">
+                    <button
+                      type="button"
+                      onClick={goPrev}
+                      disabled={index <= 0}
+                      className="px-3 py-2 bg-secondary/50 hover:bg-accent/30 text-muted-foreground hover:text-foreground rounded-lg text-xs font-medium border border-border disabled:opacity-40 transition"
+                    >
+                      ⬅️ Questão Anterior
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleFinishEarly}
+                      className="px-3 py-2 bg-destructive/10 hover:bg-destructive/20 text-destructive border border-destructive/30 rounded-lg text-xs font-medium transition"
+                    >
+                      ⏹️ Finalizar
+                    </button>
+                  </div>
+                  <p className="text-center text-[10px] text-muted-foreground/60">cód. <span className="select-all font-mono">{q.id}</span></p>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </main>
+
+          <aside className="hidden min-w-0 lg:sticky lg:top-20 lg:block">
+            <QuestionNavigation
+              questions={questions}
+              answers={answers}
+              currentIndex={index}
+              elapsed={elapsed}
+              onNavigate={goToQuestion}
+            />
+          </aside>
+        </div>
+      ) : (
+        <AnimatePresence>
           <ResultScreen
             questions={questions}
             answers={answers}
@@ -838,8 +870,26 @@ function SimuladoPage() {
             concluidos={concluidos}
             onRestart={restart}
           />
-        )}
-      </AnimatePresence>
+        </AnimatePresence>
+      )}
+      <Dialog open={showQuestionNav} onOpenChange={setShowQuestionNav}>
+        <DialogContent className="glass-strong w-[calc(100vw-2rem)] max-h-[85dvh] overflow-y-auto sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Navegação das questões</DialogTitle>
+            <DialogDescription>Escolha uma questão para ir diretamente a ela.</DialogDescription>
+          </DialogHeader>
+          <QuestionNavigation
+            questions={questions}
+            answers={answers}
+            currentIndex={index}
+            elapsed={elapsed}
+            onNavigate={(target) => {
+              goToQuestion(target);
+              setShowQuestionNav(false);
+            }}
+          />
+        </DialogContent>
+      </Dialog>
       <SwitchSimuladoDialog
         open={switchOpen}
         pendingLabel={simModeLabel(pendingMode)}
@@ -891,6 +941,91 @@ function SwitchSimuladoDialog({
         </div>
       </DialogContent>
     </Dialog>
+  );
+}
+
+function QuestionNavigation({
+  questions,
+  answers,
+  currentIndex,
+  elapsed,
+  onNavigate,
+}: {
+  questions: Question[];
+  answers: (number | null)[];
+  currentIndex: number;
+  elapsed: number;
+  onNavigate: (target: number) => void;
+}) {
+  return (
+    <section className="glass rounded-2xl p-4">
+      <div className="grid grid-cols-2 gap-3">
+        <div className="rounded-xl border border-border bg-secondary/40 p-3">
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Tempo</p>
+          <p className="mt-1 text-lg font-bold tabular-nums">{fmtTime(elapsed)}</p>
+        </div>
+        <div className="rounded-xl border border-border bg-secondary/40 p-3">
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Questão</p>
+          <p className="mt-1 text-lg font-bold tabular-nums">
+            {currentIndex + 1} <span className="text-sm font-medium text-muted-foreground">/ {questions.length}</span>
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-4">
+        <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Navegação</p>
+        <div className="grid grid-cols-6 gap-2">
+          {questions.map((question, questionIndex) => {
+            const isCurrent = questionIndex === currentIndex;
+            const answer = answers[questionIndex];
+            const isAnswered = answer !== null && answer !== undefined;
+            const isCorrect = isAnswered && answer === question.correctIndex;
+            const status = isCurrent
+              ? "Atual"
+              : !isAnswered
+                ? "Falta"
+                : isCorrect
+                  ? "Acertou"
+                  : "Errou";
+            const statusClass = isCurrent
+              ? "border-primary bg-primary/15 text-primary"
+              : !isAnswered
+                ? "border-border bg-secondary/50 text-muted-foreground hover:bg-accent"
+                : isCorrect
+                  ? "border-success/50 bg-success/10 text-success"
+                  : "border-destructive/50 bg-destructive/10 text-destructive";
+
+            return (
+              <button
+                key={question.id}
+                type="button"
+                onClick={() => onNavigate(questionIndex)}
+                aria-label={`Questão ${questionIndex + 1}: ${status}`}
+                aria-current={isCurrent ? "step" : undefined}
+                className={`aspect-square min-h-9 rounded-lg border text-xs font-bold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring ${statusClass}`}
+              >
+                {questionIndex + 1}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="mt-4 grid grid-cols-2 gap-x-3 gap-y-2 border-t border-border pt-3 text-xs">
+        <span className="flex items-center gap-2 text-muted-foreground">
+          <span className="h-2.5 w-2.5 rounded-full bg-success" /> Acertou
+        </span>
+        <span className="flex items-center gap-2 text-muted-foreground">
+          <span className="h-2.5 w-2.5 rounded-full bg-destructive" /> Errou
+        </span>
+        <span className="flex items-center gap-2 text-muted-foreground">
+          <span className="h-2.5 w-2.5 rounded-full bg-primary" /> Atual
+        </span>
+        <span className="flex items-center gap-2 text-muted-foreground">
+          <span className="h-2.5 w-2.5 rounded-full bg-muted-foreground/50" /> Falta
+        </span>
+      </div>
+    </section>
   );
 }
 

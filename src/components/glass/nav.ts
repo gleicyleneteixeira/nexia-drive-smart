@@ -167,7 +167,7 @@ export function contaSection(supportHref: string | null): NavSection {
     label: "Conta",
     items: [
       { id: "suporte", label: "Suporte", icon: MessageCircle, action: { kind: "external", href: supportHref ?? "#" }, keywords: ["whatsapp", "ajuda", "falar"] },
-      { id: "tema", label: "Alternar tema", icon: Palette, action: { kind: "theme" }, keywords: ["cor", "rosa", "azul", "escuro", "claro"] },
+      { id: "tema", label: "Alternar tema", icon: Palette, action: { kind: "theme" }, keywords: ["cor", "tema", "escuro", "claro"] },
       { id: "sair", label: "Sair", icon: LogOut, action: { kind: "signout" }, keywords: ["logout", "encerrar"] },
     ],
   };

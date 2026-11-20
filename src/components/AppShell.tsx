@@ -3,8 +3,21 @@ import { Link, Outlet, useLocation, useNavigate, useRouterState } from "@tanstac
 import { RequireAuth } from "./RequireAuth";
 import { RatingPrompt, triggerRatingPrompt } from "./RatingPrompt";
 import {
-  Flame, Star, Calendar, Upload, Video, BarChart3, Users, ShoppingBag,
-  LogOut, Palette, RefreshCw, ListChecks, Settings, Brain,
+  Flame,
+  Star,
+  Calendar,
+  Upload,
+  Video,
+  BarChart3,
+  Users,
+  ShoppingBag,
+  LogOut,
+  RefreshCw,
+  ListChecks,
+  Settings,
+  Brain,
+  Moon,
+  Sun,
 } from "lucide-react";
 import { CronogramaModal } from "./CronogramaModal";
 import { DailyCheckinBanner } from "./DailyCheckinBanner";
@@ -488,8 +501,17 @@ export function AppShell() {
               )
             }
             right={
-              user ? (
-                <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={toggleTheme}
+                  className="glass-pill flex h-10 w-10 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
+                  aria-label={theme === "dark" ? "Ativar modo claro" : "Ativar modo escuro"}
+                  title={theme === "dark" ? "Ativar modo claro" : "Ativar modo escuro"}
+                >
+                  {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                </button>
+                {user && (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <button
@@ -538,8 +560,8 @@ export function AppShell() {
                         onClick={toggleTheme}
                         className="flex items-center gap-2 cursor-pointer rounded-xl"
                       >
-                        <Palette className="h-4 w-4" />
-                        Tema {theme === "rosa" ? "Azul" : "Rosa"}
+                        {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                        {theme === "dark" ? "Ativar modo claro" : "Ativar modo escuro"}
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={() => void signOut()}
@@ -550,8 +572,8 @@ export function AppShell() {
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
-                </div>
-              ) : null
+                )}
+              </div>
             }
           />
         )}

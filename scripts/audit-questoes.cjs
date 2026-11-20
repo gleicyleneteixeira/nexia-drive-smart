@@ -1,5 +1,5 @@
 // Auditoria automática do banco de questões (QUESTIONS em src/data/questions.ts).
-// Uso: node scripts/audit-questoes.cjs
+// Uso: node scripts/audit-questoes.cjs [caminho-do-relatorio]
 // Gera: audit-questoes-relatorio.txt (listas completas por tipo de problema).
 const fs = require("fs");
 const path = require("path");
@@ -148,8 +148,11 @@ A.resumo.push("Obs.: o app embaralha alternativas em runtime (shuffleOptions) e 
 
 // ---------- F. duplicatas ----------
 const byStmt = new Map();
-for (const q of ALL) { const n = norm(q.statement); if (!byStmt.has(n)) byStmt.set(n, []); byStmt.get(n).push(q.id); }
-for (const [n, ids] of byStmt) if (ids.length > 1) A.duplicadas.push(`ENUNCIADO IDENTICO: ${ids.join(" + ")}`);
+for (const q of ALL) { const n = norm(q.statement); if (!byStmt.has(n)) byStmt.set(n, []); byStmt.get(n).push(q); }
+for (const [n, questions] of byStmt) {
+  const protectedByGroup = questions.length > 1 && questions[0].group && questions.every((q) => q.group === questions[0].group);
+  if (questions.length > 1 && !protectedByGroup) A.duplicadas.push(`ENUNCIADO IDENTICO: ${questions.map((q) => q.id).join(" + ")}`);
+}
 const pares = [];
 for (let a = 0; a < ALL.length; a++) {
   const ga = trigrams(ALL[a].statement);
@@ -217,6 +220,9 @@ for (const [titulo, lista] of secoes) {
   out += `\r\n===== ${titulo}: ${lista.length} =====\r\n`;
   out += lista.sort().join("\r\n") + "\r\n";
 }
-fs.writeFileSync(path.join(__dirname, "..", "audit-questoes-relatorio.txt"), out, "utf8");
+const reportPath = process.argv[2]
+  ? path.resolve(process.argv[2])
+  : path.join(__dirname, "..", "audit-questoes-relatorio.txt");
+fs.writeFileSync(reportPath, out, "utf8");
 for (const [titulo, lista] of secoes) console.log(`${titulo}: ${lista.length}`);
-console.log("Relatorio completo em audit-questoes-relatorio.txt");
+console.log(`Relatorio completo em ${reportPath}`);
