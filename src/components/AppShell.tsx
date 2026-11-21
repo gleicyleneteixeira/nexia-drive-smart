@@ -520,7 +520,8 @@ export function AppShell() {
       : pathname === "/biblioteca" ||
           pathname.startsWith("/biblioteca/") ||
           pathname === "/livro" ||
-          pathname === "/placas"
+          pathname === "/placas" ||
+          pathname === "/infracoes"
         ? "materiais"
         : undefined;
 
@@ -610,42 +611,46 @@ export function AppShell() {
             : "Início"
       : pathname === "/biblioteca"
         ? "Galerias e biblioteca"
-        : pathname === "/simulado"
-          ? "Simulados"
-          : pathname === "/conquistas"
-            ? "Conquistas"
-            : pathname === "/admin"
-              ? "Admin"
-              : pathname === "/placas"
-                ? placasEmTreino
-                  ? "Treino de placas"
-                  : "Guia de placas"
-                : pathname === "/turbo"
-                  ? "Revisão Turbo"
-                  : pathname === "/mais-caem"
-                    ? "Questões que mais caem"
-                    : pathname === "/livro"
-                      ? "Resumos narrados"
-                      : pathname === "/psicotecnico"
-                        ? "Psicotécnico"
-                        : "Nexia Drive";
+        : pathname === "/infracoes"
+          ? "Infrações do CTB"
+          : pathname === "/simulado"
+            ? "Simulados"
+            : pathname === "/conquistas"
+              ? "Conquistas"
+              : pathname === "/admin"
+                ? "Admin"
+                : pathname === "/placas"
+                  ? placasEmTreino
+                    ? "Treino de placas"
+                    : "Guia de placas"
+                  : pathname === "/turbo"
+                    ? "Revisão Turbo"
+                    : pathname === "/mais-caem"
+                      ? "Questões que mais caem"
+                      : pathname === "/livro"
+                        ? "Resumos narrados"
+                        : pathname === "/psicotecnico"
+                          ? "Psicotécnico"
+                          : "Nexia Drive";
 
   const pageEyebrow =
     pathname === "/app"
       ? "Área do aluno"
       : pathname === "/biblioteca" || pathname === "/livro"
         ? "Aulas e materiais"
-        : pathname === "/placas"
-          ? placasEmTreino
-            ? "Simulados"
-            : "Aulas e materiais"
-          : pathname === "/simulado" ||
-              pathname === "/psicotecnico" ||
-              pathname === "/conquistas" ||
-              pathname === "/turbo" ||
-              pathname === "/mais-caem"
-            ? "Simulados"
-            : "Nexia Drive";
+        : pathname === "/infracoes"
+          ? "Aulas e materiais"
+          : pathname === "/placas"
+            ? placasEmTreino
+              ? "Simulados"
+              : "Aulas e materiais"
+            : pathname === "/simulado" ||
+                pathname === "/psicotecnico" ||
+                pathname === "/conquistas" ||
+                pathname === "/turbo" ||
+                pathname === "/mais-caem"
+              ? "Simulados"
+              : "Nexia Drive";
 
   const isHub = activeModule === "hub";
   const showChrome = !isPublicPage && !!user;

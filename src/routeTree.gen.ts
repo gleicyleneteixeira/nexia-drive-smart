@@ -17,6 +17,7 @@ import { Route as BibliotecaRouteImport } from './routes/biblioteca'
 import { Route as CadastroRouteImport } from './routes/cadastro'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ConquistasRouteImport } from './routes/conquistas'
+import { Route as InfracoesRouteImport } from './routes/infracoes'
 import { Route as LivroRouteImport } from './routes/livro'
 import { Route as MaisCaemRouteImport } from './routes/mais-caem'
 import { Route as PlacasRouteImport } from './routes/placas'
@@ -70,6 +71,11 @@ const CheckoutRoute = CheckoutRouteImport.update({
 const ConquistasRoute = ConquistasRouteImport.update({
   id: '/conquistas',
   path: '/conquistas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InfracoesRoute = InfracoesRouteImport.update({
+  id: '/infracoes',
+  path: '/infracoes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LivroRoute = LivroRouteImport.update({
@@ -152,6 +158,7 @@ export interface FileRoutesByFullPath {
   '/cadastro': typeof CadastroRoute
   '/checkout': typeof CheckoutRoute
   '/conquistas': typeof ConquistasRoute
+  '/infracoes': typeof InfracoesRoute
   '/livro': typeof LivroRoute
   '/mais-caem': typeof MaisCaemRoute
   '/placas': typeof PlacasRoute
@@ -176,6 +183,7 @@ export interface FileRoutesByTo {
   '/cadastro': typeof CadastroRoute
   '/checkout': typeof CheckoutRoute
   '/conquistas': typeof ConquistasRoute
+  '/infracoes': typeof InfracoesRoute
   '/livro': typeof LivroRoute
   '/mais-caem': typeof MaisCaemRoute
   '/placas': typeof PlacasRoute
@@ -201,6 +209,7 @@ export interface FileRoutesById {
   '/cadastro': typeof CadastroRoute
   '/checkout': typeof CheckoutRoute
   '/conquistas': typeof ConquistasRoute
+  '/infracoes': typeof InfracoesRoute
   '/livro': typeof LivroRoute
   '/mais-caem': typeof MaisCaemRoute
   '/placas': typeof PlacasRoute
@@ -227,6 +236,7 @@ export interface FileRouteTypes {
     | '/cadastro'
     | '/checkout'
     | '/conquistas'
+    | '/infracoes'
     | '/livro'
     | '/mais-caem'
     | '/placas'
@@ -251,6 +261,7 @@ export interface FileRouteTypes {
     | '/cadastro'
     | '/checkout'
     | '/conquistas'
+    | '/infracoes'
     | '/livro'
     | '/mais-caem'
     | '/placas'
@@ -275,6 +286,7 @@ export interface FileRouteTypes {
     | '/cadastro'
     | '/checkout'
     | '/conquistas'
+    | '/infracoes'
     | '/livro'
     | '/mais-caem'
     | '/placas'
@@ -300,6 +312,7 @@ export interface RootRouteChildren {
   CadastroRoute: typeof CadastroRoute
   CheckoutRoute: typeof CheckoutRoute
   ConquistasRoute: typeof ConquistasRoute
+  InfracoesRoute: typeof InfracoesRoute
   LivroRoute: typeof LivroRoute
   MaisCaemRoute: typeof MaisCaemRoute
   PlacasRoute: typeof PlacasRoute
@@ -370,6 +383,13 @@ declare module '@tanstack/react-router' {
       path: '/conquistas'
       fullPath: '/conquistas'
       preLoaderRoute: typeof ConquistasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/infracoes': {
+      id: '/infracoes'
+      path: '/infracoes'
+      fullPath: '/infracoes'
+      preLoaderRoute: typeof InfracoesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/livro': {
@@ -506,6 +526,7 @@ const rootRouteChildren: RootRouteChildren = {
   CadastroRoute: CadastroRoute,
   CheckoutRoute: CheckoutRoute,
   ConquistasRoute: ConquistasRoute,
+  InfracoesRoute: InfracoesRoute,
   LivroRoute: LivroRoute,
   MaisCaemRoute: MaisCaemRoute,
   PlacasRoute: PlacasRoute,
