@@ -9,7 +9,6 @@ import {
   getQuestionBank,
   eixoDeCategoria,
   OFFICIAL_EXAM_PASS_SCORE,
-  INCIDENCE_META,
   CATEGORY_LABELS,
   type Question,
   type Category,
@@ -30,7 +29,6 @@ import {
   Brain,
   Sparkles,
   ListChecks,
-  Signpost,
 } from "lucide-react";
 import { Placa } from "@/components/Placa";
 import { OptionImage } from "@/components/OptionImage";
@@ -620,7 +618,7 @@ function SimuladoPage() {
     contarConclusao();
     setShowResult(true);
   };
-  const incMeta = INCIDENCE_META[q.incidence];
+
   const progress =
     ((Math.min(index, questions.length) + (selected !== null ? 1 : 0)) /
       questions.length) *
@@ -630,8 +628,8 @@ function SimuladoPage() {
     <div
       className={`mx-auto w-full max-w-[1440px] px-3 md:px-4 pt-2 pb-4 md:pt-6 md:pb-10 lg:pb-10 flex flex-col ${
         showResult
-          ? "min-h-[calc(100dvh-3.5rem)] overflow-y-auto"
-          : "h-[calc(100dvh-3.5rem)] md:h-auto overflow-hidden md:overflow-visible lg:min-h-[calc(100dvh-3.5rem)]"
+          ? "min-h-[calc(100dvh-8.5rem)] overflow-y-auto lg:min-h-[calc(100dvh-3.5rem)]"
+          : "h-[calc(100dvh-8.5rem)] md:h-auto overflow-hidden md:overflow-visible lg:min-h-[calc(100dvh-3.5rem)]"
       }`}
     >
       {/* Header compacto em uma linha: voltar, título/contador, timer, placar, encerrar */}
@@ -726,23 +724,13 @@ function SimuladoPage() {
               >
                 {/* ÁREA DE CONTEÚDO (enunciado + imagem + alternativas): rola só se exceder */}
                 <div className="flex-1 min-h-0 overflow-y-auto pr-0.5 pb-4">
-                  {/* Badges */}
-                  <div className="flex flex-wrap gap-2 mb-2 md:mb-4 shrink-0">
-                    <span className={`text-xs px-2.5 py-1 rounded-full border ${incMeta.className}`}>
-                      {incMeta.emoji} {incMeta.label}
-                    </span>
-                    <span className="text-xs px-2.5 py-1 rounded-full border border-border bg-secondary/50">
+                  <div className="mb-3 flex shrink-0 flex-wrap gap-2 md:mb-4">
+                    <span className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
                       {CATEGORY_LABELS[q.category]}
                     </span>
-                    {q.trap && (
-                      <span className="text-xs px-2.5 py-1 rounded-full border border-destructive/30 bg-destructive/10 text-destructive flex items-center gap-1">
-                        <AlertTriangle className="h-3 w-3" /> Pegadinha clássica
-                      </span>
-                    )}
                   </div>
 
-                  {/* Statement */}
-                  <h2 className="text-[15px] leading-snug md:text-xl font-medium md:leading-relaxed shrink-0">
+                  <h2 className="shrink-0 break-words text-[15px] font-semibold leading-relaxed text-foreground md:text-xl">
                     {q.statement}
                   </h2>
 
@@ -776,6 +764,7 @@ function SimuladoPage() {
                           key={i}
                           onClick={() => pick(i)}
                           disabled={selected !== null}
+                          aria-pressed={isSel}
                           className={`w-full text-left p-3 md:p-4 min-h-[48px] rounded-2xl border transition-all duration-200 flex items-start gap-2.5 md:gap-3 ${
                             state === "correct"
                               ? "border-success/50 bg-success/10"
@@ -789,24 +778,20 @@ function SimuladoPage() {
                           <div
                             className={`shrink-0 w-7 h-7 md:w-8 md:h-8 rounded-lg flex items-center justify-center font-semibold text-sm border ${
                               state === "correct"
-                                ? "bg-success text-success-foreground border-success"
+                                ? "bg-success/15 text-success border-success/50"
                                 : state === "wrong"
-                                  ? "bg-destructive text-destructive-foreground border-destructive"
-                                  : "bg-white/8 border-white/15"
+                                  ? "bg-destructive/15 text-destructive border-destructive/50"
+                                  : "bg-white/8 border-white/15 text-foreground/90"
                             }`}
                           >
-                            {state === "correct" ? (
-                              <Check className="h-4 w-4" />
-                            ) : state === "wrong" ? (
-                              <X className="h-4 w-4" />
-                            ) : (
-                              LETTERS[i]
-                            )}
+                            {LETTERS[i]}
                           </div>
-                          <span className="text-[13px] md:text-base pt-0.5 md:pt-1 flex items-center gap-2.5">
+                          <span className="min-w-0 flex-1 break-words text-[13px] leading-relaxed md:text-base">
                             {q.option_images?.[i] && <OptionImage src={q.option_images[i]!} />}
                             {opt}
                           </span>
+                          {state === "correct" && <Check className="mt-1 h-4 w-4 shrink-0 text-success" aria-hidden="true" />}
+                          {state === "wrong" && <X className="mt-1 h-4 w-4 shrink-0 text-destructive" aria-hidden="true" />}
                         </button>
                       );
                     })}
@@ -1158,32 +1143,6 @@ function ModePicker({ onPick, onBack }: { onPick: (m: SimMode) => void; onBack?:
           <ArrowRight className="h-5 w-5 text-primary-glow mt-2 shrink-0" />
         </div>
       </button>
-
-      {/* Treino de placas: entrada dentro do simulador para o aluno que quer
-          ver todas as placas ou fazer o quiz visual (não é o simulado de
-          questões escritas — esse continua na categoria "Placas" abaixo). */}
-      <Link
-        to="/placas"
-        search={{ ver: "catalogo" }}
-        className="mt-3 block rounded-2xl border border-border bg-background/40 p-5 hover:border-primary/40 hover:bg-primary/5 transition-colors"
-      >
-        <div className="flex items-start gap-3">
-          <div className="w-11 h-11 rounded-xl bg-amber-400/15 flex items-center justify-center shrink-0">
-            <Signpost className="h-5 w-5 text-amber-500" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-[10px] uppercase tracking-widest text-amber-500 font-bold">
-              Treino de placas
-            </p>
-            <p className="font-display font-bold text-lg">Ver todas as placas</p>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Catálogo com imagem, código e significado por categoria — ou faça o quiz visual de 15
-              placas por rodada.
-            </p>
-          </div>
-          <ArrowRight className="h-5 w-5 text-muted-foreground mt-2 shrink-0" />
-        </div>
-      </Link>
 
       <div className="mt-6">
         <p className="text-xs uppercase tracking-widest text-muted-foreground font-semibold flex items-center gap-1.5 mb-3">

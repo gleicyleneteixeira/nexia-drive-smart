@@ -29,10 +29,10 @@ const EMPLOYMENT_LABELS: Record<Employment, string> = {
 const employmentToDb: Record<Employment, string> = {
   carteira_assinada: "carteira_assinada",
   autonomo: "autonomo",
-  estudante: "nao_trabalha",
-  trabalha_estuda: "carteira_assinada",
-  desempregado: "nao_trabalha",
-  outro: "nao_trabalha",
+  estudante: "estudante",
+  trabalha_estuda: "trabalha_estuda",
+  desempregado: "desempregado",
+  outro: "outro",
 };
 
 export function ProfilePrompt() {

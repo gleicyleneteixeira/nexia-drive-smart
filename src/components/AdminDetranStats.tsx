@@ -100,8 +100,9 @@ export function AdminDetranStats() {
       return;
     }
     const headers = ["uf", "nome", "teorica", "pratica"];
+    // Exporta os valores pelas provas exibidas, não pela coluna histórica invertida.
     const rows = stats.map(
-      (s) => `"${s.uf}","${s.nome}",${s.teorica},${s.pratica}`
+      (s) => `"${s.uf}","${s.nome}",${s.pratica},${s.teorica}`
     );
     const csv = [headers.join(","), ...rows].join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
@@ -140,11 +141,12 @@ export function AdminDetranStats() {
         for (const line of dataLines) {
           const cols = parseCsvLine(line).map((c) => c.trim());
           if (cols.length >= 4) {
+            // A planilha usa as provas corretas; o banco mantém os campos invertidos.
             parsedData.push({
               uf: cols[0].toUpperCase(),
               nome: cols[1],
-              teorica: parseFloat(cols[2].replace(",", ".")) || 0,
-              pratica: parseFloat(cols[3].replace(",", ".")) || 0,
+              pratica: parseFloat(cols[2].replace(",", ".")) || 0,
+              teorica: parseFloat(cols[3].replace(",", ".")) || 0,
             });
           }
         }
@@ -253,9 +255,9 @@ export function AdminDetranStats() {
                     step="0.1"
                     min="0"
                     max="100"
-                    value={item.teorica}
+                    value={item.pratica}
                     onChange={(e) =>
-                      handleChange(item.uf, "teorica", e.target.value)
+                      handleChange(item.uf, "pratica", e.target.value)
                     }
                     className="w-24 px-3 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-center text-amber-400 font-bold focus:outline-none focus:border-amber-500"
                   />{" "}
@@ -267,9 +269,9 @@ export function AdminDetranStats() {
                     step="0.1"
                     min="0"
                     max="100"
-                    value={item.pratica}
+                    value={item.teorica}
                     onChange={(e) =>
-                      handleChange(item.uf, "pratica", e.target.value)
+                      handleChange(item.uf, "teorica", e.target.value)
                     }
                     className="w-24 px-3 py-1.5 bg-background border border-border rounded-lg text-center text-primary font-bold focus:outline-none focus:border-primary"
                   />{" "}

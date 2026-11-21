@@ -16,6 +16,11 @@ import {
   Sparkles,
   Gauge,
   BookMarked,
+  ClipboardCheck,
+  User,
+  Video,
+  CreditCard,
+  Calendar,
 } from "lucide-react";
 
 /**
@@ -37,6 +42,9 @@ export type NavAction =
   | { kind: "external"; href: string }
   /** ação do app (trocar tema, sair) */
   | { kind: "theme" }
+  | { kind: "subscription" }
+  | { kind: "profile" }
+  | { kind: "schedule" }
   | { kind: "signout" };
 
 export interface NavItem {
@@ -115,12 +123,134 @@ export function navSections(modulo: ModuloAtivo): NavSection[] {
   );
 }
 
-/** Tab bar (mobile) contextualizada. No psicotécnico o rótulo vira "Treino"
- *  (curto: "Treinar agora" não cabe na pílula de 5 abas). */
+/** Navegação inferior contextualizada pelo módulo em estudo. */
 export function tabBarItems(modulo: ModuloAtivo): NavItem[] {
-  const simulos = simuladosItem(modulo);
-  const item = modulo === "psicotecnico" ? { ...simulos, label: "Treino" } : simulos;
-  return TAB_BAR_ITEMS.map((i) => (i.id === "simulado" ? item : i));
+  if (modulo === "hub") {
+    return [
+      { id: "inicio", label: "Início", icon: Home, action: { kind: "home" } },
+      {
+        id: "psicotecnico",
+        label: "Psicotécnico",
+        icon: Brain,
+        action: { kind: "module", module: "psicotecnico" },
+      },
+      {
+        id: "teorico",
+        label: "Teórico",
+        icon: BookOpen,
+        action: { kind: "module", module: "teorico" },
+      },
+      {
+        id: "pratico",
+        label: "Prático",
+        icon: Car,
+        action: { kind: "module", module: "direcao" },
+      },
+    ];
+  }
+
+  if (modulo === "psicotecnico") {
+    return [
+      { id: "inicio", label: "Início", icon: Home, action: { kind: "home" } },
+      {
+        ...simuladosItem(modulo),
+        id: "psicotecnico",
+        label: "Treino",
+      },
+      {
+        id: "aulas",
+        label: "Aulas",
+        icon: Video,
+        action: {
+          kind: "link",
+          to: "/biblioteca",
+          search: { module_type: "psicotecnico" },
+        },
+      },
+    ];
+  }
+
+  if (modulo === "teorico") {
+    return [
+      { id: "inicio", label: "Início", icon: Home, action: { kind: "home" } },
+      {
+        id: "simulado",
+        label: "Simulado",
+        icon: ClipboardCheck,
+        action: { kind: "link", to: "/simulado" },
+      },
+      {
+        id: "aulas",
+        label: "Aulas",
+        icon: Video,
+        action: {
+          kind: "link",
+          to: "/biblioteca",
+          search: { module_type: "teorico" },
+        },
+      },
+      {
+        id: "placas-catalogo",
+        label: "Placas",
+        icon: Signpost,
+        action: {
+          kind: "link",
+          to: "/placas",
+          search: { ver: "catalogo" },
+        },
+      },
+      {
+        id: "cronograma",
+        label: "Cronograma",
+        icon: Calendar,
+        action: { kind: "schedule" },
+      },
+    ];
+  }
+
+  if (modulo === "direcao") {
+    return [
+      { id: "inicio", label: "Início", icon: Home, action: { kind: "home" } },
+      {
+        id: "aulas",
+        label: "Aulas",
+        icon: Video,
+        action: {
+          kind: "link",
+          to: "/biblioteca",
+          search: { module_type: "direcao" },
+        },
+      },
+    ];
+  }
+
+  return [
+    { id: "inicio", label: "Início", icon: Home, action: { kind: "home" } },
+    {
+      id: "teorico",
+      label: "Teórico",
+      icon: BookOpen,
+      action: { kind: "module", module: "teorico" },
+    },
+    {
+      id: "psicotecnico",
+      label: "Psicotécnico",
+      icon: Brain,
+      action: { kind: "module", module: "psicotecnico" },
+    },
+    {
+      id: "simulado",
+      label: "Simulado",
+      icon: ClipboardCheck,
+      action: { kind: "link", to: "/simulado" },
+    },
+    {
+      id: "aulas",
+      label: "Aulas",
+      icon: Video,
+      action: { kind: "link", to: "/biblioteca" },
+    },
+  ];
 }
 
 /**
@@ -143,7 +273,7 @@ export const NAV_SECTIONS: NavSection[] = [
       { id: "galerias", label: "Galerias e biblioteca", icon: Library, action: { kind: "link", to: "/biblioteca" }, keywords: ["livros", "pdf", "materiais", "videos", "galeria", "apostila"] },
       { id: "livro", label: "Resumos narrados", icon: BookMarked, action: { kind: "link", to: "/livro" }, keywords: ["ler", "narra", "audio", "pdf", "resumo", "ouvir"] },
       { id: "placas-catalogo", label: "Guia de placas", icon: Signpost, action: { kind: "link", to: "/placas", search: { ver: "catalogo" } }, keywords: ["sinalizacao", "placa", "significado", "catalogo", "consultar"] },
-      { id: "pratico", label: "Direção Prática", icon: Car, action: { kind: "module", module: "direcao" }, soon: true, keywords: ["pratica", "baliza", "manobras"] },
+      { id: "pratico", label: "Direção Prática", icon: Car, action: { kind: "module", module: "direcao" }, keywords: ["pratica", "baliza", "manobras"] },
     ],
   },
   {
@@ -166,21 +296,14 @@ export function contaSection(supportHref: string | null): NavSection {
     id: "conta",
     label: "Conta",
     items: [
+      { id: "perfil", label: "Meu perfil", icon: User, action: { kind: "profile" }, keywords: ["cadastro", "dados pessoais", "uf"] },
+      { id: "assinatura", label: "Minha assinatura", icon: CreditCard, action: { kind: "subscription" }, keywords: ["plano", "acesso", "validade", "pagamento"] },
       { id: "suporte", label: "Suporte", icon: MessageCircle, action: { kind: "external", href: supportHref ?? "#" }, keywords: ["whatsapp", "ajuda", "falar"] },
       { id: "tema", label: "Alternar tema", icon: Palette, action: { kind: "theme" }, keywords: ["cor", "tema", "escuro", "claro"] },
       { id: "sair", label: "Sair", icon: LogOut, action: { kind: "signout" }, keywords: ["logout", "encerrar"] },
     ],
   };
 }
-
-/** Itens da barra inferior (mobile) — 4 destinos + "Mais". */
-export const TAB_BAR_ITEMS: NavItem[] = [
-  { id: "inicio", label: "Início", icon: Home, action: { kind: "home" } },
-  { id: "estudar", label: "Aulas", icon: BookOpen, action: { kind: "home" } }, // abre sheet
-  { id: "simulado", label: "Simulados", icon: Target, action: { kind: "link", to: "/simulado" } },
-  { id: "conquistas", label: "Conquistas", icon: Trophy, action: { kind: "link", to: "/conquistas" } },
-  { id: "mais", label: "Mais", icon: Sparkles, action: { kind: "home" } }, // abre sheet
-];
 
 /** Achata as seções em uma lista (para a paleta de comandos). */
 export function flattenSections(sections: NavSection[]): NavItem[] {

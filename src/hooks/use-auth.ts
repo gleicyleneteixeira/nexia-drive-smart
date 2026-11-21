@@ -8,6 +8,9 @@ export interface Profile {
   email: string | null;
   phone: string | null;
   cpf: string | null;
+  uf: string | null;
+  employment_status: string | null;
+  employment_other: string | null;
   created_at: string;
   status: string; // 'pendente_pagamento' | 'ativo'
   expires_at: string | null;

@@ -321,12 +321,17 @@ type CreateUserInput = {
   phone: string | null;
   employment_status: string;
   employment_other: string | null;
+  uf?: string | null;
 };
 
 export const createUserWithoutConfirmation = createServerFn({ method: "POST" })
   .inputValidator((d: CreateUserInput) => d)
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { isBrazilianUf } = await import("@/lib/brazilian-states");
+    if (data.uf != null && !isBrazilianUf(data.uf)) {
+      return { success: false, error: "Estado inválido." };
+    }
     const emailClean = data.email.trim().toLowerCase();
     // Padronização do banco: CPF e telefone sempre só dígitos, sem máscara.
     const { cleanCpf } = await import("@/lib/cpf");
@@ -347,6 +352,7 @@ export const createUserWithoutConfirmation = createServerFn({ method: "POST" })
         phone: phoneDb,
         employment_status: data.employment_status,
         employment_other: data.employment_other,
+        uf: data.uf ?? null,
         status: "pendente_pagamento",
       },
     });
@@ -371,6 +377,7 @@ export const createUserWithoutConfirmation = createServerFn({ method: "POST" })
           phone: phoneDb,
           employment_status: data.employment_status,
           employment_other: data.employment_other,
+          uf: data.uf ?? null,
           display_name: data.display_name,
           email: emailClean,
           status: "pendente_pagamento",

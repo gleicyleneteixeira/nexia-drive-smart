@@ -6,17 +6,13 @@ import { useAuth } from "@/hooks/use-auth";
 import { isProfileExpired } from "@/lib/subscription";
 import { fetchLibraryItems } from "@/lib/library";
 import { CATEGORY_LABELS, type Category } from "@/data/questions";
-import { fetchVideoTutorials, type VideoTutorial } from "@/lib/video-tutorials";
 import { GroupPopups } from "@/components/WhatsAppGroupPopup";
 import { NativePdfModal } from "@/components/NativePdfModal";
-import { RankingReprovacao } from "@/components/RankingReprovacao";
+import { RankingAprovacao } from "@/components/RankingAprovacao";
+import { RankingUsuarios } from "@/components/RankingUsuarios";
 import { ScoreProntidao } from "@/components/ScoreProntidao";
 import { HCarousel } from "@/components/HCarousel";
-import { GlassCard, GlassButton, GlassBadge } from "@/components/glass";
-import { supabase } from "@/integrations/supabase/client";
-import type { Database } from "@/integrations/supabase/types";
-import { buildPlanoFromConfig } from "@/components/CronogramaModal";
-import { gerarCronograma, primeiraPendente } from "@/lib/schedule";
+import { GlassCard } from "@/components/glass";
 import { Loader2 } from "lucide-react";
 import {
   Sparkles,
@@ -28,7 +24,6 @@ import {
   BookOpen,
   ChevronRight,
   ShieldCheck,
-  Video,
   ListChecks,
   FileText,
   ExternalLink,
@@ -119,7 +114,7 @@ function DashboardController() {
   const [activeModule, setActiveModule] = useState<"hub" | "teorico" | "psicotecnico" | "direcao">(() => {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("nexia:active_module");
-      return (stored as "teorico" | "psicotecnico" | "direcao") || "hub";
+      if (stored === "teorico" || stored === "psicotecnico" || stored === "direcao") return stored;
     }
     return "hub";
   });
@@ -161,450 +156,82 @@ function DashboardController() {
 // ==========================================
 // 1. HUB SELECTION COMPONENT
 // ==========================================
-type EstudoConfigRow = Database["public"]["Tables"]["estudo_config"]["Row"];
 
-type ContinueState =
-  | { kind: "continue"; capitulo: string; dia: number; lidas: number; total: number; pct: number }
-  | { kind: "done" }
-  | null;
-
-function ModuleHub({ onSelect }: { onSelect: (mod: "teorico" | "psicotecnico" | "direcao") => void }) {
-  const { data: videos = [], isLoading: videosLoading } = useQuery({
-    queryKey: ["video-tutorials"],
-    queryFn: fetchVideoTutorials,
-  });
-
-  const { data: libraryItems = [], isLoading: libLoading } = useQuery({
-    queryKey: ["library", "hub-tutorials"],
-    queryFn: () => fetchLibraryItems(false),
-  });
-
-  const hubVideos = videos.filter((v) => v.module === "hub");
-  const tutorialItems = libraryItems.filter((i) => i.module_type === "tutorial" && !i.is_paid);
-  const [selectedVideo, setSelectedVideo] = useState<VideoTutorial | null>(null);
-  const { user } = useAuth();
-
-  // -----------------------------------------------------------------------
-  // "Continue de onde parou" — SÓ dado real (estudo_config + progresso
-  // salvo em localStorage). Sem cronograma → nada é exibido (nunca inventa).
-  // -----------------------------------------------------------------------
-  const [continuar, setContinuar] = useState<ContinueState>(null);
-
-  useEffect(() => {
-    if (!user?.id) return;
-    let cancelled = false;
-    (async () => {
-      try {
-        const { data: config } = await supabase
-          .from("estudo_config")
-          .select("*")
-          .eq("user_id", user.id)
-          .maybeSingle();
-        if (!config || cancelled) return;
-
-        const plan = buildPlanoFromConfig(config as EstudoConfigRow);
-
-        // Mesma fonte de progresso do DailyCheckinBanner
-        let lidas = 0;
-        let lastAccess: string | null = null;
-        try {
-          const raw = localStorage.getItem(`cronograma_progress_${user.id}`);
-          if (raw) {
-            const lp = JSON.parse(raw);
-            if (typeof lp.completed_pages === "number") {
-              lidas = lp.completed_pages;
-              lastAccess = lp.last_access_date ?? null;
-            }
-          }
-        } catch {
-          /* sem localStorage: segue com 0 páginas */
-        }
-
-        const d = new Date();
-        const isoHoje = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-        const c = gerarCronograma({
-          progresso: lidas,
-          selectedDays: plan.selectedDays,
-          blockPages: plan.calculatedPages,
-          examDate: plan.semData ? null : plan.dataProva,
-          leuHoje: lastAccess === isoHoje,
-        });
-        if (cancelled) return;
-
-        const pend = primeiraPendente(c.blocos);
-        if (!pend) {
-          setContinuar({ kind: "done" });
-          return;
-        }
-        const total = c.blocos.reduce((acc, b) => acc + (b.paginaFim - b.paginaInicio + 1), 0);
-        setContinuar({
-          kind: "continue",
-          capitulo: pend.capitulo,
-          dia: pend.dia,
-          lidas,
-          total,
-          pct: total > 0 ? Math.min(100, Math.max(0, Math.round((lidas / total) * 100))) : 0,
-        });
-      } catch {
-        /* silencioso: sem cronograma, sem faixa */
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [user?.id]);
+function ModuleHub({
+  onSelect,
+}: {
+  onSelect: (mod: "teorico" | "psicotecnico" | "direcao") => void;
+}) {
+  const { profile } = useAuth();
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-12 md:py-20 space-y-8 text-center relative">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[400px] pointer-events-none -z-10">
-        <div className="absolute top-[-20%] left-[20%] w-[35vw] h-[35vw] rounded-full bg-primary/20 blur-[100px]" />
-        <div className="absolute top-[10%] right-[20%] w-[30vw] h-[30vw] rounded-full bg-success/10 blur-[80px]" />
+    <div className="relative mx-auto max-w-5xl space-y-5 px-4 py-4 text-center sm:py-6 md:space-y-6 md:py-8">
+      <div className="pointer-events-none absolute left-1/2 top-0 -z-10 h-48 w-full max-w-3xl -translate-x-1/2">
+        <div className="absolute left-[20%] top-0 h-40 w-40 rounded-full bg-primary/15 blur-[80px]" />
+        <div className="absolute right-[20%] top-8 h-36 w-36 rounded-full bg-success/10 blur-[70px]" />
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: -15 }}
+      <motion.header
+        initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="space-y-4 max-w-2xl mx-auto"
+        className="space-y-2"
       >
-        <h1 className="text-3xl md:text-5xl font-display font-bold">O que você deseja estudar hoje?</h1>
-        <p className="text-muted-foreground text-sm md:text-base leading-relaxed">
-          Sua aprovação no DETRAN começa aqui. Assista aos tutoriais e selecione o módulo desejado para ver materiais exclusivos e simulados.
+        <h1 className="font-display text-2xl font-bold sm:text-3xl">
+          O que você deseja estudar?
+        </h1>
+        <p className="text-sm text-muted-foreground">
+          Escolha um módulo para começar sua preparação.
         </p>
-      </motion.div>
+      </motion.header>
 
-      {/* Faixa "Continue de onde parou" — só quando há cronograma real */}
-      {continuar && (
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="glass rounded-3xl p-4 sm:p-5 max-w-4xl mx-auto text-left flex flex-col sm:flex-row sm:items-center gap-4"
-        >
-          <div className="flex-1 min-w-0">
-            <p className="section-label">
-              {continuar.kind === "done" ? "Cronograma" : "Continue de onde parou"}
-            </p>
-            {continuar.kind === "continue" ? (
-              <>
-                <p className="text-sm font-semibold mt-1.5 truncate">
-                  {continuar.capitulo} · Dia {continuar.dia}
-                </p>
-                <div
-                  className="mt-2.5 h-2 rounded-full bg-white/10 overflow-hidden"
-                  role="progressbar"
-                  aria-valuenow={continuar.pct}
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                  aria-label="Progresso do cronograma de estudos"
-                >
-                  <div
-                    className="h-full rounded-full gradient-primary transition-[width] duration-500"
-                    style={{ width: `${continuar.pct}%` }}
-                  />
-                </div>
-                <p className="text-[11px] text-muted-foreground mt-1.5">
-                  {continuar.pct}% · {continuar.lidas} de {continuar.total} páginas lidas
-                </p>
-              </>
-            ) : (
-              <p className="text-sm font-semibold mt-1.5">
-                Todas as lições do cronograma foram concluídas 🎉
-              </p>
-            )}
-          </div>
-          {continuar.kind === "continue" && (
-            <GlassButton
-              variant="primary"
-              size="md"
-              onClick={() => onSelect("teorico")}
-              className="shrink-0"
-            >
-              Continuar
-              <ChevronRight className="h-4 w-4" />
-            </GlassButton>
-          )}
-        </motion.div>
-      )}
-
-      {/* Video Tutorials Section */}
-      {hubVideos.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="max-w-4xl mx-auto"
-        >
-          <div className="flex items-center gap-2 justify-center mb-4">
-            <Video className="h-5 w-5 text-primary" />
-            <h2 className="text-lg font-display font-bold">Como funciona o sistema</h2>
-          </div>
-          
-          {videosLoading ? (
-            <div className="flex justify-center py-8">
-              <Loader2 className="h-6 w-6 animate-spin text-primary" />
-            </div>
-          ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {hubVideos.map((video) => (
-                <motion.div
-                  key={video.id}
-                  whileHover={{ scale: 1.02 }}
-                  onClick={() => setSelectedVideo(video)}
-                  className="glass rounded-2xl overflow-hidden cursor-pointer"
-                >
-                  <div className="aspect-video relative bg-background/50">
-                    {video.thumbnail_url ? (
-                      <img 
-                        src={video.thumbnail_url} 
-                        alt={video.title}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-primary-glow/20">
-                        <Play className="h-12 w-12 text-primary/50" />
-                      </div>
-                    )}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-12 h-12 rounded-full bg-primary/90 flex items-center justify-center shadow-glow">
-                        <Play className="h-5 w-5 text-primary-foreground ml-0.5" />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-3 text-left">
-                    <h3 className="font-semibold text-sm line-clamp-1">{video.title}</h3>
-                    {video.description && (
-                      <p className="text-xs text-muted-foreground line-clamp-2 mt-1">{video.description}</p>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          )}
-        </motion.div>
-      )}
-
-      {/* Tutorial Items from Library */}
-      {tutorialItems.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="max-w-4xl mx-auto"
-        >
-          <div className="flex items-center gap-2 justify-center mb-4">
-            <BookOpen className="h-5 w-5 text-primary" />
-            <h2 className="text-lg font-display font-bold">Tutoriais</h2>
-          </div>
-          
-          {libLoading ? (
-            <div className="flex justify-center py-8">
-              <Loader2 className="h-6 w-6 animate-spin text-primary" />
-            </div>
-          ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {tutorialItems.map((item) => (
-                <motion.div
-                  key={item.id}
-                  whileHover={{ scale: 1.02 }}
-                  className="glass rounded-2xl overflow-hidden cursor-pointer"
-                >
-                  <div className="aspect-video relative bg-background/50">
-                    {item.cover_url ? (
-                      <img 
-                        src={item.cover_url} 
-                        alt={item.title}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-primary-glow/20">
-                        <BookOpen className="h-12 w-12 text-primary/50" />
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-3 text-left">
-                    <h3 className="font-semibold text-sm line-clamp-1">{item.title}</h3>
-                    {item.description && (
-                      <p className="text-xs text-muted-foreground line-clamp-2 mt-1">{item.description}</p>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          )}
-        </motion.div>
-      )}
-
-      {/* Video Player Modal */}
-      {selectedVideo && (
-        <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
-          onClick={() => setSelectedVideo(null)}
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="w-full max-w-3xl glass rounded-3xl overflow-hidden"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="p-4 flex items-center justify-between border-b border-border/30">
-              <h3 className="font-display font-bold">{selectedVideo.title}</h3>
-              <button 
-                onClick={() => setSelectedVideo(null)}
-                className="p-2 rounded-xl hover:bg-accent transition-colors"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            <div className="aspect-video">
-              <iframe
-                src={selectedVideo.url}
-                className="w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-            {selectedVideo.description && (
-              <div className="p-4 text-sm text-muted-foreground">
-                {selectedVideo.description}
-              </div>
-            )}
-          </motion.div>
-        </div>
-      )}
-
-      <div className="grid md:grid-cols-3 gap-5 max-w-4xl mx-auto pt-6 items-stretch">
-        {/* Módulo 1: Psicotécnico */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.1 }}
-          role="button"
-          tabIndex={0}
-          aria-label="Começar Psicotécnico"
+      <div className="flex flex-wrap justify-center gap-3 sm:gap-5">
+        <motion.button
+          type="button"
+          initial={{ opacity: 0, scale: 0.85 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3, delay: 0.05 }}
           onClick={() => onSelect("psicotecnico")}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              onSelect("psicotecnico");
-            }
-          }}
-          className="group h-full text-left cursor-pointer rounded-3xl outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          aria-label="Estudar Psicotécnico"
+          className="group flex h-28 w-28 flex-col items-center justify-center gap-2 rounded-full border border-pink-400/25 bg-pink-500/10 text-pink-300 shadow-lg shadow-pink-950/20 backdrop-blur-xl transition duration-200 hover:scale-105 hover:bg-pink-500/15 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring sm:h-32 sm:w-32"
         >
-          <GlassCard interactive className="h-full p-6 sm:p-7 flex flex-col justify-between gap-5">
-            <div className="space-y-4">
-              <div className="w-14 h-14 rounded-2xl bg-pink-500/10 border border-pink-500/25 flex items-center justify-center text-pink-400 group-hover:scale-110 transition-transform duration-200">
-                <Brain className="h-7 w-7" />
-              </div>
-              <div className="space-y-2">
-                <h2 className="text-xl sm:text-2xl font-bold font-display text-foreground leading-tight">
-                  Prepare-se para o <span className="gradient-text">Psicotécnico</span>
-                </h2>
-                <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
-                  Memorização, atenção, raciocínio lógico e o teste dos risquinhos (Palográfico).
-                </p>
-              </div>
-              <ul className="space-y-2 text-xs text-muted-foreground pt-1">
-                <li className="flex items-center gap-2">✓ Teste Palográfico interativo</li>
-                <li className="flex items-center gap-2">✓ Exercícios de Raciocínio Lógico e Atenção</li>
-                <li className="flex items-center gap-2">✓ Macetes gravados em vídeo explicativo</li>
-              </ul>
-            </div>
-            <div>
-              <span className="w-full py-3.5 px-5 rounded-xl font-bold gradient-primary text-primary-foreground flex items-center justify-center gap-2 shadow-glow group-hover:gap-3 transition-all duration-200 pointer-events-none">
-                Começar
-                <ChevronRight className="h-4 w-4" />
-              </span>
-            </div>
-          </GlassCard>
-        </motion.div>
+          <Brain className="h-7 w-7 transition-transform group-hover:scale-110" />
+          <span className="text-xs font-bold sm:text-sm">Psicotécnico</span>
+        </motion.button>
 
-        {/* Módulo 2: Teórico */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.15 }}
-          role="button"
-          tabIndex={0}
-          aria-label="Começar Parte Teórica"
+        <motion.button
+          type="button"
+          initial={{ opacity: 0, scale: 0.85 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
           onClick={() => onSelect("teorico")}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              onSelect("teorico");
-            }
-          }}
-          className="group h-full text-left cursor-pointer rounded-3xl outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          aria-label="Estudar Teórico"
+          className="group flex h-28 w-28 flex-col items-center justify-center gap-2 rounded-full border border-primary/25 bg-primary/10 text-primary shadow-lg shadow-primary/10 backdrop-blur-xl transition duration-200 hover:scale-105 hover:bg-primary/15 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring sm:h-32 sm:w-32"
         >
-          <GlassCard interactive className="h-full p-6 sm:p-7 flex flex-col justify-between gap-5">
-            <div className="space-y-4">
-              <div className="w-14 h-14 rounded-2xl bg-red-500/10 border border-red-500/25 flex items-center justify-center text-red-500 group-hover:scale-110 transition-transform duration-200">
-                <BookOpen className="h-7 w-7" />
-              </div>
-              <div className="space-y-2">
-                <h2 className="text-xl sm:text-2xl font-bold font-display text-foreground leading-tight">
-                  Prepare-se para a <span className="gradient-text">Parte Teórica</span>
-                </h2>
-                <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
-                  Legislação, Direção Defensiva, Primeiros Socorros, Mecânica Básica e Meio Ambiente.
-                </p>
-              </div>
-              <ul className="space-y-2 text-xs text-muted-foreground pt-1">
-                <li className="flex items-center gap-2">✓ Simulados inteligentes com cronômetro</li>
-                <li className="flex items-center gap-2">✓ Game interativo para memorizar Placas</li>
-                <li className="flex items-center gap-2">✓ Resumos e livrinhos virtuais em PDF</li>
-              </ul>
-            </div>
-            <div>
-              <span className="w-full py-3.5 px-5 rounded-xl font-bold gradient-primary text-primary-foreground flex items-center justify-center gap-2 shadow-glow group-hover:gap-3 transition-all duration-200 pointer-events-none">
-                Começar
-                <ChevronRight className="h-4 w-4" />
-              </span>
-            </div>
-          </GlassCard>
-        </motion.div>
+          <BookOpen className="h-7 w-7 transition-transform group-hover:scale-110" />
+          <span className="text-xs font-bold sm:text-sm">Teórico</span>
+        </motion.button>
 
-        {/* Módulo 3: Direção Prática — indisponível (visual desativado, sem clique) */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.2 }}
-          aria-disabled="true"
-          title="Módulo prático em breve"
-          className="group relative h-full text-left rounded-3xl opacity-70 cursor-not-allowed"
+        <motion.button
+          type="button"
+          initial={{ opacity: 0, scale: 0.85 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3, delay: 0.15 }}
+          onClick={() => onSelect("direcao")}
+          aria-label="Estudar Direção Prática"
+          className="group flex h-28 w-28 flex-col items-center justify-center gap-1 rounded-full border border-white/10 bg-white/5 text-muted-foreground backdrop-blur-xl transition duration-200 hover:scale-105 hover:border-primary/40 hover:text-foreground sm:h-32 sm:w-32"
         >
-          <GlassBadge tone="warning" className="absolute -top-3 left-1/2 -translate-x-1/2 shadow-lg">
-            Em breve
-          </GlassBadge>
-          <GlassCard className="h-full p-6 sm:p-7 flex flex-col justify-between gap-5">
-            <div className="space-y-4">
-              <div className="w-14 h-14 rounded-2xl bg-warning/10 border border-warning/25 flex items-center justify-center text-warning">
-                <TrafficCone className="h-7 w-7" />
-              </div>
-              <div className="space-y-2">
-                <h2 className="text-xl sm:text-2xl font-bold font-display text-foreground leading-tight">
-                  <span className="gradient-text">Dicas</span> para passar na Direção Prática
-                </h2>
-                <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
-                  Dicas para arrasar no exame prático: manobras, baliza e o dia da avaliação.
-                </p>
-              </div>
-              <ul className="space-y-2 text-xs text-muted-foreground pt-1">
-                <li className="flex items-center gap-2">✓ O que o examinador avalia</li>
-                <li className="flex items-center gap-2">✓ Guia de manobras e baliza</li>
-                <li className="flex items-center gap-2">✓ Dicas para não ser reprovado</li>
-              </ul>
-            </div>
-            <div>
-              <span className="w-full py-3.5 px-5 rounded-xl font-bold bg-white/8 border border-white/10 text-muted-foreground flex items-center justify-center gap-2 pointer-events-none">
-                Em breve
-              </span>
-            </div>
-          </GlassCard>
-        </motion.div>
+          <TrafficCone className="h-7 w-7 transition-transform group-hover:scale-110" />
+          <span className="text-xs font-bold sm:text-sm">Direção Prática</span>
+          <span className="text-[9px] font-semibold uppercase tracking-wide text-primary-glow">Acessar</span>
+        </motion.button>
       </div>
 
-      {/* Ranking de Reprovação */}
-      <div className="max-w-4xl mx-auto pt-4">
-        <RankingReprovacao />
+      <div className="mx-auto max-w-4xl">
+        <RankingAprovacao userUF={profile?.uf} />
+      </div>
+
+      <div className="mx-auto max-w-4xl">
+        <RankingUsuarios />
       </div>
     </div>
   );
@@ -613,7 +240,7 @@ function ModuleHub({ onSelect }: { onSelect: (mod: "teorico" | "psicotecnico" | 
 // ==========================================
 // 2. TEORICO DASHBOARD — página principal do Teórico (é a tela de seleção):
 // topo = banner do cronograma (DailyCheckinBanner global do AppShell),
-// centro = escolha do tipo de simulado, abaixo = biblioteca.
+// centro = escolha do tipo de simulado.
 // ==========================================
 const TEORICO_CATS: { id: Category; icon: string }[] = [
   { id: "legislacao", icon: "📘" },
@@ -628,16 +255,6 @@ const TEORICO_CATS: { id: Category; icon: string }[] = [
 
 function TeoricoDashboard() {
   const { user } = useAuth();
-  const { data: libraryItems = [], isLoading: libLoading } = useQuery({
-    queryKey: ["library", "teorico-dash"],
-    queryFn: () => fetchLibraryItems(false),
-  });
-  const teoricoItems = libraryItems.filter((i) => i.module_type === "teorico" && !i.is_paid);
-  const [pdfModal, setPdfModal] = useState<{ url: string; title: string } | null>(null);
-
-  const scrollToSection = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
 
   return (
     <motion.div
@@ -646,26 +263,8 @@ function TeoricoDashboard() {
       exit={{ opacity: 0 }}
       className="mx-auto max-w-6xl px-4 py-6 md:py-8 space-y-6"
     >
-      {/* Pílulas de navegação rápida */}
-      <div className="flex justify-center gap-2">
-        <button
-          type="button"
-          onClick={() => scrollToSection("secao-simulados")}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-primary/40 bg-primary/10 text-xs font-bold text-primary-glow hover:bg-primary/20 transition-colors"
-        >
-          📝 Simulados
-        </button>
-        <button
-          type="button"
-          onClick={() => scrollToSection("secao-biblioteca")}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-border bg-secondary/50 text-xs font-semibold text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors"
-        >
-          📚 Aulas e materiais
-        </button>
-      </div>
-
-      {/* Score de Prontidão: barra de progresso + selo (bloco de 5 por dia, só simulado geral) */}
-      <ScoreProntidao userId={user?.id} />
+      {/* Nível de preparo para a prova: barra de progresso + selo (bloco de 5 por dia, só simulado geral) */}
+      <ScoreProntidao userId={user?.id} showCTA={false} />
 
       {/* CENTRO (foco principal): escolha o tipo de simulado */}
       <section id="secao-simulados" className="scroll-mt-24">
@@ -718,51 +317,6 @@ function TeoricoDashboard() {
           ))}
         </div>
       </section>
-
-      {/* ABAIXO DOS SIMULADOS: aulas, galerias e materiais de estudo */}
-      <section id="secao-biblioteca" className="scroll-mt-24">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-base font-display font-bold flex items-center gap-1.5">
-            <Library className="h-4.5 w-4.5 text-primary" />
-            Aulas e materiais
-          </h2>
-          <Link
-            to="/biblioteca"
-            search={{ module_type: "teorico" }}
-            className="text-xs text-primary hover:text-primary-glow font-semibold flex items-center gap-1 transition-colors"
-          >
-            Ver todos <ChevronRight className="h-3 w-3" />
-          </Link>
-        </div>
-
-        {libLoading ? (
-          <div className="flex items-center justify-center py-8">
-            <Loader2 className="h-5 w-5 animate-spin text-primary" />
-          </div>
-        ) : teoricoItems.length > 0 ? (
-          <HCarousel>
-            {teoricoItems.map((item) => (
-              <div key={item.id} className="shrink-0 w-[240px] snap-start">
-                <LibraryCard item={item} onPdfClick={setPdfModal} />
-              </div>
-            ))}
-          </HCarousel>
-        ) : (
-          <div className="glass rounded-2xl p-8 text-center">
-            <BookOpen className="h-10 w-10 mx-auto text-muted-foreground/50 mb-2" />
-            <p className="text-sm text-muted-foreground">Nenhum material disponível ainda.</p>
-            <p className="text-xs text-muted-foreground/60 mt-1">Os materiais teóricos aparecerão aqui quando forem cadastrados.</p>
-          </div>
-        )}
-      </section>
-
-      {pdfModal && (
-        <NativePdfModal
-          pdfUrl={pdfModal.url}
-          title={pdfModal.title}
-          onClose={() => setPdfModal(null)}
-        />
-      )}
     </motion.div>
   );
 }
@@ -771,42 +325,29 @@ function TeoricoDashboard() {
 // 3. PSICOTECNICO DASHBOARD
 // ==========================================
 function PsicotecnicoDashboard() {
-  const { data: libraryItems = [], isLoading: libLoading } = useQuery({
-    queryKey: ["library", "psico-dash"],
-    queryFn: () => fetchLibraryItems(false),
-  });
-  const psicoItems = libraryItems.filter(
-    (i) => i.module_type === "psicotecnico" && !i.is_paid && !i.title.toLowerCase().includes("palografico") && !i.title.toLowerCase().includes("topografico")
-  );
-  const [pdfModal, setPdfModal] = useState<{ url: string; title: string } | null>(null);
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="mx-auto max-w-6xl px-4 py-6 md:py-8 space-y-6"
+      className="mx-auto max-w-6xl space-y-4 px-4 py-4 md:py-6"
     >
-      {/* Hero */}
-      <section className="glass rounded-3xl p-4 md:p-5 shadow-card relative overflow-hidden">
-        <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-success/15 blur-3xl" />
-        <div className="relative">
-          <p className="text-xs uppercase tracking-widest text-primary-glow font-semibold flex items-center gap-1">
-            <Brain className="h-3.5 w-3.5" /> Módulo Psicotécnico CNH
+      <section className="glass rounded-2xl p-4 shadow-card md:p-5">
+        <div>
+          <p className="flex items-center gap-1 text-xs font-semibold uppercase tracking-widest text-primary-glow">
+            <Brain className="h-3.5 w-3.5" /> Psicotécnico
           </p>
-          <h1 className="text-2xl md:text-4xl font-display font-bold mt-2 leading-tight">
-            Perce o medo e domine os testes que mais reprovam no{" "}
-            <span className="gradient-text">Psicotécnico</span>.
+          <h1 className="mt-2 text-xl font-display font-bold leading-tight md:text-2xl">
+            Treine para o exame psicotécnico
           </h1>
-          <p className="text-xs md:text-sm text-muted-foreground mt-2 max-w-lg leading-relaxed">
-            O exame psicotécnico avalia atenção, memória e comportamento. Treine com nossos simulados interativos oficiais.
+          <p className="mt-1 text-xs text-muted-foreground md:text-sm">
+            Escolha um exercício de atenção, memória ou raciocínio.
           </p>
         </div>
       </section>
 
-      {/* Tests Grid */}
       <section>
-        <h2 className="text-base font-display font-bold mb-3">Testes Psicotécnicos Práticos</h2>
+        <h2 className="mb-3 text-base font-display font-bold">Escolha um teste</h2>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
           <PsicoTestCard 
             title="Atenção Concentrada"
@@ -829,94 +370,6 @@ function PsicotecnicoDashboard() {
         </div>
       </section>
 
-      {/* Livros e Materiais - fetchados da biblioteca */}
-      <section>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-base font-display font-bold flex items-center gap-1.5">
-            <Library className="h-4.5 w-4.5 text-primary" />
-            Materiais de Estudo Psicotécnico
-          </h2>
-          <Link
-            to="/biblioteca"
-            search={{ module_type: "psicotecnico" }}
-            className="text-xs text-primary hover:text-primary-glow font-semibold flex items-center gap-1 transition-colors"
-          >
-            Ver todos <ChevronRight className="h-3 w-3" />
-          </Link>
-        </div>
-
-        {libLoading ? (
-          <div className="flex items-center justify-center py-8">
-            <Loader2 className="h-5 w-5 animate-spin text-primary" />
-          </div>
-        ) : psicoItems.length > 0 ? (
-          <HCarousel>
-            {psicoItems.map((item) => (
-              <div key={item.id} className="shrink-0 w-[240px] snap-start">
-                <LibraryCard item={item} onPdfClick={setPdfModal} />
-              </div>
-            ))}
-          </HCarousel>
-        ) : (
-          <div className="glass rounded-2xl p-8 text-center">
-            <BookOpen className="h-10 w-10 mx-auto text-muted-foreground/50 mb-2" />
-            <p className="text-sm text-muted-foreground">Nenhum material disponível ainda.</p>
-            <p className="text-xs text-muted-foreground/60 mt-1">Os materiais psicotécnicos aparecerão aqui quando forem cadastrados.</p>
-          </div>
-        )}
-      </section>
-
-      {/* Tips and videos section */}
-      <section className="grid md:grid-cols-2 gap-4">
-        <div className="glass rounded-3xl p-5 shadow-card space-y-4">
-          <h3 className="font-display font-bold text-base flex items-center gap-1.5">
-            <ShieldCheck className="h-4.5 w-4.5 text-primary" />
-            Dicas Críticas de Sucesso
-          </h3>
-          <ul className="space-y-2 text-xs text-muted-foreground">
-            <li className="flex items-start gap-2">
-              <span className="text-success shrink-0 font-bold">✓</span>
-              <span><strong>Mantenha a calma:</strong> O examinador avalia desvios bruscos e nervosismo.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-success shrink-0 font-bold">✓</span>
-              <span><strong>Durma bem:</strong> Testes de atenção dependem de sua acuidade física imediata.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-success shrink-0 font-bold">✓</span>
-              <span><strong>Siga ordens:</strong> A maioria das reprovações acontece por começar antes do comando do instrutor.</span>
-            </li>
-          </ul>
-        </div>
-
-        <div className="glass rounded-3xl p-5 shadow-card space-y-4">
-          <h3 className="font-display font-bold text-base flex items-center gap-1.5">
-            <Brain className="h-4.5 w-4.5 text-success" />
-            O que treinar primeiro
-          </h3>
-          <ul className="space-y-2 text-xs text-muted-foreground">
-            <li className="flex items-start gap-2">
-              <span className="text-primary shrink-0 font-bold">1.</span>
-              <span><strong>Atenção Concentrada:</strong> É o teste mais cobrado e mais reprovado.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-primary shrink-0 font-bold">2.</span>
-              <span><strong>Memória Rápida:</strong> Pratique memorizar objetos e detalhes rapidamente.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-primary shrink-0 font-bold">3.</span>
-              <span><strong>Raciocínio Lógico:</strong> Pratique identificar padrões e sequências de figuras geométricas.</span>
-            </li>
-          </ul>
-        </div>
-      </section>
-      {pdfModal && (
-        <NativePdfModal
-          pdfUrl={pdfModal.url}
-          title={pdfModal.title}
-          onClose={() => setPdfModal(null)}
-        />
-      )}
     </motion.div>
   );
 }

@@ -56,6 +56,30 @@ export type Database = {
         }
         Relationships: []
       }
+      detran_stats: {
+        Row: {
+          nome: string
+          pratica: number
+          teorica: number
+          uf: string
+          updated_at: string
+        }
+        Insert: {
+          nome: string
+          pratica?: number
+          teorica?: number
+          uf: string
+          updated_at?: string
+        }
+        Update: {
+          nome?: string
+          pratica?: number
+          teorica?: number
+          uf?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       library_items: {
         Row: {
           cover_url: string | null
@@ -130,6 +154,7 @@ profiles: {
            phone: string | null
            studies: boolean | null
            status: string
+           uf: string | null
             selos: string[] | null
             updated_at: string
              access_status: string | null
@@ -155,6 +180,7 @@ profiles: {
             phone?: string | null
             studies?: boolean | null
             status?: string
+            uf?: string | null
             selos?: string[]
             updated_at?: string
             access_status?: string | null
@@ -180,6 +206,7 @@ profiles: {
             phone?: string | null
             studies?: boolean | null
             status?: string
+            uf?: string | null
             selos?: string[]
             updated_at?: string
             access_status?: string | null
@@ -440,6 +467,14 @@ profiles: {
           _user_id: string
         }
         Returns: boolean
+      }
+      get_user_points_ranking: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          user_id: string
+          display_name: string
+          total_points: number
+        }[]
       }
     }
     Enums: {

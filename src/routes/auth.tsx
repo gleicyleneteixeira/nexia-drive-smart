@@ -12,6 +12,7 @@ import { Loader2, Eye, EyeOff, User, ArrowLeft } from "lucide-react";
 import { formatCpf, cleanCpf, isValidCpf } from "@/lib/cpf";
 import { formatPhone, cleanPhone } from "@/lib/phone";
 import { triggerWebhook } from "@/services/webhookService";
+import { BRAZILIAN_STATES, isBrazilianUf } from "@/lib/brazilian-states";
 
 export const Route = createFileRoute("/auth")({
   component: AuthPage,
@@ -23,10 +24,10 @@ type Employment = "carteira_assinada" | "autonomo" | "estudante" | "trabalha_est
 const employmentToDb: Record<string, string> = {
   carteira_assinada: "carteira_assinada",
   autonomo: "autonomo",
-  estudante: "nao_trabalha",
-  trabalha_estuda: "carteira_assinada",
-  desempregado: "nao_trabalha",
-  outro: "nao_trabalha",
+  estudante: "estudante",
+  trabalha_estuda: "trabalha_estuda",
+  desempregado: "desempregado",
+  outro: "outro",
 };
 
 function AuthPage() {
@@ -39,6 +40,7 @@ function AuthPage() {
   const [name, setName] = useState("");
   const [cpf, setCpf] = useState("");
   const [phone, setPhone] = useState("");
+  const [uf, setUf] = useState("");
   const [employment, setEmployment] = useState<Employment | "">("");
   const [employmentOther, setEmploymentOther] = useState("");
   const [loading, setLoading] = useState(false);
@@ -73,6 +75,9 @@ function AuthPage() {
         }
         if (!isValidCpf(cpf)) {
           throw new Error("CPF inválido. Verifique os números digitados.");
+        }
+        if (uf && !isBrazilianUf(uf)) {
+          throw new Error("Selecione um estado válido.");
         }
         if (employment === "outro" && !employmentOther.trim()) {
           throw new Error("Descreva sua situação profissional.");
@@ -126,6 +131,7 @@ function AuthPage() {
             phone: phone || null,
             employment_status: employmentToDb[employment] ?? employment,
             employment_other: employment === "outro" ? employmentOther : null,
+            uf: uf || null,
           },
         });
         if (!createRes.success) {
@@ -319,6 +325,21 @@ function AuthPage() {
                 <p className="text-xs text-amber-400 mt-1">
                   ⚠️ 📲 Cadastre seu WhatsApp com DDD — ele será usado para notificações e para recuperar sua senha. Verifique se o número está correto, pois as notificações serão recebidas através dele.
                 </p>
+              </div>
+              <div>
+                <Label htmlFor="uf">Estado onde pretende fazer a prova (opcional)</Label>
+                <Select value={uf} onValueChange={setUf}>
+                  <SelectTrigger id="uf" className="h-9 w-full text-base md:text-sm">
+                    <SelectValue placeholder="Selecione seu estado" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {BRAZILIAN_STATES.map((state) => (
+                      <SelectItem key={state.uf} value={state.uf}>
+                        {state.uf} — {state.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div>
                 <Label htmlFor="employment">Situação profissional *</Label>

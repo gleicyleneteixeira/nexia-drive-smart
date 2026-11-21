@@ -2382,7 +2382,7 @@ const QUESTIONS_A: Question[] = [
         explanation: "Correta letra C: distância de parada soma reação, da percepção ao freio, com frenagem, do freio à parada. As distâncias percorridas durante a reação e a frenagem se somam até a imobilização total do veículo. Direção defensiva define distância de reação, de frenagem e de parada.",
         detailedExplanation: "Temos três conceitos importantes: Distância de REAÇÃO, que é o que andamos desde que vemos o perigo até pisar no freio. Distância de FRENAGEM, que é a distância que o carro percorre até parar depois de acionar o freio. A Distância de PARADA é a soma das duas. A alternativa A confunde os conceitos e a B inverte. A D é falsa porque depende das condições da pista.",
         commonMistake: "A galera costuma trocar as definições de reação e frenagem. Lembre-se: REAÇÃO é até frear e FRENAGEM é até parar.",
-        tip: "PARADA = REAÇÃO + FRENAGEM. Perceber → Freiar → Parar.",
+        tip: "PARADA = REAÇÃO + FRENAGEM. Perceber → Frear → Parar.",
         incidence: "alta",
         trap: true,
         difficulty: 3
@@ -3778,7 +3778,7 @@ const QUESTIONS_A: Question[] = [
     {
         id: "prova_geral_14",
         category: "legislacao",
-        statement: "A figura da questão mostra um cruzamento sem qualquer sinalização de preferência, com dois veículos chegando exatamente ao mesmo tempo ao ponto de encontro das vias. A qual veículo pertence a preferência?",
+        statement: "Em um cruzamento sem qualquer sinalização de preferência, dois veículos chegam exatamente ao mesmo tempo ao ponto de encontro das vias. A qual veículo pertence a preferência?",
         options: ["Ao veículo que vier pela esquerda.", "Ao veículo que seguir em frente.", "Ao veículo 1, que está à direita do 2.", "Ao veículo 2, porque o veículo 1 vai virar à esquerda."],
         correctIndex: 2,
         explanation: "Correta letra C: sem sinalização, a preferência é de quem vem pela direita (art. 29, III, c).",
@@ -15811,17 +15811,22 @@ function comImagemDaPlaca(q: Question): Question {
     return url ? { ...q, image_url: url } : q;
 }
 
+function semPrefixoPergunta(q: Question): Question {
+    const statement = q.statement.replace(/^\s*Pergunta\s*:\s*/i, "");
+    return statement === q.statement ? q : { ...q, statement };
+}
+
 function buildQuestionBank(includeDisabled: boolean): Question[] {
     return QUESTIONS.filter((q) => includeDisabled || !overrideDisabled.has(q.id))
         .map((q) => {
             const p = overridePatch.get(q.id);
-            return p ? { ...q, ...p, id: q.id } : q;
+            return semPrefixoPergunta(p ? { ...q, ...p, id: q.id } : q);
         })
         .map(comImagemDaPlaca)
         .concat(
             overrideCustoms
                 .filter((c) => includeDisabled || !overrideDisabled.has(c.id))
-                .map(comImagemDaPlaca),
+                .map((q) => comImagemDaPlaca(semPrefixoPergunta(q))),
         );
 }
 

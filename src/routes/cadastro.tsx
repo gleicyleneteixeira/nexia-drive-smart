@@ -13,6 +13,7 @@ import { formatPhone, cleanPhone } from "@/lib/phone";
 import { useAuth } from "@/hooks/use-auth";
 import { isProfileExpired } from "@/lib/subscription";
 import { triggerWebhook } from "@/services/webhookService";
+import { BRAZILIAN_STATES, isBrazilianUf } from "@/lib/brazilian-states";
 
 export const Route = createFileRoute("/cadastro")({
   component: CadastroPage,
@@ -39,10 +40,10 @@ const EMPLOYMENT_LABELS: Record<Employment, string> = {
 const employmentToDb: Record<Employment, string> = {
   carteira_assinada: "carteira_assinada",
   autonomo: "autonomo",
-  estudante: "nao_trabalha",
-  trabalha_estuda: "carteira_assinada",
-  desempregado: "nao_trabalha",
-  outro: "nao_trabalha",
+  estudante: "estudante",
+  trabalha_estuda: "trabalha_estuda",
+  desempregado: "desempregado",
+  outro: "outro",
 };
 
 function maskEmail(email: string): string {
@@ -68,6 +69,7 @@ function CadastroPage() {
   const [name, setName] = useState("");
   const [cpf, setCpf] = useState("");
   const [phone, setPhone] = useState("");
+  const [uf, setUf] = useState("");
   const [employment, setEmployment] = useState<Employment | "">("");
   const [employmentOther, setEmploymentOther] = useState("");
   
@@ -132,6 +134,9 @@ function CadastroPage() {
         if (!employment) {
           throw new Error("Selecione sua situação profissional.");
         }
+        if (uf && !isBrazilianUf(uf)) {
+          throw new Error("Selecione um estado válido.");
+        }
         if (employment === "outro" && !employmentOther.trim()) {
           throw new Error("Descreva sua situação profissional.");
         }
@@ -188,6 +193,7 @@ function CadastroPage() {
               phone: phone || null,
               employment_status: employmentToDb[employment as Employment] ?? employment,
               employment_other: employment === "outro" ? employmentOther.trim() : null,
+              uf: uf || null,
             },
           });
 
@@ -250,6 +256,7 @@ function CadastroPage() {
                   phone: phone || null,
                   employment_status: employmentToDb[employment as Employment] ?? employment,
                   employment_other: employment === "outro" ? employmentOther.trim() : null,
+                  uf: uf || null,
                 },
               });
               if (retryCreate.success && retryCreate.userId) {
@@ -731,6 +738,21 @@ function CadastroPage() {
                 </p>
               </div>
               <div>
+                <Label htmlFor="uf">Estado onde pretende fazer a prova (opcional)</Label>
+                <Select value={uf} onValueChange={setUf}>
+                  <SelectTrigger id="uf" className="h-11 w-full bg-background/40 border-border/30">
+                    <SelectValue placeholder="Selecione seu estado" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {BRAZILIAN_STATES.map((state) => (
+                      <SelectItem key={state.uf} value={state.uf}>
+                        {state.uf} — {state.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
                 <Label htmlFor="employment">Situação profissional *</Label>
                 <Select value={employment} onValueChange={(v) => setEmployment(v as Employment)}>
                   <SelectTrigger id="employment" className="h-11 w-full bg-background/40 border-border/30">
@@ -852,6 +874,7 @@ function CadastroPage() {
                   phone: "(11) 99999-9999",
                   cpf: "000.000.000-00",
                   status: "ativo",
+                  uf: null,
                 };
                 localStorage.setItem("nexia:mock_user", JSON.stringify(mockUser));
                 localStorage.setItem("nexia:mock_profile", JSON.stringify(mockProfile));

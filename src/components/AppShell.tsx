@@ -18,6 +18,7 @@ import {
   Brain,
   Moon,
   Sun,
+  UserRound,
 } from "lucide-react";
 import { CronogramaModal } from "./CronogramaModal";
 import { DailyCheckinBanner } from "./DailyCheckinBanner";
@@ -28,8 +29,21 @@ import { supabase } from "@/integrations/supabase/client";
 import { loadQuestionOverrides } from "@/data/questions";
 import { loadReviewFromServer } from "@/lib/review";
 import { isProfileExpired } from "@/lib/subscription";
+import { BRAZILIAN_STATES, isBrazilianUf } from "@/lib/brazilian-states";
+import { cleanCpf, formatCpf, isValidCpf } from "@/lib/cpf";
+import { cleanPhone, formatPhone } from "@/lib/phone";
 import { APP_VERSION } from "@/lib/app-version";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,12 +52,22 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import {
   GlassSidebar,
   GlassTopbar,
   GlassSheet,
+  GlassTabBar,
   CommandPalette,
   navSections,
   simuladosItem,
+  tabBarItems,
   contaSection,
   type NavItem,
 } from "@/components/glass";
@@ -74,14 +98,40 @@ const SUPER_ADMIN_ITEMS: NavItemLegacy[] = [
 ];
 
 const STORAGE_SIDEBAR_KEY = "@nexia_sidebar_collapsed";
+const NOT_SET = "not_set";
+const PROFILE_EMPLOYMENT_OPTIONS = [
+  { value: "carteira_assinada", label: "CLT" },
+  { value: "autonomo", label: "Autônomo(a)" },
+  { value: "estudante", label: "Estudante" },
+  { value: "trabalha_estuda", label: "Trabalha e Estuda" },
+  { value: "desempregado", label: "Desempregado(a)" },
+  { value: "outro", label: "Outros" },
+  { value: "nao_trabalha", label: "Não trabalha (cadastro anterior)" },
+] as const;
+
+type ProfileDraft = {
+  display_name: string;
+  cpf: string;
+  phone: string;
+  employment_status: string;
+  employment_other: string;
+  uf: string;
+};
 
 /** Espaço lateral que o conteúdo reserva para a sidebar flutuante. */
 const sidebarSpace = (expanded: boolean) => `${(expanded ? 264 : 76) + 12}px`;
 
+function getEmploymentLabel(status: string | null, other: string | null) {
+  if (!status || status === NOT_SET) return "Não informado";
+  if (status === "outro" && other?.trim()) return `Outros: ${other.trim()}`;
+  if (status === "clt") return "CLT";
+  return PROFILE_EMPLOYMENT_OPTIONS.find((option) => option.value === status)?.label ?? status;
+}
+
 export function AppShell() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { user, profile, isAdmin, signOut } = useAuth();
+  const { user, profile, isAdmin, isMock, signOut, refreshProfile } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
   const isPublicPage =
@@ -102,6 +152,18 @@ export function AppShell() {
   const [cronogramaOpen, setCronogramaOpen] = useState(false);
   const [supportLink, setSupportLink] = useState<string | null>(null);
   const [showSupportButton, setShowSupportButton] = useState(true);
+  const [subscriptionDialogOpen, setSubscriptionDialogOpen] = useState(false);
+  const [profileDialogOpen, setProfileDialogOpen] = useState(false);
+  const [profileEditing, setProfileEditing] = useState(false);
+  const [profileSaving, setProfileSaving] = useState(false);
+  const [profileDraft, setProfileDraft] = useState<ProfileDraft>({
+    display_name: "",
+    cpf: "",
+    phone: "",
+    employment_status: NOT_SET,
+    employment_other: "",
+    uf: NOT_SET,
+  });
 
   // Paleta de comandos (Ctrl+K) e menu lateral mobile
   const [paletteOpen, setPaletteOpen] = useState(false);
@@ -257,10 +319,24 @@ export function AppShell() {
   // ---------------------------------------------------------------------------
   const goHome = useCallback(() => {
     setActiveAdminSection(null);
+    setActiveModule("hub");
     localStorage.removeItem("nexia:active_module");
     window.dispatchEvent(new Event("nexia:active_module:change"));
     if (pathname !== "/app") navigate({ to: "/app" });
   }, [navigate, pathname]);
+
+  const openProfile = useCallback(() => {
+    setProfileDraft({
+      display_name: profile?.display_name ?? "",
+      cpf: profile?.cpf ?? "",
+      phone: profile?.phone ?? "",
+      employment_status: profile?.employment_status ?? NOT_SET,
+      employment_other: profile?.employment_other ?? "",
+      uf: profile?.uf ?? NOT_SET,
+    });
+    setProfileEditing(false);
+    setProfileDialogOpen(true);
+  }, [profile]);
 
   const runAction = useCallback(
     (item: NavItem) => {
@@ -286,13 +362,127 @@ export function AppShell() {
         case "theme":
           toggleTheme();
           break;
+        case "subscription":
+          setSubscriptionDialogOpen(true);
+          break;
+        case "profile":
+          openProfile();
+          break;
+        case "schedule":
+          setCronogramaOpen(true);
+          break;
         case "signout":
           void signOut();
           break;
       }
     },
-    [goHome, navigate, toggleTheme, signOut],
+    [goHome, navigate, toggleTheme, signOut, openProfile, handleToggleModule],
   );
+
+  const handleSaveProfile = async () => {
+    const cpf = cleanCpf(profileDraft.cpf);
+    const phone = cleanPhone(profileDraft.phone);
+    const employmentStatus =
+      profileDraft.employment_status === NOT_SET
+        ? null
+        : profileDraft.employment_status === "clt"
+          ? "carteira_assinada"
+          : profileDraft.employment_status;
+    const uf = profileDraft.uf === NOT_SET ? null : profileDraft.uf;
+
+    if (!profileDraft.display_name.trim()) {
+      toast.error("Preencha seu nome completo.");
+      return;
+    }
+    if (!isValidCpf(cpf)) {
+      toast.error("CPF inválido. Verifique os números digitados.");
+      return;
+    }
+    if (phone.length !== 10 && phone.length !== 11) {
+      toast.error("Informe um telefone com DDD.");
+      return;
+    }
+    if (!employmentStatus) {
+      toast.error("Selecione sua situação profissional.");
+      return;
+    }
+    if (
+      profileDraft.employment_status === "outro" &&
+      !profileDraft.employment_other.trim()
+    ) {
+      toast.error("Descreva sua situação profissional.");
+      return;
+    }
+    if (uf && !isBrazilianUf(uf)) {
+      toast.error("Selecione um estado válido.");
+      return;
+    }
+
+    const updates = {
+      display_name: profileDraft.display_name.trim().toUpperCase(),
+      cpf,
+      phone,
+      employment_status: employmentStatus,
+      employment_other:
+        profileDraft.employment_status === "outro"
+          ? profileDraft.employment_other.trim()
+          : null,
+      uf,
+    };
+
+    setProfileSaving(true);
+    try {
+      if (isMock) {
+        if (!profile) {
+          toast.error("Não foi possível carregar seu perfil.");
+          return;
+        }
+        localStorage.setItem(
+          "nexia:mock_profile",
+          JSON.stringify({ ...profile, ...updates }),
+        );
+      } else {
+        if (!user) {
+          toast.error("Faça login novamente para atualizar seu perfil.");
+          return;
+        }
+        const { error } = await supabase
+          .from("profiles")
+          .update(updates)
+          .eq("id", user.id);
+        if (error) {
+          console.error("Erro ao atualizar perfil:", error);
+          toast.error(
+            error.code === "23505"
+              ? "Este CPF já está cadastrado em outra conta."
+              : "Não foi possível salvar seu perfil. Tente novamente.",
+          );
+          return;
+        }
+      }
+
+      await refreshProfile();
+      setProfileEditing(false);
+      toast.success("Perfil atualizado.");
+    } catch (error) {
+      console.error("Erro ao atualizar perfil:", error);
+      toast.error("Não foi possível salvar seu perfil. Tente novamente.");
+    } finally {
+      setProfileSaving(false);
+    }
+  };
+
+  const cancelProfileEditing = () => {
+    setProfileDraft({
+      display_name: profile?.display_name ?? "",
+      cpf: profile?.cpf ?? "",
+      phone: profile?.phone ?? "",
+      employment_status: profile?.employment_status ?? NOT_SET,
+      employment_other: profile?.employment_other ?? "",
+      uf: profile?.uf ?? NOT_SET,
+    });
+    setProfileEditing(false);
+  };
 
   // Itens de admin viram NavItem (mesmos destinos de sempre)
   const adminNavItems: NavItem[] = useMemo(
@@ -309,18 +499,6 @@ export function AppShell() {
     [],
   );
 
-  // Seções completas: ESTUDAR + TREINAR + (Admin) + CONTA.
-  // Estudar/Treinar seguem o módulo escolhido no Início (navSections).
-  const sections = useMemo(() => {
-    const base = navSections(activeModule);
-    if (isAdmin) {
-      base.push({ id: "admin", label: "Admin", items: adminNavItems });
-    }
-    base.push(contaSection(supportLink));
-    return base;
-  }, [isAdmin, supportLink, adminNavItems, activeModule]);
-
-  // Item ativo (pílula de vidro destacada)
   // Query string atual, vinda do roteador (reage a navigate/replace sem reload).
   const searchStr = useRouterState({ select: (s) => s.location.searchStr });
 
@@ -331,7 +509,37 @@ export function AppShell() {
     [searchStr],
   );
   const placasEmTreino = verPlacas === "simulado" || verPlacas === "adaptativo";
+  const navContext =
+    pathname === "/simulado" ||
+    pathname === "/psicotecnico" ||
+    pathname === "/conquistas" ||
+    pathname === "/turbo" ||
+    pathname === "/mais-caem" ||
+    (pathname === "/placas" && placasEmTreino)
+      ? "simulado"
+      : pathname === "/biblioteca" ||
+          pathname.startsWith("/biblioteca/") ||
+          pathname === "/livro" ||
+          pathname === "/placas"
+        ? "materiais"
+        : undefined;
 
+  // Seções completas: ESTUDAR + TREINAR + (Admin) + CONTA.
+  // Estudar/Treinar seguem o módulo escolhido no Início (navSections).
+  const sections = useMemo(() => {
+    const base = navSections(activeModule).filter((section) => {
+      if (navContext === "simulado") return section.id !== "estudar";
+      if (navContext === "materiais") return section.id !== "treinar";
+      return true;
+    });
+    if (isAdmin) {
+      base.push({ id: "admin", label: "Admin", items: adminNavItems });
+    }
+    base.push(contaSection(supportLink));
+    return base;
+  }, [isAdmin, supportLink, adminNavItems, activeModule, navContext]);
+
+  // Item ativo (pílula de vidro destacada)
   const activeId = useMemo(() => {
     if (pathname === "/app") {
       if (activeModule === "psicotecnico") return "psicotecnico";
@@ -377,6 +585,18 @@ export function AppShell() {
     () => sections.map((section) => ({ label: section.label, items: section.items })),
     [sections],
   );
+  const tabBarActiveId = (() => {
+    if (cronogramaOpen && activeModule === "teorico") return "cronograma";
+    if (pathname === "/placas") return "placas-catalogo";
+    if (pathname === "/psicotecnico") return "psicotecnico";
+    if (navContext === "simulado") {
+      return activeModule === "psicotecnico" ? "psicotecnico" : "simulado";
+    }
+    if (navContext === "materiais") return "aulas";
+    if (pathname === "/app" && activeModule === "teorico") return "simulado";
+    if (pathname === "/app" && activeModule === "direcao") return "inicio";
+    return activeId;
+  })();
 
   // Título/contexto da topbar (mesma semântica de antes)
   const pageTitle =
@@ -527,16 +747,15 @@ export function AppShell() {
                       </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="glass-strong w-52 border border-white/15 p-1.5">
+                      <DropdownMenuItem
+                        onClick={openProfile}
+                        className="flex items-center gap-2 cursor-pointer rounded-xl"
+                      >
+                        <UserRound className="h-4 w-4" />
+                        <span>Meu perfil</span>
+                      </DropdownMenuItem>
                       {isActive && (
                         <>
-                          <DropdownMenuItem
-                            onClick={() => triggerRatingPrompt("manual")}
-                            className="flex items-center gap-2 cursor-pointer rounded-xl"
-                          >
-                            <Star className="h-4 w-4" />
-                            Avaliar o app
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
                           {activeModule === "teorico" && (
                             <DropdownMenuItem
                               onClick={() => setCronogramaOpen(true)}
@@ -546,6 +765,14 @@ export function AppShell() {
                               <span>Meu Cronograma</span>
                             </DropdownMenuItem>
                           )}
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            onClick={() => triggerRatingPrompt("manual")}
+                            className="flex items-center gap-2 cursor-pointer rounded-xl"
+                          >
+                            <Star className="h-4 w-4" />
+                            Avaliar o app
+                          </DropdownMenuItem>
                         </>
                       )}
                       <DropdownMenuItem
@@ -594,7 +821,7 @@ export function AppShell() {
         })()}
 
         <RatingPrompt />
-        {activeModule === "teorico" && pathname === "/app" && <DailyCheckinBanner />}
+        {pathname === "/app" && activeModule === "teorico" && <DailyCheckinBanner />}
         {activeModule === "teorico" && (
           <CronogramaModal open={cronogramaOpen} onOpenChange={setCronogramaOpen} />
         )}
@@ -617,7 +844,7 @@ export function AppShell() {
 
         {/* Main Content — o simulado gerencia o próprio espaço (altura fixa). */}
         <main
-          className={`flex-1 min-w-0 ${pathname === "/simulado" ? "pb-0" : "pb-10"}`}
+          className={`flex-1 min-w-0 pb-28 ${pathname === "/simulado" ? "lg:pb-0" : "lg:pb-10"}`}
         >
           {isPublicPage ? (
             <Outlet />
@@ -641,6 +868,253 @@ export function AppShell() {
           runAction(item);
         }}
       />
+
+      <Dialog open={subscriptionDialogOpen} onOpenChange={setSubscriptionDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Minha assinatura</DialogTitle>
+            <DialogDescription>
+              Consulte o status e a validade do seu acesso ao Nexia Drive.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3 rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-sm text-muted-foreground">Status</span>
+              <span className={`text-sm font-semibold ${
+                profile?.status === "ativo" && !isProfileExpired(profile)
+                  ? "text-success"
+                  : "text-warning"
+              }`}>
+                {!profile
+                  ? "Indisponível"
+                  : profile.status === "ativo" && !isProfileExpired(profile)
+                    ? "Ativa"
+                    : profile.status === "ativo"
+                      ? "Expirada"
+                      : "Pendente"}
+              </span>
+            </div>
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-sm text-muted-foreground">Validade</span>
+              <span className="text-right text-sm font-medium">
+                {profile?.expires_at
+                  ? new Date(profile.expires_at).toLocaleDateString("pt-BR")
+                  : profile?.status === "ativo"
+                    ? "Sem data limite"
+                    : "Não definida"}
+              </span>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={profileDialogOpen}
+        onOpenChange={(open) => {
+          setProfileDialogOpen(open);
+          if (!open) setProfileEditing(false);
+        }}
+      >
+        <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Meu perfil</DialogTitle>
+            <DialogDescription>
+              Confira seus dados de cadastro. O e-mail é somente para consulta.
+            </DialogDescription>
+          </DialogHeader>
+          {profile ? (
+            profileEditing ? (
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="profile-name">Nome completo</Label>
+                  <Input
+                    id="profile-name"
+                    value={profileDraft.display_name}
+                    onChange={(event) =>
+                      setProfileDraft({
+                        ...profileDraft,
+                        display_name: event.target.value,
+                      })
+                    }
+                    autoComplete="name"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="profile-email">E-mail</Label>
+                  <Input
+                    id="profile-email"
+                    value={profile.email ?? user?.email ?? ""}
+                    readOnly
+                    aria-readonly="true"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    O e-mail não pode ser alterado por aqui.
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="profile-cpf">CPF</Label>
+                  <Input
+                    id="profile-cpf"
+                    value={formatCpf(profileDraft.cpf)}
+                    onChange={(event) =>
+                      setProfileDraft({
+                        ...profileDraft,
+                        cpf: cleanCpf(event.target.value),
+                      })
+                    }
+                    inputMode="numeric"
+                    maxLength={14}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="profile-phone">Telefone / WhatsApp</Label>
+                  <Input
+                    id="profile-phone"
+                    value={formatPhone(profileDraft.phone)}
+                    onChange={(event) =>
+                      setProfileDraft({
+                        ...profileDraft,
+                        phone: cleanPhone(event.target.value),
+                      })
+                    }
+                    inputMode="tel"
+                    autoComplete="tel"
+                    maxLength={15}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="profile-employment">Situação profissional</Label>
+                  <Select
+                    value={profileDraft.employment_status}
+                    onValueChange={(value) =>
+                      setProfileDraft({
+                        ...profileDraft,
+                        employment_status: value,
+                      })
+                    }
+                  >
+                    <SelectTrigger id="profile-employment" className="w-full">
+                      <SelectValue placeholder="Selecione..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={NOT_SET}>Não informado</SelectItem>
+                      {profileDraft.employment_status === "clt" && (
+                        <SelectItem value="clt">CLT (cadastro anterior)</SelectItem>
+                      )}
+                      {PROFILE_EMPLOYMENT_OPTIONS.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                {profileDraft.employment_status === "outro" && (
+                  <div className="space-y-2">
+                    <Label htmlFor="profile-employment-other">Descreva sua situação</Label>
+                    <Input
+                      id="profile-employment-other"
+                      value={profileDraft.employment_other}
+                      onChange={(event) =>
+                        setProfileDraft({
+                          ...profileDraft,
+                          employment_other: event.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                )}
+                <div className="space-y-2">
+                  <Label htmlFor="profile-uf">Estado onde pretende fazer a prova</Label>
+                  <Select
+                    value={profileDraft.uf}
+                    onValueChange={(value) =>
+                      setProfileDraft({ ...profileDraft, uf: value })
+                    }
+                  >
+                    <SelectTrigger id="profile-uf" className="w-full">
+                      <SelectValue placeholder="Selecione seu estado" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={NOT_SET}>Não informar agora</SelectItem>
+                      {BRAZILIAN_STATES.map((state) => (
+                        <SelectItem key={state.uf} value={state.uf}>
+                          {state.uf} — {state.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            ) : (
+              <div className="grid gap-3 sm:grid-cols-2">
+                {[
+                  ["Nome completo", profile.display_name || "Não informado"],
+                  ["E-mail", profile.email ?? user?.email ?? "Não informado"],
+                  ["CPF", profile.cpf ? formatCpf(profile.cpf) : "Não informado"],
+                  ["Telefone / WhatsApp", profile.phone ? formatPhone(profile.phone) : "Não informado"],
+                  [
+                    "Situação profissional",
+                    getEmploymentLabel(profile.employment_status, profile.employment_other),
+                  ],
+                  [
+                    "Estado da prova",
+                    profile.uf
+                      ? `${profile.uf} — ${BRAZILIAN_STATES.find((state) => state.uf === profile.uf)?.name ?? ""}`.trim()
+                      : "Não informado",
+                  ],
+                ].map(([label, value]) => (
+                  <div key={label} className="rounded-xl border border-border/30 bg-background/30 p-3">
+                    <p className="text-xs text-muted-foreground">{label}</p>
+                    <p className="mt-1 break-words text-sm font-medium">{value}</p>
+                  </div>
+                ))}
+              </div>
+            )
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              Não foi possível carregar seus dados de perfil.
+            </p>
+          )}
+          <DialogFooter>
+            {profileEditing ? (
+              <>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={cancelProfileEditing}
+                  disabled={profileSaving}
+                >
+                  Cancelar
+                </Button>
+                <Button
+                  type="button"
+                  onClick={handleSaveProfile}
+                  disabled={profileSaving}
+                >
+                  {profileSaving ? "Salvando..." : "Salvar alterações"}
+                </Button>
+              </>
+            ) : (
+              <Button
+                type="button"
+                onClick={() => setProfileEditing(true)}
+                disabled={!profile}
+              >
+                Editar dados
+              </Button>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {showChrome && (
+        <GlassTabBar
+          items={tabBarItems(activeModule)}
+          activeId={tabBarActiveId}
+          onTab={runAction}
+        />
+      )}
 
       {/* PALETA DE COMANDOS (Ctrl+K) */}
       <CommandPalette

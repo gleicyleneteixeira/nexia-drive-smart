@@ -48,31 +48,34 @@ function ConquistasPage() {
         </h1>
       </div>
 
-      {/* Level card */}
-      <div className="glass rounded-3xl p-6 shadow-card flex items-center gap-6 flex-wrap">
-        <div className="w-24 h-24 rounded-full gradient-primary flex items-center justify-center shadow-glow text-3xl font-display font-bold text-primary-foreground">
-          7
-        </div>
-        <div className="flex-1 min-w-[200px]">
-          <p className="text-sm text-muted-foreground">Nível atual</p>
-          <p className="text-2xl font-display font-bold">Aprendiz Veterano</p>
-          <div className="mt-3">
-            <div className="flex justify-between text-xs mb-1">
-              <span>3.420 XP</span>
-              <span className="text-muted-foreground">5.000 XP</span>
-            </div>
-            <div className="h-2 rounded-full bg-secondary overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: "68%" }}
-                transition={{ duration: 0.8 }}
-                className="h-full gradient-primary"
-              />
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              1.580 XP para o próximo nível
-            </p>
+      {/* Level progress */}
+      <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] px-3.5 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] backdrop-blur-lg">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent"
+        />
+        <div className="relative flex items-center gap-3">
+          <span className="shrink-0 rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-[10px] font-semibold text-primary-glow">
+            Nível 7
+          </span>
+          <div
+            className="h-1 min-w-0 flex-1 overflow-hidden rounded-full bg-white/10"
+            role="progressbar"
+            aria-label="Progresso para o próximo nível"
+            aria-valuenow={68}
+            aria-valuemin={0}
+            aria-valuemax={100}
+          >
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: "68%" }}
+              transition={{ duration: 0.8 }}
+              className="h-full rounded-full gradient-primary"
+            />
           </div>
+          <span className="shrink-0 tabular-nums text-[11px] font-medium text-muted-foreground">
+            3.420 / 5.000 XP
+          </span>
         </div>
       </div>
 
