@@ -208,6 +208,7 @@ function ItemCard({ item }: { item: LibraryItem }) {
   const isImage = item.item_type === "image";
   const isCarousel = item.item_type === "carousel";
   const isAudio = item.item_type === "audio";
+  const cover = item.cover_url || (isImage || isCarousel ? item.url : null);
   const Icon = isCarousel ? BookOpen : isAudio ? Headphones : isImage ? ImageIcon : isVideo ? Play : item.item_type === "pdf" ? BookOpen : item.item_type === "heyzine" ? FileText : ExternalLink;
   const typeLabel = isCarousel ? "Carrossel" : isAudio ? "Áudio" : isImage ? "Imagem" : isVideo ? "Vídeo" : item.item_type === "pdf" ? "Livrinho" : item.item_type === "heyzine" ? "Flipbook" : "Link";
 
@@ -250,8 +251,8 @@ function ItemCard({ item }: { item: LibraryItem }) {
         className="group block glass rounded-2xl overflow-hidden hover:bg-accent/30 transition-all hover:-translate-y-0.5 hover:shadow-glow cursor-pointer min-w-0"
       >
         <div className="aspect-[4/3] relative bg-gradient-to-br from-primary/20 to-primary-glow/20 overflow-hidden">
-          {item.cover_url ? (
-            <img src={item.cover_url} alt={item.title} className="w-full object-cover" />
+          {cover ? (
+            <img src={cover} alt={item.title} className="w-full h-full object-cover" />
           ) : (
             <div className="w-full flex items-center justify-center">
               <Icon className="h-16 w-16 text-primary/50" />

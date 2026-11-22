@@ -3302,16 +3302,44 @@ function vimeoIdDe(url: string): string | null {
   return m ? m[1] : null;
 }
 
+function ehUrlTikTok(url: string): boolean {
+  try {
+    const host = new URL(url).hostname.toLowerCase();
+    return host === "tiktok.com" || host.endsWith(".tiktok.com");
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Capa automática de um link de vídeo.
- * YouTube: direto da miniatura oficial (i.ytimg.com). Vimeo: consulta o oEmbed
- * oficial e, se falhar, usa o vumbnail como último recurso.
+ * YouTube: direto da miniatura oficial (i.ytimg.com). Vimeo e TikTok: consultam
+ * o endpoint oEmbed oficial.
  * Retorna null quando não é um link de vídeo reconhecido.
  */
 async function capaAutomaticaDeVideo(url: string): Promise<string | null> {
   const limpa = url.trim();
   const yt = youtubeIdDe(limpa);
   if (yt) return `https://i.ytimg.com/vi/${yt}/hqdefault.jpg`;
+  if (ehUrlTikTok(limpa)) {
+    try {
+      const r = await fetch(`https://www.tiktok.com/oembed?url=${encodeURIComponent(limpa)}`);
+      if (r.ok) {
+        const j: unknown = await r.json();
+        if (
+          typeof j === "object" &&
+          j !== null &&
+          "thumbnail_url" in j &&
+          typeof j.thumbnail_url === "string"
+        ) {
+          return j.thumbnail_url;
+        }
+      }
+    } catch {
+      // The upload or external-cover URL remains available when oEmbed is blocked.
+    }
+    return null;
+  }
   const vm = vimeoIdDe(limpa);
   if (vm) {
     try {
@@ -3539,7 +3567,7 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
   const pdfInputRef = useRef<HTMLInputElement | null>(null);
   const coverInputRef = useRef<HTMLInputElement | null>(null);
 
-  // ---- Capa automática de vídeo (YouTube / Vimeo) ----
+  // ---- Capa automática de vídeo (YouTube / Vimeo / TikTok) ----
   // O admin não precisa subir imagem: a capa vem da própria miniatura do vídeo,
   // mas um switch permite trocar por arquivo ou por link de imagem.
   const [capaAuto, setCapaAuto] = useState<string | null>(null);
@@ -3632,45 +3660,32 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
       setCapaAuto(null);
       return;
     }
+    setCapaAuto(null);
     const alvo = url.trim();
     if (!alvo) {
-      setCapaAuto(null);
       return;
     }
     // debounce: evita uma consulta a cada tecla digitada
+    let active = true;
     const t = setTimeout(() => {
-      capaAutomaticaDeVideo(alvo).then((c) => setCapaAuto(c));
+      capaAutomaticaDeVideo(alvo).then((c) => {
+        if (active) setCapaAuto(c);
+      });
     }, 450);
-    return () => clearTimeout(t);
+    return () => {
+      active = false;
+      clearTimeout(t);
+    };
   }, [url, itemType]);
 
   // Item já existente: a automática só assume se for exatamente a capa já salva.
   // Nunca sobrescreve uma capa que o admin escolheu antes.
   useEffect(() => {
+    if (!editing) return;
     setCapaAutoAtiva(
-      !editing || !editing.cover_url || (!!capaAuto && editing.cover_url === capaAuto)
+      !editing.cover_url || (!!capaAuto && editing.cover_url === capaAuto)
     );
   }, [editing, capaAuto]);
-
-  /**
-   * Baixa a capa automática e guarda no próprio bucket (o item fica independente
-   * do YouTube/Vimeo). Se o download for bloqueado, devolve o link original —
-   * o <img> das capas carrega esse link normalmente.
-   */
-  async function guardarCapaRemota(remote: string): Promise<string> {
-    try {
-      const r = await fetch(remote, { mode: "cors" });
-      if (!r.ok) return remote;
-      const blob = await r.blob();
-      if (!blob.size) return remote;
-      const tipo = blob.type || "image/jpeg";
-      const ext = (tipo.split("/")[1] || "jpg").replace("jpeg", "jpg");
-      const f = new File([blob], `capa-${Date.now()}.${ext}`, { type: tipo });
-      return await uploadToBucket(f, "covers");
-    } catch {
-      return remote;
-    }
-  }
 
   const [saving, setSaving] = useState(false);
   // Feedback VISÍVEL dentro do form: progresso, sucesso ou o erro exato do servidor.
@@ -3774,6 +3789,7 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
   function reset() {
     setTitle(""); setDescription(""); setItemType("pdf"); setUrl("");
     setCoverUrl(""); setIsPaid(false); setPriceCents(""); setPublished(true);
+    setCapaAutoAtiva(true);
     setPdfFile(null); setCoverFile(null); setModuleType("teorico");
     setSlides([{ id: Math.random().toString(), file: null, image_url: "", text: "", audioFile: null, audio_url: "" }]);
     setNarrated(false);
@@ -3877,9 +3893,8 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
         setBanner({ kind: "busy", msg: "Enviando a capa…" });
         finalCover = await uploadToBucket(chosenCover, "covers");
       } else if (capaAutoAtiva && capaAuto) {
-        // Capa automática do vídeo (YouTube/Vimeo) — sem arquivo escolhido
-        setBanner({ kind: "busy", msg: "Usando a capa automática do vídeo…" });
-        finalCover = await guardarCapaRemota(capaAuto);
+        // Usa a miniatura hospedada pelo provedor, sem consumir o bucket da biblioteca.
+        finalCover = capaAuto;
       }
 
       if (!finalUrl) throw new Error("Informe a URL ou faça upload do arquivo");
@@ -4007,7 +4022,7 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
             <SelectContent>
               <SelectItem value="pdf">Livrinho (PDF — vira página)</SelectItem>
               <SelectItem value="heyzine">Embed Heyzine (link de flipbook)</SelectItem>
-              <SelectItem value="video">Vídeo (YouTube/Vimeo)</SelectItem>
+              <SelectItem value="video">Vídeo (YouTube/Vimeo/TikTok)</SelectItem>
               <SelectItem value="image">Imagem (foto/ilustração)</SelectItem>
               <SelectItem value="link">Link externo (site)</SelectItem>
               <SelectItem value="carousel">Carrossel de Imagens</SelectItem>
@@ -4078,14 +4093,32 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
       {itemType === "image" && (
         <div>
           <FileDrop
-            label={`Arquivo de Imagem ${editing ? "(opcional — manter atual se vazio)" : "*"}`}
-            hint="Clique em “Escolher arquivo” ou arraste a imagem até aqui."
+            label={`Arquivo de Imagem (opcional se usar uma URL)`}
+            hint="Clique em “Escolher arquivo” ou arraste a imagem. Também é possível usar uma imagem hospedada fora do Nexia."
             accept="image/*"
             file={pdfFile}
             inputRef={pdfInputRef}
             onPick={onMainPick}
           />
           {editing && url && <p className="text-xs text-muted-foreground mt-1">Atual: {url}</p>}
+          <div className="mt-3">
+            <Label>URL externa da imagem (opcional)</Label>
+            <Input
+              type="url"
+              value={url}
+              onChange={(e) => {
+                setUrl(e.target.value);
+                if (e.target.value) {
+                  setPdfFile(null);
+                  if (pdfInputRef.current) pdfInputRef.current.value = "";
+                }
+              }}
+              placeholder="https://seu-hospedador.com/imagem.jpg"
+            />
+            <p className="text-[11px] text-muted-foreground mt-1">
+              A imagem fica hospedada no serviço indicado e não ocupa o armazenamento do Nexia.
+            </p>
+          </div>
         </div>
       )}
 
@@ -4179,7 +4212,9 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
 
               <div className="grid md:grid-cols-3 gap-3">
                 <div>
-                  <Label className="text-xs">Imagem do Slide {slide.image_url ? "(opcional)" : "*"}</Label>
+                  <Label className="text-xs">
+                    Arquivo de imagem do slide (opcional se usar URL)
+                  </Label>
                   <Input
                     type="file"
                     accept="image/*"
@@ -4190,10 +4225,24 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
                       setSlides(copy);
                     }}
                   />
+                  <Label className="text-xs mt-2 block">URL externa da imagem (opcional)</Label>
+                  <Input
+                    type="url"
+                    value={slide.image_url}
+                    onChange={(e) => {
+                      const copy = [...slides];
+                      copy[idx].image_url = e.target.value;
+                      if (e.target.value) copy[idx].file = null;
+                      setSlides(copy);
+                    }}
+                    placeholder="https://seu-hospedador.com/slide.jpg"
+                  />
                   {slide.image_url && !slide.file && (
                     <div className="mt-1 flex items-center gap-2">
                       <img src={slide.image_url} className="h-10 w-10 object-cover rounded" />
-                      <span className="text-[10px] text-muted-foreground truncate max-w-[200px]">Imagem atual definida</span>
+                      <span className="text-[10px] text-muted-foreground truncate max-w-[200px]">
+                        Imagem do slide
+                      </span>
                     </div>
                   )}
                 </div>
@@ -4264,7 +4313,7 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
       )}
 
       <div className="space-y-3">
-        {/* Capa automática do vídeo (YouTube/Vimeo) — ligada por padrão */}
+        {/* Capa automática do vídeo — ligada por padrão */}
         {capaAuto && (
           <div className="rounded-xl border border-primary/30 bg-primary/5 p-3 space-y-2">
             <div className="flex items-center justify-between gap-3">
@@ -4329,29 +4378,35 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
           <p className="text-xs text-muted-foreground mt-1">Capa atual definida.</p>
         )}
 
-        {/* Outra forma de trocar a capa: link de imagem */}
-        {capaAuto && (
-          <details className="mt-1">
-            <summary className="text-[11px] text-muted-foreground cursor-pointer hover:text-foreground">
-              Usar outra capa por link de imagem (em vez da automática)
-            </summary>
-            <Input
-              className="mt-2"
-              value={coverUrl}
-              onChange={(e) => {
-                setCoverUrl(e.target.value);
-                if (e.target.value) setCapaAutoAtiva(false);
-              }}
-              placeholder="https://.../capa.jpg"
-            />
-          </details>
-        )}
+        <details className="mt-1">
+          <summary className="text-[11px] text-muted-foreground cursor-pointer hover:text-foreground">
+            Usar capa por link de imagem (hospedada fora do Nexia)
+          </summary>
+          <Input
+            type="url"
+            className="mt-2"
+            value={coverUrl}
+            onChange={(e) => {
+              setCoverUrl(e.target.value);
+              if (e.target.value) {
+                setCapaAutoAtiva(false);
+                setCoverFile(null);
+                if (coverInputRef.current) coverInputRef.current.value = "";
+              }
+            }}
+            placeholder="https://seu-hospedador.com/capa.jpg"
+          />
+          <p className="text-[11px] text-muted-foreground mt-1">
+            A URL é salva diretamente; a imagem não é enviada nem ocupa espaço no armazenamento do Nexia.
+          </p>
+        </details>
 
-        {/* Captura de frame só quando NÃO há capa automática (TikTok, arquivo direto etc.) */}
-        {itemType === "video" && url && !capaAuto && (
+        {/* Captura de frame só quando NÃO há capa automática e a URL é de arquivo de vídeo. */}
+        {itemType === "video" && url && !capaAuto && !ehUrlTikTok(url) && (
           <div className="mt-3 space-y-2">
             <p className="text-xs text-muted-foreground">
-              Selecione um frame do vídeo como capa (funciona para TikTok, Instagram, Facebook, etc.):
+              Se a URL for de um arquivo de vídeo direto, selecione um frame como capa.
+              Para redes sociais, use o upload ou uma URL de imagem.
             </p>
             {(
               <>
@@ -4396,6 +4451,12 @@ function ItemForm({ editing, onDone }: { editing: LibraryItem | null; onDone: ()
               </>
             )}
           </div>
+        )}
+        {itemType === "video" && url && !capaAuto && ehUrlTikTok(url) && (
+          <p className="text-xs text-muted-foreground">
+            Não foi possível obter a miniatura automaticamente. Você ainda pode escolher uma
+            foto acima ou informar uma URL de capa hospedada fora do Nexia.
+          </p>
         )}
       </div>
 
