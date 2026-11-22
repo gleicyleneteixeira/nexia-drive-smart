@@ -1504,7 +1504,7 @@ function SimuladoPreviewModal({ q: original, onClose }: { q: Question; onClose: 
                     : state === "wrong"
                       ? "border-destructive/50 bg-destructive/10"
                       : state === "muted"
-                        ? "border-border bg-secondary/30 opacity-60"
+                        ? "border-border bg-secondary/30"
                         : "border-border bg-secondary/50 hover:border-primary/40 hover:bg-secondary"
                 } ${selected === null ? "cursor-pointer" : "cursor-default"}`}
               >

@@ -771,7 +771,7 @@ function SimuladoPage() {
                               : state === "wrong"
                                 ? "border-destructive/50 bg-destructive/10"
                                 : state === "muted"
-                                  ? "border-white/8 bg-white/4 opacity-60"
+                                  ? "border-border bg-muted/50"
                                   : "border-white/12 bg-white/6 hover:border-primary/40 hover:bg-white/10 hover:shadow-[0_8px_30px_rgba(0,0,0,0.25)]"
                           } ${selected === null ? "cursor-pointer" : "cursor-default"}`}
                         >

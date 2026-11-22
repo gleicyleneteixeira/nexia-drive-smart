@@ -2784,7 +2784,7 @@ export function Logico({
               } else if (validated) {
                 if (isCorrectOpt) cls = "border-green-500 bg-green-500/10 shadow-[0_0_12px_rgba(34,197,94,0.30)]";
                 else if (isPicked) cls = "border-red-500 bg-red-500/10 shadow-[0_0_12px_rgba(239,68,68,0.30)]";
-                else cls = "border-border opacity-60";
+                else cls = "border-border";
               }
               return (
                 <button

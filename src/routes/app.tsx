@@ -1655,7 +1655,7 @@ function PanelLightsQuiz() {
                     } else if (isUserPick) {
                       btnStyle = "bg-destructive/20 border-destructive/60 text-destructive-glow shadow-destructive-glow";
                     } else {
-                      btnStyle = "bg-zinc-950/40 border-border/10 text-muted-foreground opacity-60";
+                      btnStyle = "bg-secondary/50 border-border text-foreground";
                     }
                   }
 
