@@ -10,7 +10,7 @@ import {
   Timer,
   Shapes,
   Target,
-  Map,
+  Map as MapIcon,
   ArrowRight,
   RotateCcw,
   Trophy,
@@ -28,6 +28,7 @@ import { COMPLETE_MEMORY_ELEMENTS } from "@/data/psicotecnico";
 import { RaciocinioLogicoView } from "@/components/RaciocinioLogicoView";
 import { AtencaoSetas } from "@/components/AtencaoSetas";
 import { AtencaoDifusaPlacas } from "@/components/AtencaoDifusaPlacas";
+import { MemoriaPalavrasCircular } from "@/components/MemoriaPalavrasCircular";
 
 export const Route = createFileRoute("/psicotecnico")({
   validateSearch: (search: Record<string, unknown>): { test?: string } => {
@@ -218,7 +219,7 @@ const TESTS: {
     id: "difusa",
     title: "TEACO - DIFUSA",
     desc: "Circule placas numeradas de 01 a 50 na ordem crescente.",
-    icon: Map,
+    icon: MapIcon,
     accent: "from-emerald-500 to-primary",
   },
   {
@@ -1650,7 +1651,7 @@ function Memoria({
 }) {
   const MEM_SECS = 60;
   const WRITE_SECS = 120;
-  const [phase, setPhase] = useState<"intro" | "memorize" | "write" | "done">("intro");
+  const [phase, setPhase] = useState<"mode" | "palavras" | "intro" | "memorize" | "write" | "done">("mode");
   const [time, setTime] = useState(MEM_SECS);
   const [text, setText] = useState("");
 
@@ -1702,12 +1703,54 @@ function Memoria({
     speech.stop();
     setText("");
     setTime(MEM_SECS);
-    setPhase("intro");
+    setPhase("mode");
   }
 
   return (
     <div className="glass rounded-3xl p-5 md:p-6 shadow-card">
       <TestHeader title="2/3 · Memória Rápida" subtitle="Memorize e liste o máximo de objetos" />
+      {phase === "mode" && (
+        <div className="space-y-4">
+          <div className="text-center">
+            <p className="text-xs font-bold uppercase tracking-widest text-primary">Escolha o modo</p>
+            <h3 className="mt-1 text-lg font-display font-bold">Como deseja treinar?</h3>
+          </div>
+          <div className="grid gap-3 md:grid-cols-2">
+            <button
+              type="button"
+              onClick={() => setPhase("intro")}
+              className="glass rounded-2xl p-5 text-left transition-all hover:-translate-y-0.5 hover:bg-accent/30"
+            >
+              <p className="text-2xl">🖼️</p>
+              <p className="mt-2 font-bold">Imagem / Elementos</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Memorize uma cena e escreva ou liste os objetos lembrados.
+              </p>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                speech.stop();
+                setPhase("palavras");
+              }}
+              className="glass rounded-2xl p-5 text-left transition-all hover:-translate-y-0.5 hover:bg-accent/30"
+            >
+              <p className="text-2xl">🔤</p>
+              <p className="mt-2 font-bold">Folha de Palavras</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Memorize palavras-alvo e circule-as em uma folha com distratores.
+              </p>
+            </button>
+          </div>
+        </div>
+      )}
+      {phase === "palavras" && (
+        <MemoriaPalavrasCircular
+          speech={speech}
+          onBack={() => setPhase("mode")}
+          onDone={(acertos) => onDone({ items: acertos })}
+        />
+      )}
       {phase === "intro" && (
         <Intro
           bullets={[

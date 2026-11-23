@@ -113,7 +113,76 @@
   80% { transform: translate(calc(var(--placa-offset-x) + 3px), var(--placa-offset-y)) rotate(var(--placa-rotation)); }
 }
 
+.palavras-grade {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+  align-items: center;
+  border-radius: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.035), transparent 55%),
+    rgba(248, 250, 252, 0.38);
+  padding: 14px;
+}
+
+.palavra-circular {
+  position: relative;
+  min-height: 48px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+  cursor: pointer;
+}
+
+.palavra-circular:hover {
+  background: rgba(59, 130, 246, 0.06);
+  transform: scale(1.03);
+}
+
+.palavra-circular--marcada {
+  border: 2px solid #2563eb;
+  background: rgba(37, 99, 235, 0.07);
+  box-shadow:
+    inset 0 0 0 2px rgba(37, 99, 235, 0.06),
+    0 0 0 3px rgba(37, 99, 235, 0.08);
+  transform: rotate(-1deg);
+}
+
+.palavra-circular--marcada::before,
+.palavra-circular--marcada::after {
+  content: "";
+  position: absolute;
+  inset: 3px 1px;
+  border: 1px solid rgba(37, 99, 235, 0.42);
+  border-radius: 47% 53% 50% 46%;
+  pointer-events: none;
+  transform: rotate(2deg);
+}
+
+.palavra-circular--marcada::after {
+  inset: 7px -1px 5px 3px;
+  border-radius: 53% 47% 44% 56%;
+  transform: rotate(-3deg);
+}
+
 @media (max-width: 640px) {
+  .palavras-grade {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 5px;
+    padding: 8px;
+  }
+
+  .palavra-circular {
+    min-height: 44px;
+    font-size: 10px;
+  }
+
   .placas-arena {
     grid-template-columns: repeat(5, minmax(54px, 1fr));
     grid-template-rows: repeat(10, minmax(68px, 1fr));
