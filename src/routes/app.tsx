@@ -350,10 +350,22 @@ function PsicotecnicoDashboard() {
         <h2 className="mb-3 text-base font-display font-bold">Escolha um teste</h2>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
           <PsicoTestCard 
-            title="Atenção Concentrada"
-            desc="Encontre os símbolos corretos sob limite de tempo rigoroso."
+            title="TEACO - ROTAS"
+            desc="Siga as rotas e marque a figura correspondente."
             emoji="🎯"
             type="atencao"
+          />
+          <PsicoTestCard
+            title="TEACO - SETA"
+            desc="Encontre de 1 a 4 símbolos-alvo em uma grade sob limite de tempo."
+            emoji="↗️"
+            type="setas"
+          />
+          <PsicoTestCard
+            title="TEACO - DIFUSA"
+            desc="Circule placas de 01 a 50 na ordem crescente em 60 segundos."
+            emoji="🛣️"
+            type="difusa"
           />
           <PsicoTestCard 
             title="Memória Rápida"

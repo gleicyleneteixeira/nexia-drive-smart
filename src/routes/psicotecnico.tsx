@@ -9,6 +9,8 @@ import {
   Eye,
   Timer,
   Shapes,
+  Target,
+  Map,
   ArrowRight,
   RotateCcw,
   Trophy,
@@ -24,6 +26,8 @@ import memoriaImg from "@/assets/psico-memoria.png";
 import { isValidAnswer } from "@/utils/textMatcher";
 import { COMPLETE_MEMORY_ELEMENTS } from "@/data/psicotecnico";
 import { RaciocinioLogicoView } from "@/components/RaciocinioLogicoView";
+import { AtencaoSetas } from "@/components/AtencaoSetas";
+import { AtencaoDifusaPlacas } from "@/components/AtencaoDifusaPlacas";
 
 export const Route = createFileRoute("/psicotecnico")({
   validateSearch: (search: Record<string, unknown>): { test?: string } => {
@@ -43,7 +47,7 @@ export const Route = createFileRoute("/psicotecnico")({
   }),
 });
 
-type Stage = "hub" | "atencao" | "memoria" | "logico" | "result";
+type Stage = "hub" | "atencao" | "setas" | "difusa" | "memoria" | "logico" | "result";
 
 interface ScoreMap {
   atencao?: { correct: number; total: number };
@@ -81,7 +85,13 @@ export function useSpeech() {
 function PsicoPage() {
   const { test } = Route.useSearch();
   const initialStage: Stage =
-    test === "atencao" || test === "memoria" || test === "logico" ? test : "hub";
+    test === "atencao" ||
+    test === "setas" ||
+    test === "difusa" ||
+    test === "memoria" ||
+    test === "logico"
+      ? test
+      : "hub";
   const [stage, setStage] = useState<Stage>(initialStage);
   const [scores, setScores] = useState<ScoreMap>({});
   const speech = useSpeech();
@@ -157,6 +167,8 @@ function PsicoPage() {
           }}
         />
       )}
+      {stage === "setas" && <AtencaoSetas onBack={() => go("hub")} />}
+      {stage === "difusa" && <AtencaoDifusaPlacas onBack={() => go("hub")} />}
       {stage === "memoria" && (
         <Memoria
           speech={speech}
@@ -190,10 +202,24 @@ const TESTS: {
 }[] = [
   {
     id: "atencao",
-    title: "Teste de Atenção",
-    desc: "Siga a linha certa e marque a figura igual.",
+    title: "TEACO - ROTAS",
+    desc: "Siga as rotas e marque a figura correspondente.",
     icon: Eye,
     accent: "from-warning to-destructive",
+  },
+  {
+    id: "setas",
+    title: "TEACO - SETA",
+    desc: "Encontre os símbolos-alvo em uma grade de setas e distratores.",
+    icon: Target,
+    accent: "from-primary-glow to-success",
+  },
+  {
+    id: "difusa",
+    title: "TEACO - DIFUSA",
+    desc: "Circule placas numeradas de 01 a 50 na ordem crescente.",
+    icon: Map,
+    accent: "from-emerald-500 to-primary",
   },
   {
     id: "memoria",
@@ -1148,7 +1174,7 @@ function Atencao({
             🎯
           </div>
           <h2 className="text-xl md:text-2xl font-display font-bold">
-            Modo Treino de Atenção Concentrada
+            TEACO - ROTAS · Atenção Concentrada
           </h2>
           <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
             Selecione o nível de dificuldade para iniciar o treinamento de concentração DETRAN. O
