@@ -192,11 +192,21 @@ export function AtencaoDifusaPlacas({ onBack }: { onBack: () => void }) {
       {phase === "playing" && (
         <section className="mx-auto max-w-6xl space-y-3">
           <div className="sticky top-2 z-30 flex items-center justify-between rounded-2xl border border-border/60 bg-background/95 px-4 py-3 shadow-card backdrop-blur">
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
-                TEACO - DIFUSA
-              </p>
-              <p className="text-xs text-muted-foreground">Encontradas: {foundCount} de 50</p>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={onBack}
+                className="grid h-9 w-9 shrink-0 place-items-center rounded-lg glass hover:bg-accent/30"
+                aria-label="Voltar aos testes"
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </button>
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
+                  TEACO - DIFUSA
+                </p>
+                <p className="text-xs text-muted-foreground">Encontradas: {foundCount} de 50</p>
+              </div>
             </div>
             <div
               className={`flex items-center gap-2 rounded-xl px-3 py-2 font-mono text-lg font-bold ${

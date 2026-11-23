@@ -501,14 +501,24 @@ export function AtencaoSetas({ onBack }: { onBack: () => void }) {
         <>
           <section className="sticky top-2 z-20 space-y-3 rounded-2xl border border-border/60 bg-background/95 p-3 shadow-card backdrop-blur md:p-4">
             <div className="flex items-center justify-between gap-3">
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
-                  TEACO - SETA · Nível {level}/4
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  Procure {targetSymbols.length}{" "}
-                  {targetSymbols.length === 1 ? "símbolo-alvo" : "símbolos-alvo"}
-                </p>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={onBack}
+                  className="grid h-9 w-9 shrink-0 place-items-center rounded-lg glass hover:bg-accent/30"
+                  aria-label="Voltar aos testes"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                </button>
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-primary">
+                    TEACO - SETA · Nível {level}/4
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Procure {targetSymbols.length}{" "}
+                    {targetSymbols.length === 1 ? "símbolo-alvo" : "símbolos-alvo"}
+                  </p>
+                </div>
               </div>
               <div
                 className={`flex items-center gap-2 rounded-xl px-3 py-2 font-mono text-lg font-bold ${

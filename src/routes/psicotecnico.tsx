@@ -48,7 +48,16 @@ export const Route = createFileRoute("/psicotecnico")({
   }),
 });
 
-type Stage = "hub" | "atencao" | "setas" | "difusa" | "memoria" | "logico" | "result";
+type Stage =
+  | "hub"
+  | "atencao"
+  | "setas"
+  | "difusa"
+  | "memoria"
+  | "memoria_imagem"
+  | "memoria_palavras"
+  | "logico"
+  | "result";
 
 interface ScoreMap {
   atencao?: { correct: number; total: number };
@@ -90,6 +99,8 @@ function PsicoPage() {
     test === "setas" ||
     test === "difusa" ||
     test === "memoria" ||
+    test === "memoria_imagem" ||
+    test === "memoria_palavras" ||
     test === "logico"
       ? test
       : "hub";
@@ -113,8 +124,25 @@ function PsicoPage() {
   }, [stage]);
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-6 md:py-10">
-      {stage !== "logico" && (
+    <div
+      className={`mx-auto max-w-4xl px-4 ${
+        stage === "atencao" ||
+        stage === "setas" ||
+        stage === "difusa" ||
+        stage === "memoria" ||
+        stage === "memoria_imagem" ||
+        stage === "memoria_palavras"
+          ? "py-2 md:py-3"
+          : "py-6 md:py-10"
+      }`}
+    >
+      {stage !== "logico" &&
+        stage !== "atencao" &&
+        stage !== "setas" &&
+        stage !== "difusa" &&
+        stage !== "memoria" &&
+        stage !== "memoria_imagem" &&
+        stage !== "memoria_palavras" && (
         <div className="flex items-start justify-between gap-3 mb-6 flex-wrap">
           <div>
             {stage !== "hub" && (
@@ -179,6 +207,25 @@ function PsicoPage() {
           }}
         />
       )}
+      {stage === "memoria_imagem" && (
+        <Memoria
+          speech={speech}
+          onDone={(r) => {
+            setScores((s) => ({ ...s, memoria: r }));
+            go("hub");
+          }}
+        />
+      )}
+      {stage === "memoria_palavras" && (
+        <MemoriaPalavrasCircular
+          speech={speech}
+          onBack={() => go("hub")}
+          onDone={(acertos) => {
+            setScores((s) => ({ ...s, memoria: { items: acertos } }));
+            go("hub");
+          }}
+        />
+      )}
       {stage === "logico" && <RaciocinioLogicoView onBack={() => go("hub")} />}
       {stage === "result" && (
         <Result
@@ -223,11 +270,18 @@ const TESTS: {
     accent: "from-emerald-500 to-primary",
   },
   {
-    id: "memoria",
-    title: "Memória Rápida",
-    desc: "Memorize a cena e liste o máximo de objetos.",
-    icon: Timer,
+    id: "memoria_imagem",
+    title: "TEPIC-M - imagem",
+    desc: "Memorize uma cena e liste o máximo de objetos.",
+    icon: Eye,
     accent: "from-destructive to-warning",
+  },
+  {
+    id: "memoria_palavras",
+    title: "TEPIC-M - palavras",
+    desc: "Memorize palavras-alvo e circule-as em uma folha com distratores.",
+    icon: Shapes,
+    accent: "from-warning to-primary",
   },
   {
     id: "logico",
@@ -1651,7 +1705,7 @@ function Memoria({
 }) {
   const MEM_SECS = 60;
   const WRITE_SECS = 120;
-  const [phase, setPhase] = useState<"mode" | "palavras" | "intro" | "memorize" | "write" | "done">("mode");
+  const [phase, setPhase] = useState<"intro" | "memorize" | "write" | "done">("intro");
   const [time, setTime] = useState(MEM_SECS);
   const [text, setText] = useState("");
 
@@ -1703,54 +1757,12 @@ function Memoria({
     speech.stop();
     setText("");
     setTime(MEM_SECS);
-    setPhase("mode");
+    setPhase("intro");
   }
 
   return (
     <div className="glass rounded-3xl p-5 md:p-6 shadow-card">
       <TestHeader title="2/3 · Memória Rápida" subtitle="Memorize e liste o máximo de objetos" />
-      {phase === "mode" && (
-        <div className="space-y-4">
-          <div className="text-center">
-            <p className="text-xs font-bold uppercase tracking-widest text-primary">Escolha o modo</p>
-            <h3 className="mt-1 text-lg font-display font-bold">Como deseja treinar?</h3>
-          </div>
-          <div className="grid gap-3 md:grid-cols-2">
-            <button
-              type="button"
-              onClick={() => setPhase("intro")}
-              className="glass rounded-2xl p-5 text-left transition-all hover:-translate-y-0.5 hover:bg-accent/30"
-            >
-              <p className="text-2xl">🖼️</p>
-              <p className="mt-2 font-bold">Imagem / Elementos</p>
-              <p className="mt-1 text-xs text-muted-foreground">
-                Memorize uma cena e escreva ou liste os objetos lembrados.
-              </p>
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                speech.stop();
-                setPhase("palavras");
-              }}
-              className="glass rounded-2xl p-5 text-left transition-all hover:-translate-y-0.5 hover:bg-accent/30"
-            >
-              <p className="text-2xl">🔤</p>
-              <p className="mt-2 font-bold">Folha de Palavras</p>
-              <p className="mt-1 text-xs text-muted-foreground">
-                Memorize palavras-alvo e circule-as em uma folha com distratores.
-              </p>
-            </button>
-          </div>
-        </div>
-      )}
-      {phase === "palavras" && (
-        <MemoriaPalavrasCircular
-          speech={speech}
-          onBack={() => setPhase("mode")}
-          onDone={(acertos) => onDone({ items: acertos })}
-        />
-      )}
       {phase === "intro" && (
         <Intro
           bullets={[

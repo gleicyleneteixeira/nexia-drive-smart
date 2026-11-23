@@ -228,12 +228,22 @@ export function MemoriaPalavrasCircular({ speech, onDone, onBack }: Props) {
     <div className="space-y-4">
       {phase === "memorize" && (
         <section className="glass rounded-3xl p-5 md:p-7 shadow-card">
-          <div className="flex items-center justify-between gap-3 border-b border-border/10 pb-3">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-primary">
-                Memória de palavras · Folha 1
-              </p>
-              <p className="mt-1 text-sm font-semibold">Memorize estas palavras</p>
+          <div className="sticky top-2 z-30 flex items-center justify-between gap-3 rounded-xl bg-background/95 pb-3 border-b border-border/10 backdrop-blur">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={onBack}
+                className="grid h-9 w-9 shrink-0 place-items-center rounded-lg glass hover:bg-accent/30"
+                aria-label="Voltar aos testes"
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </button>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-widest text-primary">
+                  Memória de palavras · Folha 1
+                </p>
+                <p className="mt-1 text-sm font-semibold">Memorize estas palavras</p>
+              </div>
             </div>
             <div
               className={`flex items-center gap-2 rounded-xl px-3 py-2 font-mono text-lg font-bold ${
@@ -292,12 +302,22 @@ export function MemoriaPalavrasCircular({ speech, onDone, onBack }: Props) {
 
       {phase === "answer" && (
         <section className="glass rounded-3xl p-5 md:p-7 shadow-card">
-          <div className="flex items-center justify-between gap-3 border-b border-border/10 pb-3">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-primary">
-                Memória de palavras · Folha 2
-              </p>
-              <p className="mt-1 text-sm font-semibold">Circule apenas as palavras lembradas</p>
+          <div className="sticky top-2 z-30 flex items-center justify-between gap-3 rounded-xl bg-background/95 pb-3 border-b border-border/10 backdrop-blur">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={onBack}
+                className="grid h-9 w-9 shrink-0 place-items-center rounded-lg glass hover:bg-accent/30"
+                aria-label="Voltar aos testes"
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </button>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-widest text-primary">
+                  Memória de palavras · Folha 2
+                </p>
+                <p className="mt-1 text-sm font-semibold">Circule apenas as palavras lembradas</p>
+              </div>
             </div>
             <div
               className={`flex items-center gap-2 rounded-xl px-3 py-2 font-mono text-lg font-bold ${

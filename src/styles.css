@@ -9,7 +9,9 @@
   align-items: center;
   justify-items: center;
   width: 100%;
-  min-height: min(720px, 72vh);
+  height: calc(100dvh - 104px);
+  min-height: 430px;
+  max-height: 720px;
   overflow: hidden;
   border: 1px solid rgba(31, 122, 92, 0.12);
   border-radius: 18px;
@@ -186,7 +188,9 @@
   .placas-arena {
     grid-template-columns: repeat(5, minmax(54px, 1fr));
     grid-template-rows: repeat(10, minmax(68px, 1fr));
-    min-height: 690px;
+    height: calc(100dvh - 94px);
+    min-height: 520px;
+    max-height: none;
     padding: 8px 4px;
   }
 

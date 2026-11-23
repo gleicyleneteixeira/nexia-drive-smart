@@ -368,10 +368,16 @@ function PsicotecnicoDashboard() {
             type="difusa"
           />
           <PsicoTestCard 
-            title="Memória Rápida"
-            desc="Lembre de placas e detalhes em imagens piscadas."
+            title="TEPIC-M - imagem"
+            desc="Memorize uma cena e liste o máximo de objetos."
             emoji="🧠"
-            type="memoria"
+            type="memoria_imagem"
+          />
+          <PsicoTestCard
+            title="TEPIC-M - palavras"
+            desc="Memorize palavras-alvo e circule-as em uma folha com distratores."
+            emoji="🔤"
+            type="memoria_palavras"
           />
           <PsicoTestCard
             title="Raciocínio Lógico"
