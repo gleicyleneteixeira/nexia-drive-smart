@@ -450,10 +450,10 @@ export function AtencaoSetas({ onBack }: { onBack: () => void }) {
             </div>
           </section>
 
-          <div className="overflow-x-auto rounded-2xl border border-border/60 bg-secondary/20 p-2">
+          <div className="overflow-hidden rounded-2xl border border-border/60 bg-secondary/20 p-1 sm:p-2">
             <div
-              className="grid min-w-[525px] gap-1"
-              style={{ gridTemplateColumns: "repeat(21, minmax(22px, 1fr))" }}
+              className="grid w-full gap-[2px] sm:gap-1"
+              style={{ gridTemplateColumns: "repeat(21, minmax(0, 1fr))" }}
             >
               {grid
                 .filter((cell) => cell.row === 0)
@@ -475,7 +475,7 @@ export function AtencaoSetas({ onBack }: { onBack: () => void }) {
                           : "border-border/50 bg-background/80 hover:border-primary/60 active:scale-95"
                       } disabled:cursor-default`}
                     >
-                      <SymbolGraphic symbol={cell.symbol} size={22} />
+                      <SymbolGraphic symbol={cell.symbol} size={11} />
                     </button>
                   );
                 })}
@@ -567,17 +567,17 @@ export function AtencaoSetas({ onBack }: { onBack: () => void }) {
 
           <div
             ref={gridRef}
-            className="max-h-[60vh] overflow-auto rounded-2xl border border-border/60 bg-secondary/20 p-2"
+            className="max-h-[60vh] overflow-y-auto overflow-x-hidden rounded-2xl border border-border/60 bg-secondary/20 p-1 sm:p-2"
             aria-label="Grade de busca de símbolos"
           >
-            <div className="min-w-[525px] space-y-1">
+            <div className="w-full space-y-1">
               {rows.map((rowCells, rowIndex) => {
                 return (
                   <div
                     key={rowIndex}
                     data-row={rowIndex}
                     className="grid gap-1 rounded-lg p-0.5"
-                    style={{ gridTemplateColumns: "repeat(21, minmax(22px, 1fr))" }}
+                    style={{ gridTemplateColumns: "repeat(21, minmax(0, 1fr))" }}
                   >
                     {rowCells.map((cell) => {
                       const wasSelected = selected[cell.index] !== undefined;
@@ -599,7 +599,7 @@ export function AtencaoSetas({ onBack }: { onBack: () => void }) {
                               : "border-border/50 bg-background/80 hover:border-primary/60 hover:bg-primary/5 active:scale-95"
                           } disabled:cursor-default`}
                         >
-                          <SymbolGraphic symbol={cell.symbol} size={21} />
+                          <SymbolGraphic symbol={cell.symbol} size={11} />
                         </button>
                       );
                     })}

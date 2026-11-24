@@ -1509,27 +1509,28 @@ function Atencao({
                             })}
                           </div>
                         )}
-                        <div className="flex gap-1 justify-around w-full">
+                        <div
+                          className="grid w-full gap-[2px] sm:gap-1"
+                          style={{ gridTemplateColumns: "repeat(21, minmax(0, 1fr))" }}
+                        >
                           {row.map((cell) => {
                             const result = clickedCells[cell.uniqueKey];
                             const isClicked = !!result;
                             const isCorrect = result?.correct;
 
-                            const btnSize =
-                              level === 1 ? "w-11 h-11" : level === 2 ? "w-9 h-9" : "w-8 h-8";
                             const symSize = level === 1 ? 26 : level === 2 ? 22 : 18;
 
                             return (
                               <button
                                 key={cell.uniqueKey}
                                 onClick={() => handleCellClick(cell)}
-                                className={`relative rounded-xl border flex items-center justify-center transition-all cursor-pointer ${
+                                className={`relative aspect-square w-full min-w-0 rounded-md sm:rounded-xl border flex items-center justify-center transition-all cursor-pointer [&_svg]:h-[85%] [&_svg]:w-[85%] ${
                                   isClicked
                                     ? isCorrect
                                       ? "border-success bg-success/20 shadow-success-glow"
                                       : "border-destructive bg-destructive/20 shadow-destructive-glow animate-shake"
                                     : "border-border/10 bg-white/5 hover:bg-white/10 hover:border-primary/40 active:scale-90"
-                                } ${btnSize}`}
+                                }`}
                                 disabled={isClicked}
                               >
                                 {SYMBOL_REGISTRY[cell.id]?.render(symSize)}

@@ -629,7 +629,7 @@ function SimuladoPage() {
       className={`mx-auto w-full max-w-[1440px] px-3 md:px-4 pt-2 pb-4 md:pt-6 md:pb-10 lg:pb-10 flex flex-col ${
         showResult
           ? "min-h-[calc(100dvh-8.5rem)] overflow-y-auto lg:min-h-[calc(100dvh-3.5rem)]"
-          : "h-[calc(100dvh-8.5rem)] md:h-auto overflow-hidden md:overflow-visible lg:min-h-[calc(100dvh-3.5rem)]"
+          : "min-h-[calc(100dvh-8.5rem)] lg:min-h-[calc(100dvh-3.5rem)]"
       }`}
     >
       {/* Header compacto em uma linha: voltar, título/contador, timer, placar, encerrar */}
@@ -720,10 +720,10 @@ function SimuladoPage() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -30 }}
                 transition={{ duration: 0.25 }}
-                className="glass rounded-2xl md:rounded-3xl p-4 md:p-8 mt-2 flex-1 min-h-0 flex flex-col overflow-hidden"
+                className="glass rounded-2xl md:rounded-3xl p-3 md:p-8 mt-2 flex-1 min-h-0 flex flex-col"
               >
                 {/* ÁREA DE CONTEÚDO (enunciado + imagem + alternativas): rola só se exceder */}
-                <div className="flex-1 min-h-0 overflow-y-auto pr-0.5 pb-4">
+                <div className="flex-1 min-h-0 pr-0.5 pb-3 md:pb-4">
                   <div className="mb-3 flex shrink-0 flex-wrap gap-2 md:mb-4">
                     <span className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
                       {CATEGORY_LABELS[q.category]}

@@ -186,18 +186,18 @@
   }
 
   .placas-arena {
-    grid-template-columns: repeat(5, minmax(54px, 1fr));
-    grid-template-rows: repeat(10, minmax(68px, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-rows: repeat(10, minmax(0, 1fr));
     height: calc(100dvh - 94px);
-    min-height: 520px;
+    min-height: 0;
     max-height: none;
-    padding: 8px 4px;
+    padding: 6px 2px;
   }
 
   .placa-km {
-    width: 52px;
-    height: 64px;
-    grid-template-rows: 15px 34px 15px;
+    width: min(12vw, 48px);
+    height: min(15vw, 58px);
+    grid-template-rows: 14px 30px 14px;
   }
 }
 

@@ -39,7 +39,7 @@ export function RatingPrompt() {
   const [submitting, setSubmitting] = useState(false);
   const [existingLoaded, setExistingLoaded] = useState(false);
   const [hasExisting, setHasExisting] = useState(false);
-  const wasHidden = useRef<boolean>(false);
+  const hasExistingRef = useRef(false);
 
   const isRatingLow = rating > 0 && rating < 5;
   const isMotivoValido = motivo.trim().length >= 15;
@@ -71,11 +71,13 @@ export function RatingPrompt() {
       if (cancelled) return;
       if (data) {
         window.localStorage.setItem(RATED_KEY, "1");
+        hasExistingRef.current = true;
         setHasExisting(true);
         setRating(data.rating ?? 0);
         setComment(data.comment ?? "");
       } else {
         window.localStorage.removeItem(RATED_KEY);
+        hasExistingRef.current = false;
         setHasExisting(false);
         setRating(0);
         setComment("");
@@ -91,7 +93,7 @@ export function RatingPrompt() {
 
   // Gatilho por evento custom (fim de simulado, login, manual)
   useEffect(() => {
-    function onTrigger(e: Event) {
+    async function onTrigger(e: Event) {
       const detail = (e as CustomEvent).detail as { reason?: string } | undefined;
       const reason = detail?.reason ?? "manual";
       if (!user) return;
@@ -101,6 +103,28 @@ export function RatingPrompt() {
         return;
       }
       if (!canPromptAuto()) return;
+
+      // Confirma no banco antes de exibir. Isso evita reapresentar a avaliação
+      // para quem já avaliou, mesmo após trocar de página ou recarregar.
+      if (hasExistingRef.current) {
+        markShownThisSession();
+        return;
+      }
+      const { data } = await supabase
+        .from("app_ratings")
+        .select("rating, comment")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (data) {
+        hasExistingRef.current = true;
+        setHasExisting(true);
+        setRating(data.rating ?? 0);
+        setComment(data.comment ?? "");
+        window.localStorage.setItem(RATED_KEY, "1");
+        markShownThisSession();
+        return;
+      }
+
       setManual(false);
       setOpen(true);
       markShownThisSession();
@@ -138,6 +162,7 @@ export function RatingPrompt() {
       return;
     }
     window.localStorage.setItem(RATED_KEY, "1");
+    hasExistingRef.current = true;
     setHasExisting(true);
     toast.success(hasExisting ? "Avaliação atualizada. Valeu!" : "Obrigado pela avaliação!");
     dismiss();
