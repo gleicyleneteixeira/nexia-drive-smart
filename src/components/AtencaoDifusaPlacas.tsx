@@ -190,7 +190,7 @@ export function AtencaoDifusaPlacas({ onBack }: { onBack: () => void }) {
       )}
 
       {phase === "playing" && (
-        <section className="mx-auto max-w-6xl space-y-3">
+        <section className="mx-auto w-full max-w-none space-y-3">
           <div className="sticky top-2 z-30 flex items-center justify-between rounded-2xl border border-border/60 bg-background/95 px-4 py-3 shadow-card backdrop-blur">
             <div className="flex items-center gap-2">
               <button

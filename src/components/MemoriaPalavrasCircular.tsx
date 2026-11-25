@@ -256,7 +256,7 @@ export function MemoriaPalavrasCircular({ speech, onDone, onBack }: Props) {
             </div>
           </div>
 
-          <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
+          <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
             {palavrasAlvo.map((palavra) => (
               <div
                 key={palavra}

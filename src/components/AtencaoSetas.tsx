@@ -467,7 +467,7 @@ export function AtencaoSetas({ onBack }: { onBack: () => void }) {
                       disabled={wasSelected}
                       onClick={() => handleCellClick(cell)}
                       aria-label={`Símbolo de treino ${cell.index + 1}`}
-                      className={`grid aspect-square place-items-center rounded-md border transition-colors ${
+                      className={`grid aspect-square place-items-center rounded-md border transition-colors [&_svg]:h-[78%] [&_svg]:w-[78%] ${
                         wasSelected
                           ? isCorrect
                             ? "border-emerald-500/70 bg-emerald-500/15"
@@ -567,7 +567,7 @@ export function AtencaoSetas({ onBack }: { onBack: () => void }) {
 
           <div
             ref={gridRef}
-            className="max-h-[60vh] overflow-y-auto overflow-x-hidden rounded-2xl border border-border/60 bg-secondary/20 p-1 sm:p-2"
+            className="max-h-[60vh] overflow-y-auto overflow-x-hidden rounded-2xl border border-border/60 bg-secondary/20 p-1 sm:p-2 lg:max-h-[calc(100dvh-22rem)]"
             aria-label="Grade de busca de símbolos"
           >
             <div className="w-full space-y-1">
@@ -591,7 +591,7 @@ export function AtencaoSetas({ onBack }: { onBack: () => void }) {
                           aria-label={`Símbolo ${cell.index + 1}: ${
                             TARGET_LABELS[cell.symbol as TargetSymbol] ?? "distrator"
                           }`}
-                          className={`grid aspect-square place-items-center rounded-md border transition-colors ${
+                          className={`grid aspect-square place-items-center rounded-md border transition-colors [&_svg]:h-[78%] [&_svg]:w-[78%] ${
                             wasSelected
                               ? isCorrect
                                 ? "border-emerald-500/70 bg-emerald-500/15"

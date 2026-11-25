@@ -123,18 +123,24 @@ function PsicoPage() {
     }
   }, [stage]);
 
+  const isGameStage =
+    stage === "atencao" ||
+    stage === "setas" ||
+    stage === "difusa" ||
+    stage === "memoria" ||
+    stage === "memoria_imagem" ||
+    stage === "memoria_palavras";
+
+  // Provas de grade/arena ocupam toda a largura da tela; memória e demais
+  // telas continuam em coluna centralizada (leitura confortável).
+  const isFullBleedStage =
+    stage === "atencao" || stage === "setas" || stage === "difusa" || stage === "memoria_palavras";
+
   return (
     <div
-      className={`mx-auto max-w-4xl px-4 ${
-        stage === "atencao" ||
-        stage === "setas" ||
-        stage === "difusa" ||
-        stage === "memoria" ||
-        stage === "memoria_imagem" ||
-        stage === "memoria_palavras"
-          ? "py-2 md:py-3"
-          : "py-6 md:py-10"
-      }`}
+      className={`mx-auto w-full ${
+        isFullBleedStage ? "max-w-none px-2 sm:px-4" : "max-w-4xl px-4"
+      } ${isGameStage ? "py-2 md:py-3" : "py-6 md:py-10"}`}
     >
       {stage !== "logico" &&
         stage !== "atencao" &&
@@ -1396,7 +1402,7 @@ function Atencao({
 
       {/* Active Game Loop Screen */}
       {phase === "playing" && (
-        <div className="flex flex-col max-w-3xl mx-auto h-full">
+        <div className="mx-auto flex w-full flex-col lg:h-[calc(100dvh-8.5rem)] lg:min-h-[520px]">
           {/* Compact Stats Bar */}
           <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-t-2xl border border-border/20 border-b-0 bg-black/30 backdrop-blur-sm flex-wrap shrink-0">
             <div className="flex items-center gap-2 shrink-0">
@@ -1510,8 +1516,8 @@ function Atencao({
                           </div>
                         )}
                         <div
-                          className="grid w-full gap-[2px] sm:gap-1"
-                          style={{ gridTemplateColumns: "repeat(21, minmax(0, 1fr))" }}
+                          className="grid w-full items-center gap-x-1 gap-y-[2px] sm:gap-1"
+                          style={{ gridTemplateColumns: `repeat(${row.length}, minmax(0, 1fr))` }}
                         >
                           {row.map((cell) => {
                             const result = clickedCells[cell.uniqueKey];
@@ -1524,7 +1530,7 @@ function Atencao({
                               <button
                                 key={cell.uniqueKey}
                                 onClick={() => handleCellClick(cell)}
-                                className={`relative aspect-square w-full min-w-0 rounded-md sm:rounded-xl border flex items-center justify-center transition-all cursor-pointer [&_svg]:h-[85%] [&_svg]:w-[85%] ${
+                                className={`relative mx-auto aspect-square w-full min-w-0 max-w-[52px] rounded-md border sm:max-w-[60px] sm:rounded-xl lg:max-w-[68px] xl:max-w-[76px] flex items-center justify-center transition-all cursor-pointer [&_svg]:h-[85%] [&_svg]:w-[85%] ${
                                   isClicked
                                     ? isCorrect
                                       ? "border-success bg-success/20 shadow-success-glow"
@@ -1973,7 +1979,7 @@ type MCell =
 function MatrixCell({ c }: { c: MCell }) {
   return (
     <div
-      className="aspect-square bg-white flex items-center justify-center p-1 overflow-hidden"
+      className="aspect-square bg-white flex items-center justify-center p-1 overflow-hidden [&>svg]:h-[82%] [&>svg]:w-[82%]"
       style={{ border: "1.5px solid #9aa0ad" }}
     >
       {c.type === "shape" && (
@@ -1988,7 +1994,7 @@ function MatrixCell({ c }: { c: MCell }) {
 
 function Matrix2x2({ cells }: { cells: [MCell, MCell, MCell, MCell] }) {
   return (
-    <div className="mx-auto grid grid-cols-2 gap-2 max-w-[280px]">
+    <div className="mx-auto grid w-full max-w-[280px] grid-cols-2 gap-2 sm:max-w-[340px] lg:max-w-[420px]">
       {cells.map((c, i) => (
         <MatrixCell key={i} c={c} />
       ))}
@@ -1998,7 +2004,7 @@ function Matrix2x2({ cells }: { cells: [MCell, MCell, MCell, MCell] }) {
 
 function Matrix2x3({ cells }: { cells: MCell[] }) {
   return (
-    <div className="mx-auto grid grid-cols-3 gap-2 max-w-[400px]">
+    <div className="mx-auto grid w-full max-w-[400px] grid-cols-3 gap-2 sm:max-w-[480px] lg:max-w-[600px]">
       {cells.map((c, i) => (
         <MatrixCell key={i} c={c} />
       ))}
@@ -2008,7 +2014,7 @@ function Matrix2x3({ cells }: { cells: MCell[] }) {
 
 function Matrix3x3({ cells }: { cells: MCell[] }) {
   return (
-    <div className="mx-auto grid grid-cols-3 gap-2 max-w-[360px]">
+    <div className="mx-auto grid w-full max-w-[360px] grid-cols-3 gap-2 sm:max-w-[440px] lg:max-w-[540px]">
       {cells.map((c, i) => (
         <MatrixCell key={i} c={c} />
       ))}
@@ -2021,7 +2027,7 @@ const optShape =
   (kind: ShapeKind, color = NAVY) =>
   () => (
     <div
-      className="aspect-square w-full flex items-center justify-center bg-white"
+      className="aspect-square w-full flex items-center justify-center bg-white [&>svg]:h-[88%] [&>svg]:w-[88%]"
       style={{ border: "1.5px solid #9aa0ad" }}
     >
       <CShape kind={kind} color={color} size={68} />
@@ -2032,7 +2038,7 @@ const optArrow =
   (dir: "up" | "right" | "down" | "left", color = NAVY) =>
   () => (
     <div
-      className="aspect-square w-full flex items-center justify-center bg-white"
+      className="aspect-square w-full flex items-center justify-center bg-white [&>svg]:h-[86%] [&>svg]:w-[86%]"
       style={{ border: "1.5px solid #9aa0ad" }}
     >
       <Arrow dir={dir} color={color} size={60} />
