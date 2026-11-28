@@ -38,6 +38,7 @@ import {
 } from "lucide-react";
 import { Placa } from "@/components/Placa";
 import { triggerRatingPrompt } from "@/components/RatingPrompt";
+import { VideoExplainerButton } from "@/components/VideoExplainerButton";
 
 export const Route = createFileRoute("/simulado-demo")({
   component: SimuladoDemoPage,
@@ -690,6 +691,9 @@ function DetailedFeedback({
       <p className="text-sm text-foreground/90 leading-relaxed">
         {q.detailedExplanation ?? q.explanation}
       </p>
+      <div className="mt-3">
+        <VideoExplainerButton url={q.video_url} />
+      </div>
 
       {q.legalBase && (
         <p className="text-xs mt-3 flex items-start gap-2 text-muted-foreground">
@@ -1163,6 +1167,9 @@ function ReviewCard({
                 <p className="text-sm text-foreground/90 leading-relaxed">
                   {q.detailedExplanation ?? q.explanation}
                 </p>
+                <div className="mt-3">
+                  <VideoExplainerButton url={q.video_url} />
+                </div>
               </div>
 
               {q.legalBase && (

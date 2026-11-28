@@ -8,6 +8,7 @@ import { useQuestionBank } from "@/hooks/use-question-bank";
 import { Placa, PLACA_SVG_IDS, type PlacaId } from "@/components/Placa";
 import { cn } from "@/lib/utils";
 import { OptionImage } from "@/components/OptionImage";
+import { VideoExplainerButton } from "@/components/VideoExplainerButton";
 
 // Catálogo oficial de placas (146 entradas) — fonte do campo buscabível do
 // editor de questão. O nome vem com entidades HTML ("&quot;"), decodificadas
@@ -1025,6 +1026,7 @@ const IMPORT_TEMPLATE = [
     commonMistake: "Pegadinha comum (opcional).",
     tip: "Dica curta (opcional).",
     memoryHook: "Gancho de memória (opcional).",
+    video_url: "https://youtu.be/... (opcional)",
     image_url: "https://... (opcional)",
     option_images: ["https://... (opcional, uma por alternativa — mesma ordem de options)"],
     incidence: "alta",
@@ -1058,6 +1060,7 @@ function toTemplateShape(q: Question): Record<string, unknown> {
   if (q.commonMistake) out.commonMistake = q.commonMistake;
   if (q.tip) out.tip = q.tip;
   if (q.memoryHook) out.memoryHook = q.memoryHook;
+  if (q.video_url) out.video_url = q.video_url;
   if (q.image_url) out.image_url = q.image_url;
   if (q.option_images?.some(Boolean)) out.option_images = q.option_images;
   if (q.incidence) out.incidence = q.incidence;
@@ -1241,6 +1244,7 @@ export function QuestionsPanel() {
           ...(it.commonMistake ? { commonMistake: String(it.commonMistake) } : {}),
           ...(it.tip ? { tip: String(it.tip) } : {}),
           ...(it.memoryHook ? { memoryHook: String(it.memoryHook) } : {}),
+          ...(it.video_url ? { video_url: String(it.video_url) } : {}),
           ...(it.image_url ? { image_url: String(it.image_url) } : {}),
           ...(Array.isArray(it.option_images) ? { option_images: it.option_images.map((u: any) => (u ? String(u) : null)) } : {}),
           incidence: it.incidence ?? "media",
@@ -1650,6 +1654,7 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
   const [commonMistake, setCommonMistake] = useState(initial?.commonMistake ?? "");
   const [tip, setTip] = useState(initial?.tip ?? "");
   const [memoryHook, setMemoryHook] = useState(initial?.memoryHook ?? "");
+  const [videoUrl, setVideoUrl] = useState(initial?.video_url ?? "");
   const [imageUrl, setImageUrl] = useState(initial?.image_url ?? "");
   // Upload direto da imagem para o bucket (library/images) — sem depender de host externo
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -1832,6 +1837,7 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
         explanation: explanation.trim(), detailedExplanation: detailed.trim() || undefined,
         legalBase: legalBase.trim() || undefined, commonMistake: commonMistake.trim() || undefined,
         tip: tip.trim() || undefined, memoryHook: memoryHook.trim() || undefined,
+        video_url: videoUrl.trim() || undefined,
         image_url: imageUrl.trim() || undefined, placa: (placa as PlacaId) || undefined,
         option_images: temImagemOpcao ? imagensOrdenadas : null,
         incidence, difficulty, trap: trap || undefined, origin,
@@ -1956,6 +1962,14 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
         <div className="space-y-1">
           <Label className="text-xs">Base legal (opcional)</Label>
           <Input value={legalBase} onChange={(e) => setLegalBase(e.target.value)} placeholder="Art. 29 do CTB" />
+        </div>
+        <div className="space-y-1 sm:col-span-2">
+          <Label className="text-xs">Link do Vídeo (YouTube, TikTok ou Instagram)</Label>
+          <Input
+            value={videoUrl}
+            onChange={(e) => setVideoUrl(e.target.value)}
+            placeholder="Ex: https://www.tiktok.com/@... ou https://youtu.be/... ou https://www.instagram.com/reel/..."
+          />
         </div>
         <div className="space-y-1 sm:col-span-2">
           <Label className="text-xs">Imagem da questão (opcional)</Label>
@@ -2103,6 +2117,11 @@ function QuestionForm({ initial, onCancel, onSaved }: { initial: Question | null
           <span className="text-xs px-2.5 py-1 rounded-full border border-success/30 bg-success/10 text-success font-semibold">Correta aqui: {LETTERS[correctIndex]} (letra sorteada)</span>
         </div>
         <p className="text-sm font-medium leading-relaxed">{statement.trim() || "Enunciado da questão..."}</p>
+        {videoUrl.trim() ? (
+          <div>
+            <VideoExplainerButton url={videoUrl} />
+          </div>
+        ) : null}
         {imageUrl.trim() ? (
           <div className="flex justify-center">
             <img src={imageUrl.trim()} alt="imagem da questão" className="max-w-[170px]" />

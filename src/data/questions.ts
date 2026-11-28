@@ -16,6 +16,7 @@ export interface Question {
     commonMistake?: string; // qual pegadinha as bancas usam
     tip?: string;
     memoryHook?: string; // gancho mnemônico para memorização (frase-chave, rima, sigla, imagem mental)
+    video_url?: string; // link opcional para explicação em YouTube, TikTok ou Instagram
     incidence: Incidence;
     trap?: boolean; // pegadinha clássica
     difficulty: 1 | 2 | 3;
@@ -12094,11 +12095,14 @@ const QUESTIONS_B: Question[] = [
         id: "ia_normas_024",
         category: "legislacao",
         group: "uso-do-acostamento",
-        statement: "O acostamento admite o trânsito de veículos para manobras de:",
-        options: ["Ultrapassagem e retorno à direita.", "Conversão e retornos à esquerda.", "Estacionamento e carga e descarga.", "Passagem e ultrapassagem lenta."],
-        correctIndex: 1,
-        explanation: "Correta letra B: o material lista conversão e retornos à esquerda entre as exceções. O acostamento é a faixa contígua ao leito viário com finalidade própria, onde nem todas as condutas admitidas na pista de rolamento são permitidas.",
-        commonMistake: "o material lista conversão e retornos à esquerda entre as exceções.",
+        statement: "Em uma via rural provida de acostamento e sem local apropriado para retorno, o condutor que deseja converter à esquerda ou retornar deve:",
+        options: ["Aguardar no acostamento, à direita, para cruzar a pista com segurança.", "Transitar pelo acostamento até encontrar uma abertura no canteiro central.", "Parar sobre a faixa da esquerda ligando o pisca-alerta.", "Realizar a ultrapassagem pelo acostamento e converter em seguida."],
+        correctIndex: 0,
+        explanation: "Correta letra A: conforme o Art. 37 do CTB, nas vias com acostamento onde não houver local apropriado para conversão à esquerda ou retorno, o condutor deve sair da pista e aguardar no acostamento à direita, esperando uma brecha segura para cruzar a via.",
+        detailedExplanation: "Nas vias providas de acostamento, a conversão à esquerda e a operação de retorno devem ser feitas nos locais apropriados. Onde esses locais não existirem, o condutor deve aguardar no acostamento, à direita, para cruzar a pista com segurança. Circular ou ultrapassar pelo acostamento é infração gravíssima prevista no Art. 193 do CTB.",
+        legalBase: "Arts. 37 e 193 do CTB",
+        commonMistake: "Confundir aguardar parado no acostamento à direita com circular pelo acostamento ou aguardar no centro da pista.",
+        tip: "No acostamento você aguarda parado, nunca circula.",
         incidence: "alta",
         trap: true,
         difficulty: 2,

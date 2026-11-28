@@ -11,6 +11,7 @@ import {
 import { Eye, EyeOff, RotateCcw, Zap } from "lucide-react";
 import { Placa } from "@/components/Placa";
 import { OptionImage } from "@/components/OptionImage";
+import { VideoExplainerButton } from "@/components/VideoExplainerButton";
 
 export const Route = createFileRoute("/turbo")({
   component: TurboPage,
@@ -205,6 +206,9 @@ function TurboPage() {
                     <p className="text-xs text-muted-foreground mt-2">
                       {q.explanation}
                     </p>
+                    <div className="mt-3">
+                      <VideoExplainerButton url={q.video_url} />
+                    </div>
                   </div>
                 </motion.div>
               )}

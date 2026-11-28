@@ -32,6 +32,7 @@ import {
 } from "lucide-react";
 import { Placa } from "@/components/Placa";
 import { OptionImage } from "@/components/OptionImage";
+import { VideoExplainerButton } from "@/components/VideoExplainerButton";
 import { triggerRatingPrompt } from "@/components/RatingPrompt";
 import { toast } from "sonner";
 import { registrarSimuladoConcluido, registrarSimuladoIniciado } from "@/lib/simulados-concluidos";
@@ -1045,6 +1046,9 @@ function DetailedFeedback({
       <p className="text-sm text-foreground/90 leading-relaxed">
         {q.detailedExplanation ?? q.explanation}
       </p>
+      <div className="mt-3">
+        <VideoExplainerButton url={q.video_url} />
+      </div>
 
       {q.legalBase && (
         <p className="text-xs mt-3 flex items-start gap-2 text-muted-foreground">
@@ -1555,6 +1559,9 @@ function ReviewCard({
                 <p className="text-sm text-foreground/90 leading-relaxed">
                   {q.detailedExplanation ?? q.explanation}
                 </p>
+                <div className="mt-3">
+                  <VideoExplainerButton url={q.video_url} />
+                </div>
               </div>
 
               {q.legalBase && (

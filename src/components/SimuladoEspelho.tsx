@@ -11,6 +11,7 @@ import {
 } from "@/data/questions";
 import { Placa } from "@/components/Placa";
 import { OptionImage } from "@/components/OptionImage";
+import { VideoExplainerButton } from "@/components/VideoExplainerButton";
 import {
   ArrowLeft,
   ArrowRight,
@@ -366,6 +367,9 @@ function EspelhoFeedback({ q, selected }: { q: Question; selected: number }) {
       <p className="text-sm text-foreground/90 leading-relaxed">
         {q.detailedExplanation ?? q.explanation}
       </p>
+      <div className="mt-3">
+        <VideoExplainerButton url={q.video_url} />
+      </div>
 
       {q.legalBase && (
         <p className="text-xs mt-3 flex items-start gap-2 text-muted-foreground">
